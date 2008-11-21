@@ -1,0 +1,19 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: xfields
+Name: Custom fields
+Version: 0.09
+Acts: core
+File: xfields.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Description: ƒополнительные пол€
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru
+Title: ƒополнительные пол€
+Information: ѕозвол€ет создавать пользовательские дополнительные пол€ в новост€х.
+Preinstall: no

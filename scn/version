@@ -1,0 +1,15 @@
+;
+; Version description file for plugin @@ 2z project
+;
+
+ID: scn
+Name: Same category news
+Version: 0.4
+Acts: news_full
+File: scn.php
+Config: config.php
+Type: plugin
+Description: Выводит внутри новости список новостей из той-же категории
+Author: SwiZZeR
+Author_URI: http://swizzer.ru
+URI: http://no_url.com/

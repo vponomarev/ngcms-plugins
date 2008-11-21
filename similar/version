@@ -1,0 +1,16 @@
+;
+; Version description file for plugin @@ 2z project
+;
+
+ID: similar
+Name: Похожие новости
+Version: 0.01
+Acts: core
+File: similar.php
+Config: config.php
+Install: install.php
+Deinstall: deinstall.php
+Type: plugin
+Description: Перелинковка новостей по критериям похожести
+Author: Vitaly A. Ponomarev
+Author_URI: http://2lib.ru

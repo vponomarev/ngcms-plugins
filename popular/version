@@ -1,0 +1,18 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: popular
+Name: Show most popular news
+Version: 0.04
+Acts: core, index
+File: popular.php
+Config: config.php
+Type: widget
+Description: ќтображение попул€рных новостей
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+Title: ѕопул€рные новости
+Information: ќтображение информационного блока с наиболее часто посещаемыми новост€ми.
+Preinstall: default_yes
+Preinstall_vars: cache="1"; cacheExpire="3600";

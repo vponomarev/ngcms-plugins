@@ -1,0 +1,18 @@
+;
+; Version description file for plugin @@ Next Geration CMS
+;
+
+ID: rating
+Name: –ейтинг новостей
+Name_EN: News rating
+Version: 0.04
+Acts: ppages, news_full, news_short, news_search
+File: rating.php
+Config: config.php
+Type: plugin
+Description: ¬едение рейтинга новостей
+Description_EN: Manage news rating
+Author: SwiZZeR &amp; Vitaly A. Ponomarev
+Title: –ейтинг новостей
+Preinstall: default_yes
+Information: ¬едение и отображение пользовательского рейтинга новостей (выставл€етс€ рейтинг от 1 до 5)

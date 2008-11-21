@@ -1,0 +1,1 @@
+<li><a href="{link}">{date} {title} {views}</a></li>

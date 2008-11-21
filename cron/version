@@ -1,0 +1,16 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: cron
+Name: Планировщик задач
+Version: 0.04
+Acts: maintenance
+File: cron.php
+Config: config.php
+Type: plugin
+Description: Замена cron'а системы
+Author: Vitaly A. Ponomarev
+Title: Планировщик задач
+Information: Позволяет запускать другие плагины по расписанию.
+Preinstall: no

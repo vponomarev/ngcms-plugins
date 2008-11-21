@@ -1,0 +1,19 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: unirating
+Name: Universal rating engine
+Version: 0.01
+Acts: core, ppages
+File: unirating.php
+Config: config.php
+Install: install.php
+Type: plugin
+Description: ”ниверсальный рейтинг
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+URI: http://ngcms.ru/
+Title: ”ниверсальный рейтинг
+Preinstall: no
+Information: ”нивесальный движок управлени€ рейтингом информационных элементов (новостей, статических страниц,...).

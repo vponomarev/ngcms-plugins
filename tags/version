@@ -1,0 +1,20 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: tags
+Name: Теги
+Version: 0.09
+Acts: core
+File: tags.php
+Config: config.php
+Install: install.php
+Deinstall: deinstall.php
+Type: plugin
+Description: Использование тегов и облака тегов
+Author: SwiZZeR, Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+URI: http://no_url.com/
+Title: Облако тегов
+Information: Показывает массив ключевых слов, созданных в новости. Чем чаще ключевое слово встречается в новостях, тем сильнее выделяется данное слово в &quot;облаке&quot;.
+Preinstall: no

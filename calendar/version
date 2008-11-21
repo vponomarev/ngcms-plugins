@@ -1,0 +1,18 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: calendar
+Name: Show news calendar
+Version: 0.05
+Acts: core, index
+File: calendar.php
+Config: config.php
+Type: widget
+Description: Показать календарь
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+Title: Календарь новостей
+Information: Отображение данных о новостях по выбранному месяцу, при этом дни, когда были новости, выделяются.
+Preinstall: default_yes
+Preinstall_vars: cache="1"; cacheExpire="3600";

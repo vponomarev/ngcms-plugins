@@ -1,0 +1,17 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: lastcomments
+Name: Последние комментарии
+Version: 0.06
+Acts: index 
+File: lastcomments.php
+Config: config.php
+Type: plugin
+Description: Вывод последних комментариев
+Author:  SwiZZeR, EsCaPeR, Vitaly
+Title: Последние комментарии
+Information: Отображение последних комментариев, оставленных на страницах сайта
+Preinstall: default_no
+Preinstall_vars: cache="1"; cacheExpire="3600";

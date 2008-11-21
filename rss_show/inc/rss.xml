@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="windows-1251"?>
+ <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/">
+ <channel>
+  <title><![CDATA[CVS snapshot проекта 2Z]]></title>
+  <link><![CDATA[http://snap.align.ru]]></link>
+  <language>ru</language>
+  <description><![CDATA[Здесь описание вашего сайта]]></description>
+  <generator>Plugin RSS_EXPORT (0.01) for 2Z CMS (0.9.7)</generator>
+
+  <item>
+   <title><![CDATA[Новости :: простая новость]]></title>
+   <link><![CDATA[http://snap.align.ru/category/news/simplenews.html]]></link>
+   <description><![CDATA[test]]></description>
+   <category>Новости</category>
+   <guid isPermaLink="false">http://snap.align.ru?id=151</guid>
+   <pubDate>Thu, 15 May 2008 13:26:28 GMT</pubDate>
+
+  </item>
+  <item>
+   <title><![CDATA[Моя 'семья' в &quot;кавычках&quot; блин, WEB :: моя 'кавычка' супер "новость"]]></title>
+   <link><![CDATA[http://snap.align.ru/category/mtemp-web/moya_kavychka_super_novost.html]]></link>
+   <description><![CDATA[вот отак]]></description>
+   <category>Моя 'семья' в &quot;кавычках&quot; блин, WEB</category>
+
+   <guid isPermaLink="false">http://snap.align.ru?id=150</guid>
+   <pubDate>Sun, 11 May 2008 20:42:13 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[eetr]]></title>
+   <link><![CDATA[http://snap.align.ru/category/none/eetr.html]]></link>
+   <description><![CDATA[erterter
+
+
+[fin_lock]bla-bla[/fin_lock]]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=149</guid>
+   <pubDate>Sat, 10 May 2008 00:44:19 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[pages]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/past.html]]></link>
+   <description><![CDATA[длинный/первая
+<!--nextpage-->
+длинный/вторая
+<!--nextpage-->
+длинный/третья]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=138</guid>
+   <pubDate>Sat, 05 Apr 2008 16:13:00 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[news from past]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/news_from_past.html]]></link>
+   <description><![CDATA[subj
+
+Merry Christmas !!!
+]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=137</guid>
+   <pubDate>Tue, 01 Jan 2008 00:01:00 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[Very Lovely <script>alert('123');</script> NEWS]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/very_lovely_alert123_news.html]]></link>
+   <description><![CDATA[SDFDFsdf
+
+<script>alert('Supa Dupa FLY!!');</script>
+
+А вот и мы :)]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=136</guid>
+   <pubDate>Wed, 30 Apr 2008 21:13:00 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[Very Lovely NEWS]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/very_lovely_news.html]]></link>
+   <description><![CDATA[V.L.N.]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=135</guid>
+   <pubDate>Wed, 09 Apr 2008 21:13:15 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[Very NEWS]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/very_news.html]]></link>
+   <description><![CDATA[dgdfd]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=134</guid>
+   <pubDate>Wed, 09 Apr 2008 21:12:52 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[А вот и <b>Я</b>]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/a_vot_i_ya.html]]></link>
+   <description><![CDATA[Бла-бла]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=133</guid>
+   <pubDate>Wed, 09 Apr 2008 21:10:20 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[Новость "с кавычками"]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/novost_s_kavychkami.html]]></link>
+   <description><![CDATA[ага :)]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=132</guid>
+   <pubDate>Wed, 09 Apr 2008 19:43:19 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[Супер новость]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/super_novost.html]]></link>
+   <description><![CDATA[Это моя супер-новость]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=131</guid>
+   <pubDate>Sun, 30 Mar 2008 16:46:11 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[тест]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/none/test.html]]></link>
+   <description><![CDATA[тест
+
+:biggrin::biggrin::biggrin::biggrin::biggrin::biggrin::biggrin::biggrin::biggrin::biggrin:]]></description>
+   <category></category>
+   <guid isPermaLink="false">http://snap.align.ru?id=129</guid>
+   <pubDate>Sun, 30 Mar 2008 15:24:14 GMT</pubDate>
+  </item>
+  <item>
+   <title><![CDATA[Плагины, Модули проекта :: varmgr :: Управление переменными в новостях]]></title>
+
+   <link><![CDATA[http://snap.align.ru/category/plugin-2z_modules/varmgr.html]]></link>
+   <description><![CDATA[Плагин позволяет управлять отображением переменных в новостях.
+Пока поддерживается только свой формат отображения даты.]]></description>
+   <category>Плагины, Модули проекта</category>
+   <guid isPermaLink="false">http://snap.align.ru?id=128</guid>
+   <pubDate>Sat, 23 Feb 2008 22:15:50 GMT</pubDate>
+  </item>
+  <item>
+
+   <title><![CDATA[Плагины, Модули проекта :: randtext :: Вывод случайного текста]]></title>
+   <link><![CDATA[http://snap.align.ru/category/plugin-2z_modules/randtext.html]]></link>
+   <description><![CDATA[При этом вывод текста может проводиться как из файла так и браться из настроек самого плагина.]]></description>
+   <category>Плагины, Модули проекта</category>
+   <guid isPermaLink="false">http://snap.align.ru?id=127</guid>
+   <pubDate>Sat, 23 Feb 2008 22:14:24 GMT</pubDate>
+  </item>
+
+  <item>
+   <title><![CDATA[Системы авторизации, Модули проекта :: auth_punbb :: Авторизация через БД форума punBB]]></title>
+   <link><![CDATA[http://snap.align.ru/category/auth-2z_modules/auth_punbb.html]]></link>
+   <description><![CDATA[Модуль авторизации через БД форума punBB]]></description>
+   <category>Системы авторизации, Модули проекта</category>
+   <guid isPermaLink="false">http://snap.align.ru?id=126</guid>
+   <pubDate>Sat, 23 Feb 2008 22:13:17 GMT</pubDate>
+
+  </item>
+ </channel>
+</rss>
