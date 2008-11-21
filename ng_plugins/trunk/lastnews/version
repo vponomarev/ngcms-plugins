@@ -1,0 +1,18 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: lastnews
+Name: Show last news
+Version: 0.08
+Acts: core, index
+File: lastnews.php
+Config: config.php
+Type: widget
+Description: Отображение последних новостей
+Author: Vitaly A. Ponomarev
+Author_URI: http://2lib.ru/
+Title: Последние новости
+Information: Отображение последних новостей сайта
+Preinstall: default_no
+Preinstall_vars: cache="1"; cacheExpire="3600";

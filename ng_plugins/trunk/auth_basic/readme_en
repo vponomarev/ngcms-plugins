@@ -1,0 +1,13 @@
+Basic auth module for Next Generation CMS
+==============================================
+
+This module is a basic mondaroty auth module for NG CMS.
+It's required for system and can't be turned off.
+
+
+Plugin gives you this abilities:
+==================================
+* authenticate users in NG CMS based web-site
+* use another prefix for mySQL table with users, this function will let you
+  to use the same users table for several different sites (installed in one
+  mySQL DB with different table prefixes)

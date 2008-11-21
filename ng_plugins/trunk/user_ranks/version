@@ -1,0 +1,15 @@
+;
+; Version description file for plugin @@ 2z project
+;
+
+ID: user_ranks
+Name: User ranks
+Version: 0.1
+Acts: core
+File: user_ranks.php
+Config: config.php
+Type: plugin
+Description: Присвоение пользователям рангов
+Author: SwiZZeR
+Author_URI: http://swizzer.ru
+URI: http://no_url.com/

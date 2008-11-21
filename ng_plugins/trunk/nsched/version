@@ -1,0 +1,18 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: nsched
+Name: Новости по расписанию
+Version: 0.06
+Acts: cron, addnews, addnews_form, addnews_, editnews_entry, editnews
+File: nsched.php
+Install: install.php
+Deinstall: uninstall.php
+Config: config.php
+Type: plugin
+Description: Публикация/снятие с публикации новостей по расписанию
+Author: Vitaly A. Ponomarev
+Title: Управление публикацией новостей
+Information: Позволяет для каждой новости задать свои дату+время публикации/снятия с публикации.<br/>Полезно в случае отпуска администратора сайта (создаются новости "впрок", но публикуются они в заданное время) или для размещения рекламных статей с ограниченным сроком жизни.
+Preinstall: no

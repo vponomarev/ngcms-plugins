@@ -1,0 +1,15 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: complain
+Name: Сообщить о проблеме в новости
+Version: 0.02
+Acts: news_full, ppages
+File: complain.php
+Config: config.php
+Install: install.php
+Deinstall: deinstall.php
+Type: plugin
+Description: Позволяет сообщить автору новости/администратору о проблеме
+Author: Vitaly A. Ponomarev

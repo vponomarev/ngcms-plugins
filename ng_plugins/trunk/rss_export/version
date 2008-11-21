@@ -1,0 +1,20 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: rss_export
+Name: RSS экспорт
+Name_EN: RSS news exporter
+Version: 0.07
+Acts: ppages
+File: rss_export.php
+Config: config.php
+Type: plugin
+Description: Экспорт новостей в формате RSS
+Description_EN: News export in RSS format
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+Preinstall_vars: feed_title_format="site_title"; news_title="1"; news_count="30"; use_hide="1"
+Title: RSS экспорт новостей
+Preinstall: default_yes
+Information: Генератор RSS новостной ленты
