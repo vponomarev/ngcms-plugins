@@ -1,0 +1,12 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: bb_media
+Name: MEDIA bb code
+Version: 0.02
+Acts: news_short, news_full
+File: bb_media.php
+Type: plugin
+Title: BB код [MEDIA]
+Description: BB код [MEDIA]
