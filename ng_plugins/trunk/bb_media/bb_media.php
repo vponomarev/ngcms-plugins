@@ -54,7 +54,7 @@ class BBmediaNewsfilter extends NewsFilter {
 						// No params to scan
 						$keys = array();
 					}
-					                             print "Param line: '".$paramLine."'<br/>\n";
+					                             
 					// Return an error if BB code is bad
 					if (!is_array($keys)) {
 						array_push($rdest,'[INVALID MEDIA BB CODE]');
@@ -98,7 +98,7 @@ class BBmediaNewsfilter extends NewsFilter {
 						}
 					}
 					// Fill an output replacing array
-					print "FILE: '".$keys['file']."'<br/>\n";
+					
 					array_push($rdest, '<embed type="application/x-shockwave-flash" src="'.$config['admin_url'].'/plugins/bb_media/swf/player.swf" quality="high" allowfullscreen="true" allowscriptaccess="always" flashvars="file='.urlencode($keys['file']).'" '.(implode(" ", $outkeys)).' />');
 				}
 				$tvars['vars'][$varKeyName] = str_replace($rsrc, $rdest, $tvars['vars'][$varKeyName]);
