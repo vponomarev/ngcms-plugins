@@ -29,6 +29,7 @@ if (!$_REQUEST['action']) {
 	generate_config_page($plugin, $cfg);
 }
 elseif ($_REQUEST['action'] == 'commit') {
+	commit_plugin_config_changes($plugin, $cfg);
 	if ($_REQUEST['rebuild']) {
 		// Rebuild index table
 		// * Truncate index
@@ -50,6 +51,5 @@ elseif ($_REQUEST['action'] == 'commit') {
 		$mysql->query("unlock tables");
 		print $lang['tags_rebuild_done']."<br/>";
 	}
-	commit_plugin_config_changes($plugin, $cfg);
 	print_commit_complete($plugin);
 }
