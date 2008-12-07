@@ -49,7 +49,7 @@ class BBmediaNewsfilter extends NewsFilter {
 					// Make a parametric line with url
 					if (trim($paramLine)) {
 						// Parse params
-						$keys = $this->parseBBCodeParams((($null=='=')?'file=':'').$paramLine);
+						$keys = $parse->parseBBCodeParams((($null=='=')?'file=':'').$paramLine);
 					} else {
 						// No params to scan
 						$keys = array();
