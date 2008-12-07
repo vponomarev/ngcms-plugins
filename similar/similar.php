@@ -17,7 +17,7 @@ class SimilarNewsfilter extends NewsFilter {
 		$scount = (($scount < 1)||($scount > 20))?5:$scount;
 
 		// Modify DB data
-		plugin_similar_repopulate(plugin_similar_repopulate($newsid, $scount), $scount);
+		plugin_similar_repopulate(plugin_similar_repopulate($newsid, $scount), $scount, array($newsid));
 
 		return 1;
 	}
