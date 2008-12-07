@@ -30,7 +30,7 @@ class SimilarNewsfilter extends NewsFilter {
 		$scount = (($scount < 1)||($scount > 20))?5:$scount;
 
 		// Modify DB data
-		plugin_similar_repopulate(plugin_similar_repopulate($newsID, $scount), $scount);
+		plugin_similar_repopulate(plugin_similar_repopulate($newsID, $scount), $scount, array($newsID));
 
 		return 1;
 	}
@@ -95,7 +95,7 @@ class SimilarNewsfilter extends NewsFilter {
 		$scount = (($scount < 1)||($scount > 20))?5:$scount;
 
 		// Modify DB data
-		plugin_similar_repopulate(plugin_similar_repopulate($modList, $scount), $scount);
+		plugin_similar_repopulate(plugin_similar_repopulate($modList, $scount), $scount, $idList);
 		return 1;
 	}
 
