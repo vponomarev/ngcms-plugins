@@ -17,7 +17,7 @@ function plugin_similar_repopulate($newsid, $count, $skipndel = array()){
 		$ld [] = db_squote($newsID);
 
 	// Delete old rec's
-	$mysql->query("delete from ".prefix."_similar_index where (newsID in (". join(", ", $ld).") or refNewsID in (". join(", ", $ld)."))".(count($skipndel)?' and refNewsId not in ('.join(", ", $skipndel).')':''));
+	$mysql->query("delete from ".prefix."_similar_index where (newsID in (". join(", ", $ld).") or refNewsID in (". join(", ", $ld)."))".(count($skipndel)?' and NewsId not in ('.join(", ", $skipndel).')':''));
 
 	foreach ($newsIDlist as $newsID) {
 		$list = $mysql->select("select i.newsID, count(i.tagID) as cnt, n.title, n.editdate, n.postdate from ".prefix."_tags_index i left join ".prefix."_news n on n.id = i.newsID where (i.newsID <> ".db_squote($newsID).") and (i.tagID in ( select tagID from ".prefix."_tags_index use index(newsID) where newsID = ".db_squote($newsID).") ) group by newsID order by cnt desc");
