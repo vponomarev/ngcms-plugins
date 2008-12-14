@@ -3,9 +3,6 @@
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
 
-// Preload plugin tags
-register_filter('news','bb_media', new BBmediaNewsFilter);
-
 class BBmediaNewsfilter extends NewsFilter {
 	// Add {plugin_similar} variable into news
 	function showNews($newsID, $SQLnews, &$tvars, $mode) {
@@ -106,4 +103,7 @@ class BBmediaNewsfilter extends NewsFilter {
 		}
 	}
 }
+
+// Preload plugin tags
+register_filter('news','bb_media', new BBmediaNewsFilter);
 

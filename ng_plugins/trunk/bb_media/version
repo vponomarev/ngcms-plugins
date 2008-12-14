@@ -4,7 +4,7 @@
 
 ID: bb_media
 Name: MEDIA bb code
-Version: 0.02
+Version: 0.03
 Acts: news_short, news_full
 File: bb_media.php
 Type: plugin
