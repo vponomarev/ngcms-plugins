@@ -1,0 +1,19 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: feedback
+Name: Feedback forms
+Version: 0.01
+Acts: ppages
+File: feedback.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Description: Генератор форм обратной связи
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru
+Title: Формы обратной связи
+Information: Позволяет создавать различные формы обратной связи.
+Preinstall: no
