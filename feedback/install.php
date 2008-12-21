@@ -8,6 +8,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 
 plugins_load_config();
+loadPluginLang('feedback', 'config', '', '', ':');
 
 $db_update = array(
  array(
@@ -17,6 +18,7 @@ $db_update = array(
   'fields' => array(
     array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
     array('action' => 'cmodify', 'name' => 'active', 'type' => 'int', 'params' => 'default 0'),
+    array('action' => 'cmodify', 'name' => 'regonly', 'type' => 'int', 'params' => 'default 0'),
     array('action' => 'cmodify', 'name' => 'flags', 'type' => 'char(20)'),
     array('action' => 'cmodify', 'name' => 'name', 'type' => 'char(40)'),
     array('action' => 'cmodify', 'name' => 'title', 'type' => 'char(80)'),
@@ -35,6 +37,6 @@ if ($_REQUEST['action'] == 'commit') {
 		plugin_mark_installed('feedback');
 	}
 } else {
-	$text = "Плагин <b>feedback</b> позволяет управлять формами обратной связи на вашем сайте";
+	$text = $lang['feedback:text.install'];
 	generate_install_page('feedback', $text);
 }

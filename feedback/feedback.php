@@ -11,6 +11,8 @@ loadPluginLang('feedback', 'main', '', '', ':');
 function plugin_feedback_screen() {
  global $template, $tpl, $lang, $mysql, $userROW;
 
+ $ptpl_url = admin_url.'/plugins/feedback/tpl';
+
  // Determine paths for all template files
  $tpath = locatePluginTemplates(array('site.infoblock', 'site.form.hdr', 'site.form.row'), 'feedback', extra_get_param('feedback', 'localsource'));
 
@@ -18,7 +20,7 @@ function plugin_feedback_screen() {
 
  if (!is_array($frow = $mysql->record("select * from ".prefix."_feedback where active = 1 and id = ".$form_id))) {
 	$tpl->template('site.infoblock', $tpath['site.infoblock']);
-	$tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $lang['feedback:form.no.title'], 'entries' => $lang['feedback:form.no.description'])));
+	$tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $lang['feedback:form.no.title'], 'ptpl_url' => $ptpl_url, 'entries' => $lang['feedback:form.no.description'])));
 	$template['vars']['mainblock']      =  $tpl->show('site.infoblock');
 	return 1;
  }
@@ -31,6 +33,7 @@ function plugin_feedback_screen() {
  $tpl->template('site.form.row', $tpath['site.form.row']);
  foreach ($fData as $fName => $fInfo) {
  	$tvars = array();
+ 	$tvars['vars']['ptpl_url'] = $ptpl_url;
 	$tvars['vars']['name']	= $fInfo['name'];
 	$tvars['vars']['title']	= $fInfo['title'];
 
@@ -60,16 +63,29 @@ function plugin_feedback_screen() {
 
  // Prepare params
  $tvars = array();
+ $tvars['vars']['ptpl_url']		= $ptpl_url;
  $tvars['vars']['id']			= $frow['id'];
  $tvars['vars']['description']	= $frow['description'];
  $tvars['vars']['entries']		= $output;
  $tvars['vars']['form_url']		= GetLink('plugins', array('plugin_name' => 'feedback'));
 
- $tpl->template('site.form.hdr', $tpath['site.form.hdr']);
- $tpl->vars('site.form.hdr', $tvars);
- $output = $tpl->show('site.form.hdr');
+ // Choose template to use
+ if ($frow['template']) {
+  $tP = root.'plugins/feedback/tpl/templates/';
+  $tN = $frow['template'];
+ } else {
+  $tP = $tpath['site.form.hdr'];
+  $tN = 'site.form.hdr';
+ }
+
+
+ // Show template of current form
+ $tpl->template($tN, $tP);
+ $tpl->vars($tN, $tvars);
+ $output = $tpl->show($tN);
 
  $tvars = array();
+ $tvars['vars']['ptpl_url']	= $ptpl_url;
  $tvars['vars']['title']	= $frow['title'];
  $tvars['vars']['entries']	= $output;
 
