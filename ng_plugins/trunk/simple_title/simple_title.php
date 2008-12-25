@@ -1,5 +1,8 @@
 <?php
-if (!defined('2z')) { die("Don't you figure you're so cool?"); }
+
+// Protect against hack attempts
+if (!defined('NGCMS')) die ('HAL');
+
 add_act('index_post', 'simple_tags');
 function simple_tags(){
 		global $config, $tpl, $mysql, $parse, $template, $echo_name, $action;
