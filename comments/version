@@ -1,0 +1,18 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: comments
+Name: [DEVEL] User comments
+Version: 0.00
+Acts: news_short, news_full, ppages
+File: comments.php
+Config: config.php
+Type: plugin
+Description: Комментарии пользователей
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+Title: Календарь новостей
+Information: Отображение данных о новостях по выбранному месяцу, при этом дни, когда были новости, выделяются.
+Preinstall: default_yes
+Preinstall_vars: cache="1"; cacheExpire="3600";
