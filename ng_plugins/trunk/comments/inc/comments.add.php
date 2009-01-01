@@ -210,7 +210,16 @@ function comments_add(){
 			$lang['notice']
 		);
 
-		zzMail($config['admin_mail'], $lang['newcomment'], $body, 'html');
+		if (extra_get_param('comments', 'inform_author')) {
+			// Determine author's email
+			if (is_array($umail=$mysql->record("select * from ".uprefix."_users where id = ".db_squote($news_row['author_id'])))) {
+				zzMail($umail['mail'], $lang['newcomment'], $body, 'html');
+			}
+		}
+
+		if (extra_get_param('comments', 'inform_admin'))
+			zzMail($config['admin_mail'], $lang['newcomment'], $body, 'html');
+
 	}
 
 	@setcookie("com_username", urlencode($params['user_name']), 0, '/');
