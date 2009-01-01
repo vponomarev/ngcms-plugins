@@ -36,18 +36,19 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	$tpl -> template($templateName, $templatePath);
 
 	if ($config['use_avatars']) {
-		$sql = "select c.*, u.avatar from ".prefix."_comments c left join ".uprefix."_users u on c.author_id = u.id where c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'')." order by c.id".($config['reverse_comments']?' desc':'');
+		$sql = "select c.*, u.avatar from ".prefix."_comments c left join ".uprefix."_users u on c.author_id = u.id where c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
 	} else {
-		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($comment_id?(" and c.id=".db_squote($comment_id)):'')." order by c.id".($config['reverse_comments']?' desc':'');
+		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($comment_id?(" and c.id=".db_squote($comment_id)):'');
 	}
+	$sql .= " order by c.id".(extra_get_param('comments', 'backorder')?' desc':'');
 
 	$comnum = 0;
 	foreach ($mysql->select($sql) as $row) {
 		$comnum++;
-		$tvars['vars']['id']		=	$row['postdate'];
+		$tvars['vars']['id']		=	$row['id'];
 		$tvars['vars']['author']	=	$row['author'];
 		$tvars['vars']['mail']		=	$row['mail'];
-		$tvars['vars']['date']		=	LangDate(ctimestamp, $row['postdate']);
+		$tvars['vars']['date']		=	LangDate(extra_get_param('comments', 'timestamp'), $row['postdate']);
 
 		if ($row['reg']) {
 			$tvars['vars']['profile_link'] = GetLink('user', $row);
