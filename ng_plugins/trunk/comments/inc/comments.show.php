@@ -193,7 +193,7 @@ function comments_showform($newsID, $callingParams = array()){
 	$tvars['vars']['newsid']		=	$newsID;
 
 	// Generate request URL
-	$link = GetLink('plugins', array('plugin_name' => 'comments'));
+	$link = GetLink('plugins', array('plugin_name' => 'comments'), 1);
 	$link .= ((strpos($link,'?') === false)?'?':'&').'plugin_cmd=add&rand=';
 	$tvars['vars']['post_url'] = $link;
 
