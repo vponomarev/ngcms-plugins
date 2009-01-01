@@ -86,7 +86,7 @@ function comments_add(){
 
 	if ($config['flood_time']) {
 		if (Flooder($ip)) {
-			msg(array("type" => "error", "text" => str_replace('{timeout}',$config['flood_time'] ,$lang['commets:err.flood'])));
+			msg(array("type" => "error", "text" => str_replace('{timeout}',$config['flood_time'] ,$lang['comments:err.flood'])));
 			return;
 		}
 	}
