@@ -26,11 +26,13 @@ function comments_add(){
 		$params['author_id']	= $user['id'];
 		$params['mail']			= $user['mail'];
 		$is_member				= 1;
+		$memberRec				= $user;
 	} else if (is_array($userROW)) {
 		$params['user_name']	= $userROW['name'];
 		$params['author_id']	= $userROW['id'];
 		$params['mail']			= $userROW['mail'];
 		$is_member				= 1;
+		$memberRec				= $userROW;
 	} else {
 		$params['user_name']	= secure_html(convert(trim($_POST['name'])));
 		$params['author_id']	= 0;
@@ -84,20 +86,17 @@ function comments_add(){
 		return;
 	}
 
-	if ($config['flood_time']) {
-		if (Flooder($ip)) {
-			msg(array("type" => "error", "text" => str_replace('{timeout}',$config['flood_time'] ,$lang['comments:err.flood'])));
-			return;
-		}
+	// Check for flood
+	if (checkFlood(0, $ip, 'comments', 'add', $is_member?$memberRec:null, $is_member?null:$params['user_name'])) {
+		msg(array("type" => "error", "text" => str_replace('{timeout}',$config['flood_time'] ,$lang['comments:err.flood'])));
+		return;
 	}
 
-	/*
-	if ($ban_row = $mysql->record("select * from ".prefix."_ipban where ip=".db_squote($ip))) {
-		$mysql->query("update ".prefix."_ipban set counter=counter+1 where ip=".db_squote($ip));
+	// Check for bans
+	if (checkBanned($ip, 'comment', 'add', $is_member?$memberRec:null, $is_member?null:$params['user_name'])) {
 		msg(array("type" => "error", "text" => $lang['msge_ip'], "info" => sprintf($lang['msgi_ip'], $ban_row['descr'])));
 		return;
 	}
-	*/
 
 	// Locate news
 	if ($news_row = $mysql->record("select * from ".prefix."_news where id = ".db_squote($params['newsid']))) {
@@ -185,11 +184,7 @@ function comments_add(){
 	}
 
 	// Update flood protect database
-	if ($mysql->rows($mysql->query("SELECT id FROM ".prefix."_flood WHERE ip = ".db_squote($ip))) > "0") {
-		$mysql->query("UPDATE ".prefix."_flood SET id=".db_squote($time)." WHERE ip = ".db_squote($ip));
-	} else {
-		$mysql->query("INSERT INTO ".prefix."_flood (`ip`, `id`) VALUES (".db_squote($ip).", ".db_squote($time).")");
-	}
+	checkFlood(1, $ip, 'comments', 'add', $is_member?$memberRec:null, $is_member?null:$params['user_name']);
 
 	// Email informer
 	if (extra_get_param('comments', 'inform_author') || extra_get_param('comments', 'inform_admin')) {
@@ -227,32 +222,3 @@ function comments_add(){
 
 	return array($news_row, $comment_id);
 }
-
-/*
-	// Check if we need to override news template
-	$callingCommentsParams = array();
-
-	// Set default template path
-	$templatePath = tpl_dir.$config['theme'];
-
-	// Find first category
-	$fcat = array_shift(explode(",", $news_row['catid']));
-	// Check if there is a custom mapping
-	if ($fcat && $catmap[$fcat] && ($ctname = $catz[$catmap[$fcat]]['tpl'])) {
-		// Check if directory exists
-		if (is_dir($templatePath.'/ncustom/'.$ctname))
-			$callingCommentsParams['overrideTemplatePath'] = $templatePath.'/ncustom/'.$ctname;
-	}
-
-	include root.'/includes/comments.show.php';
-	comments_show($params['newsid'], $comment_id, $news_row['com']+1, $callingCommentsParams);
-	return 1;
-}
-
-if (!comments_add()) {
-		$tpl -> template('error', tpl_site);
-		$tpl -> vars('error', array( 'vars' => array('content' => $template['vars']['mainblock'])));
-		echo $tpl -> show('error');
-}
-
-*/

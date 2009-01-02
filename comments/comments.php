@@ -43,7 +43,7 @@ class CommentsNewsFilter extends NewsFilter {
 		// If news is found, check if we need to show comments
 		//@include_once root.'includes/comments.show.php';
 		comments_show($newsID, 0, 0, $callingCommentsParams);
-		if ($SQLnews['allow_com'] && !$config['forbid_comments'] && (!$config['com_for_reg'] || is_array($userROW)))
+		if ($SQLnews['allow_com'] && (!extra_get_param('comments', 'regonly') || is_array($userROW)))
 			comments_showform($newsID, $callingCommentsParams);
 
 	}
