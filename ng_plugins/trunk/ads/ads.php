@@ -43,8 +43,38 @@ class AdsStaticFilter extends StaticFilter {
 	}
 }
 
-register_filter('static','ads', new AdsStaticFilter);
+//
+// ADS filtering functions for NEWS
+class AdsNewsFilter extends NewsFilter {
+	function showNews($newsID, $SQLnews, &$tvars, $params = array()) {
+		global $template;
+		$count = extra_get_param('ads','count');
+		if ((intval($count) < 1)||(intval($count) > 20))
+			$count = 3;
 
+		for ( $i = 1; $i <= $count; $i++) {
+			$v = 'ads'.$i;
+			$mode = extra_get_param('ads',$v.'_type');
+
+			// Check if we should show data block
+			if  (!((($params['style'] == 'short')&&($mode =='news.short'))||
+				(($params['style'] == 'full') &&($mode =='news.full') )||
+				($mode=='news')))
+					continue;
+
+			list ($content, $insertBlock) = ads_get_content($i);
+			$tvars['vars'][$v] = $content;
+			if ($insertBlock)
+				$template['vars']['plugin_ads_defer'] .= $insertBlock;
+		}
+		return 1;
+	}
+
+}
+
+// Register filters
+register_filter('static','ads', new AdsStaticFilter);
+register_filter('news',  'ads', new AdsNewsFilter);
 
 add_act('index', 'plugin_ads');
 
