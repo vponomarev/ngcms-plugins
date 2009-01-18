@@ -20,6 +20,8 @@ if (!defined('NGCMS')) die ('HAL');
 //		'plugin'  => if is called from plugin - ID of plugin
 //		'overrideTemplateName' => alternative template for display
 //		'overrideTemplatePath' => alternative path for searching of template
+//		'limitStart' => order comment no to start (for pagination)
+//		'limitCount' => number of comments to show (for pagination)
 function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams = array()){
 	global $mysql, $tpl, $template, $config, $userROW, $parse, $lang;
 
@@ -41,6 +43,12 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($comment_id?(" and c.id=".db_squote($comment_id)):'');
 	}
 	$sql .= " order by c.id".(extra_get_param('comments', 'backorder')?' desc':'');
+
+	// Check if we need to use limits
+	if ($callingParams['limitStart'] || $callingParams['limitCount']) {
+		$sql .= ' limit '.intval($callingParams['limitStart']).", ".intval($callingParams['limitCount']);
+	}
+
 
 	$comnum = 0;
 	foreach ($mysql->select($sql) as $row) {
