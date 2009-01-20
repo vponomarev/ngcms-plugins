@@ -76,7 +76,7 @@ elseif ($_REQUEST['action'] == 'commit') {
 
 		// * Process counters
 		foreach ($tags as $tag => $cnt) {
-			$mysql->query("insert into ".prefix."_tags (tag, posts) values (".db_squote($tag).",".intval($cnt).") on duplicate key update posts = ".intval($cnt));
+			$mysql->query("insert into ".prefix."_tags (tag, posts) values (".db_squote($tag).",".intval($cnt).") on duplicate key update posts = posts + ".intval($cnt));
 		}
 
 		// * Regenerate counters

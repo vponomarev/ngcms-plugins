@@ -4,7 +4,7 @@
 
 ID: tags
 Name: Теги
-Version: 0.09
+Version: 0.10
 Acts: core
 File: tags.php
 Config: config.php
