@@ -3,6 +3,7 @@ function clx(mode) {
  document.getElementById('type_text').style.display = (mode == 'text')?'block':'none';
  document.getElementById('type_textarea').style.display = (mode == 'textarea')?'block':'none';
  document.getElementById('type_select').style.display = (mode == 'select')?'block':'none';
+ document.getElementById('type_date').style.display = (mode == 'date')?'block':'none';
 }
 </script>
 
@@ -32,6 +33,11 @@ function clx(mode) {
 <!-- <tr class="contRow1"><td width="5%" style="background-color: #FFFFE0;">{l_feedback:type.select}</td><td width="45%">{l_feedback:select.storekeys}</td><td><select name="select_storekeys">{storekeys_opts}</select></td></tr> -->
 <tr class="contRow1"><td width="5%" style="background-color: #FFFFE0;">{l_feedback:type.select}</td><td>{l_feedback:select.options}</td><td><textarea cols=70 rows=8 name="select_options">{select_options}</textarea></tr>
 <tr class="contRow1"><td width="5%" style="background-color: #FFFFE0;">{l_feedback:type.select}</td><td>{l_feedback:field .default}</td><td><input type="text" name="select_default" value="{select_default}" size=40></tr>
+</table>
+</div>
+<div id="type_date">
+<table border="0" cellspacing="1" cellpadding="1" class="content">
+<tr class="contRow1"><td width="5%" style="background-color: #E0FFFF;">{l_feedback:type.date}</td><td width="45%">{l_feedback:field.default.date}</td><td><input type="text" name="date_default" value="{date_default}" size=10></tr>
 </table>
 </div>
 <table border="0" cellspacing="1" cellpadding="1" class="content">

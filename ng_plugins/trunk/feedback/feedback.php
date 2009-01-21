@@ -43,6 +43,22 @@ function plugin_feedback_screen() {
 			$tvars['vars']['value']	= $fInfo['default'];
 			break;
 
+		case 'date':
+
+			$opts = '';
+			for ($di = 1; $di <= 31; $di++) { $opts .= '<option value="'.$di.'"'.($di == $fInfo['default:vars']['day']?' selected="selected"':'').'>'.sprintf('%02u',$di).'</option>'; }
+			$tvars['vars']['day_options'] = $opts;
+
+			$opts = '';
+			for ($di = 1; $di <= 12; $di++) { $opts .= '<option value="'.$di.'"'.($di == $fInfo['default:vars']['month']?' selected="selected"':'').'>'.sprintf('%02u',$di).'</option>'; }
+			$tvars['vars']['month_options'] = $opts;
+
+			$opts = '';
+			for ($di = 1970; $di <= 2010; $di++) { $opts .= '<option value="'.$di.'"'.($di == $fInfo['default:vars']['year']?' selected="selected"':'').'>'.$di.'</option>'; }
+			$tvars['vars']['year_options'] = $opts;
+
+			break;
+
 		case 'select':
 			$opts = '';
 			if (is_array($fInfo['options']))
@@ -54,6 +70,7 @@ function plugin_feedback_screen() {
 	$tvars['regx']['#\[text\](.+?)\[\/text\]#is']			= ($fInfo['type'] == 'text'    )?'$1':'';
 	$tvars['regx']['#\[textarea\](.+?)\[\/textarea\]#is']	= ($fInfo['type'] == 'textarea')?'$1':'';
 	$tvars['regx']['#\[select\](.+?)\[\/select\]#is']		= ($fInfo['type'] == 'select'  )?'$1':'';
+	$tvars['regx']['#\[date\](.+?)\[\/date\]#is']			= ($fInfo['type'] == 'date'  )?'$1':'';
 
 	$tpl->vars('site.form.row', $tvars);
 	$output .= $tpl->show('site.form.row');
@@ -100,12 +117,13 @@ function plugin_feedback_post() {
 
  // Determine paths for all template files
  $tpath = locatePluginTemplates(array('site.infoblock', 'site.form.hdr', 'site.form.row'), 'feedback', extra_get_param('feedback', 'localsource'));
+ $ptpl_url = admin_url.'/plugins/feedback/tpl';
 
  $form_id = intval($_REQUEST['id']);
 
  if (!is_array($frow = $mysql->record("select * from ".prefix."_feedback where active = 1 and id = ".$form_id))) {
 	$tpl->template('site.infoblock', $tpath['site.infoblock']);
-	$tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $lang['feedback:form.no.title'], 'entries' => $lang['feedback:form.no.description'])));
+	$tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $lang['feedback:form.no.title'], 'ptpl_url' => $ptpl_url, 'entries' => $lang['feedback:form.no.description'])));
 	$template['vars']['mainblock']      =  $tpl->show('site.infoblock');
 	return 1;
  }
@@ -118,7 +136,14 @@ function plugin_feedback_post() {
  $output = '';
 
  foreach ($fData as $fName => $fInfo) {
-  $output .= '['.$fName.'] '.$fInfo['title'].': '.$_REQUEST[$fName]."<br/>\n";
+  switch ($fInfo['type']) {
+  	case 'date':	$fieldValue = $_REQUEST[$fName.':day'] . '.' . $_REQUEST[$fName.':month'] . '.' . $_REQUEST[$fName.':year'];
+	  				break;
+	default:		$fieldValue = $_REQUEST[$fName];
+
+
+  }
+  $output .= '['.$fName.'] '.$fInfo['title'].': '.$fieldValue."<br/>\n";
  }
 
  $mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $lang['feedback:mail.subj']);
@@ -134,6 +159,6 @@ function plugin_feedback_post() {
  }
 
  $tpl->template('site.infoblock', $tpath['site.infoblock']);
- $tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $frow['title'], 'entries' => str_replace('{ecount}', $mailCount, $lang['feedback:confirm.message']))));
+ $tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $frow['title'], 'ptpl_url' => $ptpl_url, 'entries' => str_replace('{ecount}', $mailCount, $lang['feedback:confirm.message']))));
  $template['vars']['mainblock']      =  $tpl->show('site.infoblock');
 }
