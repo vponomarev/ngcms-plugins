@@ -226,7 +226,7 @@ function showFormRow() {
 		}
 
 		$xsel = '';
-		foreach (array('text', 'textarea', 'select') as $ts) {
+		foreach (array('text', 'textarea', 'select', 'date') as $ts) {
 			$txvars['vars'][$ts.'_default'] = ($xRow['type'] == $ts)?$xRow['default']:'';
 			$xsel .= '<option value="'.$ts.'"'.(($xRow['type'] == $ts)?' selected':'').'>'.$lang['feedback:type.'.$ts];
 		}
@@ -302,6 +302,19 @@ function editFormRow(){
 			case 'text':
 				$fld['type'] = 'text';
 				$fld['default'] = $_REQUEST['text_default'];
+				break;
+
+			case 'date':
+				$fld['type'] = 'date';
+				// Check default date
+				if (preg_match('#^ *(\d{1,2})\.(\d{1,2})\.(\d{4}) *$#', $_REQUEST['date_default'], $match) &&
+					($match[1] >= 1) && ($match[1] <= 31) && ($match[2] >= 1) && ($match[2] <= 12) && ($match[3] >= 1970) && ($match[3] <= 2099)
+				   ) {
+					$fld['default'] = $match[1].'.'.$match[2].'.'.$match[3];
+					$fld['default:vars']['day']		= $match[1];
+					$fld['default:vars']['month']	= $match[2];
+					$fld['default:vars']['year']	= $match[3];
+				}
 				break;
 
 			case 'textarea':
