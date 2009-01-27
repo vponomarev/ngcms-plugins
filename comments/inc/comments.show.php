@@ -44,13 +44,15 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	}
 	$sql .= " order by c.id".(extra_get_param('comments', 'backorder')?' desc':'');
 
+	// Comments counter
+	$comnum = 0;
+
 	// Check if we need to use limits
 	if ($callingParams['limitStart'] || $callingParams['limitCount']) {
 		$sql .= ' limit '.intval($callingParams['limitStart']).", ".intval($callingParams['limitCount']);
+		$comnum = intval($callingParams['limitStart']);
 	}
 
-
-	$comnum = 0;
 	foreach ($mysql->select($sql) as $row) {
 		$comnum++;
 		$tvars['vars']['id']		=	$row['id'];
@@ -149,6 +151,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 //		'plugin'  => if is called from plugin - ID of plugin
 //		'overrideTemplateName' => alternative template for display
 //		'overrideTemplatePath' => alternative path for searching of template
+//		'noajax'		=> DISABLE AJAX mode
 function comments_showform($newsID, $callingParams = array()){
 	global $mysql, $config, $template, $tpl, $userROW;
 
@@ -169,6 +172,9 @@ function comments_showform($newsID, $callingParams = array()){
 	} else {
 		$tvars['vars']['smilies'] = "";
 	}
+
+	// Lock AJAX calls if required
+	$tvars['regx']['#\[ajax\](.*?)\[\/ajax\]#is'] = $callingParams['noajax']?'':'$1';
 
 	if ($_COOKIE['com_username'] && trim($_COOKIE['com_username']) != "") {
 		$tvars['vars']['savedname'] = secure_html(urldecode($_COOKIE['com_username']));
