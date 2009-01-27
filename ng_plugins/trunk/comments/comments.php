@@ -85,7 +85,7 @@ function plugin_comments_add() {
 		// Check if AJAX mode is turned OFF
 		if (!$_REQUEST['ajax']) {
 			// Make FULL news link
-			$link = GetLink('full', $addResult[0]);
+			$link = GetLink('full', $addResult[0], 1);
 			// Make redirect to full news
 			@header("Location: ".$link);
 			return 1;
@@ -115,9 +115,23 @@ function plugin_comments_add() {
 		return 1;
 	} else {
 		// Some errors.
-		$tpl -> template('error', tpl_site);
-		$tpl -> vars('error', array( 'vars' => array('content' => $template['vars']['mainblock'])));
-		echo $tpl -> show('error');
+		if ($_REQUEST['ajax']) {
+			// AJAX MODE
+			$tpl -> template('error', tpl_site);
+			$tpl -> vars('error', array( 'vars' => array('content' => $template['vars']['mainblock'])));
+			echo $tpl -> show('error');
+		} else {
+			// NON-AJAX MODE
+			$tavars = array( 'vars' => array(
+				'title'		=> 'Сообщение об ошибке',
+				'message'	=> $template['vars']['mainblock'],
+				'link'		=> ($_REQUEST['referer'])?$_REQUEST['referer']:'/',
+				'linktext'	=> 'Вернуться назад'
+			));
+			$tpl -> template('redirect', tpl_site);
+			$tpl -> vars('redirect', $tavars);
+			echo $tpl -> show('redirect');
+		}
 
 		$template['vars']['mainblock'] = '';
 	}
