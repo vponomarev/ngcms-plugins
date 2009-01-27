@@ -206,6 +206,7 @@ function comments_showform($newsID, $callingParams = array()){
 	$tvars['vars']['bbcodes']		=	BBCodes();
 	$tvars['vars']['skins_url']		=	skins_url;
 	$tvars['vars']['newsid']		=	$newsID;
+	$tvars['vars']['request_uri']	=	$_SERVER['REQUEST_URI'];
 
 	// Generate request URL
 	$link = GetLink('plugins', array('plugin_name' => 'comments'), 1);
