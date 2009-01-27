@@ -70,7 +70,7 @@ class CommentsNewsFilter extends NewsFilter {
 }
 
 function plugin_comments_add() {
-	global $config, $catz, $catmap, $tpl, $template, $SUPRESS_TEMPLATE_SHOW;
+	global $config, $catz, $catmap, $tpl, $template, $lang, $SUPRESS_TEMPLATE_SHOW;
 
 	$SUPRESS_TEMPLATE_SHOW = 1;
 
@@ -123,10 +123,10 @@ function plugin_comments_add() {
 		} else {
 			// NON-AJAX MODE
 			$tavars = array( 'vars' => array(
-				'title'		=> 'Сообщение об ошибке',
+				'title'		=> $lang['comments:err.redir.title'],
 				'message'	=> $template['vars']['mainblock'],
 				'link'		=> ($_REQUEST['referer'])?$_REQUEST['referer']:'/',
-				'linktext'	=> 'Вернуться назад'
+				'linktext'	=> $lang['comments:err.redir.url'],
 			));
 			$tpl -> template('redirect', tpl_site);
 			$tpl -> vars('redirect', $tavars);
@@ -139,7 +139,7 @@ function plugin_comments_add() {
 
 // Show dedicated page for comments
 function plugin_comments_show(){
-	global $config, $catz, $mysql, $catmap, $tpl, $template, $SUPRESS_TEMPLATE_SHOW, $userROW;
+	global $config, $catz, $mysql, $catmap, $tpl, $template, $lang, $SUPRESS_TEMPLATE_SHOW, $userROW;
 
 	include_once(root."/plugins/comments/inc/comments.show.php");
 
@@ -147,7 +147,7 @@ function plugin_comments_show(){
 	$newsID = intval($_REQUEST['news_id']);
 
 	if (!$newsID || !is_array($newsRow = $mysql->record("select * from ".prefix."_news where id = ".$newsID))) {
-		$template['vars']['mainblock'] = 'Указанной новости не существует';
+		$template['vars']['mainblock'] = $lang['comments:err.nonews'];
 		return;
 	}
 
