@@ -41,19 +41,24 @@ class CommentsNewsFilter extends NewsFilter {
 		include_once(root."/plugins/comments/inc/comments.show.php");
 
 		// Check if we need pagination
-		$flagMoreComments = 0;
+		$flagMoreComments	= false;
+		$skipCommShow		= false;
 
 		if (extra_get_param('comments', 'multipage')) {
+			$multi_mcount = intval(extra_get_param('comments', 'multi_mcount'));
 			// If we have comments more than for one page - activate pagination
-			if ((intval(extra_get_param('comments', 'multi_mcount')) > 0) && ($SQLnews['com'] > intval(extra_get_param('comments', 'multi_mcount')))) {
-				$callingCommentsParams['limitCount'] = intval(extra_get_param('comments', 'multi_mcount'));
-				$flagMoreComments = 1;
+			if (($multi_mcount >= 0) && ($SQLnews['com'] > $multi_mcount)) {
+				$callingCommentsParams['limitCount'] = $multi_mcount;
+				$flagMoreComments = true;
+				if (!$multi_mcount)
+					$skipCommShow = true;
 			}
 
 		}
 
-		// Show comments
-		comments_show($newsID, 0, 0, $callingCommentsParams);
+		// Show comments [ if not skipped ]
+		if (!$skipCommShow)
+			comments_show($newsID, 0, 0, $callingCommentsParams);
 
 		// If multipage is used and we have more comments - show
 		if ($flagMoreComments) {
@@ -84,6 +89,8 @@ function plugin_comments_add() {
 		// Ok.
 		// Check if AJAX mode is turned OFF
 		if (!$_REQUEST['ajax']) {
+			// We should JUMP to this new comment
+
 			// Make FULL news link
 			$link = GetLink('full', $addResult[0], 1);
 			// Make redirect to full news
@@ -152,6 +159,7 @@ function plugin_comments_show(){
 	}
 
 	// Prepare params for call
+	// AJAX is turned off by default
 	$callingCommentsParams = array( 'noajax' => 1);
 
 	// Set default template path
@@ -177,29 +185,23 @@ function plugin_comments_show(){
 
 	$template['vars']['mainblock'] .= $tpl->show('comments.header');
 
-	// Show comments
-	include_once(root."/plugins/comments/inc/comments.show.php");
-
 	// Check if we need pagination
-	$flagMoreComments	= 0;
 	$page				= 0;
 	$pageCount			= 0;
 
-	if (extra_get_param('comments', 'multipage')) {
-		// If we have comments more than for one page - activate pagination
-		if ((intval(extra_get_param('comments', 'multi_mcount')) > 0) && ($newsRow['com'] > intval(extra_get_param('comments', 'multi_mcount')))) {
-			$flagMoreComments = 1;
+	// If we have comments more than for one page - activate pagination
+	$multi_scount = intval(extra_get_param('comments', 'multi_scount'));
+	if (($multi_scount > 0) && ($newsRow['com'] > $multi_scount)) {
 
-			// Page count
-			$pageCount = ceil($newsRow['com']/intval(extra_get_param('comments', 'multi_scount')));
+		// Page count
+		$pageCount = ceil($newsRow['com'] / $multi_scount);
 
-			// Check if user wants to access not first page
-			$page = intval($_REQUEST['page']);
-			if ($page < 1) $page = 1;
+		// Check if user wants to access not first page
+		$page = intval($_REQUEST['page']);
+		if ($page < 1) $page = 1;
 
-			$callingCommentsParams['limitCount'] = intval(extra_get_param('comments', 'multi_scount'));
-			$callingCommentsParams['limitStart'] = ($page-1) * intval(extra_get_param('comments', 'multi_scount'));
-		}
+		$callingCommentsParams['limitCount'] = intval(extra_get_param('comments', 'multi_scount'));
+		$callingCommentsParams['limitStart'] = ($page-1) * intval(extra_get_param('comments', 'multi_scount'));
 	}
 
 	// Show comments
@@ -212,6 +214,10 @@ function plugin_comments_show(){
 		$navigations = getNavigations(tpl_dir.$config['theme']);
 		$template['vars']['mainblock'] .= generatePagination($page, 1, $pageCount, 10, $link, $navigations);
 	}
+
+	// Enable AJAX in case if we are on last page
+	if ($page == $pageCount)
+		$callingCommentsParams['noajax'] = 0;
 
 	// Show form for adding comments
 	if ($newsRow['allow_com'] && (!extra_get_param('comments', 'regonly') || is_array($userROW))) {

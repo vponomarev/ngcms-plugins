@@ -46,7 +46,7 @@ function comments_add(){
 	// If user is not logged, make some additional tests
 	if (!$is_member) {
 		// Check if unreg are allowed to make comments
-		if (!extra_get_param('comments', 'regonly')) {
+		if (extra_get_param('comments', 'regonly')) {
 			msg(array("type" => "error", "text" => $lang['comments:err.regonly']));
 			return;
 		}
