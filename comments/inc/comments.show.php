@@ -53,12 +53,16 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		$comnum = intval($callingParams['limitStart']);
 	}
 
+	$timestamp = extra_get_param('comments', 'timestamp');
+	if (!$timestamp)
+		$timestamp = 'j.m.Y - H:i';
+
 	foreach ($mysql->select($sql) as $row) {
 		$comnum++;
 		$tvars['vars']['id']		=	$row['id'];
 		$tvars['vars']['author']	=	$row['author'];
 		$tvars['vars']['mail']		=	$row['mail'];
-		$tvars['vars']['date']		=	LangDate(extra_get_param('comments', 'timestamp'), $row['postdate']);
+		$tvars['vars']['date']		=	LangDate($timestamp, $row['postdate']);
 
 		if ($row['reg']) {
 			$tvars['vars']['profile_link'] = GetLink('user', $row);
