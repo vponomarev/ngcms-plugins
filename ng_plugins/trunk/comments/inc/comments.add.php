@@ -7,7 +7,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Params for filtering and processing
 //
 function comments_add(){
-	global $mysql, $config, $AUTH_METHOD, $userROW, $ip, $lang, $parse, $HTTP_REFERER, $catmap, $catz;
+	global $mysql, $config, $AUTH_METHOD, $userROW, $ip, $lang, $parse, $HTTP_REFERER, $catmap, $catz, $PFILTERS;
 
 	// Check membership
 	// If login/pass is entered (either logged or not)
@@ -21,27 +21,28 @@ function comments_add(){
 	}
 
 	// Entered data have higher priority then login data
+	$memberRec = null;
 	if (is_array($user)) {
-		$params['user_name']	= $user['name'];
-		$params['author_id']	= $user['id'];
-		$params['mail']			= $user['mail'];
+		$SQL['author']			= $user['name'];
+		$SQL['author_id']		= $user['id'];
+		$SQL['mail']			= $user['mail'];
 		$is_member				= 1;
 		$memberRec				= $user;
 	} else if (is_array($userROW)) {
-		$params['user_name']	= $userROW['name'];
-		$params['author_id']	= $userROW['id'];
-		$params['mail']			= $userROW['mail'];
+		$SQL['author']			= $userROW['name'];
+		$SQL['author_id']		= $userROW['id'];
+		$SQL['mail']			= $userROW['mail'];
 		$is_member				= 1;
 		$memberRec				= $userROW;
 	} else {
-		$params['user_name']	= secure_html(convert(trim($_POST['name'])));
-		$params['author_id']	= 0;
-		$params['mail']			= secure_html(trim($_POST['mail']));
+		$SQL['author']			= secure_html(convert(trim($_POST['name'])));
+		$SQL['author_id']		= 0;
+		$SQL['mail']			= secure_html(trim($_POST['mail']));
 		$is_member				= 0;
 	}
 
-	$params['newsid']	=	intval($_POST['newsid']);
-	$params['content']	=	secure_html(convert(trim($_POST['content'])));
+	$SQL['post']	=	intval($_POST['newsid']);
+	$SQL['text']	=	secure_html(convert(trim($_POST['content'])));
 
 	// If user is not logged, make some additional tests
 	if (!$is_member) {
@@ -63,43 +64,46 @@ function comments_add(){
 			$_SESSION['captcha'] = rand(00000, 99999);
 		}
 
-		if (!$params['user_name']) {
+		if (!$SQL['author']) {
 			msg(array("type" => "error", "text" => $lang['commets:err.name']));
 			return;
 		}
-		if (!$params['mail']) {
+		if (!$SQL['mail']) {
 			msg(array("type" => "error", "text" => $lang['commets:err.mail']));
 			return;
 		}
-		if (preg_match("/[^(\w)|(\x7F-\xFF)|(\s)]/", $params['user_name']) || strlen($params['user_name']) > 60) {
+
+		// Check if author name use incorrect symbols. Check should be done only for unregs
+		if ((!$SQL['author_id']) && (preg_match("/[^(\w)|(\x7F-\xFF)|(\s)]/", $SQL['author']) || strlen($SQL['author']) > 60)) {
 			msg(array("type" => "error", "text" => $lang['commets:err.badname']));
 			return;
 		}
-		if (strlen($params['mail']) > 70 || !preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $params['mail'])) {
+		if (strlen($SQL['mail']) > 70 || !preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $SQL['mail'])) {
 			msg(array("type" => "error", "text" => $lang['commets:err.badmail']));
 			return;
 		}
 	}
 
-	if (strlen($params['content']) > extra_get_param('comments', 'maxlen') || strlen($params['content']) < 2) {
+	$maxlen = intval(extra_get_param('comments', 'maxlen'));
+	if (($maxlen) && (strlen($SQL['text']) > $maxlen || strlen($SQL['text']) < 2)) {
 		msg(array("type" => "error", "text" => str_replace('{maxlen}',extra_get_param('comments', 'maxlen') ,$lang['comments:err.badtext'])));
 		return;
 	}
 
 	// Check for flood
-	if (checkFlood(0, $ip, 'comments', 'add', $is_member?$memberRec:null, $is_member?null:$params['user_name'])) {
+	if (checkFlood(0, $ip, 'comments', 'add', $is_member?$memberRec:null, $is_member?null:$SQL['author'])) {
 		msg(array("type" => "error", "text" => str_replace('{timeout}',$config['flood_time'] ,$lang['comments:err.flood'])));
 		return;
 	}
 
 	// Check for bans
-	if (checkBanned($ip, 'comment', 'add', $is_member?$memberRec:null, $is_member?null:$params['user_name'])) {
+	if (checkBanned($ip, 'comment', 'add', $is_member?$memberRec:null, $is_member?null:$SQL['author'])) {
 		msg(array("type" => "error", "text" => $lang['msge_ip'], "info" => sprintf($lang['msgi_ip'], $ban_row['descr'])));
 		return;
 	}
 
 	// Locate news
-	if ($news_row = $mysql->record("select * from ".prefix."_news where id = ".db_squote($params['newsid']))) {
+	if ($news_row = $mysql->record("select * from ".prefix."_news where id = ".db_squote($SQL['post']))) {
 		if (!$news_row['allow_com']) {
 			msg(array("type" => "error", "text" => $lang['comments:err.forbidden']));
 			return;
@@ -127,7 +131,7 @@ function comments_add(){
 	if ($multiCheck) {
 
 		// Locate last comment for this news
-		if (is_array($lpost = $mysql->record("select author_id, author, ip, mail from ".prefix."_comments where post=".db_squote($params['newsid'])." order by id desc limit 1"))) {
+		if (is_array($lpost = $mysql->record("select author_id, author, ip, mail from ".prefix."_comments where post=".db_squote($SQL['post'])." order by id desc limit 1"))) {
 			// Check for post from the same user
 			if (is_array($userROW)) {
 				 if ($userROW['id'] == $lpost['author_id']) {
@@ -136,7 +140,7 @@ function comments_add(){
 				}
 			} else {
 				//print "Last post: ".$lpost['id']."<br>\n";
-				if (($lpost['author'] == $params['user_name'])||($lpost['mail'] == $params['mail'])) {
+				if (($lpost['author'] == $SQL['author'])||($lpost['mail'] == $SQL['mail'])) {
 					msg(array("type" => "error", "text" => $lang['comments:err.multilock']));
 					return;
 				}
@@ -149,42 +153,70 @@ function comments_add(){
 	//
 	// Run interceptors
 	//
-	exec_acts('addcomment','', &$params);
+	exec_acts('addcomment','', &$SQL);
 
 	// Break if interceptor blocks comment adding
-	if ($params['stop'])
+	if ($SQL['stop'])
 		return;
 
 	*/
 
-	$time = time() + ($config['date_adjust'] * 60);
+	$SQL['postdate'] = time() + ($config['date_adjust'] * 60);
 
 	if (extra_get_param('comments', 'maxwlen') > 1){
-		$params['content'] = preg_replace('/(\S{'.intval(extra_get_param('comments', 'maxwlen')).'})(?!\s)/', '$1 ', $params['content']);
+		$SQL['text'] = preg_replace('/(\S{'.intval(extra_get_param('comments', 'maxwlen')).'})(?!\s)/', '$1 ', $SQL['text']);
 
-		if (strlen($params['user_name']) > extra_get_param('comments', 'maxwlen')) {
-			$params['user_name'] = substr($params['user_name'], 0, extra_get_param('comments', 'maxwlen'))." ...";
+		if ((!$SQL['author_id']) && (strlen($SQL['author']) > extra_get_param('comments', 'maxwlen'))) {
+			$SQL['author'] = substr($SQL['author'], 0, extra_get_param('comments', 'maxwlen'))." ...";
 		}
 	}
-	$params['content'] = str_replace("\r\n", "<br />", $params['content']);
+	$SQL['text']	= str_replace("\r\n", "<br />", $SQL['text']);
+	$SQL['ip']		= $ip;
+	$SQL['reg']		= ($is_member) ? '1' : '0';
+
+	// RUN interceptors
+	load_extras('comments:add');
+
+	$pluginNoError = 1;
+	if (is_array($PFILTERS['comments']))
+		foreach ($PFILTERS['comments'] as $k => $v) {
+			if (!($pluginNoError = $v->addComments($memberRec, $news_row, $tvars, $SQL))) {
+				msg(array("type" => "error", "text" => str_replace('{plugin}', $k, $lang['comments:err.pluginlock'])));
+				break;
+			}
+		}
+
+	if (!$pluginNoError) {
+		return 0;
+	}
+
 
 	// Create comment
-	$mysql->query("insert into ".prefix."_comments (`postdate`, `post`, `author`, `author_id`, `mail`, `text`, `ip`, `reg`) VALUES (".db_squote($time).", ".db_squote($params['newsid']).", ".db_squote($params['user_name']).", ".db_squote($params['author_id']).", ".db_squote($params['mail']).", ".db_squote($params['content']).", ".db_squote($ip).", '".(($is_member) ? '1' : '0')."')");
+	$vnames = array(); $vparams = array();
+	foreach ($SQL as $k => $v) { $vnames[]  = $k; $vparams[] = db_squote($v); }
+
+	$mysql->query("insert into ".prefix."_comments (".implode(",",$vnames).") values (".implode(",",$vparams).")");
 
 	// Retrieve comment ID
 	$comment_id = $mysql->result("select LAST_INSERT_ID() as id");
 
 	// Update comment counter in news
-	$mysql->query("update ".prefix."_news set com=com+1 where id=".db_squote($params['newsid']));
+	$mysql->query("update ".prefix."_news set com=com+1 where id=".db_squote($SQL['post']));
 	$comment_no = $new_row['com']+1;
 
 	// Update counter for user
-	if ($params['author_id']) {
-		$mysql->query("update ".prefix."_users set com=com+1 where id = ".db_squote($params['author_id']));
+	if ($SQL['author_id']) {
+		$mysql->query("update ".prefix."_users set com=com+1 where id = ".db_squote($SQL['author_id']));
 	}
 
 	// Update flood protect database
-	checkFlood(1, $ip, 'comments', 'add', $is_member?$memberRec:null, $is_member?null:$params['user_name']);
+	checkFlood(1, $ip, 'comments', 'add', $is_member?$memberRec:null, $is_member?null:$SQL['author']);
+
+	// RUN interceptors
+	if (is_array($PFILTERS['comments']))
+		foreach ($PFILTERS['comments'] as $k => $v)
+			$v->addComments($memberRec, $news_row, $tvars, $SQL, $comment_id);
+
 
 	// Email informer
 	if (extra_get_param('comments', 'inform_author') || extra_get_param('comments', 'inform_admin')) {
@@ -195,10 +227,10 @@ function comments_add(){
 					'{comment}',
 					'{newslink}',
 					'{newstitle}'),
-			array(	$params['user_name'],
-					($params['author_id'])?'<a href="'.GetLink('user', array('author' => $params['user_name'])).'">':'',
-					($params['author_id'])?'</a>':'',
-					$parse->bbcodes($parse->smilies(secure_html($params['content']))),
+			array(	$SQL['author'],
+					($SQL['author_id'])?'<a href="'.GetLink('user', array('author' => $SQL['author'])).'">':'',
+					($SQL['author_id'])?'</a>':'',
+					$parse->bbcodes($parse->smilies(secure_html($SQL['text']))),
 					GetLink('full', $news_row),
 					$news_row['title'],
 					),
@@ -217,8 +249,8 @@ function comments_add(){
 
 	}
 
-	@setcookie("com_username", urlencode($params['user_name']), 0, '/');
-	@setcookie("com_usermail", urlencode($params['mail']), 0, '/');
+	@setcookie("com_username", urlencode($SQL['author']), 0, '/');
+	@setcookie("com_usermail", urlencode($SQL['mail']), 0, '/');
 
 	return array($news_row, $comment_id);
 }

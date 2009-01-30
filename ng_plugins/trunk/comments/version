@@ -16,3 +16,4 @@ Title:  алендарь новостей
 Information: ќтображение данных о новост€х по выбранному мес€цу, при этом дни, когда были новости, выдел€ютс€.
 Preinstall: default_yes
 Preinstall_vars: cache="1"; cacheExpire="3600";
+Library: lib; inc/comments.lib.php
