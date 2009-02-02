@@ -126,7 +126,7 @@ function plugin_comments_add() {
 			// AJAX MODE
 			$tpl -> template('error', tpl_site);
 			$tpl -> vars('error', array( 'vars' => array('content' => $template['vars']['mainblock'])));
-			echo $tpl -> show('error');
+			$template['vars']['mainblock'] = $tpl -> show('error');
 		} else {
 			// NON-AJAX MODE
 			$tavars = array( 'vars' => array(
@@ -137,10 +137,8 @@ function plugin_comments_add() {
 			));
 			$tpl -> template('redirect', tpl_site);
 			$tpl -> vars('redirect', $tavars);
-			echo $tpl -> show('redirect');
+			$template['vars']['mainblock'] = $tpl -> show('redirect');
 		}
-
-		$template['vars']['mainblock'] = '';
 	}
 }
 
