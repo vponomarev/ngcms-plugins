@@ -148,18 +148,6 @@ function comments_add(){
 		}
 	}
 
-	/*
-	*** TEMPORALLY DISABLE INTERCEPTORS ***
-	//
-	// Run interceptors
-	//
-	exec_acts('addcomment','', &$SQL);
-
-	// Break if interceptor blocks comment adding
-	if ($SQL['stop'])
-		return;
-
-	*/
 
 	$SQL['postdate'] = time() + ($config['date_adjust'] * 60);
 
