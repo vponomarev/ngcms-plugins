@@ -10,15 +10,19 @@ function plugin_similar_recover($newsID, $count) {
 	if (!$count)
 		return 0;
 
-	// Delete old data
-	$mysql->query("delete from ".prefix."_similar_index where newsID = ".db_squote($newsID));
-
 	// Load a list of similar looking news via TAG index
 	$list = $mysql->select("select i.newsID, count(i.tagID) as cnt from ".prefix."_tags_index i where (i.newsID <> ".db_squote($newsID).") and (i.tagID in ( select tagID from ".prefix."_tags_index where newsID = ".db_squote($newsID).") ) group by i.newsID order by cnt desc limit ".intval($count));
+
+	// Lock tables
+	$mysql->query("lock tables ".prefix."_similar_index write, ".prefix."_tags_index read, ".prefix."_tags_index i read, ".prefix."_news write");
+
+	// Delete old data
+	$mysql->query("delete from ".prefix."_similar_index where newsID = ".db_squote($newsID));
 
 	// Check if we have something similar-looking. Break if nothing similar
 	if (!sizeof($list)) {
 		$mysql->query("update ".prefix."_news set similar_status = 1 where id = ".db_squote($newsID));
+		$mysql->query("unlock tables");
 		// Return: OK, news do not have any similars
 		return 1;
 	}
@@ -39,6 +43,7 @@ function plugin_similar_recover($newsID, $count) {
 
 	// And at the end - update news status
 	$mysql->query("update ".prefix."_news set similar_status = 2 where id = ".db_squote($newsID));
+	$mysql->query("unlock tables");
 
 	// Return: OK, news have similars
 	return 2;
