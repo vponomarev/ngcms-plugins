@@ -19,12 +19,13 @@ class TagsNewsfilter extends NewsFilter {
 		$tags = array();
 		foreach (explode(",", $_REQUEST['tags']) as $tag) {
 			$tag = trim($tag);
-			if (!$tag) continue;
+			if (!strlen($tag)) continue;
 			$tags[$tag] = 1;
 		}
 
 		// Make a resulting line
-		$SQL['tags']   = join(", ", array_keys($tags));
+		$SQL['tags']   = sizeof($tags)?join(", ", array_keys($tags)):'';
+
 		return 1;
 	}
 
@@ -40,7 +41,7 @@ class TagsNewsfilter extends NewsFilter {
 		$tagsNewQ = array();
 		foreach (explode(",", $SQL['tags']) as $tag) {
 			$tag = trim($tag);
-			if (!$tag) continue;
+			if (!$strlen(tag)) continue;
 			$tagsNew[] = $tag;
 			$tagsNewQ[] = db_squote($tag);
 		}
@@ -73,12 +74,12 @@ class TagsNewsfilter extends NewsFilter {
 		$tags = array();
 		foreach (explode(",", $_REQUEST['tags']) as $tag) {
 			$tag = trim($tag);
-			if (!$tag) continue;
+			if (!strlen($tag)) continue;
 			$tags[$tag] = 1;
 		}
 
 		// Make a resulting line
-		$SQLnew['tags']   = join(", ", array_keys($tags));
+		$SQLnew['tags']   = sizeof($tags)?join(", ", array_keys($tags)):'';
 		return 1;
 	}
 
@@ -99,6 +100,7 @@ class TagsNewsfilter extends NewsFilter {
 		if ($SQLnews['approve'])
 			foreach (explode(",", $SQLnews['tags']) as $tag) {
 				$tag = trim($tag);
+				if (!strlen($tag)) continue;
 				$tagsOld[]  = $tag;
 				$tagsOldQ[] = db_squote($tag);
 			}
@@ -111,6 +113,7 @@ class TagsNewsfilter extends NewsFilter {
 		if ($SQLnew['approve'])
 			foreach (explode(",", $SQLnew['tags']) as $tag) {
 				$tag = trim($tag);
+				if (!strlen($tag)) continue;
 				$tagsNew[] = $tag;
 				$tagsNewQ[] = db_squote($tag);
 			}
@@ -118,8 +121,8 @@ class TagsNewsfilter extends NewsFilter {
 		// List of deleted tags
 		$tagsDelQ = array_diff($tagsOldQ, $tagsNewQ);
 		$tagsAddQ = array_diff($tagsNewQ, $tagsOldQ);
-
 		$tagsDiffQ = array_merge($tagsDelQ, $tagsAddQ);
+		
 		// Delete tag indexes for news
 		$mysql->query("delete from ".prefix."_tags_index where newsID = ".$newsID);
 

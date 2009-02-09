@@ -71,7 +71,12 @@ elseif ($_REQUEST['action'] == 'commit') {
 		$tagIndexSQL = $mysql->select("select id, tags from ".prefix."_news where (tags is not NULL) and (tags <> '') and (approve = 1)");
 		foreach ($tagIndexSQL as $row) {
 			$ntags = preg_split("/, */", trim($row['tags']));
-			foreach ($ntags as $ntag) $tags[$ntag] = $tags[$ntag] + 1;
+			foreach ($ntags as $ntag) {
+				$ntag = trim($ntag);
+				if (!strlen($ntag))
+					continue;
+				$tags[$ntag] = $tags[$ntag] + 1;
+			}	
 		}
 
 		// * Process counters
@@ -84,9 +89,13 @@ elseif ($_REQUEST['action'] == 'commit') {
 			$ntags = preg_split("/, */", trim($row['tags']));
 			$ntagsQ = array();
 			foreach ($ntags as $tag) {
+				$tag = trim($tag);
+				if (!strlen($tag))
+					continue;
 				$ntagsQ[] = db_squote($tag);
 			}
-			$mysql->query("insert into ".prefix."_tags_index (newsID, tagID) select ".db_squote($row['id']).", id from ".prefix."_tags where tag in (".join(",",$ntagsQ).")");
+			if (sizeof($ntagQ))
+				$mysql->query("insert into ".prefix."_tags_index (newsID, tagID) select ".db_squote($row['id']).", id from ".prefix."_tags where tag in (".join(",",$ntagsQ).")");
 		}
 
 		// * DELETE unused tags
