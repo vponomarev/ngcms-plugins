@@ -32,23 +32,13 @@ elseif ($_REQUEST['action'] == 'commit') {
 	commit_plugin_config_changes($plugin, $cfg);
 	if ($_REQUEST['rebuild']) {
 		// Rebuild index table
+
 		// * Truncate index
 		$mysql->query("truncate table ".prefix."_similar_index");
-		// * LOCK
-		$mysql->query("lock tables ".prefix."_tags_index i write, ".prefix."_tags_index write, ".prefix."_similar_index write, ".prefix."_news read, ".prefix."_news n read");
 
-		// Generate in memory list of news that have tags
-		$nList = array();
-		foreach ($mysql->select("select distinct(newsID) from ".prefix."_tags_index i") as $row)
-			$nList [] = $row['newsID'];
+		// * Mark all news to have broken index
+		$mysql->query("update ".prefix."_news set similar_status = 0");
 
-		$scount = extra_get_param('similar', 'count');
-		$scount = (($scount < 1)||($scount > 20))?5:$scount;
-
-		// Modify DB data
-		plugin_similar_repopulate($nList, $scount);
-
-		$mysql->query("unlock tables");
 		print $lang['tags_rebuild_done']."<br/>";
 	}
 	print_commit_complete($plugin);

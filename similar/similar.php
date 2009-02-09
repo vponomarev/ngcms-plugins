@@ -43,9 +43,13 @@ class SimilarNewsfilter extends NewsFilter {
 
 		// Show similar news only in full mode
 		if ($mode['style'] == 'full') {
+			// Check if we have similar news
+			$similars = $SQLnews['similar_status'];
+			if (!$similars)
+				$similars = plugin_similar_recover($newsID, extra_get_param('similar', 'count'));
+	
 			// Locate similar news
-			$similarRows = $mysql->select("select si.*, n.id as n_id, n.catid as n_catid, n.alt_name as n_alt_name, n.postdate as n_postdate from ".prefix."_similar_index si left join ".prefix."_news n on n.id = si.refNewsID where si.newsID = ". db_squote($newsID)." order by si.refNewsQuantaty desc");
-			if (count($similarRows)) {
+			if (($similars == 2) && count($similarRows = $mysql->select("select si.*, n.id as n_id, n.catid as n_catid, n.alt_name as n_alt_name, n.postdate as n_postdate from ".prefix."_similar_index si left join ".prefix."_news n on n.id = si.refNewsID where si.newsID = ". db_squote($newsID)." order by si.refNewsQuantaty desc"))) {
 
 				$result = '';
 				foreach ($similarRows as $similar) {
