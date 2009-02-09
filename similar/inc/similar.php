@@ -11,7 +11,7 @@ function plugin_similar_recover($newsID, $count) {
 		return 0;
 
 	// Load a list of similar looking news via TAG index
-	$list = $mysql->select("select i.newsID, count(i.tagID) as cnt from ".prefix."_tags_index i where (i.newsID <> ".db_squote($newsID).") and (i.tagID in ( select tagID from ".prefix."_tags_index where newsID = ".db_squote($newsID).") ) group by i.newsID order by cnt desc limit ".intval($count));
+	$list = $mysql->select("select i.newsID, count(i.tagID) as cnt from ".prefix."_tags_index i use index (tagID) where (i.newsID <> ".db_squote($newsID).") and (i.tagID in ( select tagID from ".prefix."_tags_index use index (newsID) where newsID = ".db_squote($newsID).") ) group by i.newsID order by cnt desc limit ".intval($count));
 
 	// Lock tables
 	$mysql->query("lock tables ".prefix."_similar_index write, ".prefix."_tags_index read, ".prefix."_tags_index i read, ".prefix."_news write");
