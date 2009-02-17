@@ -30,7 +30,7 @@ function plugin_lastnews(){
 //   * maxlength	- maximum length of news title (cut)
 //   * overrideTemplatePath - path for template
 function plugin_lastnewsGenerator($orderBy = '', $categories = array(), $overrideParams = array()) {
-	global $config, $mysql, $tpl, $lang, $langShortMonths, $langMonths;
+	global $config, $mysql, $tpl, $lang, $langShortMonths, $langMonths, $PFILTERS;
 
 	// Generate cache file name [ we should take into account SWITCHER plugin & calling parameters ]
 	$cacheFileName = md5('lastnews'.$config['theme'].$config['default_lang'].var_export($categories, true).var_export($overrideParams, true)).'.txt';
@@ -79,7 +79,27 @@ function plugin_lastnewsGenerator($orderBy = '', $categories = array(), $overrid
 	if (count($catfilter))
 		$filter [] = '('.join(' OR ', $catfilter).')';
 
+	// Preparation for plugin integration [if needed]
+	$callingParams = array();
+	if (extra_get_param('lastnews', 'pcall')) {
+		$callingParams['plugin'] = 'lastnews';
+		switch (intval(extra_get_param('lastnews', 'pcall_mode'))) {
+			case 1: $callingParams['style'] = 'short';
+					break;
+			case 2: $callingParams['style'] = 'full';
+					break;
+			default: $callingParams['style'] = 'export';
+		}
+
+		// Preload plugins
+		load_extras('news:show');
+		load_extras('news:show:one');
+	}
 	foreach ($mysql->select("select * from ".prefix."_news where ".join(" AND ", $filter)." order by ".($orderby?$orderby:"id desc")." limit ".$number) as $row) {
+		// Execute filters [ if requested ]
+		if (extra_get_param('lastnews', 'pcall') && is_array($PFILTERS['news']))
+				foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($row['id'], $row, $callingParams); }
+
 		$tvars['vars'] = array(
 			'link'		=>	GetLink('full', $row),
 			'views'		=>	$row['views']
@@ -95,6 +115,10 @@ function plugin_lastnewsGenerator($orderBy = '', $categories = array(), $overrid
 		} else {
 			$tvars['vars']['title'] = secure_html($row['title']);
 		}
+
+		// Execute filters [ if requested ]
+		if (extra_get_param('lastnews', 'pcall') && is_array($PFILTERS['news']))
+			foreach ($PFILTERS['news'] as $k => $v) { $v->showNews($row['id'], $row, $tvars, $callingParams); }
 
 		$tpl -> template('entries', $tpath['entries']);
 		$tpl -> vars('entries', $tvars);
