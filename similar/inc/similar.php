@@ -33,7 +33,7 @@ function plugin_similar_recover($newsID, $count) {
 	foreach ($list as $sr)
 		$nlist [$sr['newsID']] = $sr['cnt'];
 
-	$nl = $mysql->select("select id, title, editdate, postdate from ".prefix."_news where id in (".join(", ", array_keys($nlist)).")"); 
+	$nl = $mysql->select("select id, title, editdate, postdate from ".prefix."_news where id in (".join(", ", array_keys($nlist)).")");
 
 	// Now we have everything we need. Let's update similar list
 	foreach ($nl as $nrow) {
@@ -47,6 +47,52 @@ function plugin_similar_recover($newsID, $count) {
 
 	// Return: OK, news have similars
 	return 2;
+}
+
+
+//
+// Clear similarity database for selected news
+// [ CALLED AFTER ADD/EDIT/DELETE ]
+function plugin_similar_reset($newsID){
+	global $mysql;
+
+	$newsList = is_array($newsID)?$newsID:array($newsID);
+
+	// Make reset for all tags for new news
+	// 1. Select list of TAGS id's
+	$list = $mysql->select("select tagID from ".prefix."_tags_index where newsID in (".join(", ", $newsList).")", 1);
+	// 2. Select list of affected news
+	if (is_array($list) && count($list)) {
+		$aList = array();
+		foreach ($list as $rec)
+			$aList []= $rec['tagID'];
+
+		$nlist = $mysql->select("select newsID from ".prefix."_tags_index where tagID in (".join(",", $aList).') group by newsID', 1);
+
+		// 3. Update affected news
+		if (is_array($nlist) && count($nlist)) {
+			$nList = array();
+			foreach ($nlist as $rec)
+				$nList []= $rec['newsID'];
+
+			$mysql->query("update ".prefix."_news set similar_status = 0 where id in (".join(",", $nList).")");
+		}
+	}
+}
+
+function plugin_similar_resetLinked($newsID) {
+	global $mysql;
+
+	$newsList = is_array($newsID)?$newsID:array($newsID);
+	// Select all linked news
+	$list = $mysql->select("select newsID from ".prefix."_similar_index where refNewsID in (".join(", ", $newsList).")", 1);
+	// 2. Select list of affected news
+	if (is_array($list) && count($list)) {
+		$nList = array();
+		foreach ($list as $rec)
+			$nList []= $rec['newsID'];
+		$mysql->query("update ".prefix."_news set similar_status = 0 where id in (".join(",", $nList).")");
+	}
 }
 
 function plugin_similar_repopulate($newsid, $count){

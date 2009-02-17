@@ -16,8 +16,8 @@ class SimilarNewsfilter extends NewsFilter {
 		$scount = extra_get_param('similar', 'count');
 		$scount = (($scount < 1)||($scount > 20))?5:$scount;
 
-		// Modify DB data
-		plugin_similar_repopulate(plugin_similar_repopulate($newsid, $scount), $scount, array($newsid));
+		// Make reset for all tags for new news
+		plugin_similar_reset($newsid);
 
 		return 1;
 	}
@@ -26,11 +26,14 @@ class SimilarNewsfilter extends NewsFilter {
 	function editNewsNotify($newsID, $SQLnews, &$SQLnew, &$tvars) {
 		global $mysql;
 
-		$scount = extra_get_param('similar', 'count');
-		$scount = (($scount < 1)||($scount > 20))?5:$scount;
+		if (!$SQLnews['approve'])
+			return 1;
 
-		// Modify DB data
-		plugin_similar_repopulate(plugin_similar_repopulate($newsID, $scount), $scount, array($newsID));
+		// Reset linked news
+		plugin_similar_resetLinked($newsID);
+
+		// Reset news with the same tags [ AFTER actual edit - new tags ]
+		plugin_similar_reset($newsID);
 
 		return 1;
 	}
@@ -47,7 +50,7 @@ class SimilarNewsfilter extends NewsFilter {
 			$similars = $SQLnews['similar_status'];
 			if (!$similars)
 				$similars = plugin_similar_recover($newsID, extra_get_param('similar', 'count'));
-	
+
 			// Locate similar news
 			if (($similars == 2) && count($similarRows = $mysql->select("select si.*, n.id as n_id, n.catid as n_catid, n.alt_name as n_alt_name, n.postdate as n_postdate from ".prefix."_similar_index si left join ".prefix."_news n on n.id = si.refNewsID where si.newsID = ". db_squote($newsID)." order by si.refNewsQuantaty desc"))) {
 
@@ -85,38 +88,22 @@ class SimilarNewsfilter extends NewsFilter {
 		if (!isset($setValue['approve']))
 			return 1;
 
-		// Catch a list of changed news
-		$modList = array();
-		foreach ($currentData as $newsID => $newsData)
-			if ($newsData['approve'] != $setValue['approve'])
-				$modList [] = $newsID;
-
-		// If no news was changed - exit
-		if (!count($modList))
-			return 1;
-
-		$scount = extra_get_param('similar', 'count');
-		$scount = (($scount < 1)||($scount > 20))?5:$scount;
-
-		// Modify DB data
-		plugin_similar_repopulate(plugin_similar_repopulate($modList, $scount), $scount, $idList);
+		// Turn on - call RESET()
+		if (!$setValue['approve']) {
+			plugin_similar_reset($idList);
+		} else {
+			// Turn off - call renew for all linked news
+			plugin_similar_resetLinked($idList);
+		}
 		return 1;
 	}
 
-	function deleteNewsNotify($newsID, $SQLnews) {
+	function deleteNews($newsID, $SQLnews) {
 		global $mysql;
 
-		$scount = extra_get_param('similar', 'count');
-		$scount = (($scount < 1)||($scount > 20))?5:$scount;
+		plugin_similar_resetLinked($newsID);
 
-		// Fetch list of news that should be modified
-		$nList = array();
-
-		foreach ($mysql->select("select distinct(newsID) from ".prefix."_similar_index where refNewsID = ".db_squote($newsID)) as $row) {
-			$nList [] = $row['newsID'];
-		}
-
-		// Modify DB data
-		plugin_similar_repopulate($nList, $scount);
+		// Delete similarity info
+		$mysql->query("delete from ".prefix."_similar_index where newsID = ".intval($newsID));
 	}
 }
