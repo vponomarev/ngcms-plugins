@@ -20,12 +20,30 @@ function plugin_rss_export(){
 		return GetLink('category', array('alt' => implode("-",$nlist)));
 	}
 
-    	global $lang, $PFILTERS;
+   	global $lang, $PFILTERS;
 	global $template, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $mysql, $catz;
 
 	// Generate header
 	if ($_REQUEST['category']) { $xcat = $catz[$_REQUEST['category']]; } else { $xcat = ''; }
-	print plugin_rss_export_mk_header($xcat);
+
+
+	// Generate cache file name [ we should take into account SWITCHER plugin ]
+	// Take into account: FLAG: use_hide, check if user is logged in
+	$cacheFileName = md5('rss_export'.$config['theme'].$config['home_url'].$config['default_lang'].$xcat.extra_get_param('rss_export','use_hide').is_array($userROW)).'.txt';
+
+	if (extra_get_param('rss_export','cache')) {
+		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('rss_export','cacheExpire'), 'rss_export');
+		if ($cacheData != false) {
+			// We got data from cache. Return it and stop
+			$SUPRESS_TEMPLATE_SHOW = 1;
+			$SUPRESS_MAINBLOCK_SHOW = 1;
+			print $cacheData;
+			return;
+		}
+	}
+
+	// Generate output
+	$output = plugin_rss_export_mk_header($xcat);
 
 	$limit = extra_get_param('rss_export','news_count');
 	if ((!is_numeric($limit)) || ($limit<0) || ($limit>500)) { $limit = 50; }
@@ -57,21 +75,26 @@ function plugin_rss_export(){
 
         $content = news_showone($row['id'], '', array( 'emulate' => $row, 'style' => $export_mode, 'plugin' => 'rss_export' ));
 
-		print "  <item>\n";
-		print "   <title><![CDATA[".((extra_get_param('rss_export','news_title') == 1)&&GetCategories($row['catid'],true)?GetCategories($row['catid'], true).' :: ':'').secure_html($row['title'])."]]></title>\n";
-		print "   <link><![CDATA[".GetLink('full', $row)."]]></link>\n";
-		print "   <description><![CDATA[".$content."]]></description>\n";
-		print "   <category>".GetCategories($row['catid'], true)."</category>\n";
-		print "   <guid isPermaLink=\"false\">".home."?id=".$row['id']."</guid>\n";
-		print "   <pubDate>".strftime('%a, %d %b %Y %H:%M:%S GMT',$row['postdate'])."</pubDate>\n";
-		print "  </item>\n";
+		$output .= "  <item>\n";
+		$output .= "   <title><![CDATA[".((extra_get_param('rss_export','news_title') == 1)&&GetCategories($row['catid'],true)?GetCategories($row['catid'], true).' :: ':'').secure_html($row['title'])."]]></title>\n";
+		$output .= "   <link><![CDATA[".GetLink('full', $row)."]]></link>\n";
+		$output .= "   <description><![CDATA[".$content."]]></description>\n";
+		$output .= "   <category>".GetCategories($row['catid'], true)."</category>\n";
+		$output .= "   <guid isPermaLink=\"false\">".home."?id=".$row['id']."</guid>\n";
+		$output .= "   <pubDate>".strftime('%a, %d %b %Y %H:%M:%S GMT',$row['postdate'])."</pubDate>\n";
+		$output .= "  </item>\n";
 	}
 	setlocale(LC_TIME,$old_locale);
-	print " </channel>\n</rss>\n";
+	$output .= " </channel>\n</rss>\n";
 
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 1;
 
+	print $output;
+
+	if (extra_get_param('rss_export','cache')) {
+		cacheStoreFile($cacheFileName, $output, 'rss_export');
+	}
 }
 
 
