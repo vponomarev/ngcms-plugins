@@ -41,7 +41,7 @@ class TagsNewsfilter extends NewsFilter {
 		$tagsNewQ = array();
 		foreach (explode(",", $SQL['tags']) as $tag) {
 			$tag = trim($tag);
-			if (!$strlen(tag)) continue;
+			if (!strlen($tag)) continue;
 			$tagsNew[] = $tag;
 			$tagsNewQ[] = db_squote($tag);
 		}
