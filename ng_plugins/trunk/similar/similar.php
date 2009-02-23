@@ -47,8 +47,11 @@ class SimilarNewsfilter extends NewsFilter {
 		if ($mode['style'] == 'full') {
 			// Check if we have similar news
 			$similars = $SQLnews['similar_status'];
-			if (!$similars)
-				$similars = plugin_similar_recover($newsID, extra_get_param('similar', 'count'));
+			if (!$similars) {
+				$scount = extra_get_param('similar', 'count');
+				$scount = (($scount < 1)||($scount > 20))?5:$scount;
+				$similars = plugin_similar_recover($newsID, $scount);
+			}	
 
 			// Locate similar news
 			// Accroding to pcall parameter we should decide if full data export from news should be done
