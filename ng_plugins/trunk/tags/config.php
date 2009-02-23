@@ -94,7 +94,7 @@ elseif ($_REQUEST['action'] == 'commit') {
 					continue;
 				$ntagsQ[] = db_squote($tag);
 			}
-			if (sizeof($ntagQ))
+			if (sizeof($ntagsQ))
 				$mysql->query("insert into ".prefix."_tags_index (newsID, tagID) select ".db_squote($row['id']).", id from ".prefix."_tags where tag in (".join(",",$ntagsQ).")");
 		}
 
