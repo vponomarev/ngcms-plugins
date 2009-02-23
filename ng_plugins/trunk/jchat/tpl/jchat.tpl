@@ -1,10 +1,11 @@
-<!-- STYLE DEFINITION ((( YOU CAN CHANGE IT ))) -->
+<!-- STYLE DEFINITION BEGIN ((( YOU CAN CHANGE IT ))) -->
+<!-- Please SAVE styles .jchat_ODD, .jchat_EVEN, .jchat_INFO -->
 <style>
 .jchat_ODD  TD { background-color: #FFFFFF; width: 100%; text-align: left; font-size: 12px;  border-bottom: 1px solid #DDDDDD; }
 .jchat_EVEN TD { background-color: #FBFBFB; width: 100%; text-align: left; font-size: 12px;  border-bottom: 1px solid #DDDDDD; }
 .jchat_INFO TD { background-color: #FFFFFF; width: 100%; text-align: left; font: 10px arial; border-bottom: 1px solid #DDDDDD; }
 </style>
-
+<!-- STYLE DEFINITION END ((( YOU CAN CHANGE IT ))) -->
 <!-- SCRIPTS INTERNALS BEGIN ((( DO NOT CHANGE ))) -->
 <script language="javascript">
 function chatSubmitForm() {
@@ -111,6 +112,7 @@ function jChat(maxRows, refresh, tableID) {
 
 		// Add rows
 		var len = data.length;
+		var loadedRows = 0;
 		var lastRow = this.tableRef.rows.length;
 		for (var i=0; i<len; i++) {
 			var rec  = data[i];
@@ -120,6 +122,7 @@ function jChat(maxRows, refresh, tableID) {
 				//alert('DUP: '+thisObject.maxLoadedID+' >= '+rec['id']);
 				continue;
 			}	
+			loadedRows++;
 
 			var row  = this.tableRef.insertRow(lastRow++);
 			row.className = ((rec['id'] % 2) == 0)?'jchat_ODD':'jchat_EVEN';
@@ -128,7 +131,7 @@ function jChat(maxRows, refresh, tableID) {
         		cell.innerHTML = ((rec['author_id']>0)?('<b>'+rec['author']+'</b>'):('<i>'+rec['author']+'</i>'))+': '+rec['text'];
         		thisObject.maxLoadedID = rec['id'];
 		}
-		if (len>0) {
+		if (loadedRows>0) {
 			// Clear old rows from chat [ if needed ]
 			while (thisObject.tableRef.rows.length > thisObject.maxRows)
 				thisObject.tableRef.deleteRow(0);
@@ -155,6 +158,9 @@ function jChat(maxRows, refresh, tableID) {
 	//
 	this.postMessage = function(name, text) {
 		var TX = this.linkTX;
+		var sButton = document.getElementById('jChatSubmit');
+		if (sButton != null)
+			sButton.disabled = true;
 
 		TX.requestFile = '/plugin/jchat/';
 		TX.setVar('plugin_cmd', 'add');[not-logged]
@@ -168,6 +174,9 @@ function jChat(maxRows, refresh, tableID) {
 			if (typeof(data) == 'object') {
 				if (data['status']) {
 					thisObject.addMessage('<i>message posted</i>', 'jchat_INFO'); 
+					var sText = document.getElementById('jChatText');
+					if (sText != null)
+						sText.value = '';
 				} else {
 					thisObject.addMessage('<i>ERROR: <b>'+data['error']+'</b></i>', 'jchat_INFO'); 
 				}
@@ -177,6 +186,10 @@ function jChat(maxRows, refresh, tableID) {
 			} else {
 				thisObject.addMessage('<i><b>Bad reply from server</b></i>', 'jchat_INFO'); 
 			}
+			var sButton = document.getElementById('jChatSubmit');
+			if (sButton != null)
+				sButton.disabled = false;
+
 		}	
 		TX.runAJAX();
 
@@ -220,8 +233,8 @@ function jChat(maxRows, refresh, tableID) {
 <form method="post" name="jChatForm" id="jChatForm" onsubmit="chatSubmitForm(); return false;">
 <table align="left">[not-logged]
 <tr><td>Name:</td><td><input type="text" name="name" /></td></tr>[/not-logged]
-<tr><td>Text:</td><td><input type="text" name="text" maxlength="{maxlen}"/></td></tr>
-<tr><td colspan="2"><input type="submit" value="Post"/></td></tr>
+<tr><td>Text:</td><td><input id="jChatText" type="text" name="text" maxlength="{maxlen}"/></td></tr>
+<tr><td colspan="2"><input id="jChatSubmit" type="submit" value="Post"/></td></tr>
 </table>
 </form>
 [/post-enabled]
