@@ -5,7 +5,6 @@ if (!defined('NGCMS')) die ('HAL');
 
 // Preload plugin tags
 load_extras('core', 'tags');
-register_filter('news','similar', new SimilarNewsFilter);
 
 include_once("inc/similar.php");
 
@@ -52,7 +51,13 @@ class SimilarNewsfilter extends NewsFilter {
 				$similars = plugin_similar_recover($newsID, extra_get_param('similar', 'count'));
 
 			// Locate similar news
-			if (($similars == 2) && count($similarRows = $mysql->select("select si.*, n.id as n_id, n.catid as n_catid, n.alt_name as n_alt_name, n.postdate as n_postdate from ".prefix."_similar_index si left join ".prefix."_news n on n.id = si.refNewsID where si.newsID = ". db_squote($newsID)." order by si.refNewsQuantaty desc"))) {
+			// Accroding to pcall parameter we should decide if full data export from news should be done
+			$query = "select n.id, n.catid, n.alt_name, n.postdate, si.id as si_id, si.newsID as si_newsID, si.refNewsID as si_refNewsID, si.refNewsQuantaty as si_refNewsQuantaty, si.refNewsTitle as si_refNewsTitle, si.refNewsDate as si_refNewsDate from ".prefix."_similar_index si left join ".prefix."_news n on n.id = si.refNewsID where si.newsID = ". db_squote($newsID)." order by si.refNewsQuantaty desc";
+			if (extra_get_param('similar', 'pcall')) {
+				$query = "select n.*, si.id as si_id, si.newsID as si_newsID, si.refNewsID as si_refNewsID, si.refNewsQuantaty as si_refNewsQuantaty, si.refNewsTitle as si_refNewsTitle, si.refNewsDate as si_refNewsDate from ".prefix."_similar_index si left join ".prefix."_news n on n.id = si.refNewsID where si.newsID = ". db_squote($newsID)." order by si.refNewsQuantaty desc";
+			}
+
+			if (($similars == 2) && count($similarRows = $mysql->select($query))) {
 
 				$result = '';
 				foreach ($similarRows as $similar) {
@@ -61,9 +66,9 @@ class SimilarNewsfilter extends NewsFilter {
 					// Set formatted date
 					$dformat = extra_get_param('similar','dateformat')?extra_get_param('similar','dateformat'):'{day0}.{month0}.{year}';
 					$txvars['vars']['date'] = str_replace(array('{day}', '{day0}', '{month}', '{month0}', '{year}', '{year2}', '{month_s}', '{month_l}'),
-							array(date('j',$similar['refNewsDate']), date('d',$similar['refNewsDate']), date('n',$similar['refNewsDate']), date('m',$similar['refNewsDate']), date('y',$similar['refNewsDate']), date('Y',$similar['refNewsDate']), $langShortMonths[date('n',$similar['refNewsDate'])-1], $langMonths[date('n',$similar['refNewsDate'])-1]), $dformat);
-					$txvars['vars']['title'] = $similar['refNewsTitle'];
-					$txvars['vars']['url'] = getLink('full', array('id' => $similar['n_id'], 'catid' => $similar['n_catid'], 'alt_name' => $similar['n_alt_name'], 'postdate' => $similar['n_postdate']));
+							array(date('j',$similar['si_refNewsDate']), date('d',$similar['si_refNewsDate']), date('n',$similar['si_refNewsDate']), date('m',$similar['si_refNewsDate']), date('y',$similar['si_refNewsDate']), date('Y',$similar['si_refNewsDate']), $langShortMonths[date('n',$similar['si_refNewsDate'])-1], $langMonths[date('n',$similar['si_refNewsDate'])-1]), $dformat);
+					$txvars['vars']['title'] = $similar['si_refNewsTitle'];
+					$txvars['vars']['url'] = getLink('full', $similar);
 
 					$tpl -> template('similar_entry', $tpath['similar_entry']);
 					$tpl -> vars('similar_entry', $txvars);
@@ -107,3 +112,5 @@ class SimilarNewsfilter extends NewsFilter {
 		$mysql->query("delete from ".prefix."_similar_index where newsID = ".intval($newsID));
 	}
 }
+register_filter('news','similar', new SimilarNewsFilter);
+
