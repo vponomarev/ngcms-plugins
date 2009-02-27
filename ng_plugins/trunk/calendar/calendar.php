@@ -76,16 +76,43 @@ function plug_calgen($month, $year) {
 	 $result .= $tpl -> show('entries');
 	}
 
+
+
 	unset($tvars);
 	$tvars['vars'] = array (
 		'tpl_url' => tpl_url,
 		'entries' => $result,
-		'current_link' => '<a href="'.GetLink('month', array('postdate' => $dt)).'">'.$langMonths[$month-1].' '.$year.'</a>',
-		'[prev_link]' => '<a href="'.GetLink('month', array('postdate' => $prevdt)).'">',
-		'[/prev_link]' => '</a>',
-		'[next_link]' => '<a href="'.GetLink('month', array('postdate' => $nextdt)).'">',
-		'[/next_link]' => '</a>',
+		'current_link' => '<a href="'.GetLink('month', array('postdate' => $dt)).'">'.$langMonths[$month-1].' '.$year.'</a>'
 	);
+
+	// If cache is activated - calculate MIN and MAX dates for news
+	if (extra_get_param('calendar','cache')) {
+		// 
+		$mmx = $mysql->record("select (select postdate from ng_news use key(news_postdate) where mainpage=1 order by postdate limit 1) as min, (select postdate from ng_news use key(news_postdate) where approve=1 order by postdate desc limit 1) as max", 1);
+
+		// Prev link
+		if ($prevdt<$mmx['min']) {
+			// Lock
+			$tvars['regx']['#\[prev_link\].+?\[/prev_link\]#is'] = '&nbsp;';
+		} else {
+			$tvars['vars']['[prev_link]']  = '<a href="'.GetLink('month', array('postdate' => $prevdt)).'">';
+			$tvars['vars']['[/prev_link]'] = '</a>';
+		}
+		
+		// Next link
+		if ($nextdt>$mmx['max']) {
+			// Lock
+			$tvars['regx']['#\[next_link\].+?\[/next_link\]#is'] = '&nbsp;';
+		} else {
+			$tvars['vars']['[next_link]']  = '<a href="'.GetLink('month', array('postdate' => $nextdt)).'">';
+			$tvars['vars']['[/next_link]'] = '</a>';
+		}
+	} else {
+		$tvars['vars']['[prev_link]']  = '<a href="'.GetLink('month', array('postdate' => $prevdt)).'">';
+		$tvars['vars']['[/prev_link]'] = '</a>';
+		$tvars['vars']['[next_link]']  = '<a href="'.GetLink('month', array('postdate' => $nextdt)).'">';
+		$tvars['vars']['[/next_link]'] = '</a>';
+	}	
 
 	foreach (explode(",", $lang['short_weekdays']) as $k => $v)
 		$lang['weekday_'.$k] = $v;
