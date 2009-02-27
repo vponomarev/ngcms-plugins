@@ -6,7 +6,7 @@ if (!defined('NGCMS')) die ('HAL');
 add_act('index', 'plugin_popular');
 
 function plugin_popular() {
-	global $config, $mysql, $tpl, $template;
+	global $config, $mysql, $tpl, $template, $PFILTERS;
 
 	$counter   = intval(extra_get_param('popular','counter'));
 	$number    = intval(extra_get_param('popular','number'));
@@ -30,7 +30,29 @@ function plugin_popular() {
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('entries', 'popular'), 'popular', extra_get_param('popular', 'localsource'));
 
-	foreach ($mysql->select("select id, alt_name, postdate, title, views, catid from ".prefix."_news where approve = '1' order by views desc limit 0,$number") as $row) {
+	$query = "select id, alt_name, postdate, title, views, catid from ".prefix."_news where approve = '1' order by views desc limit ".$number;
+	if (extra_get_param('popular', 'pcall')) {
+		$callingParams['plugin'] = 'lastnews';
+		switch (intval(extra_get_param('lastnews', 'pcall_mode'))) {
+			case 1: $callingParams['style'] = 'short';
+					break;
+			case 2: $callingParams['style'] = 'full';
+					break;
+			default: $callingParams['style'] = 'export';
+		}
+
+		// Preload plugins
+		load_extras('news:show');
+		load_extras('news:show:one');
+
+		$query = "select * from ".prefix."_news where approve = '1' order by views desc limit ".$number;
+	}
+
+	foreach ($mysql->select($query) as $row) {
+		// Execute filters [ if requested ]
+		if (extra_get_param('popular', 'pcall') && is_array($PFILTERS['news']))
+				foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($row['id'], $row, $callingParams); }
+
 		$tvars['vars'] = array(
 			'link'		=>	GetLink('full', $row),
 			'views'		=>	($counter) ? ' [ '.$row['views'].' ]' : ''
@@ -40,6 +62,10 @@ function plugin_popular() {
 		} else {
 			$tvars['vars']['title'] = secure_html($row['title']);
 		}
+
+		// Execute filters [ if requested ]
+		if (extra_get_param('popular', 'pcall') && is_array($PFILTERS['news']))
+			foreach ($PFILTERS['news'] as $k => $v) { $v->showNews($row['id'], $row, $tvars, $callingParams); }
 
 		$tpl -> template('entries', $tpath['entries']);
 		$tpl -> vars('entries', $tvars);
