@@ -4,7 +4,7 @@
 
 ID: popular
 Name: Show most popular news
-Version: 0.04
+Version: 0.05
 Acts: core, index
 File: popular.php
 Config: config.php
