@@ -150,6 +150,10 @@ function showForm($edMode){
 		$tvars['vars']['emails'] = secure_html($frow['emails']);
 		$tvars['vars']['description'] = secure_html($frow['description']);
 
+		$link = GetLink('plugins', array('plugin_name' => 'feedback'), 1);
+		$link .= ((strpos($link,'?') === false)?'?':'&').'id='.$frow['id'];
+		$tvars['vars']['url'] = $link;
+
 		// Generate list of templates
 		$lf = array('') + ListFiles(extras_dir.'/feedback/tpl/templates', 'tpl');
 		$lout = '';
