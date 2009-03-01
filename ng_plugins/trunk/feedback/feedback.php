@@ -45,15 +45,15 @@ function plugin_feedback_screen() {
 
 		case 'date':
 
-			$opts = '';
+			$opts = $fInfo['required']?'':'<option value="">--</option>';
 			for ($di = 1; $di <= 31; $di++) { $opts .= '<option value="'.$di.'"'.($di == $fInfo['default:vars']['day']?' selected="selected"':'').'>'.sprintf('%02u',$di).'</option>'; }
 			$tvars['vars']['day_options'] = $opts;
 
-			$opts = '';
+			$opts = $fInfo['required']?'':'<option value="">--</option>';
 			for ($di = 1; $di <= 12; $di++) { $opts .= '<option value="'.$di.'"'.($di == $fInfo['default:vars']['month']?' selected="selected"':'').'>'.sprintf('%02u',$di).'</option>'; }
 			$tvars['vars']['month_options'] = $opts;
 
-			$opts = '';
+			$opts = $fInfo['required']?'':'<option value="">--</option>';
 			for ($di = 1970; $di <= 2010; $di++) { $opts .= '<option value="'.$di.'"'.($di == $fInfo['default:vars']['year']?' selected="selected"':'').'>'.$di.'</option>'; }
 			$tvars['vars']['year_options'] = $opts;
 
