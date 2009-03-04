@@ -14,7 +14,7 @@
 <tr>
 <td colspan="2" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8">Редактирование формы "{name}"</td>
 </tr>
-<tr align="left"><td class="contentRow" width="170"><b>Код формы:</b></td><td><input style="width: 30px; background: white;" type="text" name="id" value="{id}" disabled="disabled"/> <input style="width: 470px; background: white;" type="text" name="id" value="{url}" readonly="readonly" /></td></tr>
+<tr align="left"><td class="contentRow" width="170"><b>Код формы:</b></td><td><input style="width: 30px; background: white;" type="text" name="id" value="{id}" disabled="disabled"/> <input style="width: 470px; background: white;" type="text" value="{url}" readonly="readonly" /></td></tr>
 <tr align="left"><td class="contentRow" width="170"><b>ID формы:</b></td><td><input style="width: 200px;" type="text" name="name" value="{name}"/></td></tr>
 <tr align="left"><td class="contentRow" width="170"><b>Название формы:</b></td><td><input style="width: 300px;" type="text" name="title" value="{title}"/></td></tr>
 <tr align="left"><td class="contentRow" width="170"><b>Описание формы:</b><br/><small>Выводится пользователю перед формой</small></td><td><textarea style="margin-left: 0px;" cols="80" rows="2" name="description">{description}</textarea></td></tr>
