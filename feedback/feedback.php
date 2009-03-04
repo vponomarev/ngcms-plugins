@@ -30,12 +30,15 @@ function plugin_feedback_screen() {
  if (!is_array($fData)) $fData = array();
 
  $output = '';
+ $FBF_DATA = array();
  $tpl->template('site.form.row', $tpath['site.form.row']);
  foreach ($fData as $fName => $fInfo) {
  	$tvars = array();
  	$tvars['vars']['ptpl_url'] = $ptpl_url;
 	$tvars['vars']['name']	= $fInfo['name'];
 	$tvars['vars']['title']	= $fInfo['title'];
+
+	$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']));
 
 	switch ($fInfo['type']) {
 		case 'text':
@@ -85,6 +88,9 @@ function plugin_feedback_screen() {
  $tvars['vars']['description']	= $frow['description'];
  $tvars['vars']['entries']		= $output;
  $tvars['vars']['form_url']		= GetLink('plugins', array('plugin_name' => 'feedback'));
+
+ $tvars['vars']['FBF_DATA'] = json_encode($FBF_DATA);
+ $tvars['regx']['#\[jcheck\](.+?)\[\/jcheck\]#is']	= intval(substr($frow['flags'],0,1))?'$1':'';
 
  // Choose template to use
  if ($frow['template']) {
