@@ -66,7 +66,9 @@ function saveForm() {
 	}
 
 	// Сохраняем изменения
-	$mysql->select("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($_REQUEST['emails']).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active'])." where id = ".$id);
+	$flags = ($_REQUEST['jcheck']?'1':'0');
+
+	$mysql->select("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($_REQUEST['emails']).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active']).", flags=".intval($flags)." where id = ".$id);
 	showForm(1);
 }
 
@@ -86,6 +88,7 @@ function showList(){
 			'name'		=> $frow['name'],
 			'title'		=> $frow['title'],
 			'active'	=> $frow['active']?$lang['yesa']:$lang['noa'],
+
 		));
 		if ($frow['active']) {
 			$tvars['vars']['[linkdel]'] = '<a onclick="alert('."'".$lang['feedback:active_nodel']."'".');">';
@@ -147,6 +150,7 @@ function showForm($edMode){
 		$tvars['vars']['name'] = $edMode?$_REQUEST['name']:$frow['name'];
 		$tvars['vars']['title'] = $edMode?$_REQUEST['title']:$frow['title'];
 		$tvars['vars']['active_checked'] = ($edMode?$_REQUEST['active']:$frow['active'])?'checked="checked"':'';
+		$tvars['vars']['jcheck_checked'] = ($edMode?$_REQUEST['jcheck']:intval(substr($frow['flags'],0,1)))?'checked="checked"':'';
 		$tvars['vars']['emails'] = secure_html($frow['emails']);
 		$tvars['vars']['description'] = secure_html($frow['description']);
 

@@ -19,6 +19,7 @@
 <tr align="left"><td class="contentRow" width="170"><b>Название формы:</b></td><td><input style="width: 300px;" type="text" name="title" value="{title}"/></td></tr>
 <tr align="left"><td class="contentRow" width="170"><b>Описание формы:</b><br/><small>Выводится пользователю перед формой</small></td><td><textarea style="margin-left: 0px;" cols="80" rows="2" name="description">{description}</textarea></td></tr>
 <tr align="left"><td class="contentRow" width="170"><b>Активна:</b></td><td><input type="checkbox" name="active" value="1" {active_checked} /></td></tr>
+<tr align="left"><td class="contentRow" width="170"><b>Проверять ввод полей:</b><br/><small>Включить JavaScript код для проверки заполнения полей</small></td><td><input type="checkbox" name="jcheck" value="1" {jcheck_checked} /></td></tr>
 <tr align="left"><td class="contentRow" width="170"><b>Используемый шаблон:</b></td><td><select name="template">{template_options}</select></td></tr>
 <tr align="left"><td class="contentRow" width="170"><b>Email список рассылки:</b><br/><small>Список email адресов (по одному в строке) на которые будут отправляться данные из формы.</small></td><td><textarea style="margin-left: 0px;" cols="60" rows="2" name="emails">{emails}</textarea></td></tr>
 <tr><td colspan="2"><input type="submit" value="Сохранить"/></td></tr>
