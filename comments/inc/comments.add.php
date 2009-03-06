@@ -97,8 +97,13 @@ function comments_add(){
 	}
 
 	// Check for bans
-	if (checkBanned($ip, 'comment', 'add', $is_member?$memberRec:null, $is_member?null:$SQL['author'])) {
-		msg(array("type" => "error", "text" => $lang['msge_ip'], "info" => sprintf($lang['msgi_ip'], $ban_row['descr'])));
+	if ($ban_mode = checkBanned($ip, 'comments', 'add', $is_member?$memberRec:null, $is_member?null:$SQL['author'])) {
+		// If hidden mode is active - say that news is not found
+		if ($ban_mode == 2) {
+			msg(array("type" => "error", "text" => $lang['comments:err.notfound']));
+	        } else {
+	        	msg(array("type" => "error", "text" => $lang['comments:err.ipban']));
+	        }	
 		return;
 	}
 
