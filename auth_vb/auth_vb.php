@@ -68,7 +68,7 @@ class auth_vb {
 		// Row was found. Now we meed to synchronise it with our own DB
 		// 1. Try to fetch linked account data from our own DB
 		if ($row = $mysql->record("select * from ".uprefix."_users where vb_userid = ".db_squote($vb_row['userid']))) {
-			// Record fetched. Save punBB row and return row from our DB
+			// Record fetched. Save vBulletin row and return row from our DB
 			$this->vb_row = $vb_row;
 			return $row;
 		}
@@ -104,12 +104,12 @@ class auth_vb {
 		}
 
 		// We don't have a record. Let's create one
-		$query = "insert into ".uprefix."_users (name, pass, last, reg, ip, punbb_userid) values (".db_squote($pun_row['username']).", md5(md5(".db_squote($password).")), unix_timestamp(now()), unix_timestamp(now()),'', ".$vb_row['userid'].")";
+		$query = "insert into ".uprefix."_users (name, pass, last, reg, ip, vb_userid) values (".db_squote($vb_row['username']).", md5(md5(".db_squote($password).")), unix_timestamp(now()), unix_timestamp(now()),'', ".$vb_row['userid'].")";
 		$mysql->query($query);
 		$mysql->query("unlock tables");
 
 		// Now let's fetch new row
-		if ($row = $mysql->record("select * from ".uprefix."_users where punbb_userid = ".db_squote($vb_row['userid']))) {
+		if ($row = $mysql->record("select * from ".uprefix."_users where vb_userid = ".db_squote($vb_row['userid']))) {
 			// Record found. Ok.
 			$this->vb_row = $vb_row;
 			return $row;
@@ -129,7 +129,7 @@ class auth_vb {
 
 		$dbprefix = extra_get_param('auth_vb', 'dbprefix')?extra_get_param('auth_vb', 'dbprefix'):'';
 
-		// Exit if no flag 'punbb_userid' is given (i.e. no save)
+		// Exit if no flag 'vb_userid' is given (i.e. no save)
 		if (!$dbrow['vb_userid']) { return 0; }
 
 		// Fetch data from vBulletin DB if we don't have data in cache
