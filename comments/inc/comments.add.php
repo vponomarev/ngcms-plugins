@@ -65,21 +65,21 @@ function comments_add(){
 		}
 
 		if (!$SQL['author']) {
-			msg(array("type" => "error", "text" => $lang['commets:err.name']));
+			msg(array("type" => "error", "text" => $lang['comments:err.name']));
 			return;
 		}
 		if (!$SQL['mail']) {
-			msg(array("type" => "error", "text" => $lang['commets:err.mail']));
+			msg(array("type" => "error", "text" => $lang['comments:err.mail']));
 			return;
 		}
 
 		// Check if author name use incorrect symbols. Check should be done only for unregs
 		if ((!$SQL['author_id']) && (preg_match("/[^(\w)|(\x7F-\xFF)|(\s)]/", $SQL['author']) || strlen($SQL['author']) > 60)) {
-			msg(array("type" => "error", "text" => $lang['commets:err.badname']));
+			msg(array("type" => "error", "text" => $lang['comments:err.badname']));
 			return;
 		}
 		if (strlen($SQL['mail']) > 70 || !preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $SQL['mail'])) {
-			msg(array("type" => "error", "text" => $lang['commets:err.badmail']));
+			msg(array("type" => "error", "text" => $lang['comments:err.badmail']));
 			return;
 		}
 	}
@@ -103,7 +103,7 @@ function comments_add(){
 			msg(array("type" => "error", "text" => $lang['comments:err.notfound']));
 	        } else {
 	        	msg(array("type" => "error", "text" => $lang['comments:err.ipban']));
-	        }	
+	        }
 		return;
 	}
 
