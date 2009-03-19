@@ -4,7 +4,7 @@
 
 ID: auth_vb
 Name: vBulletin forum auth
-Version: 0.02
+Version: 0.03
 Acts: auth
 Install: install.php
 File: auth_vb.php

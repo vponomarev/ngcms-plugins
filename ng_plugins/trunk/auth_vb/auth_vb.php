@@ -14,7 +14,7 @@ $AUTH_CAPABILITIES['vb'] = array('login' => '1', 'db' => '1');
 
 class auth_vb {
 	var $error = 0;
-	var $setremember = 16;
+	var $setremember = false;
 	var $vb_row = array();
 
 	// Constructor
@@ -31,6 +31,17 @@ class auth_vb {
 			}
 		} else {
 			$this->auth_db = $mysql;
+		}
+	}
+
+	// Set remember fields
+	function setRemember($vb_row, $flag){
+
+		if ((extra_get_param('auth_vb', 'setremember') == 1)||(!extra_get_param('auth_vb', 'setremember') && $flag)) {
+			$this->setremember = true;
+			$this->remember_cookies = array('bbuserid' => $vb_row['userid'], 'bbpassword' => md5($vb_row['password']));
+		} else {
+			$this->setremember = false;
 		}
 	}
 
@@ -70,6 +81,8 @@ class auth_vb {
 		if ($row = $mysql->record("select * from ".uprefix."_users where vb_userid = ".db_squote($vb_row['userid']))) {
 			// Record fetched. Save vBulletin row and return row from our DB
 			$this->vb_row = $vb_row;
+			$this->setRemember($vb_row, intval($_REQUEST['remember']));
+
 			return $row;
 		}
 
@@ -81,6 +94,8 @@ class auth_vb {
 			// Record found. Return it
 			$mysql->query("unlock tables");
 			$this->vb_row = $vb_row;
+			$this->setRemember($vb_row, intval($_REQUEST['remember']));
+
 			return $row;
 		}
 		// No record. Check for DUPs
@@ -93,6 +108,8 @@ class auth_vb {
 				$mysql->query("update ".prefix."_users set vb_userid=".db_squote($vb_row['userid'])." where id=".db_squote($row['id']));
 				$row['vb_userid'] = $vb_row['userid'];
 				$this->vb_row = $vb_row;
+				$this->setRemember($vb_row, intval($_REQUEST['remember']));
+
 				return $row;
 			}
 			return '';
@@ -112,6 +129,8 @@ class auth_vb {
 		if ($row = $mysql->record("select * from ".uprefix."_users where vb_userid = ".db_squote($vb_row['userid']))) {
 			// Record found. Ok.
 			$this->vb_row = $vb_row;
+			$this->setRemember($vb_row, intval($_REQUEST['remember']));
+
 			return $row;
 		}
 
@@ -161,10 +180,10 @@ class auth_vb {
 		@setcookie('zz_auth', $auth_cookie, ($config['remember']?(time() + 3600 * 24 * 365):0), '/');
 		@setcookie('bbsessionhash', $newsessionhash, 0, '/', extra_get_param('auth_vb','cookie_domain')?extra_get_param('auth_vb','cookie_domain'):'');
 
-		// Set "remember" cookies if this mode is requested
+		// Set "remember" cookies if this mode is requested [ REMEMBER for 1 YEAR ]
 		if ($this->setremember && is_array($this->remember_cookies))
 			foreach ($this->remember_cookies as $c => $cv)
-				@setcookie($c, $cv, 0, '/', extra_get_param('auth_vb','cookie_domain')?extra_get_param('auth_vb','cookie_domain'):'');
+				@setcookie($c, $cv, time()+ 365*24*3600, '/', extra_get_param('auth_vb','cookie_domain')?extra_get_param('auth_vb','cookie_domain'):'');
 		return 1;
 	}
 
@@ -246,6 +265,8 @@ class auth_vb {
 			$params = array ( 'sessionhash' => db_squote($newsessionhash), 'userid' => db_squote($cookie_userid), 'host' => db_squote($ip), 'idhash' => db_squote($session_idhash), 'lastactivity' => 'unix_timestamp(now())', 'languageid' => db_squote($userrec['languageid']));
 			$this->auth_db->query("insert into ".$dbprefix."session (".implode(", ",array_keys($params)).") values (".implode(", ",$params).")");
 
+			// Set cookie
+			@setcookie('bbsessionhash', $newsessionhash, 0, '/', extra_get_param('auth_vb','cookie_domain')?extra_get_param('auth_vb','cookie_domain'):'');
 		}
 
 		// If we fetched user info - fetch our linked record
