@@ -88,7 +88,7 @@ function plug_calgen($month, $year) {
 	// If cache is activated - calculate MIN and MAX dates for news
 	if (extra_get_param('calendar','cache')) {
 		// 
-		$mmx = $mysql->record("select (select postdate from ng_news use key(news_postdate) where mainpage=1 order by postdate limit 1) as min, (select postdate from ng_news use key(news_postdate) where approve=1 order by postdate desc limit 1) as max", 1);
+		$mmx = $mysql->record("select (select postdate from ".prefix."_news use key(news_postdate) where mainpage=1 order by postdate limit 1) as min, (select postdate from ".prefix."_news use key(news_postdate) where approve=1 order by postdate desc limit 1) as max", 1);
 
 		// Prev link
 		if ($prevdt<$mmx['min']) {
