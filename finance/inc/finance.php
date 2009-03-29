@@ -183,6 +183,7 @@ function finance_get_balance_type($balance_no) {
 //     'points' -	_только_ в поинтах
 //     'auto'   -	[default] сначала пытаемся списать в поинтах, если их недостаточно -
 //					 списываем средства в валюте
+//	# 'ptype' - тип поинтов для оплаты (в случае авто оплаты или оплаты по поинтам)
 //	# 'value' - массив с параметрами платежа
 //		'money' = сумма платежа в валюте
 //		'points' = массив (тип поинтов,кол-во поинтов) при списании в поинтах
@@ -216,7 +217,8 @@ function finance_pay($identity, $payment) {
 	if (!isset($payment['type']) || ($payment['type'] == 'auto') || ($payment['type'] == 'points')) {
 		// Проверяем наличие достаточной суммы на балансах
 		// $ptype - тип баланса; $pvalue - сумма списания с баланса
-		list ($ptype, $pcount) = $payment['value']['points'];
+		$ptype	= $payment['ptype'];
+		$pcount	= $payment['value']['points'];
 		foreach ($mysql->select("select * from ".prefix."_balance_manager where type=".db_squote($ptype)." order by id desc") as $row) {
 			if ($pcount > $res['balance'.$row['id']]) {
 				$pcount-=$res['balance'.$row['id']];

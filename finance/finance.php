@@ -74,7 +74,7 @@ class FinanceNewsFilter extends NewsFilter {
 		} else {
 			$ubalance = 0;
 			$enough = 0;
-		}	
+		}
 
 		if (is_array($userROW)) {
 			// Юзер залогинен
@@ -227,7 +227,7 @@ function plugin_finance_pay() {
 		return;
 	}
 	// Пытаемся оплатить
-	if (finance_pay(array('id' => $userROW['id']), array('type' => 'money', 'value' => $row['fin_price'] * 100, 'description' => 'Payment for access'))) {
+	if (finance_pay(array('id' => $userROW['id']), array('type' => 'money', 'value' => array( 'money' => $row['fin_price'] * 100), 'description' => 'Payment for access'))) {
 		// Платёж прошел успешно. Предоставляем доступ
 		$mysql->query("insert into ".prefix."_subscribe_manager(user_id, special_access_type, access_element_id) values(".db_squote($userROW['id']).", $access_type, $access_element_id)");
 		$template['vars']['mainblock'] = 'Платеж успешно проведён, доступ открыт.'.($_REQUEST['back']?'<br /><a href="'.$_REQUEST['back'].'">Вернуться назад</a>':'');
