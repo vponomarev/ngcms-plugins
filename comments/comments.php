@@ -6,6 +6,49 @@ if (!defined('NGCMS')) die ('HAL');
 $lang = LoadLang("comments", "site");
 
 class CommentsNewsFilter extends NewsFilter {
+	function editNewsForm($newsID, $SQLold, &$tvars) {
+		global $lang, $mysql, $config, $parse, $tpl, $mod;
+
+		// List comments
+		$comments = '';
+		$tpl -> template('comments', tpl_actions.$mod);
+
+		foreach ($mysql->select("select * from ".prefix."_comments where post='".$newsID."' order by id") as $crow) {
+			$text	= $crow['text'];
+
+			if ($config['blocks_for_reg'])		{ $text = $parse -> userblocks($text); }
+			if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
+			if ($config['use_bbcodes'])			{ $text = $parse -> bbcodes($text); }
+			if ($config['use_smilies'])			{ $text = $parse -> smilies($text); }
+
+			$txvars['vars'] = array(
+				'php_self'		=>	$PHP_SELF,
+				'com_author'	=>	$crow['author'],
+				'com_post'		=>	$crow['post'],
+				'com_url'		=>	($crow['url']) ? $crow['url'] : $PHP_SELF.'?mod=users&action=edituser&id='.$crow['author_id'],
+				'com_id'		=>	$crow['id'],
+				'com_ip'		=>	$crow['ip'],
+				'com_time'		=>	LangDate(extra_get_param('comments','timestamp'), $crow['postdate']),
+				'com_part'		=>	$text
+			);
+
+			if ($crow['reg']) {
+				$txvars['vars']['[userlink]'] = '';
+				$txvars['vars']['[/userlink]'] = '';
+			} else {
+				$txvars['regx']["'\\[userlink\\].*?\\[/userlink\\]'si"] = $crow['author'];
+			}
+
+			$tpl -> vars('comments', $txvars);
+			$comments .= $tpl -> show('comments');
+		}
+		$tvars['vars']['comments'] = $comments;
+
+		$tvars['vars']['comnum'] = $SQLold['com']?$SQLold['com']:$lang['noa'];
+		$tvars['regx']['[\[comments\](.*)\[/comments\]]']     = ($SQLnews['com'])?'$1':'';
+		$tvars['regx']['[\[nocomments\](.*)\[/nocomments\]]'] = ($SQLnews['com'])?'':'$1';
+	}
+
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		$tvars['vars']['comments-num']	=	$SQLnews['com'];
 		$tvars['vars']['comnum']	=	$SQLnews['com'];
