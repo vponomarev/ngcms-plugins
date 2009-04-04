@@ -1,0 +1,16 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: ads_linkfeed
+Name: LINKFEED.RU links display
+Version: 0.01
+Acts: index_post
+File: ads_linkfeed.php
+Config: config.php
+Type: plugin
+Title: —сылочна€ реклама LINKFEED.RU
+Description: –еклама с площадки LINKFEED.RU на сайте
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+preinstall: no
