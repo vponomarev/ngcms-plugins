@@ -4,7 +4,7 @@
 
 ID: lastnews
 Name: Show last news
-Version: 0.09
+Version: 0.10
 Acts: core, index
 File: lastnews.php
 Config: config.php

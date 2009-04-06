@@ -48,6 +48,7 @@ function plugin_lastnewsGenerator($orderBy = '', $categories = array(), $overrid
 	} else {
 		$number = intval($overrideParams['number']);
 	}
+	$offset = intval($overrideParams['offset']);
 
 	if (intval($overrideParams['maxlength']) <= 1) {
 		$maxlength = 100;
@@ -95,7 +96,7 @@ function plugin_lastnewsGenerator($orderBy = '', $categories = array(), $overrid
 		load_extras('news:show');
 		load_extras('news:show:one');
 	}
-	foreach ($mysql->select("select * from ".prefix."_news where ".join(" AND ", $filter)." order by ".($orderby?$orderby:"id desc")." limit ".$number) as $row) {
+	foreach ($mysql->select("select * from ".prefix."_news where ".join(" AND ", $filter)." order by ".($orderby?$orderby:"id desc")." limit ".$offset.",".$number) as $row) {
 		// Execute filters [ if requested ]
 		if (extra_get_param('lastnews', 'pcall') && is_array($PFILTERS['news']))
 				foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($row['id'], $row, $callingParams); }
