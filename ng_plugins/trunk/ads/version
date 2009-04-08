@@ -4,7 +4,7 @@
 
 ID: ads
 Name: ADS manager
-Version: 0.10
+Version: 0.11
 Acts: index, news_short, news_full
 File: ads.php
 Config: config.php
