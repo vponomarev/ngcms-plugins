@@ -98,7 +98,7 @@ function plugin_ads(){
 			// main page
 			(($mode == 'root')&&(!$action)&&(!$category)&&(!$cstart)&&(!$year)&&(!$month)) ||
 			// everywhere except main page
-			(($mode == 'noroot')&&($action||$category)) ||
+			(($mode == 'noroot')&&($action||$category||($year&&$month))) ||
 			// everywhere
 			($mode == 'all')
 		   ) {
