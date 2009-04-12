@@ -11,6 +11,20 @@ if (!defined('NGCMS')) die ('HAL');
 plugins_load_config();
 
 
+$xfEnclosureValues = array( '' => '');
+//
+// IF plugin 'XFIELDS' is enabled - load it to prepare `enclosure` integration
+if (status('xfields')) {
+	include_once(root."/plugins/xfields/xfields.php");
+
+	// Load XFields config
+	if (is_array($xfc=xf_configLoad())) {
+		foreach ($xfc['news'] as $fid => $fdata) {
+			$xfEnclosureValues[$fid] = $fid.' ('.$fdata['title'].')';
+		}
+	}
+}
+
 // Fill configuration parameters
 $cfg = array();
 
@@ -23,6 +37,11 @@ array_push($cfgX, array('type' => 'input', 'name' => 'news_count', 'title' => 'К
 array_push($cfgX, array('type' => 'select','name' => 'use_hide', 'title' => 'Обрабатывать тег <b>[hide] ... [/hide]</b>', 'descr' => '<b>Да</b> - текст отмеченный тегом <b>hide</b> не отображается<br><b>Нет</b> - текст отмеченный тегом <b>hide</b> отображается', 'values' => array ( '0' => 'Нет', '1' => 'Да'), value => extra_get_param('rss_export','use_hide')));
 array_push($cfgX, array('type' => 'select','name' => 'content_show', 'title' => 'Вид отображения новости', 'descr' => 'Вам необходимо указать какая именно информация будет отображаться внутри новости, экспортируемой через RSS', 'values' => array ( '0' => 'короткая+длинная', '1' => 'только короткая', '2' => 'только длинная'), value => extra_get_param('rss_export','content_show')));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>Общие настройки</b>', 'entries' => $cfgX));
+
+$cfgX = array();
+array_push($cfgX, array('name' => 'xfEnclosureEnabled', 'title' => "Генерация поля 'Enclosure' используя данные плагина xfields", 'descr' => "<b>Да</b> - включить генерацию<br /><b>Нет</b> - отключить генерацию</small>", 'type' => 'select', 'values' => array ( '1' => 'Да', '0' => 'Нет'), 'value' => intval(extra_get_param($plugin,'xfEnclosureEnabled'))));
+array_push($cfgX, array('name' => 'xfEnclosure', 'title' => "ID поля плагина <b>xfields</b>, которое будет использоваться для генерации поля <b>Enclosure</b>", 'type' => 'select', 'values' => $xfEnclosureValues, 'value' => extra_get_param($plugin,'xfEnclosure')));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>Генерация поля <b>enclosure</b></b>', 'entries' => $cfgX));
 
 $cfgX = array();
 array_push($cfgX, array('name' => 'cache', 'title' => "Использовать кеширование данных<br /><small><b>Да</b> - кеширование используется<br /><b>Нет</b> - кеширование не используется</small>", 'type' => 'select', 'values' => array ( '1' => 'Да', '0' => 'Нет'), 'value' => intval(extra_get_param($plugin,'cache'))));

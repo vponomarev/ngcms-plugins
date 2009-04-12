@@ -75,10 +75,27 @@ function plugin_rss_export(){
 
         $content = news_showone($row['id'], '', array( 'emulate' => $row, 'style' => $export_mode, 'plugin' => 'rss_export' ));
 
+		$enclosure = '';
+
+		// Check if Enclosure `xfields` integration is activated
+		if (extra_get_param('rss_export', 'xfEnclosureEnabled') && (true || status('xfields'))) {
+			// Load (if needed XFIELDS plugin
+			include_once(root."/plugins/xfields/xfields.php");
+
+			if (is_array($xfd = xf_decode($row['xfields'])) && isset($xfd[extra_get_param('rss_export','xfEnclosure')])) {
+				$enclosure = $xfd[extra_get_param('rss_export','xfEnclosure')];
+			}
+		}
+
 		$output .= "  <item>\n";
 		$output .= "   <title><![CDATA[".((extra_get_param('rss_export','news_title') == 1)&&GetCategories($row['catid'],true)?GetCategories($row['catid'], true).' :: ':'').secure_html($row['title'])."]]></title>\n";
 		$output .= "   <link><![CDATA[".GetLink('full', $row)."]]></link>\n";
 		$output .= "   <description><![CDATA[".$content."]]></description>\n";
+
+		// Output enclosure URL (if configured & set
+		if ($enclosure != '')
+			$output .= '   <enclosure url="'.$enclosure.'" />'."\n";
+
 		$output .= "   <category>".GetCategories($row['catid'], true)."</category>\n";
 		$output .= "   <guid isPermaLink=\"false\">".home."?id=".$row['id']."</guid>\n";
 		$output .= "   <pubDate>".strftime('%a, %d %b %Y %H:%M:%S GMT',$row['postdate'])."</pubDate>\n";
