@@ -7,7 +7,7 @@
  <input type=hidden name=mode value=pay>
  <input type=hidden name=access_element_id value="{newsid}">
  <input type=hidden name="back" value="{backurl}">
- <input type=submit value="Оплатить контент" onlick="'."alert('платим!');".'" />
+ <input type=submit value="Оплатить контент" />
 </form>
 <br />
 </div>
