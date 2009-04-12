@@ -59,7 +59,7 @@ function plugin_rss_export(){
 	// Prepare hide template
 	if ($config['blocks_for_reg'] && extra_get_param('rss_export','use_hide')) {
 		LoadPluginLang('rss_export', 'main','','rexport');
-		$hide_template = @file_get_contents(root.'extras/rss_export/templates/hide.tpl');
+		$hide_template = @file_get_contents(root.'plugins/rss_export/templates/hide.tpl');
 		$hide_template = str_replace('{text}',$lang['rexport_hide'],$hide_template);
 	}
 
