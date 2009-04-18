@@ -29,7 +29,7 @@ function plugin_lastnews(){
 //
 //   * maxlength	- maximum length of news title (cut)
 //   * overrideTemplatePath - path for template
-function plugin_lastnewsGenerator($orderBy = '', $categories = array(), $overrideParams = array()) {
+function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrideParams = array()) {
 	global $config, $mysql, $tpl, $lang, $langShortMonths, $langMonths, $PFILTERS;
 
 	// Generate cache file name [ we should take into account SWITCHER plugin & calling parameters ]
