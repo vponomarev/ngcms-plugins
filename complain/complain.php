@@ -58,8 +58,11 @@ function plugin_complain_screen() {
  // Prepare filters
  $where = array ('(c.complete = 0)');
 
+ // Populate admins array
+ $admins = explode("\n", extra_get_param('complain', 'admins'));
+
  // Non admins will see only complains in which they are involved
- if ($userROW['status'] > 1) {
+ if (($userROW['status'] > 1)&&(!in_array($userROW['name'], $admins))) {
  	$where [] = '((c.publisher_id = '.intval($userROW['id']).') or (c.owner_id = '.intval($userROW['id']).') or (c.author_id = '.intval($userROW['id']).'))';
  }
 
@@ -222,7 +225,7 @@ function plugin_complain_post() {
  $mysql->query("insert into ".prefix."_complain (author_id, publisher_id, publisher_ip, publisher_mail, date, ds_id, entry_id, error_code, flags) values (".db_squote($cdata['author_id']).", ".db_squote(is_array($userROW)?$userROW['id']:0).", ".db_squote($ip).", ".db_squote($publisherMail).", now(), ".db_squote($cdata['ds_id']).", ".db_squote($cdata['id']).", ".db_squote($errid).", ".db_squote($flags).")");
 
  // Write a mail (if needed)
- if (extra_get_param('complain', 'inform_author') || extra_get_param('complain', 'inform_admin')) {
+ if (extra_get_param('complain', 'inform_author') || extra_get_param('complain', 'inform_admin') || extra_get_param('complain', 'inform_admins')) {
 
   $tmvars = array ( 'vars' =>
    array (
@@ -235,10 +238,12 @@ function plugin_complain_post() {
    array( "\n", $cdata['title'], $cdata['link'], $errtext, GetLink('plugins', array('plugin_name' => 'complain')) ),
    $lang['complain:mail.open.body']);
 
+  // Inform author
   if (extra_get_param('complain', 'inform_author') && strlen($cdata['author_mail'])) {
    zzMail($cdata['author_mail'], $lang['complain:mail.open.subj'], $mail_text, 'text');
   }
 
+  // Inform site admins
   if (extra_get_param('complain', 'inform_admin')) {
    // Send to all admins
    foreach ($mysql->select("select mail from ".uprefix."_users where status = 1") as $urow) {
@@ -247,6 +252,18 @@ function plugin_complain_post() {
     }
    }
   }
+
+  // Inform PLUGIN admins
+  if (extra_get_param('complain', 'inform_admins')) {
+  	foreach (explode("\n", extra_get_param('complain', 'admins')) as $admin_name) {
+		if ($urow = $mysql->recors("select mail from ".uprefix."_users where name = ".db_squote($admin_name))) {
+		    if (strlen($urow['mail'])) {
+		     zzMail($urow['mail'], $lang['complain:mail.open.subj'], $mail_text, 'text');
+		    }
+		}
+	  }
+  }
+
  }
 
  $tpl->template('infoblock', $tpath['infoblock']);
@@ -291,13 +308,15 @@ function plugin_complain_update() {
   return 1;
  }
 
- // ** Check requested actions **
+ // Populate admins list
+ $admins = explode("\n", extra_get_param('complain', 'admins'));
 
+ // ** Check requested actions **
  // Change ownership
  if ($_REQUEST['setowner'] == '1') {
   // Admins can change all ownerships, users - can set ownership only for their news
   // that are not already owned by anyone
-  $mysql->query("update ".prefix."_complain set owner_id = ".db_squote($userROW['id'])." where id in (".join(",", $ilist).")".(($userROW['status']>1)?' and owner_id = 0 and author_id='.db_squote($userROW['id']):''));
+  $mysql->query("update ".prefix."_complain set owner_id = ".db_squote($userROW['id'])." where id in (".join(",", $ilist).")".(($userROW['status']>1 && (!in_array($userROW['name'], $admins)))?' and owner_id = 0 and author_id='.db_squote($userROW['id']):''));
  }
 
  // Change status [ ONLY FOR NEWS OWNED BY ME ]

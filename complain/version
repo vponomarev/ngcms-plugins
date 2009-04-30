@@ -4,7 +4,7 @@
 
 ID: complain
 Name: Сообщить о проблеме в новости
-Version: 0.02
+Version: 0.03
 Acts: news_full, ppages
 File: complain.php
 Config: config.php

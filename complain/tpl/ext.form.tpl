@@ -20,13 +20,14 @@ body { font : normal 12px verdana, sans-serif; }
 
 <div id="senderror">
 <div class="texth">
-Сообщить об ошибке:<br/><br/>
+<u>Сообщить об ошибке:</u><br/><br/>
+Тип ошибки: <select name="error" class="error">{errorlist}</select><br/><br/>
 [email]Ваш e-mail: <input type="text" name="mail"/><br/>[/email]
 [notify]<input type="checkbox" name="notify" value="1"/> информировать о решении проблемы <br/>[/notify]
-	<select name="error" class="error">{errorlist}</select><br/><br/>
-	<input type="submit" class="report" value="Отправить"/>
+[text]Детальное описание проблемы:<br/><textarea cols="80" rows="4" name="text"></textarea><br/>[/text]
+<input type="submit" class="report" value="Отправить"/>
 </div>	
 </div>
-	</form>
+</form>
 </body>
 </html>
