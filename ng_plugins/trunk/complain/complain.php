@@ -256,7 +256,7 @@ function plugin_complain_post() {
   // Inform PLUGIN admins
   if (extra_get_param('complain', 'inform_admins')) {
   	foreach (explode("\n", extra_get_param('complain', 'admins')) as $admin_name) {
-		if ($urow = $mysql->recors("select mail from ".uprefix."_users where name = ".db_squote($admin_name))) {
+		if ($urow = $mysql->record("select mail from ".uprefix."_users where name = ".db_squote($admin_name))) {
 		    if (strlen($urow['mail'])) {
 		     zzMail($urow['mail'], $lang['complain:mail.open.subj'], $mail_text, 'text');
 		    }
