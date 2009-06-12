@@ -4,7 +4,7 @@
 
 ID: archive
 Name: Show news archive
-Version: 0.03
+Version: 0.04
 Acts: core, index
 File: archive.php
 Config: config.php
