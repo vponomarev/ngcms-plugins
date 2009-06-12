@@ -31,8 +31,12 @@ function plugin_archive() {
 
 
 	foreach($mysql->select("SELECT month(from_unixtime(postdate)) as month, year(from_unixtime(postdate)) as year, COUNT(id) AS cnt, postdate FROM ".prefix."_news WHERE approve = '1' GROUP BY year(from_unixtime(postdate)), month(from_unixtime(postdate)) ORDER BY postdate DESC limit $maxnum") as $row){
+	    $month_link = checkLinkAvailable('news', 'by.month')?
+					generateLink('news', 'by.month', array('year' => $row['year'], 'month' => sprintf('%02u', $row['month']))):
+					generateLink('core', 'plugin', array('plugin' => 'news', 'handler' => 'by.month'), array('year' => $row['year'], 'month' => sprintf('%02u', $row['month'])));
+
 		$tvars['vars'] = array(
-			'link'		=>	GetLink('month', $row),
+			'link'		=>	$month_link,
 			'title'		=>	$langMonths[$row['month']-1].' '.$row['year'],
 			'cnt'		=>	$row['cnt']
 		);
