@@ -74,12 +74,12 @@ class auth_basic {
 	//
 	// Отменить авторизацию
 	function drop_auth() {
-	 	global $config, $mysql;
+	 	global $config, $mysql, $userROW;
 
 	 	$auth_cookie = $_COOKIE['zz_auth'];
 	 	if (!$auth_cookie) { return; }
 
-		$mysql->query("update ".uprefix."_users set authcookie = '' where userid=".db_squote($userid));
+		$mysql->query("update ".uprefix."_users set authcookie = '' where id=".db_squote($userROW['id']));
 		@setcookie('zz_auth', '', time() - 3600 * 24 * 365, '/');
 	 	return;
 	}
@@ -120,7 +120,7 @@ class auth_basic {
 	 		return 0;
 	 	}
 
-	 	if (preg_match('/[&<>'."'".']/', $values['login'])) {
+	 	if (preg_match('/[&<>\xFF'."'".']/', $values['login'])) {
 	 		// Запрещенные HTML символы
 	 		$msg = $lang['auth_login_html'];
 	 		return 0;
@@ -168,34 +168,37 @@ class auth_basic {
 		if (($regstatus < 1)||($regstatus > 4))
 			$regstatus = 4;
 
-		if ($config['register_type'] == "0") {
-			$newpassword = MakeRandomPassword();
-			$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
-			msg(array("text" => $lang['msgo_registered'], "info" => sprintf($lang['msgo_info1'], $newpassword)));
+		switch ($config['register_type']) {
+			case 0:
+				$newpassword = MakeRandomPassword();
+				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
+				msg(array("text" => $lang['msgo_registered'], "info" => sprintf($lang['msgo_info1'], $newpassword)));
+				break;
+			case 1:
+				$newpassword = MakeRandomPassword();
+				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
+				zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $newpassword), 'html');
+				msg(array("text" => $lang['msgo_registered'], "info" => $lang['msgo_info2']));
+				break;
+			case 2:
+				$newpassword	=	MakeRandomPassword();
+				$actcode		=	MakeRandomPassword();
+				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '', '".$actcode."')");
+				$userid			=	$mysql->record('select LAST_INSERT_ID() as id');
+				$link			=	$config['home_url'].(checkLinkAvailable('core', 'activation')?
+									generateLink('core', 'activation', array('userid' => $userid['id'], 'code' => $actcode)):
+									generateLink('core', 'plugin', array('plugin' => 'core', 'handler' => 'activation'), array('userid' => $userid['id'], 'code' => $actcode)));
+
+				$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
+				zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $newpassword).sprintf($lang['activate'], $actlink), 'html');
+				msg(array("text" => $lang['msgo_registered'], "info" => $lang['msgo_info3']));
+				break;
+			case 3:
+				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($values['password'])).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
+				zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $values['password']), 'html');
+				msg(array("text" => $lang['msgo_registered']));
 		}
-		if ($config['register_type'] == "1") {
-			$newpassword = MakeRandomPassword();
-			$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
-			zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $newpassword), 'html');
-			msg(array("text" => $lang['msgo_registered'], "info" => $lang['msgo_info2']));
-		}
-		if ($config['register_type'] == "2") {
-			$newpassword		=	MakeRandomPassword();
-			$actcode		=	MakeRandomPassword();
-			$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '', '".$actcode."')");
-			$userid			=	$mysql->record('select LAST_INSERT_ID() as id');
-			$link			=	GetLink('activation_do', array('userid' => $userid['id'], 'code' => $actcode));
-			$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
-			zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $newpassword).sprintf($lang['activate'], $actlink), 'html');
-			//echo $lastid;
-			msg(array("text" => $lang['msgo_registered'], "info" => $lang['msgo_info3']));
-		}
-		if ($config['register_type'] == "3") {
-			$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($values['password'])).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
-			zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $values['password']), 'html');
-			msg(array("text" => $lang['msgo_registered']));
-			//print var_dump($lang);
-		}
+
 		return 1;
 
 	}
@@ -209,8 +212,9 @@ class auth_basic {
 		LoadPluginLang('auth_basic', 'auth','','auth');
 		$mode = extra_get_param('auth_basic','restorepw');
 		if (!$mode) {
-			array_push($params, array('text' => $lang['auth_norestore']));
-			return $params;
+			return false;
+			//array_push($params, array('text' => $lang['auth_norestore']));
+			//return $params;
 	        }
 
 		array_push($params, array('text' => $lang['auth_restore_'.$mode]));
@@ -267,8 +271,11 @@ class auth_basic {
 
 			$tvars['vars'] = array( 'login' => $row['name'],
 						'home' => home,
-						'newpw' => $newpassword,
-						'pwurl' => home.'/?action=lostpassword&type=confirm&uid='.$row['id'].'&secret='.EncodePassword($newpassword));
+						'newpw' => $newpassword);
+			$tvars['vars']['pwurl'] = $config['home_url'].(checkLinkAvailable('core', 'lostpassword')?
+										generateLink('core', 'lostpassword', array('userid' => $row['id'], 'code' => EncodePassword($newpassword))):
+										generateLink('core', 'plugin', array('plugin' => 'core', 'handler' => 'lostpassword'), array('userid' => $row['id'], 'code' => EncodePassword($newpassword))));
+
 			$tpl -> template('restorepw', GetPluginLangDir('auth_basic'));
 			$tpl -> vars('restorepw', $tvars);
 
@@ -286,13 +293,11 @@ class auth_basic {
 	//
   // Подтверждение восстановления пароля
   //
-  function confirm_restorepw(&$msg) {
+  function confirm_restorepw(&$msg, $reqid = NULL, $reqsecret = NULL) {
 		global $config, $mysql, $lang, $tpl;
 
 		LoadPluginLang('auth_basic', 'auth','','auth');
 
-	 	$reqid = $_REQUEST['uid'];
-	 	$reqsecret = $_REQUEST['secret'];
 	 	$row = $mysql->record("select * from ".uprefix."_users where id = ".db_squote($reqid));
 	 	if (is_array($row)) {
 	 		if ($reqsecret == $row['newpw']) {
