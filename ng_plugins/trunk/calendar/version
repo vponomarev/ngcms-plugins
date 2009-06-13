@@ -4,7 +4,7 @@
 
 ID: calendar
 Name: Show news calendar
-Version: 0.07
+Version: 0.08
 Acts: core, index
 File: calendar.php
 Config: config.php
