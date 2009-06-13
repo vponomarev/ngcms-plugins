@@ -6,18 +6,27 @@ if (!defined('NGCMS')) die ('HAL');
 add_act('index', 'plugin_calendar');
 
 function plugin_calendar() {
-        global $month, $year;
+	global $CurrentHandler;
 
-	if (is_int($year) && is_int($month) && ($month >= 1) && ($month <= 12) && ($year >= 1970) && ($year <= 2100)) {
-		$this_month	=	$month;
-		$this_year	=	$year;
+	// Determine MONTH and YEAR for current show process
+	if (($CurrentHandler['pluginName'] == 'news')&&
+		(in_array($CurrentHandler['handlerName'], array('by.day','by.month', 'by.year')))) {
+		$year = isset($CurrentHandler['params']['year'])?$CurrentHandler['params']['year']:$_REQUEST['year'];
+		$month = isset($CurrentHandler['params']['month'])?$CurrentHandler['params']['month']:$_REQUEST['month'];
+
+		if (($month < 1)||($month > 12))
+			$month = 1;
+
+		if (($year < 1970)||($year > 2100)) {
+			$tm = localtime();
+			$year = $tm[5];
+		}
 	} else {
-		$time		=	time();
-		$this_month	=	date('m', $time);
-		$this_year	=	date('Y', $time);
+		$lt = time();
+		$month = date('m', $lt);
+		$year  = date('Y', $lt);
 	}
-
-        return plug_calgen($this_month, $this_year);
+    return plug_calgen($month, $year);
 }
 
 
@@ -64,7 +73,11 @@ function plug_calgen($month, $year) {
 	 for ($j = 1; $j <= 7; $j++) {
 	  $dayno = ($i*7+$j)-$offset;
 	  if (($dayno>0)&&($dayno <= $days)) {
-		  $tvars['vars']['d'.$j]	= ($counters[$dayno]?('<a href="'.GetLink('date', array('postdate' => mktime(0,0,0,$month,$dayno,$year))).'">'.$dayno.'</a>'):$dayno);
+		  $day_link = checkLinkAvailable('news', 'by.day')?
+						generateLink('news', 'by.day', array('year' => $year, 'month' => $month, 'day' => sprintf('%02u', $dayno))):
+						generateLink('core', 'plugin', array('plugin' => 'news', 'handler' => 'by.day'), array('year' => $year, 'month' => $month, 'day' => $dayno));
+
+		  $tvars['vars']['d'.$j]	= ($counters[$dayno]?('<a href="'.$day_link.'">'.$dayno.'</a>'):$dayno);
 		  $tvars['vars']['cl'.$j]	= $lang['calendar_class_'.(($flagCurrentMonth && ($localTime[3] == $dayno))?'today_':'').'week'.(($j<6)?'day':'end')];
 	  } else {
 	  	$tvars['vars']['d'.$j]		= '';
@@ -75,19 +88,31 @@ function plug_calgen($month, $year) {
 	 $tpl -> vars('entries', $tvars);
 	 $result .= $tpl -> show('entries');
 	}
-
-
-
 	unset($tvars);
+
+    $month_link = checkLinkAvailable('news', 'by.month')?
+				generateLink('news', 'by.month', array('year' => $year, 'month' => $month)):
+				generateLink('core', 'plugin', array('plugin' => 'news', 'handler' => 'by.month'), array('year' => $year, 'month' => $month));
+
 	$tvars['vars'] = array (
 		'tpl_url' => tpl_url,
 		'entries' => $result,
-		'current_link' => '<a href="'.GetLink('month', array('postdate' => $dt)).'">'.$langMonths[$month-1].' '.$year.'</a>'
+		'current_link' => '<a href="'.$month_link.'">'.$langMonths[$month-1].' '.$year.'</a>'
 	);
+
+    $prev_cd   = localtime($prevdt, true);
+	$prev_link = checkLinkAvailable('news', 'by.month')?
+				generateLink('news', 'by.month', array('year' => ($prev_cd['tm_year']+1900), 'month' => sprintf('%02u', ($prev_cd['tm_mon']+1)))):
+				generateLink('core', 'plugin', array('plugin' => 'news', 'handler' => 'by.month'), array('year' => ($prev_cd['tm_year']+1900), 'month' => sprintf('%02u', ($prev_cd['tm_mon']+1))));
+
+    $next_cd   = localtime($nextdt, true);
+	$next_link = checkLinkAvailable('news', 'by.month')?
+				generateLink('news', 'by.month', array('year' => ($next_cd['tm_year']+1900), 'month' => sprintf('%02u', ($next_cd['tm_mon']+1)))):
+				generateLink('core', 'plugin', array('plugin' => 'news', 'handler' => 'by.month'), array('year' => ($next_cd['tm_year']+1900), 'month' => sprintf('%02u', ($next_cd['tm_mon']+1))));
 
 	// If cache is activated - calculate MIN and MAX dates for news
 	if (extra_get_param('calendar','cache')) {
-		// 
+		//
 		$mmx = $mysql->record("select (select postdate from ".prefix."_news use key(news_postdate) where mainpage=1 order by postdate limit 1) as min, (select postdate from ".prefix."_news use key(news_postdate) where approve=1 order by postdate desc limit 1) as max", 1);
 
 		// Prev link
@@ -95,24 +120,25 @@ function plug_calgen($month, $year) {
 			// Lock
 			$tvars['regx']['#\[prev_link\].+?\[/prev_link\]#is'] = '&nbsp;';
 		} else {
-			$tvars['vars']['[prev_link]']  = '<a href="'.GetLink('month', array('postdate' => $prevdt)).'">';
+
+			$tvars['vars']['[prev_link]']  = '<a href="'.$prev_link.'">';
 			$tvars['vars']['[/prev_link]'] = '</a>';
 		}
-		
+
 		// Next link
 		if ($nextdt>$mmx['max']) {
 			// Lock
 			$tvars['regx']['#\[next_link\].+?\[/next_link\]#is'] = '&nbsp;';
 		} else {
-			$tvars['vars']['[next_link]']  = '<a href="'.GetLink('month', array('postdate' => $nextdt)).'">';
+			$tvars['vars']['[next_link]']  = '<a href="'.$next_link.'">';
 			$tvars['vars']['[/next_link]'] = '</a>';
 		}
 	} else {
-		$tvars['vars']['[prev_link]']  = '<a href="'.GetLink('month', array('postdate' => $prevdt)).'">';
+		$tvars['vars']['[prev_link]']  = '<a href="'.$prev_link.'">';
 		$tvars['vars']['[/prev_link]'] = '</a>';
-		$tvars['vars']['[next_link]']  = '<a href="'.GetLink('month', array('postdate' => $nextdt)).'">';
+		$tvars['vars']['[next_link]']  = '<a href="'.$next_link.'">';
 		$tvars['vars']['[/next_link]'] = '</a>';
-	}	
+	}
 
 	foreach (explode(",", $lang['short_weekdays']) as $k => $v)
 		$lang['weekday_'.$k] = $v;
