@@ -23,7 +23,7 @@ if (!defined('NGCMS')) die ('HAL');
 //		'limitStart' => order comment no to start (for pagination)
 //		'limitCount' => number of comments to show (for pagination)
 function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams = array()){
-	global $mysql, $tpl, $template, $config, $userROW, $parse, $lang;
+	global $mysql, $tpl, $template, $config, $userROW, $parse, $lang, $PFILTERS;
 
 	// -> desired template path
 	$templatePath = ($callingParams['overrideTemplatePath'])?$callingParams['overrideTemplatePath']:tpl_dir.$config['theme'];
@@ -40,7 +40,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	if ($config['use_avatars']) {
 		$sql = "select c.*, u.avatar from ".prefix."_comments c left join ".uprefix."_users u on c.author_id = u.id where c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
 	} else {
-		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($comment_id?(" and c.id=".db_squote($comment_id)):'');
+		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
 	}
 	$sql .= " order by c.id".(extra_get_param('comments', 'backorder')?' desc':'');
 
@@ -64,8 +64,10 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		$tvars['vars']['mail']		=	$row['mail'];
 		$tvars['vars']['date']		=	LangDate($timestamp, $row['postdate']);
 
-		if ($row['reg']) {
-			$tvars['vars']['profile_link'] = GetLink('user', $row);
+		if ($row['reg'] && plugin_is_active('uprofile')) {
+			$tvars['vars']['profile_link'] = checkLinkAvailable('uprofile', 'show')?
+				generateLink('uprofile', 'show', array('name' => $row['author'], 'id' => $row['author_id'])):
+				generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('id' => $row['author_id']));
 			$tvars['regx']["'\[profile\](.*?)\[/profile\]'si"] = '$1';
 		} else {
 			$tvars['vars']['profile_link'] = '';
@@ -131,7 +133,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 			$tvars['regx']["'\[answer\](.*?)\[/answer\]'si"] = '';
 		}
 
-		if (is_array($userROW) && (($userROW['status'] == "1") || ($userROW['status'] == "2"))) {
+		if (is_array($userROW) && (($userROW['status'] == 1) || ($userROW['status'] == 2))) {
 			$tvars['vars']['[edit-com]'] = "<a href=\"".admin_url."/admin.php?mod=editcomments&amp;newsid=$newsID&amp;comid=$row[id]\" target=\"_blank\" title=\"".$lang['addanswer']."\">";
 			$tvars['vars']['[/edit-com]'] = "</a>";
 			$tvars['vars']['[del-com]'] = "<a href=\"".admin_url."/admin.php?mod=editcomments&amp;subaction=deletecomment&amp;newsid=$newsID&amp;comid=$row[id]&amp;oster=$row[author]\" title=\"".$lang['comdelete']."\">";
@@ -143,9 +145,16 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 			$tvars['vars']['ip'] = '';
 		}
 
-		exec_acts('comments', $row);
-		$tpl -> vars($templateName, $tvars);
+		// RUN interceptors
+		if (is_array($PFILTERS['comments']))
+			foreach ($PFILTERS['comments'] as $k => $v)
+				$v->showComments($newsID, $row, $comnum, $tvars);
 
+		// run OLD-STYLE interceptors
+		exec_acts('comments', $row);
+
+		// Show template
+		$tpl -> vars($templateName, $tvars);
 		$template['vars']['mainblock'] .= $tpl -> show($templateName);
 
 	}
@@ -157,7 +166,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 //		'overrideTemplatePath' => alternative path for searching of template
 //		'noajax'		=> DISABLE AJAX mode
 function comments_showform($newsID, $callingParams = array()){
-	global $mysql, $config, $template, $tpl, $userROW;
+	global $mysql, $config, $template, $tpl, $userROW, $PFILTERS;
 
 	// -> desired template path
 	$templatePath = ($callingParams['overrideTemplatePath'])?$callingParams['overrideTemplatePath']:tpl_dir.$config['theme'];
@@ -213,11 +222,17 @@ function comments_showform($newsID, $callingParams = array()){
 	$tvars['vars']['request_uri']	=	$_SERVER['REQUEST_URI'];
 
 	// Generate request URL
-	$link = GetLink('plugins', array('plugin_name' => 'comments'), 1);
-	$link .= ((strpos($link,'?') === false)?'?':'&').'plugin_cmd=add&rand=';
+	$link = generateLink('core', 'plugin', array('plugin' => 'comments', 'handler' => 'add'));
 	$tvars['vars']['post_url'] = $link;
 
+	// RUN interceptors
+	if (is_array($PFILTERS['comments']))
+		foreach ($PFILTERS['comments'] as $k => $v)
+			$v->showComments($newsID, $row, $comnum, $tvars);
+
+	// RUN interceptors ( OLD-style )
 	exec_acts('comments_form', $row);
+
 	$tpl -> vars($templateName, $tvars);
 	$template['vars']['mainblock'] .= $tpl -> show($templateName);
 }

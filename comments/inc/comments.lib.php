@@ -17,5 +17,7 @@ class FilterComments {
 	// Adding notificator [ after successful adding ]
 	function addCommentsNotify($userRec, $newsRec, &$tvars, $SQL, $commID) { return 1; }
 
+	// Show comments
+	function showComments($newsID, $commRec, $comnum, &$tvars) { return 1; }
 
 }

@@ -208,11 +208,18 @@ function comments_add(){
 	// RUN interceptors
 	if (is_array($PFILTERS['comments']))
 		foreach ($PFILTERS['comments'] as $k => $v)
-			$v->addComments($memberRec, $news_row, $tvars, $SQL, $comment_id);
+			$v->addCommentsNotify($memberRec, $news_row, $tvars, $SQL, $comment_id);
 
 
 	// Email informer
 	if (extra_get_param('comments', 'inform_author') || extra_get_param('comments', 'inform_admin')) {
+		if ($SQL['author_id']) {
+			$alink = $config['home_url'].(checkLinkAvailable('uprofile', 'show')?
+						generateLink('uprofile', 'show', array('name' => $SQL['author'], 'id' => $SQL['author_id'])):
+						generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('name' => $SQL['author'], 'id' => $SQL['author_id'])));
+		} else {
+			$alink = '';
+		}
 		$body = str_replace(
 			array(	'{username}',
 					'[userlink]',
@@ -221,10 +228,10 @@ function comments_add(){
 					'{newslink}',
 					'{newstitle}'),
 			array(	$SQL['author'],
-					($SQL['author_id'])?'<a href="'.GetLink('user', array('author' => $SQL['author'])).'">':'',
+					($SQL['author_id'])?'<a href="'.$alink.'">':'',
 					($SQL['author_id'])?'</a>':'',
 					$parse->bbcodes($parse->smilies(secure_html($SQL['text']))),
-					GetLink('full', $news_row),
+					$config['home_url'].newsGenerateLink($news_row),
 					$news_row['title'],
 					),
 			$lang['notice']
