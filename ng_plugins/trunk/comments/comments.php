@@ -105,8 +105,10 @@ class CommentsNewsFilter extends NewsFilter {
 
 		// If multipage is used and we have more comments - show
 		if ($flagMoreComments) {
-			$link = GetLink('plugins', array('plugin_name' => 'comments'), 1);
-			$link .= ((strpos($link,'?') === false)?'?':'&').'plugin_cmd=show&news_id='.$newsID;
+			$link = checkLinkAvailable('comments', 'show')?
+						generateLink('comments', 'show', array('news_id' => $newsID)):
+						generateLink('core', 'plugin', array('plugin' => 'comments', 'handler' => 'show'), array('news_id' => $newsID));
+
 			$template['vars']['mainblock'] .= str_replace(array('{link}', '{count}'), array($link, $SQLnews['com']), $lang['comments:link.more']);
 		}
 
@@ -135,9 +137,10 @@ function plugin_comments_add() {
 			// We should JUMP to this new comment
 
 			// Make FULL news link
-			$link = GetLink('full', $addResult[0], 1);
+			$nlink = newsGenerateLink($addResult[0]);
+
 			// Make redirect to full news
-			@header("Location: ".$link);
+			@header("Location: ".$nlink);
 			return 1;
 		}
 
@@ -218,7 +221,7 @@ function plugin_comments_show(){
 
 	// Show header file
 	$tvars = array();
-	$tvars['vars']['link']	= GetLink('full', $newsRow);
+	$tvars['vars']['link']	= newsGenerateLink($newsRow);
 	$tvars['vars']['title']	= secure_html($newsRow['title']);
 
 	$tpl->template('comments.header', $templatePath);
@@ -249,11 +252,12 @@ function plugin_comments_show(){
 	comments_show($newsID, 0, 0, $callingCommentsParams);
 
 	if ($pageCount > 1) {
-		$link = GetLink('plugins', array('plugin_name' => 'comments'), 1);
-		$link .= ((strpos($link,'?') === false)?'?':'&').'plugin_cmd=show&news_id='.$newsID.'&page={page}';
+	    $paginationParams = checkLinkAvailable('comments', 'show')?
+	    			array('pluginName' => 'comments', 'pluginHandler' => 'show', 'params' => array('news_id' => $newsID), 'xparams' => array(), 'paginator' => array('page', 0, false)):
+	    			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'comments', 'handler' => 'show'), 'xparams' => array('news_id' => $newsID), 'paginator' => array('page', 1, false));
 
 		$navigations = getNavigations(tpl_dir.$config['theme']);
-		$template['vars']['mainblock'] .= generatePagination($page, 1, $pageCount, 10, $link, $navigations);
+		$template['vars']['mainblock'] .= generatePagination($page, 1, $pageCount, 10, $paginationParams, $navigations);
 	}
 
 	// Enable AJAX in case if we are on last page
