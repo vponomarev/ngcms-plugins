@@ -4,7 +4,7 @@
 
 ID: jchat
 Name: AJAX chat
-Version: 0.02
+Version: 0.03
 Acts: index, ppages
 File: jchat.php
 Config: config.php
@@ -14,4 +14,3 @@ Title: AJAX chat
 Description: AJAX based чат для сайта
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
-preinstall: no

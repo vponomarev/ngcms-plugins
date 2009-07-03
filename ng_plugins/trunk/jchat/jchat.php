@@ -81,6 +81,8 @@ function plugin_jchat_index() {
 
 	$tvars['vars']['maxlen'] = $maxlen;
 
+	$tvars['vars']['link_add'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'add'), array());
+	$tvars['vars']['link_show'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'show'), array());
 	$tvars['regx']['#\[not-logged\](.*?)\[\/not-logged\]#is'] = is_array($userROW)?'':'$1';
 	$tvars['regx']['#\[post-enabled\](.*?)\[\/post-enabled\]#is'] = (!is_array($userROW) && (extra_get_param('jchat', 'access') < 2))?'':'$1';
 
