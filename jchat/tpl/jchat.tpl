@@ -59,8 +59,8 @@ function jChat(maxRows, refresh, tableID) {
 				//document.getElementById('timerDebug').innerHTML = thisObject.tickCount;
 				if (thisObject.scanActive) {
 					dateTime = new Date();
-					thisObject.linkRX.requestFile = '/plugin/jchat/';
-					thisObject.linkRX.setVar('plugin_cmd', 'show');
+					thisObject.linkRX.requestFile = '{link_show}';
+					//thisObject.linkRX.setVar('plugin_cmd', 'show');
 					thisObject.linkRX.setVar('start', thisObject.maxLoadedID);
 					thisObject.linkRX.setVar('timer', thisObject.timerInterval /1000);
 					thisObject.linkRX.setVar('idle', Math.round((dateTime.getTime()/1000) - thisObject.idleStart));
@@ -162,8 +162,9 @@ function jChat(maxRows, refresh, tableID) {
 		if (sButton != null)
 			sButton.disabled = true;
 
-		TX.requestFile = '/plugin/jchat/';
-		TX.setVar('plugin_cmd', 'add');[not-logged]
+		TX.requestFile = '{link_add}';
+		//TX.setVar('plugin_cmd', 'add');
+		[not-logged]
 		TX.setVar('name', name);[/not-logged]
 		TX.setVar('start', this.maxLoadedID);
 		TX.setVar('text', text);
