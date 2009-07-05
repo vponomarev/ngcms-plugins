@@ -7,8 +7,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 
-plugins_load_config();
-LoadPluginLang($plugin, 'main');
+loadPluginLang('complain', 'config', '', '', ':');
 
 
 $db_update = array(
@@ -23,7 +22,7 @@ if ($_REQUEST['action'] == 'commit') {
 		plugin_mark_deinstalled($plugin);
 	}
 } else {
-	generate_install_page($plugin, '', 'deinstall');
+	generate_install_page($plugin, $lang['complain:desc_uninstall'], 'deinstall');
 }
 
 ?>

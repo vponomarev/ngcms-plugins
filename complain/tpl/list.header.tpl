@@ -29,8 +29,7 @@ input  { font-size: 10px; }
 <body>
 <h1>Список активных инцидентов</h1>
 
-<form action="/plugin/complain/" method="post">
-<input type="hidden" name="plugin_cmd" value="update"/>
+<form action="{form_url}" method="post">
 <table id="mt" width="100%" cellspacing=1 cellpadding=1>
 <thead>
 <tr>

@@ -11,7 +11,7 @@ body { font : normal 12px verdana, sans-serif; }
 </style>
 </head>
 <body>
-<form method="post" action="">
+<form method="post" action="{form_url}">
 <input type="hidden" name="action" value="plugin"/>
 <input type="hidden" name="plugin" value="complain"/>
 <input type="hidden" name="plugin_cmd" value="post"/>
@@ -24,7 +24,7 @@ body { font : normal 12px verdana, sans-serif; }
 Тип ошибки: <select name="error" class="error">{errorlist}</select><br/><br/>
 [email]Ваш e-mail: <input type="text" name="mail"/><br/>[/email]
 [notify]<input type="checkbox" name="notify" value="1"/> информировать о решении проблемы <br/>[/notify]
-[text]Детальное описание проблемы:<br/><textarea cols="80" rows="4" name="text"></textarea><br/>[/text]
+[text]Детальное описание проблемы:<br/><textarea cols="80" rows="4" name="error_text"></textarea><br/>[/text]
 <input type="submit" class="report" value="Отправить"/>
 </div>	
 </div>

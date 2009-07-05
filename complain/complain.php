@@ -68,15 +68,16 @@ function plugin_complain_screen() {
 
 
  $entries = '';
- foreach ($mysql->select("select count(c.id) as ccount, c.id, c.status, c.complete, c.owner_id, (select name from ".uprefix."_users where id = c.owner_id) as owner_name, c.author_id, (select name from ".uprefix."_users where id = c.author_id) as author_name, c.publisher_id, (select name from ".uprefix."_users where id = c.publisher_id) as publisher_name, c.publisher_ip, date(c.date) as date, c.ds_id, c.entry_id, c.error_code, n.alt_name as n_alt_name, n.id as n_id, n.title as n_title, n.catid as n_catid from ".prefix."_complain c left join ".prefix."_news n on c.entry_id = n.id where ".join(" AND ", $where)." group by c.ds_id, c.entry_id, c.error_code") as $crow) {
+// foreach ($mysql->select("select count(c.id) as ccount, c.id, c.status, c.complete, c.owner_id, (select name from ".uprefix."_users where id = c.owner_id) as owner_name, c.author_id, (select name from ".uprefix."_users where id = c.author_id) as author_name, c.publisher_id, (select name from ".uprefix."_users where id = c.publisher_id) as publisher_name, c.publisher_ip, date(c.date) as date, c.ds_id, c.entry_id, c.error_code, n.alt_name as n_alt_name, n.id as n_id, n.title as n_title, n.catid as n_catid, n.postdate as n_postdate from ".prefix."_complain c left join ".prefix."_news n on c.entry_id = n.id where ".join(" AND ", $where)." group by c.ds_id, c.entry_id, c.error_code") as $crow) {
+ foreach ($mysql->select("select c.id, c.status, c.complete, c.owner_id, (select name from ".uprefix."_users where id = c.owner_id) as owner_name, c.author_id, (select name from ".uprefix."_users where id = c.author_id) as author_name, c.publisher_id, (select name from ".uprefix."_users where id = c.publisher_id) as publisher_name, c.publisher_ip, date(c.date) as date, c.ds_id, c.entry_id, c.error_code, c.error_text, n.alt_name as n_alt_name, n.id as n_id, n.title as n_title, n.catid as n_catid, n.postdate as n_postdate from ".prefix."_complain c left join ".prefix."_news n on c.entry_id = n.id where ".join(" AND ", $where)) as $crow) {
   $tvars = array();
   $tvars['vars'] = array(
    'id'             => $crow['id'],
    'date'           => $crow['date'],
-   'error'          => $elist[$crow['error_code']],
+   'error'          => $elist[$crow['error_code']].($crow['error_text']?' (<span style="cursor: pointer;" onclick="alert('."'".str_replace(array("\r", "\n"), array('', '\n'), htmlspecialchars($crow['error_text']))."'".');">*</span>)':''),
    'ccount'         => ($crow['ccount']>1)?('(<b>'.$crow['ccount'].'</b>)'):'',
    'title'          => $crow['n_title'],
-   'link'           => GetLink('full', array('id' => $crow['n_id'], 'alt_name' => $crow['n_alt_name'], 'catid' => $crow['n_catid'])),
+   'link'           => newsGenerateLink(array('catid' => $crow['n_catid'], 'alt_name' => $crow['n_alt_name'], 'id' => $crow['n_id'], 'postdate' => $crow['n_postdate'])),
    'publisher_name' => $crow['publisher_id']?$crow['publisher_name']:'',
    'publisher_ip'	=> $crow['publisher_ip'],
    'author_name'    => $crow['author_name'],
@@ -86,6 +87,7 @@ function plugin_complain_screen() {
 
   // Check if user have enough permissions to make any changes in this report
   if (($userROW['status'] == 1) ||
+      (in_array($userROW['name'], $admins)) ||
       ($userROW['id'] == $crow['owner_id']) ||
       (($crow['author_id'] == $userROW['id']) &&
 	   (($crow['owner_id'] == $userROW['id'])||(!$crow['owner_id']))
@@ -100,13 +102,12 @@ function plugin_complain_screen() {
   $entries .= $tpl->show('list.entry');
  }
 
-
  $sselect = '';
  for ($i = 2; $i < 5; $i++) $sselect .= '<option value="'.$i.'">'.$lang['complain:status.'.$i].'</option>';
 
  $tpl->template('list.header', $tpath['list.header']);
  $tvars = array();
- $tvars['vars'] = array( 'entries' => $entries, 'status_options' => $sselect );
+ $tvars['vars'] = array( 'entries' => $entries, 'status_options' => $sselect, 'form_url' => generateLink('core', 'plugin', array('plugin' => 'complain', 'handler' => 'update')));
  $tpl->vars('list.header', $tvars);
  $template['vars']['mainblock'] = $tpl->show('list.header');
 
@@ -143,6 +144,9 @@ function plugin_complain_add() {
  $txvars['vars'] = array ( 'ds_id' => intval($_REQUEST['ds_id']), 'entry_id' => intval($_REQUEST['entry_id']), 'errorlist' => $err );
  $txvars['regx']['#\[notify\](.*?)\[/notify\]#is'] = ((is_array($userROW)) &&(extra_get_param('complain', 'inform_reporter') == 2))?'$1':'';
  $txvars['regx']['#\[email\](.*?)\[/email\]#is'] = ((!is_array($userROW)) && extra_get_param('complain', 'allow_unreg_inform'))?'$1':'';
+ $txvars['regx']['#\[text\](.*?)\[/text\]#is'] = ((is_array($userROW) && (extra_get_param('complain', 'allow_text')==1)) || (extra_get_param('complain', 'allow_text') == 2))?'$1':'';
+
+ $txvars['vars']['form_url'] = generateLink('core', 'plugin', array('plugin' => 'complain', 'handler' => 'post'));
 
  $tpl->template('ext.form', $tpath['ext.form']);
  $tpl->vars('ext.form', $txvars);
@@ -177,7 +181,7 @@ function plugin_complain_post() {
   	 $cdata['ds_id']       = intval($_REQUEST['ds_id']);
   	 $cdata['id']          = $dse['id'];
   	 $cdata['title']       = $dse['title'];
-  	 $cdata['link']        = GetLink('full', $dse);
+  	 $cdata['link']        = newsGenerateLink($dse);
   	 $cdata['author']      = $dse['author'];
   	 $cdata['author_id']   = $dse['author_id'];
   	 $cdata['author_mail'] = $dse['mail'];
@@ -218,11 +222,14 @@ function plugin_complain_post() {
   $flagNotify = (extra_get_param('complain', 'allow_unreg_inform') && $publisherMail)?1:0;
  }
 
+ // Text error description
+ $errorText = ((is_array($userROW) && (extra_get_param('complain', 'allow_text') == 1)) || (extra_get_param('complain', 'allow_text') == 2))? $_REQUEST['error_text'] : '';
+
  // Fill flags variable
  $flags = $flagNotify?'N':'';
 
  // Let's make a report
- $mysql->query("insert into ".prefix."_complain (author_id, publisher_id, publisher_ip, publisher_mail, date, ds_id, entry_id, error_code, flags) values (".db_squote($cdata['author_id']).", ".db_squote(is_array($userROW)?$userROW['id']:0).", ".db_squote($ip).", ".db_squote($publisherMail).", now(), ".db_squote($cdata['ds_id']).", ".db_squote($cdata['id']).", ".db_squote($errid).", ".db_squote($flags).")");
+ $mysql->query("insert into ".prefix."_complain (author_id, publisher_id, publisher_ip, publisher_mail, date, ds_id, entry_id, error_code, error_text, flags) values (".db_squote($cdata['author_id']).", ".db_squote(is_array($userROW)?$userROW['id']:0).", ".db_squote($ip).", ".db_squote($publisherMail).", now(), ".db_squote($cdata['ds_id']).", ".db_squote($cdata['id']).", ".db_squote($errid).", ".db_squote($errorText).", ".db_squote($flags).")");
 
  // Write a mail (if needed)
  if (extra_get_param('complain', 'inform_author') || extra_get_param('complain', 'inform_admin') || extra_get_param('complain', 'inform_admins')) {
@@ -235,7 +242,7 @@ function plugin_complain_post() {
 
   $mail_text = str_replace(
    array( '\n', '{title}', '{link}', '{error}', '{link_admin}' ),
-   array( "\n", $cdata['title'], $cdata['link'], $errtext, GetLink('plugins', array('plugin_name' => 'complain')) ),
+   array( "\n", $cdata['title'], $cdata['link'], $errtext, generateLink('core', 'plugin', array('plugin' => 'complain')) ),
    $lang['complain:mail.open.body']);
 
   // Inform author
@@ -282,7 +289,7 @@ function plugin_complain_update() {
  // Determine paths for all template files
  $tpath = locatePluginTemplates(array('infoblock'), 'complain', extra_get_param('complain', 'localsource'));
 
- $link_admin = str_replace('{link}', GetLink('plugins', array('plugin_name' => 'complain')), $lang['complain:link.admin']);
+ $link_admin = str_replace('{link}', generateLink('core', 'plugin', array('plugin' => 'complain')), $lang['complain:link.admin']);
 
  // Only registered users are allowed here
  if (!is_array($userROW)) {
@@ -337,7 +344,7 @@ function plugin_complain_update() {
   	  $cdata['ds_id']       = intval($_REQUEST['ds_id']);
   	  $cdata['id']          = $dse['id'];
   	  $cdata['title']       = $dse['title'];
-  	  $cdata['link']        = GetLink('full', $dse);
+  	  $cdata['link']        = newsGenerateLink($dse);
   	  $cdata['author']      = $dse['author'];
   	  $cdata['author_id']   = $dse['author_id'];
   	  $cdata['author_mail'] = $dse['mail'];
@@ -390,8 +397,7 @@ class ComplainNewsFilter extends NewsFilter {
 		// Check displayed information type - FORM or simple LINK
 		if (extra_get_param('complain', 'extform')) {
 			// External form
-			$link = GetLink('plugins', array('plugin_name' => 'complain'));
-			$link .= ((strpos($link,'?') === false)?'?':'&amp;').'plugin_cmd=add&amp;ds_id=1&amp;entry_id='.$newsID;
+			$link = generateLink('core', 'plugin', array('plugin' => 'complain', 'handler' => 'add'), array('ds_id' => '1', 'entry_id' => $newsID));
 
 			$txvars = array();
 			$txvars['vars'] = array ( 'link' => $link );
