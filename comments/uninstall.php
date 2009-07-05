@@ -22,7 +22,7 @@ $db_update = array(
   'table'  => 'users',
   'action' => 'modify',
   'fields' => array(
-    array('action' => 'drop', 'name' => 'comments'),
+    array('action' => 'drop', 'name' => 'com'),
   )
  ),
  array(
