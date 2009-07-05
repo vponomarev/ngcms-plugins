@@ -64,7 +64,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		$tvars['vars']['mail']		=	$row['mail'];
 		$tvars['vars']['date']		=	LangDate($timestamp, $row['postdate']);
 
-		if ($row['reg'] && plugin_is_active('uprofile')) {
+		if ($row['reg'] && getPluginStatusActive('uprofile')) {
 			$tvars['vars']['profile_link'] = checkLinkAvailable('uprofile', 'show')?
 				generateLink('uprofile', 'show', array('name' => $row['author'], 'id' => $row['author_id'])):
 				generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('id' => $row['author_id']));

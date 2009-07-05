@@ -78,7 +78,7 @@ function plugin_rss_export(){
 		$enclosure = '';
 
 		// Check if Enclosure `xfields` integration is activated
-		if (extra_get_param('rss_export', 'xfEnclosureEnabled') && (true || status('xfields'))) {
+		if (extra_get_param('rss_export', 'xfEnclosureEnabled') && (true || getPluginStatusActive('xfields'))) {
 			// Load (if needed XFIELDS plugin
 			include_once(root."/plugins/xfields/xfields.php");
 

@@ -14,7 +14,7 @@ plugins_load_config();
 $xfEnclosureValues = array( '' => '');
 //
 // IF plugin 'XFIELDS' is enabled - load it to prepare `enclosure` integration
-if (status('xfields')) {
+if (getPluginStatusActive('xfields')) {
 	include_once(root."/plugins/xfields/xfields.php");
 
 	// Load XFields config
