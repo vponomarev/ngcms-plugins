@@ -66,6 +66,8 @@ function plugin_comments_install($action) {
 		case 'apply':
 			if (fixdb_plugin_install('comments', $db_update, 'install', ($action=='autoapply')?true:false)) {
 				plugin_mark_installed('comments');
+			} else {
+				return false;
 			}
 
 			// Now we need to set some default params
