@@ -220,7 +220,7 @@ function uprofile_editForm(){
 
 
 function uprofile_editApply(){
-	global $mysql, $tpl, $lang, $template, $userROW, $auth_db;
+	global $mysql, $tpl, $lang, $template, $userROW, $auth_db, $config;
 
 	// Load required library
 	@include_once root.'includes/classes/upload.class.php';
@@ -254,9 +254,10 @@ function uprofile_editApply(){
 		$fmanage = new file_managment();
 		$imanage = new image_managment();
 		$up = $fmanage->file_upload(array('type' => 'avatar', 'http_var' => 'newavatar', 'replace' => 1, 'manualfile' => $userROW['id'].'.'.strtolower($_FILES['newavatar']['name'])));
+
 		if (is_array($up)) {
 			// Now fetch information about size and prepare to write info into DB
-			if (is_array($sz = $imanage->get_size($config['avatars_dir'].$subdirectory.'/'.$up[1]))) {
+			if (is_array($sz = $imanage->get_size($config['avatars_dir'].$up[1]))) {
 				$fmanage->get_limits('avatar');
 
 				// Check avatar size limit (!!!)
@@ -364,4 +365,3 @@ function uprofile_manageDelete($type, $userID){
 	$mysql->query("update ".uprefix."_users set ".($type=='photo'?'photo':'avatar')." = '' where id = ".$userID);
 	if ($localUpdate) $userROW[$type] = '';
 }
-
