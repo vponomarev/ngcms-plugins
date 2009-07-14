@@ -62,6 +62,12 @@ function plugin_jchat_show(){
 function plugin_jchat_index() {
 	global $template, $tpl, $SUPRESS_TEMPLATE_SHOW, $userROW;
 
+	// Check permissions [ guests do not see chat ]
+	if (!extra_get_param('jchat', access) && !is_array($userROW)) {
+		$template['vars']['plugin_jchat'] = '';
+		return;
+	}
+
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('jchat'), 'jchat', extra_get_param('jchat', 'localsource'));
 	$tvars = array();
