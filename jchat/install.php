@@ -66,17 +66,3 @@ function plugin_jchat_install($action) {
 	}
 	return true;
 }
-
-
-
-if ($_REQUEST['action'] == 'commit') {
-	// If submit requested, do config save
-	if (fixdb_plugin_install('jchat', $db_update)) {
-		plugin_mark_installed('jchat');
-	}
-} else {
-	$text = "Плагин <b>jchat</b> позволяет вам установить AJAX based chat на вашем сайте<br /><br />Внимание! При установке плагин производит изменения в БД системы!";
-	generate_install_page('jchat', $text);
-}
-
-?>
