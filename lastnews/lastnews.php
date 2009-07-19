@@ -102,7 +102,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 				foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($row['id'], $row, $callingParams); }
 
 		$tvars['vars'] = array(
-			'link'		=>	GetLink('full', $row),
+			'link'		=>	newsGenerateLink($row),
 			'views'		=>	$row['views']
 		);
 
