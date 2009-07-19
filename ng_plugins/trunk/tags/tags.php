@@ -122,7 +122,7 @@ class TagsNewsfilter extends NewsFilter {
 		$tagsDelQ = array_diff($tagsOldQ, $tagsNewQ);
 		$tagsAddQ = array_diff($tagsNewQ, $tagsOldQ);
 		$tagsDiffQ = array_merge($tagsDelQ, $tagsAddQ);
-		
+
 		// Delete tag indexes for news
 		$mysql->query("delete from ".prefix."_tags_index where newsID = ".$newsID);
 
@@ -168,9 +168,9 @@ class TagsNewsfilter extends NewsFilter {
 			$tag = trim($tag);
 			if (!$tag) continue;
 
-		//	$link  = getLink('plugins', array ('plugin_name' => 'tags'));
-			$link  = str_replace('{plugin_name}', 'tags', getLink('plugins', array('plugin_name' => 'tags')));
-			$link .= ((strpos($link, '?') === false)?'?':'&') . 'tag='.urlencode($tag);
+		    $link = checkLinkAvailable('tags', 'tag')?
+						generateLink('tags', 'tag', array('tag' => $tag)):
+						generateLink('core', 'plugin', array('plugin' => 'tags', 'handler' => 'tag'), array('tag' => $tag));
 			$tags[] = str_replace(array('{url}', '{tag}'), array($link, $tag), $this->displayParams['tag_news']);
 		}
 
@@ -248,26 +248,53 @@ class TagsNewsfilter extends NewsFilter {
 }
 
 register_filter('news','tags', new TagsNewsFilter);
-register_plugin_page('tags','','plugin_tags');
-add_act('index', 'plugin_tags_cloud');
+register_plugin_page('tags','','plugin_tags_cloud');
+register_plugin_page('tags','tag','plugin_tags_tag');
+add_act('index', 'plugin_tags_cloudblock');
 
 //
-// Show news for selected tag
-function plugin_tags() {
+// Show tags cloud
+function plugin_tags_cloud(){
 	global $tpl, $template, $mysql, $lang, $SYSTEM_FLAGS;
+
+	LoadPluginLang('tags', 'main');
+	plugin_tags_generatecloud(1);
+}
+
+//
+// Show side cloud block
+function plugin_tags_cloudblock() {
+	plugin_tags_generatecloud(0);
+}
+
+//
+// Show current tag
+function plugin_tags_tag() {
+	global $tpl, $template, $mysql, $lang, $SYSTEM_FLAGS, $CurrentHandler;
+
+	// Determine MONTH and YEAR for current show process
+	if (($CurrentHandler['pluginName'] == 'tags')&&
+		($CurrentHandler['handlerName'] == 'tag') &&
+		isset($CurrentHandler['params']['tag'])) {
+			$tag = $CurrentHandler['params']['tag'];
+	} else {
+		$tag = $_REQUEST['tag'];
+	}
+
+	$tag = str_replace(array('&', '<'), array('&amp;','&lt;'), $tag);
+
+	// IF no tag is specified - show cloud
+	if (!$tag) {
+		plugin_tags_cloud();
+		return;
+	}
+
 
 	LoadPluginLang('tags', 'main');
 
 	$SYSTEM_FLAGS['info']['title']['group']		= 'Облако тегов';
 	$tpath = locatePluginTemplates(array('plugin', 'entry'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
 
-	$tag = str_replace(array('&', '<'), array('&amp;','&lt;'), $_REQUEST['tag']);
-
-	// IF no tag is specified - show cloud
-	if (!$tag) {
-		plugin_tags_cloud(1);
-		return;
-	}
 
 	include_once root.'includes/news.php';
 	// Search for tag in tags table
@@ -289,7 +316,7 @@ function plugin_tags() {
 
 }
 
-function plugin_tags_cloud($ppage = 0){
+function plugin_tags_generatecloud($ppage = 0){
 	global $tpl, $template, $mysql, $lang, $config;
 
 	LoadPluginLang('tags', 'main');
@@ -297,7 +324,7 @@ function plugin_tags_cloud($ppage = 0){
 	$masterTPL = $ppage?'plugin':'cloud';
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
-	$cacheFileName = md5('tags'.$config['theme'].$config['default_lang']).$masterTPL.'.txt';
+	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang']).$masterTPL.'.txt';
 
 	if (extra_get_param('tags','cache')) {
 		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('tags','cacheExpire'), 'tags');
@@ -346,8 +373,10 @@ function plugin_tags_cloud($ppage = 0){
 
 	// Prepare output rows
 	foreach ($rows as $row) {
-		$link  = str_replace('{plugin_name}', 'tags', getLink('plugins', array('plugin_name' => 'tags')));
-		$link .= ((strpos($link, '?') === false)?'?':'&') . 'tag='.urlencode($row['tag']);
+	    $link = checkLinkAvailable('tags', 'tag')?
+					generateLink('tags', 'tag', array('tag' => $row['tag'])):
+					generateLink('core', 'plugin', array('plugin' => 'tags', 'handler' => 'tag'), array('tag' => $row['tag']));
+
 		if ($manualstyle) {
 			$mmatch = 0;
 			foreach ($wlist as $wrow) {

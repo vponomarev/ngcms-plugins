@@ -4,7 +4,7 @@
 
 ID: tags
 Name: Теги
-Version: 0.11
+Version: 0.12
 Acts: core
 File: tags.php
 Config: config.php
@@ -12,7 +12,7 @@ Install: install.php
 Deinstall: deinstall.php
 Type: plugin
 Description: Использование тегов и облака тегов
-Author: SwiZZeR, Vitaly A. Ponomarev
+Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 URI: http://no_url.com/
 Title: Облако тегов
