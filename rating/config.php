@@ -31,7 +31,7 @@ array_push($cfg,  array('mode' => 'group', 'title' => '<b>Настройки плагина</b>'
 
 $cfgX = array();
 array_push($cfgX, array('name' => 'localsource', 'title' => "Выберите каталог из которого плагин будет брать шаблоны для отображения<br /><small><b>Шаблон сайта</b> - плагин будет пытаться взять шаблоны из общего шаблона сайта; в случае недоступности - шаблоны будут взяты из собственного каталога плагина<br /><b>Плагин</b> - шаблоны будут браться из собственного каталога плагина</small>", 'type' => 'select', 'values' => array ( '0' => 'Шаблон сайта', '1' => 'Плагин'), 'value' => intval(extra_get_param($plugin,'localsource'))));
-array_push($cfgX, array('name' => 'localskin', 'title' => "Выберите активный локальный<br /><small>Выбранный скин будет использоваться при установке <b>Плагин</b> в предыдущем поле</small>", 'type' => 'select', 'values' => $skList, 'value' => extra_get_param($plugin,'localskin')?extra_get_param($plugin,'localskin'):'basic'));
+array_push($cfgX, array('name' => 'localskin', 'title' => "Выберите активный шаблон<br /><small>Выбранный скин будет использоваться при установке <b>Плагин</b> в предыдущем поле</small>", 'type' => 'select', 'values' => $skList, 'value' => extra_get_param($plugin,'localskin')?extra_get_param($plugin,'localskin'):'basic'));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>Настройки отображения</b>', 'entries' => $cfgX));
 
 
