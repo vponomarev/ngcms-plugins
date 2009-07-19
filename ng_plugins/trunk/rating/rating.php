@@ -63,6 +63,8 @@ function rating_show($newsID, $rating, $votes){
 	
 	$tvars['vars']['tpl_url'] = $tpath['url::rating.css'];
 	$tvars['vars']['home'] = home;
+	$tvars['vars']['ajax_url'] = generateLink('core', 'plugin', array('plugin' => 'rating'), array());
+
 	$tvars['vars']['post_id'] = $newsID;
 	$tvars['vars']['rating'] = (!$rating || !$votes) ? 0 : round(($rating / $votes), 0);
 	$tvars['vars']['votes'] = $votes;
@@ -81,10 +83,6 @@ function rating_show($newsID, $rating, $votes){
 	return;
 }
 
-function plugin_rating_shownews($sth, $row, &$tvars){
-		$tvars['vars']['plugin_rating'] = rating_show($row['id'],$row['rating'],$row['votes']);
-}
-
 function plugin_rating_screen(){
 	global $SUPRESS_TEMPLATE_SHOW, $template;
 
@@ -97,7 +95,17 @@ function plugin_rating_screen(){
 	}
 }
 
-add_act('news_short', 'plugin_rating_shownews', 3);
-add_act('news_full',  'plugin_rating_shownews', 3);
-add_act('news_search',  'plugin_rating_shownews', 3);
+//
+// Фильтр новостей (для показа рейтинга)
+//
+class RatingNewsFilter extends NewsFilter {
+	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+		global $tpl, $mysql, $userROW;
+
+		$tvars['vars']['plugin_rating'] = rating_show($SQLnews['id'],$SQLnews['rating'],$SQLnews['votes']);
+	}
+}	
+
+
+register_filter('news','raing', new RatingNewsFilter);
 register_plugin_page('rating','','plugin_rating_screen',0);

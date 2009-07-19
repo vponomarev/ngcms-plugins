@@ -5,7 +5,7 @@ function rating(rating, post_id){
 	ajax.onShow("");
 	ajax.setVar("rating", rating);
 	ajax.setVar("post_id", post_id);
-	ajax.requestFile = "{home}/plugin/rating/";
+	ajax.requestFile = "{ajax_url}";
 	ajax.method = 'POST';
 	ajax.element = 'ratingdiv_'+post_id;
 	ajax.runAJAX();
