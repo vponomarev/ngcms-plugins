@@ -54,7 +54,7 @@ function plugin_popular() {
 				foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($row['id'], $row, $callingParams); }
 
 		$tvars['vars'] = array(
-			'link'		=>	GetLink('full', $row),
+			'link'		=>	newsGenerateLink($row),
 			'views'		=>	($counter) ? ' [ '.$row['views'].' ]' : ''
 		);
 		if (strlen($row['title']) > $maxlength) {
