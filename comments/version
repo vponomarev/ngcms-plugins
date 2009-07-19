@@ -3,8 +3,8 @@
 ;
 
 ID: comments
-Name: [DEVEL] User comments
-Version: 0.00
+Name: User comments
+Version: 0.01
 Acts: news_short, news_full, ppages, editnews, editnews_form, news
 File: comments.php
 Config: config.php
