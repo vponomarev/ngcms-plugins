@@ -8,7 +8,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 
 plugins_load_config();
-LoadPluginLang($plugin, 'main', '', 'tags');
+LoadPluginLang('tags', 'main', '', '', ':');
 
 // Fill configuration parameters
 $skList = array();
@@ -19,38 +19,38 @@ if ($skDir = opendir(extras_dir.'/tags/tpl/skins')) {
 		}
 	}
 	closedir($skDir);
-}	
+}
 
 $cfg = array();
-//array_push($cfg, array('descr' => $lang['tags_descr']));
-array_push($cfg, array('name' => 'rebuild', 'title' => $lang['tags_rebuild'], 'descr' => $lang['tags_rebuild_desc'], 'type' => 'select', 'value' => 0, 'values' => array ( 0 => $lang['noa'], 1 => $lang['yesa']), 'nosave' => 1));
+//array_push($cfg, array('descr' => $lang['tags:descr']));
+array_push($cfg, array('name' => 'rebuild', 'title' => $lang['tags:rebuild'], 'descr' => $lang['tags:rebuild_desc'], 'type' => 'select', 'value' => 0, 'values' => array ( 0 => $lang['noa'], 1 => $lang['yesa']), 'nosave' => 1));
 
 $cfgX = array();
-//array_push($cfg, array('name' => 'timestamp', 'title' => $lang['tags_timestamp'], 'descr' => $lang['tags_timestamp_desc'], 'type' => 'input', 'html_flags' => 'size="40"', 'value' => extra_get_param($plugin, 'timestamp')));
-array_push($cfgX, array('name' => 'limit', 'title' => $lang['tags_limit'], 'descr' => $lang['tags_limit_desc'], 'type' => 'input', 'html_flags' => 'size="4"', 'value' => extra_get_param($plugin, 'limit')));
-array_push($cfgX, array('name' => 'orderby', 'title' => $lang['tags_orderby'], 'descr' => $lang['tags_orderby_desc'], 'type' => 'select', 'values' => array ( '0' => $lang['tags_order_rand'], '1' => $lang['tags_order_tag_asc'], '2' => $lang['tags_order_tag_desc'], '3' => $lang['tags_order_pop_asc'], '4' => $lang['tags_order_pop_desc']), 'value' => extra_get_param($plugin, 'orderby')));
-array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags_cfg_sidepanel'].'</b>', 'entries' => $cfgX));
+//array_push($cfg, array('name' => 'timestamp', 'title' => $lang['tags:timestamp'], 'descr' => $lang['tags:timestamp_desc'], 'type' => 'input', 'html_flags' => 'size="40"', 'value' => extra_get_param($plugin, 'timestamp')));
+array_push($cfgX, array('name' => 'limit', 'title' => $lang['tags:limit'], 'descr' => $lang['tags:limit_desc'], 'type' => 'input', 'html_flags' => 'size="4"', 'value' => extra_get_param($plugin, 'limit')));
+array_push($cfgX, array('name' => 'orderby', 'title' => $lang['tags:orderby'], 'descr' => $lang['tags:orderby_desc'], 'type' => 'select', 'values' => array ( '0' => $lang['tags:order_rand'], '1' => $lang['tags:order_tag_asc'], '2' => $lang['tags:order_tag_desc'], '3' => $lang['tags:order_pop_asc'], '4' => $lang['tags:order_pop_desc']), 'value' => extra_get_param($plugin, 'orderby')));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags:cfg_sidepanel'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
-array_push($cfgX, array('name' => 'ppage_limit', 'title' => $lang['tags_limit'], 'descr' => $lang['tags_limit_desc'], 'type' => 'input', 'html_flags' => 'size="4"', 'value' => extra_get_param($plugin, 'ppage_limit')));
-array_push($cfgX, array('name' => 'ppage_orderby', 'title' => $lang['tags_orderby'], 'descr' => $lang['tags_orderby_desc'], 'type' => 'select', 'values' => array ( '0' => $lang['tags_order_rand'], '1' => $lang['tags_order_tag_asc'], '2' => $lang['tags_order_tag_desc'], '3' => $lang['tags_order_pop_asc'], '4' => $lang['tags_order_pop_desc']), 'value' => extra_get_param($plugin, 'ppage_orderby')));
-array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags_cfg_ppage'].'</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'ppage_limit', 'title' => $lang['tags:limit'], 'descr' => $lang['tags:limit_desc'], 'type' => 'input', 'html_flags' => 'size="4"', 'value' => extra_get_param($plugin, 'ppage_limit')));
+array_push($cfgX, array('name' => 'ppage_orderby', 'title' => $lang['tags:orderby'], 'descr' => $lang['tags:orderby_desc'], 'type' => 'select', 'values' => array ( '0' => $lang['tags:order_rand'], '1' => $lang['tags:order_tag_asc'], '2' => $lang['tags:order_tag_desc'], '3' => $lang['tags:order_pop_asc'], '4' => $lang['tags:order_pop_desc']), 'value' => extra_get_param($plugin, 'ppage_orderby')));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags:cfg_ppage'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
-array_push($cfgX, array('name' => 'manualstyle', 'title' => $lang['tags_manualstyle'], 'descr' => $lang['tags_manualstyle_desc'], 'type' => 'select', 'values' => array ( '1' => $lang['yesa'], '0' => $lang['noa']), 'value' => (extra_get_param($plugin, 'manualstyle'))?extra_get_param($plugin, 'manualstyle'):0));
-array_push($cfgX, array('name' => 'styles', 'title' => $lang['tags_styles'], 'descr' => $lang['tags_styles_desc'], 'type' => 'input', 'html_flags' => 'size=70', 'value' => extra_get_param('tags','styles')));
-array_push($cfgX, array('name' => 'styles_weight', 'title' => $lang['tags_styles_weight'], 'descr' => $lang['tags_styles_weight_desc'], 'type' => 'text', 'html_flags' => 'cols=65 rows=4', 'value' => extra_get_param('tags','styles_weight')));
-array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags_cfg_stylecontrol'].'</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'manualstyle', 'title' => $lang['tags:manualstyle'], 'descr' => $lang['tags:manualstyle_desc'], 'type' => 'select', 'values' => array ( '1' => $lang['yesa'], '0' => $lang['noa']), 'value' => (extra_get_param($plugin, 'manualstyle'))?extra_get_param($plugin, 'manualstyle'):0));
+array_push($cfgX, array('name' => 'styles', 'title' => $lang['tags:styles'], 'descr' => $lang['tags:styles_desc'], 'type' => 'input', 'html_flags' => 'size=70', 'value' => extra_get_param('tags','styles')));
+array_push($cfgX, array('name' => 'styles_weight', 'title' => $lang['tags:styles_weight'], 'descr' => $lang['tags:styles_weight_desc'], 'type' => 'text', 'html_flags' => 'cols=65 rows=4', 'value' => extra_get_param('tags','styles_weight')));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags:cfg_stylecontrol'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
-array_push($cfgX, array('name' => 'localsource', 'title' => $lang['tags_localsource'], 'descr' => $lang['tags_localsource'], 'type' => 'select', 'values' => array ( '0' => $lang['tags_lsrc_site'], '1' => $lang['tags_lsrc_plugin']), 'value' => intval(extra_get_param($plugin,'localsource'))));
-array_push($cfgX, array('name' => 'skin', 'title'   => $lang['tags_skin'], 'descr' => $lang['tags_skin_desc'], 'type' => 'select', 'values' => $skList, 'value' => extra_get_param('tags','skin')));
-array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags_cfg_display'].'</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'localsource', 'title' => $lang['tags:localsource'], 'descr' => $lang['tags:localsource'], 'type' => 'select', 'values' => array ( '0' => $lang['tags:lsrc_site'], '1' => $lang['tags:lsrc_plugin']), 'value' => intval(extra_get_param($plugin,'localsource'))));
+array_push($cfgX, array('name' => 'skin', 'title'   => $lang['tags:skin'], 'descr' => $lang['tags:skin_desc'], 'type' => 'select', 'values' => $skList, 'value' => extra_get_param('tags','skin')));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags:cfg_display'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
-array_push($cfgX, array('name' => 'cache', 'title' => $lang['tags_use_cache'], 'descr' => $lang['tags_use_cache_desc'], 'type' => 'select', 'values' => array ( '1' => $lang['yesa'], '0' => $lang['noa']), 'value' => intval(extra_get_param($plugin,'cache'))));
-array_push($cfgX, array('name' => 'cacheExpire', 'title' => $lang['tags_cache_expire'], 'descr' => $lang['tags_cache_expire_desc'], 'type' => 'input', 'value' => intval(extra_get_param($plugin,'cacheExpire'))?extra_get_param($plugin,'cacheExpire'):'60'));
-array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags_cfg_cache'].'</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'cache', 'title' => $lang['tags:use_cache'], 'descr' => $lang['tags:use_cache_desc'], 'type' => 'select', 'values' => array ( '1' => $lang['yesa'], '0' => $lang['noa']), 'value' => intval(extra_get_param($plugin,'cache'))));
+array_push($cfgX, array('name' => 'cacheExpire', 'title' => $lang['tags:cache_expire'], 'descr' => $lang['tags:cache_expire_desc'], 'type' => 'input', 'value' => intval(extra_get_param($plugin,'cacheExpire'))?extra_get_param($plugin,'cacheExpire'):'60'));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags:cfg_cache'].'</b>', 'entries' => $cfgX));
 
 
 
@@ -76,7 +76,7 @@ elseif ($_REQUEST['action'] == 'commit') {
 				if (!strlen($ntag))
 					continue;
 				$tags[$ntag] = $tags[$ntag] + 1;
-			}	
+			}
 		}
 
 		// * Process counters
@@ -102,7 +102,7 @@ elseif ($_REQUEST['action'] == 'commit') {
 		$mysql->query("delete from ".prefix."_tags where posts = 0");
 
 		$mysql->query("unlock tables");
-		print $lang['tags_rebuild_done']."<br/>";
+		print $lang['tags:rebuild_done']."<br/>";
 	}
 	commit_plugin_config_changes($plugin, $cfg);
 	print_commit_complete($plugin);
