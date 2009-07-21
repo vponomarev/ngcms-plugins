@@ -18,8 +18,9 @@ function uprofile_list() {
 
 
 function uprofile_showProfile($params) {
-	global $mysql, $lang, $tpl, $template;
+	global $mysql, $lang, $tpl, $template, $SYSTEM_FLAGS;
 
+	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.view'];
 	//LoadPluginLang('uprofile', 'users', '', '', ':');
 
 	// Check if valid user identity is specified
@@ -141,7 +142,9 @@ function profile_show() {
 
 // Show EDIT FORM for current user's profile
 function uprofile_editForm(){
-	global $mysql, $userROW, $lang, $config, $tpl, $template;
+	global $mysql, $userROW, $lang, $config, $tpl, $template, $SYSTEM_FLAGS;
+
+	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.edit'];
 
 	// Check if user is logged in
 	if (!is_array($userROW)) {
