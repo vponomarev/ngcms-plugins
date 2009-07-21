@@ -79,7 +79,8 @@ register_filter('news',  'ads', new AdsNewsFilter);
 add_act('index', 'plugin_ads');
 
 function plugin_ads(){
-	global $template, $action, $category, $cstart, $tvars, $year, $month;
+	global $template, $tvars, $CurrentHandler;
+	//global $template, $action, $category, $cstart, $tvars, $year, $month;
 
 	$template['vars']['plugin_ads_defer'] = '';
 	$template['vars']['plugin_ads_rand']  = rand().rand();
@@ -96,9 +97,9 @@ function plugin_ads(){
 
 		if (
 			// main page
-			(($mode == 'root')&&(!$action)&&(!$category)&&(!$cstart)&&(!$year)&&(!$month)) ||
+			(($mode == 'root')&&($CurrentHandler[0] == '/')) ||
 			// everywhere except main page
-			(($mode == 'noroot')&&($action||$category||($year&&$month))) ||
+			(($mode == 'noroot')&&($CurrentHandler[0] != '/')) ||
 			// everywhere
 			($mode == 'all')
 		   ) {
