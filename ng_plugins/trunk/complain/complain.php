@@ -68,13 +68,14 @@ function plugin_complain_screen() {
 
 
  $entries = '';
+ $etext = array();
 // foreach ($mysql->select("select count(c.id) as ccount, c.id, c.status, c.complete, c.owner_id, (select name from ".uprefix."_users where id = c.owner_id) as owner_name, c.author_id, (select name from ".uprefix."_users where id = c.author_id) as author_name, c.publisher_id, (select name from ".uprefix."_users where id = c.publisher_id) as publisher_name, c.publisher_ip, date(c.date) as date, c.ds_id, c.entry_id, c.error_code, n.alt_name as n_alt_name, n.id as n_id, n.title as n_title, n.catid as n_catid, n.postdate as n_postdate from ".prefix."_complain c left join ".prefix."_news n on c.entry_id = n.id where ".join(" AND ", $where)." group by c.ds_id, c.entry_id, c.error_code") as $crow) {
  foreach ($mysql->select("select c.id, c.status, c.complete, c.owner_id, (select name from ".uprefix."_users where id = c.owner_id) as owner_name, c.author_id, (select name from ".uprefix."_users where id = c.author_id) as author_name, c.publisher_id, (select name from ".uprefix."_users where id = c.publisher_id) as publisher_name, c.publisher_ip, date(c.date) as date, c.ds_id, c.entry_id, c.error_code, c.error_text, n.alt_name as n_alt_name, n.id as n_id, n.title as n_title, n.catid as n_catid, n.postdate as n_postdate from ".prefix."_complain c left join ".prefix."_news n on c.entry_id = n.id where ".join(" AND ", $where)) as $crow) {
   $tvars = array();
   $tvars['vars'] = array(
    'id'             => $crow['id'],
    'date'           => $crow['date'],
-   'error'          => $elist[$crow['error_code']].($crow['error_text']?' (<span style="cursor: pointer;" onclick="alert('."'".str_replace(array("\r", "\n"), array('', '\n'), htmlspecialchars($crow['error_text']))."'".');">*</span>)':''),
+   'error'          => $elist[$crow['error_code']].($crow['error_text']?' (<span style="cursor: pointer;" onclick="alert(ETEXT['.$crow['id'].']);">*</span>)':''),
    'ccount'         => ($crow['ccount']>1)?('(<b>'.$crow['ccount'].'</b>)'):'',
    'title'          => $crow['n_title'],
    'link'           => newsGenerateLink(array('catid' => $crow['n_catid'], 'alt_name' => $crow['n_alt_name'], 'id' => $crow['n_id'], 'postdate' => $crow['n_postdate'])),
@@ -84,6 +85,8 @@ function plugin_complain_screen() {
    'owner_name'     => $crow['owner_id']?'<b>'.$crow['owner_name'].'</b>':$lang['complain:noowner'],
    'status'         => $lang['complain:status.'.$crow['status']],
   );
+  if ($crow['error_text'])
+  	$etext[$crow['id']] = iconv('Windows-1251', 'UTF-8', $crow['error_text']);
 
   // Check if user have enough permissions to make any changes in this report
   if (($userROW['status'] == 1) ||
@@ -107,10 +110,9 @@ function plugin_complain_screen() {
 
  $tpl->template('list.header', $tpath['list.header']);
  $tvars = array();
- $tvars['vars'] = array( 'entries' => $entries, 'status_options' => $sselect, 'form_url' => generateLink('core', 'plugin', array('plugin' => 'complain', 'handler' => 'update')));
+ $tvars['vars'] = array( 'entries' => $entries, 'status_options' => $sselect, 'form_url' => generateLink('core', 'plugin', array('plugin' => 'complain', 'handler' => 'update')), 'ETEXT' => json_encode($etext));
  $tpl->vars('list.header', $tvars);
  $template['vars']['mainblock'] = $tpl->show('list.header');
-
 }
 
 function plugin_complain_add() {
