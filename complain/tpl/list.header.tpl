@@ -27,6 +27,10 @@ input  { font-size: 10px; }
 </style>
 </head>
 <body>
+<script language="javascript">
+var ETEXT={ETEXT};
+</script>
+
 <h1>Список активных инцидентов</h1>
 
 <form action="{form_url}" method="post">
