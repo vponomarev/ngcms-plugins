@@ -23,7 +23,7 @@ function plugin_favorites() {
 			return;
 		}
 	}
-	
+
 	if (!$number)		{ $number = 10; }
 	if (!$maxlength)	{ $maxlength = 100; }
 
@@ -32,7 +32,7 @@ function plugin_favorites() {
 
 	foreach ($mysql->select("select alt_name, postdate, title, views, catid from ".prefix."_news where favorite = '1' and approve = '1' limit 0,$number") as $row) {
 		$tvars['vars'] = array(
-			'link'		=>	GetLink('full', $row),
+			'link'		=>	newsGenerateLink($row),
 			'views'		=>	($counter) ? ' [ '.$row['views'].' ]' : ''
 		);
 		if (strlen($row['title']) > $maxlength) {
@@ -57,5 +57,5 @@ function plugin_favorites() {
 
 	if (extra_get_param('favorites','cache')) {
 		cacheStoreFile($cacheFileName, $output, 'favorites');
-	}	
+	}
 }

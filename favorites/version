@@ -4,7 +4,7 @@
 
 ID: favorites
 Name: Show favorite news
-Version: 0.05
+Version: 0.06
 Acts: core, index
 File: favorites.php
 Config: config.php
