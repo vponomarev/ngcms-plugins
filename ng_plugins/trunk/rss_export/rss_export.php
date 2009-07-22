@@ -6,26 +6,22 @@ if (!defined('NGCMS')) die ('HAL');
 include_once root."/includes/news.php";
 
 register_plugin_page('rss_export','','plugin_rss_export',0);
+register_plugin_page('rss_export','category','plugin_rss_export_category',0);
 
-function plugin_rss_export(){
-	function catURL($ids) {
-		global $catz, $linkz;
-		$idlist = explode(",",$ids);
-		$nlist = array();
-		foreach ($idlist as $idc) {
-			if (is_array($t = GetCategoryById($idc))) {
-				$nlist[] = $t['alt'];
-			}
-		}
-		return GetLink('category', array('alt' => implode("-",$nlist)));
-	}
+function plugin_rss_export() {
+	plugin_rss_export_generate();
+}
 
+function plugin_rss_export_category($params) {
+	plugin_rss_export_generate($params['category']);
+}
+
+function plugin_rss_export_generate($catname = ''){
    	global $lang, $PFILTERS;
 	global $template, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $mysql, $catz;
 
 	// Generate header
-	if ($_REQUEST['category']) { $xcat = $catz[$_REQUEST['category']]; } else { $xcat = ''; }
-
+	$xcat = isset($catz[$catname])?$catz[$catname]:'';
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
 	// Take into account: FLAG: use_hide, check if user is logged in
@@ -50,11 +46,11 @@ function plugin_rss_export(){
 	$old_locale = setlocale(LC_TIME,0);
 	setlocale(LC_TIME,'en_EN');
 	if (is_array($xcat)) {
-		$query = "select * from ".prefix."_news where catid regexp '[[:<:]](".$xcat['id'].")[[:>:]]' and approve=1 order by ".$xcat['orderby'];
+		$orderBy = ($xcat['orderby'] && in_array($xcat['orderby'], array('id desc', 'id asc', 'postdate desc', 'postdate asc', 'title desc', 'title asc')))?$xcat['orderby']:'id desc';
+		$query = "select * from ".prefix."_news where catid regexp '[[:<:]](".$xcat['id'].")[[:>:]]' and approve=1 order by ".$orderBy;
 	} else {
 		$query = "select * from ".prefix."_news where approve=1 order by id desc";
 	}
-
 
 	// Prepare hide template
 	if ($config['blocks_for_reg'] && extra_get_param('rss_export','use_hide')) {
@@ -122,7 +118,7 @@ function plugin_rss_export_mk_header($xcat) {
  $line.= " <channel>\n";
  if (extra_get_param('rss_export','feed_title_format') == 'handy') {
 	$line.= "  <title><![CDATA[".extra_get_param('rss_export', 'feed_title_value')."]]></title>\n";
- } else if (extra_get_param('rss_export', 'feed_title_format') == 'site_title') {
+ } else if ((extra_get_param('rss_export', 'feed_title_format') == 'site_title') && is_array($xcat)) {
 	$line.= "  <title><![CDATA[".$config['home_title'].(is_array($xcat)?' :: '.$xcat['name']:'')."]]></title>\n";
  } else {
 	$line.= "  <title><![CDATA[".$config['home_title']."]]></title>\n";
@@ -133,4 +129,3 @@ function plugin_rss_export_mk_header($xcat) {
  $line.= "  <generator><![CDATA[Plugin RSS_EXPORT (0.07) // Next Generation CMS (".engineVersion.")]]></generator>\n";
  return $line;
 }
-
