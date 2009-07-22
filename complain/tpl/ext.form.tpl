@@ -12,9 +12,6 @@ body { font : normal 12px verdana, sans-serif; }
 </head>
 <body>
 <form method="post" action="{form_url}">
-<input type="hidden" name="action" value="plugin"/>
-<input type="hidden" name="plugin" value="complain"/>
-<input type="hidden" name="plugin_cmd" value="post"/>
 <input type="hidden" name="ds_id" value="{ds_id}"/>
 <input type="hidden" name="entry_id" value="{entry_id}"/>
 

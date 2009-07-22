@@ -419,7 +419,7 @@ class ComplainNewsFilter extends NewsFilter {
 		}
 
 		$txvars = array();
-		$txvars['vars'] = array ( 'ds_id' => 1, 'entry_id' => $newsID, 'errorlist' => $err );
+		$txvars['vars'] = array ( 'ds_id' => 1, 'entry_id' => $newsID, 'errorlist' => $err, 'form_url' => generateLink('core', 'plugin', array('plugin' => 'complain', 'handler' => 'post')) );
 
 		$tpl->template('int.form', $tpath['int.form']);
 		$tpl->vars('int.form', $txvars);
