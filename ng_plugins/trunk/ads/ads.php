@@ -97,9 +97,9 @@ function plugin_ads(){
 
 		if (
 			// main page
-			(($mode == 'root')&&($CurrentHandler[0] == '/')) ||
+			(($mode == 'root')&&($CurrentHandler['params'][0] == '/')) ||
 			// everywhere except main page
-			(($mode == 'noroot')&&($CurrentHandler[0] != '/')) ||
+			(($mode == 'noroot')&&($CurrentHandler['params'][0] != '/')) ||
 			// everywhere
 			($mode == 'all')
 		   ) {
