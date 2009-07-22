@@ -157,7 +157,7 @@ function plugin_complain_add() {
 
 
 function plugin_complain_post() {
- global $template, $tpl, $mysql, $lang, $userROW, $ip;
+ global $template, $tpl, $mysql, $lang, $userROW, $ip, $config;
  global $SUPRESS_TEMPLATE_SHOW;
 
  loadPluginLang('complain', 'main', '', '', ':');
@@ -244,7 +244,7 @@ function plugin_complain_post() {
 
   $mail_text = str_replace(
    array( '\n', '{title}', '{link}', '{error}', '{link_admin}' ),
-   array( "\n", $cdata['title'], $cdata['link'], $errtext, generateLink('core', 'plugin', array('plugin' => 'complain')) ),
+   array( "\n", $cdata['title'], $cdata['link'], $errtext, $config['home_url'].generateLink('core', 'plugin', array('plugin' => 'complain')) ),
    $lang['complain:mail.open.body']);
 
   // Inform author
@@ -346,7 +346,7 @@ function plugin_complain_update() {
   	  $cdata['ds_id']       = intval($_REQUEST['ds_id']);
   	  $cdata['id']          = $dse['id'];
   	  $cdata['title']       = $dse['title'];
-  	  $cdata['link']        = newsGenerateLink($dse);
+  	  $cdata['link']        = $config['home_url'].newsGenerateLink($dse);
   	  $cdata['author']      = $dse['author'];
   	  $cdata['author_id']   = $dse['author_id'];
   	  $cdata['author_mail'] = $dse['mail'];
