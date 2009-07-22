@@ -143,11 +143,25 @@ function plugin_jchat_add() {
 	$maxwlen = intval(extra_get_param('jchat', 'maxwlen'));
 	if (($maxwlen < 1)||($maxlen > 5000)) $maxwlen = 500;
 
-	$SQL['text']   = secure_html(convert(trim($_REQUEST['text'])));
-	if (strlen($SQL['text']) > $maxlen)
-		$SQL['text'] = substr($SQL['text'], 0, $maxlen).'...';
+	//
+	$postText = secure_html(convert(trim($_REQUEST['text'])));
+	$ptb = array();
 
-	$SQL['text'] = preg_replace('/(\S{'.$maxwlen.'})(?!\s)/', '$1 ', $SQL['text']);
+	foreach (preg_split('#(\s|^)(http\:\/\/[A-Za-z\-\.0-9]+\/\S+)(\s|$)#', $line, -1, PREG_SPLIT_DELIM_CAPTURE) as $cx) {
+		if (preg_match('#http\:\/\/[A-Za-z\-\.0-9]+\/\S+#', $cx, $m)) {
+			// LINK
+			$cx = '<a href="'.htmlspecialchars($cx).'">'.((strlen($cx)>$maxwlen)?(substr($cx, 0, $maxwlen-2).'..'):$cx).'</a>';
+		} else {
+			$cx = preg_replace('/(\S{'.$maxwlen.'})(?!\s)/', '$1 ', $cx);
+		}
+		$ptb[] = $cx;
+	}
+	$SQL['text'] = join('', $ptb);
+
+	//if (strlen($SQL['text']) > $maxlen)
+	//	$SQL['text'] = substr($SQL['text'], 0, $maxlen).'...';
+
+	//$SQL['text'] = preg_replace('/(\S{'.$maxwlen.'})(?!\s)/', '$1 ', $SQL['text']);
 
 
 	$SQL['chatid'] = 1;
