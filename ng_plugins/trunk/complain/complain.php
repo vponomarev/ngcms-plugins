@@ -245,7 +245,7 @@ function plugin_complain_post() {
 
   $mail_text = str_replace(
    array( '\n', '{title}', '{link}', '{error}', '{link_admin}' ),
-   array( "\n", $cdata['title'], $cdata['link'], $errtext, $cdata['link_admin'] ),
+   array( "\n", $tmvars['title'], $tmvars['link'], $errtext, $tmvars['link_admin'] ),
    $lang['complain:mail.open.body']);
 
   // Inform author
