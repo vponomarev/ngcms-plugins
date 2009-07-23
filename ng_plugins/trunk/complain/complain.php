@@ -281,7 +281,7 @@ function plugin_complain_post() {
 }
 
 function plugin_complain_update() {
- global $template, $tpl, $mysql, $lang, $userROW;
+ global $template, $config, $tpl, $mysql, $lang, $userROW;
  global $SUPRESS_TEMPLATE_SHOW;
 
  loadPluginLang('complain', 'main', '', '', ':');
