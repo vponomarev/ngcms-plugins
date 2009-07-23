@@ -85,7 +85,7 @@ function plugin_rss_export_generate($catname = ''){
 
 		$output .= "  <item>\n";
 		$output .= "   <title><![CDATA[".((extra_get_param('rss_export','news_title') == 1)&&GetCategories($row['catid'],true)?GetCategories($row['catid'], true).' :: ':'').secure_html($row['title'])."]]></title>\n";
-		$output .= "   <link><![CDATA[".GetLink('full', $row)."]]></link>\n";
+		$output .= "   <link><![CDATA[".$config['home_url'].newsGenerateLink($row)."]]></link>\n";
 		$output .= "   <description><![CDATA[".$content."]]></description>\n";
 
 		// Output enclosure URL (if configured & set
