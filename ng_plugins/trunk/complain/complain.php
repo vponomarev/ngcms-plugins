@@ -239,12 +239,13 @@ function plugin_complain_post() {
   $tmvars = array ( 'vars' =>
    array (
     'title' => $cdata['title'],
-    'link'  => $cdata['link'],
+    'link'  => $config['home_url'].$cdata['link'],
+    'link_admin' => $config['home_url'].generateLink('core', 'plugin', array('plugin' => 'complain')),
     'error' => $errtext));
 
   $mail_text = str_replace(
    array( '\n', '{title}', '{link}', '{error}', '{link_admin}' ),
-   array( "\n", $cdata['title'], $cdata['link'], $errtext, $config['home_url'].generateLink('core', 'plugin', array('plugin' => 'complain')) ),
+   array( "\n", $cdata['title'], $cdata['link'], $errtext, $cdata['link_admin'] ),
    $lang['complain:mail.open.body']);
 
   // Inform author
