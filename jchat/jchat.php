@@ -147,7 +147,7 @@ function plugin_jchat_add() {
 	$postText = secure_html(convert(trim($_REQUEST['text'])));
 	$ptb = array();
 
-	foreach (preg_split('#(\s|^)(http\:\/\/[A-Za-z\-\.0-9]+\/\S+)(\s|$)#', $line, -1, PREG_SPLIT_DELIM_CAPTURE) as $cx) {
+	foreach (preg_split('#(\s|^)(http\:\/\/[A-Za-z\-\.0-9]+\/\S+)(\s|$)#', $postText, -1, PREG_SPLIT_DELIM_CAPTURE) as $cx) {
 		if (preg_match('#http\:\/\/[A-Za-z\-\.0-9]+\/\S+#', $cx, $m)) {
 			// LINK
 			$cx = '<a href="'.htmlspecialchars($cx).'">'.((strlen($cx)>$maxwlen)?(substr($cx, 0, $maxwlen-2).'..'):$cx).'</a>';
