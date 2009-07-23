@@ -236,12 +236,11 @@ function plugin_complain_post() {
  // Write a mail (if needed)
  if (extra_get_param('complain', 'inform_author') || extra_get_param('complain', 'inform_admin') || extra_get_param('complain', 'inform_admins')) {
 
-  $tmvars = array ( 'vars' =>
-   array (
+  $tmvars = array (
     'title' => $cdata['title'],
     'link'  => $config['home_url'].$cdata['link'],
     'link_admin' => $config['home_url'].generateLink('core', 'plugin', array('plugin' => 'complain')),
-    'error' => $errtext));
+    'error' => $errtext);
 
   $mail_text = str_replace(
    array( '\n', '{title}', '{link}', '{error}', '{link_admin}' ),
