@@ -190,7 +190,7 @@ function plugin_comments_add() {
 
 // Show dedicated page for comments
 function plugin_comments_show(){
-	global $config, $catz, $mysql, $catmap, $tpl, $template, $lang, $SUPRESS_TEMPLATE_SHOW, $userROW;
+	global $config, $catz, $mysql, $catmap, $tpl, $template, $lang, $SUPRESS_TEMPLATE_SHOW, $userROW, $TemplateCache;
 
 	include_once(root."/plugins/comments/inc/comments.show.php");
 
@@ -256,7 +256,8 @@ function plugin_comments_show(){
 	    			array('pluginName' => 'comments', 'pluginHandler' => 'show', 'params' => array('news_id' => $newsID), 'xparams' => array(), 'paginator' => array('page', 0, false)):
 	    			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'comments', 'handler' => 'show'), 'xparams' => array('news_id' => $newsID), 'paginator' => array('page', 1, false));
 
-		$navigations = getNavigations(tpl_dir.$config['theme']);
+		templateLoadVariables(true);
+		$navigations = $TemplateCache['site']['#variables']['navigation'];
 		$template['vars']['mainblock'] .= generatePagination($page, 1, $pageCount, 10, $paginationParams, $navigations);
 	}
 
