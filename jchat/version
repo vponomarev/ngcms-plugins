@@ -9,6 +9,7 @@ Acts: index, ppages
 File: jchat.php
 Config: config.php
 Install: install.php
+Deinstall: deinstall.php
 Type: plugin
 Title: AJAX chat
 Description: AJAX based чат для сайта
