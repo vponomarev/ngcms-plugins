@@ -150,7 +150,7 @@ function plugin_comments_add() {
 		$commentId	= $addResult[1];
 
 		// Check if we need to override news template
-		$callingCommentsParams = array();
+		$callingCommentsParams = array('outprint' => true);
 
 		// Set default template path
 		$templatePath = tpl_dir.$config['theme'];
@@ -163,8 +163,14 @@ function plugin_comments_add() {
 			if (is_dir($templatePath.'/ncustom/'.$ctname))
 				$callingCommentsParams['overrideTemplatePath'] = $templatePath.'/ncustom/'.$ctname;
 		}
+		$output = array(
+			'status' => 1,
+			'data' => iconv('Windows-1251', 'UTF-8', comments_show($SQLnews['id'], $commentId, $SQLnews['com']+1, $callingCommentsParams))
+		);
 
-		comments_show($SQLnews['id'], $commentId, $SQLnews['com']+1, $callingCommentsParams);
+		print json_encode($output);
+		$template['vars']['mainblock'] = '';
+
 		return 1;
 	} else {
 		// Some errors.
@@ -172,7 +178,14 @@ function plugin_comments_add() {
 			// AJAX MODE
 			$tpl -> template('error', tpl_site);
 			$tpl -> vars('error', array( 'vars' => array('content' => $template['vars']['mainblock'])));
-			$template['vars']['mainblock'] = $tpl -> show('error');
+
+			$output = array(
+				'status' => 0,
+				'data' => iconv('Windows-1251', 'UTF-8', $tpl -> show('error'))
+			);
+			print json_encode($output);
+			$template['vars']['mainblock'] = '';
+
 		} else {
 			// NON-AJAX MODE
 			$tavars = array( 'vars' => array(
