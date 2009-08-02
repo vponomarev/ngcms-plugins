@@ -22,6 +22,7 @@ if (!defined('NGCMS')) die ('HAL');
 //		'overrideTemplatePath' => alternative path for searching of template
 //		'limitStart' => order comment no to start (for pagination)
 //		'limitCount' => number of comments to show (for pagination)
+//		'outprint'	 => flag: if set, output will be returned, elsewhere - will be added to mainblock
 function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams = array()){
 	global $mysql, $tpl, $template, $config, $userROW, $parse, $lang, $PFILTERS;
 
@@ -155,8 +156,11 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 
 		// Show template
 		$tpl -> vars($templateName, $tvars);
-		$template['vars']['mainblock'] .= $tpl -> show($templateName);
-
+		$output = $tpl -> show($templateName);
+		if ($callingParams['outprint']) {
+			return $output;
+		}
+		$template['vars']['mainblock'] .= $output;
 	}
 }
 
