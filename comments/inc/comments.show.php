@@ -26,7 +26,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	global $mysql, $tpl, $template, $config, $userROW, $parse, $lang, $PFILTERS;
 
 	// -> desired template path
-	$templatePath = ($callingParams['overrideTemplatePath'])?$callingParams['overrideTemplatePath']:tpl_dir.$config['theme'];
+	$templatePath = ($callingParams['overrideTemplatePath'])?$callingParams['overrideTemplatePath']:(tpl_site.'plugins/comments');
 
 	// -> desired template
 	if ($callingParams['overrideTemplateName']) {
@@ -136,7 +136,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		if (is_array($userROW) && (($userROW['status'] == 1) || ($userROW['status'] == 2))) {
 			$tvars['vars']['[edit-com]'] = "<a href=\"".admin_url."/admin.php?mod=editcomments&amp;newsid=$newsID&amp;comid=$row[id]\" target=\"_blank\" title=\"".$lang['addanswer']."\">";
 			$tvars['vars']['[/edit-com]'] = "</a>";
-			$tvars['vars']['[del-com]'] = "<a href=\"".admin_url."/admin.php?mod=editcomments&amp;subaction=deletecomment&amp;newsid=$newsID&amp;comid=$row[id]&amp;oster=$row[author]\" title=\"".$lang['comdelete']."\">";
+			$tvars['vars']['[del-com]'] = "<a href=\"".admin_url."/admin.php?mod=editcomments&amp;subaction=deletecomment&amp;newsid=$newsID&amp;comid=$row[id]\" title=\"".$lang['comdelete']."\">";
 			$tvars['vars']['[/del-com]'] = "</a>";
 			$tvars['vars']['ip'] = "<a href=\"http://www.nic.ru/whois/?ip=$row[ip]\" title=\"".$lang['whois']."\">".$lang['whois']."</a>";
 		} else {
@@ -169,7 +169,7 @@ function comments_showform($newsID, $callingParams = array()){
 	global $mysql, $config, $template, $tpl, $userROW, $PFILTERS;
 
 	// -> desired template path
-	$templatePath = ($callingParams['overrideTemplatePath'])?$callingParams['overrideTemplatePath']:tpl_dir.$config['theme'];
+	$templatePath = ($callingParams['overrideTemplatePath'])?$callingParams['overrideTemplatePath']:(tpl_site.'plugins/comments');
 
 	// -> desired template
 	if ($callingParams['overrideTemplateName']) {

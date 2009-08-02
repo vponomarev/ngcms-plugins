@@ -70,15 +70,15 @@ class CommentsNewsFilter extends NewsFilter {
 		$callingCommentsParams = array();
 
 		// Set default template path
-		$templatePath = tpl_dir.$config['theme'];
+		$templatePath = tpl_site.'plugins/comments';
 
 		$fcat = array_shift(explode(",", $SQLnews['catid']));
 
 		// Check if there is a custom mapping
 		if ($fcat && $catmap[$fcat] && ($ctname = $catz[$catmap[$fcat]]['tpl'])) {
 			// Check if directory exists
-			if (is_dir($templatePath.'/ncustom/'.$ctname))
-				$callingCommentsParams['overrideTemplatePath'] = $templatePath.'/ncustom/'.$ctname;
+			if (is_dir(tpl_site.'ncustom/'.$ctname))
+				$callingCommentsParams['overrideTemplatePath'] = tpl_site.'ncustom/'.$ctname;
 		}
 
 		include_once(root."/plugins/comments/inc/comments.show.php");
@@ -206,23 +206,24 @@ function plugin_comments_show(){
 	// AJAX is turned off by default
 	$callingCommentsParams = array( 'noajax' => 1);
 
-	// Set default template path
-	$templatePath = tpl_dir.$config['theme'];
+	// Set default template path [from site template / comments plugin subdirectory]
+	$templatePath = tpl_site.'plugins/comments';
 
 	$fcat = array_shift(explode(",", $newsRow['catid']));
 
 	// Check if there is a custom mapping
 	if ($fcat && $catmap[$fcat] && ($ctname = $catz[$catmap[$fcat]]['tpl'])) {
 		// Check if directory exists
-		if (is_dir($templatePath.'/ncustom/'.$ctname))
-			$callingCommentsParams['overrideTemplatePath'] = $templatePath.'/ncustom/'.$ctname;
-			$templatePath = $templatePath.'/ncustom/'.$ctname;
+		if (is_dir($tpl_site.'ncustom/'.$ctname))
+			$callingCommentsParams['overrideTemplatePath'] = tpl_site.'ncustom/'.$ctname;
+			$templatePath = tpl_site.'ncustom/'.$ctname;
 	}
 
 	// Show header file
 	$tvars = array();
 	$tvars['vars']['link']	= newsGenerateLink($newsRow);
 	$tvars['vars']['title']	= secure_html($newsRow['title']);
+
 
 	$tpl->template('comments.header', $templatePath);
 	$tpl->vars('comments.header', $tvars);
