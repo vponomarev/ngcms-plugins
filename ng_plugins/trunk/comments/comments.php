@@ -306,12 +306,79 @@ function plugin_comments_show(){
 	$tpl->vars('comments.external', $tcvars);
 
 	$template['vars']['mainblock'] .= $tpl->show('comments.external');
-
-
 }
 
+
+// Delete comment
+function plugin_comments_delete(){
+	global $mysql, $config, $userROW, $lang, $tpl, $template, $SUPRESS_MAINBLOCK_SHOW, $SUPRESS_TEMPLATE_SHOW;
+
+	$output = array();
+	$params = array();
+
+	// First: check if user have enough permissions
+	if (!is_array($userROW) || ($userROW['status'] > 2)) {
+		// Not allowed
+		$output['status']	= 0;
+		$output['data']		= $lang['perm.denied'];
+	} else {
+		// Second: check if this comment exists
+		$comid = intval($_REQUEST['id']);
+
+		if (($comid) && ($row = $mysql->record("select * from ".prefix."_comments where id=".db_squote($comid)))) {
+			$mysql->query("delete from ".prefix."_comments where id=".db_squote($comid));
+			$mysql->query("update ".uprefix."_users set com=com-1 where id=".db_squote($row['author_id']));
+			$mysql->query("update ".prefix."_news set com=com-1 where id=".db_squote($row['post']));
+
+			$output['status']	= 1;
+			$output['data']		= $lang['comments:deleted.text'];
+			$params['newsid']	= $row['post'];
+		} else {
+			$output['status']	= 0;
+			$output['data']		= $lang['comments:err.nocomment'];
+		}
+	}
+
+	$SUPRESS_TEMPLATE_SHOW = 1;
+
+	// Check if we run AJAX request
+	if ($_REQUEST['ajax']) {
+		$output['data'] = iconv('Windows-1251', 'UTF-8', $output['data']);
+		$template['vars']['mainblock'] = json_encode($output);
+	} else {
+		// NON-AJAX mode
+
+		// Fetch news record
+		if ($nrow = $mysql->record("select * from ".prefix."_news where id = ".db_squote($params['newsid']))) {
+			$url = newsGenerateLink($nrow);
+		} else {
+			$url = $config['home_url'];
+		}
+
+		$tavars = array( 'vars' => array(
+			'message'	=> $output['data'],
+			'link'		=> $url,
+		));
+
+		// If ok - redirect to news
+		if ($output['status']) {
+			$tavars['vars']['title']	= $lang['comments:deleted.title'];
+			$tavars['vars']['linktext']	= $lang['comments:deleted.url'];
+		} else {
+			// Print error messag
+			// NON-AJAX MODE
+			$tavars['vars']['title']	= $lang['comments:err.redir.title'];
+			$tavars['vars']['linktext']	= $lang['comments:err.redir.url'];
+		}
+		$tpl -> template('redirect', tpl_site);
+		$tpl -> vars('redirect', $tavars);
+		$template['vars']['mainblock'] = $tpl -> show('redirect');
+	}
+}
 
 loadPluginLang('comments', 'main', '', '', ':');
 register_filter('news','comments', new CommentsNewsFilter);
 register_plugin_page('comments','add','plugin_comments_add',0);
 register_plugin_page('comments','show','plugin_comments_show',0);
+register_plugin_page('comments','delete','plugin_comments_delete',0);
+
