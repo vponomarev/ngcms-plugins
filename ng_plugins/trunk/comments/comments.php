@@ -49,7 +49,10 @@ class CommentsNewsFilter extends NewsFilter {
 		$tvars['regx']['[\[nocomments\](.*)\[/nocomments\]]'] = ($SQLnews['com'])?'':'$1';
 	}
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+	function showNews($newsID, $SQLnews, &$tvars, $callingParams = array()) {
+		global $catmap, $catz, $config, $userROW, $template, $lang, $tpl;
+
+		// Fill variables within news template
 		$tvars['vars']['comments-num']	=	$SQLnews['com'];
 		$tvars['vars']['comnum']	=	$SQLnews['com'];
 		$tvars['regx']['[\[comheader\](.*)\[/comheader\]]'] = ($SQLnews['com'])?'$1':'';
@@ -58,16 +61,22 @@ class CommentsNewsFilter extends NewsFilter {
 		$tvars['regx']['[\[comments\](.*)\[/comments\]]']     = ($SQLnews['com'])?'$1':'';
 		$tvars['regx']['[\[nocomments\](.*)\[/nocomments\]]'] = ($SQLnews['com'])?'':'$1';
 
-	}
-
-	function onAfterNewsShow ($newsID, $SQLnews, $mode = array()) {
-		global $catmap, $catz, $config, $userROW, $template, $lang;
-		// Skin short mode
-		if ($mode['style'] != 'full')
+		// Check if we need to add comments block:
+		//	* style == full
+		//  * emulate == false
+		//  * plugin == not set
+		if (!(($callingParams['style'] == 'full')&&(!$callingParams['emulate'])&&(!isset($callingParams['plugin'])))) {
+			// No, we don't need to show comments
+			$tvars['vars']['plugin_comments'] = '';
 			return 1;
+		}
+
+		// ******************************************** //
+		// Yeah, let's show comments here
+		// ******************************************** //
 
 		// Prepare params for call
-		$callingCommentsParams = array();
+		$callingCommentsParams = array('outprint' => true);
 
 		// Set default template path
 		$templatePath = tpl_site.'plugins/comments';
@@ -99,9 +108,9 @@ class CommentsNewsFilter extends NewsFilter {
 
 		}
 
+		$tcvars = array();
 		// Show comments [ if not skipped ]
-		if (!$skipCommShow)
-			comments_show($newsID, 0, 0, $callingCommentsParams);
+		$tcvars['vars']['entries'] = $skipCommShow?'':comments_show($newsID, 0, 0, $callingCommentsParams);
 
 		// If multipage is used and we have more comments - show
 		if ($flagMoreComments) {
@@ -109,13 +118,22 @@ class CommentsNewsFilter extends NewsFilter {
 						generateLink('comments', 'show', array('news_id' => $newsID)):
 						generateLink('core', 'plugin', array('plugin' => 'comments', 'handler' => 'show'), array('news_id' => $newsID));
 
-			$template['vars']['mainblock'] .= str_replace(array('{link}', '{count}'), array($link, $SQLnews['com']), $lang['comments:link.more']);
+			$tcvars['vars']['more_comments'] = str_replace(array('{link}', '{count}'), array($link, $SQLnews['com']), $lang['comments:link.more']);
+		} else {
+			$tcvars['vars']['more_comments'] = '';
 		}
 
 		// Show form for adding comments
-		if ($SQLnews['allow_com'] && (!extra_get_param('comments', 'regonly') || is_array($userROW)))
-			comments_showform($newsID, $callingCommentsParams);
+		if ($SQLnews['allow_com'] && (!extra_get_param('comments', 'regonly') || is_array($userROW))) {
+			$tcvars['vars']['form'] = comments_showform($newsID, $callingCommentsParams);
+		} else {
+			$tcvars['vars']['form'] = '';
+		}
+		$tcvars['regx']['[\[comheader\](.*)\[/comheader\]]'] = ($SQLnews['com'])?'$1':'';
 
+		$tpl->template('comments.internal', $templatePath);
+		$tpl->vars('comments.internal', $tcvars);
+		$tvars['vars']['plugin_comments'] = $tpl->show('comments.internal');
 	}
 }
 
@@ -211,13 +229,13 @@ function plugin_comments_show(){
 	$newsID = intval($_REQUEST['news_id']);
 
 	if (!$newsID || !is_array($newsRow = $mysql->record("select * from ".prefix."_news where id = ".$newsID))) {
-		$template['vars']['mainblock'] = $lang['comments:err.nonews'];
+		error404();
 		return;
 	}
 
 	// Prepare params for call
 	// AJAX is turned off by default
-	$callingCommentsParams = array( 'noajax' => 1);
+	$callingCommentsParams = array( 'noajax' => 1, 'outprint' => true);
 
 	// Set default template path [from site template / comments plugin subdirectory]
 	$templatePath = tpl_site.'plugins/comments';
@@ -231,17 +249,6 @@ function plugin_comments_show(){
 			$callingCommentsParams['overrideTemplatePath'] = tpl_site.'ncustom/'.$ctname;
 			$templatePath = tpl_site.'ncustom/'.$ctname;
 	}
-
-	// Show header file
-	$tvars = array();
-	$tvars['vars']['link']	= newsGenerateLink($newsRow);
-	$tvars['vars']['title']	= secure_html($newsRow['title']);
-
-
-	$tpl->template('comments.header', $templatePath);
-	$tpl->vars('comments.header', $tvars);
-
-	$template['vars']['mainblock'] .= $tpl->show('comments.header');
 
 	// Check if we need pagination
 	$page				= 0;
@@ -263,7 +270,8 @@ function plugin_comments_show(){
 	}
 
 	// Show comments
-	comments_show($newsID, 0, 0, $callingCommentsParams);
+	$tcvars = array();
+	$tcvars['vars']['entries'] = comments_show($newsID, 0, 0, $callingCommentsParams);
 
 	if ($pageCount > 1) {
 	    $paginationParams = checkLinkAvailable('comments', 'show')?
@@ -272,7 +280,9 @@ function plugin_comments_show(){
 
 		templateLoadVariables(true);
 		$navigations = $TemplateCache['site']['#variables']['navigation'];
-		$template['vars']['mainblock'] .= generatePagination($page, 1, $pageCount, 10, $paginationParams, $navigations);
+		$tcvars['vars']['more_comments'] = generatePagination($page, 1, $pageCount, 10, $paginationParams, $navigations);
+	} else {
+		$tcvars['vars']['more_comments'] = '';
 	}
 
 	// Enable AJAX in case if we are on last page
@@ -281,8 +291,22 @@ function plugin_comments_show(){
 
 	// Show form for adding comments
 	if ($newsRow['allow_com'] && (!extra_get_param('comments', 'regonly') || is_array($userROW))) {
-		comments_showform($newsID, $callingCommentsParams);
+		$tcvars['vars']['form'] = comments_showform($newsID, $callingCommentsParams);
+	} else {
+		$tcvars['vars']['form'] = '';
 	}
+
+	// Show header file
+	$tcvars['vars']['link']	= newsGenerateLink($newsRow);
+	$tcvars['vars']['title']	= secure_html($newsRow['title']);
+	$tcvars['regx']['[\[comheader\](.*)\[/comheader\]]'] = ($newsRow['com'])?'$1':'';
+
+
+	$tpl->template('comments.external', $templatePath);
+	$tpl->vars('comments.external', $tcvars);
+
+	$template['vars']['mainblock'] .= $tpl->show('comments.external');
+
 
 }
 

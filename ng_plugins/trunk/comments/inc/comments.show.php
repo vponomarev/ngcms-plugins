@@ -58,6 +58,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	if (!$timestamp)
 		$timestamp = 'j.m.Y - H:i';
 
+	$output = '';
 	foreach ($mysql->select($sql) as $row) {
 		$comnum++;
 		$tvars['vars']['id']		=	$row['id'];
@@ -156,19 +157,20 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 
 		// Show template
 		$tpl -> vars($templateName, $tvars);
-		$output = $tpl -> show($templateName);
-		if ($callingParams['outprint']) {
-			return $output;
-		}
-		$template['vars']['mainblock'] .= $output;
+		$output .= $tpl -> show($templateName);
 	}
+	if ($callingParams['outprint']) {
+		return $output;
+	}
+	$template['vars']['mainblock'] .= $output;
 }
 
 // $callingParams
 //		'plugin'  => if is called from plugin - ID of plugin
-//		'overrideTemplateName' => alternative template for display
-//		'overrideTemplatePath' => alternative path for searching of template
+//		'overrideTemplateName'	=> alternative template for display
+//		'overrideTemplatePath'	=> alternative path for searching of template
 //		'noajax'		=> DISABLE AJAX mode
+//		'outprint'	 	=> flag: if set, output will be returned, elsewhere - will be added to mainblock
 function comments_showform($newsID, $callingParams = array()){
 	global $mysql, $config, $template, $tpl, $userROW, $PFILTERS;
 
@@ -238,7 +240,11 @@ function comments_showform($newsID, $callingParams = array()){
 	exec_acts('comments_form', $row);
 
 	$tpl -> vars($templateName, $tvars);
-	$template['vars']['mainblock'] .= $tpl -> show($templateName);
+	$output = $tpl -> show($templateName);
+	if ($callingParams['outprint']) {
+		return $output;
+	}
+	$template['vars']['mainblock'] .= $output;
 }
 
 // preload plugins
