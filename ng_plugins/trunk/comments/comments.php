@@ -221,7 +221,9 @@ function plugin_comments_add() {
 
 // Show dedicated page for comments
 function plugin_comments_show(){
-	global $config, $catz, $mysql, $catmap, $tpl, $template, $lang, $SUPRESS_TEMPLATE_SHOW, $userROW, $TemplateCache;
+	global $config, $catz, $mysql, $catmap, $tpl, $template, $lang, $SUPRESS_TEMPLATE_SHOW, $userROW, $TemplateCache, $SYSTEM_FLAGS;
+
+	$SYSTEM_FLAGS['info']['title']['group']		= $lang['comments:header.title'];
 
 	include_once(root."/plugins/comments/inc/comments.show.php");
 
@@ -232,6 +234,7 @@ function plugin_comments_show(){
 		error404();
 		return;
 	}
+	$SYSTEM_FLAGS['info']['title']['item']		= $newsRow['title'];
 
 	// Prepare params for call
 	// AJAX is turned off by default
@@ -381,4 +384,3 @@ register_filter('news','comments', new CommentsNewsFilter);
 register_plugin_page('comments','add','plugin_comments_add',0);
 register_plugin_page('comments','show','plugin_comments_show',0);
 register_plugin_page('comments','delete','plugin_comments_delete',0);
-
