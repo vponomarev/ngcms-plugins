@@ -171,10 +171,10 @@ class TagsNewsfilter extends NewsFilter {
 		    $link = checkLinkAvailable('tags', 'tag')?
 						generateLink('tags', 'tag', array('tag' => $tag)):
 						generateLink('core', 'plugin', array('plugin' => 'tags', 'handler' => 'tag'), array('tag' => $tag));
-			$tags[] = str_replace(array('{url}', '{tag}'), array($link, $tag), $this->displayParams['tag_news']);
+			$tags[] = str_replace(array('{url}', '{tag}'), array($link, $tag), $this->displayParams['news.tag']);
 		}
 
-		$tvars['vars']['tags'] = join($this->displayParams['tag_news_delimiter'], $tags);
+		$tvars['vars']['tags'] = join($this->displayParams['news.tag.delimiter'], $tags);
 		$tvars['vars']['[tags]'] = '';
 		$tvars['vars']['[/tags]'] = '';
 
@@ -257,7 +257,6 @@ add_act('index', 'plugin_tags_cloudblock');
 function plugin_tags_cloud(){
 	global $tpl, $template, $mysql, $lang, $SYSTEM_FLAGS;
 
-	LoadPluginLang('tags', 'main');
 	plugin_tags_generatecloud(1);
 }
 
@@ -270,7 +269,7 @@ function plugin_tags_cloudblock() {
 //
 // Show current tag
 function plugin_tags_tag() {
-	global $tpl, $template, $mysql, $lang, $SYSTEM_FLAGS, $CurrentHandler;
+	global $tpl, $template, $mysql, $lang, $SYSTEM_FLAGS, $CurrentHandler, $TemplateCache;
 
 	// Determine MONTH and YEAR for current show process
 	if (($CurrentHandler['pluginName'] == 'tags')&&
@@ -290,41 +289,82 @@ function plugin_tags_tag() {
 	}
 
 
-	LoadPluginLang('tags', 'main');
+	LoadPluginLang('tags', 'main', '', '', ':');
 
-	$SYSTEM_FLAGS['info']['title']['group']		= 'Облако тегов';
-	$tpath = locatePluginTemplates(array('plugin', 'entry'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
+	$SYSTEM_FLAGS['info']['title']['group']		= $lang['tags:header.tag.title'];
+	$tpath = locatePluginTemplates(array('cloud', 'pages', 'cloud.tag.entry'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
 
 
 	include_once root.'includes/news.php';
 	// Search for tag in tags table
 	if (!($rec = $mysql->record("select * from ".prefix."_tags where tag=".db_squote($tag)))) {
 		// Unknown tag
-		$entries = $lang['tags_nonews'];
+		$entries = $lang['tags:nonews'];
 	} else {
 		$SYSTEM_FLAGS['info']['title']['secure_html']	= secure_html($tag);
-		foreach ($mysql->select("select n.* from ".prefix."_tags_index i left join ".prefix."_news n on n.id = i.newsID where i.tagID =".db_squote($rec['id'])." order by n.postdate desc") as $row) {
-			$entries .= news_showone(0, '', array('overrideTemplateName' => 'entry', 'overrideTemplatePath' => $tpath['entry'], 'emulate' => $row, 'style' => 'export', 'plugin' => 'tags'));
+
+		// Set page display limit
+		$perPage = intval(pluginGetVariable('tags', 'tpage_limit'));
+		if (($perPage < 1) || ($perPage > 1000))
+			$perPage = 1000;
+
+		// Manage pagination
+		if (pluginGetVariable('tags', 'tpage_paginator')) {
+			$tagCount = $mysql->result("select count(*) as cnt from ".prefix."_tags_index where tagID = ".db_squote($rec['id']));
+			$pagesCount = ceil($tagCount / $perPage);
+			$pageNo = intval($_REQUEST['page']);
+			if ($pageNo < 1)
+				$pageNo = 1;
+
+			$limit = 'limit '.(intval($pageNo - 1)*$perPage).", ".$perPage;
+
+			// If we have more than 1 page or current page != 1, we should generate paginator
+			// Load navigation bar
+			templateLoadVariables(true);
+			$navigations = $TemplateCache['site']['#variables']['navigation'];
+
+			$paginationParams = array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'tags', 'handler' => 'tag'), 'xparams' => array('tag' => $tag), 'paginator' => array('page', 1, false));
+			//
+			$tvars = array();
+			$tvars['regx']["'\[prev-link\](.*?)\[/prev-link\]'si"] = ($pageNo > 1)?str_replace('%page%',"$1",str_replace('%link%',generatePageLink($paginationParams, $pageNo - 1), $navigations['prevlink'])):'';
+			$tvars['regx']["'\[next-link\](.*?)\[/next-link\]'si"] = ($pageNo < $pagesCount)?str_replace('%page%',"$1",str_replace('%link%',generatePageLink($paginationParams, $pageNo + 1), $navigations['nextlink'])):'';
+			$tvars['vars']['pages'] = generatePagination($pageNo, 1, $pagesCount, 10, $paginationParams, $navigations);
+
+			$tpl -> template('pages', $tpath['pages']);
+			$tpl -> vars('pages', $tvars);
+			$pages = $tpl -> show('pages');
+
+		} else {
+			$limit = 'limit '.$perPage;
+			$pages = '';
 		}
 
+		foreach ($mysql->select("select n.* from ".prefix."_tags_index i left join ".prefix."_news n on n.id = i.newsID where i.tagID =".db_squote($rec['id'])." order by n.postdate desc ".$limit) as $row) {
+			$entries .= news_showone(0, '', array('overrideTemplateName' => 'cloud.tag.entry', 'overrideTemplatePath' => $tpath['cloud.tag.entry'], 'emulate' => $row, 'style' => 'export', 'plugin' => 'tags'));
+		}
 	}
+	$tvars = array ( 'vars' => array ( 'entries' => $entries, 'tag' => $tag, 'pages' => $pages));
+	$tvars['regx']['#\[paginator\](.*?)\[\/paginator\]#is'] = ($pages != '')?'$1':'';
 
-	$tpl -> template('plugin', $tpath['plugin']);
-	$tpl -> vars('plugin', array ( 'vars' => array ( 'entries' => $entries, 'tag' => $tag)));
-	$template['vars']['mainblock'] = $tpl -> show('plugin');
+	$tpl -> template('cloud', $tpath['cloud']);
+	$tpl -> vars('cloud', $tvars);
+	$template['vars']['mainblock'] = $tpl -> show('cloud');
 
 
 }
 
 function plugin_tags_generatecloud($ppage = 0){
-	global $tpl, $template, $mysql, $lang, $config;
+	global $tpl, $template, $mysql, $lang, $config, $SYSTEM_FLAGS, $TemplateCache;
 
-	LoadPluginLang('tags', 'main');
+	LoadPluginLang('tags', 'main', '', '', ':');
 
-	$masterTPL = $ppage?'plugin':'cloud';
+	if ($ppage)
+		$SYSTEM_FLAGS['info']['title']['group']		= $lang['tags:header.tags.title'];
+
+	$masterTPL = $ppage?'cloud':'sidebar';
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
-	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang']).$masterTPL.'.txt';
+	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang']).$masterTPL.$_REQUEST['page'].'.txt';
 
 	if (extra_get_param('tags','cache')) {
 		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('tags','cacheExpire'), 'tags');
@@ -336,7 +376,7 @@ function plugin_tags_generatecloud($ppage = 0){
 	}
 
 	// Load params for display (if needed)
-	$tpath = locatePluginTemplates(array(':params.ini', $masterTPL), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
+	$tpath = locatePluginTemplates(array(':params.ini', 'pages', $masterTPL), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
 	$displayParams = parse_ini_file($tpath[':params.ini'].'params.ini');
 
 	$tags = array();
@@ -349,10 +389,32 @@ function plugin_tags_generatecloud($ppage = 0){
 		case 4: $orderby = 'posts desc'; break;
 		default: $orderby = 'rand()';
 	}
-	$limit = intval(extra_get_param('tags', ($ppage?'ppage_':'').'limit'));
-	if (($limit < 1)||($limit > 1000)) $limit = 1000;
 
-	$rows = $mysql->select("select * from ".prefix."_tags order by ".$orderby." limit ".$limit);
+	// Set page display limit
+	$perPage = intval(pluginGetVariable('tags', ($ppage?'ppage_':'').'limit'));
+	if (($perPage < 1) || ($perPage > 1000))
+		$perPage = 1000;
+
+	if ($ppage) {
+		if (pluginGetVariable('tags', 'ppage_paginator')) {
+			$tagCount = $mysql->result("select count(*) as cnt from ".prefix."_tags");
+			$pagesCount = ceil($tagCount / $perPage);
+			$pageNo = intval($_REQUEST['page']);
+			if ($pageNo < 1)
+				$pageNo = 1;
+
+			$limit = 'limit '.(intval($pageNo - 1)*$perPage).", ".$perPage;
+
+			if ($orderby == 'rand()')
+				$orderby = 'tag';
+		} else {
+			$limit = 'limit '.$perPage;
+		}
+	} else {
+		$limit = 'limit '.$perPage;
+	}
+
+	$rows = $mysql->select("select * from ".prefix."_tags order by ".$orderby.' '.$limit);
 
 	// Prepare style definition
 	$wlist = array();
@@ -392,13 +454,38 @@ function plugin_tags_generatecloud($ppage = 0){
 			$params = 'style ="font-size: '.(($row['posts']/$max)*100+100).'%;"';
 		}
 
-		$tags[] = str_replace(array('{url}', '{tag}', '{posts}', '{params}'), array($link, $row['tag'], $row['posts'], $params), $displayParams['tag_cloud']);
+		$tags[] = str_replace(array('{url}', '{tag}', '{posts}', '{params}'), array($link, $row['tag'], $row['posts'], $params), $displayParams[($ppage?'cloud':'sidebar').'.tag']);
 	}
 
-	$tagList = join($displayParams['tag_cloud_delimiter']."\n", $tags);
+	$tagList = join($displayParams[($ppage?'cloud':'sidebar').'.tag.delimiter']."\n", $tags);
+
+	// If we have more than 1 page or current page != 1, we should generate paginator
+	if ( $ppage && (($pagesCount > 1) || ($pageNo != 1))) {
+		// Load navigation bar
+		templateLoadVariables(true);
+		$navigations = $TemplateCache['site']['#variables']['navigation'];
+
+		$paginationParams = array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'tags'), 'xparams' => array(), 'paginator' => array('page', 1, false));
+
+		//
+		$tvars = array();
+		$tvars['regx']["'\[prev-link\](.*?)\[/prev-link\]'si"] = ($pageNo > 1)?str_replace('%page%',"$1",str_replace('%link%',generatePageLink($paginationParams, $pageNo - 1), $navigations['prevlink'])):'';
+		$tvars['regx']["'\[next-link\](.*?)\[/next-link\]'si"] = ($pageNo < $pagesCount)?str_replace('%page%',"$1",str_replace('%link%',generatePageLink($paginationParams, $pageNo + 1), $navigations['nextlink'])):'';
+		$tvars['vars']['pages'] = generatePagination($pageNo, 1, $pagesCount, 10, $paginationParams, $navigations);
+
+		$tpl -> template('pages', $tpath['pages']);
+		$tpl -> vars('pages', $tvars);
+		$pages = $tpl -> show('pages');
+	} else {
+		$pages = '';
+	}
+
+
+	$tvars = array ( 'vars' => array ( 'entries' => $tagList, 'tag' => $lang['tags:taglist'], 'pages' => $pages));
+	$tvars['regx']['#\[paginator\](.*?)\[\/paginator\]#is'] = ($pages != '')?'$1':'';
 
 	$tpl -> template($masterTPL, $tpath[$masterTPL]);
-	$tpl -> vars($masterTPL, array ( 'vars' => array ( 'entries' => $tagList, 'tag' => $lang['tags_taglist'])));
+	$tpl -> vars($masterTPL, $tvars);
 	$output = $tpl -> show($masterTPL);
 	$template['vars'][$ppage?'mainblock':'plugin_tags'] = $output;
 
