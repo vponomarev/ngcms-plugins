@@ -86,8 +86,10 @@ class CommentsNewsFilter extends NewsFilter {
 		// Check if there is a custom mapping
 		if ($fcat && $catmap[$fcat] && ($ctname = $catz[$catmap[$fcat]]['tpl'])) {
 			// Check if directory exists
-			if (is_dir(tpl_site.'ncustom/'.$ctname))
+			if (is_dir(tpl_site.'ncustom/'.$ctname)) {
 				$callingCommentsParams['overrideTemplatePath'] = tpl_site.'ncustom/'.$ctname;
+				$templatePath = tpl_site.'ncustom/'.$ctname;
+			}
 		}
 
 		include_once(root."/plugins/comments/inc/comments.show.php");
