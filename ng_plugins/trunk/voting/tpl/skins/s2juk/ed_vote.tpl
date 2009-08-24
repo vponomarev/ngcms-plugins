@@ -25,11 +25,16 @@
 
   
   if (mode) { 
-  vajax.requestFile = "{home}?action=plugin&plugin=voting&style=ajax&voted="+voteid+"&list=0&mode=vote&choice="+choice;
+  	vajax.setVar("mode", "vote"); 
+	vajax.setVar("choice", choice);
   } else {
-  vajax.requestFile = "{home}?action=plugin&plugin=voting&style=ajax&voted="+voteid+"&list=0&mode=show";
+  	vajax.setVar("mode", "show");
   }
-  vajax.method = 'GET';
+  vajax.setVar("style","ajax");
+  vajax.setVar("voteid", voteid);
+  vajax.setVar("list", 0);
+  vajax.requestFile = "{post_url}";
+  vajax.method = 'POST';
   vajax.element = 'voting_ng';
   vajax.runAJAX();
   return false;
@@ -39,7 +44,7 @@
 
 <div id="voting_ng">
 {votename}<br/><br/>
-<form action="{home}?action=plugin&plugin=voting" method="post" id="voteForm">
+<form action="{post_url}" method="post" id="voteForm">
 <input type=hidden name="mode" value="vote" />
 <input type=hidden name="voteid" value="{voteid}" />
 <input type=hidden name="referer" value="{REFERER}" />

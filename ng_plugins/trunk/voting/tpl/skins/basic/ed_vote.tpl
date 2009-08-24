@@ -32,8 +32,8 @@
   vajax.setVar("style","ajax");
   vajax.setVar("voteid", voteid);
   vajax.setVar("list", 0);
-  vajax.requestFile = "{home}/plugin/voting/";
-  vajax.method = 'GET';
+  vajax.requestFile = "{post_url}";
+  vajax.method = 'POST';
   vajax.element = 'voting_ng';
   vajax.runAJAX();
   return false;
@@ -43,7 +43,7 @@
 
 <div id="voting_ng">
 <h5>{votename}</h5>
-<form action="/plugin/voting/" method="post" id="voteForm">
+<form action="{post_url}" method="post" id="voteForm">
 <input type=hidden name="mode" value="vote" />
 <input type=hidden name="voteid" value="{voteid}" />
 <input type=hidden name="referer" value="{REFERER}" />
