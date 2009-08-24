@@ -37,22 +37,23 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 	global $tpl, $mysql, $username, $userROW, $ip;
 
 	$result = '';
+	$post_url = generateLink('core', 'plugin', array('plugin' => 'voting'), array());
 
 	$tpath = locatePluginTemplates(array('shls_vote', 'edls_vote', 'shls_vline', 'edls_vline', 'lshdr', 'sh_vote', 'ed_vote', 'sh_vline', 'ed_vline'), 'voting', extra_get_param('voting', 'localsource'), $tpl_skin);
 	// Preload templates
 	if ($mode<4) {
-	 	$tpl->template('shls_vote',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
-	 	$tpl->template('edls_vote',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
-	 	$tpl->template('shls_vline',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
-	 	$tpl->template('edls_vline',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
-	 	$tpl->template('lshdr',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
-	 	$tpl->vars('lshdr',array('vars' => array('home' => home)));
+	 	$tpl->template('shls_vote',$tpath['shls_vote']);
+	 	$tpl->template('edls_vote',$tpath['edls_vote']);
+	 	$tpl->template('shls_vline',$tpath['shls_vline']);
+	 	$tpl->template('edls_vline',$tpath['edls_vline']);
+	 	$tpl->template('lshdr',$tpath['lshdr']);
+	 	$tpl->vars('lshdr',array('vars' => array('home' => home, 'post_url' => $post_url)));
 	 	$result = $tpl->show('lshdr');
 	} else {
-	 	$tpl->template('sh_vote',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
-	 	$tpl->template('ed_vote',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
-	 	$tpl->template('sh_vline',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
-	 	$tpl->template('ed_vline',extras_dir.'/voting/tpl/skins/'.$tpl_skin);
+	 	$tpl->template('sh_vote',$tpath['sh_vote']);
+	 	$tpl->template('ed_vote',$tpath['ed_vote']);
+	 	$tpl->template('sh_vline',$tpath['sh_vline']);
+	 	$tpl->template('ed_vline',$tpath['ed_vline']);
 	}
 
 	if (!$mode) {
@@ -106,6 +107,7 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 		        	'num' => $num,
 		        	'count' => $lrow['cnt'],
 		        	'perc' => intval($lrow['cnt']*100/$cnt),
+		        	'post_url' => $post_url,
 		        	'tpl_dir' => admin_url.'/plugins/voting/tpl/skins/'.$tpl_skin);
 			$tpl->vars($tpl_prefix.'_vline', $tvars);
 			$votelines .= $tpl->show($tpl_prefix.'_vline');
@@ -120,6 +122,7 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 			'REFERER' => $REQUEST_URI,
 			'home' => home,
 			'vcount' => $tcount,
+			'post_url' => $post_url,
 			'tpl_dir' => admin_url.'/plugins/voting/tpl/skins/'.$tpl_skin);
 		$tpl->vars($tpl_prefix.'_vote', $tvars);
 		$result .= $tpl->show($tpl_prefix.'_vote');
@@ -142,7 +145,6 @@ function plugin_voting_screen() {
  if ((!is_dir(extras_dir.'/voting/tpl/skins/'.$skin))||(!$skin)) { $skin = 'basic'; }
 
  $is_ajax = ($_REQUEST['style'] == 'ajax')?1:0;
-
  if (($_REQUEST['mode'] == 'vote') && ($choice = intval($_REQUEST['choice']))) {
     // VOTE REQUEST
 	if (($row = $mysql->record("select * from ".prefix."_voteline where id = $choice"))&&
@@ -151,7 +153,7 @@ function plugin_voting_screen() {
 		// Check for dupes
 		$dup = 0;
 		if ($secure = extra_get_param('voting','secure')) {
-			$condition = (is_array($userROW))?"userid = ".$userROW['id']:"ip='$ip'";
+			$condition = (is_array($userROW))?"userid = ".$userROW['id']:"ip=".db_squote($ip);
 			if ($mysql->record("select * from ".prefix."_votestat where voteid = ".$vrow['id']." and $condition limit 1")) {
 				$dup = 1;
 			}

@@ -21,9 +21,9 @@
   vajax.setVar("mode", "vote");
   vajax.setVar("style","ajax");
   vajax.setVar("list","1");
-  vajax.setVar("voteid", choice);
-  vajax.requestFile = "{home}/plugin/voting/";
-  vajax.method = 'GET';
+  vajax.setVar("choice", choice);
+  vajax.requestFile = "{post_url}";
+  vajax.method = 'POST';
   vajax.element = 'zz_voting_'+vid;
   vajax.runAJAX();
   return false;
