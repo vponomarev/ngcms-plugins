@@ -1,10 +1,10 @@
 ;
-; Version description file for plugin @@ 2z project
+; Version description file for plugin @@ Next Generation CMS
 ;
 
 ID: similar
 Name: Похожие новости
-Version: 0.04
+Version: 0.05
 Acts: core
 File: similar.php
 Config: config.php
