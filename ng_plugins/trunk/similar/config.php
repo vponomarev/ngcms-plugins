@@ -5,20 +5,26 @@
 //
 
 plugins_load_config();
-LoadPluginLang($plugin, 'main', '', 'similar');
+LoadPluginLang($plugin, 'main', '', 'similar', ':');
 include_once('inc/similar.php');
 
 
 $cfg = array();
-array_push($cfg, array('name' => 'rebuild', 'title' => $lang['similar_rebuild'], 'descr' => $lang['similar_rebuild_desc'], 'type' => 'select', 'value' => 0, 'values' => array ( 0 => $lang['noa'], 1 => $lang['yesa']), 'nosave' => 1));
+array_push($cfg, array('name' => 'rebuild', 'title' => $lang['similar:rebuild'], 'descr' => $lang['similar:rebuild_desc'], 'type' => 'select', 'value' => 0, 'values' => array ( 0 => $lang['noa'], 1 => $lang['yesa']), 'nosave' => 1));
 
 $cfgX = array();
-array_push($cfgX, array('name' => 'localsource', 'title' => $lang['similar_localsource'], 'descr' => $lang['simiar_localsource'], 'type' => 'select', 'values' => array ( '0' => $lang['similar_lsrc_site'], '1' => $lang['similar_lsrc_plugin']), 'value' => intval(extra_get_param($plugin,'localsource'))));
-array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['similar_cfg_display'].'</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'localsource', 'title' => $lang['similar:localsource'], 'descr' => $lang['simiar_localsource'], 'type' => 'select', 'values' => array ( '0' => $lang['similar:lsrc_site'], '1' => $lang['similar:lsrc_plugin']), 'value' => intval(extra_get_param($plugin,'localsource'))));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['similar:cfg_display'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
-array_push($cfgX, array('name' => 'count', 'title' => $lang['similar_count'], 'descr' => $lang['similar_count_desc'], 'type' => 'input', 'html_flags' => 'size="4"', 'value' => extra_get_param($plugin, 'count')));
-array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['similar_cfg_common'].'</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'similar_enabled', 'title' => $lang['similar:similar_enabled'], 'descr' => $lang['similar:similar_enabled_desc'], 'type' => 'select', 'values' => array(0 => $lang['noa'], 1 => $lang['yesa']), 'value' => extra_get_param($plugin, 'similar_enabled')));
+array_push($cfgX, array('name' => 'count', 'title' => $lang['similar:similar_count'], 'descr' => $lang['similar:similar_count_desc'], 'type' => 'input', 'html_flags' => 'size="4"', 'value' => extra_get_param($plugin, 'count')));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['similar:cfg_similar'].'</b>', 'entries' => $cfgX));
+
+$cfgX = array();
+array_push($cfgX, array('name' => 'samecat_enabled', 'title' => $lang['similar:samecat_enabled'], 'descr' => $lang['similar:samecat_enabled_desc'], 'type' => 'select', 'values' => array(0 => $lang['noa'], 1 => $lang['yesa']), 'value' => extra_get_param($plugin, 'samecat_enabled')));
+array_push($cfgX, array('name' => 'samecat_count', 'title' => $lang['similar:samecat_count'], 'descr' => $lang['similar:samecat_count_desc'], 'type' => 'input', 'html_flags' => 'size="4"', 'value' => extra_get_param($plugin, 'samecat_count')));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['similar:cfg_samecateg'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
 array_push($cfgX, array('name' => 'pcall', 'title' => "Интеграция с новостными плагинами<br /><small><b>Да</b> - в плагине появится возможность испольвать переменные других плагинов<br /><b>Нет</b> - переменные других плагинов использовать нельзя</small>", 'type' => 'select', 'values' => array ( '1' => 'Да', '0' => 'Нет'), 'value' => intval(extra_get_param($plugin,'pcall'))));
@@ -26,8 +32,8 @@ array_push($cfgX, array('name' => 'pcall_mode', 'title' => "Режим вызова", 'desc
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>Интеграция</b>', 'entries' => $cfgX));
 
 $cfgX = array();
-array_push($cfgX, array('name' => 'count', 'title' => $lang['similar_similarity']));
-array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['similar_cfg_similarity'].'</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'countX', 'title' => $lang['similar:similarity']));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['similar:cfg_similarity'].'</b>', 'entries' => $cfgX));
 
 
 if (!$_REQUEST['action']) {

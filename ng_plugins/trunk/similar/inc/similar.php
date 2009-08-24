@@ -11,8 +11,9 @@ function plugin_similar_recover($newsID, $count) {
 		return 0;
 
 	// Load a list of similar looking news via TAG index
-	$list = $mysql->select("select i.newsID, count(i.tagID) as cnt from ".prefix."_tags_index i use index (tagID) where (i.newsID <> ".db_squote($newsID).") and (i.tagID in ( select tagID from ".prefix."_tags_index use index (newsID) where newsID = ".db_squote($newsID).") ) group by i.newsID order by cnt desc limit ".intval($count));
-
+	$list = array();
+	$list[0] = $mysql->select("select i.newsID, count(i.tagID) as cnt from ".prefix."_tags_index i use index (tagID) where (i.newsID <> ".db_squote($newsID).") and (i.tagID in ( select tagID from ".prefix."_tags_index use index (newsID) where newsID = ".db_squote($newsID).") ) group by i.newsID order by cnt desc limit ".intval($count));
+//	$list[1] = $mysql->select("select ")
 	// Lock tables
 	$mysql->query("lock tables ".prefix."_similar_index write, ".prefix."_tags_index read, ".prefix."_tags_index i read, ".prefix."_news write");
 
@@ -20,7 +21,7 @@ function plugin_similar_recover($newsID, $count) {
 	$mysql->query("delete from ".prefix."_similar_index where newsID = ".db_squote($newsID));
 
 	// Check if we have something similar-looking. Break if nothing similar
-	if (!sizeof($list)) {
+	if (!sizeof($list[0])) {
 		$mysql->query("update ".prefix."_news set similar_status = 1 where id = ".db_squote($newsID));
 		$mysql->query("unlock tables");
 		// Return: OK, news do not have any similars
@@ -30,7 +31,7 @@ function plugin_similar_recover($newsID, $count) {
 	// Fine. Now we have a list of similar news.
 	// Let's load data from this news
 	$nlist = array();
-	foreach ($list as $sr)
+	foreach ($list[0] as $sr)
 		$nlist [$sr['newsID']] = $sr['cnt'];
 
 	$nl = $mysql->select("select id, title, editdate, postdate from ".prefix."_news where id in (".join(", ", array_keys($nlist)).")");
@@ -38,7 +39,7 @@ function plugin_similar_recover($newsID, $count) {
 	// Now we have everything we need. Let's update similar list
 	foreach ($nl as $nrow) {
 		$mysql->query("insert into ".prefix."_similar_index (newsID, refNewsID, refNewsQuantaty, refNewsTitle, refNewsDate) values (".
-			db_squote($newsID).", ".db_squote($nrow['id']).", ".db_squote($nlist[$nrow['id']]).", ".db_squote($nrow['title']).", ".db_squote($nrow['editdate']?$nrow['editdate']:$nrow['postdate']).")");
+			db_squote($newsID).", ".db_squote($nrow['id']).", ".db_squote($nlist[$nrow['id']]).", ".db_squote($nrow['title']).", ".db_squote(($nrow['editdate']>$nrow['postdate'])?$nrow['editdate']:$nrow['postdate']).")");
 	}
 
 	// And at the end - update news status
@@ -119,7 +120,7 @@ function plugin_similar_repopulate($newsid, $count){
 		// Populate data for our news
 		for ($i = 0; $i < min(count($list), $count); $i++) {
 			$row = $list[$i];
-			$mysql->query("insert into ".prefix."_similar_index (newsID, refNewsID, refNewsQuantaty, refNewsTitle, refNewsDate) values (".db_squote($newsID).", ".db_squote($row['newsID']).", ".db_squote($row['cnt']).", ".db_squote($row['title']).", ".db_squote($row['editdate']?$row['editdate']:$row['postdate']).")");
+			$mysql->query("insert into ".prefix."_similar_index (newsID, refNewsID, refNewsQuantaty, refNewsTitle, refNewsDate) values (".db_squote($newsID).", ".db_squote($row['newsID']).", ".db_squote($row['cnt']).", ".db_squote($row['title']).", ".db_squote(($row['editdate']>$row['postdate'])?$row['editdate']:$row['postdate']).")");
 		}
 
 		foreach ($list as $row)
