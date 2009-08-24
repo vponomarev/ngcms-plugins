@@ -27,8 +27,11 @@ function lastcomments($pp = 0) {
 
 	if ($pp) { $pp = 'pp_'; } else { $pp = '';}
 
+	// Generate cache file name [ we should take into account SWITCHER plugin & calling parameters ]
+	$cacheFileName = md5('lastcomments'.$config['theme'].$config['default_lang'].$pp).'.txt';
+
 	if (extra_get_param('lastcomments','cache')) {
-		$cacheData = cacheRetrieveFile($pp.'lastcomments.txt', extra_get_param('lastcomments','cacheExpire'), 'lastcomments');
+		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('lastcomments','cacheExpire'), 'lastcomments');
 		if ($cacheData != false) {
 			// We got data from cache. Return it and stop
 			$template['vars'][($pp)?'mainblock':'plugin_lastcomments'] = $cacheData;
@@ -57,7 +60,7 @@ function lastcomments($pp = 0) {
 	    if (strlen($text) > $comm_length)	{ $text = $parse -> truncateHTML($text, $comm_length);}
 
 		$tvars['vars'] = array(
-			'link'		=>	GetLink('full', array('id' => $row['nid'], 'alt_name' => $row['alt_name'], 'catid' => $row['catid'], 'postdate' => $row['npostdate'])),
+			'link'		=>	newsGenerateLink(array('id' => $row['nid'], 'alt_name' => $row['alt_name'], 'catid' => $row['catid'], 'postdate' => $row['npostdate'])),
 			'date'		=>	langdate('d.m.Y', $row['postdate']),
 			'author'	=>	str_replace('<', '&lt;', $row['author']),
 			'author_id'	=>	$row['author_id'],
@@ -66,8 +69,10 @@ function lastcomments($pp = 0) {
 			'category_link'	=>	GetCategories($row['catid'])
 		);
 
-		if ($row['author_id']) {
-			$tvars['vars']['author_link'] = GetLink('user', $row);
+		if ($row['author_id'] && getPluginStatusActive('uprofile')) {
+			$tvars['vars']['author_link'] = checkLinkAvailable('uprofile', 'show')?
+				generateLink('uprofile', 'show', array('name' => $row['author'], 'id' => $row['author_id'])):
+				generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('id' => $row['author_id']));
 			$tvars['regx']["'\[profile\](.*?)\[/profile\]'si"] = '$1';
 		} else {
 			$tvars['vars']['author_link'] = '';
@@ -84,7 +89,8 @@ function lastcomments($pp = 0) {
 
 	$output = $tpl -> show($pp.'lastcomments');
 	$template['vars'][($pp)?'mainblock':'plugin_lastcomments'] = $output;
-	cacheStoreFile($pp.'lastcomments.txt', $output, 'lastcomments');
 
+	if (extra_get_param('lastcomments','cache')) {
+		cacheStoreFile($cacheFileName, $output, 'lastcomments');
+	}
 }
-
