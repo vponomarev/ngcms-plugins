@@ -146,17 +146,14 @@ function showForm($edMode){
 
 		}
 		$tvars['regx']['#\[enabled\](.+?)\[\/enabled\]#is'] = '$1';
-		$tvars['vars']['id'] = $frow['id'];
-		$tvars['vars']['name'] = $edMode?$_REQUEST['name']:$frow['name'];
-		$tvars['vars']['title'] = $edMode?$_REQUEST['title']:$frow['title'];
-		$tvars['vars']['active_checked'] = ($edMode?$_REQUEST['active']:$frow['active'])?'checked="checked"':'';
-		$tvars['vars']['jcheck_checked'] = ($edMode?$_REQUEST['jcheck']:intval(substr($frow['flags'],0,1)))?'checked="checked"':'';
-		$tvars['vars']['emails'] = secure_html($frow['emails']);
-		$tvars['vars']['description'] = secure_html($frow['description']);
-
-		$link = GetLink('plugins', array('plugin_name' => 'feedback'), 1);
-		$link .= ((strpos($link,'?') === false)?'?':'&').'id='.$frow['id'];
-		$tvars['vars']['url'] = $link;
+		$tvars['vars']['id']				= $frow['id'];
+		$tvars['vars']['name']				= $edMode?$_REQUEST['name']:$frow['name'];
+		$tvars['vars']['title']				= $edMode?$_REQUEST['title']:$frow['title'];
+		$tvars['vars']['active_checked']	= ($edMode?$_REQUEST['active']:$frow['active'])?'checked="checked"':'';
+		$tvars['vars']['jcheck_checked']	= ($edMode?$_REQUEST['jcheck']:intval(substr($frow['flags'],0,1)))?'checked="checked"':'';
+		$tvars['vars']['emails']			= secure_html($frow['emails']);
+		$tvars['vars']['description']		= secure_html($frow['description']);
+		$tvars['vars']['url']				= home.generateLink('core', 'plugin', array('plugin' => 'feedback'), array('id' => $frow['id']));
 
 		// Generate list of templates
 		$lf = array('') + ListFiles(extras_dir.'/feedback/tpl/templates', 'tpl');
