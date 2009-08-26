@@ -87,7 +87,7 @@ function plugin_feedback_screen() {
  $tvars['vars']['id']			= $frow['id'];
  $tvars['vars']['description']	= $frow['description'];
  $tvars['vars']['entries']		= $output;
- $tvars['vars']['form_url']		= GetLink('plugins', array('plugin_name' => 'feedback'));
+ $tvars['vars']['form_url']		= generateLink('core', 'plugin', array('plugin' => 'feedback'), array());
 
  $tvars['vars']['FBF_DATA'] = json_encode($FBF_DATA);
  $tvars['regx']['#\[jcheck\](.+?)\[\/jcheck\]#is']	= intval(substr($frow['flags'],0,1))?'$1':'';
