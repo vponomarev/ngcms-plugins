@@ -14,7 +14,7 @@ if (!defined('NGCMS')) die ('HAL');
 //	apply		- apply installation, with handy confirmation
 //	autoapply       - apply installation in automatic mode [INSTALL script]
 //
-function plugin_comments_install($action) {
+function plugin_feedback_install($action) {
 	global $lang;
 
 	if ($action != 'autoapply')
