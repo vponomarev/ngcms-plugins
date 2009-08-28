@@ -5,7 +5,6 @@
 //
 
 plugins_load_config();
-LoadPluginLang($plugin, 'main', '', 'similar', ':');
 
 //
 // Install script for plugin.
@@ -18,7 +17,7 @@ function plugin_similar_install($action) {
 	global $lang;
 
 	if ($action != 'autoapply')
-			loadPluginLang('similar', 'config', '', '', ':');
+			loadPluginLang('similar', 'main', '', '', ':');
 
 	// Fill DB_UPDATE configuration scheme
 	$db_update = array(
