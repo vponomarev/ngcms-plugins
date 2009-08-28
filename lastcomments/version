@@ -5,7 +5,7 @@
 ID: lastcomments
 Name: Последние комментарии
 Version: 0.07
-Acts: index 
+Acts: index, ppages 
 File: lastcomments.php
 Config: config.php
 Type: plugin
