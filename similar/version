@@ -14,3 +14,5 @@ Type: plugin
 Description: Перелинковка новостей по критериям похожести
 Author: Vitaly A. Ponomarev
 Author_URI: http://2lib.ru
+Title: Похожие новости
+Information: Позволяет проводить перелинковку новостей на базе плагина <b>tags</b> (Облако тегов)
