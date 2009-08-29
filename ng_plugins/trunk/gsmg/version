@@ -12,3 +12,5 @@ Type: plugin
 Description: Генерация карты сайта для Google
 Author: Vitaly A. Ponomarev
 Author_URI: http://2lib.ru/
+Title: Генератор Google SiteMap
+Information: Позволяет создавать SiteMap для вашего сайта
