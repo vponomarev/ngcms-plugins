@@ -151,5 +151,8 @@ class SimilarNewsfilter extends NewsFilter {
 		$mysql->query("delete from ".prefix."_similar_index where newsID = ".intval($newsID));
 	}
 }
-register_filter('news','similar', new SimilarNewsFilter);
 
+// Activate plugin ONLY if plugin tags already activated
+if (getPluginStatusActive('tags')) {
+	register_filter('news','similar', new SimilarNewsFilter);
+}
