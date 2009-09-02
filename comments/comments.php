@@ -196,12 +196,15 @@ function plugin_comments_add() {
 		// Some errors.
 		if ($_REQUEST['ajax']) {
 			// AJAX MODE
-			$tpl -> template('error', tpl_site);
-			$tpl -> vars('error', array( 'vars' => array('content' => $template['vars']['mainblock'])));
+			// Set default template path [from site template / comments plugin subdirectory]
+			$templatePath = tpl_site.'plugins/comments';
+
+			$tpl -> template('comments.error', $templatePath);
+			$tpl -> vars('comments.error', array( 'vars' => array('content' => $template['vars']['mainblock'])));
 
 			$output = array(
 				'status' => 0,
-				'data' => iconv('Windows-1251', 'UTF-8', $tpl -> show('error'))
+				'data' => iconv('Windows-1251', 'UTF-8', $tpl -> show('comments.error'))
 			);
 			print json_encode($output);
 			$template['vars']['mainblock'] = '';
