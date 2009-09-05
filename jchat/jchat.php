@@ -22,7 +22,7 @@ function jchat_show($start){
 	$maxID	= 0;
 	$data	= array();
 
-	foreach (array_reverse($mysql->select("select id, postdate, author, author_id, text from ".prefix."_jchat ".(intval($start)?"where id >".intval($start):'')." order by id desc", 1)) as $row) {
+	foreach (array_reverse($mysql->select("select id, postdate, author, author_id, text from ".prefix."_jchat ".(intval($start)?"where id >".intval($start):'')." order by id desc limit ".$limit, 1)) as $row) {
 		$maxID = max($maxID, $row['id']);
 		$row['author'] = iconv('Windows-1251', 'UTF-8', $row['author']);
 		$row['text'] = iconv('Windows-1251', 'UTF-8', $row['text']);
