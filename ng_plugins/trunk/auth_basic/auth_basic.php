@@ -11,11 +11,6 @@ global $AUTH_METHOD;
 global $AUTH_CAPABILITIES;
 global $config;
 
-$AUTH_METHOD['basic']	= new auth_basic;
-$AUTH_CAPABILITIES['basic'] = array('login' => '1', 'db' => '1');
-
-if (extra_get_param('auth_basic','en_dbprefix')) { $config['uprefix'] = extra_get_param('auth_basic','dbprefix'); }
-
 class auth_basic {
 
 	// Осуществить вход
@@ -64,7 +59,7 @@ class auth_basic {
 	 	$auth_cookie = $_COOKIE['zz_auth'];
 	 	if (!$auth_cookie) { return ''; }
 
-	 	$query = "select * from ".uprefix."_users where authcookie = ".db_squote($auth_cookie);
+	 	$query = "select * from ".uprefix."_users where authcookie = ".db_squote($auth_cookie)." limit 1";
 	 	$row = $mysql->record($query);
 
 	 	if ($row['name']) { return $row; }
@@ -311,4 +306,10 @@ class auth_basic {
 		return 0;
 	}
 }
-?>
+
+$AUTH_METHOD['basic']	= new auth_basic;
+$AUTH_CAPABILITIES['basic'] = array('login' => '1', 'db' => '1');
+
+if (extra_get_param('auth_basic','en_dbprefix')) { 
+	$config['uprefix'] = extra_get_param('auth_basic','dbprefix');
+}
