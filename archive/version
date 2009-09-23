@@ -5,7 +5,7 @@
 ID: archive
 Name: Show news archive
 Version: 0.04
-Acts: core, index
+Acts: index
 File: archive.php
 Config: config.php
 Type: widget

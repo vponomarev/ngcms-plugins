@@ -5,7 +5,7 @@
 ID: popular
 Name: Show most popular news
 Version: 0.06
-Acts: core, index
+Acts: index
 File: popular.php
 Config: config.php
 Type: widget

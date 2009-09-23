@@ -5,7 +5,7 @@
 ID: lastnews
 Name: Show last news
 Version: 0.12
-Acts: core, index
+Acts: index
 File: lastnews.php
 Config: config.php
 Type: widget
