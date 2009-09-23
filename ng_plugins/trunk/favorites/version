@@ -5,7 +5,7 @@
 ID: favorites
 Name: Show favorite news
 Version: 0.06
-Acts: core, index
+Acts: index
 File: favorites.php
 Config: config.php
 Type: widget

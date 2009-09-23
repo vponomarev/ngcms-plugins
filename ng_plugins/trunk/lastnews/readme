@@ -68,8 +68,8 @@ $overrideParams - конфигурационный ассоциативный массив со следующими параметрам
  * overrideTemplatePath - путь, в котором хранятся шаблоны lastnews.tpl/entries.tpl для данного
    блока.
    При задании этой переменной вы можете использовать встроенную константы:
-   > tpl_path - указывает путь к текущему шаблону сайта (с '/' в конце)
-   		пример: tpl_path . 'plugins/lastnews/skin1'
+   > tpl_site - указывает путь к текущему шаблону сайта (с '/' в конце)
+   		пример: tpl_site . 'plugins/lastnews/skin1'
    > root     - указывает путь к каталогу /engine (без '/' в конце)
 		пример: root . '/plugins/lastnews/tpl/skins/skin1'
 

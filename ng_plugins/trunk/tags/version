@@ -5,7 +5,7 @@
 ID: tags
 Name: Теги
 Version: 0.14
-Acts: core
+Acts: index,news,ppages
 File: tags.php
 Config: config.php
 Install: install.php
