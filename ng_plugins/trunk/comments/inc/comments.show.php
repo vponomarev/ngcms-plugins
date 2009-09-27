@@ -49,7 +49,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	$comnum = 0;
 
 	// Check if we need to use limits
-	if ($callingParams['limitStart'] || $callingParams['limitCount']) {
+	if (isset($callingParams['limitStart']) && ($callingParams['limitStart'] || $callingParams['limitCount'])) {
 		$sql .= ' limit '.intval($callingParams['limitStart']).", ".intval($callingParams['limitCount']);
 		$comnum = intval($callingParams['limitStart']);
 	}
@@ -85,14 +85,16 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		if ($config['use_smilies'])			{ $text = $parse -> smilies($text); }
 
 
+		/*
 		if (intval($config['com_wrap']) && (strlen($text) > $config['com_wrap'])) {
 			$tvars['vars']['comment-short']	=	substr($text, 0, $config['com_wrap']);
 			$tvars['vars']['comment-full']	=	substr($text, $config['com_wrap']);
 			$tvars['regx']["'\[comment_full\](.*?)\[/comment_full\]'si"] = '$1';
 		} else {
+		*/
 			$tvars['vars']['comment-short'] = $text;
 			$tvars['regx']["'\[comment_full\](.*?)\[/comment_full\]'si"] = '';
-		}
+		/* } */
 		if ($commID && $commDisplayNum)
 			$comnum = $commDisplayNum;
 
@@ -151,7 +153,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		}
 
 		// RUN interceptors
-		if (is_array($PFILTERS['comments']))
+		if (isset($PFILTERS['comments']) && is_array($PFILTERS['comments']))
 			foreach ($PFILTERS['comments'] as $k => $v)
 				$v->showComments($newsID, $row, $comnum, $tvars);
 

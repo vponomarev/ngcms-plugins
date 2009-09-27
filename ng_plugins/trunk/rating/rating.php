@@ -99,7 +99,7 @@ function plugin_rating_screen(){
 // Фильтр новостей (для показа рейтинга)
 //
 class RatingNewsFilter extends NewsFilter {
-	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		global $tpl, $mysql, $userROW;
 
 		$tvars['vars']['plugin_rating'] = rating_show($SQLnews['id'],$SQLnews['rating'],$SQLnews['votes']);

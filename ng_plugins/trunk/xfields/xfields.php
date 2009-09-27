@@ -48,7 +48,7 @@ class XFieldsNewsFilter extends NewsFilter {
 		$tv = array ( 'vars' => array( 'entries' => $output));
 		$tpl -> template('add_news', extras_dir.'/xfields/tpl');
 		$tpl -> vars('add_news', $tv);
-		$tvars['vars']['plugin_xfields'] .= $tpl -> show('add_news');
+		$tvars['vars']['plugin_xfields'] = $tpl -> show('add_news');
 		return 1;
 	}
 	function addNews(&$tvars, &$SQL) {
@@ -141,7 +141,7 @@ class XFieldsNewsFilter extends NewsFilter {
 	}
 
 	// Show news call :: processor (call after all processing is finished and before show)
-	function showNews($newsID, $SQLnews, &$tvars) {
+	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		// Try to load config. Stop processing if config was not loaded
 		if (($xf = xf_configLoad()) === false) return;
 
@@ -151,8 +151,9 @@ class XFieldsNewsFilter extends NewsFilter {
 		if (is_array($xf['news']))
 			foreach ($xf['news'] as $k => $v) {
 				$kp = preg_quote($k, "'");
-				$tvars['regx']["'\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]'is"] = ($fields[$k] == "")?"":"$1";
-				$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$fields[$k]).(strlen($fields[$k])?'<br/>':'')):$fields[$k];
+				$xfk = isset($fields[$k])?$fields[$k]:'';
+				$tvars['regx']["'\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]'is"] = ($xfk == "")?"":"$1";
+				$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':'')):$xfk;
 			}
 		$SQLnews['content'] = $content;
 	}

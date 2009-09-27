@@ -168,6 +168,7 @@ function doAddEdit() {
 	$data['title']		= $_REQUEST['title'];
 	$data['required']	= intval($_REQUEST['required']);
 	$data['type']		= $_REQUEST['type'];
+	$data['default']	= '';
 
 	switch ($data['type']) {
 		case 'text':
@@ -194,8 +195,8 @@ function doAddEdit() {
 					$optvals[$line] = 1;
 				}
 			}
-			if (intval($_REQUEST['select_storekeys']))
-				$data['storekeys']	= 1;
+			
+			$data['storekeys'] = intval($_REQUEST['select_storekeys'])?1:0;
 
 			$data['options'] = $optlist;
 			if (trim($_REQUEST['select_default'])) {

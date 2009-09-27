@@ -77,7 +77,7 @@ function plug_calgen($month, $year) {
 						generateLink('news', 'by.day', array('year' => $year, 'month' => $month, 'day' => sprintf('%02u', $dayno))):
 						generateLink('core', 'plugin', array('plugin' => 'news', 'handler' => 'by.day'), array('year' => $year, 'month' => $month, 'day' => $dayno));
 
-		  $tvars['vars']['d'.$j]	= ($counters[$dayno]?('<a href="'.$day_link.'">'.$dayno.'</a>'):$dayno);
+		  $tvars['vars']['d'.$j]	= ((isset($counters[$dayno]) && $counters[$dayno])?('<a href="'.$day_link.'">'.$dayno.'</a>'):$dayno);
 		  $tvars['vars']['cl'.$j]	= $lang['calendar_class_'.(($flagCurrentMonth && ($localTime[3] == $dayno))?'today_':'').'week'.(($j<6)?'day':'end')];
 	  } else {
 	  	$tvars['vars']['d'.$j]		= '';
