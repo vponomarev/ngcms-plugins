@@ -146,7 +146,7 @@ class TagsNewsfilter extends NewsFilter {
 	}
 
 	// Add {plugin_tags_news} variable into news
-	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		global $mysql, $tpl;
 
 		// Check if we have tags in news

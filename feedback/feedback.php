@@ -119,13 +119,14 @@ function plugin_feedback_screen() {
 }
 
 function plugin_feedback_post() {
- global $template, $tpl, $lang, $mysql, $userROW;
+ global $template, $tpl, $lang, $mysql, $userROW, $SYSTEM_FLAGS;
 
  // Determine paths for all template files
  $tpath = locatePluginTemplates(array('site.infoblock', 'site.form.hdr', 'site.form.row'), 'feedback', extra_get_param('feedback', 'localsource'));
  $ptpl_url = admin_url.'/plugins/feedback/tpl';
 
  $form_id = intval($_REQUEST['id']);
+ $SYSTEM_FLAGS['info']['title']['group']		= $lang['feedback:header.title'];
 
  if (!is_array($frow = $mysql->record("select * from ".prefix."_feedback where active = 1 and id = ".$form_id))) {
 	$tpl->template('site.infoblock', $tpath['site.infoblock']);
@@ -133,6 +134,9 @@ function plugin_feedback_post() {
 	$template['vars']['mainblock']      =  $tpl->show('site.infoblock');
 	return 1;
  }
+
+ $SYSTEM_FLAGS['info']['title']['item']	= str_replace('{title}', $frow['title'], $lang['feedback:header.send']);
+
 
  // Unpack form data
  $fData = unserialize($frow['struct']);

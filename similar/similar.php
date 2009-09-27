@@ -38,7 +38,7 @@ class SimilarNewsfilter extends NewsFilter {
 	}
 
 	// Add {plugin_similar} variable into news
-	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		global $mysql, $tpl, $PFILTERS;
 
 		$tpath = locatePluginTemplates(array('similar', 'similar_entry'), 'similar', extra_get_param('similar', 'localsource'));

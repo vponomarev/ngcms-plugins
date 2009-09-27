@@ -378,7 +378,7 @@ function plugin_complain_update() {
 // Фильтр новостей (для генерации блока "сообщить о проблеме")
 //
 class ComplainNewsFilter extends NewsFilter {
-	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		global $tpl, $mysql, $userROW;
 
 		// Show only in full news

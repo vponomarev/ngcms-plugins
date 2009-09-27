@@ -5,10 +5,11 @@ if (!defined('NGCMS')) die ('HAL');
 
 class BBmediaNewsfilter extends NewsFilter {
 	// Add {plugin_similar} variable into news
-	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		global $config, $parse;
 
 		foreach (array('short-story', 'full-story') as $varKeyName) {
+			if (!isset($tvars['vars'][$varKeyName])) { continue; }
 			if (preg_match_all("#\[media(\=| *)(.*?)\](.*?)\[\/media\]#is", $tvars['vars'][$varKeyName], $pcatch, PREG_SET_ORDER)) {
 				$rsrc = array();
 				$rdest = array();
