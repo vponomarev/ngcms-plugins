@@ -29,7 +29,7 @@ function plugin_archive() {
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('entries', 'archive'), 'archive', extra_get_param('archive', 'localsource'));
 
-
+	$result = '';
 	foreach($mysql->select("SELECT month(from_unixtime(postdate)) as month, year(from_unixtime(postdate)) as year, COUNT(id) AS cnt, postdate FROM ".prefix."_news WHERE approve = '1' GROUP BY year(from_unixtime(postdate)), month(from_unixtime(postdate)) ORDER BY postdate DESC limit $maxnum") as $row){
 	    $month_link = checkLinkAvailable('news', 'by.month')?
 					generateLink('news', 'by.month', array('year' => $row['year'], 'month' => sprintf('%02u', $row['month']))):

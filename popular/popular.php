@@ -13,7 +13,7 @@ function plugin_popular() {
 	$maxlength = intval(extra_get_param('popular','maxlength'));
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
-	$cacheFileName = md5('popular'.$config['theme'].$config['default_lang'].$year.$month).'.txt';
+	$cacheFileName = md5('popular'.$config['theme'].$config['default_lang']).'.txt';
 
 	if (extra_get_param('popular','cache')) {
 		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('popular','cacheExpire'), 'popular');

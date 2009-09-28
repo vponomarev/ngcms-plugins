@@ -69,7 +69,7 @@ function rating_show($newsID, $rating, $votes){
 	$tvars['vars']['rating'] = (!$rating || !$votes) ? 0 : round(($rating / $votes), 0);
 	$tvars['vars']['votes'] = $votes;
 
-	if ($_COOKIE['rating'.$newsID] || (extra_get_param('rating','regonly') && !is_array($userROW))) {
+	if ((isset($_COOKIE['rating'.$newsID]) && $_COOKIE['rating'.$newsID]) || (extra_get_param('rating','regonly') && !is_array($userROW))) {
 		// Show
 		$tpl -> template('rating', $tpath['rating']);
 		$tpl -> vars('rating', $tvars);
