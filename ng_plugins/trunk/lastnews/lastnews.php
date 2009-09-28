@@ -48,7 +48,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 	} else {
 		$number = intval($overrideParams['number']);
 	}
-	$offset = intval($overrideParams['offset']);
+	$offset = isset($overrideParams['offset'])?intval($overrideParams['offset']):0;
 
 	if (intval($overrideParams['maxlength']) <= 1) {
 		$maxlength = 100;
@@ -57,7 +57,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 	}
 
 	// Determine paths for all template files
-	if ($overrideParams['overrideTemplatePath']) {
+	if (isset($overrideParams['overrideTemplatePath']) && $overrideParams['overrideTemplatePath']) {
 		$tpath = array('entries' => $overrideParams['overrideTemplatePath'], 'lastnews' => $overrideParams['overrideTemplatePath']);
 	} else {
 		$tpath = locatePluginTemplates(array('entries', 'lastnews'), 'lastnews', extra_get_param('lastnews', 'localsource'));
@@ -96,6 +96,8 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 		load_extras('news:show');
 		load_extras('news:show:one');
 	}
+
+	$result = '';
 	foreach ($mysql->select("select * from ".prefix."_news where ".join(" AND ", $filter)." order by ".($orderby?$orderby:"id desc")." limit ".$offset.",".$number) as $row) {
 		// Execute filters [ if requested ]
 		if (extra_get_param('lastnews', 'pcall') && is_array($PFILTERS['news']))
@@ -107,7 +109,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 		);
 
 		// Set formatted date
-		$dformat = ($overrideParams['dateformat'])?$overrideParams['dateformat']:(extra_get_param('lastnews','dateformat')?extra_get_param('lastnews','dateformat'):'{day0}.{month0}.{year}');
+		$dformat = (isset($overrideParams['dateformat']))?$overrideParams['dateformat']:(extra_get_param('lastnews','dateformat')?extra_get_param('lastnews','dateformat'):'{day0}.{month0}.{year}');
 		$tvars['vars']['date'] = str_replace(array('{day}', '{day0}', '{month}', '{month0}', '{year}', '{year2}', '{month_s}', '{month_l}'),
 						array(date('j',$row['postdate']), date('d',$row['postdate']), date('n',$row['postdate']), date('m',$row['postdate']), date('y',$row['postdate']), date('Y',$row['postdate']), $langShortMonths[date('n',$row['postdate'])-1], $langMonths[date('n',$row['postdate'])-1]), $dformat);
 
