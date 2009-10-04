@@ -20,6 +20,13 @@ function plugin_rss_export_generate($catname = ''){
    	global $lang, $PFILTERS;
 	global $template, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $mysql, $catz;
 
+	// Disable executing of `index` action (widget plugins and so on..)
+	actionDisable('index');
+
+	// Suppress templates
+	$SUPRESS_TEMPLATE_SHOW = 1;
+	$SUPRESS_MAINBLOCK_SHOW = 1;
+
 	// Generate header
 	$xcat = isset($catz[$catname])?$catz[$catname]:'';
 
@@ -31,8 +38,6 @@ function plugin_rss_export_generate($catname = ''){
 		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('rss_export','cacheExpire'), 'rss_export');
 		if ($cacheData != false) {
 			// We got data from cache. Return it and stop
-			$SUPRESS_TEMPLATE_SHOW = 1;
-			$SUPRESS_MAINBLOCK_SHOW = 1;
 			print $cacheData;
 			return;
 		}
@@ -100,9 +105,7 @@ function plugin_rss_export_generate($catname = ''){
 	setlocale(LC_TIME,$old_locale);
 	$output .= " </channel>\n</rss>\n";
 
-	$SUPRESS_TEMPLATE_SHOW = 1;
-	$SUPRESS_MAINBLOCK_SHOW = 1;
-
+	// Print output
 	print $output;
 
 	if (extra_get_param('rss_export','cache')) {
