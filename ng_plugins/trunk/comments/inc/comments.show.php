@@ -49,9 +49,11 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	$comnum = 0;
 
 	// Check if we need to use limits
-	if (isset($callingParams['limitStart']) && ($callingParams['limitStart'] || $callingParams['limitCount'])) {
-		$sql .= ' limit '.intval($callingParams['limitStart']).", ".intval($callingParams['limitCount']);
-		$comnum = intval($callingParams['limitStart']);
+	$limitStart = isset($callingParams['limitStart'])?intval($callingParams['limitStart']):0;
+	$limitCount = isset($callingParams['limitCount'])?intval($callingParams['limitCount']):0;
+	if ($limitStart || $limitCount) {
+		$sql .= ' limit '.$limitStart.", ".$limitCount;
+		$comnum = $limitStart;
 	}
 
 	$timestamp = extra_get_param('comments', 'timestamp');
