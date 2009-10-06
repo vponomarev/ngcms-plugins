@@ -25,7 +25,7 @@ class clFilterComments extends FilterComments {
 
 		// Manage blocking
 		foreach (explode("\n",extra_get_param('filter','block')) as $line) {
-			if ($line && strpos(' '.$c,trim($line))) {
+			if ($line && stripos(' '.$c,trim($line))) {
 				loadPluginLang('filter', 'filter', '', '', ':');
 				msg(array("type" => "error", "text" => str_replace('%lock%', trim($line), $lang['filter:block'])));
 				return 0;

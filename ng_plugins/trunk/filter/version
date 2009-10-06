@@ -1,10 +1,10 @@
 ;
-; Version description file for plugin @@ 2z project
+; Version description file for plugin @@ Next Generation CMS
 ;
 
 ID: filter
 Name: Filter
-Version: 0.03
+Version: 0.04
 Acts: comments:add
 File: filter.php
 Config: config.php
