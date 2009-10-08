@@ -10,12 +10,6 @@ if (!defined('NGCMS')) die ('HAL');
 // Flags:
 // N - inform reporter about status changes of incident
 
-register_filter('news','complain', new ComplainNewsFilter);
-register_plugin_page('complain','','plugin_complain_screen',0);
-register_plugin_page('complain','add','plugin_complain_add',0);
-register_plugin_page('complain','post','plugin_complain_post',0);
-register_plugin_page('complain','update','plugin_complain_update',0);
-
 function plugin_complain_resolve_error($id) {
  foreach (explode("\n",extra_get_param('complain', 'errlist')) as $erow) {
   if (preg_match('#^(\d+)\|(.+?)$#', trim($erow), $m) && ($m[1] == $id)) {
@@ -426,3 +420,9 @@ class ComplainNewsFilter extends NewsFilter {
 		$tvars['vars']['plugin_complain']      =  $tpl->show('int.form');
 	}
 }
+
+register_filter('news','complain', new ComplainNewsFilter);
+register_plugin_page('complain','','plugin_complain_screen',0);
+register_plugin_page('complain','add','plugin_complain_add',0);
+register_plugin_page('complain','post','plugin_complain_post',0);
+register_plugin_page('complain','update','plugin_complain_update',0);
