@@ -14,7 +14,7 @@ plugins_load_config();
 // Fill configuration parameters
 $cfg = array();
 $cfgX = array();
-array_push($cfg, array('descr' => 'Плагин реализует базовый функционал работы с комментариями'));
+array_push($cfg, array('descr' => 'Плагин реализует базовый функционал работы с комментариями.<br/><font color="red"><b>Обратите внимание:</b> плагин для своей работы использует файлы-шаблоны из <u>основного шаблона сайта</u></font>.'));
 
 $cfgX = array();
 array_push($cfgX, array('name' => 'regonly', 'title' => "Комментарии только для зарегистрированных", 'descr' => '<b>Да</b> - комментарии могут оставлять только зарегистрированные пользователи<br/><b>Нет</b> - комментарии может оставить любой посетитель', 'type' => 'select', 'values' => array ( '0' => 'Нет', '1' => 'Да'), 'value' => intval(extra_get_param($plugin,'regonly'))));
