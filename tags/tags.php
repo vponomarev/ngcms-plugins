@@ -292,7 +292,7 @@ function plugin_tags_tag() {
 	LoadPluginLang('tags', 'main', '', '', ':');
 
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['tags:header.tag.title'];
-	$tpath = locatePluginTemplates(array('cloud', 'pages', 'cloud.tag.entry'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
+	$tpath = locatePluginTemplates(array('cloud', 'cloud.tag', 'pages', 'cloud.tag.entry'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
 
 
 	include_once root.'includes/news.php';
@@ -336,7 +336,7 @@ function plugin_tags_tag() {
 
 		} else {
 			$limit = 'limit '.$perPage;
-			$pages = '';
+			$pagesCount = 1;
 		}
 
 		foreach ($mysql->select("select n.* from ".prefix."_tags_index i left join ".prefix."_news n on n.id = i.newsID where i.tagID =".db_squote($rec['id'])." order by n.postdate desc ".$limit) as $row) {
@@ -344,11 +344,13 @@ function plugin_tags_tag() {
 		}
 	}
 	$tvars = array ( 'vars' => array ( 'entries' => $entries, 'tag' => $tag, 'pages' => $pages));
-	$tvars['regx']['#\[paginator\](.*?)\[\/paginator\]#is'] = ($pages != '')?'$1':'';
+	$tvars['regx']['#\[paginator\](.*?)\[\/paginator\]#is'] = ($pagesCount > 1)?'$1':'';
 
-	$tpl -> template('cloud', $tpath['cloud']);
-	$tpl -> vars('cloud', $tvars);
-	$template['vars']['mainblock'] = $tpl -> show('cloud');
+	// Check if we have template `tag`
+	$tplName = isset($tpath['cloud.tag'])?'cloud.tag':'cloud';
+	$tpl -> template($tplName, $tpath[$tplName]);
+	$tpl -> vars($tplName, $tvars);
+	$template['vars']['mainblock'] = $tpl -> show($tplName);
 
 
 }
