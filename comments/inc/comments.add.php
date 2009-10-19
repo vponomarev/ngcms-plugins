@@ -82,6 +82,13 @@ function comments_add(){
 			msg(array("type" => "error", "text" => $lang['comments:err.badmail']));
 			return;
 		}
+		// Check if guest wants to use email of already registered user
+		if (pluginGetVariable('comments', 'guest_edup_lock')) {
+			if (is_array($mysql->record("select * from ".uprefix."_users where mail = ".db_squote($SQL['mail'])." limit 1"))) {
+				msg(array("type" => "error", "text" => $lang['comments:err.edupmail']));
+				return;
+			}
+		}
 	}
 
 	$maxlen = intval(extra_get_param('comments', 'maxlen'));
