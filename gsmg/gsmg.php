@@ -45,7 +45,6 @@ function plugin_gsmg_screen() {
 			$cnt = $mysql->record("select count(*) as cnt from ".prefix."_news");
 			$pages = ceil($cnt['cnt'] / $config['number']);
 			for ($i = 2; $i <= $pages; $i++) {
-				$link = getLink('page', array('page' => $i));
 				$output.= "<url>";
 				$output.= "<loc><![CDATA[".$config['home_url'].generateLink('news', 'main', array('page' => $i))."]]></loc>";
 				$output.= "<priority>".floatval(extra_get_param('gsmg', 'mainp_pr'))."</priority>";
@@ -59,7 +58,6 @@ function plugin_gsmg_screen() {
 	// Ќадо ли выводить данные по категори€м
 	if (extra_get_param('gsmg','cat')) {
 		foreach  ($catmap as $id => $altname) {
-				$link = getLink('category', array('id' => $id, 'alt' => $altname));
 				$output.= "<url>";
 				$output.= "<loc><![CDATA[".$config['home_url'].generateLink('news', 'by.category', array('category' => $altname, 'catid' => $id))."]]></loc>";
 				$output.= "<priority>".floatval(extra_get_param('gsmg', 'cat_pr'))."</priority>";
@@ -70,7 +68,6 @@ function plugin_gsmg_screen() {
 			if (extra_get_param('gsmg', 'catp')) {
 				$pages = ceil($catz[$altname]['posts'] / $config['number']);
 				for ($i = 2; $i <= $pages; $i++) {
-					$link = getLink('category_page', array('page' => $i, 'alt' => $altname));
 					$output.= "<url>";
 					$output.= "<loc><![CDATA[".$config['home_url'].generateLink('news', 'by.category', array('category' => $altname, 'catid' => $id, 'page' => $i))."]]></loc>";
 					$output.= "<priority>".floatval(extra_get_param('gsmg', 'catp_pr'))."</priority>";
