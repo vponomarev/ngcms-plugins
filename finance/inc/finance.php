@@ -80,7 +80,8 @@ function finance_register_acceptor(&$ref) {
 // параметры:
 // $userlogin	- логин пользователя чей баланс проверяем
 // $balance_no	- номер баланса для проверки (0 - основной баланс, -1 - считать общую сумму со всех монетарных балансов)
-//
+// возвращаемое значение:
+// * сумма баланса указанного пользователя (если пользователь не найден, то 0)
 
 function finance_check_money($userlogin, $balance_no = -1) {
 	global $mysql, $userROW, $FINANCE_CACHE;
