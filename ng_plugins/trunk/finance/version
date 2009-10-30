@@ -5,7 +5,7 @@
 ID: finance
 Name: Finance manager
 Version: 0.12
-Acts: core, ppages, addnews, addnews_form, addnews_, editnews_entry, editnews
+Acts: core, ppages
 File: finance.php
 Config: config.php
 Install: install.php
