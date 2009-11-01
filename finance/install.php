@@ -81,16 +81,19 @@ function plugin_finance_install($action) {
 	    array('action' => 'cmodify', 'name' => 'dt', 'type' => 'datetime'),
 	    // Тип операции: 1 - приход, 2 - расход
 	    array('action' => 'cmodify', 'name' => 'operation_type', 'type' => 'int'),
-	    // С какого баланса списывались/начислялись деньги (-1 - по дефолту)
-	    array('action' => 'cmodify', 'name' => 'balance_no', 'type' => 'int', 'params' => 'default -1'),
-	    // Сумма списания/начисления
-	    array('action' => 'cmodify', 'name' => 'sum', 'type' => 'int', 'params' => 'default 0'),
+	    // Описываем изменения балансов
+	    array('action' => 'cmodify', 'name' => 'balance',  'type' => 'int', 'params' => 'default 0'),
+	    array('action' => 'cmodify', 'name' => 'balance1', 'type' => 'int', 'params' => 'default 0'),
+	    array('action' => 'cmodify', 'name' => 'balance2', 'type' => 'int', 'params' => 'default 0'),
+	    array('action' => 'cmodify', 'name' => 'balance3', 'type' => 'int', 'params' => 'default 0'),
+	    array('action' => 'cmodify', 'name' => 'balance4', 'type' => 'int', 'params' => 'default 0'),
 	    // В случае списания - параметры "куда"
 	    // subscribe_ref - ссылка на строчку таблицы subscribe_manager
 	    array('action' => 'cmodify', 'name' => 'subscribe_ref', 'type' => 'int'),
 	    array('action' => 'cmodify', 'name' => 'special_access_type', 'type' => 'int'),
 	    array('action' => 'cmodify', 'name' => 'access_group_id', 'type' => 'int'),
 	    array('action' => 'cmodify', 'name' => 'access_element_id', 'type' => 'int'),
+	    array('action' => 'cmodify', 'name' => 'ip', 'type' => 'char(15)'),
 	    array('action' => 'cmodify', 'name' => 'description', 'type' => 'text'),
 	   )
 	 ),

@@ -180,15 +180,15 @@ function finance_get_balance_type($balance_no) {
 //	# 'login'	- Login пользователя
 // $payment - массив с параметрами платежа
 //  # 'type' - тип проводимого платежа:
-//     'money'  -	_только_ валютный
-//     'points' -	_только_ в поинтах
-//     'auto'   -	[default] сначала пытаемся списать в поинтах, если их недостаточно -
+//	'money'  -	_только_ валютный
+//	'points' -	_только_ в поинтах
+//	'auto'   -	[default] сначала пытаемся списать в поинтах, если их недостаточно -
 //					 списываем средства в валюте
-//	# 'ptype' - тип поинтов для оплаты (в случае авто оплаты или оплаты по поинтам)
-//	# 'value' - массив с параметрами платежа
-//		'money' = сумма платежа в валюте
-//		'points' = массив (тип поинтов,кол-во поинтов) при списании в поинтах
-//	# 'description' - описание платежа [ для помещения в таблицу finance_history ]
+//  # 'ptype' - тип поинтов для оплаты (в случае авто оплаты или оплаты по поинтам)
+//  # 'value' - массив с параметрами платежа
+//	'money'  =	сумма платежа в валюте
+//	'points' =	массив (тип поинтов,кол-во поинтов) при списании в поинтах
+//  # 'description' - описание платежа [ для помещения в таблицу finance_history ]
 //
 
 function finance_pay($identity, $payment) {
@@ -270,13 +270,13 @@ function finance_pay($identity, $payment) {
 		}
 
 	}
-
+	
 	// Если мы дошли до этой точки, значит готовы списывать средства со счета пользователя
 	// * списание
 	$mysql->query("update ".uprefix."_users set ".implode(", ", $bupdate)." where ".(isset($identity['id'])?('id='.db_squote($identity['id'])):'login='.db_squote($identity['name'])));
 
 	// * сохранение лога
-	$mysql->query("insert into ".prefix."_finance_history (user_id, dt, operation_type, paytype, sum) values (".db_squote($res['id']).", now(), 1, ".($enough?(db_squote($value['points'][0]).", ".db_squote($value['points'][1])):("'', ".db_squote($value['money']))));
+	$mysql->query("insert into ".prefix."_finance_history (user_id, dt, operation_type, sum) values (".db_squote($res['id']).", now(), 2, ".($enough?(db_squote($value['points'][0]).", ".db_squote($value['points'][1])):("'', ".db_squote($value['money']))));
 
 	// * Возвращаем информацию об успешном списании
 	return 1;
@@ -288,8 +288,8 @@ function finance_pay($identity, $payment) {
 // $balance - номер баланса на который класть деньги (0 - core balance)
 // $sum - сумма (в валюте или "поинтах") которую необходимо положить на счет
 //
-function finance_add_money($userlogin, $balance, $sum) {
-	global $mysql, $userROW;
+function finance_add_money($userlogin, $balance, $sum, $description = '') {
+	global $mysql, $userROW, $ip;
 
 	if (is_array($userROW) && ($userlogin == $userROW['name'])) {
 		$res = $userROW;
@@ -300,6 +300,10 @@ function finance_add_money($userlogin, $balance, $sum) {
 		// Пользователь найден
 		//print "Add money request for user '$userlogin', balance no '$balance' sum '$sum'<br />\n"."update ".uprefix.'_users set balance_'.$balance.'=balance_'.$balance.'+'.intval($sum*100).' where id = '.$res['id'];
 		$mysql->query("update ".uprefix.'_users set balance'.$balance.'=balance'.$balance.'+'.intval($sum*100).' where id = '.$res['id']);
+
+		// * сохранение лога
+		$mysql->query("insert into ".prefix."_finance_history (user_id, dt, operation_type, balance".($balance>0?$balance:'').", ip, description) values (".db_squote($res['id']).", now(), 1, ".intval($sum*100).", ".db_squote($ip).", ".db_squote($description).")");
+		
 		return 1;
 	} else { print "Unknow user: $userlogin"; }
 	return 0;
