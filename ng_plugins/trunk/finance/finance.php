@@ -128,13 +128,14 @@ add_act('usermenu', 'finance_info_menu');
 function finance_info($sth) {
  global $userROW, $template;
 
- $template['vars']['plugin_finance_balance'] = is_array($userROW)?sprintf("%.02f", finance_check_money($userROW['name'])/100):'';
+ $template['vars']['plugin_finance_balance'] = is_array($userROW)?(sprintf("%.02f", finance_check_money($userROW['name'])/100).' '.pluginGetVariable('finance', 'syscurrency')):'';
 }
 
 function finance_info_menu($sth) {
  global $userROW, $tvars;
 
- $tvars['vars']['plugin_finance_balance'] = is_array($userROW)?sprintf("%.02f", finance_check_money($userROW['name'])/100):'';
+ $tvars['vars']['plugin_finance_balance'] = is_array($userROW)?(sprintf("%.02f", finance_check_money($userROW['name'])/100).' '.pluginGetVariable('finance', 'syscurrency')):'';
+ //$tvars['vars']['plugin_finance_balance'] = is_array($userROW)?sprintf("%.02f", finance_check_money($userROW['name'])/100):'';
 }
 
 //
