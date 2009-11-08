@@ -234,9 +234,14 @@ function plugin_finance_pay_accept($need_form=0) {
 	$acceptor_id = $_REQUEST['acceptor'];
 	foreach ($FINANCE_MONEY_ACCEPTORS as $acceptor) {
 		if ($acceptor->active && ($acceptor->id == $acceptor_id)) {
-			// Выводим форму от аксептора
-			if ($need_form) { $template['vars']['mainblock'] = $acceptor->paymentAcceptForm(secure_html($_REQUEST['needsum'])); }
-			else { $template['vars']['mainblock'] = $acceptor->paymentAccept(); }
+			// Определяем что надо сделать
+			if ($need_form) {
+				// Выводим форму от аксептора
+				$template['vars']['mainblock'] = $acceptor->paymentAcceptForm(secure_html($_REQUEST['needsum']));
+			} else {
+				// Автоматизированное проведение платежа
+				$template['vars']['mainblock'] = $acceptor->paymentAccept();
+			}
 			return;
 		}
 	}
