@@ -92,6 +92,9 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tvars['vars']['id'] = $field;
 		$tvars['vars']['title'] = $data['title'];
 		$tvars['vars']['type'] = $data['type'];
+		$tvars['vars']['storage'] = intval($data['storage']);
+		$tvars['vars']['db.type'] = $data['db.type'];
+		$tvars['vars']['db.len'] = (intval($data['db.len'])>0)?intval($data['db.len']):'';
 
 		$xsel = '';
 		foreach (array('text', 'textarea', 'select') as $ts) {
@@ -119,6 +122,10 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tvars['vars']['title'] = '';
 		$tvars['vars']['type'] = 'text';
 
+		$tvars['vars']['storage'] = '0';
+		$tvars['vars']['db.type'] = '';
+		$tvars['vars']['db.len'] = '';
+
 		$xsel = '';
 		foreach (array('text', 'textarea', 'select') as $ts) {
 			$tvars['vars'][$ts.'_default'] = '';
@@ -140,7 +147,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 //
 //
 function doAddEdit() {
-	global $xf, $XF, $lang, $tpl;
+	global $xf, $XF, $lang, $tpl, $mysql;
 
 	$error = 0;
 
@@ -195,7 +202,7 @@ function doAddEdit() {
 					$optvals[$line] = 1;
 				}
 			}
-			
+
 			$data['storekeys'] = intval($_REQUEST['select_storekeys'])?1:0;
 
 			$data['options'] = $optlist;
@@ -226,9 +233,34 @@ function doAddEdit() {
 			$error = 1;
 	}
 
+	// Check for storage params
+	$data['storage']	= $_REQUEST['storage'];
+	$data['db.type']	= $_REQUEST['db_type'];
+	$data['db.len']		= intval($_REQUEST['db_len']);
+
+	if ($data['storage']) {
+		// Check for correct DB type
+		if (!in_array($data['db.type'], array('int', 'char', 'datetime'))) {
+			msg(array("type" => "error", "text" => $lang['xfields_error.db.type']));
+			$error = 1;
+		}
+
+		// Check for correct DB len (if applicable)
+		if (($data['db.type'] == 'char')&&((intval($data['db.len'])<1)||(intval($data['db.len'])>255))) {
+			msg(array("type" => "error", "text" => $lang['xfields_error.db.len']));
+			$error = 1;
+		}
+	}
+
 	if ($error) {
 		showAddEditForm($data, $editMode, $field);
 		return;
+	}
+
+	$DB = array();
+	$DB['new'] = array('storage' => $data['storage'], 'db.type' => $data['db.type'], 'db.len' => $data['db.len']);
+	if ($editMode) {
+		$DB['old'] = array('storage' => $XF['news'][$field]['storage'], 'db.type' => $XF['news'][$field]['db.type'], 'db.len' => $XF['news'][$field]['db.len']);
 	}
 
 	$XF['news'][$field] = $data;
@@ -237,6 +269,71 @@ function doAddEdit() {
 		showAddEditForm($data, $editMode, $field);
 		return;
 	}
+
+	// Now we should update table `_news` structure and content
+	$found = 0;
+	foreach ($mysql->select("describe ".prefix."_news", 1) as $row) {
+		if ($row['Field'] == 'xfields_'.$field) {
+			$found = 1;
+			break;
+		}
+	}
+
+	$dbFlagChanged = 0;
+
+	// 1. If we add XFIELD and field already exists in DB - drop it!
+	// 2. If we don't want to store data in separate field - drop it!
+	if ($found && (!$editMode || !$DB['new']['storage'])) { print "DROP";
+		$mysql->query("alter table ".prefix."_news drop column `xfields_".$field."`");
+	}
+
+	// If we need to have this field - let's make it. But only if smth was changed
+	do {
+		if (!$data['storage']) break;
+		// Anything should be done only if field is changed
+		if (($DB['old']['db.type'] == $DB['new']['db.type'])&&($DB['old']['db.len'] == $DB['new']['db.len'])) break;
+
+		$ftype = '';
+		switch ($DB['new']['db.type']) {
+			case 'int':			$ftype = 'int'; break;
+			case 'datetime':	$ftype = 'datetime'; break;
+			case 'char':		if (($DB['new']['db.len'] > 0)&&($DB['new']['db.len'] <= 255)) { $ftype = 'char('.intval($DB['new']['db.len']).')'; break; }
+		}
+
+		if ($ftype) {
+			$dbFlagChanged = 1;
+			if ($found) {
+				$mysql->query("alter table ".prefix."_news change column `xfields_".$field.'` `xfields_'.$field.'` '.$ftype);
+				$mysql->query("update ".prefix."_news set `xfields_".$field."` = NULL");
+			} else {
+				$mysql->query("alter table ".prefix."_news add column `xfields_".$field.'` '.$ftype);
+			}
+		}
+	} while(0);
+
+
+
+	// Second - fill field's content if required
+	if ($DB['new']['storage'] && $dbFlagChanged) {
+		// Make updates with chunks for 500 RECS
+		$recCount = 0;
+		$maxID = 0;
+		do {
+			$recCount = 0;
+			foreach ($mysql->select("select id, xfields from ".prefix."_news where (id > ".$maxID.") and (xfields is not NULL) and (xfields <> '') order by id limit 5") as $rec) {
+				$recCount++;
+				if ($rec['id'] > $maxID) $maxID = $rec['id'];
+				$xlist = xf_decode($rec['xfields']);
+				if (isset($xlist[$field]) && ($xlist[$field] != '')) {
+					$mysql->query("update ".prefix."_news set `xfields_".$field."` = ".db_squote($xlist[$field])." where id = ".db_squote($rec['id']));
+				}
+			}
+		} while ($recCount);
+
+
+
+	}
+
 
 	$tvars = array ( 'vars' => array ( 'id' => $field));
 	$tvars['regx']["'\[edit\](.*?)\[/edit\]'si"] = ($editMode)?'$1':'';

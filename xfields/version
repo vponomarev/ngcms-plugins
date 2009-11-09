@@ -4,7 +4,7 @@
 
 ID: xfields
 Name: Custom fields
-Version: 0.09
+Version: 0.09a
 Acts: core
 File: xfields.php
 Config: config.php

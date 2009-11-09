@@ -9,6 +9,20 @@ function clx(mode) {
  document.getElementById('type_textarea').style.display = (mode == 'textarea')?'block':'none';
  document.getElementById('type_select').style.display = (mode == 'select')?'block':'none';
 }
+function storageMode(mode) {
+// alert(document.getElementById('storageRow'));
+ if (mode == 0) {
+  document.getElementById('storageRow').className = 'contRow3';
+  document.getElementById('db.type').disabled = true;
+  document.getElementById('db.len').disabled = true;
+ } else {
+  document.getElementById('storageRow').className = 'contRow1';
+  document.getElementById('db.type').disabled = false;
+  document.getElementById('db.len').disabled = false;
+ }
+
+}
+
 </script>
 
 <form action="?mod=extra-config&plugin=xfields&action=doedit" method="post" name="xfieldsform">
@@ -20,6 +34,8 @@ function clx(mode) {
 </tr>
 <tr class="contRow1"><td width="50%">{l_xfields_id}</td><td width="47%"><input type="text" name="id" value="{id}" size="40" [edit]readonly[/edit]>[edit] &nbsp; &nbsp; {l_xfields_noeditid}[/edit]</td></tr>
 <tr class="contRow1"><td width="50%">{l_xfields_title}</td><td><input type="text" name="title" value="{title}" size="40" /></td></tr>
+<tr class="contRow1"><td width="50%">Режим сохранения данных:</td><td><select name="storage" id="storage" value="{storage}" onclick="storageMode(this.value);" onchange="storageMode(this.value);" /><option value="0">Единое хранилище</option><option value="1">Персональное поле в БД</option></select></td></tr>
+<tr class="contRow3" id="storageRow"><td width="50%">Тип поля в БД:</td><td><select name="db_type" value="{db.type}" id="db.type" /><option value="int">int - только цифры</option><option value="char">char - текст с ограничением длины</option><option value="datetime">datetime - дата-время</option></select> <input maxlength="3" size="3" type="text" name="db_len" value="{db.len}" id="db.len" /></td></tr>
 <tr class="contRow1"><td width="50%">{l_xfields_type}</td><td><select name="type" id="type" onclick="clx(this.value);" onchange="clx(this.value);" />{type_opts}</select></td></tr>
 </table>
 
@@ -48,4 +64,7 @@ function clx(mode) {
 
 <script type="text/javascript">
 clx('{type}');
+document.getElementById('storage').value = '{storage}';
+document.getElementById('db.type').value = '{db.type}';
+storageMode(document.getElementById('storage').value);
 </script>
