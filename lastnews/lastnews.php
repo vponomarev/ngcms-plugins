@@ -20,12 +20,15 @@ function plugin_lastnews(){
 //   * dateformat	- manually set date format for display [default: "{day0}:{month0}:{year}"]
 //	* {day}		- day number
 //	* {day0}	- day number with leading zero
-//	* {month}
-//	* {month0}
-//	* {year}
-//	* {year2}
-//	* {month_s}
-//	* {month_l}
+//	* {month}       - month number
+//	* {month0}      - month number with leading zero
+//	* {year}        - year (in 4 digit format)
+//	* {year2}       - year (in 2 digit format)
+//	* {month_s}     - month name, short
+//	* {month_l}     - month name, long
+//	* {hour}        - hour
+//	* {hour0}       - hour with leading zero
+//	* {minute0}     - minute with leading zero
 //
 //   * maxlength	- maximum length of news title (cut)
 //   * overrideTemplatePath - path for template
@@ -110,8 +113,8 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 
 		// Set formatted date
 		$dformat = (isset($overrideParams['dateformat']))?$overrideParams['dateformat']:(extra_get_param('lastnews','dateformat')?extra_get_param('lastnews','dateformat'):'{day0}.{month0}.{year}');
-		$tvars['vars']['date'] = str_replace(array('{day}', '{day0}', '{month}', '{month0}', '{year}', '{year2}', '{month_s}', '{month_l}'),
-						array(date('j',$row['postdate']), date('d',$row['postdate']), date('n',$row['postdate']), date('m',$row['postdate']), date('y',$row['postdate']), date('Y',$row['postdate']), $langShortMonths[date('n',$row['postdate'])-1], $langMonths[date('n',$row['postdate'])-1]), $dformat);
+		$tvars['vars']['date'] = str_replace(array('{day}', '{day0}', '{month}', '{month0}', '{year}', '{year2}', '{month_s}', '{month_l}', '{hour}', '{hour0}', '{minute0}'),
+						array(date('j',$row['postdate']), date('d',$row['postdate']), date('n',$row['postdate']), date('m',$row['postdate']), date('y',$row['postdate']), date('Y',$row['postdate']), $langShortMonths[date('n',$row['postdate'])-1], $langMonths[date('n',$row['postdate'])-1], date('G', $row['postdate']), date('H', $row['postdate']), date('i', $row['postdate'])), $dformat);
 
 		if (strlen($row['title']) > $maxlength) {
 			$tvars['vars']['title'] = substr(secure_html($row['title']), 0, $maxlength)."...";
