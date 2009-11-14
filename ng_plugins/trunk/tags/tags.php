@@ -444,7 +444,8 @@ function plugin_tags_generatecloud($ppage = 0){
 	$cloudMax = (intval($displayParams['size3d.max'])>0)?intval($displayParams['size3d.max']):18;
 	if ($cloudMax == $cloudMin) { $cloudMin = 10; $cloudMax = 18; }
 
-	$cloudStep = ($max - $min)/($cloudMax-$cloudMin);
+	$cloudStep = abs(round(($max - $min)/($cloudMax-$cloudMin), 2));
+	if ($cloudStep < 0.01) $cloudStep = 1;
 
 	// Prepare output rows
 	foreach ($rows as $row) {
