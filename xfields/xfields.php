@@ -70,6 +70,9 @@ class XFieldsNewsFilter extends NewsFilter {
 				msg(array("type" => "error", "text" => str_replace('{field}', $id, $lang['xfields_msge_emptyrequired'])));
 				return 0;
 			}
+			// Check if we should save data into separate SQL field
+			if ($data['storage'] && ($rcall[$id] != ''))
+				$SQL['xfields_'.$id] = $rcall[$id];
 		}
 
 	    $SQL['xfields']   = xf_encode($xdata);
@@ -134,6 +137,9 @@ class XFieldsNewsFilter extends NewsFilter {
 				msg(array("type" => "error", "text" => str_replace('{field}', $id, $lang['xfields_msge_emptyrequired'])));
 				return 0;
 			}
+			// Check if we should save data into separate SQL field
+			if ($data['storage'])
+				$SQLnew['xfields_'.$id] = $rcall[$id];
 		}
 
 	    $SQLnew['xfields']   = xf_encode($xdata);

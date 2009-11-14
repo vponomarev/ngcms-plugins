@@ -320,7 +320,7 @@ function doAddEdit() {
 		$maxID = 0;
 		do {
 			$recCount = 0;
-			foreach ($mysql->select("select id, xfields from ".prefix."_news where (id > ".$maxID.") and (xfields is not NULL) and (xfields <> '') order by id limit 5") as $rec) {
+			foreach ($mysql->select("select id, xfields from ".prefix."_news where (id > ".$maxID.") and (xfields is not NULL) and (xfields <> '') order by id limit 500") as $rec) {
 				$recCount++;
 				if ($rec['id'] > $maxID) $maxID = $rec['id'];
 				$xlist = xf_decode($rec['xfields']);
