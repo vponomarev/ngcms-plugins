@@ -432,8 +432,19 @@ function plugin_tags_generatecloud($ppage = 0){
 			$manualstyle = 0;
 	}
 	// Calculate min/max if we have any rows
-	$min = 0; $max = 0;
-	foreach ($rows as $row) { if ($row['posts'] > $max) $max = $row['posts']; }
+	$min = -1; $max = 0;
+	foreach ($rows as $row) { 
+		if ($row['posts'] > $max) $max = $row['posts'];
+		if (($min == -1)||($row['posts'] < $min)) $min = $row['posts'];
+	}
+	
+	// Init variables for 3D cloud
+	$cloud3d = array();
+	$cloudMin = (intval($displayParams['size3d.min'])>0)?intval($displayParams['size3d.min']):10;
+	$cloudMax = (intval($displayParams['size3d.max'])>0)?intval($displayParams['size3d.max']):18;
+	if ($cloudMax == $cloudMin) { $cloudMin = 10; $cloudMax = 18; }
+
+	$cloudStep = ($max - $min)/($cloudMax-$cloudMin);
 
 	// Prepare output rows
 	foreach ($rows as $row) {
@@ -441,6 +452,7 @@ function plugin_tags_generatecloud($ppage = 0){
 					generateLink('tags', 'tag', array('tag' => $row['tag'])):
 					generateLink('core', 'plugin', array('plugin' => 'tags', 'handler' => 'tag'), array('tag' => $row['tag']));
 
+		$cloud3d[] = '<a href="'.$link.'" style="font-size: '.(round(($row['posts']-$min)/$cloudStep)+$cloudMin).'pt">'.iconv('Windows-1251', 'UTF-8', $row['tag']).'</a>';
 		if ($manualstyle) {
 			$mmatch = 0;
 			foreach ($wlist as $wrow) {
@@ -453,7 +465,7 @@ function plugin_tags_generatecloud($ppage = 0){
 			if (!$mmatch)
 				$params = 'class ="'.($stylelist[$styleListCount - round($row['posts']/$max * $styleListCount)]).'"';
 		} else {
-			$params = 'style ="font-size: '.(($row['posts']/$max)*100+100).'%;"';
+			$params = 'style ="font-size: '.(round(($row['posts']/$max)*100+100)).'%;"';
 		}
 
 		$tags[] = str_replace(array('{url}', '{tag}', '{posts}', '{params}'), array($link, $row['tag'], $row['posts'], $params), $displayParams[($ppage?'cloud':'sidebar').'.tag']);
@@ -484,6 +496,8 @@ function plugin_tags_generatecloud($ppage = 0){
 
 
 	$tvars = array ( 'vars' => array ( 'entries' => $tagList, 'tag' => $lang['tags:taglist'], 'pages' => $pages));
+	if (pluginGetVariable('tags', 'cloud3d'))
+		$tvars['vars']['cloud3d'] = urlencode('<tags>'.join(' ', $cloud3d).'</tags>');
 	$tvars['regx']['#\[paginator\](.*?)\[\/paginator\]#is'] = ($pages != '')?'$1':'';
 
 	$tpl -> template($masterTPL, $tpath[$masterTPL]);
