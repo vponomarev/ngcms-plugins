@@ -1,4 +1,4 @@
-<?
+<?php
 
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
