@@ -31,7 +31,7 @@ function plugin_wpinger_servicePing() {
 	global $config;
 
 	// Determine SITEMAP URL
-	$smapURL = $config['home_url'].generateLink('core', 'plugin', array('plugin' => 'gsmg'), array());
+	$smapURL = $config['home_url'].generateLink('core', 'plugin', array('plugin' => 'rss_export'), array());
 
 	// Determine servicing mode:
 	// * DIRECT
