@@ -14,10 +14,13 @@ plugins_load_config();
 function plugin_wpinger_install($action) {
 	global $lang;
 
+	if ($action != 'autoapply')
+		loadPluginLang('wpinger', 'config', '', '', ':');
+
 	// Apply requested action
 	switch ($action) {
 		case 'confirm':
-			generate_install_page('wpinger', "Плагин позволяет информировать внешние системы (обычно - поисковые сервера) об обновлениях на вашем сайте.<br/><br/>");
+			generate_install_page('wpinger', $lang['wpinger:install_text']);
 			break;
 		case 'autoapply':
 		case 'apply':
