@@ -39,8 +39,8 @@ class auth_basic {
 	function save_auth($dbrow) {
 		global $config, $mysql, $ip;
 
-	        // создаём random cookie
-	        $auth_cookie = md5($config['crypto_salt'].uniqid(rand(),1));
+        // создаём random cookie
+        $auth_cookie = md5($config['crypto_salt'].uniqid(rand(),1));
 
 		$query = "update ".uprefix."_users set last = ".db_squote(time()).", ip=".db_squote($ip).", authcookie = ".db_squote($auth_cookie)." where id=".db_squote($dbrow['id']);
 		$mysql->query($query);
@@ -62,7 +62,16 @@ class auth_basic {
 	 	$query = "select * from ".uprefix."_users where authcookie = ".db_squote($auth_cookie)." limit 1";
 	 	$row = $mysql->record($query);
 
-	 	if ($row['name']) { return $row; }
+		// Auth done
+	 	if ($row['name']) {
+			// Check if we need to update last visit field
+	 		if ((pluginGetVariable('auth_basic', 'lastupdate') > 0) && ((time() - $row['last']) > pluginGetVariable('auth_basic', 'lastupdate'))) {
+	 			$query = "update ".uprefix."_users set last = ".db_squote(time()).", ip=".db_squote($ip)." where id=".db_squote($row['id']);
+	 			$mysql->query($query);
+	 		}
+
+	 		return $row;
+	 	}
 	 	return '';
 	}
 
@@ -310,6 +319,6 @@ class auth_basic {
 $AUTH_METHOD['basic']	= new auth_basic;
 $AUTH_CAPABILITIES['basic'] = array('login' => '1', 'db' => '1');
 
-if (extra_get_param('auth_basic','en_dbprefix')) { 
+if (extra_get_param('auth_basic','en_dbprefix')) {
 	$config['uprefix'] = extra_get_param('auth_basic','dbprefix');
 }
