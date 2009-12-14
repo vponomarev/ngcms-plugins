@@ -4,8 +4,8 @@
 
 ID: nsched
 Name: Новости по расписанию
-Version: 0.06
-Acts: cron, addnews, addnews_form, addnews_, editnews_entry, editnews
+Version: 0.07
+Acts: cron, admin:mod:addnews,admin:mod:editnews
 File: nsched.php
 Install: install.php
 Deinstall: uninstall.php
