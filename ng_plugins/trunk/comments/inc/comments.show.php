@@ -154,6 +154,9 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 			$tvars['vars']['ip'] = '';
 		}
 
+		$tvars['regx']['#\[is-logged\](.+?)\[/is-logged\]#is']		= is_array($userROW)?'$1':'';
+		$tvars['regx']['#\[isnt-logged\](.+?)\[/isnt-logged\]#is']	= is_array($userROW)?'':'$1';
+
 		// RUN interceptors
 		if (isset($PFILTERS['comments']) && is_array($PFILTERS['comments']))
 			foreach ($PFILTERS['comments'] as $k => $v)
