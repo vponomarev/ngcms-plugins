@@ -150,7 +150,7 @@ class TagsNewsfilter extends NewsFilter {
 		global $mysql, $tpl;
 
 		// Check if we have tags in news
-		if (!$SQLnews['tags']) {
+		if (!$SQLnews['tags'] && !pluginGetVariable('tags', 'show_always')) {
 			$tvars['regx']["'\[tags\](.*?)\[/tags\]'si"] = '';
 			$tvars['vars']['tags'] = '';
 			return 1;
@@ -174,7 +174,7 @@ class TagsNewsfilter extends NewsFilter {
 			$tags[] = str_replace(array('{url}', '{tag}'), array($link, $tag), $this->displayParams['news.tag']);
 		}
 
-		$tvars['vars']['tags'] = join($this->displayParams['news.tag.delimiter'], $tags);
+		$tvars['vars']['tags'] = count($tags)?(join($this->displayParams['news.tag.delimiter'], $tags)):$this->displayParams['news.notags'];
 		$tvars['vars']['[tags]'] = '';
 		$tvars['vars']['[/tags]'] = '';
 
