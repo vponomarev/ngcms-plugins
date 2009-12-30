@@ -32,11 +32,12 @@
 <script language="javascript">
 var insertCloudElementID = 'insertTagCloud';
 var insertCloudClientWidth = document.getElementById(insertCloudElementID).clientWidth;
-var insertCloudClientHeight = 140;
+var insertCloudClientHeight = insertCloudClientWidth; //140;
 var tagLine = '{cloud3d}';
 var rnumber = Math.floor(Math.random()*9999999);
 var widget_so = new SWFObject("/engine/plugins/tags/tpl/skins/3d/tagcloud.swf?r="+rnumber, "tagcloudflash", insertCloudClientWidth, insertCloudClientHeight, "9", "#ffffff");
 widget_so.addParam("allowScriptAccess", "always");
+widget_so.addParam("wmode", "transparent");
 widget_so.addVariable("tcolor", "0x333333");
 widget_so.addVariable("tspeed", "115");
 widget_so.addVariable("distr", "true");

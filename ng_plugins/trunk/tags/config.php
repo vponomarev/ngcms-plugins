@@ -52,6 +52,7 @@ $cfgX = array();
 array_push($cfgX, array('name' => 'localsource', 'title' => $lang['tags:localsource'], 'descr' => $lang['tags:localsource#desc'], 'type' => 'select', 'values' => array ( '0' => $lang['tags:lsrc_site'], '1' => $lang['tags:lsrc_plugin']), 'value' => intval(extra_get_param($plugin,'localsource'))));
 array_push($cfgX, array('name' => 'skin', 'title'   => $lang['tags:skin'], 'descr' => $lang['tags:skin#desc'], 'type' => 'select', 'values' => $skList, 'value' => extra_get_param('tags','skin')));
 array_push($cfgX, array('name' => 'cloud3d', 'title'   => $lang['tags:cloud3d'], 'descr' => $lang['tags:cloud3d#desc'], 'type' => 'select', 'values' => array( '0' => $lang['noa'], '1' => $lang['yesa'] ), 'value' => extra_get_param('tags','cloud3d')));
+array_push($cfgX, array('name' => 'show_always', 'title'   => $lang['tags:show_always'], 'descr' => $lang['tags:show_always#desc'], 'type' => 'select', 'values' => array( '0' => $lang['noa'], '1' => $lang['yesa'] ), 'value' => extra_get_param('tags','show_always')));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags:block.display'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
