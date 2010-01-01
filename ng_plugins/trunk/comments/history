@@ -1,5 +1,6 @@
-[0.02][2009-12-25]
+[0.02][2010-01-02]
 + Добавлена поддержка блоков [is-logged]..[/is-logged] и [isnt-logged]..[/isnt-logged] в шаблоне comments.form.tpl
++ Добавлена поддержка блока [if-have-perm]..[/if-have-perm] в шаблоне comments.show.tpl
 
 [0.01][2009-08-02]
 + Первая версия:

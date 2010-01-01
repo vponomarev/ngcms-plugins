@@ -148,10 +148,13 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 			$tvars['vars']['[del-com]'] = "<a href=\"".$delete_link."\" title=\"".$lang['comdelete']."\">";
 			$tvars['vars']['[/del-com]'] = "</a>";
 			$tvars['vars']['ip'] = "<a href=\"http://www.nic.ru/whois/?ip=$row[ip]\" title=\"".$lang['whois']."\">".$lang['whois']."</a>";
+			$tvars['vars']['[if-have-perm]'] = '';
+			$tvars['vars']['[/if-have-perm]'] = '';
 		} else {
 			$tvars['regx']["'\\[edit-com\\].*?\\[/edit-com\\]'si"]	=	'';
 			$tvars['regx']["'\\[del-com\\].*?\\[/del-com\\]'si"]	=	'';
 			$tvars['vars']['ip'] = '';
+			$tvars['regx']['#\[if-have-perm\].*?\[\/if-have-perm\]#si'] = '';
 		}
 
 		$tvars['regx']['#\[is-logged\](.+?)\[/is-logged\]#is']		= is_array($userROW)?'$1':'';
