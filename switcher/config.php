@@ -18,10 +18,10 @@ $cfg = array();
 array_push($cfg, array('descr' => $lang['switcher_description']));
 
 $lang_list[] = $lang['switcher_bydefault'];
-$lang_list = array_merge($lang_list, ListFiles("lang", ".."));
+$lang_list = array_merge($lang_list, ListFiles('lang', ''));
 
 $tpl_list[] = $lang['switcher_bydefault'];
-$tpl_list = array_merge($tpl_list, ListFiles("../templates", ".."));
+$tpl_list = array_merge($tpl_list, ListFiles('../templates', ''));
 
 $cfgX = array();
 $profile_count = intval(extra_get_param('switcher','count'));
