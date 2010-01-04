@@ -30,7 +30,9 @@ function FBF_CHECK() {
 <form method="post" action="{form_url}" id="feedback_form" name="feedback_form">
 <input type="hidden" name="id" value="{id}"/>
 <table>
+[error]<tr><td colspan="2" style="background: red; color: white;">{errorText}</td></tr>[/error]
 {entries}
+{captcha}
 </table>
 <input type="submit" [jcheck]onclick="return FBF_CHECK();" [/jcheck]value="{l_feedback:form.request}"/>
 </form>
