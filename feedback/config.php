@@ -49,6 +49,23 @@ function saveForm() {
 		return;
 	}
 
+	// Готовим список email адресов пользователей
+	$emails = '';
+	if (is_array($_POST['elist'])) {
+		$elist	= $_POST['elist'];
+		$eok	= array();
+
+		$num = 1;
+		foreach ($elist as $erec) {
+			// Проверяем наличие email'ов в списке
+			$mlist = preg_split('# *(\,) *#', trim($erec[2], -1));
+			if (count($mlist) && strlen($mlist[0])) {
+				$eok[$num] = array($num, trim($erec[1]), $mlist);
+				$num++;
+			}
+		}
+		$emails = serialize($eok);
+	}
 	$name = trim($_REQUEST['name']);
 
 	// Проверяем ввод наименования
@@ -68,7 +85,7 @@ function saveForm() {
 	// Сохраняем изменения
 	$flags = ($_REQUEST['jcheck']?'1':'0').($_REQUEST['captcha']?'1':'0');
 
-	$mysql->select("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($_REQUEST['emails']).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active']).", flags=".db_squote($flags)." where id = ".$id);
+	$mysql->select("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($emails).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active']).", flags=".db_squote($flags)." where id = ".$id);
 	showForm(1);
 }
 
@@ -109,7 +126,7 @@ function showList(){
 function showForm($edMode){
 	global $mysql, $tpl, $template, $lang;
 
-	$tpath = locatePluginTemplates(array('conf.form.hdr', 'conf.form.row'), 'feedback', extra_get_param('feedback', 'localsource'));
+	$tpath = locatePluginTemplates(array('conf.form.hdr', 'conf.form.row', 'conf.form.egroup'), 'feedback', extra_get_param('feedback', 'localsource'));
 	$output = '';
 
 	// Load form
@@ -152,9 +169,38 @@ function showForm($edMode){
 		$tvars['vars']['active_checked']	= ($edMode?$_REQUEST['active']:$frow['active'])?'checked="checked"':'';
 		$tvars['vars']['jcheck_checked']	= ($edMode?$_REQUEST['jcheck']:intval(substr($frow['flags'],0,1)))?'checked="checked"':'';
 		$tvars['vars']['captcha_checked']	= ($edMode?$_REQUEST['captcha']:intval(substr($frow['flags'],1,1)))?'checked="checked"':'';
-		$tvars['vars']['emails']			= secure_html($frow['emails']);
 		$tvars['vars']['description']		= secure_html($frow['description']);
 		$tvars['vars']['url']				= home.generateLink('core', 'plugin', array('plugin' => 'feedback'), array('id' => $frow['id']));
+
+		// Prepare output for Email groups
+		{
+			$tpl -> template('conf.form.egroup', $tpath['conf.form.egroup']);
+			$elist = array();
+
+			if (($elist = unserialize($frow['emails'])) === false) {
+				$elist[1]= array(1, '', preg_split("# *(\r\n|\n) *#", $frow['emails']));
+			}
+
+			// Add an empty line to $elist
+			$elist[] = array('', '', '');
+
+			$eout = '';
+			$num = 1;
+			foreach ($elist as $erec) {
+				$txvars = array('vars' => array(
+					'nname'		=> 'elist['.$num.'][0]',
+					'nvalue'	=> $erec[0],
+					'gname'		=> 'elist['.$num.'][1]',
+					'gvalue'	=> $erec[1],
+					'vname'		=> 'elist['.$num.'][2]',
+					'vvalue'	=> join(', ', $erec[2]),
+				));
+				$tpl -> vars('conf.form.egroup', $txvars);
+				$eout .= $tpl -> show('conf.form.egroup');
+				$num++;
+			}
+		}
+		$tvars['vars']['egroups']			= $eout;
 
 		// Generate list of templates
 		$lf = array('') + ListFiles(extras_dir.'/feedback/tpl/templates', 'tpl');
