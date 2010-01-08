@@ -33,6 +33,7 @@ function FBF_CHECK() {
 [error]<tr><td colspan="2" style="background: red; color: white;">{errorText}</td></tr>[/error]
 {entries}
 {captcha}
+{elist}
 </table>
 <input type="submit" [jcheck]onclick="return FBF_CHECK();" [/jcheck]value="{l_feedback:form.request}"/>
 </form>

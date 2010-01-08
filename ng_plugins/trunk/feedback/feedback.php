@@ -21,146 +21,168 @@ function plugin_feedback_screen(){
 // * 0 - initial show
 // * 1 - show filled earlier values (error filling some fields)
 function plugin_feedback_showScreen($mode = 0, $errorText = '') {
- global $template, $tpl, $lang, $mysql, $userROW;
+	global $template, $tpl, $lang, $mysql, $userROW;
 
- $ptpl_url = admin_url.'/plugins/feedback/tpl';
+	$ptpl_url = admin_url.'/plugins/feedback/tpl';
 
- // Determine paths for all template files
- $tpath = locatePluginTemplates(array('site.infoblock', 'site.form.hdr', 'site.form.row', 'site.form.captcha'), 'feedback', extra_get_param('feedback', 'localsource'));
+	// Determine paths for all template files
+	$tpath = locatePluginTemplates(array('site.infoblock', 'site.form.hdr', 'site.form.row', 'site.form.captcha', 'site.form.elist'), 'feedback', extra_get_param('feedback', 'localsource'));
 
- $form_id = intval($_REQUEST['id']);
+	$form_id = intval($_REQUEST['id']);
 
- if (!is_array($frow = $mysql->record("select * from ".prefix."_feedback where active = 1 and id = ".$form_id))) {
-	$tpl->template('site.infoblock', $tpath['site.infoblock']);
-	$tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $lang['feedback:form.no.title'], 'ptpl_url' => $ptpl_url, 'entries' => $lang['feedback:form.no.description'])));
-	$template['vars']['mainblock']      =  $tpl->show('site.infoblock');
-	return 1;
- }
-
- // Unpack form data
- $fData = unserialize($frow['struct']);
- if (!is_array($fData)) $fData = array();
-
- $output = '';
- $FBF_DATA = array();
- $tpl->template('site.form.row', $tpath['site.form.row']);
- foreach ($fData as $fName => $fInfo) {
- 	$tvars = array();
- 	$tvars['vars']['ptpl_url'] = $ptpl_url;
-	$tvars['vars']['name']	= $fInfo['name'];
-	$tvars['vars']['title']	= $fInfo['title'];
-
-	$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']), iconv('Windows-1251', 'UTF-8', $fInfo['title']));
-
- 	$setValue = $mode?$_REQUEST[$fInfo['name']]:$fInfo['default'];
-
-	switch ($fInfo['type']) {
-		case 'text':
-		case 'textarea':
-			$tvars['vars']['value']	= $setValue;
-			break;
-
-		case 'date':
-			// Prepare parsed date for show (in `show again` mode)
-			$setValueDay	= $fInfo['default:vars']['day'];
-			$setValueMonth	= $fInfo['default:vars']['month'];
-			$setValueYear	= $fInfo['default:vars']['year'];
-			if ($mode) {
-				if ((intval($_REQUEST[$fInfo['name'].':day']) >= 1) &&
-					(intval($_REQUEST[$fInfo['name'].':day']) <= 31) &&
-					(intval($_REQUEST[$fInfo['name'].':month']) >= 1) &&
-					(intval($_REQUEST[$fInfo['name'].':month']) <= 12) &&
-					(intval($_REQUEST[$fInfo['name'].':year']) >= 1970) &&
-					(intval($_REQUEST[$fInfo['name'].':year']) <= 2012)) {
-					$setValueDay	= intval($_REQUEST[$fInfo['name'].':day']);
-					$setValueMonth	= intval($_REQUEST[$fInfo['name'].':month']);
-					$setValueYear	= intval($_REQUEST[$fInfo['name'].':year']);
-				}
-			}
-
-			$opts = $fInfo['required']?'':'<option value="">--</option>';
-			for ($di = 1; $di <= 31; $di++) { $opts .= '<option value="'.$di.'"'.($di == $setValueDay?' selected="selected"':'').'>'.sprintf('%02u',$di).'</option>'; }
-			$tvars['vars']['day_options'] = $opts;
-
-			$opts = $fInfo['required']?'':'<option value="">--</option>';
-			for ($di = 1; $di <= 12; $di++) { $opts .= '<option value="'.$di.'"'.($di == $setValueMonth?' selected="selected"':'').'>'.sprintf('%02u',$di).'</option>'; }
-			$tvars['vars']['month_options'] = $opts;
-
-			$opts = $fInfo['required']?'':'<option value="">--</option>';
-			for ($di = 1970; $di <= 2012; $di++) { $opts .= '<option value="'.$di.'"'.($di == $setValueYear?' selected="selected"':'').'>'.$di.'</option>'; }
-			$tvars['vars']['year_options'] = $opts;
-
-			break;
-
-		case 'select':
-			$opts = '';
-			if (is_array($fInfo['options']))
-				foreach ($fInfo['options'] as $k => $v) {
-					$opts .= '<option value="'.secure_html($v).'"'.($v == $setValue?' selected="selected"':'').'>'.secure_html($v).'</option>';
-				}
-			$tvars['vars']['options'] = $opts;
+	if (!is_array($frow = $mysql->record("select * from ".prefix."_feedback where active = 1 and id = ".$form_id))) {
+		$tpl->template('site.infoblock', $tpath['site.infoblock']);
+		$tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $lang['feedback:form.no.title'], 'ptpl_url' => $ptpl_url, 'entries' => $lang['feedback:form.no.description'])));
+		$template['vars']['mainblock']      =  $tpl->show('site.infoblock');
+		return 1;
 	}
-	$tvars['regx']['#\[text\](.+?)\[\/text\]#is']			= ($fInfo['type'] == 'text'    )?'$1':'';
-	$tvars['regx']['#\[textarea\](.+?)\[\/textarea\]#is']	= ($fInfo['type'] == 'textarea')?'$1':'';
-	$tvars['regx']['#\[select\](.+?)\[\/select\]#is']		= ($fInfo['type'] == 'select'  )?'$1':'';
-	$tvars['regx']['#\[date\](.+?)\[\/date\]#is']			= ($fInfo['type'] == 'date'  )?'$1':'';
 
-	$tpl->vars('site.form.row', $tvars);
-	$output .= $tpl->show('site.form.row');
+	// Unpack form data
+	$fData = unserialize($frow['struct']);
+	if (!is_array($fData)) $fData = array();
 
- }
- // Check if we need captcha
- $captcha = '';
+	$output = '';
+	$FBF_DATA = array();
+	$tpl->template('site.form.row', $tpath['site.form.row']);
+	foreach ($fData as $fName => $fInfo) {
+		$tvars = array();
+		$tvars['vars']['ptpl_url'] = $ptpl_url;
+		$tvars['vars']['name']	= $fInfo['name'];
+		$tvars['vars']['title']	= $fInfo['title'];
 
- if (substr($frow['flags'],1,1)) {
- 	$tvars = array();
- 	$tvars['vars']['rand'] = rand(00000, 99999);
- 	$tvars['vars']['captcha_url'] = admin_url."/captcha.php?id=feedback";
- 	$tpl->template('site.form.captcha', $tpath['site.form.captcha']);
- 	$tpl->vars('site.form.captcha', $tvars);
- 	$captcha = $tpl->show('site.form.captcha');
+		$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']), iconv('Windows-1251', 'UTF-8', $fInfo['title']));
 
- 	// Now let's generate our own code
- 	$_SESSION['captcha.feedback'] = rand(00000, 99999);
- }
+		$setValue = $mode?$_REQUEST[$fInfo['name']]:$fInfo['default'];
 
- // Prepare params
- $tvars = array();
- $tvars['vars']['ptpl_url']		= $ptpl_url;
- $tvars['vars']['captcha']		= $captcha;
- $tvars['vars']['id']			= $frow['id'];
- $tvars['vars']['description']	= $frow['description'];
- $tvars['vars']['entries']		= $output;
- $tvars['vars']['form_url']		= generateLink('core', 'plugin', array('plugin' => 'feedback', 'handler' => 'post'), array());
+		switch ($fInfo['type']) {
+			case 'text':
+			case 'textarea':
+				$tvars['vars']['value']	= $setValue;
+				break;
 
- $tvars['vars']['FBF_DATA'] = json_encode($FBF_DATA);
- $tvars['regx']['#\[jcheck\](.+?)\[\/jcheck\]#is']	= intval(substr($frow['flags'],0,1))?'$1':'';
- $tvars['vars']['errorText']	= $errorText;
- $tvars['regx']['#\[error\](.*?)\[\/error\]#is']	= ($errorText == '')?'':'$1';
+			case 'date':
+				// Prepare parsed date for show (in `show again` mode)
+				$setValueDay	= $fInfo['default:vars']['day'];
+				$setValueMonth	= $fInfo['default:vars']['month'];
+				$setValueYear	= $fInfo['default:vars']['year'];
+				if ($mode) {
+					if ((intval($_REQUEST[$fInfo['name'].':day']) >= 1) &&
+						(intval($_REQUEST[$fInfo['name'].':day']) <= 31) &&
+						(intval($_REQUEST[$fInfo['name'].':month']) >= 1) &&
+						(intval($_REQUEST[$fInfo['name'].':month']) <= 12) &&
+						(intval($_REQUEST[$fInfo['name'].':year']) >= 1970) &&
+						(intval($_REQUEST[$fInfo['name'].':year']) <= 2012)) {
+						$setValueDay	= intval($_REQUEST[$fInfo['name'].':day']);
+						$setValueMonth	= intval($_REQUEST[$fInfo['name'].':month']);
+						$setValueYear	= intval($_REQUEST[$fInfo['name'].':year']);
+					}
+				}
 
- // Choose template to use
- if ($frow['template']) {
-  $tP = root.'plugins/feedback/tpl/templates/';
-  $tN = $frow['template'];
- } else {
-  $tP = $tpath['site.form.hdr'];
-  $tN = 'site.form.hdr';
- }
+				$opts = $fInfo['required']?'':'<option value="">--</option>';
+				for ($di = 1; $di <= 31; $di++) { $opts .= '<option value="'.$di.'"'.($di == $setValueDay?' selected="selected"':'').'>'.sprintf('%02u',$di).'</option>'; }
+				$tvars['vars']['day_options'] = $opts;
+
+				$opts = $fInfo['required']?'':'<option value="">--</option>';
+				for ($di = 1; $di <= 12; $di++) { $opts .= '<option value="'.$di.'"'.($di == $setValueMonth?' selected="selected"':'').'>'.sprintf('%02u',$di).'</option>'; }
+				$tvars['vars']['month_options'] = $opts;
+
+				$opts = $fInfo['required']?'':'<option value="">--</option>';
+				for ($di = 1970; $di <= 2012; $di++) { $opts .= '<option value="'.$di.'"'.($di == $setValueYear?' selected="selected"':'').'>'.$di.'</option>'; }
+				$tvars['vars']['year_options'] = $opts;
+
+				break;
+
+			case 'select':
+				$opts = '';
+				if (is_array($fInfo['options']))
+					foreach ($fInfo['options'] as $k => $v) {
+						$opts .= '<option value="'.secure_html($v).'"'.($v == $setValue?' selected="selected"':'').'>'.secure_html($v).'</option>';
+					}
+				$tvars['vars']['options'] = $opts;
+		}
+		$tvars['regx']['#\[text\](.+?)\[\/text\]#is']			= ($fInfo['type'] == 'text'    )?'$1':'';
+		$tvars['regx']['#\[textarea\](.+?)\[\/textarea\]#is']	= ($fInfo['type'] == 'textarea')?'$1':'';
+		$tvars['regx']['#\[select\](.+?)\[\/select\]#is']		= ($fInfo['type'] == 'select'  )?'$1':'';
+		$tvars['regx']['#\[date\](.+?)\[\/date\]#is']			= ($fInfo['type'] == 'date'  )?'$1':'';
+
+		$tpl->vars('site.form.row', $tvars);
+		$output .= $tpl->show('site.form.row');
+
+	}
+	// Check if we need captcha
+	$captcha = '';
+
+	if (substr($frow['flags'],1,1)) {
+		$tvars = array();
+		$tvars['vars']['rand'] = rand(00000, 99999);
+		$tvars['vars']['captcha_url'] = admin_url."/captcha.php?id=feedback";
+		$tpl->template('site.form.captcha', $tpath['site.form.captcha']);
+		$tpl->vars('site.form.captcha', $tvars);
+		$captcha = $tpl->show('site.form.captcha');
+
+		// Now let's generate our own code
+		$_SESSION['captcha.feedback'] = rand(00000, 99999);
+	}
+
+	// Check if we need to show `select destination notification address` menu
+	$em = unserialize($frow['emails']);
+	if ($em === false) {
+		$em[1]= array(1, '', preg_split("# *(\r\n|\n) *#", $frow['emails']));
+	}
+
+	$elist = '';
+	if (count($em) > 1) {
+		$tpl->template('site.form.elist', $tpath['site.form.elist']);
+		$options = '';
+		foreach ($em as $er) {
+			$options .= '<option value="'.$er[0].'">'.(($er[1] == '')?(join(', ', $er[2])):$er[1]).'</option>';
+		}
+
+		$txvars = array('vars' => array('options' => $options));
+		$tpl->vars('site.form.elist', $txvars);
+		$elist = $tpl->show('site.form.elist');
+	}
 
 
- // Show template of current form
- $tpl->template($tN, $tP);
- $tpl->vars($tN, $tvars);
- $output = $tpl->show($tN);
 
- $tvars = array();
- $tvars['vars']['ptpl_url']	= $ptpl_url;
- $tvars['vars']['title']	= $frow['title'];
- $tvars['vars']['entries']	= $output;
+	// Prepare params
+	$tvars = array();
+	$tvars['vars']['ptpl_url']		= $ptpl_url;
+	$tvars['vars']['captcha']		= $captcha;
+	$tvars['vars']['id']			= $frow['id'];
+	$tvars['vars']['description']	= $frow['description'];
+	$tvars['vars']['entries']		= $output;
+	$tvars['vars']['form_url']		= generateLink('core', 'plugin', array('plugin' => 'feedback', 'handler' => 'post'), array());
 
- $tpl->template('site.infoblock', $tpath['site.infoblock']);
- $tpl->vars('site.infoblock', $tvars);
- $template['vars']['mainblock']      =  $tpl->show('site.infoblock');
+	$tvars['vars']['FBF_DATA'] = json_encode($FBF_DATA);
+	$tvars['regx']['#\[jcheck\](.+?)\[\/jcheck\]#is']	= intval(substr($frow['flags'],0,1))?'$1':'';
+	$tvars['vars']['errorText']	= $errorText;
+	$tvars['regx']['#\[error\](.*?)\[\/error\]#is']	= ($errorText == '')?'':'$1';
+
+	// Choose template to use
+	if ($frow['template']) {
+		$tP = root.'plugins/feedback/tpl/templates/';
+		$tN = $frow['template'];
+	} else {
+		$tP = $tpath['site.form.hdr'];
+		$tN = 'site.form.hdr';
+	}
+
+
+	// Show template of current form
+	$tpl->template($tN, $tP);
+	$tpl->vars($tN, $tvars);
+	$output = $tpl->show($tN);
+
+	$tvars = array();
+	$tvars['vars']['ptpl_url']	= $ptpl_url;
+	$tvars['vars']['title']	= $frow['title'];
+	$tvars['vars']['entries']	= $output;
+	$tvars['vars']['elist']		= $elist;
+
+	$tpl->template('site.infoblock', $tpath['site.infoblock']);
+	$tpl->vars('site.infoblock', $tvars);
+	$template['vars']['mainblock']      =  $tpl->show('site.infoblock');
 
 }
 
@@ -215,8 +237,16 @@ function plugin_feedback_post() {
 	$mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $lang['feedback:mail.subj']);
 	$mailBody = str_replace(array('\n'), array("\n"), $lang['feedback:mail.body.header']) . $output;
 
+	// Select recipient group
+	$em = unserialize($frow['emails']);
+	if ($em === false) {
+		$em[1]= array(1, '', preg_split("# *(\r\n|\n) *#", $frow['emails']));
+	}
+
+	$elist = (isset($em[intval($_POST['recipient'])]))?$em[intval($_POST['recipient'])][2]:$em[1][2];
+
 	$mailCount = 0;
-	foreach (explode("\n", $frow['emails']) as $email) {
+	foreach ($elist as $email) {
 		if (trim($email) == '')
 			continue;
 
@@ -227,5 +257,10 @@ function plugin_feedback_post() {
 	$tpl->template('site.infoblock', $tpath['site.infoblock']);
 	$tpl->vars('site.infoblock', array( 'vars' => array( 'title' => $frow['title'], 'ptpl_url' => $ptpl_url, 'entries' => str_replace('{ecount}', $mailCount, $lang['feedback:confirm.message']))));
 	$template['vars']['mainblock']      =  $tpl->show('site.infoblock');
-}
 
+	// Lock used captcha code if captcha is enabled
+	if (substr($frow['flags'],1,1)) {
+		$_SESSION['captcha.feedback'] = rand(00000, 99999);
+	}
+
+}
