@@ -83,7 +83,7 @@ function saveForm() {
 	}
 
 	// Сохраняем изменения
-	$flags = ($_REQUEST['jcheck']?'1':'0').($_REQUEST['captcha']?'1':'0');
+	$flags = ($_REQUEST['jcheck']?'1':'0').($_REQUEST['captcha']?'1':'0').($_REQUEST['html']?'1':'0');
 
 	$mysql->select("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($emails).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active']).", flags=".db_squote($flags)." where id = ".$id);
 	showForm(1);
@@ -169,6 +169,7 @@ function showForm($edMode){
 		$tvars['vars']['active_checked']	= ($edMode?$_REQUEST['active']:$frow['active'])?'checked="checked"':'';
 		$tvars['vars']['jcheck_checked']	= ($edMode?$_REQUEST['jcheck']:intval(substr($frow['flags'],0,1)))?'checked="checked"':'';
 		$tvars['vars']['captcha_checked']	= ($edMode?$_REQUEST['captcha']:intval(substr($frow['flags'],1,1)))?'checked="checked"':'';
+		$tvars['vars']['html_checked']		= ($edMode?$_REQUEST['html']:intval(substr($frow['flags'],2,1)))?'checked="checked"':'';
 		$tvars['vars']['description']		= secure_html($frow['description']);
 		$tvars['vars']['url']				= home.generateLink('core', 'plugin', array('plugin' => 'feedback'), array('id' => $frow['id']));
 

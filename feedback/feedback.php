@@ -52,7 +52,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 
 		$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']), iconv('Windows-1251', 'UTF-8', $fInfo['title']));
 
-		$setValue = $mode?$_REQUEST[$fInfo['name']]:$fInfo['default'];
+		$setValue = secure_html($mode?$_REQUEST[$fInfo['name']]:$fInfo['default']);
 
 		switch ($fInfo['type']) {
 			case 'text':
@@ -193,7 +193,7 @@ function plugin_feedback_post() {
 	global $template, $tpl, $lang, $mysql, $userROW, $SYSTEM_FLAGS;
 
 	// Determine paths for all template files
-	$tpath = locatePluginTemplates(array('site.infoblock', 'site.form.hdr', 'site.form.row'), 'feedback', extra_get_param('feedback', 'localsource'));
+	$tpath = locatePluginTemplates(array('site.infoblock', 'site.form.hdr', 'site.form.row', 'htmail', 'htmail.body'), 'feedback', extra_get_param('feedback', 'localsource'));
 	$ptpl_url = admin_url.'/plugins/feedback/tpl';
 
 	$form_id = intval($_REQUEST['id']);
@@ -222,6 +222,12 @@ function plugin_feedback_post() {
 		}
 	}
 
+	// Check if user requested HTML message format
+	$flagHTML = substr($frow['flags'], 2, 1) ? true : false;
+	if ($flagHTML) {
+		$tpl->template('htmail.body', $tpath['htmail.body']);
+	}
+
 	// Scan all fields and fill data. Prepare outgoing email.
 	$output = '';
 
@@ -231,11 +237,37 @@ function plugin_feedback_post() {
 		  					break;
 			default:		$fieldValue = $_REQUEST[$fName];
 		}
-		$output .= '['.$fName.'] '.$fInfo['title'].': '.$fieldValue."<br/>\n";
+
+		if ($flagHTML) {
+			$thvars = array('vars' => array(
+				'id' => $fName,
+				'title' => secure_html($fInfo['title']),
+				'value' => str_replace("\n", "<br/>\n", secure_html($fieldValue)),
+			));
+			$tpl->vars('htmail.body', $thvars);
+			$output .= $tpl->show('htmail.body');
+		} else {
+			$output .= str_replace(array('{id}', '{title}', '{value}'), array($fName, $fInfo['title'], $fieldValue), str_replace(array('\n'), array("\n"), $lang['feedback:mail.body.row']));
+		}
 	}
 
 	$mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $lang['feedback:mail.subj']);
-	$mailBody = str_replace(array('\n'), array("\n"), $lang['feedback:mail.body.header']) . $output;
+	$mailBody = '';
+	if ($flagHTML) {
+		$tmvars = array('vars' => array(
+					'form.id'			=> $frow['name'],
+					'form.title'		=> $frow['title'],
+					'form.description'	=> $frow['description'],
+					'entries'			=> $output,
+		));
+
+		$tpl->template('htmail', $tpath['htmail']);
+		$tpl->vars('htmail', $tmvars);
+		$mailBody .= $tpl->show('htmail');
+	} else {
+		$mailBody = str_replace(array('\n'), array("\n"), $lang['feedback:mail.body.header']) . $output . str_replace(array('\n'), array("\n"), $lang['feedback:mail.body.footer']);
+	}
+
 
 	// Select recipient group
 	$em = unserialize($frow['emails']);
@@ -251,7 +283,7 @@ function plugin_feedback_post() {
 			continue;
 
 		$mailCount++;
-		zzMail($email, $mailSubject, $mailBody, 'text');
+		zzMail($email, $mailSubject, $mailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
 	}
 
 	$tpl->template('site.infoblock', $tpath['site.infoblock']);
