@@ -1,0 +1,11 @@
+ID: re_stat
+Name: Перенаправление статики
+Version: 0.02
+Actions: ppages; re_stat.php
+Config: config.php
+Type: plugin
+Title: Перенаправление статических страниц
+Description: Управление перенаправлением статических страниц
+Author: Ivan Litvinenko (Amarelius)
+Author_URI: http://arnit.com.ua/
+preinstall: no
