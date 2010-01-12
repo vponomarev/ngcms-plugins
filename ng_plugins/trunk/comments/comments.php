@@ -121,8 +121,10 @@ class CommentsNewsFilter extends NewsFilter {
 						generateLink('core', 'plugin', array('plugin' => 'comments', 'handler' => 'show'), array('news_id' => $newsID));
 
 			$tcvars['vars']['more_comments'] = str_replace(array('{link}', '{count}'), array($link, $SQLnews['com']), $lang['comments:link.more']);
+			$tcvars['regx']['#\[more_comments\](.*?)\[\/more_comments\]#is'] = '$1';
 		} else {
 			$tcvars['vars']['more_comments'] = '';
+			$tcvars['regx']['#\[more_comments\](.*?)\[\/more_comments\]#is'] = '';
 		}
 
 		// Show form for adding comments
@@ -289,8 +291,10 @@ function plugin_comments_show(){
 		templateLoadVariables(true);
 		$navigations = $TemplateCache['site']['#variables']['navigation'];
 		$tcvars['vars']['more_comments'] = generatePagination($page, 1, $pageCount, 10, $paginationParams, $navigations);
+		$tcvars['regx']['#\[more_comments\](.*?)\[\/more_comments\]#is'] = '$1';
 	} else {
 		$tcvars['vars']['more_comments'] = '';
+		$tcvars['regx']['#\[more_comments\](.*?)\[\/more_comments\]#is'] = '';
 	}
 
 	// Enable AJAX in case if we are on last page
