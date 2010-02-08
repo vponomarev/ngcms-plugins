@@ -1,0 +1,13 @@
+ID: cat_description
+Name: Описание категорий
+Version: 0.01
+Actions: news; cat_description.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Title: Описание категорий
+Description: Описание категорий
+Author: Ivan Litvinenko (Amarelius)
+Author_URI: http://arnit.com.ua/
+preinstall: no
