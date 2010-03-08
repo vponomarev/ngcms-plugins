@@ -99,7 +99,7 @@ function plugin_rss_export_generate($catname = ''){
 
 		$output .= "   <category>".GetCategories($row['catid'], true)."</category>\n";
 		$output .= "   <guid isPermaLink=\"false\">".home."?id=".$row['id']."</guid>\n";
-		$output .= "   <pubDate>".strftime('%a, %d %b %Y %H:%M:%S GMT',$row['postdate'])."</pubDate>\n";
+		$output .= "   <pubDate>".gmstrftime('%a, %d %b %Y %H:%M:%S GMT',$row['postdate'])."</pubDate>\n";
 		$output .= "  </item>\n";
 	}
 	setlocale(LC_TIME,$old_locale);
