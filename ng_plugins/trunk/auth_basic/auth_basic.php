@@ -189,9 +189,7 @@ class auth_basic {
 				$actcode		=	MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '', '".$actcode."')");
 				$userid			=	$mysql->record('select LAST_INSERT_ID() as id');
-				$link			=	$config['home_url'].(checkLinkAvailable('core', 'activation')?
-									generateLink('core', 'activation', array('userid' => $userid['id'], 'code' => $actcode)):
-									generateLink('core', 'plugin', array('plugin' => 'core', 'handler' => 'activation'), array('userid' => $userid['id'], 'code' => $actcode)));
+				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid['id'], 'code' => $actcode), array(), false, true);
 
 				$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
 				zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $newpassword).sprintf($lang['activate'], $actlink), 'html');
@@ -276,9 +274,7 @@ class auth_basic {
 			$tvars['vars'] = array( 'login' => $row['name'],
 						'home' => home,
 						'newpw' => $newpassword);
-			$tvars['vars']['pwurl'] = $config['home_url'].(checkLinkAvailable('core', 'lostpassword')?
-										generateLink('core', 'lostpassword', array('userid' => $row['id'], 'code' => EncodePassword($newpassword))):
-										generateLink('core', 'plugin', array('plugin' => 'core', 'handler' => 'lostpassword'), array('userid' => $row['id'], 'code' => EncodePassword($newpassword))));
+			$tvars['vars']['pwurl'] = generatePluginLink('core', 'lostpassword', array('userid' => $row['id'], 'code' => EncodePassword($newpassword)), array(), false, true);
 
 			$tpl -> template('restorepw', GetPluginLangDir('auth_basic'));
 			$tpl -> vars('restorepw', $tvars);
