@@ -8,7 +8,7 @@
 <div id="senderror">
 <div class="texth">Сообщить об ошибке:</div>
 <div class="formh">
-	<form method="POST" target="_blank" action="{form_url}">
+	<form method="post" target="_blank" action="{form_url}">
 	<input type="hidden" name="ds_id" value="{ds_id}"/>
 	<input type="hidden" name="entry_id" value="{entry_id}"/>
 	<select name="error" class="error" id="errorSelect">

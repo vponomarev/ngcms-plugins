@@ -72,7 +72,7 @@ function plugin_complain_screen() {
    'error'          => $elist[$crow['error_code']].($crow['error_text']?' (<span style="cursor: pointer;" onclick="alert(ETEXT['.$crow['id'].']);">*</span>)':''),
    'ccount'         => ($crow['ccount']>1)?('(<b>'.$crow['ccount'].'</b>)'):'',
    'title'          => $crow['n_title'],
-   'link'           => newsGenerateLink(array('catid' => $crow['n_catid'], 'alt_name' => $crow['n_alt_name'], 'id' => $crow['n_id'], 'postdate' => $crow['n_postdate'])),
+   'link'           => newsGenerateLink(array('catid' => $crow['n_catid'], 'alt_name' => $crow['n_alt_name'], 'id' => $crow['n_id'], 'postdate' => $crow['n_postdate']), false, 0, true),
    'publisher_name' => $crow['publisher_id']?$crow['publisher_name']:'',
    'publisher_ip'	=> $crow['publisher_ip'],
    'author_name'    => $crow['author_name'],
@@ -177,7 +177,7 @@ function plugin_complain_post() {
   	 $cdata['ds_id']       = intval($_REQUEST['ds_id']);
   	 $cdata['id']          = $dse['id'];
   	 $cdata['title']       = $dse['title'];
-  	 $cdata['link']        = newsGenerateLink($dse);
+  	 $cdata['link']        = newsGenerateLink($dse, false, 0, true);
   	 $cdata['author']      = $dse['author'];
   	 $cdata['author_id']   = $dse['author_id'];
   	 $cdata['author_mail'] = $dse['mail'];
@@ -232,8 +232,8 @@ function plugin_complain_post() {
 
   $tmvars = array (
     'title' => $cdata['title'],
-    'link'  => $config['home_url'].$cdata['link'],
-    'link_admin' => $config['home_url'].generateLink('core', 'plugin', array('plugin' => 'complain')),
+    'link'  => $cdata['link'],
+    'link_admin' => generateLink('core', 'plugin', array('plugin' => 'complain'), array(), false, true),
     'error' => $errtext);
 
   $mail_text = str_replace(
@@ -340,7 +340,7 @@ function plugin_complain_update() {
   	  $cdata['ds_id']       = intval($_REQUEST['ds_id']);
   	  $cdata['id']          = $dse['id'];
   	  $cdata['title']       = $dse['title'];
-  	  $cdata['link']        = $config['home_url'].newsGenerateLink($dse);
+  	  $cdata['link']        = newsGenerateLink($dse, false, 0, true);
   	  $cdata['author']      = $dse['author'];
   	  $cdata['author_id']   = $dse['author_id'];
   	  $cdata['author_mail'] = $dse['mail'];
