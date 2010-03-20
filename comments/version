@@ -4,7 +4,7 @@
 
 ID: comments
 Name: User comments
-Version: 0.02
+Version: 0.03
 Acts: news_short, news_full, ppages, editnews, editnews_form, news
 File: comments.php
 Config: config.php

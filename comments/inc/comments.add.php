@@ -220,13 +220,7 @@ function comments_add(){
 
 	// Email informer
 	if (extra_get_param('comments', 'inform_author') || extra_get_param('comments', 'inform_admin')) {
-		if ($SQL['author_id']) {
-			$alink = $config['home_url'].(checkLinkAvailable('uprofile', 'show')?
-						generateLink('uprofile', 'show', array('name' => $SQL['author'], 'id' => $SQL['author_id'])):
-						generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('name' => $SQL['author'], 'id' => $SQL['author_id'])));
-		} else {
-			$alink = '';
-		}
+		$alink = ($SQL['author_id']) ? generatePluginLink('uprofile', 'show', array('name' => $SQL['author'], 'id' => $SQL['author_id']), array(), false, true) : '';
 		$body = str_replace(
 			array(	'{username}',
 					'[userlink]',
@@ -238,7 +232,7 @@ function comments_add(){
 					($SQL['author_id'])?'<a href="'.$alink.'">':'',
 					($SQL['author_id'])?'</a>':'',
 					$parse->bbcodes($parse->smilies(secure_html($SQL['text']))),
-					$config['home_url'].newsGenerateLink($news_row),
+					newsGenerateLink($news_row, false, 0, true),
 					$news_row['title'],
 					),
 			$lang['notice']
