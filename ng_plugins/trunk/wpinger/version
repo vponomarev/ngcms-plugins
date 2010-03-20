@@ -4,7 +4,7 @@
 
 ID: wpinger
 Name: Weblog pinger
-Version: 0.01
+Version: 0.02
 Acts: admin:mod:addnews,admin:mod:editnews
 File: wpinger.php
 Config: config.php
