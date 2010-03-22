@@ -34,10 +34,8 @@ function plugin_wpinger_install($action) {
 				extra_set_param('wpinger', $k, $v);
 			}
 			
-			if (fixdb_plugin_install('wpinger', array())) {
-				plugin_mark_installed('wpinger');
-				extra_commit_changes();
-			}
+			plugin_mark_installed('wpinger');
+			extra_commit_changes();
 
 			break;
 	}
