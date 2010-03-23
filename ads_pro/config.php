@@ -114,33 +114,33 @@ function add()
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.add_edit.form'), 'ads_pro', 1);
 	
 	$ttvars['vars']['category_list'] = '';
-	$ttvars['vars']['category_list'] .= "subsubel = document.createElement('option');\n";
-	$ttvars['vars']['category_list'] .= "subsubel.setAttribute('value', '0');\n";
-	$ttvars['vars']['category_list'] .= "subsubel.appendChild(document.createTextNode('".$lang['ads_pro:all']."'));\n";
-	$ttvars['vars']['category_list'] .= "subel.appendChild(subsubel);\n";
+	$ttvars['vars']['category_list'] .= 'subsubel = document.createElement("option");';
+	$ttvars['vars']['category_list'] .= 'subsubel.setAttribute("value", "0");';
+	$ttvars['vars']['category_list'] .= 'subsubel.appendChild(document.createTextNode("'.$lang['ads_pro:all'].'"));';
+	$ttvars['vars']['category_list'] .= 'subel.appendChild(subsubel);';
 	$t_category_list = array(0 => $lang['ads_pro:all']);
 	foreach ($mysql->select('select `id`, `name` from '.prefix.'_category') as $row)
 	{
 		$t_category_list[$row['id']] = $row['name'];
-		$ttvars['vars']['category_list'] .= "subsubel = document.createElement('option');\n";
-		$ttvars['vars']['category_list'] .= "subsubel.setAttribute('value', '".$row['id']."');\n";
-		$ttvars['vars']['category_list'] .= "subsubel.appendChild(document.createTextNode('".$row['name']."'));\n";
-		$ttvars['vars']['category_list'] .= "subel.appendChild(subsubel);\n";
+		$ttvars['vars']['category_list'] .= 'subsubel = document.createElement("option");';
+		$ttvars['vars']['category_list'] .= 'subsubel.setAttribute("value", "'.$row['id'].'");';
+		$ttvars['vars']['category_list'] .= 'subsubel.appendChild(document.createTextNode("'.$row['name'].'"));';
+		$ttvars['vars']['category_list'] .= 'subel.appendChild(subsubel);';
 	}
 
 	$ttvars['vars']['static_list'] = '';
-	$ttvars['vars']['static_list'] .= "subsubel = document.createElement('option');\n";
-	$ttvars['vars']['static_list'] .= "subsubel.setAttribute('value', '0');\n";
-	$ttvars['vars']['static_list'] .= "subsubel.appendChild(document.createTextNode('".$lang['ads_pro:all']."'));\n";
-	$ttvars['vars']['static_list'] .= "subel.appendChild(subsubel);\n";
+	$ttvars['vars']['static_list'] .= 'subsubel = document.createElement("option");';
+	$ttvars['vars']['static_list'] .= 'subsubel.setAttribute("value", "0");';
+	$ttvars['vars']['static_list'] .= 'subsubel.appendChild(document.createTextNode("'.$lang['ads_pro:all'].'"));';
+	$ttvars['vars']['static_list'] .= 'subel.appendChild(subsubel);';
 	$t_static_list = array(0 => $lang['ads_pro:all']);
 	foreach ($mysql->select('select `id`, `title` from '.prefix.'_static') as $row)
 	{
 		$t_static_list[$row['id']] = $row['title'];
-		$ttvars['vars']['static_list'] .= "subsubel = document.createElement('option');\n";
-		$ttvars['vars']['static_list'] .= "subsubel.setAttribute('value', '".$row['id']."');\n";
-		$ttvars['vars']['static_list'] .= "subsubel.appendChild(document.createTextNode('".$row['title']."'));\n";
-		$ttvars['vars']['static_list'] .= "subel.appendChild(subsubel);\n";
+		$ttvars['vars']['static_list'] .= 'subsubel = document.createElement("option");';
+		$ttvars['vars']['static_list'] .= 'subsubel.setAttribute("value", "'.$row['id'].'");';
+		$ttvars['vars']['static_list'] .= 'subsubel.appendChild(document.createTextNode("'.$row['title'].'"));';
+		$ttvars['vars']['static_list'] .= 'subel.appendChild(subsubel);';
 	}	
 	
 	if ($id)
