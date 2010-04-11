@@ -62,6 +62,7 @@ function plugin_jchat_install($action) {
 				'win.order'		=> 0,
 				'enable.panel'		=> 1,
 				'enable.win'		=> 0,
+				'localsource'		=> 0,
 			);
 
 			foreach ($params as $k => $v) {
