@@ -49,12 +49,19 @@ function plugin_jchat_install($action) {
 			// Now we need to set some default params
 			$params = array(
 				'access'		=> 1,
-				'refresh'		=> 30,
-				'history'		=> 30,
-				'rate_limit'	=> 0,
-				'maxidle'		=> 0,
+				'rate_limit'		=> 0,
 				'maxwlen'		=> 40,
 				'maxlen'		=> 500,
+				'refresh'		=> 30,
+				'history'		=> 30,
+				'maxidle'		=> 0,
+				'order'			=> 0,
+				'win.refresh'		=> 30,
+				'win.history'		=> 30,
+				'win.maxidle'		=> 0,
+				'win.order'		=> 0,
+				'enable.panel'		=> 1,
+				'enable.win'		=> 0,
 			);
 
 			foreach ($params as $k => $v) {
