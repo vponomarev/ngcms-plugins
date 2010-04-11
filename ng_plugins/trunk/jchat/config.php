@@ -16,6 +16,7 @@ loadPluginLang('jchat', 'config', '', '', ':');
 $cfg = array();
 $cfgX = array();
 array_push($cfgX, array('descr' => $lang['jchat:desc']));
+array_push($cfgX, array('name' => 'localsource', 'title' => $lang['jchat:localsource'], 'descr' => $lang['jchat:localsource#desc'], 'type' => 'select', 'values' => array ( '0' => $lang['jchat:lsrc.site'], '1' => $lang['jchat:lsrc.plugin']), 'value' => intval(pluginGetVariable($plugin,'localsource'))));
 array_push($cfgX, array('name' => 'access', 'title' => $lang['jchat:access'], 'descr' => $lang['jchat:access#desc'], 'type' => 'select', 'values' => array ('0' => $lang['jchat:access.off'], '1' => $lang['jchat:access.ro'], '2' => $lang['jchat:access.rw']), 'value' => pluginGetVariable($plugin,'access')));
 array_push($cfgX, array('name' => 'rate_limit', 'title' => $lang['jchat:rate_limit'], 'descr' => $lang['jchat:rate_limit#desc'], 'type' => 'input', 'value' => pluginGetVariable($plugin,'rate_limit')));
 array_push($cfgX, array('name' => 'maxwlen', 'title' => $lang['jchat:maxwlen'], 'descr' => $lang['jchat:maxwlen#desc'], 'type' => 'input', 'value' => pluginGetVariable($plugin,'maxwlen')));
