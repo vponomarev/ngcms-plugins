@@ -10,11 +10,11 @@ function jchat_show($start){
 	global $userROW, $mysql, $tpl;
 
 	// Check permissions [ guests do not see chat ]
-	if (!extra_get_param('jchat', access) && !is_array($userROW))
+	if (!pluginGetVariable('jchat', access) && !is_array($userROW))
 		return false;
 
 	// Get limit
-	$limit = intval(extra_get_param('jchat', 'history'));
+	$limit = intval(pluginGetVariable('jchat', 'history'));
 	if (($limit < 1)||($limit > 500))
 		$limit = 30;
 
@@ -25,7 +25,12 @@ function jchat_show($start){
 	foreach (array_reverse($mysql->select("select id, postdate, author, author_id, text from ".prefix."_jchat ".(intval($start)?"where id >".intval($start):'')." order by id desc limit ".$limit, 1)) as $row) {
 		$maxID = max($maxID, $row['id']);
 		$row['author'] = iconv('Windows-1251', 'UTF-8', $row['author']);
-		$row['text'] = iconv('Windows-1251', 'UTF-8', $row['text']);
+		$row['text'] = iconv('Windows-1251', 'UTF-8', preg_replace('#^\@(.+?)\:#','<i>$1</i>:',$row['text']));
+		$row['time'] = strftime('%H:%M', $row['postdate']);
+		$row['datetime'] = strftime('%d.%m.%Y %H:%M', $row['postdate']);
+		if (getPluginStatusActive('uprofile')) {
+			$row['profile_link'] = generatePluginLink('uprofile', 'show', array('name' => $row['author'], 'id' => $row['author_id']));
+		}
 
 		// Make some conversions to INT type
 		$row['id'] = intval($row['id']);
@@ -37,18 +42,18 @@ function jchat_show($start){
 	$bundle = array(array(), $data);
 	// 1. Check if we need to reconfigure refresh rate
 
-	$conf_refresh = intval(extra_get_param('jchat', 'refresh'));
+	$conf_refresh = intval(pluginGetVariable('jchat', 'refresh'));
+	if (($conf_refresh < 5)||($conf_refresh > 1800))
+		$conf_refresh = 120;
+
 	if (isset($_REQUEST['timer']) && ($conf_refresh >= 5) && (intval($_REQUEST['timer']) != $conf_refresh))
 		$bundle[0] []= array('reload', $conf_refresh);
 
-	$conf_maxidle = intval(extra_get_param('jchat', 'maxidle'));
+	$conf_maxidle = intval(pluginGetVariable('jchat', 'maxidle'));
 	if (isset($_REQUEST['idle']) && ($conf_maxidle > 0) && (intval($_REQUEST['idle']) > $conf_maxidle))
 		$bundle[0] []= array('stop', $conf_refresh);
 
-
 	return $bundle;
-
-
 }
 
 function plugin_jchat_show(){
@@ -58,42 +63,53 @@ function plugin_jchat_show(){
 	$template['vars']['mainblock'] = json_encode(jchat_show(intval($_REQUEST['start'])));
 }
 
-
+// Index screen for side panel
 function plugin_jchat_index() {
-	global $template, $tpl, $SUPRESS_TEMPLATE_SHOW, $userROW;
+	global $template, $tpl, $SUPRESS_TEMPLATE_SHOW, $userROW, $CurrentHandler;
+
+	loadPluginLang('jchat', 'main', '', '', ':');
+
+	// We shouldn't show side jchat panel if user currently visited separate jchat window
+	if ($CurrentHandler['pluginName'] == 'jchat') {
+		$template['vars']['plugin_jchat'] = '';
+		return;
+	}
 
 	// Check permissions [ guests do not see chat ]
-	if (!extra_get_param('jchat', access) && !is_array($userROW)) {
+	if (!pluginGetVariable('jchat', access) && !is_array($userROW)) {
 		$template['vars']['plugin_jchat'] = '';
 		return;
 	}
 
 	// Determine paths for all template files
-	$tpath = locatePluginTemplates(array('jchat'), 'jchat', extra_get_param('jchat', 'localsource'));
+	$tpath = locatePluginTemplates(array('jchat'), 'jchat', pluginGetVariable('jchat', 'localsource'));
 	$tvars = array();
 	$tvars['vars']['data'] = json_encode(jchat_show(intval($_REQUEST['start'])));
 
-	$history = intval(extra_get_param('jchat', 'history'));
+	$history = intval(pluginGetVariable('jchat', 'history'));
 	if (($history < 1)||($history > 500)) $history = 30;
 
-	$refresh = intval(extra_get_param('jchat', 'refresh'));
+	$refresh = intval(pluginGetVariable('jchat', 'refresh'));
 	if (($refresh < 5)||($refresh > 1800)) $refresh = 120;
 
-	$maxlen = intval(extra_get_param('jchat', 'maxlen'));
+	$maxlen = intval(pluginGetVariable('jchat', 'maxlen'));
 	if (($maxlen < 1)||($refresh > 5000)) $maxlen = 500;
 
 	$tvars['vars']['history'] = $history;
 	$tvars['vars']['refresh'] = $refresh;
 
 	$tvars['vars']['maxlen'] = $maxlen;
+	$tvars['vars']['msgOrder'] = intval(pluginGetVariable('jchat', 'order'));
 
 	$tvars['vars']['link_add'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'add'), array());
 	$tvars['vars']['link_show'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'show'), array());
 	$tvars['regx']['#\[not-logged\](.*?)\[\/not-logged\]#is'] = is_array($userROW)?'':'$1';
-	$tvars['regx']['#\[post-enabled\](.*?)\[\/post-enabled\]#is'] = (!is_array($userROW) && (extra_get_param('jchat', 'access') < 2))?'':'$1';
+	$tvars['regx']['#\[post-enabled\](.*?)\[\/post-enabled\]#is'] = (!is_array($userROW) && (pluginGetVariable('jchat', 'access') < 2))?'':'$1';
 
+	$tvars['regx']['#\[selfwin\](.*?)\[\/selfwin\]#is'] = pluginGetVariable('jchat', 'enable_win') ? '$1' : '';
+	$tvars['vars']['link_selfwin'] = generatePluginLink('jchat', null);
 
-	$tpl -> template('jchat', $tpath['jchat']);
+	$tpl -> template('jchat', $tpath['jchat'], '', array('includeAllowed' => true));
 	$tpl -> vars('jchat', $tvars);
 	//print $tpl -> show('jchat');
 	$template['vars']['plugin_jchat'] = $tpl -> show('jchat');
@@ -123,13 +139,13 @@ function plugin_jchat_add() {
 	}
 
 	// If we're guest - check if we can make posts
-	if (!is_array($userROW) && (extra_get_param('jchat', 'access') < 2)) {
+	if (!is_array($userROW) && (pluginGetVariable('jchat', 'access') < 2)) {
 			print json_encode(array('status' => 0, 'error' => 'Guests are not allowed to post'));
 			return;
 	}
 
 	// Check for rate limit
-	$rate_limit = intval(extra_get_param('jchat', 'rate_limit'));
+	$rate_limit = intval(pluginGetVariable('jchat', 'rate_limit'));
 	if ($rate_limit < 0) $rate_limit = 0;
 
 	if (is_array($mysql->record("select id from ".prefix."_jchat where (ip = ".db_squote($ip).") and (postdate + ".$rate_limit.') > '.time()))) {
@@ -137,10 +153,10 @@ function plugin_jchat_add() {
 			return;
 	}
 
-	$maxlen = intval(extra_get_param('jchat', 'maxlen'));
+	$maxlen = intval(pluginGetVariable('jchat', 'maxlen'));
 	if (($maxlen < 1)||($maxlen > 5000)) $maxlen = 500;
 
-	$maxwlen = intval(extra_get_param('jchat', 'maxwlen'));
+	$maxwlen = intval(pluginGetVariable('jchat', 'maxwlen'));
 	if (($maxwlen < 1)||($maxlen > 5000)) $maxwlen = 500;
 
 	//
@@ -158,12 +174,6 @@ function plugin_jchat_add() {
 	}
 	$SQL['text'] = join('', $ptb);
 
-	//if (strlen($SQL['text']) > $maxlen)
-	//	$SQL['text'] = substr($SQL['text'], 0, $maxlen).'...';
-
-	//$SQL['text'] = preg_replace('/(\S{'.$maxwlen.'})(?!\s)/', '$1 ', $SQL['text']);
-
-
 	$SQL['chatid'] = 1;
 	$SQL['ip']     = $ip;
 	$SQL['postdate'] = time();
@@ -176,7 +186,67 @@ function plugin_jchat_add() {
 	print json_encode(array('status' => 1, 'bundle' => jchat_show(intval($_REQUEST['start']))));
 }
 
+function plugin_jchat_win() {
+	global $template, $tpl, $SUPRESS_TEMPLATE_SHOW, $userROW;
 
-register_plugin_page('jchat','add','plugin_jchat_add',0);
-register_plugin_page('jchat','show','plugin_jchat_show',0);
-add_act('index', 'plugin_jchat_index');
+	loadPluginLang('jchat', 'main', '', '', ':');
+
+	// Check permissions [ guests receive an error ]
+	if (!pluginGetVariable('jchat', access) && !is_array($userROW)) {
+		$template['vars']['mainblock'] = $lang['jchat:regonly'];
+		return;
+	}
+
+	// Determine paths for all template files
+	$tpath = locatePluginTemplates(array('jchat.main', 'jchat.self'), 'jchat', pluginGetVariable('jchat', 'localsource'));
+
+	$tvars = array();
+	$tvars['vars']['data'] = json_encode(jchat_show(intval($_REQUEST['start'])));
+
+	$history = intval(pluginGetVariable('jchat', 'win_history'));
+	if (($history < 1)||($history > 500)) $history = 30;
+
+	$refresh = intval(pluginGetVariable('jchat', 'win_refresh'));
+	if (($refresh < 5)||($refresh > 1800)) $refresh = 120;
+
+	$maxlen = intval(pluginGetVariable('jchat', 'maxlen'));
+	if (($maxlen < 1)||($refresh > 5000)) $maxlen = 500;
+
+	$tvars['vars']['history'] = $history;
+	$tvars['vars']['refresh'] = $refresh;
+
+	$tvars['vars']['maxlen'] = $maxlen;
+	$tvars['vars']['msgOrder'] = intval(pluginGetVariable('jchat', 'win_order'));
+
+	$tvars['vars']['link_add'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'add'), array());
+	$tvars['vars']['link_show'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'show'), array());
+	$tvars['regx']['#\[not-logged\](.*?)\[\/not-logged\]#is'] = is_array($userROW)?'':'$1';
+	$tvars['regx']['#\[post-enabled\](.*?)\[\/post-enabled\]#is'] = (!is_array($userROW) && (pluginGetVariable('jchat', 'access') < 2))?'':'$1';
+
+	if (pluginGetVariable('jchat', 'win_mode'))
+		$SUPRESS_TEMPLATE_SHOW = 1;
+
+	$templateName = intval(pluginGetVariable('jchat', 'win_mode'))?'jchat.self':'jchat.main';
+
+	$tpl -> template($templateName, $tpath[$templateName], '', array('includeAllowed' => true));
+	$tpl -> vars($templateName, $tvars);
+	$template['vars']['mainblock'] = $tpl -> show($templateName);
+}
+
+// Register handler if self window is enabled
+if (pluginGetVariable('jchat', 'enable_win'))
+	register_plugin_page('jchat', '', 'plugin_jchat_win', 0);
+
+// Register main page processor if panel windows is enabled
+if (pluginGetVariable('jchat', 'enable_panel')) {
+	add_act('index', 'plugin_jchat_index');
+} else {
+	global $template;
+	$template['vars']['plugin_jchat'] = '';
+}
+
+// Register processing applications if SELF or PANEL modes are enabled
+if (pluginGetVariable('jchat', 'enable_win') || pluginGetVariable('jchat', 'enable_panel')) {
+	register_plugin_page('jchat','add','plugin_jchat_add',0);
+	register_plugin_page('jchat','show','plugin_jchat_show',0);
+}
