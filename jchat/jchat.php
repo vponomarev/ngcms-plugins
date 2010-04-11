@@ -159,8 +159,9 @@ function plugin_jchat_add() {
 	$maxwlen = intval(pluginGetVariable('jchat', 'maxwlen'));
 	if (($maxwlen < 1)||($maxlen > 5000)) $maxwlen = 500;
 
-	//
-	$postText = secure_html(convert(trim($_REQUEST['text'])));
+	// Load text & strip it to maxlen
+	$postText = substr(secure_html(convert(trim($_REQUEST['text']))), 0, $maxlen);
+
 	$ptb = array();
 
 	foreach (preg_split('#(\s|^)(http\:\/\/[A-Za-z\-\.0-9]+\/\S*)(\s|$)#', $postText, -1, PREG_SPLIT_DELIM_CAPTURE) as $cx) {
