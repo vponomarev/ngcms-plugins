@@ -251,6 +251,16 @@ function plugin_feedback_post() {
 		}
 	}
 
+	// Select recipient group
+	$em = unserialize($frow['emails']);
+	if ($em === false) {
+		$em[1]= array(1, '', preg_split("# *(\r\n|\n) *#", $frow['emails']));
+	}
+
+	$elist = (isset($em[intval($_POST['recipient'])]))?$em[intval($_POST['recipient'])][2]:$em[1][2];
+	$eGroupName = (isset($em[intval($_POST['recipient'])]))?$em[intval($_POST['recipient'])][1]:$em[1][1];
+
+	// Prepare EMAIL content
 	$mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $lang['feedback:mail.subj']);
 	$mailBody = '';
 	if ($flagHTML) {
@@ -265,17 +275,9 @@ function plugin_feedback_post() {
 		$tpl->vars('htmail', $tmvars);
 		$mailBody .= $tpl->show('htmail');
 	} else {
-		$mailBody = str_replace(array('\n'), array("\n"), $lang['feedback:mail.body.header']) . $output . str_replace(array('\n'), array("\n"), $lang['feedback:mail.body.footer']);
+		$mailBody = str_replace(array('{group}', '\n'), array($eGroupName, "\n"), $lang['feedback:mail.body.header']) . $output . str_replace(array('\n'), array("\n"), $lang['feedback:mail.body.footer']);
 	}
 
-
-	// Select recipient group
-	$em = unserialize($frow['emails']);
-	if ($em === false) {
-		$em[1]= array(1, '', preg_split("# *(\r\n|\n) *#", $frow['emails']));
-	}
-
-	$elist = (isset($em[intval($_POST['recipient'])]))?$em[intval($_POST['recipient'])][2]:$em[1][2];
 
 	$mailCount = 0;
 	foreach ($elist as $email) {
