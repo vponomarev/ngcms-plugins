@@ -1,0 +1,20 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: tracker
+Name: BitTorrent tracker
+Version: 0.02
+Acts: ppages, news_full, news:show:one, admin:mod:addnews, admin:mod:editnews
+File: announce.php
+Config: config.php
+Install: install.php
+Deinstall: deinstall.php
+Type: plugin
+Description: BitTorrent треккер
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+URI: http://no_url.com/
+Title: BitTorrent трекер
+Information: Позволяет превратить ваш сайт в BitTorrent трекер
+Preinstall: no
