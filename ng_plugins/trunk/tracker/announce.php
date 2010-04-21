@@ -346,7 +346,7 @@ class TrackerNewsFilter extends NewsFilter {
 }
 
 include_once "lib/basic.php";
-register_plugin_page('tracker','','plugin_tracker_announce');
+register_plugin_page('tracker','announce','plugin_tracker_announce');
 register_filter('news','tracker', new TrackerNewsFilter);
 
 loadPluginLang('tracker', 'main', '', '', ':');
