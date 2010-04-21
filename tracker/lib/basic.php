@@ -77,7 +77,7 @@ function tracker_fetch_tstatus($info_hash, $mode, $timeout = 60, $params = array
 		return false;
 	}
 
-	$fname = $dir.bin2hex($info_hash).'.hash';
+	$fname = $dir.$info_hash.'.hash';
 	// Try to open file
 	if (($fn = @fopen($fname, 'r+')) == FALSE) {
 		// For `info` mode - return false

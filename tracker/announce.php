@@ -52,7 +52,7 @@ function plugin_tracker_announce() {
 	$params['agent'] = $_SERVER['HTTP_USER_AGENT'];
 
 	// Try to fetch data on requested info_hash
-	$data = tracker_fetch_tstatus($params['info_hash'], 'report', 130, $params);
+	$data = tracker_fetch_tstatus(bin2hex($params['info_hash']), 'report', 130, $params);
 
 	// Return an error report (if needed)
 	if ($data == false) {
