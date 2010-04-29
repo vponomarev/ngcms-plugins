@@ -24,7 +24,7 @@ class WPingerNewsfilter extends NewsFilter {
 	}
 }
 
-register_filter('news','tags', new WPingerNewsFilter);
+register_filter('news','wpinger', new WPingerNewsFilter);
 
 
 function plugin_wpinger_servicePing() {
