@@ -234,6 +234,11 @@ function uprofile_editApply(){
 		return;
 	}
 
+	if (!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $userROW['pass'])) {
+		msg(array("type" => "error", "text" => $lang['uprofile:msge_needoldpass']));
+		return;
+	}
+
 	// Delete avatar if requested
 	if ($_REQUEST['delavatar']) {
 		uprofile_manageDelete('avatar', $userROW['id']);

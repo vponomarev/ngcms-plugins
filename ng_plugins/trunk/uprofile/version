@@ -4,7 +4,7 @@
 
 ID: uprofile
 Name: Users profile
-Version: 0.01
+Version: 0.02
 Acts: ppages
 File: uprofile.php
 Config: config.php
