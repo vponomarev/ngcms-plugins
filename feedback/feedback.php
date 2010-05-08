@@ -119,6 +119,8 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		$tpl->template('site.form.captcha', $tpath['site.form.captcha']);
 		$tpl->vars('site.form.captcha', $tvars);
 		$captcha = $tpl->show('site.form.captcha');
+		$captcha_url = $tvars['vars']['captcha_url'];
+		$captcha_rand = $tvars['vars']['rand'];
 
 		// Now let's generate our own code
 		$_SESSION['captcha.feedback'] = rand(00000, 99999);
@@ -149,6 +151,8 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	$tvars = array();
 	$tvars['vars']['ptpl_url']		= $ptpl_url;
 	$tvars['vars']['captcha']		= $captcha;
+	$tvars['vars']['captcha_url']		= $captcha_url;
+	$tvars['vars']['captcha_rand']		= $captcha_rand;
 	$tvars['vars']['id']			= $frow['id'];
 	$tvars['vars']['description']	= $frow['description'];
 	$tvars['vars']['entries']		= $output;
