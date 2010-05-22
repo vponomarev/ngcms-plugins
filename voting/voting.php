@@ -144,7 +144,7 @@ function plugin_voting_screen() {
  $skin = extra_get_param('voting','skin');
  if ((!is_dir(extras_dir.'/voting/tpl/skins/'.$skin))||(!$skin)) { $skin = 'basic'; }
 
- $is_ajax = ($_REQUEST['style'] == 'ajax')?1:0;
+ $is_ajax = (($_GET['style'] == 'ajax')||($_POST['style'] == 'ajax'))?1:0;
  if (($_REQUEST['mode'] == 'vote') && ($choice = intval($_REQUEST['choice']))) {
     // VOTE REQUEST
 	if (($row = $mysql->record("select * from ".prefix."_voteline where id = $choice"))&&
