@@ -34,7 +34,7 @@ function plugin_ads_sape() {
 		if ($flag_final) {
 			$template['vars']['plugin_ads_sape_'.$i] = '';
 		} else {
-			if (!$blen[$i-1]) {
+			if ($blen[$i-1]) {
 				$template['vars']['plugin_ads_sape_'.$i] = $sape->return_links($blen[$i-1]);
 			} else {
 				$flag_final = true;
