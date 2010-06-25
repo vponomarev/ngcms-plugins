@@ -1,0 +1,1 @@
+<li><a href="{url_gallery}">{title}</a></li>

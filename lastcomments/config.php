@@ -15,11 +15,15 @@ array_push($cfg,  array('descr' => 'Плагин отображает последние комментарии, ост
 array_push($cfgX, array('name' => 'sidepanel', 'title' => 'Включить генерацию боковой панели', 'descr' => '<b>Да</b> - панель будет генерироваться<br/><b>Нет</b> - панель не будет генерироваться', 'type' => 'select', 'values' => array ('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => extra_get_param('lastcomments','sidepanel')));
 array_push($cfgX, array('name' => 'number', 'title' => 'Количество выводимых комментариев', 'descr' => 'Значение по умолчанию: <b>10</b>', 'type' => 'input', 'html_flags' => 'size=5', 'value' => extra_get_param('lastcomments','number')));
 array_push($cfgX, array('name' => 'comm_length', 'title' => 'Усечение длины комментария', 'descr' => 'Кол-во символов из комментария для отображения<br/>Значение по умолчанию: <b>50</b>', 'type' => 'input', 'html_flags' => 'size=5', 'value' => extra_get_param('lastcomments','comm_length')));
+array_push($cfgX, array('name' => 'cutbr', 'title' => 'Заменять перенос строк на пробелы', 'descr' => '<b>Да</b> - обрезать<br/><b>Нет</b> - не обрезать', 'type' => 'select', 'values' => array ('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => extra_get_param('lastcomments','cutbr')));
+
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>Настройки боковой панели</b>', 'entries' => $cfgX));
 
 $cfgX = array();
 array_push($cfgX, array('name' => 'ppage', 'title' => 'Разрешить собственную страницу плагина', 'descr' => '<b>Да</b> - собственная страница разрешена<br/><b>Нет</b> - собственная страница запрещена', 'type' => 'select', 'values' => array ('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => extra_get_param('lastcomments','ppage')));
-array_push($cfgX, array('name' => 'pp_number', 'title' => 'Количество выводимых комментариев', 'descr' => 'Значение по умолчанию: <b>30</b>', 'type' => 'input', 'html_flags' => 'size=5', 'value' => extra_get_param('lastcomments','pp_number')));
+array_push($cfgX, array('name' => 'title', 'title' => 'Загаловок', 'descr' => 'Заголовок страницы плагина', 'type' => 'input', 'html_flags' => 'size=50', 'value' => extra_get_param('lastcomments','title')));
+array_push($cfgX, array('name' => 'pp_number', 'title' => 'Количество выводимых комментариев', 'descr' => 'Значение по умолчанию: <b>10</b>', 'type' => 'input', 'html_flags' => 'size=5', 'value' => extra_get_param('lastcomments','pp_number')));
+array_push($cfgX, array('name' => 'pp_limit_count', 'title' => 'Количество комментариев на странице', 'descr' => 'Значение по умолчанию: <b>10</b>', 'type' => 'input', 'html_flags' => 'size=5', 'value' => extra_get_param('lastcomments','pp_limit_count')));
 array_push($cfgX, array('name' => 'pp_comm_length', 'title' => 'Усечение длины комментария', 'descr' => 'Кол-во символов из комментария для отображения<br/>Значение по умолчанию: <b>500</b>', 'type' => 'input', 'html_flags' => 'size=5', 'value' => extra_get_param('lastcomments','pp_comm_length')));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>Настройки собственной страницы плагина</b>', 'entries' => $cfgX));
 
