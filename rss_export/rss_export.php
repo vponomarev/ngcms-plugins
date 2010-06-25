@@ -3,19 +3,6 @@
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
 
-class rss_exportNewsFilter extends NewsFilter {
-
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) 
-	{ 
-		global $lang;
-		if ($tvars['vars']['full-story'] != '' && extra_get_param('rss_export','content_show') == '1')
-		{
-			$tvars['vars']['short-story'] .= ('<a href="'.$tvars['vars']['news_link'].'">'.(isset($tvars['regx']['#\[more\](.*?)\[/more\]#is'])?$tvars['regx']['#\[more\](.*?)\[/more\]#is']:$lang['readmore']).'</a>');
-		}
-		return 1; 
-	}
-}
-
 include_once root."/includes/news.php";
 
 register_plugin_page('rss_export','','plugin_rss_export',0);
@@ -32,8 +19,6 @@ function plugin_rss_export_category($params) {
 function plugin_rss_export_generate($catname = ''){
    	global $lang, $PFILTERS;
 	global $template, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $mysql, $catz;
-	
-	register_filter('news','rss_export', new rss_exportNewsFilter);
 
 	// Disable executing of `index` action (widget plugins and so on..)
 	actionDisable('index');
