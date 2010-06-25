@@ -94,21 +94,6 @@ function uprofile_showProfile($params) {
 		'photo_link'=>	($urow['photo'] != "") ? photos_url.'/'.$uphoto:'',
 		'avatar'	=>	$avatar
 	);
-	
-	//////////////////////////////////////////
-	// START HACK PRIVATE_CONTENT
-
-	$categorys = pluginGetVariable('private_content', 'categorys');
-	$category = $urow['pc_category'];
-	if (!array_key_exists($category, $categorys)) $category = '';
-	$tvars['vars']['pc_status'] = $category?$categorys[$category]['name']:'';
-	$tvars['vars']['pc_icon'] = admin_url.'/plugins/private_content/tpl/images/';
-	$tvars['vars']['pc_icon'] .= ($category?$category.'_small.png':'_none.png');
-	$tvars['vars']['pc_image'] = admin_url.'/plugins/private_content/tpl/images/';
-	$tvars['vars']['pc_image'] .= ($category?$category.'.png':'_none.png');
-	
-	// END HACK PRIVATE_CONTENT
-	//////////////////////////////////////////
 
 	$tpl -> vars('users', $tvars);
 	$template['vars']['mainblock'] .= $tpl -> show('users');
