@@ -23,12 +23,20 @@ function lastcomments_page() {
 }
 
 function lastcomments($pp = 0) {
-    global $config, $mysql, $template, $tvars, $tpl, $parse;
+    global $config, $mysql, $template, $tvars, $tpl, $parse, $TemplateCache, $SYSTEM_FLAGS;
 
-	if ($pp) { $pp = 'pp_'; } else { $pp = '';}
+	$page = 1;
+	if ($pp) { 
+		$pp = 'pp_'; 
+		if(isset($params['page']) && $params['page']) { $page = intval($params['page']);}
+		else if(isset($_REQUEST['page']) && $_REQUEST['page']) { $page = intval($_REQUEST['page']);}
+		$SYSTEM_FLAGS['info']['title']['group'] = pluginGetVariable('lastcomments', 'title').($page > 1 ? ' - страница '.$page : '');
+	} else { $pp = '';}
+
+	
 
 	// Generate cache file name [ we should take into account SWITCHER plugin & calling parameters ]
-	$cacheFileName = md5('lastcomments'.$config['theme'].$config['default_lang'].$pp).'.txt';
+	$cacheFileName = md5('lastcomments'.$config['theme'].$config['default_lang'].$pp.$page).'.txt';
 
 	if (extra_get_param('lastcomments','cache')) {
 		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('lastcomments','cacheExpire'), 'lastcomments');
@@ -39,16 +47,24 @@ function lastcomments($pp = 0) {
 		}
 	}
 
-
-	$number			= intval(extra_get_param('lastcomments',$pp.'number'));
+	$number =  intval(pluginGetVariable('lastcomments', $pp.'number'));
+	if ($number < 1) { $number = 10; }
 	$comm_length	= intval(extra_get_param('lastcomments',$pp.'comm_length'));
-	if (($number < 1)       || ($number > 50))          		  { $number      = $pp?30:10;  }
 	if (($comm_length < 10) || ($comm_length > ($pp?500:100))) { $comm_length = $pp?500:50; }
+	if ($pp){
+		$limit_count = intval(pluginGetVariable('lastcomments', $pp.'limit_count'));
+		if ($limit_count < 1) { $limit_count = 10; }
+	}
+	else {
+		$limit_count = $number;
+	}
+
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array($pp.'lastcomments', $pp.'entries'), 'lastcomments', extra_get_param('lastcomments', 'localsource'));
 
-	$query = "select c.id, c.postdate, c.author, c.author_id, c.text, n.id as nid, n.title, n.alt_name, n.catid, n.postdate as npostdate from ".prefix."_comments c left join ".prefix."_news n on c.post=n.id order by c.id desc limit ".$number;
+	$query = "select c.id, c.postdate, c.author, c.author_id, c.text, n.id as nid, n.title, n.alt_name, n.catid, n.postdate as npostdate from ".prefix."_comments c left join ".prefix."_news n on c.post=n.id order by c.id desc limit ".($page - 1) * $limit_count.", ".$limit_count;
+
 	$lastcomments = '';
 	foreach ($mysql->select($query) as $row) {
 
@@ -58,6 +74,9 @@ function lastcomments($pp = 0) {
 		if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 		if ($config['use_bbcodes'])			{ $text = $parse -> bbcodes($text); }
 		if ($config['use_smilies'])			{ $text = $parse -> smilies($text); }
+		if (!$pp && intval(pluginGetVariable('lastcomments', 'cutbr'))){
+			$text = str_ireplace('<br />', ' ', $text);
+		}
 	    if (strlen($text) > $comm_length)	{ $text = $parse -> truncateHTML($text, $comm_length);}
 
 		$tvars['vars'] = array(
@@ -84,11 +103,24 @@ function lastcomments($pp = 0) {
         $tpl -> vars($pp.'entries', $tvars);
         $lastcomments .= $tpl -> show($pp.'entries');
     }
+	
+	$page_count = 1;
+	if ($pp) $page_count = ceil($number / $limit_count);
+	if ($page_count > 1) {
+		$paginationParams = checkLinkAvailable('lastcomments', '')?
+			array('pluginName' => 'lastcomments', 'pluginHandler' => '', 'params' => array(), 'xparams' => array(), 'paginator' => array('page', 0, false)):
+			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'lastcomments'), 'xparams' => array(), 'paginator' => array('page', 1, false));
+		templateLoadVariables(true); 
+		$navigations = $TemplateCache['site']['#variables']['navigation'];
+		$lastcomments .= generatePagination($page, 1, $page_count, 10, $paginationParams, $navigations);
+	}
 
     $tpl -> template($pp.'lastcomments', $tpath[$pp.'lastcomments']);
     $tpl -> vars($pp.'lastcomments', array ('vars' => array ('entries' => $lastcomments)));
 
 	$output = $tpl -> show($pp.'lastcomments');
+	
+
 	$template['vars'][($pp)?'mainblock':'plugin_lastcomments'] = $output;
 
 	if (extra_get_param('lastcomments','cache')) {
