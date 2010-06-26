@@ -16,7 +16,7 @@ function plugin_gmanager_install($action) {
 	  'fields' => array(
 	    array('action' => 'cmodify', 'name' => 'id', 'type' => 'int(11)', 'params' => 'auto_increment'),
 	    array('action' => 'cmodify', 'name' => 'id_icon', 'type' => 'int(11)', 'params' => "default '0'"),
-	    array('action' => 'cmodify', 'name' => 'order', 'type' => 'int(11)', 'params' => "default '0'"),
+	    array('action' => 'cmodify', 'name' => '`order`', 'type' => 'int(11)', 'params' => "default '0'"),
 	    array('action' => 'cmodify', 'name' => 'if_active', 'type' => 'int(1)', 'params' => "default '0'"),
 	    array('action' => 'cmodify', 'name' => 'name', 'type' => 'varchar(25)', 'params' => "default ''"),
 	    array('action' => 'cmodify', 'name' => 'title', 'type' => 'varchar(50)', 'params' => "default ''"),
