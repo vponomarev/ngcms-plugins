@@ -21,7 +21,7 @@ function plugin_multi_main($params)
 		else if (isset($CurrentHandler['params']['catid']))
 			$catname = $catmap[intval($CurrentHandler['params']['catid'])];
 		$category = pluginGetVariable('multi_main', 'category');
-		if (array_key_exists($catname, $category)){
+		if (is_array($category) && array_key_exists($catname, $category)){
 			$SYSTEM_FLAGS['template.main.name'] = $category[$catname];
 			return;
 		}
@@ -42,7 +42,7 @@ function plugin_multi_main_full($sth, $row, &$tvars){
 	$cid = intval(array_shift(explode(',', $row['catid'])));
 	$catname = $catmap[intval($cid)];
 	$category = pluginGetVariable('multi_main', 'category');
-	if (array_key_exists($catname, $category)){
+	if (is_array($category) && array_key_exists($catname, $category)){
 		$SYSTEM_FLAGS['template.main.name'] = $category[$catname];
 	}
 }
