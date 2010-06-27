@@ -10,7 +10,7 @@ function jchat_show($start){
 	global $userROW, $mysql, $tpl;
 
 	// Check permissions [ guests do not see chat ]
-	if (!pluginGetVariable('jchat', access) && !is_array($userROW))
+	if (!pluginGetVariable('jchat', 'access') && !is_array($userROW))
 		return false;
 
 	// Get limit
@@ -76,7 +76,7 @@ function plugin_jchat_index() {
 	}
 
 	// Check permissions [ guests do not see chat ]
-	if (!pluginGetVariable('jchat', access) && !is_array($userROW)) {
+	if (!pluginGetVariable('jchat', 'access') && !is_array($userROW)) {
 		$template['vars']['plugin_jchat'] = '';
 		return;
 	}
@@ -84,7 +84,8 @@ function plugin_jchat_index() {
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('jchat'), 'jchat', pluginGetVariable('jchat', 'localsource'));
 	$tvars = array();
-	$tvars['vars']['data'] = json_encode(jchat_show(intval($_REQUEST['start'])));
+	$start = isset($_REQUEST['start'])?intval($_REQUEST['start']):0;
+	$tvars['vars']['data'] = json_encode(jchat_show($start));
 
 	$history = intval(pluginGetVariable('jchat', 'history'));
 	if (($history < 1)||($history > 500)) $history = 30;
@@ -188,13 +189,20 @@ function plugin_jchat_add() {
 }
 
 function plugin_jchat_win() {
-	global $template, $tpl, $SUPRESS_TEMPLATE_SHOW, $userROW;
+	global $template, $tpl, $SUPRESS_TEMPLATE_SHOW, $userROW, $lang;
 
 	loadPluginLang('jchat', 'main', '', '', ':');
 
+	if (pluginGetVariable('jchat', 'win_mode'))
+		$SUPRESS_TEMPLATE_SHOW = 1;
+
 	// Check permissions [ guests receive an error ]
 	if (!pluginGetVariable('jchat', access) && !is_array($userROW)) {
-		$template['vars']['mainblock'] = $lang['jchat:regonly'];
+		if (pluginGetVariable('jchat', 'win_mode')) {
+			$template['vars']['mainblock'] = $lang['jchat:win.regonly'];
+		} else {
+			msg(array("type" => "error", "text" => $lang['jchat:regonly']));
+		}
 		return;
 	}
 
@@ -224,8 +232,6 @@ function plugin_jchat_win() {
 	$tvars['regx']['#\[not-logged\](.*?)\[\/not-logged\]#is'] = is_array($userROW)?'':'$1';
 	$tvars['regx']['#\[post-enabled\](.*?)\[\/post-enabled\]#is'] = (!is_array($userROW) && (pluginGetVariable('jchat', 'access') < 2))?'':'$1';
 
-	if (pluginGetVariable('jchat', 'win_mode'))
-		$SUPRESS_TEMPLATE_SHOW = 1;
 
 	$templateName = intval(pluginGetVariable('jchat', 'win_mode'))?'jchat.self':'jchat.main';
 
