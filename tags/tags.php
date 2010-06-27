@@ -157,7 +157,7 @@ class TagsNewsfilter extends NewsFilter {
 		}
 
 		// Load params for display (if needed)
-		if (!is_array($this->displayParams)) {
+		if (!isset($this->displayParams) || !is_array($this->displayParams)) {
 			$tpath = locatePluginTemplates(array(':params.ini'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
 			$this->displayParams = parse_ini_file($tpath[':params.ini'].'params.ini');
 		}
@@ -366,7 +366,7 @@ function plugin_tags_generatecloud($ppage = 0){
 	$masterTPL = $ppage?'cloud':'sidebar';
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
-	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang']).$masterTPL.$_REQUEST['page'].'.txt';
+	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang']).$masterTPL.(isset($_REQUEST['page'])?$_REQUEST['page']:'').'.txt';
 
 	if (extra_get_param('tags','cache')) {
 		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('tags','cacheExpire'), 'tags');
@@ -440,8 +440,8 @@ function plugin_tags_generatecloud($ppage = 0){
 	
 	// Init variables for 3D cloud
 	$cloud3d = array();
-	$cloudMin = (intval($displayParams['size3d.min'])>0)?intval($displayParams['size3d.min']):10;
-	$cloudMax = (intval($displayParams['size3d.max'])>0)?intval($displayParams['size3d.max']):18;
+	$cloudMin = (isset($displayParams['size3d.min']) && (intval($displayParams['size3d.min'])>0))?intval($displayParams['size3d.min']):10;
+	$cloudMax = (isset($displayParams['size3d.max']) && (intval($displayParams['size3d.max'])>0))?intval($displayParams['size3d.max']):18;
 	if ($cloudMax == $cloudMin) { $cloudMin = 10; $cloudMax = 18; }
 
 	$cloudStep = abs(round(($max - $min)/($cloudMax-$cloudMin), 2));

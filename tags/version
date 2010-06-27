@@ -4,8 +4,8 @@
 
 ID: tags
 Name: Теги
-Version: 0.17
-Acts: index,news,ppages,admin:mod:addnews,admin:mod:editnews
+Version: 0.18
+Acts: index,news,ppages,admin:mod:addnews,admin:mod:editnews,admin:mod:preview
 File: tags.php
 Config: config.php
 Install: install.php

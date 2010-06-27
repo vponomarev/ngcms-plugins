@@ -60,7 +60,7 @@ class BBmediaNewsfilter extends NewsFilter {
 					}
 
 					// Now let's compose a resulting URL
-					$keys['file'] = ((!$keys['file'])?$alt:$keys['file']);
+					$keys['file'] = ((!isset($keys['file']) || !$keys['file'])?$alt:$keys['file']);
 
 					// Let's extract file extension and try to retrieve file type
 					$fileExt = substr(strrchr($keys['file'], "."), 1);
@@ -75,8 +75,8 @@ class BBmediaNewsfilter extends NewsFilter {
 					};
 
 					// Check required keys
-					$keys['width']  = (intval($keys['width']) > 10)?intval($keys['width']):'320';
-					$keys['height'] = (intval($keys['height']) > 10)?intval($keys['height']):(($keys['type'] == 'sound')?'20':'200');
+					$keys['width']  = (isset($keys['width']) && (intval($keys['width']) > 10))?intval($keys['width']):'320';
+					$keys['height'] = (isset($keys['height']) && (intval($keys['height']) > 10))?intval($keys['height']):(($keys['type'] == 'sound')?'20':'200');
 
 					// Return an error if BB code is bad
 					if (!trim($keys['file'])) {

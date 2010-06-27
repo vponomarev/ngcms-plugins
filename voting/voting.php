@@ -11,7 +11,7 @@ function plugin_voting() {
 
 	$voteid = intval(extra_get_param('voting','active'));
 	$rand = extra_get_param('voting','rotate');
-	$voted = explode(",",$_COOKIE['ngcms_voting'].'');
+	$voted = isset($_COOKIE['ngcms_voting'])?explode(",",$_COOKIE['ngcms_voting'].''):'';
 	$skin = extra_get_param('voting','skin');
 	if ((!is_dir(extras_dir.'/voting/tpl/skins/'.$skin))||(!$skin)) { $skin = 'basic'; }
 
@@ -119,7 +119,7 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 			'votename' => $row['name'],
 			'voteid' => $row['id'],
 			'votelines' => $votelines,
-			'REFERER' => $REQUEST_URI,
+			'REFERER' => isset($REQUEST_URI)?$REQUEST_URI:'',
 			'home' => home,
 			'vcount' => $tcount,
 			'post_url' => $post_url,
