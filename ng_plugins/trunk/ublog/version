@@ -1,0 +1,19 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: ublog
+Name: User's blog
+Version: 0.01
+Acts: ppages, action.ppages.uprofile
+File: ublog.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Description: ѕоказывает все новости пользовател€ на отдельной странице
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru
+Title: Ќовости пользовател€
+Information: ѕозвол€ет отобразить все новости конкретного пользовател€
+Preinstall: no
