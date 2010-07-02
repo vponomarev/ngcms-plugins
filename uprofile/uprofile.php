@@ -18,7 +18,7 @@ function uprofile_list() {
 
 
 function uprofile_showProfile($params) {
-	global $mysql, $lang, $tpl, $template, $SYSTEM_FLAGS;
+	global $mysql, $lang, $tpl, $template, $SYSTEM_FLAGS, $PFILTERS;
 
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.view'];
 	//LoadPluginLang('uprofile', 'users', '', '', ':');
@@ -39,8 +39,11 @@ function uprofile_showProfile($params) {
 		return;
 	}
 
+	if (is_array($PFILTERS['plugin.uprofile']))
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->showProfilePre($urow['id'], $urow); }
+
 	// Determine paths for all template files
-	$tpath = locatePluginTemplates(array('users'), 'uprofile', extra_get_param('uprofile', 'localsource'));
+	$tpath = locatePluginTemplates(array('users'), 'uprofile', pluginGetVariable('uprofile', 'localsource'));
 
 	// Make page title
 	$SYSTEM_FLAGS['info']['title']['group']	= $lang['loc_userinfo'];
@@ -95,6 +98,9 @@ function uprofile_showProfile($params) {
 		'avatar'	=>	$avatar
 	);
 
+	if (is_array($PFILTERS['plugin.uprofile']))
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->showProfile($urow['id'], $urow, $tvars); }
+
 	$tpl -> vars('users', $tvars);
 	$template['vars']['mainblock'] .= $tpl -> show('users');
 }
@@ -142,7 +148,7 @@ function profile_show() {
 
 // Show EDIT FORM for current user's profile
 function uprofile_editForm(){
-	global $mysql, $userROW, $lang, $config, $tpl, $template, $SYSTEM_FLAGS;
+	global $mysql, $userROW, $lang, $config, $tpl, $template, $SYSTEM_FLAGS, $PFILTERS;
 
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.edit'];
 
@@ -155,17 +161,25 @@ function uprofile_editForm(){
 	//
 	// Show profile
 
+	// Save current user's parameters
+	$currentUser = $userROW;
+
+	// Manage profile data [if needed]
+	if (is_array($PFILTERS['plugin.uprofile']))
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileFormPre($currentUser['id'], $currentUser); }
+
+
 	// Determine paths for all template files
-	$tpath = locatePluginTemplates(array('profile'), 'uprofile', extra_get_param('uprofile', 'localsource'));
+	$tpath = locatePluginTemplates(array('profile'), 'uprofile', pluginGetVariable('uprofile', 'localsource'));
 
 	// If AVATARs are enabled
 	if ($config['use_avatars']) {
-		if ($userROW['avatar'] !== "") {
+		if ($currentUser['avatar'] !== "") {
 			// Check for new style of avatar storing
-			if (preg_match('/^'.$userROW['id'].'\./', $userROW['avatar'])) {
-				$avatar = $userROW['avatar'];
+			if (preg_match('/^'.$currentUser['id'].'\./', $currentUser['avatar'])) {
+				$avatar = $currentUser['avatar'];
 			} else {
-				$avatar = $userROW['id'].'.'.$userROW['avatar'];
+				$avatar = $currentUser['id'].'.'.$currentUser['avatar'];
 			}
 
 			$imgavatar = '<img src="'.avatars_url.'/'.$avatar.'" style="margin: 5px; border: 0px;" alt="" />';
@@ -178,12 +192,12 @@ function uprofile_editForm(){
 
 	// If PHOTOS are enabled
 	if ($config['use_photos']) {
-		if ($userROW['photo'] !== "") {
+		if ($currentUser['photo'] !== "") {
 			// Check for new style of avatar storing
-			if (preg_match('/^'.$userROW['id'].'\./', $userROW['photo'])) {
-				$photo = $userROW['photo'];
+			if (preg_match('/^'.$currentUser['id'].'\./', $currentUser['photo'])) {
+				$photo = $currentUser['photo'];
 			} else {
-				$photo = $userROW['id'].'.'.$userROW['photo'];
+				$photo = $currentUser['id'].'.'.$currentUser['photo'];
 			}
 			$imgphoto = '<a href="'.photos_url.'/'.$photo.'" target="_blank"><img src="'.photos_url.'/thumb/'.$photo.'" style="margin: 5px; border: 0px;" alt="" /></a>';
 			$delphoto = '<input type="checkbox" name="delphoto" id="delphoto" class="check" />&nbsp;<label for="delphoto">'.$lang["uprofile:delete"].'</label>';
@@ -193,28 +207,32 @@ function uprofile_editForm(){
 		$showrow_photo = $lang['uprofile:photos_denied'];
 	}
 
-	$status = (($userROW['status'] >= 1)&&($userROW['status'] <= 4))?$lang['uprofile:st_'.$userROW['status']]:$lang['uprofile:st_unknown'];
+	$status = (($currentUser['status'] >= 1)&&($currentUser['status'] <= 4))?$lang['uprofile:st_'.$currentUser['status']]:$lang['uprofile:st_unknown'];
 
 	$tvars['vars'] = array(
 		'php_self'	=>	$PHP_SELF,
-		'name'		=>	$userROW['name'],
-		'regdate'	=>	LangDate("l, j Q Y - H:i", $userROW['reg']),
-		'last'		=>	(empty($userROW['last'])) ? $lang['no_last'] : LangDate("l, j Q Y - H:i", $userROW['last']),
+		'name'		=>	$currentUser['name'],
+		'regdate'	=>	LangDate("l, j Q Y - H:i", $currentUser['reg']),
+		'last'		=>	(empty($currentUser['last'])) ? $lang['no_last'] : LangDate("l, j Q Y - H:i", $currentUser['last']),
 		'status'	=>	$status,
-		'news'		=>	$userROW['news'],
-		'comments'	=>	$userROW['com'],
-		'email'		=>	secure_html($userROW['mail']),
+		'news'		=>	$currentUser['news'],
+		'comments'	=>	$currentUser['com'],
+		'email'		=>	secure_html($currentUser['mail']),
 		'ifchecked'	=>	$ifchecked,
-		'site'		=>	secure_html($userROW['site']),
-		'icq'		=>	secure_html($userROW['icq']),
-		'from'		=>	secure_html($userROW['where_from']),
-		'about'		=>	secure_html($userROW['info']),
+		'site'		=>	secure_html($currentUser['site']),
+		'icq'		=>	secure_html($currentUser['icq']),
+		'from'		=>	secure_html($currentUser['where_from']),
+		'about'		=>	secure_html($currentUser['info']),
 		'about_sizelimit_text'	=> str_replace('{limit}', intval($config['user_aboutsize']), $lang['uprofile:about_sizelimit']),
 		'about_sizelimit'	=> intval($config['user_aboutsize']),
 		'avatar'	=>	$showrow_avatar,
 		'photo'		=>	$showrow_photo,
 		'form_action'	=>	generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'apply')),
 	);
+
+	if (is_array($PFILTERS['plugin.uprofile']))
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileForm($currentUser['id'], $currentUser, $tvars); }
+
 
 	$tpl -> template('profile', $tpath['profile']);
 	$tpl -> vars('profile', $tvars);
@@ -223,7 +241,7 @@ function uprofile_editForm(){
 
 
 function uprofile_editApply(){
-	global $mysql, $tpl, $lang, $template, $userROW, $auth_db, $config;
+	global $mysql, $tpl, $lang, $template, $userROW, $auth_db, $config, $PFILTERS;
 
 	// Load required library
 	@include_once root.'includes/classes/upload.class.php';
@@ -321,7 +339,15 @@ function uprofile_editApply(){
 		}
 	}
 
-	$sqlFields = array ( 'avatar' => $avatar, 'photo' => $photo, 'mail' => $_REQUEST['editmail'], 'site' => $_REQUEST['editsite'], 'icq' => is_numeric($_REQUEST['editicq'])?$_REQUEST['editicq']:'', 'where_from' => $_REQUEST['editfrom'], 'info' => (intval($config['user_aboutsize'])?substr($_REQUEST['editabout'],0,$config['user_aboutsize']):$_REQUEST['editabout']));
+	$sqlFields = array (
+		'avatar' => $avatar,
+		'photo' => $photo,
+		'mail' => $_REQUEST['editmail'],
+		'site' => $_REQUEST['editsite'],
+		'icq' => is_numeric($_REQUEST['editicq'])?$_REQUEST['editicq']:'',
+		'where_from' => $_REQUEST['editfrom'],
+		'info' => (intval($config['user_aboutsize'])?substr($_REQUEST['editabout'],0,$config['user_aboutsize']):$_REQUEST['editabout'])
+	);
 	if ($_REQUEST['editpassword'] != '') {
 		if (method_exists($auth_db, 'save_profile')) {
 			$auth_db->save_profile($userROW['id'], array('password' => $_REQUEST['editpassword']));
@@ -329,6 +355,9 @@ function uprofile_editApply(){
 		$sqlFields['pass'] = EncodePassword($_REQUEST['editpassword']);
 	}
 
+	// Call external plugins for request processing
+	if (is_array($PFILTERS['plugin.uprofile']))
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfile($useROW['id'], $userROW, $sqlFields); }
 
 	// Prepare SQL line
 	$sqlF = array();
@@ -337,6 +366,11 @@ function uprofile_editApply(){
 
 	$sqlUpdate = "update ".uprefix."_users set ".join(", ",$sqlF)." where id = ".db_squote($userROW['id']);
 	$mysql->query($sqlUpdate);
+
+	// Call external plugins for request processing
+	if (is_array($PFILTERS['plugin.uprofile']))
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileNotify($useROW['id'], $userROW, $sqlFields); }
+
 
 	return true;
 }

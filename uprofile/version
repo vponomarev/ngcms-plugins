@@ -4,7 +4,7 @@
 
 ID: uprofile
 Name: Users profile
-Version: 0.02
+Version: 0.03
 Acts: ppages
 File: uprofile.php
 Config: config.php
@@ -15,3 +15,4 @@ Information: ѕозвол€ет пользовател€ просматривать чужие профили и редактировать 
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 preinstall: yes
+Library: lib; lib/uprofile.lib.php
