@@ -65,15 +65,17 @@ function plugin_ublog() {
 
 	$callingParams = array(
 		'style' => 'short',
-		'searchFlag' => true, 
-		'extendedReturn' => false, 
-		'customCategoryTemplate' => false);
+		'searchFlag' => true,
+		'extendedReturn' => false,
+		'customCategoryTemplate' => false,
+		'page'	=> (isset($_GET['page'])?intval($_GET['page']):0),
+	);
 
 	$paginationParams['params'] = $pparams;
 	$paginationParams['pluginName'] = 'ublog';
 	$paginationParams['handlerName'] = '';
 	$paginationParams['xparams'] = array();
-	$paginationParams['paginator'][0] = 'page';
+	$paginationParams['paginator'] = array('page', 1, 1);
 
 	$template['vars']['mainblock'] .= news_showlist($filter, $paginationParams, $callingParams);
 }
