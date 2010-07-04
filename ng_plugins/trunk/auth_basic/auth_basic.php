@@ -40,7 +40,7 @@ class auth_basic {
 		global $config, $mysql, $ip;
 
         // создаём random cookie
-        $auth_cookie = md5($config['crypto_salt'].uniqid(rand(),1));
+        $auth_cookie = md5((isset($config['crypto_salt'])?$config['crypto_salt']:'').uniqid(rand(),1));
 
 		$query = "update ".uprefix."_users set last = ".db_squote(time()).", ip=".db_squote($ip).", authcookie = ".db_squote($auth_cookie)." where id=".db_squote($dbrow['id']);
 		$mysql->query($query);
@@ -54,13 +54,18 @@ class auth_basic {
 	//
 	// Проверить авторизацию пользователя
 	function check_auth() {
-	 	global $config, $mysql;
+	 	global $config, $mysql, $ip;
 
-	 	$auth_cookie = $_COOKIE['zz_auth'];
+	 	$auth_cookie = isset($_COOKIE['zz_auth'])?$_COOKIE['zz_auth']:'';
 	 	if (!$auth_cookie) { return ''; }
 
 	 	$query = "select * from ".uprefix."_users where authcookie = ".db_squote($auth_cookie)." limit 1";
 	 	$row = $mysql->record($query);
+
+		// Check for "IPLOCK" protection
+		if (pluginGetVariable('auth_basic', 'iplock') && ($ip != $row['ip'])) {
+			return '';
+		}
 
 		// Auth done
 	 	if ($row['name']) {
@@ -124,14 +129,43 @@ class auth_basic {
 	 		return 0;
 	 	}
 
-	 	if (preg_match('/[&<>\xFF'."'".']/', $values['login'])) {
+		// Проверяем логин на запрещенные символы
+		$csError = false;
+		switch (pluginGetVariable('auth_basic', 'regcharset')) {
+			case 0:
+				if (!preg_match('#^[A-Za-z0-9\.\_\-]+$#s', $value['login'])) {
+					$csError = true;
+				}
+				break;
+			case 1:
+				if (!preg_match('#^[А-Яа-яёЁ0-9\.\_\-]+$#s', $value['login'])) {
+					$csError = true;
+				}
+				break;
+			case 2:
+				if (!preg_match('#^[А-Яа-яёЁА-Яа-яёЁ0-9\.\_\-]+$#s', $value['login'])) {
+					$csError = true;
+				}
+				break;
+			case 3:
+				if (!preg_match('#^[\x21-\x7e\xc0-\xffёЁ]+$#s', $value['login'])) {
+					$csError = true;
+				}
+				break;
+			case 4:
+				break;
+
+		}
+
+
+	 	if (preg_match('/[&<>\\"'."'".']/', $values['login'])) {
 	 		// Запрещенные HTML символы
 	 		$msg = $lang['auth_login_html'];
 	 		return 0;
 	 	}
 
 
-	 	if ($config['register_type'] == "3") {
+	 	if ($config['register_type'] == 3) {
 	 		if (strlen($values['password']) < 3) {
 		 		// Слишком короткий пароль
 		 		$msg = $lang['auth_pass_short'];
@@ -144,7 +178,7 @@ class auth_basic {
 		 	}
 		}
 
-		if ((strlen($values['email']) > "70") || (!preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $values['email']))) {
+		if ((strlen($values['email']) > 70) || (!preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $values['email']))) {
 			// Неверный email
 			$msg = $lang['auth_email_wrong'];
 			return 0;
@@ -168,7 +202,7 @@ class auth_basic {
 		$add_time = time() + ($config['date_adjust'] * 60);
 
 		// Статус пользователя по умолчанию
-		$regstatus = intval(extra_get_param('auth_basic','regstatus'));
+		$regstatus = intval(pluginGetVariable('auth_basic','regstatus'));
 		if (($regstatus < 1)||($regstatus > 4))
 			$regstatus = 4;
 
@@ -212,7 +246,7 @@ class auth_basic {
 		$params = array();
 
 		LoadPluginLang('auth_basic', 'auth','','auth');
-		$mode = extra_get_param('auth_basic','restorepw');
+		$mode = pluginGetVariable('auth_basic','restorepw');
 		if (!$mode) {
 			return false;
 			//array_push($params, array('text' => $lang['auth_norestore']));
@@ -239,7 +273,7 @@ class auth_basic {
 	 	$values['email'] = trim($values['email']);
 
 		LoadPluginLang('auth_basic', 'auth','','auth');
-		$mode = extra_get_param('auth_basic','restorepw');
+		$mode = pluginGetVariable('auth_basic','restorepw');
 
 	 	if (!$mode) {
 	 		$msg = $lang['auth_norestore'];
@@ -315,6 +349,6 @@ class auth_basic {
 $AUTH_METHOD['basic']	= new auth_basic;
 $AUTH_CAPABILITIES['basic'] = array('login' => '1', 'db' => '1');
 
-if (extra_get_param('auth_basic','en_dbprefix')) {
-	$config['uprefix'] = extra_get_param('auth_basic','dbprefix');
+if (pluginGetVariable('auth_basic','en_dbprefix')) {
+	$config['uprefix'] = pluginGetVariable('auth_basic','dbprefix');
 }
