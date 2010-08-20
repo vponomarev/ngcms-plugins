@@ -11,7 +11,7 @@ function plugin_voting() {
 
 	$voteid = intval(extra_get_param('voting','active'));
 	$rand = extra_get_param('voting','rotate');
-	$voted = isset($_COOKIE['ngcms_voting'])?explode(",",$_COOKIE['ngcms_voting'].''):'';
+	$voted = isset($_COOKIE['ngcms_voting'])?explode(",",$_COOKIE['ngcms_voting'].''):array();
 	$skin = extra_get_param('voting','skin');
 	if ((!is_dir(extras_dir.'/voting/tpl/skins/'.$skin))||(!$skin)) { $skin = 'basic'; }
 
