@@ -32,7 +32,7 @@ function plugin_rss_export_generate($catname = ''){
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
 	// Take into account: FLAG: use_hide, check if user is logged in
-	$cacheFileName = md5('rss_export'.$config['theme'].$config['home_url'].$config['default_lang'].$xcat.extra_get_param('rss_export','use_hide').is_array($userROW)).'.txt';
+	$cacheFileName = md5('rss_export'.$config['theme'].$config['home_url'].$config['default_lang'].(is_array($xcat)?$xcat['id']:'').extra_get_param('rss_export','use_hide').is_array($userROW)).'.txt';
 
 	if (extra_get_param('rss_export','cache')) {
 		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('rss_export','cacheExpire'), 'rss_export');
