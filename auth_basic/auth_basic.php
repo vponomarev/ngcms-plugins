@@ -29,6 +29,11 @@ class auth_basic {
 		$sql = "select * from ".uprefix."_users where name = ".db_squote($username)." and pass=".db_squote($password);
 		$row = $mysql->record($sql);
 
+		// Проверяем нужна ли активация
+		if ($row['activation']) {
+			return 'ERR:NEED.ACTIVATE';
+		}
+
 		if ($row) { return $row; }
 		return '';
 	}
@@ -100,7 +105,7 @@ class auth_basic {
 		$params = array();
 		LoadPluginLang('auth_basic', 'auth','','auth');
 		array_push($params, array('name' => 'login', title => $lang['auth_login'], 'descr' => $lang['auth_login_descr'],'type' => 'input'));
-		if ($config['register_type'] == "3") {
+		if ($config['register_type'] >= 3) {
                 	array_push($params, array('name' => 'password', title => $lang['auth_pass'], 'descr' => $lang['auth_pass_descr'], 'type' => 'password'));
 			array_push($params, array('name' => 'password2', title => $lang['auth_pass2'], 'descr' => $lang['auth_pass2_descr'],'type' => 'password'));
 		}
@@ -117,7 +122,9 @@ class auth_basic {
 	// 0 - ошибка
 	// 1 - всё ok
 	function register(&$params, $values, &$msg) {
-	 	global $config, $mysql, $lang;
+	 	global $config, $mysql, $lang, $tpl;
+
+		LoadPluginLang('auth_basic', 'auth','','auth');
 
 	 	$error = 0;
 	 	$values['login'] = trim($values['login']);
@@ -133,22 +140,23 @@ class auth_basic {
 		$csError = false;
 		switch (pluginGetVariable('auth_basic', 'regcharset')) {
 			case 0:
-				if (!preg_match('#^[A-Za-z0-9\.\_\-]+$#s', $value['login'])) {
+				if (!preg_match('#^[A-Za-z0-9\.\_\-]+$#s', $values['login'])) {
 					$csError = true;
 				}
 				break;
 			case 1:
-				if (!preg_match('#^[А-Яа-яёЁ0-9\.\_\-]+$#s', $value['login'])) {
+				if (!preg_match('#^[А-Яа-яёЁ0-9\.\_\-]+$#s', $values['login'])) {
 					$csError = true;
 				}
 				break;
 			case 2:
-				if (!preg_match('#^[А-Яа-яёЁА-Яа-яёЁ0-9\.\_\-]+$#s', $value['login'])) {
+				if (!preg_match('#^[А-Яа-яёЁA-Za-z0-9\.\_\-]+$#s', $values['login'])) {
+					print "CASE2-err [".$values['login']."]";
 					$csError = true;
 				}
 				break;
 			case 3:
-				if (!preg_match('#^[\x21-\x7e\xc0-\xffёЁ]+$#s', $value['login'])) {
+				if (!preg_match('#^[\x21-\x7e\xc0-\xffёЁ]+$#s', $values['login'])) {
 					$csError = true;
 				}
 				break;
@@ -158,14 +166,14 @@ class auth_basic {
 		}
 
 
-	 	if (preg_match('/[&<>\\"'."'".']/', $values['login'])) {
+	 	if (preg_match('/[&<>\\"'."'".']/', $values['login']) || $csError) {
 	 		// Запрещенные HTML символы
 	 		$msg = $lang['auth_login_html'];
 	 		return 0;
 	 	}
 
 
-	 	if ($config['register_type'] == 3) {
+	 	if ($config['register_type'] >= 3) {
 	 		if (strlen($values['password']) < 3) {
 		 		// Слишком короткий пароль
 		 		$msg = $lang['auth_pass_short'];
@@ -206,33 +214,140 @@ class auth_basic {
 		if (($regstatus < 1)||($regstatus > 4))
 			$regstatus = 4;
 
+		// Определяем действия в зависимости от типа регистрации
 		switch ($config['register_type']) {
+
+			// 0 - Мгновенная [автогенерация пароля, без email нотификации]
 			case 0:
 				$newpassword = MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
-				msg(array("text" => $lang['msgo_registered'], "info" => sprintf($lang['msgo_info1'], $newpassword)));
+				msg(array(
+					"text" => $lang['msgo_registered'],
+					"info" => str_replace(array('{login}', '{password}'), array($values['login'], $newpassword), $lang['auth_reg.success0'])
+				));
 				break;
+
+			// 1 - Простая [автогенерация пароля, с email нотификацией]
 			case 1:
 				$newpassword = MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
-				zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $newpassword), 'html');
-				msg(array("text" => $lang['msgo_registered'], "info" => $lang['msgo_info2']));
+
+				$tvars['vars'] = array( 'login' => $values['login'],
+										'home' => home,
+										'password' => $newpassword);
+				$tvars['regx'] = array(
+					'#\[activation\].+?\[\/activation]#is' => '',
+				);
+
+				$tpl -> template('register', GetPluginLangDir('auth_basic'));
+				$tpl -> vars('register', $tvars);
+				$msg = $tpl->show('register');
+
+				sendEmailMessage(
+					$values['email'],
+					$lang['letter_title'],
+					$msg,
+					'html'
+				);
+				msg(array(
+					"text" => $lang['msgo_registered'],
+					"info" => str_replace(array('{login}', '{password}', '{email}'), array($values['login'], $newpassword, $values['email']), $lang['auth_reg.success1'])
+			));
 				break;
+
+			// 2 - С подтверждением [автогенерация пароля, пароль отправляется на email адрес и не показывается в админке]
 			case 2:
 				$newpassword	=	MakeRandomPassword();
-				$actcode		=	MakeRandomPassword();
-				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '', '".$actcode."')");
+				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
 				$userid			=	$mysql->record('select LAST_INSERT_ID() as id');
 				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid['id'], 'code' => $actcode), array(), false, true);
 
 				$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
-				zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $newpassword).sprintf($lang['activate'], $actlink), 'html');
-				msg(array("text" => $lang['msgo_registered'], "info" => $lang['msgo_info3']));
+
+				$tvars['vars'] = array( 'login' => $values['login'],
+										'home' => home,
+										'password' => $newpassword);
+				$tvars['regx'] = array(
+					'#\[activation\].+?\[\/activation]#is' => '',
+				);
+
+				$tpl -> template('register', GetPluginLangDir('auth_basic'));
+				$tpl -> vars('register', $tvars);
+				$msg = $tpl->show('register');
+
+				sendEmailMessage(
+					$values['email'],
+					$lang['letter_title'],
+					$msg,
+					'html'
+				);
+				msg(array(
+					"text" => $lang['msgo_registered'],
+					"info" => str_replace(array('{login}', '{password}', '{email}'), array($values['login'], $newpassword, $values['email']), $lang['auth_reg.success2'])
+			));
 				break;
+
+			// 3 - Ручная с нотификацией [ручная генерация пароля, email нотификация]
 			case 3:
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($values['password'])).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
-				zzMail($values['email'], $lang['letter_title'], sprintf($lang['letter_text'], home, home).sprintf($lang['your_info'], $values['login'], $values['password']), 'html');
-				msg(array("text" => $lang['msgo_registered']));
+
+				$tvars['vars'] = array( 'login' => $values['login'],
+										'home' => home,
+										'password' => $values['password']);
+				$tvars['regx'] = array(
+					'#\[activation\].+?\[\/activation]#is' => '',
+				);
+
+				$tpl -> template('register', GetPluginLangDir('auth_basic'));
+				$tpl -> vars('register', $tvars);
+				$msg = $tpl->show('register');
+
+				sendEmailMessage(
+						$values['email'],
+						$lang['letter_title'],
+						$msg,
+						'html'
+				);
+				msg(array(
+					"text" => $lang['msgo_registered'],
+					"info" => str_replace(array('{login}', '{password}', '{email}'), array($values['login'], $values['password'], $values['email']), $lang['auth_reg.success3'])
+				));
+
+				break;
+
+			// 4 - Ручная с подтверждением [ручная генерация пароля, подтверждение email адреса]
+			case 4:
+				$actcode		=	MakeRandomPassword();
+				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($values['password'])).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '', ".db_squote($actcode).")");
+				$userid			=	$mysql->record('select LAST_INSERT_ID() as id');
+				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid['id'], 'code' => $actcode), array(), false, true);
+
+				$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
+
+				$tvars['vars'] = array( 'login' => $values['login'],
+										'home' => home,
+										'password' => $values['password'],
+										'activate_url' => $link);
+
+				$tvars['regx'] = array(
+					'#\[activation\](.+?)\[\/activation]#is' => '$1',
+				);
+
+				$tpl -> template('register', GetPluginLangDir('auth_basic'));
+				$tpl -> vars('register', $tvars);
+				$msg = $tpl->show('register');
+
+				sendEmailMessage(
+					$values['email'],
+					$lang['letter_title'],
+					$msg,
+					'html'
+				);
+				msg(array(
+					"text" => $lang['msgo_registered'],
+					"info" => str_replace(array('{login}', '{password}', '{email}'), array($values['login'], $values['password'], $values['email']), $lang['auth_reg.success4'])
+				));
+			//print "<pre>".var_export($lang, true)."</pre>";
 		}
 
 		return 1;
@@ -313,7 +428,7 @@ class auth_basic {
 			$tpl -> template('restorepw', GetPluginLangDir('auth_basic'));
 			$tpl -> vars('restorepw', $tvars);
 
-			zzMail($row['mail'],$lang['auth_mail_subj'],$tpl->show('restorepw'));
+			sendEmailMessage($row['mail'],$lang['auth_mail_subj'],$tpl->show('restorepw'));
 			msg(array("text" => $lang['msgo_sent']));
 
 			return 1;
