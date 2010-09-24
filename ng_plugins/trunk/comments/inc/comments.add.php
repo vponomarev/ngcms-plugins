@@ -41,13 +41,24 @@ function comments_add(){
 		$is_member				= 0;
 	}
 
-	$SQL['post']	=	intval($_POST['newsid']);
+	// CSRF protection variables
+	$sValue = '';
+	if (preg_match('#^(\d+)\#(.+)$#', $_POST['newsid'], $m)) {
+		$SQL['post'] = $m[1];
+		$sValue = $m[2];
+	}
+
+	if ($sValue != genUToken('comment.add.'.$SQL['post'])) {
+		msg(array("type" => "error", "text" => $lang['comments:err.regonly']));
+		return;
+	}
+
 	$SQL['text']	=	secure_html(convert(trim($_POST['content'])));
 
 	// If user is not logged, make some additional tests
 	if (!$is_member) {
 		// Check if unreg are allowed to make comments
-		if (extra_get_param('comments', 'regonly')) {
+		if (pluginGetVariable('comments', 'regonly')) {
 			msg(array("type" => "error", "text" => $lang['comments:err.regonly']));
 			return;
 		}
@@ -91,9 +102,9 @@ function comments_add(){
 		}
 	}
 
-	$maxlen = intval(extra_get_param('comments', 'maxlen'));
+	$maxlen = intval(pluginGetVariable('comments', 'maxlen'));
 	if (($maxlen) && (strlen($SQL['text']) > $maxlen || strlen($SQL['text']) < 2)) {
-		msg(array("type" => "error", "text" => str_replace('{maxlen}',extra_get_param('comments', 'maxlen') ,$lang['comments:err.badtext'])));
+		msg(array("type" => "error", "text" => str_replace('{maxlen}',pluginGetVariable('comments', 'maxlen') ,$lang['comments:err.badtext'])));
 		return;
 	}
 
@@ -116,7 +127,21 @@ function comments_add(){
 
 	// Locate news
 	if ($news_row = $mysql->record("select * from ".prefix."_news where id = ".db_squote($SQL['post']))) {
-		if (!$news_row['allow_com']) {
+		// Determine if comments are allowed in  this specific news
+		$allowCom = $news_row['allow_com'];
+		if ($allowCom == 2) {
+			// `Use default` - check master category
+			$masterCat = intval(array_shift(split(',', $SQLnews['catid'])));
+			if ($masterCat && isset($catmap[$masterCat])) {
+				$allowCom = intval($catz[$catmap[$masterCat]]['allow_com']);
+			}
+
+			// If we still have 2 (no master category or master category also have 'default' - fetch plugin's config
+			if ($allowCom == 2) {
+				$allowCom = pluginGetVariable('comments', 'global_default');
+			}
+		}
+		if (!$allowCom) {
 			msg(array("type" => "error", "text" => $lang['comments:err.forbidden']));
 			return;
 		}
@@ -131,12 +156,12 @@ function comments_add(){
 	// Make tests only for non-admins
 	if (!is_array($userROW)) {
 		// Not logged
-		$multiCheck = !intval(extra_get_param('comments', 'multi'));
+		$multiCheck = !intval(pluginGetVariable('comments', 'multi'));
 	} else {
 		// Logged. Skip admins
 		if ($userROW['status'] != 1) {
 			// Check for author
-			$multiCheck = !intval(extra_get_param('comments', (($userROW['id'] == $news_row['author_id'])?'author_':'').'multi'));
+			$multiCheck = !intval(pluginGetVariable('comments', (($userROW['id'] == $news_row['author_id'])?'author_':'').'multi'));
 		}
 	}
 
@@ -163,11 +188,11 @@ function comments_add(){
 
 	$SQL['postdate'] = time() + ($config['date_adjust'] * 60);
 
-	if (extra_get_param('comments', 'maxwlen') > 1){
-		$SQL['text'] = preg_replace('/(\S{'.intval(extra_get_param('comments', 'maxwlen')).'})(?!\s)/', '$1 ', $SQL['text']);
+	if (pluginGetVariable('comments', 'maxwlen') > 1){
+		$SQL['text'] = preg_replace('/(\S{'.intval(pluginGetVariable('comments', 'maxwlen')).'})(?!\s)/', '$1 ', $SQL['text']);
 
-		if ((!$SQL['author_id']) && (strlen($SQL['author']) > extra_get_param('comments', 'maxwlen'))) {
-			$SQL['author'] = substr($SQL['author'], 0, extra_get_param('comments', 'maxwlen'))." ...";
+		if ((!$SQL['author_id']) && (strlen($SQL['author']) > pluginGetVariable('comments', 'maxwlen'))) {
+			$SQL['author'] = substr($SQL['author'], 0, pluginGetVariable('comments', 'maxwlen'))." ...";
 		}
 	}
 	$SQL['text']	= str_replace("\r\n", "<br />", $SQL['text']);
@@ -219,7 +244,7 @@ function comments_add(){
 
 
 	// Email informer
-	if (extra_get_param('comments', 'inform_author') || extra_get_param('comments', 'inform_admin')) {
+	if (pluginGetVariable('comments', 'inform_author') || pluginGetVariable('comments', 'inform_admin')) {
 		$alink = ($SQL['author_id']) ? generatePluginLink('uprofile', 'show', array('name' => $SQL['author'], 'id' => $SQL['author_id']), array(), false, true) : '';
 		$body = str_replace(
 			array(	'{username}',
@@ -238,14 +263,14 @@ function comments_add(){
 			$lang['notice']
 		);
 
-		if (extra_get_param('comments', 'inform_author')) {
+		if (pluginGetVariable('comments', 'inform_author')) {
 			// Determine author's email
 			if (is_array($umail=$mysql->record("select * from ".uprefix."_users where id = ".db_squote($news_row['author_id'])))) {
 				zzMail($umail['mail'], $lang['newcomment'], $body, 'html');
 			}
 		}
 
-		if (extra_get_param('comments', 'inform_admin'))
+		if (pluginGetVariable('comments', 'inform_admin'))
 			zzMail($config['admin_mail'], $lang['newcomment'], $body, 'html');
 
 	}

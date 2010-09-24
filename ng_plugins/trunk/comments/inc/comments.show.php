@@ -1,7 +1,7 @@
 <?php
 
 //
-// Copyright (C) 2006-2008 Next Generation CMS (http://ngcms.ru/)
+// Copyright (C) 2006-2010 Next Generation CMS (http://ngcms.ru/)
 // Name: comments.show.php
 // Description: Routines for showing comments
 // Author: Vitaly Ponomarev, Alexey Zinchenko
@@ -43,7 +43,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	} else {
 		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
 	}
-	$sql .= " order by c.id".(extra_get_param('comments', 'backorder')?' desc':'');
+	$sql .= " order by c.id".(pluginGetVariable('comments', 'backorder')?' desc':'');
 
 	// Comments counter
 	$comnum = 0;
@@ -56,7 +56,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		$comnum = $limitStart;
 	}
 
-	$timestamp = extra_get_param('comments', 'timestamp');
+	$timestamp = pluginGetVariable('comments', 'timestamp');
 	if (!$timestamp)
 		$timestamp = 'j.m.Y - H:i';
 
@@ -141,7 +141,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 
 		if (is_array($userROW) && (($userROW['status'] == 1) || ($userROW['status'] == 2))) {
 			$edit_link		= admin_url."/admin.php?mod=editcomments&amp;newsid=".$newsID."&amp;comid=".$row[id];
-			$delete_link	= generateLink('core', 'plugin', array('plugin' => 'comments', 'handler' => 'delete'), array('id' => $row['id']));
+			$delete_link	= generateLink('core', 'plugin', array('plugin' => 'comments', 'handler' => 'delete'), array('id' => $row['id'], 'uT' => genUToken($row['id'])));
 
 			$tvars['vars']['[edit-com]'] = "<a href=\"".$edit_link."\" target=\"_blank\" title=\"".$lang['addanswer']."\">";
 			$tvars['vars']['[/edit-com]'] = "</a>";
@@ -237,7 +237,7 @@ function comments_showform($newsID, $callingParams = array()){
 	$tvars['vars']['captcha_url']	=	admin_url."/captcha.php";
 	$tvars['vars']['bbcodes']		=	BBCodes();
 	$tvars['vars']['skins_url']		=	skins_url;
-	$tvars['vars']['newsid']		=	$newsID;
+	$tvars['vars']['newsid']		=	$newsID.'#'.genUToken('comment.add.'.$newsID);
 	$tvars['vars']['request_uri']	=	$_SERVER['REQUEST_URI'];
 
 	// Generate request URL

@@ -26,8 +26,15 @@ function plugin_comments_install($action) {
 	  'table'  => 'news',
 	  'action' => 'cmodify',
 	  'fields' => array(
-	    array('action' => 'cmodify', 'name' => 'allow_com', 'type' => 'tinyint(1)', 'params' => "default '1'"),
+	    array('action' => 'cmodify', 'name' => 'allow_com', 'type' => 'tinyint(1)', 'params' => "default '2'"),
 	    array('action' => 'cmodify', 'name' => 'com', 'type' => 'int', 'params' => "default '0'"),
+	  )
+	 ),
+	 array(
+	  'table'  => 'category',
+	  'action' => 'cmodify',
+	  'fields' => array(
+	    array('action' => 'cmodify', 'name' => 'allow_com', 'type' => 'tinyint(1)', 'params' => "default '2'"),
 	  )
 	 ),
 	 array(
@@ -83,13 +90,16 @@ function plugin_comments_install($action) {
 				'multi_mcount'	=> 10,
 				'multi_scount'	=> 10,
 				'inform_author'	=> 0,
-				'inform_admin'	=> 0
+				'inform_admin'	=> 0,
+				'global_default' => 1,
+				'default_news' => 2,
+				'default_categories' => 2
 			);
 
 			foreach ($params as $k => $v) {
 				extra_set_param('comments', $k, $v);
 			}
-			extra_commit_changes();
+			pluginsSaveConfig();
 
 			break;
 	}
