@@ -6,8 +6,24 @@ if (!defined('NGCMS')) die ('HAL');
 $lang = LoadLang("comments", "site");
 
 class CommentsNewsFilter extends NewsFilter {
-	function editNewsForm($newsID, $SQLold, &$tvars) {
+	function addNewsForm(&$tvars){
+		global $lang;
+		loadPluginLang('comments', 'config', '', '', ':');
+
+		for ($ix = 0; $ix <= 2; $ix++) {
+			$tvars['vars']['acom:'.$ix] = (pluginGetVariable('comments', 'default_news') == $ix)?'selected="selected"':'';
+		}
+	}
+
+	function addNews(&$tvars, &$SQL) {
+		$SQL['allow_com'] = intval($_REQUEST['allow_com']);
+		return 1;
+	}
+
+	function editNewsForm($newsID, $SQLnews, &$tvars) {
 		global $lang, $mysql, $config, $parse, $tpl, $mod;
+
+		loadPluginLang('comments', 'config', '', '', ':');
 
 		// List comments
 		$comments = '';
@@ -28,7 +44,7 @@ class CommentsNewsFilter extends NewsFilter {
 				'com_url'		=>	($crow['url']) ? $crow['url'] : $PHP_SELF.'?mod=users&action=edituser&id='.$crow['author_id'],
 				'com_id'		=>	$crow['id'],
 				'com_ip'		=>	$crow['ip'],
-				'com_time'		=>	LangDate(extra_get_param('comments','timestamp'), $crow['postdate']),
+				'com_time'		=>	LangDate(pluginGetVariable('comments','timestamp'), $crow['postdate']),
 				'com_part'		=>	$text
 			);
 
@@ -44,13 +60,32 @@ class CommentsNewsFilter extends NewsFilter {
 		}
 		$tvars['vars']['comments'] = $comments;
 
-		$tvars['vars']['comnum'] = $SQLold['com']?$SQLold['com']:$lang['noa'];
+		$tvars['vars']['comnum'] = $SQLnews['com']?$SQLnews['com']:$lang['noa'];
 		$tvars['regx']['[\[comments\](.*)\[/comments\]]']     = ($SQLnews['com'])?'$1':'';
 		$tvars['regx']['[\[nocomments\](.*)\[/nocomments\]]'] = ($SQLnews['com'])?'':'$1';
+
+		for ($ix = 0; $ix <= 2; $ix++) {
+			$tvars['vars']['acom:'.$ix] = ($SQLnews['allow_com'] == $ix)?'selected="selected"':'';
+		}
 	}
 
 	function showNews($newsID, $SQLnews, &$tvars, $callingParams = array()) {
 		global $catmap, $catz, $config, $userROW, $template, $lang, $tpl;
+
+		// Determine if comments are allowed in  this specific news
+		$allowCom = $SQLnews['allow_com'];
+		if ($allowCom == 2) {
+			// `Use default` - check master category
+			$masterCat = intval(array_shift(split(',', $SQLnews['catid'])));
+			if ($masterCat && isset($catmap[$masterCat])) {
+				$allowCom = intval($catz[$catmap[$masterCat]]['allow_com']);
+			}
+
+			// If we still have 2 (no master category or master category also have 'default' - fetch plugin's config
+			if ($allowCom == 2) {
+				$allowCom = pluginGetVariable('comments', 'global_default');
+			}
+		}
 
 		// Fill variables within news template
 		$tvars['vars']['comments-num']	=	$SQLnews['com'];
@@ -98,8 +133,8 @@ class CommentsNewsFilter extends NewsFilter {
 		$flagMoreComments	= false;
 		$skipCommShow		= false;
 
-		if (extra_get_param('comments', 'multipage')) {
-			$multi_mcount = intval(extra_get_param('comments', 'multi_mcount'));
+		if (pluginGetVariable('comments', 'multipage')) {
+			$multi_mcount = intval(pluginGetVariable('comments', 'multi_mcount'));
 			// If we have comments more than for one page - activate pagination
 			if (($multi_mcount >= 0) && ($SQLnews['com'] > $multi_mcount)) {
 				$callingCommentsParams['limitCount'] = $multi_mcount;
@@ -128,7 +163,7 @@ class CommentsNewsFilter extends NewsFilter {
 		}
 
 		// Show form for adding comments
-		if ($SQLnews['allow_com'] && (!extra_get_param('comments', 'regonly') || is_array($userROW))) {
+		if ($allowCom && (!pluginGetVariable('comments', 'regonly') || is_array($userROW))) {
 			$tcvars['vars']['form'] = comments_showform($newsID, $callingCommentsParams);
 		} else {
 			$tcvars['vars']['form'] = '';
@@ -140,6 +175,59 @@ class CommentsNewsFilter extends NewsFilter {
 		$tvars['vars']['plugin_comments'] = $tpl->show('comments.internal');
 	}
 }
+
+
+class CommentsFilterAdminCategories extends FilterAdminCategories{
+	function addCategory(&$tvars, &$SQL) {
+		$SQL['allow_com'] = intval($_REQUEST['allow_com']);
+		return 1;
+	}
+
+	function addCategoryForm(&$tvars) {
+		global $lang;
+		loadPluginLang('comments', 'config', '', '', ':');
+
+		$allowCom = pluginGetVariable('comments', 'default_categories');
+
+		$ms = '<select name="allow_com">';
+		$cv = array( '0' => 'запретить', '1' => 'разрешить', '2' => 'по умолчанию');
+		for ($i = 0; $i < 3; $i++) {
+			$ms .= '<option value="'.$i.'"'.(($allowCom == $i)?' selected="selected"':'').'>'.$cv[$i].'</option>';
+		}
+
+		$tvars['vars']['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['comments:categories.comments'].'<br/><small>'.$lang['comments:categories.comments#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
+		return 1;
+	}
+
+
+	function editCategoryForm($categoryID, $SQL, &$tvars) {
+		global $lang;
+		loadPluginLang('comments', 'config', '', '', ':');
+
+		if (!isset($SQL['allow_com'])) {
+			$SQL['allow_com'] = pluginGetVariable('comments', 'default_categories');
+		}
+
+		$ms = '<select name="allow_com">';
+		$cv = array( '0' => 'запретить', '1' => 'разрешить', '2' => 'по умолчанию');
+		for ($i = 0; $i < 3; $i++) {
+			$ms .= '<option value="'.$i.'"'.(($SQL['allow_com'] == $i)?' selected="selected"':'').'>'.$cv[$i].'</option>';
+		}
+
+		$tvars['vars']['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['comments:categories.comments'].'<br/><small>'.$lang['comments:categories.comments#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
+		return 1;
+	}
+
+	function editCategory($categoryID, $SQL, &$SQLnew, &$tvars) {
+		$SQLnew['allow_com'] = intval($_REQUEST['allow_com']);
+		return 1;
+	}
+
+
+
+}
+
+
 
 function plugin_comments_add() {
 	global $config, $catz, $catmap, $tpl, $template, $lang, $SUPRESS_TEMPLATE_SHOW;
@@ -265,7 +353,7 @@ function plugin_comments_show(){
 	$pageCount			= 0;
 
 	// If we have comments more than for one page - activate pagination
-	$multi_scount = intval(extra_get_param('comments', 'multi_scount'));
+	$multi_scount = intval(pluginGetVariable('comments', 'multi_scount'));
 	if (($multi_scount > 0) && ($newsRow['com'] > $multi_scount)) {
 
 		// Page count
@@ -275,8 +363,8 @@ function plugin_comments_show(){
 		$page = intval($_REQUEST['page']);
 		if ($page < 1) $page = 1;
 
-		$callingCommentsParams['limitCount'] = intval(extra_get_param('comments', 'multi_scount'));
-		$callingCommentsParams['limitStart'] = ($page-1) * intval(extra_get_param('comments', 'multi_scount'));
+		$callingCommentsParams['limitCount'] = intval(pluginGetVariable('comments', 'multi_scount'));
+		$callingCommentsParams['limitStart'] = ($page-1) * intval(pluginGetVariable('comments', 'multi_scount'));
 	}
 
 	// Show comments
@@ -302,7 +390,7 @@ function plugin_comments_show(){
 		$callingCommentsParams['noajax'] = 0;
 
 	// Show form for adding comments
-	if ($newsRow['allow_com'] && (!extra_get_param('comments', 'regonly') || is_array($userROW))) {
+	if ($newsRow['allow_com'] && (!pluginGetVariable('comments', 'regonly') || is_array($userROW))) {
 		$tcvars['vars']['form'] = comments_showform($newsID, $callingCommentsParams);
 	} else {
 		$tcvars['vars']['form'] = '';
@@ -329,7 +417,7 @@ function plugin_comments_delete(){
 	$params = array();
 
 	// First: check if user have enough permissions
-	if (!is_array($userROW) || ($userROW['status'] > 2)) {
+	if (!is_array($userROW) || ($userROW['status'] > 2) || ($_GET['uT'] != genUToken(intval($_REQUEST['id'])))) {
 		// Not allowed
 		$output['status']	= 0;
 		$output['data']		= $lang['perm.denied'];
@@ -390,6 +478,8 @@ function plugin_comments_delete(){
 
 loadPluginLang('comments', 'main', '', '', ':');
 register_filter('news','comments', new CommentsNewsFilter);
+register_admin_filter('categories', 'comments', new CommentsFilterAdminCategories);
+
 register_plugin_page('comments','add','plugin_comments_add',0);
 register_plugin_page('comments','show','plugin_comments_show',0);
 register_plugin_page('comments','delete','plugin_comments_delete',0);

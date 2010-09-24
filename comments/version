@@ -4,8 +4,8 @@
 
 ID: comments
 Name: User comments
-Version: 0.03
-Acts: news_short, news_full, ppages, editnews, editnews_form, news
+Version: 0.04
+Acts: news_short, news_full, ppages, editnews, editnews_form, news, admin:mod:addnews, admin:mod:editnews, admin:mod:categories
 File: comments.php
 Config: config.php
 Install: install.php
