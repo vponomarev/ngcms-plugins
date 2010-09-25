@@ -111,7 +111,7 @@ class CommentsNewsFilter extends NewsFilter {
 		// ******************************************** //
 
 		// Prepare params for call
-		$callingCommentsParams = array('outprint' => true);
+		$callingCommentsParams = array('outprint' => true, 'total' => $SQLnews['com']);
 
 		// Set default template path
 		$templatePath = tpl_site.'plugins/comments';
@@ -366,6 +366,9 @@ function plugin_comments_show(){
 		$callingCommentsParams['limitCount'] = intval(pluginGetVariable('comments', 'multi_scount'));
 		$callingCommentsParams['limitStart'] = ($page-1) * intval(pluginGetVariable('comments', 'multi_scount'));
 	}
+
+	// Pass total number of comments
+	$callingCommentsParams['total'] = $newsRow['com'];
 
 	// Show comments
 	$tcvars = array();

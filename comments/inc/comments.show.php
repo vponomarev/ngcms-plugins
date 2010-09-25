@@ -23,6 +23,7 @@ if (!defined('NGCMS')) die ('HAL');
 //		'limitStart' => order comment no to start (for pagination)
 //		'limitCount' => number of comments to show (for pagination)
 //		'outprint'	 => flag: if set, output will be returned, elsewhere - will be added to mainblock
+//		'total'		=> total number of comments in this news
 function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams = array()){
 	global $mysql, $tpl, $template, $config, $userROW, $parse, $lang, $PFILTERS;
 
@@ -97,10 +98,17 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 			$tvars['vars']['comment-short'] = $text;
 			$tvars['regx']["'\[comment_full\](.*?)\[/comment_full\]'si"] = '';
 		/* } */
-		if ($commID && $commDisplayNum)
-			$comnum = $commDisplayNum;
+		if ($commID && $commDisplayNum) {
+			$tvars['vars']['comnum'] = $commDisplayNum;
+		} else {
+			if (pluginGetVariable('comments', 'backorder') && (intval($callingParams['total'])>0)) {
+				$tvars['vars']['comnum'] = intval($callingParams['total']) - $comnum + 1;
+			} else {
+				$tvars['vars']['comnum'] = $comnum;
+			}
 
-		$tvars['vars']['comnum'] = $comnum;
+		}
+
 		$tvars['vars']['alternating'] = ($comnum%2) ? "comment_even" : "comment_odd";
 
 		if ($config['use_avatars']) {
