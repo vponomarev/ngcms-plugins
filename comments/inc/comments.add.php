@@ -131,7 +131,7 @@ function comments_add(){
 		$allowCom = $news_row['allow_com'];
 		if ($allowCom == 2) {
 			// `Use default` - check master category
-			$masterCat = intval(array_shift(split(',', $SQLnews['catid'])));
+			$masterCat = intval(array_shift(explode(',', $SQLnews['catid'])));
 			if ($masterCat && isset($catmap[$masterCat])) {
 				$allowCom = intval($catz[$catmap[$masterCat]]['allow_com']);
 			}
