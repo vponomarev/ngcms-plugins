@@ -68,7 +68,7 @@ function plugin_ublog() {
 		'searchFlag' => true,
 		'extendedReturn' => false,
 		'customCategoryTemplate' => false,
-		'page'	=> (isset($_GET['page'])?intval($_GET['page']):0),
+		'page'	=> ((isset($_GET['page']) && (intval($_GET['page'])>0))?intval($_GET['page']):0),
 	);
 
 	$paginationParams['params'] = $pparams;
