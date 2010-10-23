@@ -228,6 +228,7 @@ function uprofile_editForm(){
 		'avatar'	=>	$showrow_avatar,
 		'photo'		=>	$showrow_photo,
 		'form_action'	=>	generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'apply')),
+		'token'		=> genUToken('uprofile.update'),
 	);
 
 	if (is_array($PFILTERS['plugin.uprofile']))
@@ -252,9 +253,24 @@ function uprofile_editApply(){
 		return;
 	}
 
-	if (!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $userROW['pass'])) {
-		msg(array("type" => "error", "text" => $lang['uprofile:msge_needoldpass']));
-		return;
+	// Check if correct AUTH params are presented:
+	// * for all activities [except PW change] - token or password
+	// * for PW change - password
+
+	// If we want to change password
+	if ($_REQUEST['editpassword'] != '') {
+		// Correct OLD password must be presented
+		if (!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $userROW['pass'])) {
+			msg(array("type" => "error", "text" => $lang['uprofile:msge_needoldpass']));
+			return;
+		}
+	} else {
+		// Token or correct OLD password must be presented
+		if ((!isset($_POST['token']) || ($_POST['token'] != genUToken('uprofile.update')))&&
+			(!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $userROW['pass']))) {
+				msg(array("type" => "error", "text" => $lang['uprofile:msge_needoldpass']));
+				return;
+		}
 	}
 
 	// Delete avatar if requested
