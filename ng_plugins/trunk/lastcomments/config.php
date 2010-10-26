@@ -1,5 +1,8 @@
 <?php
 
+// Protect against hack attempts
+if (!defined('NGCMS')) die ('HAL');
+
 //
 // Configuration file for plugin
 //
