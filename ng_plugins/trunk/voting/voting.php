@@ -34,7 +34,7 @@ function plugin_voting() {
 //  4. rand - rand flag (in show one mode)
 //	5. votedList - list of voted (in show list mode)
 function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = array()) {
-	global $tpl, $mysql, $username, $userROW, $ip;
+	global $tpl, $mysql, $username, $userROW, $ip, $REQUEST_URI;
 
 	$result = '';
 	$post_url = generateLink('core', 'plugin', array('plugin' => 'voting'), array());
