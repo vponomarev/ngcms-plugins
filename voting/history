@@ -1,3 +1,7 @@
+[0.11][2010-08-21]
+% Исправлена ошибка в коде из-за которой могло возникать сообщение
+  Warning: array_key_exists() [function.array-key-exists]: The second argument should be either an array or an object
+
 [0.10][2009-08-25]
 % Плагин адаптирован для работы с NG CMS 0.9.1
 
