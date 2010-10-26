@@ -48,6 +48,7 @@ function plugin_popular() {
 		$query = "select * from ".prefix."_news where approve = '1' order by views desc limit ".$number;
 	}
 
+	$result = '';
 	foreach ($mysql->select($query) as $row) {
 		// Execute filters [ if requested ]
 		if (extra_get_param('popular', 'pcall') && is_array($PFILTERS['news']))

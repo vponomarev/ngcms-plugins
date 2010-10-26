@@ -1,5 +1,8 @@
 <?php
 
+// Protect against hack attempts
+if (!defined('NGCMS')) die ('HAL');
+
 // Preload required libraries
 loadPluginLibrary('uprofile', 'lib');
 loadPluginLang('ublog', 'main', '', '', ':');
