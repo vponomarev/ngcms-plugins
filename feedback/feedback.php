@@ -219,7 +219,7 @@ function plugin_feedback_post() {
 	// Check if captcha check if needed
 	if (substr($frow['flags'],1,1)) {
 		$vcode = $_REQUEST['vcode'];
-		if ($vcode != $_SESSION['captcha.feedback']) {
+		if ((!$vcode) || ($vcode != $_SESSION['captcha.feedback'])) {
 			// Wrong CAPTCHA code (!!!)
 			plugin_feedback_showScreen(1, $lang['feedback:sform.captcha.badcode']);
 			return;
