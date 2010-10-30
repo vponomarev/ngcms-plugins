@@ -166,11 +166,11 @@ class CommentsNewsFilter extends NewsFilter {
 		if ($allowCom && (!pluginGetVariable('comments', 'regonly') || is_array($userROW))) {
 			$tcvars['vars']['form'] = comments_showform($newsID, $callingCommentsParams);
 			$tcvars['regx']['#\[regonly\](.*?)\[\/regonly\]#is'] = '';
-			$tcvars['regx']['#\[nocomments\](.*?)\[\/nocomments\]#is'] = '';
+			$tcvars['regx']['#\[commforbidden\](.*?)\[\/commforbidden\]#is'] = '';
 		} else {
 			$tcvars['vars']['form'] = '';
 			$tcvars['regx']['#\[regonly\](.*?)\[\/regonly\]#is'] = $allowCom?'$1':'';
-			$tcvars['regx']['#\[nocomments\](.*?)\[\/nocomments\]#is'] = $allowCom?'':'$1';
+			$tcvars['regx']['#\[commforbidden\](.*?)\[\/commforbidden\]#is'] = $allowCom?'':'$1';
 		}
 		$tcvars['regx']['#\[comheader\](.*)\[/comheader\]#is'] = ($SQLnews['com'])?'$1':'';
 
