@@ -165,10 +165,14 @@ class CommentsNewsFilter extends NewsFilter {
 		// Show form for adding comments
 		if ($allowCom && (!pluginGetVariable('comments', 'regonly') || is_array($userROW))) {
 			$tcvars['vars']['form'] = comments_showform($newsID, $callingCommentsParams);
+			$tcvars['regx']['#\[regonly\](.*?)\[\/regonly\]#is'] = '';
+			$tcvars['regx']['#\[nocomments\](.*?)\[\/nocomments\]#is'] = '';
 		} else {
 			$tcvars['vars']['form'] = '';
+			$tcvars['regx']['#\[regonly\](.*?)\[\/regonly\]#is'] = $allowCom?'$1':'';
+			$tcvars['regx']['#\[nocomments\](.*?)\[\/nocomments\]#is'] = $allowCom?'':'$1';
 		}
-		$tcvars['regx']['[\[comheader\](.*)\[/comheader\]]'] = ($SQLnews['com'])?'$1':'';
+		$tcvars['regx']['#\[comheader\](.*)\[/comheader\]#is'] = ($SQLnews['com'])?'$1':'';
 
 		$tpl->template('comments.internal', $templatePath);
 		$tpl->vars('comments.internal', $tcvars);
@@ -318,6 +322,10 @@ function plugin_comments_add() {
 // Show dedicated page for comments
 function plugin_comments_show(){
 	global $config, $catz, $mysql, $catmap, $tpl, $template, $lang, $SUPRESS_TEMPLATE_SHOW, $userROW, $TemplateCache, $SYSTEM_FLAGS;
+
+	// Load lang file, that is required for [hide]..[/hide] block
+	$lang = LoadLang('news', 'site');
+
 
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['comments:header.title'];
 
