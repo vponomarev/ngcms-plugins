@@ -66,7 +66,8 @@ function plugin_gsmg_screen() {
 				$output.= "</url>";
 
 			if (extra_get_param('gsmg', 'catp')) {
-				$pages = ceil($catz[$altname]['posts'] / $config['number']);
+				$cn = ($catz[$altname]['number'] > 0)?$catz[$altname]['number']:$config['number'];
+				$pages = ceil($catz[$altname]['posts'] / $cn);
 				for ($i = 2; $i <= $pages; $i++) {
 					$output.= "<url>";
 					$output.= "<loc><![CDATA[".generateLink('news', 'by.category', array('category' => $altname, 'catid' => $id, 'page' => $i), array(), false, true)."]]></loc>";
