@@ -28,7 +28,7 @@ function plugin_rss_export_generate($catname = ''){
 	$SUPRESS_MAINBLOCK_SHOW = 1;
 
 	// Generate header
-	$xcat = isset($catz[$catname])?$catz[$catname]:'';
+	$xcat = (($catname != '') && isset($catz[$catname]))?$catz[$catname]:'';
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
 	// Take into account: FLAG: use_hide, check if user is logged in
@@ -63,8 +63,8 @@ function plugin_rss_export_generate($catname = ''){
 		$hide_template = @file_get_contents(root.'plugins/rss_export/templates/hide.tpl');
 		$hide_template = str_replace('{text}',$lang['rexport_hide'],$hide_template);
 	}
-
-
+	
+	
 	foreach ($mysql->select($query." limit $limit") as $row) {
 	        // Make standart system call in 'export' mode
 	        $export_mode = 'export_body';
