@@ -273,7 +273,7 @@ class TrackerNewsFilter extends NewsFilter {
 	function showNews($newsID, $SQLnews, &$tvars, $mode) {
 		global $tpl, $config, $mysql, $lang;
 
-		$tvars['vars']['plugin_tracker'] = '..tracker..';
+		$tvars['vars']['plugin_tracker'] = '';
 
 		// Check if INFOHASH field is filled for this news & TORRENT tracker is allowed
 		if (!$SQLnews['tracker_infohash'])
