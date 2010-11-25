@@ -94,11 +94,11 @@ function finance_check_money($userlogin, $balance_no = -1) {
 	if ($res) {
 		if ($balance_no>=0) { return $res['balance'.$balance_no]; }
 
-		$sum = $res['balance'];
+		$sum = isset($res['balance'])?$res['balance']:0;
 		// Проверяем нет ли данных уже в кеше
 		if (isset($FINANCE_CACHE['BM']) && is_array($FINANCE_CACHE['BM'])) {
 			foreach ($FINANCE_CACHE['BM'] as $row)
-				if ($row['monetary'] == 1)
+				if (($row['monetary'] == 1) &&  isset($res['balance'.$row['id']]))
 					 $sum+= $res['balance'.$row['id']];
 		} else {
 			foreach ($mysql->select("select * from ".prefix."_balance_manager where monetary = 1") as $row) {
@@ -130,7 +130,7 @@ function finance_check_enough_money($userlogin, $type, $tprice, $price) {
 		// Пользователь найден
 
 		// Проверяем наличие средств на основном (монетарном) балансе
-		if ($res['balance'] > $price) { return 1; }
+		if (isset($res['balance']) && ($res['balance'] > $price)) { return 1; }
 
 		// Проверяем наличие поинтов на выделенных балансах
 		if ($type) {
@@ -142,12 +142,12 @@ function finance_check_enough_money($userlogin, $type, $tprice, $price) {
 		}
 
 		// Проверяем наличие средств на всех монетарных балансах
-		$balance = $res['balance'];
+		$balance = isset($res['balance'])?$res['balance']:0;
 
 		// Обращаемся к кешу если он есть
 		if (isset($FINANCE_CACHE['BM']) && is_array($FINANCE_CACHE['BM'])) {
 			foreach ($FINANCE_CACHE['BM'] as $row)
-				if ($row['monetary'] == 1)
+				if (($row['monetary'] == 1) && isset($res['balance'.$row['id']]))
 					 $balance+= $res['balance'.$row['id']];
 		} else {
 			foreach ($mysql->select("select * from ".prefix."_balance_manager where monetary = 1") as $row) {
@@ -212,6 +212,7 @@ function finance_pay($identity, $payment) {
 
 	// Формируем массив для обновления пользовательской таблицы
 	$bupdate = array();
+	$bdiff = array();
 	$enough = 0;
 
 	// Проверяем возможные форматы платежей. Если можно платить в поинтах - пытаемся
@@ -224,8 +225,10 @@ function finance_pay($identity, $payment) {
 			if ($pcount > $res['balance'.$row['id']]) {
 				$pcount-=$res['balance'.$row['id']];
 				array_push($bupdate,'balance'.$row['id'].' = 0');
+				$bdiff['balance'.$row['id']] = $res['balance'.$row['id']];
 			} else {
 				array_push($bupdate,'balance'.$row['id'].' = '.($res['balance'.$row['id']] - $pcount));
+				$bdiff['balance'.$row['id']] = $pcount;
 				$pcount = 0;
 				break;
 			}
@@ -245,6 +248,8 @@ function finance_pay($identity, $payment) {
 
 	// Пытаемся заплатить в валюте
 	if (!$enough) {
+		// Обнуляем массив bupdate
+		$bupdate = array();
 		$price = $payment['value']['money'];
 
 		// Проверяем наличие средств на всех монетарных балансах. Начинаем с дополнительных
@@ -252,8 +257,10 @@ function finance_pay($identity, $payment) {
 			if ($price > $res['balance'.$row['id']]) {
 				$price-=$res['balance'.$row['id']];
 				array_push($bupdate,'balance'.$row['id'].' = 0');
+				$bdiff['balance'.$row['id']] = $res['balance'.$row['id']];
 			} else {
 				array_push($bupdate,'balance'.$row['id'].' = '.($res['balance'.$row['id']] - $price));
+				$bdiff['balance'.$row['id']] = $price;
 				$price = 0;
 				break;
 			}
@@ -266,6 +273,7 @@ function finance_pay($identity, $payment) {
 				return false;
 			}
 			array_push($bupdate,'balance = '.($res['balance'] - $price));
+			$bdiff['balance'] = $price;
 			$price = 0;
 		}
 
@@ -276,7 +284,14 @@ function finance_pay($identity, $payment) {
 	$mysql->query("update ".uprefix."_users set ".implode(", ", $bupdate)." where ".(isset($identity['id'])?('id='.db_squote($identity['id'])):'login='.db_squote($identity['name'])));
 
 	// * сохранение лога
-	$mysql->query("insert into ".prefix."_finance_history (user_id, dt, operation_type, sum) values (".db_squote($res['id']).", now(), 2, ".($enough?(db_squote($value['points'][0]).", ".db_squote($value['points'][1])):("'', ".db_squote($value['money']))));
+	$xk = array();
+	$xv = array();
+	foreach ($bdiff as $k => $v) {
+		array_push($xk, $k);
+		array_push($xv, db_squote($v));
+	}
+
+	$mysql->query("insert into ".prefix."_finance_history (user_id, dt, operation_type, description, ".implode(", ", $xk).") values (".db_squote($res['id']).", now(), 2, ".db_squote($payment['description']).", ".implode(", ",$xv).")");
 
 	// * Возвращаем информацию об успешном списании
 	return 1;
