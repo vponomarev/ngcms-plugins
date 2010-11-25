@@ -145,7 +145,8 @@ function plugin_finance_screen() {
  global $template;
 
  load_extras('fin_acceptors');
- switch ($_REQUEST['mode']) {
+ $mode = isset($_REQUEST['mode'])?$_REQUEST['mode']:'';
+ switch ($mode) {
  	case 'pay': plugin_finance_pay(); break;
  	case 'pay_accept_form': plugin_finance_pay_accept(1); break;
  	case 'pay_accept': plugin_finance_pay_accept(); break;
@@ -237,7 +238,7 @@ function plugin_finance_pay_accept($need_form=0) {
 			// Определяем что надо сделать
 			if ($need_form) {
 				// Выводим форму от аксептора
-				$template['vars']['mainblock'] = $acceptor->paymentAcceptForm(secure_html($_REQUEST['needsum']));
+				$template['vars']['mainblock'] = $acceptor->paymentAcceptForm(isset($_REQUEST['needsum'])?secure_html($_REQUEST['needsum']):'');
 			} else {
 				// Автоматизированное проведение платежа
 				$template['vars']['mainblock'] = $acceptor->paymentAccept();
