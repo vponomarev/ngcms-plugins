@@ -171,7 +171,7 @@ function showForm($edMode){
 		$tvars['vars']['captcha_checked']	= ($edMode?$_REQUEST['captcha']:intval(substr($frow['flags'],1,1)))?'checked="checked"':'';
 		$tvars['vars']['html_checked']		= ($edMode?$_REQUEST['html']:intval(substr($frow['flags'],2,1)))?'checked="checked"':'';
 		$tvars['vars']['description']		= secure_html($frow['description']);
-		$tvars['vars']['url']				= home.generateLink('core', 'plugin', array('plugin' => 'feedback'), array('id' => $frow['id']));
+		$tvars['vars']['url']				= generateLink('core', 'plugin', array('plugin' => 'feedback'), array('id' => $frow['id']), true, true);
 
 		// Prepare output for Email groups
 		{
