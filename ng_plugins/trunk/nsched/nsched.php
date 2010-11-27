@@ -18,9 +18,9 @@ class NSchedNewsFilter extends NewsFilter {
 		$tvars['vars']['nsched'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>Дата включения:</td><td><input name="nsched_activate" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr><tr><td>Дата отключения:</td><td><input name="nsched_deactivate" /></td></tr></table></td></tr>';
 		return 1;
 	}
-	function addNews(&$tvars, &$SQL) { 
+	function addNews(&$tvars, &$SQL) {
 	        $SQL['nsched_activate']   = $_REQUEST['nsched_activate'];
-		$SQL['nsched_deactivate'] = $_REQUEST['nsched_deactivate']; 	
+		$SQL['nsched_deactivate'] = $_REQUEST['nsched_deactivate'];
 		return 1;
 	}
 	function editNewsForm($newsID, $SQLold, &$tvars) {
@@ -32,10 +32,10 @@ class NSchedNewsFilter extends NewsFilter {
 		$tvars['vars']['nsched'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>Дата включения:</td><td><input name="nsched_activate" value="'.$nactivate.'" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr><tr><td>Дата отключения:</td><td><input name="nsched_deactivate" value="'.$ndeactivate.'" /></td></tr></table></td></tr>';
 		return 1;
 	}
-	function editNews($newsID, $SQLold, &$SQLnew, &$tvars) { 
+	function editNews($newsID, $SQLold, &$SQLnew, &$tvars) {
 	        $SQLnew['nsched_activate']   = $_REQUEST['nsched_activate'];
-		$SQLnew['nsched_deactivate'] = $_REQUEST['nsched_deactivate']; 	
-		return 1; 
+		$SQLnew['nsched_deactivate'] = $_REQUEST['nsched_deactivate'];
+		return 1;
 	}
 
 
@@ -49,15 +49,46 @@ add_act('cron_nsched', 'plugin_nsched');
 // Функция вызываемая по крону
 //
 function plugin_nsched() {
- global $mysql;
- 
- // Выбираем новости для которых сработал флаг "опубликовать по дате"
- foreach ($mysql->select("select * from ".prefix."_news where (nsched_activate>0) and (nsched_activate <= now())") as $row) {
- 	$mysql->query("update ".prefix."_news set approve=1, nsched_activate=0 where id = ".$row['id']);
- }
- // Выбираем новости для которых сработал флаг "снять публикацию по дате"
- foreach ($mysql->select("select * from ".prefix."_news where (nsched_deactivate>0) and (nsched_deactivate <= now())") as $row) {
- 	$mysql->query("update ".prefix."_news set approve=0, nsched_deactivate=0 where id = ".$row['id']);
- }
+	global $mysql, $catz, $catmap;
+
+
+	// Список новостей для (де)активации
+	$listActivate   = array();
+	$dataActivate	= array();
+
+	$listDeactivate = array();
+	$dataDeactivate	= array();
+
+	// Выбираем новости для которых сработал флаг "опубликовать по дате"
+	foreach ($mysql->select("select * from ".prefix."_news where (nsched_activate>0) and (nsched_activate <= now())") as $row) {
+		$listActivate[] = $row['id'];
+		$dataActivate[$row['id']] = $row;
+		//$mysql->query("update ".prefix."_news set approve=1, nsched_activate=0 where id = ".$row['id']);
+	}
+	// Выбираем новости для которых сработал флаг "снять публикацию по дате"
+	foreach ($mysql->select("select * from ".prefix."_news where (nsched_deactivate>0) and (nsched_deactivate <= now())") as $row) {
+		$listDeactivate[] = $row['id'];
+		$dataDeactivate[$row['id']] = $row;
+		//$mysql->query("update ".prefix."_news set approve=0, nsched_deactivate=0 where id = ".$row['id']);
+	}
+
+	// Проверяем, есть ли новости для (де)активации
+	if (count($listActivate) || count($listDeactivate)) {
+		// Загружаем необходимые плагины
+		loadActionHandlers('admin');
+		loadActionHandlers('admin:mod:editnews');
+
+		// Загружаем системную библиотеку
+		require_once(root.'includes/inc/lib_admin.php');
+
+		// Запускаем модификацию новостей
+		if (count($listActivate)) {
+			massModifyNews(array('data' => $dataActivate), array('approve' => 1, 'nsched_activate' => ''), false);
+		}
+		if (count($listDeactivate)) {
+			massModifyNews(array('data' => $dataDeactivate), array('approve' => 0, 'nsched_deactivate' => ''), false);
+
+		}
+	}
 }
 
