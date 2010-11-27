@@ -134,7 +134,7 @@ function cron_unregister_task($plugin, $pluginCMD='', $min='', $hour='', $day=''
 //
 function cron_run() {
 
- $cacheDir  = get_plugcfg_dir('cron').'/tmp';
+ $cacheDir  = get_plugcache_dir('cron');
 
  $timeout   = 120;  // 120 секунд (2 минуты) на попытку
  $period    = 300;  // 5 минут между запусками
