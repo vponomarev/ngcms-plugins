@@ -48,7 +48,7 @@ function lastcomments($pp = 0) {
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array($pp.'lastcomments', $pp.'entries'), 'lastcomments', extra_get_param('lastcomments', 'localsource'));
 
-	$query = "select c.id, c.postdate, c.author, c.author_id, c.text, n.id as nid, n.title, n.alt_name, n.catid, n.postdate as npostdate from ".prefix."_comments c left join ".prefix."_news n on c.post=n.id order by c.id desc limit ".$number;
+	$query = "select c.id, c.postdate, c.author, c.author_id, c.text, n.id as nid, n.title, n.alt_name, n.catid, n.postdate as npostdate from ".prefix."_comments c left join ".prefix."_news n on c.post=n.id where n.approve=1 order by c.id desc limit ".$number;
 	$lastcomments = '';
 	foreach ($mysql->select($query) as $row) {
 
