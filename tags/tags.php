@@ -6,7 +6,7 @@ if (!defined('NGCMS')) die ('HAL');
 class TagsNewsfilter extends NewsFilter {
 	function addNewsForm(&$tvars) {
 	        global $tpl;
-		$tpath = locatePluginTemplates(array('tags_addnews'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
+		$tpath = locatePluginTemplates(array('tags_addnews'), 'tags', pluginGetVariable('tags', 'localsource'), pluginGetVariable('tags', 'skin')?pluginGetVariable('tags', 'skin'):'default');
 
 		$tpl -> template('tags_addnews', $tpath['tags_addnews']);
 		$tpl -> vars('tags_addnews', array ( 'vars' => array ()));
@@ -60,7 +60,7 @@ class TagsNewsfilter extends NewsFilter {
 
 	function editNewsForm($newsID, $SQLold, &$tvars) {
 	        global $tpl;
-		$tpath = locatePluginTemplates(array('tags_editnews'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
+		$tpath = locatePluginTemplates(array('tags_editnews'), 'tags', pluginGetVariable('tags', 'localsource'), pluginGetVariable('tags', 'skin')?pluginGetVariable('tags', 'skin'):'default');
 
 		$tpl -> template('tags_editnews', $tpath['tags_editnews']);
 		$tpl -> vars('tags_editnews', array ( 'vars' => array ( 'tags' => secure_html($SQLold['tags']))));
@@ -158,7 +158,7 @@ class TagsNewsfilter extends NewsFilter {
 
 		// Load params for display (if needed)
 		if (!isset($this->displayParams) || !is_array($this->displayParams)) {
-			$tpath = locatePluginTemplates(array(':params.ini'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
+			$tpath = locatePluginTemplates(array(':params.ini'), 'tags', pluginGetVariable('tags', 'localsource'), pluginGetVariable('tags', 'skin')?pluginGetVariable('tags', 'skin'):'default');
 			$this->displayParams = parse_ini_file($tpath[':params.ini'].'params.ini');
 		}
 
@@ -263,7 +263,27 @@ function plugin_tags_cloud(){
 //
 // Show side cloud block
 function plugin_tags_cloudblock() {
-	plugin_tags_generatecloud(0);
+	global $CurrentHandler, $SYSTEM_FLAGS, $catz, $catmap;
+
+	// Check if we need to limit list of categories with tags
+	$cl = '';
+	if (pluginGetVariable('tags', 'catfilter') && ($CurrentHandler['pluginName'] == 'news') &&  ($CurrentHandler['handlerName'] == 'by.category')) {
+		// Try to determine category ID
+		//print "<pre>".var_export($CurrentHandler['params'], true)."</pre>";
+		if (isset($CurrentHandler['params']['catid']) && isset($catmap[$CurrentHandler['params']['catid']])) {
+			$cl = array(intval($CurrentHandler['params']['catid']));
+		} else if (isset($CurrentHandler['params']['category']) && isset($catz[$CurrentHandler['params']['category']])) {
+			$cl = array($catz[$CurrentHandler['params']['category']]['id']);
+		}
+	} else if (pluginGetVariable('tags', 'newsfilter') && ($CurrentHandler['pluginName'] == 'news') &&  ($CurrentHandler['handlerName'] == 'news')) {
+		if (is_array($SYSTEM_FLAGS['news']['db.categories']) && (count($SYSTEM_FLAGS['news']['db.categories'])>0)) {
+			$cl = $SYSTEM_FLAGS['news']['db.categories'];
+		}
+	//	print "<pre>".var_export($CurrentHandler['params'], true)."</pre>";
+	//	print "<pre>".var_export($SYSTEM_FLAGS['news'], true)."</pre>";
+	}
+
+	plugin_tags_generatecloud(0, $cl);
 }
 
 //
@@ -292,7 +312,7 @@ function plugin_tags_tag() {
 	LoadPluginLang('tags', 'main', '', '', ':');
 
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['tags:header.tag.title'];
-	$tpath = locatePluginTemplates(array('cloud', 'cloud.tag', 'pages', 'cloud.tag.entry'), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
+	$tpath = locatePluginTemplates(array('cloud', 'cloud.tag', 'pages', 'cloud.tag.entry'), 'tags', pluginGetVariable('tags', 'localsource'), pluginGetVariable('tags', 'skin')?pluginGetVariable('tags', 'skin'):'default');
 
 
 	include_once root.'includes/news.php';
@@ -355,7 +375,11 @@ function plugin_tags_tag() {
 
 }
 
-function plugin_tags_generatecloud($ppage = 0){
+// Generate tags cloud
+// Params
+// - $ppage - flag if separate plugin page should be generated (0 - no, 1 - yes)
+// - $catlist - array with list of categories for tag show (will not be filtered if variable is not an array)
+function plugin_tags_generatecloud($ppage = 0, $catlist = ''){
 	global $tpl, $template, $mysql, $lang, $config, $SYSTEM_FLAGS, $TemplateCache;
 
 	LoadPluginLang('tags', 'main', '', '', ':');
@@ -365,11 +389,20 @@ function plugin_tags_generatecloud($ppage = 0){
 
 	$masterTPL = $ppage?'cloud':'sidebar';
 
-	// Generate cache file name [ we should take into account SWITCHER plugin ]
-	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang']).$masterTPL.(isset($_REQUEST['page'])?$_REQUEST['page']:'').'.txt';
+	// Check if we need to limit a list of categories or can load full list of tags from cloud
+	$cl = array();
+	if (is_array($catlist)) {
+		foreach ($catlist as $cat) {
+			if (intval($cat) > 0)
+				$cl[] = intval($cat);
+		}
+	}
 
-	if (extra_get_param('tags','cache')) {
-		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('tags','cacheExpire'), 'tags');
+	// Generate cache file name [ we should take into account SWITCHER plugin ]
+	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang']).$masterTPL.(isset($_REQUEST['page'])?$_REQUEST['page']:'').(is_array($cl?join(",",$cl):$cl)).'.txt';
+
+	if (pluginGetVariable('tags','cache')) {
+		$cacheData = cacheRetrieveFile($cacheFileName, pluginGetVariable('tags','cacheExpire'), 'tags');
 		if ($cacheData != false) {
 			// We got data from cache. Return it and stop
 			$template['vars'][$ppage?'mainblock':'plugin_tags'] = $cacheData;
@@ -378,13 +411,13 @@ function plugin_tags_generatecloud($ppage = 0){
 	}
 
 	// Load params for display (if needed)
-	$tpath = locatePluginTemplates(array(':params.ini', 'pages', $masterTPL), 'tags', extra_get_param('tags', 'localsource'), extra_get_param('tags', 'skin')?extra_get_param('tags', 'skin'):'default');
+	$tpath = locatePluginTemplates(array(':params.ini', 'pages', $masterTPL), 'tags', pluginGetVariable('tags', 'localsource'), pluginGetVariable('tags', 'skin')?pluginGetVariable('tags', 'skin'):'default');
 	$displayParams = parse_ini_file($tpath[':params.ini'].'params.ini');
 
 	$tags = array();
 
 	// Get tags list from SQL
-	switch (extra_get_param('tags', ($ppage?'ppage_':'').'orderby')) {
+	switch (pluginGetVariable('tags', ($ppage?'ppage_':'').'orderby')) {
 		case 1: $orderby = 'tag'; break;
 		case 2: $orderby = 'tag desc'; break;
 		case 3: $orderby = 'posts'; break;
@@ -416,28 +449,32 @@ function plugin_tags_generatecloud($ppage = 0){
 		$limit = 'limit '.$perPage;
 	}
 
-	$rows = $mysql->select("select * from ".prefix."_tags order by ".$orderby.' '.$limit);
+
+	$rows = $mysql->select(
+		(count($cl)>0)?
+			("select DISTINCTROW nt.* from ".prefix."_tags nt left join ".prefix."_tags_index ti on nt.id = ti.tagID left join ".prefix."_news_map nm using(newsID) where nm.categoryID in (".join(",", $cl).") order by ".$orderby.' '.$limit):
+			("select * from ".prefix."_tags order by ".$orderby.' '.$limit));
 
 	// Prepare style definition
 	$wlist = array();
-	if ($manualstyle = intval(extra_get_param('tags', 'manualstyle'))) {
-	        foreach (explode("\n",extra_get_param('tags', 'styles_weight')) as $wrow) {
+	if ($manualstyle = intval(pluginGetVariable('tags', 'manualstyle'))) {
+	        foreach (explode("\n",pluginGetVariable('tags', 'styles_weight')) as $wrow) {
 	         if (preg_match('#^ *(\d+) *\| *(\d+) *\|(.+?) *$#', trim($wrow), $m))
 	         	array_push($wlist, array($m[1], $m[2], $m[3]));
 	        }
 
-		$stylelist = preg_split("/\, */", trim(extra_get_param('tags', 'styles')));
+		$stylelist = preg_split("/\, */", trim(pluginGetVariable('tags', 'styles')));
 
 		if ((($styleListCount = count($stylelist)) < 2)&&(($styleWeightListCount = count($wlist)) < 1))
 			$manualstyle = 0;
 	}
 	// Calculate min/max if we have any rows
 	$min = -1; $max = 0;
-	foreach ($rows as $row) { 
+	foreach ($rows as $row) {
 		if ($row['posts'] > $max) $max = $row['posts'];
 		if (($min == -1)||($row['posts'] < $min)) $min = $row['posts'];
 	}
-	
+
 	// Init variables for 3D cloud
 	$cloud3d = array();
 	$cloudMin = (isset($displayParams['size3d.min']) && (intval($displayParams['size3d.min'])>0))?intval($displayParams['size3d.min']):10;
@@ -448,7 +485,9 @@ function plugin_tags_generatecloud($ppage = 0){
 	if ($cloudStep < 0.01) $cloudStep = 1;
 
 	// Prepare output rows
+	$tagCount = 0;
 	foreach ($rows as $row) {
+		$tagCount++;
 	    $link = checkLinkAvailable('tags', 'tag')?
 					generateLink('tags', 'tag', array('tag' => $row['tag'])):
 					generateLink('core', 'plugin', array('plugin' => 'tags', 'handler' => 'tag'), array('tag' => $row['tag']));
@@ -472,7 +511,7 @@ function plugin_tags_generatecloud($ppage = 0){
 		$tags[] = str_replace(array('{url}', '{tag}', '{posts}', '{params}'), array($link, $row['tag'], $row['posts'], $params), $displayParams[($ppage?'cloud':'sidebar').'.tag']);
 	}
 
-	$tagList = join($displayParams[($ppage?'cloud':'sidebar').'.tag.delimiter']."\n", $tags);
+	$tagList = $tagCount?(join($displayParams[($ppage?'cloud':'sidebar').'.tag.delimiter']."\n", $tags)):($displayParams[($ppage?'cloud':'sidebar').'.notags']);
 
 	// If we have more than 1 page or current page != 1, we should generate paginator
 	if ( $ppage && (($pagesCount > 1) || ($pageNo != 1))) {
@@ -506,6 +545,6 @@ function plugin_tags_generatecloud($ppage = 0){
 	$output = $tpl -> show($masterTPL);
 	$template['vars'][$ppage?'mainblock':'plugin_tags'] = $output;
 
-	if (extra_get_param('tags','cache'))
+	if (pluginGetVariable('tags','cache'))
 		cacheStoreFile($cacheFileName, $output, 'tags');
 }
