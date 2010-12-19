@@ -39,11 +39,39 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 
 	$tpl -> template($templateName, $templatePath);
 
+	$joinFilter = array();
+	if ($config['use_avatars']) {
+		$joinFilter = array('users' => array('fields' => array('avatar')));
+	}
+
+	// RUN interceptors
+	if (isset($PFILTERS['comments']) && is_array($PFILTERS['comments']))
+		foreach ($PFILTERS['comments'] as $k => $v) {
+			$xcfg = $v->commentsJoinFilter();
+			if (is_array($xcfg) && isset($xcfg['users']) && isset($xcfg['users']['fields']) && is_array($xcfg['users']['fields'])) {
+				$joinFilter['users']['fields'] = array_uniq(array_merge($joinFilter['users']['fields'], $xcfg['users']['fields']));
+			}
+		}
+
+	//print "ARRAY CFG: <pre>".var_export($joinFilter, true)."</pre>";
+	function _cs_am($k){ return 'u.'.$k.' as `users_'.$k.'`';	}
+	if (isset($joinFilter['users']) && isset($joinFilter['users']['fields']) && is_array($joinFilter['users']['fields']) && (count($joinFilter['users']['fields']) > 0)) {
+		$sql = "select c.*, ".
+			join(", ", array_map('_cs_am', $joinFilter['users']['fields'])).
+			' from '.prefix.'_comments c'.
+			' left join '.uprefix.'_users u on c.author_id = u.id where c.post='.db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
+	} else {
+		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
+	}
+	//print "<pre>SQL: ".$sql."</pre>";
+
+	/*
 	if ($config['use_avatars']) {
 		$sql = "select c.*, u.avatar from ".prefix."_comments c left join ".uprefix."_users u on c.author_id = u.id where c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
 	} else {
 		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
 	}
+	*/
 	$sql .= " order by c.id".(pluginGetVariable('comments', 'backorder')?' desc':'');
 
 	// Comments counter
@@ -112,8 +140,8 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		$tvars['vars']['alternating'] = ($comnum%2) ? "comment_even" : "comment_odd";
 
 		if ($config['use_avatars']) {
-			if ($row['avatar']) {
-				$tvars['vars']['avatar'] = "<img src=\"".avatars_url."/".$row['avatar']."\" alt=\"".$row['author']."\" />";
+			if ($row['users_avatar']) {
+				$tvars['vars']['avatar'] = "<img src=\"".avatars_url."/".$row['users_avatar']."\" alt=\"".$row['author']."\" />";
 			} else {
 				// If gravatar integration is active, show avatar from GRAVATAR.COM
 				if ($config['avatars_gravatar']) {

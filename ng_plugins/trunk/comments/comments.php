@@ -404,8 +404,12 @@ function plugin_comments_show(){
 	// Show form for adding comments
 	if ($newsRow['allow_com'] && (!pluginGetVariable('comments', 'regonly') || is_array($userROW))) {
 		$tcvars['vars']['form'] = comments_showform($newsID, $callingCommentsParams);
+		$tcvars['regx']['#\[regonly\](.*?)\[\/regonly\]#is'] = '';
+		$tcvars['regx']['#\[commforbidden\](.*?)\[\/commforbidden\]#is'] = '';
 	} else {
 		$tcvars['vars']['form'] = '';
+		$tcvars['regx']['#\[regonly\](.*?)\[\/regonly\]#is'] = $allowCom?'$1':'';
+		$tcvars['regx']['#\[commforbidden\](.*?)\[\/commforbidden\]#is'] = $allowCom?'':'$1';
 	}
 
 	// Show header file

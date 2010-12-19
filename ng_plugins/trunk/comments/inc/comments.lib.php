@@ -20,4 +20,11 @@ class FilterComments {
 	// Show comments
 	function showComments($newsID, $commRec, $comnum, &$tvars) { return 1; }
 
+	// Show comments external table join initiator.
+	// Function should return specially formatted array:
+	// Each array antry is a name of table for joining [ currenly only `users` is supported ] with value of configuration sub array
+	// Sub array should contain configuration parameters:
+	//		fields - list of fields to join
+	// example: array ( 'users' => array ( 'fields' => array ( 'avatar' )))
+	function commentsJoinFilter(){ return array(); }
 }
