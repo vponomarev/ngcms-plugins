@@ -49,7 +49,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		foreach ($PFILTERS['comments'] as $k => $v) {
 			$xcfg = $v->commentsJoinFilter();
 			if (is_array($xcfg) && isset($xcfg['users']) && isset($xcfg['users']['fields']) && is_array($xcfg['users']['fields'])) {
-				$joinFilter['users']['fields'] = array_uniq(array_merge($joinFilter['users']['fields'], $xcfg['users']['fields']));
+				$joinFilter['users']['fields'] = array_unique(array_merge($joinFilter['users']['fields'], $xcfg['users']['fields']));
 			}
 		}
 
@@ -63,15 +63,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 	} else {
 		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
 	}
-	//print "<pre>SQL: ".$sql."</pre>";
 
-	/*
-	if ($config['use_avatars']) {
-		$sql = "select c.*, u.avatar from ".prefix."_comments c left join ".uprefix."_users u on c.author_id = u.id where c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
-	} else {
-		$sql = "select c.* from ".prefix."_comments c WHERE c.post=".db_squote($newsID).($commID?(" and c.id=".db_squote($commID)):'');
-	}
-	*/
 	$sql .= " order by c.id".(pluginGetVariable('comments', 'backorder')?' desc':'');
 
 	// Comments counter
