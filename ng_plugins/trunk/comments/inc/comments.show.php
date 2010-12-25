@@ -103,8 +103,8 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		$text	= $row['text'];
 
 		if ($config['blocks_for_reg'])		{ $text = $parse -> userblocks($text); }
-		if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 		if ($config['use_bbcodes'])			{ $text = $parse -> bbcodes($text); }
+		if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 		if ($config['use_smilies'])			{ $text = $parse -> smilies($text); }
 
 
