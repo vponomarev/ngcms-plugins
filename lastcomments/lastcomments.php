@@ -55,8 +55,8 @@ function lastcomments($pp = 0) {
 		// Parse comments
 		$text = $row['text'];
 		if ($config['blocks_for_reg'])		{ $text = $parse -> userblocks($text); }
-		if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 		if ($config['use_bbcodes'])			{ $text = $parse -> bbcodes($text); }
+		if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 		if ($config['use_smilies'])			{ $text = $parse -> smilies($text); }
 	    if (strlen($text) > $comm_length)	{ $text = $parse -> truncateHTML($text, $comm_length);}
 

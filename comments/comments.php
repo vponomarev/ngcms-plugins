@@ -33,8 +33,8 @@ class CommentsNewsFilter extends NewsFilter {
 			$text	= $crow['text'];
 
 			if ($config['blocks_for_reg'])		{ $text = $parse -> userblocks($text); }
-			if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 			if ($config['use_bbcodes'])			{ $text = $parse -> bbcodes($text); }
+			if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 			if ($config['use_smilies'])			{ $text = $parse -> smilies($text); }
 
 			$txvars['vars'] = array(
