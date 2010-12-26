@@ -25,10 +25,11 @@ if ($skDir = opendir(extras_dir.'/voting/tpl/skins')) {
 
 $cfg = array();
 array_push($cfg, array('descr' => $lang['voting:desc']));
-array_push($cfg, array('name' => 'rotate', 'title' => $lang['voting:rotate'], 'descr' => $lang['voting:rotate#desc'], 'type' => 'select', 'values' => array ( '1' => $lang['yesa'], '0' => $lang['noa']), 'value' => extra_get_param('voting','rotate')));
-array_push($cfg, array('name' => 'active', 'title' => $lang['voting:active'], 'descr' => $lang['voting:active#desc'], 'type' => 'select', 'values' => (array('0' => ' -- ') + mkVoteList()), 'value' => extra_get_param('voting','active')));
-array_push($cfg, array('name' => 'secure', 'title' => $lang['voting:secure'], 'descr' => $lang['voting:secure#desc'], 'type' => 'select', 'values' => array ( '1' => 'ад', '0' => 'Cookie'), 'value' => extra_get_param('voting','secure')));
-array_push($cfg, array('name' => 'skin', 'title'   => $lang['voting:skin'], 'descr' => $lang['voting:skin#desc'], 'type' => 'select', 'values' => $skList, 'value' => extra_get_param('voting','skin')));
+array_push($cfg, array('name' => 'rotate', 'title' => $lang['voting:rotate'], 'descr' => $lang['voting:rotate#desc'], 'type' => 'select', 'values' => array ( '1' => $lang['yesa'], '0' => $lang['noa']), 'value' => pluginGetVariable('voting','rotate')));
+array_push($cfg, array('name' => 'active', 'title' => $lang['voting:active'], 'descr' => $lang['voting:active#desc'], 'type' => 'select', 'values' => (array('0' => ' -- ') + mkVoteList()), 'value' => pluginGetVariable('voting','active')));
+array_push($cfg, array('name' => 'secure', 'title' => $lang['voting:secure'], 'descr' => $lang['voting:secure#desc'], 'type' => 'select', 'values' => array ( '1' => 'ад', '0' => 'Cookie'), 'value' => pluginGetVariable('voting','secure')));
+array_push($cfg, array('name' => 'skin',   'title' => $lang['voting:skin'],   'descr' => $lang['voting:skin#desc'],   'type' => 'select', 'values' => $skList, 'value' => pluginGetVariable('voting','skin')));
+array_push($cfg, array('name' => 'vpp',    'title' => $lang['voting:vpp'],   'descr' => $lang['voting:vpp#desc'],   'type' => 'input',    'value' => intval(pluginGetVariable('voting','vpp'))));
 
 function mkVoteList() {
 	global $mysql;
@@ -181,6 +182,3 @@ if ($_REQUEST['action'] == 'newvote') {
 
 	generate_config_page($plugin, $cfg);
 }
-
-
-?>
