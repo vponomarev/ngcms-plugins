@@ -43,6 +43,7 @@
 
 <div id="voting_ng">
 <h5>{votename}</h5>
+[votedescr]<small>Описание: {votedescr}</small><br/>[/votedescr]
 <form action="{post_url}" method="post" id="voteForm">
 <input type=hidden name="mode" value="vote" />
 <input type=hidden name="voteid" value="{voteid}" />

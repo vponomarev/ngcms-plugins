@@ -9,10 +9,10 @@ register_plugin_page('voting','','plugin_voting_screen',0);
 function plugin_voting() {
 	global $mysql, $tpl, $template, $REQUEST_URI;
 
-	$voteid = intval(extra_get_param('voting','active'));
-	$rand = extra_get_param('voting','rotate');
+	$voteid = intval(pluginGetVariable('voting','active'));
+	$rand = pluginGetVariable('voting','rotate');
 	$voted = isset($_COOKIE['ngcms_voting'])?explode(",",$_COOKIE['ngcms_voting'].''):array();
-	$skin = extra_get_param('voting','skin');
+	$skin = pluginGetVariable('voting','skin');
 	if ((!is_dir(extras_dir.'/voting/tpl/skins/'.$skin))||(!$skin)) { $skin = 'basic'; }
 
 	$template['vars']['voting'] = plugin_showvote($skin, 4, $voteid, $rand, $voted);
@@ -34,12 +34,12 @@ function plugin_voting() {
 //  4. rand - rand flag (in show one mode)
 //	5. votedList - list of voted (in show list mode)
 function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = array()) {
-	global $tpl, $mysql, $username, $userROW, $ip, $REQUEST_URI;
+	global $tpl, $mysql, $username, $userROW, $ip, $REQUEST_URI, $TemplateCache, $SYSTEM_FLAGS;
 
 	$result = '';
 	$post_url = generateLink('core', 'plugin', array('plugin' => 'voting'), array());
 
-	$tpath = locatePluginTemplates(array('shls_vote', 'edls_vote', 'shls_vline', 'edls_vline', 'lshdr', 'sh_vote', 'ed_vote', 'sh_vline', 'ed_vline'), 'voting', extra_get_param('voting', 'localsource'), $tpl_skin);
+	$tpath = locatePluginTemplates(array('shls_vote', 'edls_vote', 'shls_vline', 'edls_vline', 'lshdr', 'sh_vote', 'ed_vote', 'sh_vline', 'ed_vline'), 'voting', pluginGetVariable('voting', 'localsource'), $tpl_skin);
 	// Preload templates
 	if ($mode<4) {
 	 	$tpl->template('shls_vote',$tpath['shls_vote']);
@@ -56,8 +56,21 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 	 	$tpl->template('ed_vline',$tpath['ed_vline']);
 	}
 
+	// Page number
+	$page = isset($_GET['page'])?intval($_GET['page']):1;
+	if ($page < 1) { $page = 1; }
+
+	$vpp  = intval(pluginGetVariable('voting', 'vpp'));
+	$pageCount	= 0;
+	if ($vpp>0 && !$mode) {
+		// Calculate real number of pages
+		$pc = $mysql->record("select count(*) as cnt from ".prefix."_vote where active = 1");
+		$pageCount = ceil($pc['cnt'] / $vpp);
+	}
+	if ($page > $pageCount) { $page = $pageCount; }
+
 	if (!$mode) {
-		$where = 'where active = 1 order by id desc';
+		$where = 'where active = 1 order by id desc'.(($vpp>0)?(' limit '.(($page-1)*$vpp).', '.$vpp):'');
 	} else {
 		if ($rand) {
 			$where = 'where active = 1 order by rand() limit 1';
@@ -70,11 +83,13 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 
 	// If we have voteid - show only this vote, else - show all active
 	//print "QUERY: 'select * from ".prefix."_vote $where'<br>\n";
+	$vCount = 0;
 	foreach ($mysql->select("select * from ".prefix."_vote $where") as $row) {
+		$vCount++;
 		$votelines = '';
 
 		$dup = 0;
-		if ($secure = extra_get_param('voting','secure')) {
+		if ($secure = pluginGetVariable('voting','secure')) {
 			$condition = (is_array($userROW))?"userid = ".$userROW['id']:"ip='$ip'";
 			if ($mysql->record("select * from ".prefix."_votestat where voteid = ".$row['id']." and $condition limit 1")) {
 				$dup = 1;
@@ -119,15 +134,34 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 			'votename' => $row['name'],
 			'voteid' => $row['id'],
 			'votelines' => $votelines,
+			'votedescr' => $row['descr'],
 			'REFERER' => isset($REQUEST_URI)?$REQUEST_URI:'',
 			'home' => home,
 			'vcount' => $tcount,
 			'post_url' => $post_url,
 			'tpl_dir' => admin_url.'/plugins/voting/tpl/skins/'.$tpl_skin);
+		$tvars['regx']['#\[votedescr](.*?)\[/votedescr]#is'] = (strlen($row['descr']) > 0) ? '$1' : '';
 		$tpl->vars($tpl_prefix.'_vote', $tvars);
 		$result .= $tpl->show($tpl_prefix.'_vote');
 	}
-	if (!$result) {
+
+	// Add page navigation
+	if ($pageCount > 0) {
+		$paginationParams = array(
+			'pluginName' => 'core',
+			'pluginHandler' => 'plugin',
+			'params' => array('plugin' => 'voting'),
+			'xparams' => array(),
+			'paginator' => array('page', 1, false)
+		);
+
+		templateLoadVariables(true);
+		$navigations = $TemplateCache['site']['#variables']['navigation'];
+		$result .= '<br/>'.generatePagination($page, 1, $pageCount, 10, $paginationParams, $navigations);
+	}
+
+
+	if (!$vCount) {
 		$result = 'No votings found';
 	}
 	return $result;
@@ -141,7 +175,7 @@ function plugin_voting_screen() {
  @header('Content-type: text/html; charset="windows-1251"');
  $votedList = explode(",",$_COOKIE['ngcms_voting']);
 
- $skin = extra_get_param('voting','skin');
+ $skin = pluginGetVariable('voting','skin');
  if ((!is_dir(extras_dir.'/voting/tpl/skins/'.$skin))||(!$skin)) { $skin = 'basic'; }
 
  $is_ajax = (($_GET['style'] == 'ajax')||($_POST['style'] == 'ajax'))?1:0;
@@ -152,7 +186,7 @@ function plugin_voting_screen() {
 		// Line was found
 		// Check for dupes
 		$dup = 0;
-		if ($secure = extra_get_param('voting','secure')) {
+		if ($secure = pluginGetVariable('voting','secure')) {
 			$condition = (is_array($userROW))?"userid = ".$userROW['id']:"ip=".db_squote($ip);
 			if ($mysql->record("select * from ".prefix."_votestat where voteid = ".$vrow['id']." and $condition limit 1")) {
 				$dup = 1;
