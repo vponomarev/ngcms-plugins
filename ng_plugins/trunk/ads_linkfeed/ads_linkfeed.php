@@ -20,7 +20,7 @@ function plugin_ads_linkfeed() {
 	// Check if plugin should be activated on this domain
 	if (trim(pluginGetVariable('ads_linkfeed', 'domains'))) {
 		$found = false;
-		$list = split("\n", pluginGetVariable('ads_sape', 'domains'));
+		$list = split("\n", pluginGetVariable('ads_linkfeed', 'domains'));
 		foreach ($list as $dn) {
 			if (trim($_SERVER['HTTP_HOST']) == trim($dn)) {
 				$found = true;
