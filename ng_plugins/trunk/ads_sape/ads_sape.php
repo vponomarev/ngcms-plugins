@@ -36,7 +36,6 @@ function plugin_ads_sape() {
 			return;
 		}
 	}
-	print "Loading SAPE ...";
 
 	$blen = array();
 	foreach (split(",", pluginGetVariable('ads_sape', 'blength')) as $br) {
