@@ -1,8 +1,9 @@
 <table border="0" cellspacing="1" cellpadding="1" class="content">
 <tr>
-<td colspan="2" width=100% class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8"><a href="?mod=extras" title="{l_extras}">{l_extras}</a> => <a href="?mod=extra-config&plugin=xfields">{l_config_text} xfields</a></td>
+<td width="100%" colspan="2" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" />{l_config_text}: <a href="?mod=extra-config&plugin=xfields&section={sectionID}" class="bold">xfields</a> :: [add]{l_xfields_title_add}[/add][edit]{l_xfields_title_edit} ({id})[/edit]</td>
 </tr>
 </table>
+
 <script language="javascript">
 function clx(mode) {
  document.getElementById('type_text').style.display = (mode == 'text')?'block':'none';
@@ -25,13 +26,10 @@ function storageMode(mode) {
 
 </script>
 
-<form action="?mod=extra-config&plugin=xfields&action=doedit" method="post" name="xfieldsform">
+<form action="?mod=extra-config&plugin=xfields&action=doedit&section={sectionID}" method="post" name="xfieldsform">
 <input type="hidden" name="mod" value="extra-config">
 <input type="hidden" name="edit" value="[add]0[/add][edit]1[/edit]">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
-<tr>
-<td colspan="2" width=100% class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8">[add]{l_xfields_title_add}[/add][edit]{l_xfields_title_edit}[/edit]</td>
-</tr>
 <tr class="contRow1"><td width="50%">{l_xfields_id}</td><td width="47%"><input type="text" name="id" value="{id}" size="40" [edit]readonly[/edit]>[edit] &nbsp; &nbsp; {l_xfields_noeditid}[/edit]</td></tr>
 <tr class="contRow1"><td width="50%">{l_xfields_title}</td><td><input type="text" name="title" value="{title}" size="40" /></td></tr>
 <tr class="contRow1"><td width="50%">Режим сохранения данных:</td><td><select name="storage" id="storage" value="{storage}" onclick="storageMode(this.value);" onchange="storageMode(this.value);" /><option value="0">Единое хранилище</option><option value="1">Персональное поле в БД</option></select></td></tr>

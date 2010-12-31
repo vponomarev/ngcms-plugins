@@ -1,5 +1,5 @@
-<tr align="left" class="contRow1">
-<td style="padding:2px;">[linkup]<img src="{skins_url}/images/up.gif" width="16" height="16" alt="UP" />[/linkup] [linkdown]<img src="{skins_url}/images/down.gif" width="16" height="16" alt="DOWN" />[/linkdown] [link]{name}[/link]</td>
+<tr align="left" class="xListEntry">
+<td style="padding:2px;">[linkup]<img src="{skins_url}/images/up.gif" width="16" height="16" alt="UP" />[/linkup][linkdown]<img src="{skins_url}/images/down.gif" width="16" height="16" alt="DOWN" />[/linkdown] [link]{name}[/link]</td>
 <td>{title}</td>
 <td>{type}</td>
 <td>{options}</td>

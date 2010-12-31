@@ -4,9 +4,10 @@
 
 ID: xfields
 Name: Custom fields
-Version: 0.09a
-Acts: core
+Version: 0.10
+Acts: core, admin:mod:addnews, admin:mod:editnews, admin:mod:categories
 File: xfields.php
+Actions: rpc;lib/librpc.php
 Config: config.php
 Install: install.php
 Deinstall: uninstall.php

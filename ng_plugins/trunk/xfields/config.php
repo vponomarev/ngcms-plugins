@@ -11,7 +11,12 @@ include_once root.'plugins/xfields/xfields.php';
 if (!is_array($xf = xf_configLoad()))
 	$xf = array();
 
-
+//
+// Управление необходимыми действиями
+$sectionID= $_REQUEST['section'];
+if (!in_array($sectionID, array('news', 'grp.news', 'users', 'grp.users'))) {
+	$sectionID = 'news';
+}
 switch ($_REQUEST['action']) {
 	case 'add'		:	showAddEditForm(); break;
     case 'doadd'	:	doAddEdit(); break;
@@ -22,26 +27,75 @@ switch ($_REQUEST['action']) {
 }
 
 
-
+//
+// Показать список полей
 function showList(){
-	global $xf, $lang, $tpl;
+	global $sectionID;
+
+	if (in_array($sectionID, array('grp.news', 'grp.users'))) {
+		showSectionList();
+	} else {
+		showFieldList();
+	}
+}
+
+//
+//
+function showSectionList(){
+	global $xf, $lang, $tpl, $sectionID;
 
 	$output = '';
-	foreach ($xf['news'] as $id => $data) {
+	$output .= "<pre>".var_export($xf[$sectionID], true)."</pre>";
+
+	$tvars = array();
+	$tvars['vars']['entries'] = '';// $output;
+
+	// Prepare data
+	$grpNews = array();
+	foreach ($xf['grp.news'] as $k => $v) {
+		$grpNews[$k] = array(
+			'title' => iconv('Windows-1251', 'UTF-8',$v['title']),
+			'entries' => $v['entries'],
+			);
+	}
+
+	foreach (array('news', 'grp.news', 'users', 'grp.users') as $cID)
+		$tvars['vars']['bclass.'.$cID] = ($cID == $sectionID)?'btnActive':'btnInactive';
+
+	$tvars['vars']['json.groups.config']	= json_encode($grpNews);
+	$tvars['vars']['json.fields.config']	= json_encode(arrayCharsetConvert(0, $xf['news']));
+	$tpl -> template('groups', extras_dir.'/xfields/tpl');
+	$tpl -> vars('groups', $tvars);
+	echo $tpl -> show('groups');
+
+}
+
+//
+// Показать список доп. полей
+function showFieldList(){
+	global $xf, $lang, $tpl, $sectionID;
+
+	$output = '';
+	foreach ($xf[$sectionID] as $id => $data) {
 		unset($tvars);
+
+		$storage = '';
+		if ($data['storage']) {
+			$storage = '<br/><font color="red"><b>'.$data['db.type'].($data['db.len']?(' ('.$data['db.len'].')'):'').'</b> </font>';
+		}
 
 		$tvars['vars'] = array( 'name'	=> $id,
 								'title'	=> $data['title'],
-								'type'	=> $lang['xfields_type_'.$data['type']],
+								'type'	=> $lang['xfields_type_'.$data['type']].$storage,
 								'required'	=> $data['required']?'<font color="red"><b>Да</b></font>':'Нет',
 								'default'	=> $data['default']?$data['default']:'<font color="red">не задано</font>',
-								'[link]'	=> '<a href="?mod=extra-config&plugin=xfields&action=edit&field='.$id.'">',
+								'[link]'	=> '<a href="?mod=extra-config&plugin=xfields&action=edit&section='.$sectionID.'&field='.$id.'">',
 								'[/link]'	=> '</a>',
-								'[linkup]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=up&field='.$id.'">',
+								'[linkup]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=up&section='.$sectionID.'&field='.$id.'">',
 								'[/linkup]'	=> '</a>',
-								'[linkdown]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=down&field='.$id.'">',
+								'[linkdown]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=down&section='.$sectionID.'&field='.$id.'">',
 								'[/linkdown]'	=> '</a>',
-								'[linkdel]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=del&field='.$id.'" onclick="return confirm('."'".$lang['xfields_suretest']."'".');">',
+								'[linkdel]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=del&section='.$sectionID.'&field='.$id.'" onclick="return confirm('."'".$lang['xfields_suretest']."'".');">',
 								'[/linkdel]'	=> '</a>',
 								);
 		$options = '';
@@ -56,11 +110,18 @@ function showList(){
 		$output .= $tpl -> show('config_rows');
 	}
 
-	if (!count($xf['news']))
+	if (!count($xf[$sectionID]))
 		$output = $lang['xfields_nof'];
 
 
-	$tvars = array ( 'vars' => array( 'entries' => $output));
+	$tvars = array ( 'vars' => array(
+		'entries' => $output,
+		'section_name' => ($sectionID == 'news')?'Новости':'Пользователи',
+		'sectionID' => $sectionID
+	));
+	foreach (array('news', 'grp.news', 'users', 'grp.users') as $cID)
+		$tvars['vars']['bclass.'.$cID] = ($cID == $sectionID)?'btnActive':'btnInactive';
+
 	$tpl -> template('config', extras_dir.'/xfields/tpl');
 	$tpl -> vars('config', $tvars);
 	echo $tpl -> show('config');
@@ -70,12 +131,12 @@ function showList(){
 //
 //
 function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
-	global $xf, $lang, $tpl;
+	global $xf, $lang, $tpl, $sectionID;
 
 	$field = ($efield == NULL)?$_REQUEST['field']:$efield;
 
 	if ($eMode == NULL) {
-		$editMode = (is_array($xf['news'][$field]))?1:0;
+		$editMode = (is_array($xf[$sectionID][$field]))?1:0;
 	} else {
 		$editMode = $eMode;
 	}
@@ -88,7 +149,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tvars['regx']["'\[add\](.*?)\[/add\]'si"] = '';
 		$tvars['regx']["'\[edit\](.*?)\[/edit\]'si"] = '$1';
 
-		$data = is_array($xdata)?$xdata:$xf['news'][$field];
+		$data = is_array($xdata)?$xdata:$xf[$sectionID][$field];
 		$tvars['vars']['id'] = $field;
 		$tvars['vars']['title'] = $data['title'];
 		$tvars['vars']['type'] = $data['type'];
@@ -137,6 +198,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 
 		$tvars['vars']['select_options'] = '';
 	}
+	$tvars['vars']['sectionID'] = $sectionID;
 
 	$tpl -> template('config_edit', extras_dir.'/xfields/tpl');
 	$tpl -> vars('config_edit', $tvars);
@@ -147,7 +209,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 //
 //
 function doAddEdit() {
-	global $xf, $XF, $lang, $tpl, $mysql;
+	global $xf, $XF, $lang, $tpl, $mysql, $sectionID;
 
 	$error = 0;
 
@@ -155,10 +217,10 @@ function doAddEdit() {
 	$editMode = $_REQUEST['edit']?1:0;
 
 	// Check if field exists or not [depends on mode]
-	if ($editMode && (!is_array($xf['news'][$field]))) {
+	if ($editMode && (!is_array($xf[$sectionID][$field]))) {
 		msg(array("type" => "error", "text" => $lang['xfields_msge_noexists']));
 		$error = 1;
-	} elseif (!$editMode && (is_array($xf['news'][$field]))) {
+	} elseif (!$editMode && (is_array($xf[$sectionID][$field]))) {
 		msg(array("type" => "error", "text" => $lang['xfields_msge_exists']));
 		$error = 1;
 	}
@@ -253,17 +315,17 @@ function doAddEdit() {
 	}
 
 	if ($error) {
-		showAddEditForm($data, $editMode, $field);
+		showAddEditForm($data, $editMode, $field, $sectionID);
 		return;
 	}
 
 	$DB = array();
 	$DB['new'] = array('storage' => $data['storage'], 'db.type' => $data['db.type'], 'db.len' => $data['db.len']);
 	if ($editMode) {
-		$DB['old'] = array('storage' => $XF['news'][$field]['storage'], 'db.type' => $XF['news'][$field]['db.type'], 'db.len' => $XF['news'][$field]['db.len']);
+		$DB['old'] = array('storage' => $XF[$sectionID][$field]['storage'], 'db.type' => $XF[$sectionID][$field]['db.type'], 'db.len' => $XF[$sectionID][$field]['db.len']);
 	}
 
-	$XF['news'][$field] = $data;
+	$XF[$sectionID][$field] = $data;
 	if (!xf_configSave()) {
 		msg(array("type" => "error", "text" => $lang['xfields_msge_errcsave']));
 		showAddEditForm($data, $editMode, $field);
@@ -271,8 +333,18 @@ function doAddEdit() {
 	}
 
 	// Now we should update table `_news` structure and content
+	$tableName = '';
+	if ($sectionID == 'news') {
+		$tableName = prefix.'_news';
+	} else if ($sectionID == 'users') {
+		$tableName = uprefix.'_users';
+	} else {
+		print 'Ошибка: неизвестная секция/блок ('.$sectionID.')';
+		return;
+	}
+
 	$found = 0;
-	foreach ($mysql->select("describe ".prefix."_news", 1) as $row) {
+	foreach ($mysql->select("describe ".$tableName, 1) as $row) {
 		if ($row['Field'] == 'xfields_'.$field) {
 			$found = 1;
 			break;
@@ -283,8 +355,8 @@ function doAddEdit() {
 
 	// 1. If we add XFIELD and field already exists in DB - drop it!
 	// 2. If we don't want to store data in separate field - drop it!
-	if ($found && (!$editMode || !$DB['new']['storage'])) { print "DROP";
-		$mysql->query("alter table ".prefix."_news drop column `xfields_".$field."`");
+	if ($found && (!$editMode || !$DB['new']['storage'])) {
+		$mysql->query("alter table ".$tableName." drop column `xfields_".$field."`");
 	}
 
 	// If we need to have this field - let's make it. But only if smth was changed
@@ -303,10 +375,10 @@ function doAddEdit() {
 		if ($ftype) {
 			$dbFlagChanged = 1;
 			if ($found) {
-				$mysql->query("alter table ".prefix."_news change column `xfields_".$field.'` `xfields_'.$field.'` '.$ftype);
-				$mysql->query("update ".prefix."_news set `xfields_".$field."` = NULL");
+				$mysql->query("alter table ".$tableName." change column `xfields_".$field.'` `xfields_'.$field.'` '.$ftype);
+				$mysql->query("update ".$tableName." set `xfields_".$field."` = NULL");
 			} else {
-				$mysql->query("alter table ".prefix."_news add column `xfields_".$field.'` '.$ftype);
+				$mysql->query("alter table ".$tableName." add column `xfields_".$field.'` '.$ftype);
 			}
 		}
 	} while(0);
@@ -320,12 +392,12 @@ function doAddEdit() {
 		$maxID = 0;
 		do {
 			$recCount = 0;
-			foreach ($mysql->select("select id, xfields from ".prefix."_news where (id > ".$maxID.") and (xfields is not NULL) and (xfields <> '') order by id limit 500") as $rec) {
+			foreach ($mysql->select("select id, xfields from ".$tableName." where (id > ".$maxID.") and (xfields is not NULL) and (xfields <> '') order by id limit 500") as $rec) {
 				$recCount++;
 				if ($rec['id'] > $maxID) $maxID = $rec['id'];
 				$xlist = xf_decode($rec['xfields']);
 				if (isset($xlist[$field]) && ($xlist[$field] != '')) {
-					$mysql->query("update ".prefix."_news set `xfields_".$field."` = ".db_squote($xlist[$field])." where id = ".db_squote($rec['id']));
+					$mysql->query("update ".$tableName." set `xfields_".$field."` = ".db_squote($xlist[$field])." where id = ".db_squote($rec['id']));
 				}
 			}
 		} while ($recCount);
@@ -337,7 +409,7 @@ function doAddEdit() {
 
 	$tvars = array ( 'vars' => array ( 'id' => $field));
 	$tvars['regx']["'\[edit\](.*?)\[/edit\]'si"] = ($editMode)?'$1':'';
-
+	$tvars['vars']['sectionID'] = $sectionID;
 
 	$tpl -> template('config_done', extras_dir.'/xfields/tpl');
 	$tpl -> vars('config_done', $tvars);
@@ -349,26 +421,26 @@ function doAddEdit() {
 //
 //
 function doUpdate() {
-	global $xf, $XF, $lang, $tpl;
+	global $xf, $XF, $lang, $tpl, $sectionID;
 
 	$error = 0;
 	$field = $_REQUEST['field'];
 
 	// Check if field exists or not [depends on mode]
-	if (!is_array($xf['news'][$field])) {
-		msg(array("type" => "error", "text" => $lang['xfields_msge_noexists']. '('.$field.')'));
+	if (!is_array($xf[$sectionID][$field])) {
+		msg(array("type" => "error", "text" => $lang['xfields_msge_noexists']. '('.$sectionID.': '.$field.')'));
 		$error = 1;
 	};
 
 	$notif = '';
 	switch ($_REQUEST['subaction']) {
-		case 'del':		unset($XF['news'][$field]);
+		case 'del':		unset($XF[$sectionID][$field]);
 						$notif = $lang['xfields_done_del'];
 						break;
-		case 'up':		array_key_move($XF['news'], $field, -1);
+		case 'up':		array_key_move($XF[$sectionID], $field, -1);
 						$notif = $lang['xfields_done_up'];
 						break;
-		case 'down':	array_key_move($XF['news'], $field, 1);
+		case 'down':	array_key_move($XF[$sectionID], $field, 1);
 						$notif = $lang['xfields_done_down'];
 						break;
 		default:		$notif = $lang['xfields_updateunk'];
