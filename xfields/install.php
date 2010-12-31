@@ -19,6 +19,13 @@ $db_update = array(
   )
  ),
  array(
+  'table'  => 'categories',
+  'action' => 'modify',
+  'fields' => array(
+    array('action' => 'cmodify', 'name' => 'xf_group', 'type' => 'char(40)'),
+  )
+ ),
+ array(
   'table'  => 'users',
   'action' => 'modify',
   'fields' => array(

@@ -1,9 +1,8 @@
 <table border="0" cellspacing="1" cellpadding="1" class="content">
 <tr>
-<td colspan="2" width=100% class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8"><a href="?mod=extras" title="{l_extras}">{l_extras}</a> => <a href="?mod=extra-config&plugin=xfields">{l_config_text} xfields</a> => [edit]<a href="?mod=extra-config&plugin=xfields&action=edit&field={id}">{l_xfields_editfield} {id}</a>[/edit]</td>
+<td width="100%" colspan="2" class="pluginConfigHeader"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" />{l_config_text}: <a href="?mod=extra-config&plugin=xfields&section={sectionID}" class="bold">xfields</a> &nbsp; <img src="{skins_url}/images/nav.gif" hspace="8" alt="" />{l_xfields_editfield} <a href="?mod=extra-config&plugin=xfields&action=edit&section={sectionID}&field={id}">{id}</a></td>
 </tr>
 </table>
-<br />
+<div style="margin-top: 10px; margin-bottom: 10px; padding: 5px; padding-left: 25px; font-weight: bold; border: 1px solid red; cursor: pointer; background: #FFFFFF; background-position: 8px center;">
 {l_xfields_savedone}
-<br />
-<br />
+</div>

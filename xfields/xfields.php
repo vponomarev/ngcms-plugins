@@ -1,4 +1,4 @@
-<?
+<?php
 
 // #==========================================================#
 // # Plugin name: xfields [ Additional fields managment ]     #
@@ -14,7 +14,6 @@ LoadPluginLang('xfields', 'config');
 
 // Perform replacements while showing news
 class XFieldsNewsFilter extends NewsFilter {
-
 	function addNewsForm(&$tvars) {
 		global $lang, $tpl;
 
@@ -28,15 +27,15 @@ class XFieldsNewsFilter extends NewsFilter {
 		if (is_array($xf['news']))
 			foreach ($xf['news'] as $id => $data) {
 				switch ($data['type']) {
-					case 'text'  : 	$input = '<input type="text" name="xfields['.$id.']" title="'.$data['title'].'" value="'.secure_html($data['default']).'"/>'; break;
-					case 'select': 	$input = '<select name="xfields['.$id.']">';
+					case 'text'  : 	$input = '<input type="text" id="form_xfields_'.$id.'" name="xfields['.$id.']" title="'.$data['title'].'" value="'.secure_html($data['default']).'"/>'; break;
+					case 'select': 	$input = '<select name="xfields['.$id.']" id="form_xfields_'.$id.'" >';
 									if (!$data['required']) $input .= '<option value=""></option>';
 									if (is_array($data['options']))
 										foreach ($data['options'] as $k => $v)
 											$input .= '<option value="'.secure_html(($data['storekeys'])?$k:$v).'"'.((($data['storekeys'] && $data['default'] == $k)||(!$data['storekeys'] && $data['default'] == $v))?' selected':'').'>'.$v.'</option>';
 									$input .= '</select>';
 									break;
-					case 'textarea'  :	$input = '<textarea cols="30" rows="5" name="xfields['.$id.']">'.$data['default'].'</textarea>'; break;
+					case 'textarea'  :	$input = '<textarea cols="30" rows="5" name="xfields['.$id.']" id="form_xfields_'.$id.'" >'.$data['default'].'</textarea>'; break;
 				}
 				$tv = array ( 'vars' => array( 'title' => $data['title'], 'input' => $input, 'require' => $lang['xfields_fld_'.($data['required']?'required':'optional')]));
 
@@ -79,7 +78,7 @@ class XFieldsNewsFilter extends NewsFilter {
 		return 1;
 	}
 	function editNewsForm($newsID, $SQLold, &$tvars) {
-		global $lang, $tpl;
+		global $lang, $tpl, $catz;
 
 		// Load config
 		$xf = xf_configLoad();
@@ -95,8 +94,8 @@ class XFieldsNewsFilter extends NewsFilter {
 
 		foreach ($xf['news'] as $id => $data) {
 			switch ($data['type']) {
-				case 'text'  : 	$input = '<input type="text" name="xfields['.$id.']" title="'.$data['title'].'" value="'.secure_html($xdata[$id]).'" />'; break;
-				case 'select': 	$input = '<select name="xfields['.$id.']">';
+				case 'text'  : 	$input = '<input type="text" name="xfields['.$id.']"  id="form_xfields_'.$id.'" title="'.$data['title'].'" value="'.secure_html($xdata[$id]).'" />'; break;
+				case 'select': 	$input = '<select name="xfields['.$id.']" id="form_xfields_'.$id.'" >';
 								if (!$data['required']) $input .= '<option value="">&nbsp;</option>';
 								if (is_array($data['options']))
 									foreach ($data['options'] as $k => $v) {
@@ -104,16 +103,26 @@ class XFieldsNewsFilter extends NewsFilter {
 									}
 								$input .= '</select>';
 								break;
-				case 'textarea'  :	$input = '<textarea cols="30" rows="4" name="xfields['.$id.']">'.$xdata[$id].'</textarea>'; break;
+				case 'textarea'  :	$input = '<textarea cols="30" rows="4" name="xfields['.$id.']" id="form_xfields_'.$id.'">'.$xdata[$id].'</textarea>'; break;
 			}
-			$tv = array ( 'vars' => array( 'title' => $data['title'], 'input' => $input, 'require' => $lang['xfields_fld_'.($data['required']?'required':'optional')]));
+			$tv = array ( 'vars' => array( 'title' => $data['title'], 'input' => $input, 'id' => $id, 'require' => $lang['xfields_fld_'.($data['required']?'required':'optional')]));
 
 			$tpl -> template('ed_entry', extras_dir.'/xfields/tpl');
 			$tpl -> vars('ed_entry', $tv);
 			$output .= $tpl -> show('ed_entry');
 		}
+		$xfCategories = array();
+		foreach ($catz as $cId => $cData) {
+			$xfCategories[$cData['id']] = $cData['xf_group'];
+		}
 
-		$tv = array ( 'vars' => array( 'entries' => $output));
+		$tv = array (
+			'vars' => array(
+				'entries' => $output,
+				'xfGC' => json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
+				'xfCat' => json_encode(arrayCharsetConvert(0, $xfCategories)),
+				'xfList' => json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
+			));
 		$tpl -> template('ed_news', extras_dir.'/xfields/tpl');
 		$tpl -> vars('ed_news', $tv);
 		$tvars['vars']['plugin_xfields'] .= $tpl -> show('ed_news');
@@ -165,7 +174,56 @@ class XFieldsNewsFilter extends NewsFilter {
 	}
 }
 
+class XFieldsFilterAdminCategories extends FilterAdminCategories{
+	function addCategory(&$tvars, &$SQL) {
+		$SQL['xf_group'] = $_REQUEST['xf_group'];
+		return 1;
+	}
+
+	function addCategoryForm(&$tvars) {
+		global $lang;
+		loadPluginLang('xfields', 'config', '', '', ':');
+
+		// Get config
+		$xf = xf_configLoad();
+
+		// Prepare select
+		$ms = '<select name="xf_group"><option value="">** все поля **</option>';
+		foreach ($xf['grp.news'] as $k => $v) {
+			$ms .= '<option value="'.$k.'">'.$k.' ('.$v['title'].')</option>';
+		}
+
+		$tvars['vars']['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['xfields:categories.group'].'<br/><small>'.$lang['xfields:categories.group#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
+		return 1;
+	}
+
+
+	function editCategoryForm($categoryID, $SQL, &$tvars) {
+		global $lang;
+		loadPluginLang('xfields', 'config', '', '', ':');
+
+		// Get config
+		$xf = xf_configLoad();
+
+		// Prepare select
+		$ms = '<select name="xf_group"><option value="">** все поля **</option>';
+		foreach ($xf['grp.news'] as $k => $v) {
+			$ms .= '<option value="'.$k.'"'.(($SQL['xf_group'] == $k)?' selected="selected"':'').'>'.$k.' ('.$v['title'].')</option>';
+		}
+
+		$tvars['vars']['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['xfields:categories.group'].'<br/><small>'.$lang['xfields:categories.group#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
+		return 1;
+	}
+
+	function editCategory($categoryID, $SQL, &$SQLnew, &$tvars) {
+		$SQLnew['xf_group'] = $_REQUEST['xf_group'];
+		return 1;
+	}
+}
+
+
 register_filter('news','xfields', new XFieldsNewsFilter);
+register_admin_filter('categories', 'xfields', new XFieldsFilterAdminCategories);
 
 
 // Global XF variables
@@ -191,7 +249,7 @@ function xf_configLoad() {
 }
 
 // Save fields definition
-function xf_configSave() {
+function xf_configSave($xf = null) {
 	global $lang, $XF, $XF_loaded;
 
 	if (!$XF_loaded) return false;
@@ -201,7 +259,7 @@ function xf_configSave() {
 	if (!($fn = fopen($confdir.'/config.php', 'w'))) return false;
 
 	// Write config
-	fwrite($fn, "<?php\n\$xarray = ".var_export($XF, true).";\n");
+	fwrite($fn, "<?php\n\$xarray = ".var_export(is_array($xf)?$xf:$XF, true).";\n");
 	fclose($fn);
 	return true;
 }
