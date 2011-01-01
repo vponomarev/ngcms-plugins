@@ -181,6 +181,10 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tvars['vars']['storekeys_opts'] = '<option value="0">Сохранять значение</option><option value="1"'.(($data['storekeys'])?' selected':'').'>Сохранять код</option>';
 		$tvars['vars']['required_opts'] = '<option value="0">Нет</option><option value="1"'.(($data['required'])?' selected':'').'>Да</option>';
 	} else {
+		$sOpts = array();
+		array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+		$tvars['vars']['sOpts'] = implode("\n", $sOpts);
+
 		$tvars['regx']["'\[add\](.*?)\[/add\]'si"] = '$1';
 		$tvars['regx']["'\[edit\](.*?)\[/edit\]'si"] = '';
 
