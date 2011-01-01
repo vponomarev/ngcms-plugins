@@ -172,6 +172,9 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 					$fNum++;
 				}
 		}
+		if (!count($sOpts)) {
+			array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+		}
 		$tvars['vars']['sOpts'] = implode("\n", $sOpts);
 
 		$tvars['vars']['type_opts'] = $xsel;
