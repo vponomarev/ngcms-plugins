@@ -163,14 +163,16 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == $ts)?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
 
-		$sopts = array();
+		$sOpts = array();
+		$fNum = 1;
 		if ($data['type'] == 'select') {
 			if (is_array($data['options']))
 				foreach ($data['options'] as $k => $v) {
-					array_push($sopts, ($data['storekeys']?$k.' => ':'').$v);
+					array_push($sOpts, '<tr><td><input size="12" name="so_data['.($fNum).'][0]" type="text" value="'.($data['storekeys']?htmlspecialchars($k):'').'"/></td><td><input type="text" size="55" name="so_data['.($fNum).'][1]" value="'.htmlspecialchars($v).'"/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+					$fNum++;
 				}
 		}
-		$tvars['vars']['select_options'] = implode("\n", $sopts);
+		$tvars['vars']['sOpts'] = implode("\n", $sOpts);
 
 		$tvars['vars']['type_opts'] = $xsel;
 		$tvars['vars']['storekeys_opts'] = '<option value="0">Сохранять значение</option><option value="1"'.(($data['storekeys'])?' selected':'').'>Сохранять код</option>';
@@ -210,7 +212,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 //
 function doAddEdit() {
 	global $xf, $XF, $lang, $tpl, $mysql, $sectionID;
-
+print "<pre>".var_export($_POST, true)."</pre>";
 	$error = 0;
 
 	$field = $_REQUEST['id'];
@@ -251,6 +253,25 @@ function doAddEdit() {
 		case 'select':
 
 			// Check options
+			$optlist = array();
+			$optvals = array();
+
+			if (isset($_REQUEST['so_data']) && is_array($_REQUEST['so_data'])) {
+				foreach ($_REQUEST['so_data'] as $k => $v) {
+					if (is_array($v) && isset($v[0]) && isset($v[1]) && (($v[0] != '') || ($v[1] != ''))) {
+						if ($v[0] != '') {
+							$optlist[$v[0]] = $v[1];
+						} else {
+							$optlist[] = $v[1];
+						}
+						//print "<pre>SO_LINE: ".$v[0].", ".$v[1]."</pre>";
+					}
+				}
+			}
+
+			$opt_vals = array_values($optlist);
+
+			/*
 			$opts = $_REQUEST['select_options'];
 			$optlist = array();
 			$optvals = array();
@@ -264,6 +285,7 @@ function doAddEdit() {
 					$optvals[$line] = 1;
 				}
 			}
+			*/
 
 			$data['storekeys'] = intval($_REQUEST['select_storekeys'])?1:0;
 
