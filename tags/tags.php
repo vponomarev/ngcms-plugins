@@ -314,7 +314,6 @@ function plugin_tags_tag() {
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['tags:header.tag.title'];
 	$tpath = locatePluginTemplates(array('cloud', 'cloud.tag', 'pages', 'cloud.tag.entry'), 'tags', pluginGetVariable('tags', 'localsource'), pluginGetVariable('tags', 'skin')?pluginGetVariable('tags', 'skin'):'default');
 
-
 	include_once root.'includes/news.php';
 	// Search for tag in tags table
 	if (!($rec = $mysql->record("select * from ".prefix."_tags where tag=".db_squote($tag)))) {
