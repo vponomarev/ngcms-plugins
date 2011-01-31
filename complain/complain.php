@@ -64,11 +64,12 @@ function plugin_complain_screen() {
  $entries = '';
  $etext = array();
 // foreach ($mysql->select("select count(c.id) as ccount, c.id, c.status, c.complete, c.owner_id, (select name from ".uprefix."_users where id = c.owner_id) as owner_name, c.author_id, (select name from ".uprefix."_users where id = c.author_id) as author_name, c.publisher_id, (select name from ".uprefix."_users where id = c.publisher_id) as publisher_name, c.publisher_ip, date(c.date) as date, c.ds_id, c.entry_id, c.error_code, n.alt_name as n_alt_name, n.id as n_id, n.title as n_title, n.catid as n_catid, n.postdate as n_postdate from ".prefix."_complain c left join ".prefix."_news n on c.entry_id = n.id where ".join(" AND ", $where)." group by c.ds_id, c.entry_id, c.error_code") as $crow) {
- foreach ($mysql->select("select c.id, c.status, c.complete, c.owner_id, (select name from ".uprefix."_users where id = c.owner_id) as owner_name, c.author_id, (select name from ".uprefix."_users where id = c.author_id) as author_name, c.publisher_id, (select name from ".uprefix."_users where id = c.publisher_id) as publisher_name, c.publisher_ip, date(c.date) as date, c.ds_id, c.entry_id, c.error_code, c.error_text, n.alt_name as n_alt_name, n.id as n_id, n.title as n_title, n.catid as n_catid, n.postdate as n_postdate from ".prefix."_complain c left join ".prefix."_news n on c.entry_id = n.id where ".join(" AND ", $where)) as $crow) {
+ foreach ($mysql->select("select c.id, c.status, c.complete, c.owner_id, (select name from ".uprefix."_users where id = c.owner_id) as owner_name, c.author_id, (select name from ".uprefix."_users where id = c.author_id) as author_name, c.publisher_id, (select name from ".uprefix."_users where id = c.publisher_id) as publisher_name, c.publisher_ip, date(c.date) as date, time(c.date) as time, c.ds_id, c.entry_id, c.error_code, c.error_text, n.alt_name as n_alt_name, n.id as n_id, n.title as n_title, n.catid as n_catid, n.postdate as n_postdate from ".prefix."_complain c left join ".prefix."_news n on c.entry_id = n.id where ".join(" AND ", $where)) as $crow) {
   $tvars = array();
   $tvars['vars'] = array(
    'id'             => $crow['id'],
    'date'           => $crow['date'],
+   'time'           => $crow['time'],
    'error'          => $elist[$crow['error_code']].($crow['error_text']?' (<span style="cursor: pointer;" onclick="alert(ETEXT['.$crow['id'].']);">*</span>)':''),
    'ccount'         => ($crow['ccount']>1)?('(<b>'.$crow['ccount'].'</b>)'):'',
    'title'          => $crow['n_title'],

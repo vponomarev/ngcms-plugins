@@ -29,11 +29,22 @@ input  { font-size: 10px; }
 <body>
 <script language="javascript">
 var ETEXT={ETEXT};
+
+function toggleList() {
+ var btn = document.getElementById('btnCheckAll');
+ var f = document.getElementById('myform');
+ for (var i=0; i < f.elements.length; i++) {
+  var e = f.elements[i];
+  if (e.name.substr(0,4) == 'inc_') {
+	e.checked = btn.checked;
+  }
+ }
+}
 </script>
 
 <h1>Список активных инцидентов</h1>
 
-<form action="{form_url}" method="post">
+<form action="{form_url}" name="myform" id="myform" method="post">
 <table id="mt" width="100%" cellspacing=1 cellpadding=1>
 <thead>
 <tr>
@@ -44,7 +55,7 @@ var ETEXT={ETEXT};
  <td>Автор инцидента</td>
  <td>Назначена на</td>
  <td>Статус</td>
- <td>#</td>
+ <td><input type="checkbox" name="checkall" id="btnCheckAll" onclick="toggleList();"/></td>
 </tr>
 </thead>
 <tbody>

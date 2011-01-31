@@ -22,7 +22,7 @@ body { font : normal 12px verdana, sans-serif; }
 [email]Ваш e-mail: <input type="text" name="mail"/><br/>[/email]
 [notify]<input type="checkbox" name="notify" value="1"/> информировать о решении проблемы <br/>[/notify]
 [text]Детальное описание проблемы:<br/><textarea cols="80" rows="4" name="error_text"></textarea><br/>[/text]
-<input type="submit" class="report" value="Отправить"/>
+<input type="submit" class="report" onclick="this.disabled=true;" value="Отправить"/>
 </div>	
 </div>
 </form>
