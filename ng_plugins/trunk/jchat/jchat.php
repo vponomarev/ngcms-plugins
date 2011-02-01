@@ -6,7 +6,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Show current chat state
 //
-function jchat_show($start){
+function jchat_show($start, $commands = array()){
 	global $userROW, $mysql, $tpl;
 
 	// Check permissions [ guests do not see chat ]
@@ -52,6 +52,13 @@ function jchat_show($start){
 	$conf_maxidle = intval(pluginGetVariable('jchat', 'maxidle'));
 	if (isset($_REQUEST['idle']) && ($conf_maxidle > 0) && (intval($_REQUEST['idle']) > $conf_maxidle))
 		$bundle[0] []= array('stop', $conf_refresh);
+
+	// Add extra commands (if passed)
+	if (is_array($commands) && count($commands)) {
+		foreach ($commands as $cmd) {
+			$bundle[0] []= $cmd;
+		}
+	}
 
 	return $bundle;
 }
@@ -103,7 +110,9 @@ function plugin_jchat_index() {
 	$tvars['vars']['msgOrder'] = intval(pluginGetVariable('jchat', 'order'));
 
 	$tvars['vars']['link_add'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'add'), array());
+	$tvars['vars']['link_del'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'del'), array());
 	$tvars['vars']['link_show'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'show'), array());
+	$tvars['regx']['#\[is\.admin\](.*?)\[\/is\.admin\]#is'] = (is_array($userROW) && ($userROW['status'] == 1))?'$1':'';
 	$tvars['regx']['#\[not-logged\](.*?)\[\/not-logged\]#is'] = is_array($userROW)?'':'$1';
 	$tvars['regx']['#\[post-enabled\](.*?)\[\/post-enabled\]#is'] = (!is_array($userROW) && (pluginGetVariable('jchat', 'access') < 2))?'':'$1';
 
@@ -188,6 +197,34 @@ function plugin_jchat_add() {
 	print json_encode(array('status' => 1, 'bundle' => jchat_show(intval($_REQUEST['start']))));
 }
 
+function plugin_jchat_del() {
+	global $userROW, $template, $mysql, $SUPRESS_TEMPLATE_SHOW, $ip;
+
+	$SUPRESS_TEMPLATE_SHOW = 1;
+
+	// Only ADMINS can delete items from chat
+	if (!is_array($userROW) || ($userROW['status'] > 1)) {
+		print json_encode(array('status' => 0, 'error' => 'Permission denied'));
+		return;
+	}
+
+	// Try to load chat message
+	$id = intval($_REQUEST['id']);
+
+	if (!($crow = $mysql->record("select * from ".prefix."_jchat where id = ".db_squote($id)))) {
+		print json_encode(array('status' => 0, 'error' => 'Item not found (ID: '.$id.')'));
+		return;
+	}
+
+
+	// Delete item
+	$mysql->query("delete from ".prefix."_jchat where id = ".$id);
+
+	// Return updated list of items from chat
+	print json_encode(array('status' => 1, 'bundle' => jchat_show(intval($_REQUEST['start']), array(array('clear')))));
+}
+
+
 function plugin_jchat_win() {
 	global $template, $tpl, $SUPRESS_TEMPLATE_SHOW, $userROW, $lang;
 
@@ -229,6 +266,8 @@ function plugin_jchat_win() {
 
 	$tvars['vars']['link_add'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'add'), array());
 	$tvars['vars']['link_show'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'show'), array());
+	$tvars['vars']['link_del'] = generateLink('core', 'plugin', array('plugin' => 'jchat', 'handler' => 'del'), array());
+	$tvars['regx']['#\[is\.admin\](.*?)\[\/is\.admin\]#is'] = (is_array($userROW) && ($userROW['status'] == 1))?'$1':'';
 	$tvars['regx']['#\[not-logged\](.*?)\[\/not-logged\]#is'] = is_array($userROW)?'':'$1';
 	$tvars['regx']['#\[post-enabled\](.*?)\[\/post-enabled\]#is'] = (!is_array($userROW) && (pluginGetVariable('jchat', 'access') < 2))?'':'$1';
 
@@ -255,5 +294,6 @@ if (pluginGetVariable('jchat', 'enable_panel')) {
 // Register processing applications if SELF or PANEL modes are enabled
 if (pluginGetVariable('jchat', 'enable_win') || pluginGetVariable('jchat', 'enable_panel')) {
 	register_plugin_page('jchat','add','plugin_jchat_add',0);
+	register_plugin_page('jchat','del','plugin_jchat_del',0);
 	register_plugin_page('jchat','show','plugin_jchat_show',0);
 }
