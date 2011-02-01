@@ -8,7 +8,7 @@ add_act('index', 'plugin_lastnews');
 
 function plugin_lastnews(){
 	global $template;
-	$template['vars']['plugin_lastnews'] = plugin_lastnewsGenerator('', array(), array('number' => extra_get_param('lastnews','number'), 'maxlength' => extra_get_param('lastnews','maxlength')));
+	$template['vars']['plugin_lastnews'] = plugin_lastnewsGenerator('', array(), array('number' => pluginGetVariable('lastnews','number'), 'maxlength' => pluginGetVariable('lastnews','maxlength')));
 }
 
 //
@@ -33,13 +33,13 @@ function plugin_lastnews(){
 //   * maxlength	- maximum length of news title (cut)
 //   * overrideTemplatePath - path for template
 function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrideParams = array()) {
-	global $config, $mysql, $tpl, $lang, $langShortMonths, $langMonths, $PFILTERS;
+	global $config, $mysql, $tpl, $lang, $langShortMonths, $langMonths, $PFILTERS, $userROW;
 
 	// Generate cache file name [ we should take into account SWITCHER plugin & calling parameters ]
 	$cacheFileName = md5('lastnews'.$config['theme'].$config['default_lang'].var_export($categories, true).var_export($overrideParams, true)).'.txt';
 
-	if (extra_get_param('lastnews','cache')) {
-		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('lastnews','cacheExpire'), 'lastnews');
+	if (pluginGetVariable('lastnews','cache')) {
+		$cacheData = cacheRetrieveFile($cacheFileName, pluginGetVariable('lastnews','cacheExpire'), 'lastnews');
 		if ($cacheData != false) {
 			// We got data from cache. Return it and stop
 			return $cacheData;
@@ -63,7 +63,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 	if (isset($overrideParams['overrideTemplatePath']) && $overrideParams['overrideTemplatePath']) {
 		$tpath = array('entries' => $overrideParams['overrideTemplatePath'], 'lastnews' => $overrideParams['overrideTemplatePath']);
 	} else {
-		$tpath = locatePluginTemplates(array('entries', 'lastnews'), 'lastnews', extra_get_param('lastnews', 'localsource'));
+		$tpath = locatePluginTemplates(array('entries', 'lastnews'), 'lastnews', pluginGetVariable('lastnews', 'localsource'));
 	}
 
 	$filter = array ('approve = 1');
@@ -85,9 +85,9 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 
 	// Preparation for plugin integration [if needed]
 	$callingParams = array();
-	if (extra_get_param('lastnews', 'pcall')) {
+	if (pluginGetVariable('lastnews', 'pcall')) {
 		$callingParams['plugin'] = 'lastnews';
-		switch (intval(extra_get_param('lastnews', 'pcall_mode'))) {
+		switch (intval(pluginGetVariable('lastnews', 'pcall_mode'))) {
 			case 1: $callingParams['style'] = 'short';
 					break;
 			case 2: $callingParams['style'] = 'full';
@@ -103,7 +103,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 	$result = '';
 	foreach ($mysql->select("select * from ".prefix."_news where ".join(" AND ", $filter)." order by ".($orderby?$orderby:"id desc")." limit ".$offset.",".$number) as $row) {
 		// Execute filters [ if requested ]
-		if (extra_get_param('lastnews', 'pcall') && is_array($PFILTERS['news']))
+		if (pluginGetVariable('lastnews', 'pcall') && is_array($PFILTERS['news']))
 				foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($row['id'], $row, $callingParams); }
 
 		$tvars['vars'] = array(
@@ -111,8 +111,16 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 			'views'		=>	$row['views']
 		);
 
+		// Show edit/detele news buttons
+		if (is_array($userROW) && ($row['author_id'] == $userROW['id'] || $userROW['status'] == "1" || $userROW['status'] == "2")) {
+			$tvars['vars']['[edit-news]'] = "<a href=\"".admin_url."/admin.php?mod=editnews&amp;action=editnews&amp;id=".$row['id']."\" target=\"_blank\">";
+			$tvars['vars']['[/edit-news]'] = "</a>";
+		} else {
+			$tvars['regx']["#\[edit-news\].*?\[/edit-news\]#si"] = "";
+		}
+
 		// Set formatted date
-		$dformat = (isset($overrideParams['dateformat']))?$overrideParams['dateformat']:(extra_get_param('lastnews','dateformat')?extra_get_param('lastnews','dateformat'):'{day0}.{month0}.{year}');
+		$dformat = (isset($overrideParams['dateformat']))?$overrideParams['dateformat']:(pluginGetVariable('lastnews','dateformat')?pluginGetVariable('lastnews','dateformat'):'{day0}.{month0}.{year}');
 		$tvars['vars']['date'] = str_replace(array('{day}', '{day0}', '{month}', '{month0}', '{year}', '{year2}', '{month_s}', '{month_l}', '{hour}', '{hour0}', '{minute0}'),
 						array(date('j',$row['postdate']), date('d',$row['postdate']), date('n',$row['postdate']), date('m',$row['postdate']), date('y',$row['postdate']), date('Y',$row['postdate']), $langShortMonths[date('n',$row['postdate'])-1], $langMonths[date('n',$row['postdate'])-1], date('G', $row['postdate']), date('H', $row['postdate']), date('i', $row['postdate'])), $dformat);
 
@@ -123,7 +131,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 		}
 
 		// Execute filters [ if requested ]
-		if (extra_get_param('lastnews', 'pcall') && is_array($PFILTERS['news']))
+		if (pluginGetVariable('lastnews', 'pcall') && is_array($PFILTERS['news']))
 			foreach ($PFILTERS['news'] as $k => $v) { $v->showNews($row['id'], $row, $tvars, $callingParams); }
 
 		$tpl -> template('entries', $tpath['entries']);
@@ -139,7 +147,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 
 	$output = $tpl -> show('lastnews');
 
-	if (extra_get_param('lastnews','cache'))
+	if (pluginGetVariable('lastnews','cache'))
 		cacheStoreFile($cacheFileName, $output, 'lastnews');
 
 	return $output;
