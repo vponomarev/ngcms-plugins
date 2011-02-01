@@ -12,6 +12,15 @@ class FilterComments {
 	function addCommentsForm(&$tvars) { return 1;}
 
 	// Adding executor [ done BEFORE actual add and CAN block adding ]
+	// Returning values in simple mode:
+	// 0 - block adding comment
+	// 1 - allow adding comment
+	// Returning values in advanced mode:
+	// array(
+	//	'result' = 0 - block adding comments
+	//		 = 1 - allow adding comment
+	//	'errorText' = text message (that will be showed) in case if adding was blocked
+	// )
 	function addComments($userRec, $newsRec, &$tvars, &$SQL) { return 1; }
 
 	// Adding notificator [ after successful adding ]

@@ -205,9 +205,12 @@ function comments_add(){
 	$pluginNoError = 1;
 	if (is_array($PFILTERS['comments']))
 		foreach ($PFILTERS['comments'] as $k => $v) {
-			if (!($pluginNoError = $v->addComments($memberRec, $news_row, $tvars, $SQL))) {
-				msg(array("type" => "error", "text" => str_replace('{plugin}', $k, $lang['comments:err.pluginlock'])));
-				break;
+			$pluginResult = $v->addComments($memberRec, $news_row, $tvars, $SQL);
+			if ((is_array($pluginResult) && ($pluginResult['result']))||(!is_array($pluginResult) && $pluginResult))
+				continue;
+
+			msg(array("type" => "error", "text" => str_replace(array('{plugin}', '{errorText}'), array($k, (is_array($pluginResult) && isset($pluginResult['errorText'])?$pluginResult['errorText']:'')), $lang['comments:err.'.((is_array($pluginResult) && isset($pluginResult['errorText']))?'e':'').'pluginlock'])));
+			break;
 			}
 		}
 
