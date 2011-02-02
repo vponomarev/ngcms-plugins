@@ -9,7 +9,7 @@ if (!defined('NGCMS')) die ('HAL');
 
 class FilterComments {
 	// Form generator
-	function addCommentsForm(&$tvars) { return 1;}
+	function addCommentsForm($newsID, &$tvars) { return 1;}
 
 	// Adding executor [ done BEFORE actual add and CAN block adding ]
 	// Returning values in simple mode:
