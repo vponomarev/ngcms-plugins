@@ -1,7 +1,7 @@
 <?php
 
 //
-// Copyright (C) 2006-2010 Next Generation CMS (http://ngcms.ru/)
+// Copyright (C) 2006-2011 Next Generation CMS (http://ngcms.ru/)
 // Name: comments.show.php
 // Description: Routines for showing comments
 // Author: Vitaly Ponomarev, Alexey Zinchenko
@@ -275,7 +275,7 @@ function comments_showform($newsID, $callingParams = array()){
 	// RUN interceptors
 	if (is_array($PFILTERS['comments']))
 		foreach ($PFILTERS['comments'] as $k => $v)
-			$v->showComments($newsID, $row, $comnum, $tvars);
+			$v->addCommentsForm($newsID, $tvars);
 
 	// RUN interceptors ( OLD-style )
 	exec_acts('comments_form', $row);
