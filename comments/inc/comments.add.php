@@ -211,7 +211,6 @@ function comments_add(){
 
 			msg(array("type" => "error", "text" => str_replace(array('{plugin}', '{errorText}'), array($k, (is_array($pluginResult) && isset($pluginResult['errorText'])?$pluginResult['errorText']:'')), $lang['comments:err.'.((is_array($pluginResult) && isset($pluginResult['errorText']))?'e':'').'pluginlock'])));
 			break;
-			}
 		}
 
 	if (!$pluginNoError) {
