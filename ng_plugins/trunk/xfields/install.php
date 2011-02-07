@@ -15,21 +15,21 @@ $db_update = array(
   'table'  => 'news',
   'action' => 'modify',
   'fields' => array(
-    array('action' => 'cmodify', 'name' => 'xfields', 'type' => 'text'),
+    array('action' => 'cmodify', 'name' => 'xfields', 'type' => 'text', 'params' => 'default null'),
   )
  ),
  array(
   'table'  => 'category',
   'action' => 'modify',
   'fields' => array(
-    array('action' => 'cmodify', 'name' => 'xf_group', 'type' => 'char(40)'),
+    array('action' => 'cmodify', 'name' => 'xf_group', 'type' => 'char(40)', 'params' => 'default 0'),
   )
  ),
  array(
   'table'  => 'users',
   'action' => 'modify',
   'fields' => array(
-    array('action' => 'cmodify', 'name' => 'xfields', 'type' => 'text'),
+    array('action' => 'cmodify', 'name' => 'xfields', 'type' => 'text', 'params' => 'default 0'),
   )
  )
 );
