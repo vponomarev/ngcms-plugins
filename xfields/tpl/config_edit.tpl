@@ -8,9 +8,10 @@
 
 <script language="javascript">
 function clx(mode) {
- document.getElementById('type_text').style.display = (mode == 'text')?'block':'none';
- document.getElementById('type_textarea').style.display = (mode == 'textarea')?'block':'none';
- document.getElementById('type_select').style.display = (mode == 'select')?'block':'none';
+ document.getElementById('type_text').style.display		= (mode == 'text')?		'block':'none';
+ document.getElementById('type_textarea').style.display = (mode == 'textarea')?	'block':'none';
+ document.getElementById('type_select').style.display	= (mode == 'select')?	'block':'none';
+ document.getElementById('type_images').style.display	= (mode == 'images')?	'block':'none';
 }
 function storageMode(mode) {
 // alert(document.getElementById('storageRow'));
@@ -42,6 +43,7 @@ function storageMode(mode) {
 <tr class="contRow1"><td width="50%">{l_xfields_type}</td><td><select name="type" size="4" id="xfSelectType" onclick="clx(this.value);" onchange="clx(this.value);" />{type_opts}</select></td></tr>
 </table>
 
+<!-- FIELD TYPE: TEXT -->
 <div id="type_text">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
  <tr class="contRow1">
@@ -51,6 +53,8 @@ function storageMode(mode) {
  </tr>
 </table>
 </div>
+
+<!-- FIELD TYPE: TEXTAREA -->
 <div id="type_textarea">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
  <tr class="contRow1">
@@ -61,6 +65,8 @@ function storageMode(mode) {
  </tr>
 </table>
 </div>
+
+<!-- FIELD TYPE: SELECT -->
 <div id="type_select">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
  <tr class="contRow1">
@@ -91,6 +97,21 @@ function storageMode(mode) {
  </tr>
 </table>
 </div>
+
+<!-- FIELD TYPE: IMAGES -->
+<div id="type_images">
+<table border="0" cellspacing="1" cellpadding="1" class="content">
+ <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="45%" colspan="2">Максимальное кол-во изображений для загрузки:</td><td colspan=2"><input type="text" size="3" name="images_maxCount" value="{images_maxCount}"/></td></tr>
+ <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="45%" colspan="2">Добавлять штамп:</td><td colspan=2"><input type="checkbox" name="images_imgStamp" value="1" {images_imgStamp} /></td></tr>
+ <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="45%" colspan="2">Добавлять тень:</td><td colspan=2"><input type="checkbox"/ name="images_imgShadow" value="1" {images_imgShadow} /></td></tr>
+ <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="45%" colspan="2">Уменьшенная копия:</td><td colspan=2"><input type="checkbox" name="images_imgThumb" value="1" {images_imgThumb} /></td></tr>
+ <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="5%">&nbsp;</td><td width="40%">Не более:</td><td>&nbsp;</td><td><input type="text" size="4" name="images_thumbWidth" value="{images_thumbWidth}" /> x <input type="text" size="4" name="images_thumbHeight" value="{images_thumbHeight}" /> пикселов</td></tr>
+ <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="5%">&nbsp;</td><td width="40%">Добавлять штамп:</td><td>&nbsp;</td><td><input type="checkbox" name="images_thumbStamp" value="1" {images_thumbStamp}/></td></tr>
+ <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="5%">&nbsp;</td><td width="40%">Добавлять тень:</td><td>&nbsp;</td><td><input type="checkbox" name="images_thumbStamp" value="1" {images_thumbStamp}/></td></tr>
+</table>
+</div>
+<!-- FIELD TYPE: /CLOSED/ -->
+
 <table border="0" cellspacing="1" cellpadding="1" style="width:100%;" class="contRow3">
 <tr class="contRow1"><td width="50%">Режим сохранения данных:</td><td><select name="storage" id="storage" value="{storage}" onclick="storageMode(this.value);" onchange="storageMode(this.value);" /><option value="0">Единое хранилище</option><option value="1">Персональное поле в БД</option></select></td></tr>
 <tr class="contRow4" id="storageRow"><td width="50%">Тип поля в БД:</td><td><select name="db_type" value="{db.type}" id="db.type" /><option value="int">int - только цифры</option><option value="char">char - текст с ограничением длины</option><option value="datetime">datetime - дата-время</option></select> <input maxlength="3" size="3" type="text" name="db_len" value="{db.len}" id="db.len" /></td></tr>
