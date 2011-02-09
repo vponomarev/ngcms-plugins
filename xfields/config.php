@@ -5,6 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 
 // Load lang files
 LoadPluginLang('xfields', 'config');
+LoadPluginLang('xfields', 'config', '', 'xfconfig', '#');
 
 include_once root.'plugins/xfields/xfields.php';
 
@@ -131,7 +132,7 @@ function showFieldList(){
 //
 //
 function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
-	global $xf, $lang, $tpl, $sectionID;
+	global $xf, $lang, $sectionID, $twig;
 
 	$field = ($efield == NULL)?$_REQUEST['field']:$efield;
 
@@ -141,25 +142,25 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$editMode = $eMode;
 	}
 
-	$tvars = array ();
-
+	$tVars = array();
 
 	if ($editMode) {
-		//$tvars['regx']["'\[add\](.*?)\[/add\]'si"] = $counter?'$1':'';
-		$tvars['regx']["'\[add\](.*?)\[/add\]'si"] = '';
-		$tvars['regx']["'\[edit\](.*?)\[/edit\]'si"] = '$1';
-
 		$data = is_array($xdata)?$xdata:$xf[$sectionID][$field];
-		$tvars['vars']['id'] = $field;
-		$tvars['vars']['title'] = $data['title'];
-		$tvars['vars']['type'] = $data['type'];
-		$tvars['vars']['storage'] = intval($data['storage']);
-		$tvars['vars']['db.type'] = $data['db.type'];
-		$tvars['vars']['db.len'] = (intval($data['db.len'])>0)?intval($data['db.len']):'';
+
+
+		$tVars['flags']['editMode'] = 1;
+		$tVars = $tVars + array(
+			'id'		=>	$field,
+			'title'		=>	$data['title'],
+			'type'		=>	$data['type'],
+			'storage'	=>	intval($data['storage']),
+			'db_type'	=>	$data['db.type'],
+			'db_len'	=>	(intval($data['db.len'])>0)?intval($data['db.len']):'',
+		);
 
 		$xsel = '';
 		foreach (array('text', 'textarea', 'select', 'images') as $ts) {
-			$tvars['vars'][$ts.'_default'] = ($data['type'] == $ts)?$data['default']:'';
+			$tVars['defaults'][$ts] = ($data['type'] == $ts)?$data['default']:'';
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == $ts)?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
 
@@ -175,58 +176,64 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		if (!count($sOpts)) {
 			array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 		}
-		$tvars['vars']['sOpts'] = implode("\n", $sOpts);
 
-		$tvars['vars']['type_opts'] = $xsel;
-		$tvars['vars']['storekeys_opts'] = '<option value="0">Сохранять значение</option><option value="1"'.(($data['storekeys'])?' selected':'').'>Сохранять код</option>';
-		$tvars['vars']['required_opts'] = '<option value="0">Нет</option><option value="1"'.(($data['required'])?' selected':'').'>Да</option>';
+		$tVars = $tVars + array(
+			'sOpts'		=> implode("\n", $sOpts),
+			'type_opts'	=> $xsel,
+			'storekeys_opts'	=> '<option value="0">Сохранять значение</option><option value="1"'.(($data['storekeys'])?' selected':'').'>Сохранять код</option>',
+			'required_opts'		=> '<option value="0">Нет</option><option value="1"'.(($data['required'])?' selected':'').'>Да</option>',
+			'images'	=> array(
+				'maxCount'	=> intval($data['maxCount']),
+				'thumbWidth'	=> intval($data['thumbWidth']),
+				'thumbHeight'=> intval($data['thumbHeight']),
+			),
+		);
 
-		$tvars['vars']['images_maxCount']		= intval($data['maxCount']);
-		$tvars['vars']['images_thumbWidth']		= intval($data['thumbWidth']);
-		$tvars['vars']['images_thumbHeight']	= intval($data['thumbHeight']);
 		foreach (array('imgStamp', 'imgShadow', 'imgThumb', 'thumbStamp', 'thumbShadow') as $k) {
-			$tvars['vars']['images_'.$k] = intval($data[$k])?'checked="checked"':'';
+			$tVars['images'][$k] = intval($data[$k])?'checked="checked"':'';
 		}
-
+	//print "<pre>".var_export($tVars, true)."</pre>";
 	} else {
 		$sOpts = array();
 		array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
-		$tvars['vars']['sOpts'] = implode("\n", $sOpts);
 
-		$tvars['regx']["'\[add\](.*?)\[/add\]'si"] = '$1';
-		$tvars['regx']["'\[edit\](.*?)\[/edit\]'si"] = '';
-
-		$tvars['vars']['id'] = '';
-		$tvars['vars']['title'] = '';
-		$tvars['vars']['type'] = 'text';
-
-		$tvars['vars']['storage'] = '0';
-		$tvars['vars']['db.type'] = '';
-		$tvars['vars']['db.len'] = '';
+		$tVars['flags']['editmode'] = 0;
+		$tVars = $tVars + array(
+			'sOpts'		=> implode("\n", $sOpts),
+			'id'		=> '',
+			'title'		=> '',
+			'type'		=> 'text',
+			'storage'	=> '0',
+			'db_type'	=> '',
+			'db_len'	=> '',
+		);
 
 		$xsel = '';
 		foreach (array('text', 'textarea', 'select', 'images') as $ts) {
-			$tvars['vars'][$ts.'_default'] = '';
+			$tVars['defaults'][$ts] = '';
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == 'text')?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
-		$tvars['vars']['type_opts'] = $xsel;
-		$tvars['vars']['storekeys_opts'] = '<option value="0">Сохранять значение</option><option value="1">Сохранять код</option>';
-		$tvars['vars']['required_opts'] = '<option value="0">Нет</option><option value="1">Да</option>';
 
-		$tvars['vars']['select_options'] = '';
+		$tVars = $tVars + array(
+			'type_opts'			=> $xsel,
+			'storekeys_opts'	=> '<option value="0">Сохранять значение</option><option value="1">Сохранять код</option>',
+			'required_opts'		=> '<option value="0">Нет</option><option value="1">Да</option>',
+			'select_options'	=> '',
 
-		$tvars['vars']['images_maxCount'] = '1';
-		$tvars['vars']['images_thumbWidth'] = '150';
-		$tvars['vars']['images_thumbHeight'] = '150';
+			'images'			=> array(
+				'maxCount'	=> '1',
+				'thumbWidth'	=> '150',
+				'thumbHeight'=> '150',
+			),
+		);
+
 		foreach (array('imgStamp', 'imgShadow', 'imgThumb', 'thumbStamp', 'thumbShadow') as $k) {
-			$tvars['vars']['images_'.$k] = '';
+			$tVars['images'][$k] = '';
 		}
 	}
-	$tvars['vars']['sectionID'] = $sectionID;
-
-	$tpl -> template('config_edit', extras_dir.'/xfields/tpl');
-	$tpl -> vars('config_edit', $tvars);
-	echo $tpl -> show('config_edit');
+	$tVars['sectionID']	= $sectionID;
+	$xt = $twig->loadTemplate('plugins/xfields/tpl/config_edit.tpl');
+	echo $xt->render($tVars);
 }
 
 
