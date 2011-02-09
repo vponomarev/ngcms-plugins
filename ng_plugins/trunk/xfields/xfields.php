@@ -50,7 +50,7 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 			if (isset($_FILES['xfields_'.$id]) && isset($_FILES['xfields_'.$id]['name']) && is_array($_FILES['xfields_'.$id]['name'])) {
 				foreach ($_FILES['xfields_'.$id]['name'] as $iId => $iName) {
 					if ($_FILES['xfields_'.$id]['error'][$iId] > 0) {
-						print $iId." >>ERROR: ".$_FILES['xfields_'.$id]['error'][$iId]."<br/>\n";
+						//print $iId." >>ERROR: ".$_FILES['xfields_'.$id]['error'][$iId]."<br/>\n";
 						continue;
 					}
 					if ($_FILES['xfields_'.$id]['size'][$iId] == 0) {
