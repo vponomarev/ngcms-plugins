@@ -45,7 +45,7 @@ function showSectionList(){
 	global $xf, $lang, $tpl, $sectionID;
 
 	$output = '';
-	$output .= "<pre>".var_export($xf[$sectionID], true)."</pre>";
+	//$output .= "<pre>".var_export($xf[$sectionID], true)."</pre>";
 
 	$tvars = array();
 	$tvars['vars']['entries'] = '';// $output;
@@ -158,7 +158,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tvars['vars']['db.len'] = (intval($data['db.len'])>0)?intval($data['db.len']):'';
 
 		$xsel = '';
-		foreach (array('text', 'textarea', 'select') as $ts) {
+		foreach (array('text', 'textarea', 'select', 'images') as $ts) {
 			$tvars['vars'][$ts.'_default'] = ($data['type'] == $ts)?$data['default']:'';
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == $ts)?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
@@ -180,6 +180,14 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tvars['vars']['type_opts'] = $xsel;
 		$tvars['vars']['storekeys_opts'] = '<option value="0">Сохранять значение</option><option value="1"'.(($data['storekeys'])?' selected':'').'>Сохранять код</option>';
 		$tvars['vars']['required_opts'] = '<option value="0">Нет</option><option value="1"'.(($data['required'])?' selected':'').'>Да</option>';
+
+		$tvars['vars']['images_maxCount']		= intval($data['maxCount']);
+		$tvars['vars']['images_thumbWidth']		= intval($data['thumbWidth']);
+		$tvars['vars']['images_thumbHeight']	= intval($data['thumbHeight']);
+		foreach (array('imgStamp', 'imgShadow', 'imgThumb', 'thumbStamp', 'thumbShadow') as $k) {
+			$tvars['vars']['images_'.$k] = intval($data[$k])?'checked="checked"':'';
+		}
+
 	} else {
 		$sOpts = array();
 		array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
@@ -197,7 +205,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tvars['vars']['db.len'] = '';
 
 		$xsel = '';
-		foreach (array('text', 'textarea', 'select') as $ts) {
+		foreach (array('text', 'textarea', 'select', 'images') as $ts) {
 			$tvars['vars'][$ts.'_default'] = '';
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == 'text')?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
@@ -206,6 +214,13 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tvars['vars']['required_opts'] = '<option value="0">Нет</option><option value="1">Да</option>';
 
 		$tvars['vars']['select_options'] = '';
+
+		$tvars['vars']['images_maxCount'] = '1';
+		$tvars['vars']['images_thumbWidth'] = '150';
+		$tvars['vars']['images_thumbHeight'] = '150';
+		foreach (array('imgStamp', 'imgShadow', 'imgThumb', 'thumbStamp', 'thumbShadow') as $k) {
+			$tvars['vars']['images_'.$k] = '';
+		}
 	}
 	$tvars['vars']['sectionID'] = $sectionID;
 
@@ -219,7 +234,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 //
 function doAddEdit() {
 	global $xf, $XF, $lang, $tpl, $mysql, $sectionID;
-print "<pre>".var_export($_POST, true)."</pre>";
+	//print "<pre>".var_export($_POST, true)."</pre>";
 	$error = 0;
 
 	$field = $_REQUEST['id'];
@@ -308,6 +323,16 @@ print "<pre>".var_export($_POST, true)."</pre>";
 				}
 			}
 
+			break;
+		case 'images':
+			$data['maxCount']		= intval($_REQUEST['images_maxCount']);
+			$data['imgShadow']		= intval($_REQUEST['images_imgShadow'])?1:0;
+			$data['imgStamp']		= intval($_REQUEST['images_imgStamp'])?1:0;
+			$data['imgThumb']		= intval($_REQUEST['images_imgThumb'])?1:0;
+			$data['thumbWidth']		= intval($_REQUEST['images_thumbWidth']);
+			$data['thumbHeight']	= intval($_REQUEST['images_thumbHeight']);
+			$data['thumbStamp']		= intval($_REQUEST['images_thumbStamp'])?1:0;
+			$data['thumbThumb']		= intval($_REQUEST['images_thumbThumb'])?1:0;
 			break;
 		default:
 			$data['type'] = '';
