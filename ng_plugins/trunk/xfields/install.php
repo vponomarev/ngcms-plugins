@@ -29,7 +29,7 @@ $db_update = array(
   'table'  => 'users',
   'action' => 'modify',
   'fields' => array(
-    array('action' => 'cmodify', 'name' => 'xfields', 'type' => 'text', 'params' => 'default 0'),
+    array('action' => 'cmodify', 'name' => 'xfields', 'type' => 'text', 'params' => 'default null'),
   )
  )
 );
