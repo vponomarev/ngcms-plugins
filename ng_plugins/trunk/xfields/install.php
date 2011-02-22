@@ -31,7 +31,18 @@ $db_update = array(
   'fields' => array(
     array('action' => 'cmodify', 'name' => 'xfields', 'type' => 'text', 'params' => 'default null'),
   )
- )
+ ),
+ array(
+  'table'  => 'xfields',
+  'action' => 'cmodify',
+  'key'    => 'primary key(id)',
+  'fields' => array(
+    array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
+    array('action' => 'cmodify', 'name' => 'linked_ds', 'type' => 'int', 'params' => 'default 0'),
+    array('action' => 'cmodify', 'name' => 'linked_id', 'type' => 'int', 'params' => 'default 0'),
+    array('action' => 'cmodify', 'name' => 'xfields', 'type' => 'text', 'params' => 'default null'),
+  )
+ ),
 );
 
 if ($_REQUEST['action'] == 'commit') {

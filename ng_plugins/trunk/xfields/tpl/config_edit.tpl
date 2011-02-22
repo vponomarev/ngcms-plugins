@@ -36,8 +36,9 @@ function storageMode(mode) {
 <input type="hidden" name="edit" value="{% if (flags.editMode) %}1{% else %}0{% endif %}">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
 <tr>
-<td colspan="2" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{% if (flags.editMode) %}{{ lang.xfconfig['title_edit'] }}{% else %}}{{ lang.xfconfig['title_add'] }}{% endif %}</td>
+<td colspan="2" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{% if (flags.editMode) %}{{ lang.xfconfig['title_edit'] }}{% else %}{{ lang.xfconfig['title_add'] }}{% endif %}</td>
 </tr>
+<tr class="contRow1"><td width="50%">{{ lang.xfconfig['disabled'] }}</td><td width="47%"><input type="checkbox" name="disabled" value="1"{% if (flags.disabled) %}checked="checked"{% endif %}></td></tr>
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['id'] }}</td><td width="47%"><input type="text" name="id" value="{{ id }}" size="40" {% if (flags.editMode) %}readonly{% endif %}>{% if (flags.editMode) %} &nbsp; &nbsp; {{ lang.xfconfig['noeditid'] }}{% endif %}</td></tr>
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['title'] }}</td><td><input type="text" name="title" value="{{ title }}" size="40" /></td></tr>
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['type'] }}</td><td><select name="type" size="4" id="xfSelectType" onclick="clx(this.value);" onchange="clx(this.value);" />{{ type_opts }}</select></td></tr>
@@ -107,14 +108,25 @@ function storageMode(mode) {
  <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="45%" colspan="2">Уменьшенная копия:</td><td colspan=2"><input type="checkbox" name="images_imgThumb" value="1" {{ images.imgThumb }} /></td></tr>
  <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="5%">&nbsp;</td><td width="40%">Не более:</td><td>&nbsp;</td><td><input type="text" size="4" name="images_thumbWidth" value="{{ images.thumbWidth }}" /> x <input type="text" size="4" name="images_thumbHeight" value="{{ images.thumbHeight }}" /> пикселов</td></tr>
  <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="5%">&nbsp;</td><td width="40%">Добавлять штамп:</td><td>&nbsp;</td><td><input type="checkbox" name="images_thumbStamp" value="1" {{ images.thumbStamp }}/></td></tr>
- <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="5%">&nbsp;</td><td width="40%">Добавлять тень:</td><td>&nbsp;</td><td><input type="checkbox" name="images_thumbStamp" value="1" {{ images.thumbStamp }}/></td></tr>
+ <tr class="contRow1"><td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td><td width="5%">&nbsp;</td><td width="40%">Добавлять тень:</td><td>&nbsp;</td><td><input type="checkbox" name="images_thumbShadow" value="1" {{ images.thumbShadow }}/></td></tr>
 </table>
 </div>
 <!-- FIELD TYPE: /CLOSED/ -->
 
 <table border="0" cellspacing="1" cellpadding="1" style="width:100%;" class="contRow3">
 <tr class="contRow1"><td width="50%">Режим сохранения данных:</td><td><select name="storage" id="storage" value="{{ storage }}" onclick="storageMode(this.value);" onchange="storageMode(this.value);" /><option value="0">Единое хранилище</option><option value="1">Персональное поле в БД</option></select></td></tr>
-<tr class="contRow4" id="storageRow"><td width="50%">Тип поля в БД:</td><td><select name="db_type" value="{{ db_type }}" id="db.type" /><option value="int">int - только цифры</option><option value="char">char - текст с ограничением длины</option><option value="datetime">datetime - дата-время</option></select> <input maxlength="3" size="3" type="text" name="db_len" value="{{ db_len }}" id="db.len" /></td></tr>
+<tr class="contRow4" id="storageRow">
+<td width="50%">Тип поля в БД:</td>
+<td>
+ <select name="db_type" value="{{ db_type }}" id="db.type" />
+  <option value="int">int - только цифры</option>
+  <option value="decimal">decimal - число с фиксированной точкой</option>
+  <option value="char">char - текст с ограничением длины</option>
+  <option value="datetime">datetime - дата-время</option>
+ </select>
+ <input maxlength="3" size="3" type="text" name="db_len" value="{{ db_len }}" id="db.len" />
+</td>
+</tr>
 </table>
 <table border="0" cellspacing="1" cellpadding="1" class="content">
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['required'] }}</td><td width="47%"><select name="required">{{ required_opts }}</select></td></tr>
@@ -132,9 +144,10 @@ function storageMode(mode) {
 
 <script type="text/javascript">
 clx('{{ type }}');
-document.getElementById('storage').value = '{storage}';
-document.getElementById('db.type').value = '{db.type}';
+document.getElementById('storage').value = '{{ storage }}';
+document.getElementById('db.type').value = '{{ db_type }}';
 storageMode(document.getElementById('storage').value);
+
 var soMaxNum = $('#xfSelectTable >tbody >tr').length+1;
 
 $('#xfSelectTable a').click(function(){

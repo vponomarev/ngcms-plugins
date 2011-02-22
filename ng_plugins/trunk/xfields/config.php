@@ -15,7 +15,7 @@ if (!is_array($xf = xf_configLoad()))
 //
 // Управление необходимыми действиями
 $sectionID= $_REQUEST['section'];
-if (!in_array($sectionID, array('news', 'grp.news', 'users', 'grp.users'))) {
+if (!in_array($sectionID, array('news', 'grp.news', 'users', 'grp.users', 'tdata'))) {
 	$sectionID = 'news';
 }
 switch ($_REQUEST['action']) {
@@ -43,13 +43,12 @@ function showList(){
 //
 //
 function showSectionList(){
-	global $xf, $lang, $tpl, $sectionID;
+	global $xf, $lang, $tpl, $twig, $sectionID;
 
 	$output = '';
 	//$output .= "<pre>".var_export($xf[$sectionID], true)."</pre>";
 
-	$tvars = array();
-	$tvars['vars']['entries'] = '';// $output;
+	$tVars = array();
 
 	// Prepare data
 	$grpNews = array();
@@ -60,72 +59,70 @@ function showSectionList(){
 			);
 	}
 
-	foreach (array('news', 'grp.news', 'users', 'grp.users') as $cID)
-		$tvars['vars']['bclass.'.$cID] = ($cID == $sectionID)?'btnActive':'btnInactive';
+	foreach (array('news', 'grp.news', 'users', 'grp.users', 'tdata') as $cID)
+		$tVars['bclass'][$cID] = ($cID == $sectionID)?'btnActive':'btnInactive';
 
-	$tvars['vars']['json.groups.config']	= json_encode($grpNews);
-	$tvars['vars']['json.fields.config']	= json_encode(arrayCharsetConvert(0, $xf['news']));
-	$tpl -> template('groups', extras_dir.'/xfields/tpl');
-	$tpl -> vars('groups', $tvars);
-	echo $tpl -> show('groups');
+	$tVars['json']['groups.config']	= json_encode($grpNews);
+	$tVars['json']['fields.config']	= json_encode(arrayCharsetConvert(0, $xf['news']));
+
+	$xt = $twig->loadTemplate('plugins/xfields/tpl/groups.tpl');
+	echo $xt->render($tVars);
 
 }
 
 //
 // Показать список доп. полей
 function showFieldList(){
-	global $xf, $lang, $tpl, $sectionID;
+	global $xf, $lang, $twig, $sectionID;
 
+	$xEntries = array();
 	$output = '';
 	foreach ($xf[$sectionID] as $id => $data) {
-		unset($tvars);
-
 		$storage = '';
 		if ($data['storage']) {
 			$storage = '<br/><font color="red"><b>'.$data['db.type'].($data['db.len']?(' ('.$data['db.len'].')'):'').'</b> </font>';
 		}
 
-		$tvars['vars'] = array( 'name'	=> $id,
-								'title'	=> $data['title'],
-								'type'	=> $lang['xfields_type_'.$data['type']].$storage,
-								'required'	=> $data['required']?'<font color="red"><b>Да</b></font>':'Нет',
-								'default'	=> $data['default']?$data['default']:'<font color="red">не задано</font>',
-								'[link]'	=> '<a href="?mod=extra-config&plugin=xfields&action=edit&section='.$sectionID.'&field='.$id.'">',
-								'[/link]'	=> '</a>',
-								'[linkup]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=up&section='.$sectionID.'&field='.$id.'">',
-								'[/linkup]'	=> '</a>',
-								'[linkdown]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=down&section='.$sectionID.'&field='.$id.'">',
-								'[/linkdown]'	=> '</a>',
-								'[linkdel]'	=> '<a href="?mod=extra-config&plugin=xfields&action=update&subaction=del&section='.$sectionID.'&field='.$id.'" onclick="return confirm('."'".$lang['xfields_suretest']."'".');">',
-								'[/linkdel]'	=> '</a>',
-								);
+		$xEntry = array(
+			'name'		=> $id,
+			'title'		=> $data['title'],
+			'type'		=> $lang['xfconfig']['type_'.$data['type']].$storage,
+			'default'	=> $data['default'],
+			'link'		=> '?mod=extra-config&plugin=xfields&action=edit&section='.$sectionID.'&field='.$id,
+			'linkup'	=> '?mod=extra-config&plugin=xfields&action=update&subaction=up&section='.$sectionID.'&field='.$id,
+			'linkdown'	=> '?mod=extra-config&plugin=xfields&action=update&subaction=down&section='.$sectionID.'&field='.$id,
+			'linkdel'	=> '?mod=extra-config&plugin=xfields&action=update&subaction=del&section='.$sectionID.'&field='.$id,
+			'flags'		=> array(
+				'required'	=> $data['required']?true:false,
+				'default'	=> ($data['default'] != '')?true:false,
+				'disabled'	=> $data['disabled']?true:false,
+			),
+		);
+
 		$options = '';
 		if (is_array($data['options']) && count($data['options'])) {
 			foreach ($data['options'] as $k => $v)
 				$options .= (($data['storekeys'])?('<b>'.$k.'</b>: '.$v):('<b>'.$v.'</b>'))."<br>\n";
 		}
-		$tvars['vars']['options'] = $options;
+		$xEntry['options']	= $options;
 
-		$tpl -> template('config_rows', extras_dir.'/xfields/tpl');
-		$tpl -> vars('config_rows', $tvars);
-		$output .= $tpl -> show('config_rows');
+		$xEntries []= $xEntry;
 	}
 
 	if (!count($xf[$sectionID]))
-		$output = $lang['xfields_nof'];
+		$output = $lang['xfconfig']['nof'];
 
+	$tVars = array(
+		'entries'		=> $xEntries,
+		'section_name'	=> ($sectionID == 'news')?'Новости':'Пользователи',
+		'sectionID'		=> $sectionID,
+	);
 
-	$tvars = array ( 'vars' => array(
-		'entries' => $output,
-		'section_name' => ($sectionID == 'news')?'Новости':'Пользователи',
-		'sectionID' => $sectionID
-	));
-	foreach (array('news', 'grp.news', 'users', 'grp.users') as $cID)
-		$tvars['vars']['bclass.'.$cID] = ($cID == $sectionID)?'btnActive':'btnInactive';
+	foreach (array('news', 'grp.news', 'users', 'grp.users', 'tdata') as $cID)
+		$tVars['bclass'][$cID] = ($cID == $sectionID)?'btnActive':'btnInactive';
 
-	$tpl -> template('config', extras_dir.'/xfields/tpl');
-	$tpl -> vars('config', $tvars);
-	echo $tpl -> show('config');
+	$xt = $twig->loadTemplate('plugins/xfields/tpl/config.tpl');
+	echo $xt->render($tVars);
 }
 
 
@@ -149,6 +146,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 
 
 		$tVars['flags']['editMode'] = 1;
+		$tVars['flags']['disabled'] = $data['disabled']?true:false;
 		$tVars = $tVars + array(
 			'id'		=>	$field,
 			'title'		=>	$data['title'],
@@ -198,6 +196,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 
 		$tVars['flags']['editmode'] = 0;
+		$tVars['flags']['disabled'] = false;
 		$tVars = $tVars + array(
 			'sOpts'		=> implode("\n", $sOpts),
 			'id'		=> '',
@@ -240,7 +239,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 //
 //
 function doAddEdit() {
-	global $xf, $XF, $lang, $tpl, $mysql, $sectionID;
+	global $xf, $XF, $lang, $tpl, $twig, $mysql, $sectionID;
 	//print "<pre>".var_export($_POST, true)."</pre>";
 	$error = 0;
 
@@ -267,6 +266,7 @@ function doAddEdit() {
 	// Let's fill parameters
 	$data['title']		= $_REQUEST['title'];
 	$data['required']	= intval($_REQUEST['required']);
+	$data['disabled']	= intval($_REQUEST['disabled']);
 	$data['type']		= $_REQUEST['type'];
 	$data['default']	= '';
 
@@ -339,7 +339,7 @@ function doAddEdit() {
 			$data['thumbWidth']		= intval($_REQUEST['images_thumbWidth']);
 			$data['thumbHeight']	= intval($_REQUEST['images_thumbHeight']);
 			$data['thumbStamp']		= intval($_REQUEST['images_thumbStamp'])?1:0;
-			$data['thumbThumb']		= intval($_REQUEST['images_thumbThumb'])?1:0;
+			$data['thumbShadow']	= intval($_REQUEST['images_thumbShadow'])?1:0;
 			break;
 		default:
 			$data['type'] = '';
@@ -363,7 +363,7 @@ function doAddEdit() {
 
 	if ($data['storage']) {
 		// Check for correct DB type
-		if (!in_array($data['db.type'], array('int', 'char', 'datetime'))) {
+		if (!in_array($data['db.type'], array('int', 'decimal', 'char', 'datetime'))) {
 			msg(array("type" => "error", "text" => $lang['xfields_error.db.type']));
 			$error = 1;
 		}
@@ -397,6 +397,8 @@ function doAddEdit() {
 	$tableName = '';
 	if ($sectionID == 'news') {
 		$tableName = prefix.'_news';
+	} else if ($sectionID == 'tdata') {
+		$tableName = prefix.'_tdata';
 	} else if ($sectionID == 'users') {
 		$tableName = uprefix.'_users';
 	} else {
@@ -429,6 +431,7 @@ function doAddEdit() {
 		$ftype = '';
 		switch ($DB['new']['db.type']) {
 			case 'int':			$ftype = 'int'; break;
+			case 'decimal':		$ftype = 'decimal (12,2)'; break;
 			case 'datetime':	$ftype = 'datetime'; break;
 			case 'char':		if (($DB['new']['db.len'] > 0)&&($DB['new']['db.len'] <= 255)) { $ftype = 'char('.intval($DB['new']['db.len']).')'; break; }
 		}
@@ -468,13 +471,17 @@ function doAddEdit() {
 	}
 
 
-	$tvars = array ( 'vars' => array ( 'id' => $field));
-	$tvars['regx']["'\[edit\](.*?)\[/edit\]'si"] = ($editMode)?'$1':'';
-	$tvars['vars']['sectionID'] = $sectionID;
+	$tVars = array (
+		'id'		=>	$field,
+		'sectionID'	=>	$sectionID,
+		'flags'		=>	array (
+			'editMode'	=> $editMode?true:false,
+		),
+	);
 
-	$tpl -> template('config_done', extras_dir.'/xfields/tpl');
-	$tpl -> vars('config_done', $tvars);
-	echo $tpl -> show('config_done');
+	$tVars['sectionID']	= $sectionID;
+	$xt = $twig->loadTemplate('plugins/xfields/tpl/config_done.tpl');
+	echo $xt->render($tVars);
 
 }
 
