@@ -255,7 +255,6 @@ function comments_showform($newsID, $callingParams = array()){
 	$tvars['vars']['rand'] = rand(00000, 99999);
 
 	if ($config['use_captcha'] && (!is_array($userROW))) {
-		@session_register('captcha');
 		$_SESSION['captcha'] = rand(00000, 99999);
 		$tvars['regx']["'\[captcha\](.*?)\[/captcha\]'si"] = '$1';
 	} else {

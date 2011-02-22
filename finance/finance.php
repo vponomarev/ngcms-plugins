@@ -27,8 +27,8 @@ loadPluginLang('finance', 'main', '', '', ':');
 //
 class FinanceNewsFilter extends NewsFilter {
 	function addNewsForm(&$tvars) {
-		$tvars['vars']['finance']  = '<tr><td width="100%" class="contentHead"><img src="'.admin_url.'/skins/default/images/nav.gif" hspace="8" alt="" />ѕлатный доступ к новости</td></tr>';
-		$tvars['vars']['finance'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>—тоимость доступа:</td><td><input name="fin_price" /> <small>( в формате <b>xxx.xx</b>, если не указано, то доступ к новости бесплатен)</small></td></tr></table></td></tr>';
+		$tvars['plugin']['finance']  = '<tr><td width="100%" class="contentHead"><img src="'.admin_url.'/skins/default/images/nav.gif" hspace="8" alt="" />ѕлатный доступ к новости</td></tr>';
+		$tvars['plugin']['finance'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>—тоимость доступа:</td><td><input name="fin_price" /> <small>( в формате <b>xxx.xx</b>, если не указано, то доступ к новости бесплатен)</small></td></tr></table></td></tr>';
 		return 1;
 	}
 	function addNews(&$tvars, &$SQL) {
@@ -36,8 +36,8 @@ class FinanceNewsFilter extends NewsFilter {
 		return 1;
 	}
 	function editNewsForm($newsID, $SQLold, &$tvars) {
-		$tvars['vars']['finance']  = '<tr><td width="100%" class="contentHead"><img src="'.admin_url.'/skins/default/images/nav.gif" hspace="8" alt="" />ѕлатный доступ к новости</td></tr>';
-		$tvars['vars']['finance'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>—тоимость доступа:</td><td><input name="fin_price" value="'.$SQLold['fin_price'].'" /> <small>( в формате <b>xxx.xx</b>, если не указано, то доступ к новости бесплатен)</small></td></tr></table></td></tr>';
+		$tvars['plugin']['finance']  = '<tr><td width="100%" class="contentHead"><img src="'.admin_url.'/skins/default/images/nav.gif" hspace="8" alt="" />ѕлатный доступ к новости</td></tr>';
+		$tvars['plugin']['finance'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>—тоимость доступа:</td><td><input name="fin_price" value="'.$SQLold['fin_price'].'" /> <small>( в формате <b>xxx.xx</b>, если не указано, то доступ к новости бесплатен)</small></td></tr></table></td></tr>';
 		return 1;
 	}
 	function editNews($newsID, $SQLold, &$SQLnew, &$tvars) {

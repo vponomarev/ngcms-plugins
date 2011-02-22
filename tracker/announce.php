@@ -171,7 +171,7 @@ class TrackerNewsFilter extends NewsFilter {
 		$tpath = locatePluginTemplates(array('news.add'), 'tracker', extra_get_param('tracker', 'localsource'));
 		$tpl -> template('news.add', $tpath['news.add']);
 		$tpl -> vars('news.add', array ( 'vars' => array ()));
-		$tvars['vars']['plugin_tracker'] = $tpl -> show('news.add');
+		$tvars['plugin']['tracker'] = $tpl -> show('news.add');
 
 		return 1;
 	}
@@ -215,7 +215,7 @@ class TrackerNewsFilter extends NewsFilter {
 
 		$tpl -> template('news.edit', $tpath['news.edit']);
 		$tpl -> vars('news.edit', array ( 'vars' => array ( 'tracker_magnet' => secure_html($magnetLink))));
-		$tvars['vars']['plugin_tracker'] = $tpl -> show('news.edit');
+		$tvars['plugin']['tracker'] = $tpl -> show('news.edit');
 
 		return 1;
 	}
