@@ -9,7 +9,7 @@
 }
 .contNav {
     padding: 10px 0 10px 10px;
-    background: #eaf0f7 url({skins_url}/images/1px.png) repeat-x;
+    background: #eaf0f7 url({{ skins_url }}/images/1px.png) repeat-x;
     color: #152F59; font-family:"Trebuchet MS", Arial, Helvetica, sans-serif; font-size:13px;
     border-top: 1px solid #dfe5ec;
     border-bottom: 3px solid #dfe5ec; margin-top: 10px;

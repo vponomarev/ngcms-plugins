@@ -167,7 +167,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		if ($data['type'] == 'select') {
 			if (is_array($data['options']))
 				foreach ($data['options'] as $k => $v) {
-					array_push($sOpts, '<tr><td><input size="12" name="so_data['.($fNum).'][0]" type="text" value="'.($data['storekeys']?htmlspecialchars($k):'').'"/></td><td><input type="text" size="55" name="so_data['.($fNum).'][1]" value="'.htmlspecialchars($v).'"/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+					array_push($sOpts, '<tr><td><input size="12" name="so_data['.($fNum).'][0]" type="text" value="'.($data['storekeys']?htmlspecialchars($k):'').'"/></td><td><input type="text" size="55" name="so_data['.($fNum).'][1]" value="'.htmlspecialchars($v).'"/></td><td><a href="#"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 					$fNum++;
 				}
 		}
