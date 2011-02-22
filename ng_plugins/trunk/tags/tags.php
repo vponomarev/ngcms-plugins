@@ -10,7 +10,7 @@ class TagsNewsfilter extends NewsFilter {
 
 		$tpl -> template('tags_addnews', $tpath['tags_addnews']);
 		$tpl -> vars('tags_addnews', array ( 'vars' => array ()));
-		$tvars['vars']['plugin_tags'] = $tpl -> show('tags_addnews');
+		$tvars['plugin']['tags'] = $tpl -> show('tags_addnews');
 
 		return 1;
 	}
@@ -64,7 +64,7 @@ class TagsNewsfilter extends NewsFilter {
 
 		$tpl -> template('tags_editnews', $tpath['tags_editnews']);
 		$tpl -> vars('tags_editnews', array ( 'vars' => array ( 'tags' => secure_html($SQLold['tags']))));
-		$tvars['vars']['plugin_tags'] = $tpl -> show('tags_editnews');
+		$tvars['plugin']['tags'] = $tpl -> show('tags_editnews');
 
 		return 1;
 	}

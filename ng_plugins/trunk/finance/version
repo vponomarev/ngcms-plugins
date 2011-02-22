@@ -4,7 +4,7 @@
 
 ID: finance
 Name: Finance manager
-Version: 0.12
+Version: 0.13
 Acts: core, ppages
 File: finance.php
 Config: config.php

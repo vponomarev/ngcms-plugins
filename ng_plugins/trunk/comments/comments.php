@@ -11,7 +11,7 @@ class CommentsNewsFilter extends NewsFilter {
 		loadPluginLang('comments', 'config', '', '', ':');
 
 		for ($ix = 0; $ix <= 2; $ix++) {
-			$tvars['vars']['acom:'.$ix] = (pluginGetVariable('comments', 'default_news') == $ix)?'selected="selected"':'';
+			$tvars['plugin']['comments']['acom:'.$ix] = (pluginGetVariable('comments', 'default_news') == $ix)?'selected="selected"':'';
 		}
 	}
 
@@ -21,13 +21,13 @@ class CommentsNewsFilter extends NewsFilter {
 	}
 
 	function editNewsForm($newsID, $SQLnews, &$tvars) {
-		global $lang, $mysql, $config, $parse, $tpl, $mod;
+		global $lang, $mysql, $config, $parse, $tpl;
 
 		loadPluginLang('comments', 'config', '', '', ':');
 
 		// List comments
 		$comments = '';
-		$tpl -> template('comments', tpl_actions.$mod);
+		$tpl -> template('comments', tpl_actions.'news');
 
 		foreach ($mysql->select("select * from ".prefix."_comments where post='".$newsID."' order by id") as $crow) {
 			$text	= $crow['text'];
@@ -58,15 +58,17 @@ class CommentsNewsFilter extends NewsFilter {
 			$tpl -> vars('comments', $txvars);
 			$comments .= $tpl -> show('comments');
 		}
-		$tvars['vars']['comments'] = $comments;
-
-		$tvars['vars']['comnum'] = $SQLnews['com']?$SQLnews['com']:$lang['noa'];
-		$tvars['regx']['[\[comments\](.*)\[/comments\]]']     = ($SQLnews['com'])?'$1':'';
-		$tvars['regx']['[\[nocomments\](.*)\[/nocomments\]]'] = ($SQLnews['com'])?'':'$1';
+		$tvars['plugin']['comments']['list'] = $comments;
+		$tvars['plugin']['comments']['count'] = $SQLnews['com']?$SQLnews['com']:$lang['noa'];
 
 		for ($ix = 0; $ix <= 2; $ix++) {
-			$tvars['vars']['acom:'.$ix] = ($SQLnews['allow_com'] == $ix)?'selected="selected"':'';
+			$tvars['plugin']['comments']['acom:'.$ix] = ($SQLnews['allow_com'] == $ix)?'selected="selected"':'';
 		}
+	}
+
+	function editNews($newsID, $SQLold, &$SQLnew, &$tvars) {
+		$SQLnew['allow_com'] = intval($_REQUEST['allow_com']);
+		return 1;
 	}
 
 	function showNews($newsID, $SQLnews, &$tvars, $callingParams = array()) {
