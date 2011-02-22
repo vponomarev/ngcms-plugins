@@ -12,7 +12,6 @@ if (!defined('NGCMS')) die ('HAL');
 // Load lang files
 LoadPluginLang('xfields', 'config');
 
-
 //
 // XFields: Add/Modify attached files
 function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
@@ -142,6 +141,9 @@ class XFieldsNewsFilter extends NewsFilter {
 
 		if (is_array($xf['news']))
 			foreach ($xf['news'] as $id => $data) {
+				if ($data['disabled'])
+					continue;
+
 				$xfEntry = array(
 					'title'		=>	$data['title'],
 					'id'		=>	$id,
@@ -202,20 +204,51 @@ class XFieldsNewsFilter extends NewsFilter {
 			$xfCategories[$cData['id']] = $cData['xf_group'];
 		}
 
+		// Prepare table data [if needed]
+		if (isset($xf['tdata']) && is_array($xf['tdata'])) {
+			// Data are not provisioned
+			$tlist = array();
+
+			// Prepare config
+			$tclist = array();
+			$thlist = array();
+			foreach ($xf['tdata'] as $fId => $fData) {
+				$tclist[$fId] = array(
+					'title'		=> $fData['title'],
+					'required'	=> $fData['required'],
+					'type'		=> $fData['type'],
+					'default'	=> $fData['default'],
+				);
+				$thlist [] = array(
+					'id'	=> $fId,
+					'title'	=> $fData['title'],
+				);
+				if ($fData['type'] == 'select') {
+					$tclist[$fId]['storekeys']	= $fData['storekeys'];
+					$tclist[$fId]['options']	= $fData['options'];
+				}
+
+			}
+		}
+
+
 		$tVars = array(
 			'entries'	=>	$xfEntries,
 			'xfGC'		=>	json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
 			'xfCat'		=>	json_encode(arrayCharsetConvert(0, $xfCategories)),
 			'xfList'	=>	json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
+			'xtableConf'	=>	json_encode(arrayCharsetConvert(0, $tclist)),
+			'xtableVal'		=>	isset($_POST['xftable'])?$_POST['xftable']:json_encode(arrayCharsetConvert(0, $tlist)),
+			'xtableHdr'		=>	$thlist,
+			'xtablecnt'		=>	count($thlist),
+			'flags'			=> array(
+				'tdata'			=> true,
+			),
 		);
 		$xt = $twig->loadTemplate('plugins/xfields/tpl/add_news.tpl');
-		$tvars['vars']['plugin_xfields'] .= $xt->render($tVars);;
+		$tvars['plugin']['xfields'] .= $xt->render($tVars);;
 
 
-//		$tv = array ( 'vars' => array( 'entries' => $output));
-//		$tpl -> template('add_news', extras_dir.'/xfields/tpl');
-//		$tpl -> vars('add_news', $tv);
-//		$tvars['vars']['plugin_xfields'] = $tpl -> show('add_news');
 		return 1;
 	}
 	function addNews(&$tvars, &$SQL) {
@@ -230,6 +263,9 @@ class XFieldsNewsFilter extends NewsFilter {
 
 		$xdata = array();
 		foreach ($xf['news'] as $id => $data) {
+			if ($data['disabled'])
+				continue;
+
 			if ($data['type'] == 'images') { continue; }
 			// Fill xfields. Check that all required fields are filled
 			if ($rcall[$id] != '') {
@@ -246,7 +282,8 @@ class XFieldsNewsFilter extends NewsFilter {
 	    $SQL['xfields']   = xf_encode($xdata);
 		return 1;
 	}
-	function addNewsNotify(&$tvars, $SQL, $newsid) {
+	function addNewsNotify(&$tvars, $SQL, $newsID) {
+		global $mysql;
 
 		// Load config
 		$xf = xf_configLoad();
@@ -254,11 +291,45 @@ class XFieldsNewsFilter extends NewsFilter {
 			return 1;
 
 		xf_modifyAttachedImages(1, $newsid, $xf, array());
+
+
+		// Prepare table data [if needed]
+		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode(iconv('Windows-1251', 'UTF-8', $_POST['xftable']), true))) {
+			$xft = arrayCharsetConvert(1, $xft);
+			//print "<pre>[".(is_array($xft)?'ARR':'NOARR')."]INCOMING ARRAY: ".var_export($xft, true)."</pre>";
+			$recList = array();
+			$queryList = array();
+			// SCAN records
+			foreach ($xft as $k => $v) {
+				if (is_array($v) && isset($v['#id'])) {
+					$editMode = 0;
+
+					$tRec = array();
+					foreach ($xf['tdata'] as $fId => $fData) {
+						$tRec['xfields_'.$fId] = db_squote($v[$fId]);
+					}
+
+					// Now update record info
+					$query = "insert into ".prefix."_xfields (".join(", ", array_keys($tRec)).", linked_ds, linked_id) values (".join(", ", array_values($tRec)).", 1, ".(intval($newsID)).")";
+					print "SQL: $query <br/>\n";
+					$queryList []= $query;
+					//$mysql->query($query);
+
+					//print "GOT LINE:<pre>".var_export($tRec, true)."</pre>";
+				}
+			}
+
+			// Execute queries
+			foreach ($queryList as $query) {
+				$mysql->query($query);
+			}
+		}
+
 		return 1;
 	}
 
 	function editNewsForm($newsID, $SQLold, &$tvars) {
-		global $lang, $tpl, $catz, $config, $twig, $twigLoader;
+		global $lang, $tpl, $catz, $mysql, $config, $twig, $twigLoader;
 		//print "<pre>".var_export($lang, true)."</pre>";
 		// Load config
 		$xf = xf_configLoad();
@@ -274,6 +345,9 @@ class XFieldsNewsFilter extends NewsFilter {
 		$xfEntries = array();
 
 		foreach ($xf['news'] as $id => $data) {
+			if ($data['disabled'])
+				continue;
+
 			$xfEntry = array(
 				'title'		=>	$data['title'],
 				'id'		=>	$id,
@@ -366,19 +440,75 @@ class XFieldsNewsFilter extends NewsFilter {
 			$xfCategories[$cData['id']] = $cData['xf_group'];
 		}
 
+		// Prepare table data [if needed]
+		if (isset($xf['tdata']) && is_array($xf['tdata'])) {
+			// Load table data for specific news
+			$tlist = array();
+			foreach ($mysql->select("select * from ".prefix."_xfields where (linked_ds = 1) and (linked_id = ".db_squote($newsID).")") as $trow) {
+				$ts = unserialize($trow['xfields']);
+				$tEntry = array('#id' => $trow['id']);
+				// Scan every field for value
+				foreach ($xf['tdata'] as $fId => $fData) {
+					$fValue = '';
+					if (is_array($ts) && isset($ts[$fId])) {
+						$fValue = $ts[$fId];
+					} elseif (isset($trow['xfields_'.$fId])) {
+						$fValue = $trow['xfields_'.$fId];
+					}
+					$tEntry[$fId] = $fValue;
+				}
+				$tlist []= $tEntry;
+			}
+
+			// Prepare config
+			$tclist = array();
+			$thlist = array();
+			foreach ($xf['tdata'] as $fId => $fData) {
+				$tclist[$fId] = array(
+					'title'		=> $fData['title'],
+					'required'	=> $fData['required'],
+					'type'		=> $fData['type'],
+					'default'	=> $fData['default'],
+				);
+				$thlist [] = array(
+					'id'	=> $fId,
+					'title'	=> $fData['title'],
+				);
+				if ($fData['type'] == 'select') {
+					$tclist[$fId]['storekeys']	= $fData['storekeys'];
+					$tclist[$fId]['options']	= $fData['options'];
+				}
+
+			}
+			//print "<pre>".var_export($tclist, true)."</pre>";
+			//print "<pre>".var_export($tlist, true)."</pre>";
+		}
+
 		$tVars = array(
-			'entries'	=>	$xfEntries,
-			'xfGC'		=>	json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
-			'xfCat'		=>	json_encode(arrayCharsetConvert(0, $xfCategories)),
-			'xfList'	=>	json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
+			'entries'		=>	$xfEntries,
+			'xfGC'			=>	json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
+			'xfCat'			=>	json_encode(arrayCharsetConvert(0, $xfCategories)),
+			'xfList'		=>	json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
+			'xtableConf'	=>	json_encode(arrayCharsetConvert(0, $tclist)),
+			'xtableVal'		=>	json_encode(arrayCharsetConvert(0, $tlist)),
+			'xtableHdr'		=>	$thlist,
+			'xtablecnt'		=>	count($thlist),
+			'flags'			=> array(
+				'tdata'			=> true,
+			),
 		);
+
+
 		$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_news.tpl');
-		$tvars['vars']['plugin_xfields'] .= $xt->render($tVars);;
+		$tvars['plugin']['xfields'] .= $xt->render($tVars);
+
 
 		return 1;
 	}
 	function editNews($newsID, $SQLold, &$SQLnew, &$tvars) {
 		global $lang, $config, $mysql;
+
+		//	print "<pre>POST VARS: ".var_export($_POST, true)."</pre>";
 
 		// Load config
 		$xf = xf_configLoad();
@@ -388,19 +518,22 @@ class XFieldsNewsFilter extends NewsFilter {
 		$rcall = $_POST['xfields'];
 		if (!is_array($rcall)) $rcall = array();
 
+		// Decode previusly stored data
+		$oldFields = xf_decode($SQLold['xfields']);
 
 		// Manage attached images
 		xf_modifyAttachedImages(1, $newsID, $xf, $SQLold['#images']);
-
-		// Init file/image processing libraries
-		$fmanager = new file_managment();
-		$imanager = new image_managment();
-
 
 		$xdata = array();
 		foreach ($xf['news'] as $id => $data) {
 			// Attached images are processed in special way
 			if ($data['type'] == 'images') {
+				continue;
+			}
+
+			// Skip disabled fields
+			if ($data['disabled']) {
+				$xdata[$id] = $oldFields[$id];
 				continue;
 			}
 
@@ -415,7 +548,72 @@ class XFieldsNewsFilter extends NewsFilter {
 				$SQLnew['xfields_'.$id] = $rcall[$id];
 		}
 
+		// Prepare table data [if needed]
+		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode(iconv('Windows-1251', 'UTF-8', $_POST['xftable']), true))) {
+			$xft = arrayCharsetConvert(1, $xft);
+			//print "<pre>[".(is_array($xft)?'ARR':'NOARR')."]INCOMING ARRAY: ".var_export($xft, true)."</pre>";
+			$recList = array();
+			$queryList = array();
+			// SCAN records
+			foreach ($xft as $k => $v) {
+				if (is_array($v) && isset($v['#id'])) {
+					$editMode = 0;
+					if (intval($v['#id'])) {
+						$recList []= intval($v['#id']);
+						$editMode = 1;
+					}
+
+					$tRec = array();
+					foreach ($xf['tdata'] as $fId => $fData) {
+							$tRec['xfields_'.$fId] = db_squote($v[$fId]);
+					}
+
+					// Now update record info
+					if ($editMode) {
+						$vt = array();
+						foreach ($tRec as $kx => $vx) { $vt []= $kx." = ".$vx;	}
+
+						$query = "update ".prefix."_xfields set ".join(", ", $vt)." where id = ".intval($v['#id']);
+						//print "SQL: $query <br/>\n";
+						$queryList []= $query;
+						//$mysql->query($query);
+					} else {
+
+						$query = "insert into ".prefix."_xfields (".join(", ", array_keys($tRec)).", linked_ds, linked_id) values (".join(", ", array_values($tRec)).", 1, ".(intval($newsID)).")";
+						//print "SQL: $query <br/>\n";
+						$queryList []= $query;
+						//$mysql->query($query);
+					}
+
+					//print "GOT LINE:<pre>".var_export($tRec, true)."</pre>";
+				}
+			}
+			// Now delete old lines
+			if (count($recList)) {
+				$query = "delete from ".prefix."_xfields where (linked_ds = 1) and (linked_id = ".intval($newsID).") and id not in (".join(", ", $recList).")";
+			} else {
+				$query = "delete from ".prefix."_xfields where (linked_ds = 1) and (linked_id = ".intval($newsID).")";
+			}
+			$mysql->query($query);
+
+			// Execute queries
+			foreach ($queryList as $query) {
+				$mysql->query($query);
+			}
+
+		}
+
 	    $SQLnew['xfields']   = xf_encode($xdata);
+		return 1;
+	}
+
+	// Delete news notifier [ after news is deleted ]
+	function deleteNewsNotify($newsID, $SQLnews) {
+		global $mysql;
+
+		$query = "delete from ".prefix."_xfields where (linked_ds = 1) and (linked_id = ".intval($newsID).")";
+		$mysql->query($query);
+
 		return 1;
 	}
 

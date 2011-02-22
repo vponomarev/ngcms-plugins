@@ -28,7 +28,7 @@
 	padding-left: 35px;
 	border: 1px solid #dbe4ed;
 	cursor: pointer;
-	background: #f6f8fb url("{skins_url}/images/no_plug.png") no-repeat;
+	background: #f6f8fb url("{{ skins_url }}/images/no_plug.png") no-repeat;
 	background-position: 8px center;
 }
 .btnInactive A { font: normal 14px "Trebuchet MS", Arial, Helvetica, sans-serif normal; text-decoration: none; }
@@ -42,7 +42,7 @@
 	padding-left: 35px;
 	border: 1px solid #54a1c1;
 	cursor: pointer;
-	background: #FFFFFF url("{skins_url}/images/yes_plug.png") no-repeat;
+	background: #FFFFFF url("{{ skins_url }}/images/yes_plug.png") no-repeat;
 	background-position: 8px center;
 }
 
@@ -74,38 +74,20 @@ border: #CFCFCF 1px solid;
 }
 
 </style>
-<script type="text/javascript" src="{admin_url}/includes/js/ajax.js"></script>
-<script type="text/javascript" src="{admin_url}/includes/js/admin.js"></script>
+<script type="text/javascript" src="{{ admin_url }}/includes/js/ajax.js"></script>
+<script type="text/javascript" src="{{ admin_url }}/includes/js/admin.js"></script>
 
-<div id="loading-layer"><img src="{tpl_url}/images/loading.gif" alt="" /></div>
+<div id="loading-layer"><img src="{{ tpl_url }}/images/loading.gif" alt="" /></div>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="content">
 <tbody>
 <tr>
-<td colspan="5" class="contentHead" width="100%"><img src="{skins_url}/images/nav.gif" hspace="8">{l_config_text}: xfields</td>
+<td colspan="5" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang['config_text'] }}: xfields</td>
 </tr>
 </tbody>
 </table>
 
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-
-<tbody><tr>
-<td colspan="8" class="contNav" width="100%">
-<div id="btnMenu">
-<span class="{bclass.news}" onclick='document.location="?mod=extra-config&plugin=xfields&section=news";'>Новости: список полей</span><span class="btnSeparator">&nbsp;</span>
-<span class="{bclass.grp.news}" onclick='document.location="?mod=extra-config&plugin=xfields&section=grp.news";'>Новости: группы</span><span class="btnDelimiter">&nbsp;</span>
-<!--
-<span class="{bclass.users}" onclick='document.location="?mod=extra-config&plugin=xfields&section=users";'>Пользователи: список полей</span><span class="btnSeparator">&nbsp;</span>
-<span class="{bclass.grp.users}">Пользователи: группы</span>
--->
-</div>
-&nbsp;
-</td>
-</tr>
-</tbody>
-</table>
-
-
+{% include 'plugins/xfields/tpl/navi.tpl' %}
 
 <table width="100%">
 <tr align="left">
@@ -150,16 +132,14 @@ border: #CFCFCF 1px solid;
 </td>
 </tr>
 </table>
-{entries}
-
 </form>
 
 
 <script type="text/javascript" language="javascript">
 <!--
 // Connect to configuration data
-var gConfig	= {json.groups.config};
-var fConfig	= {json.fields.config};
+var gConfig	= {{ json['groups.config'] }};
+var fConfig	= {{ json['fields.config'] }};
 
 var grpList	= document.getElementById('gList');
 var fldList	= document.getElementById('fList');

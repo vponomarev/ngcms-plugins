@@ -1,8 +1,11 @@
-<table border="0" cellspacing="1" cellpadding="1" class="content">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tbody>
 <tr>
-<td width="100%" colspan="2" class="pluginConfigHeader"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" />{l_config_text}: <a href="?mod=extra-config&plugin=xfields&section={sectionID}" class="bold">xfields</a> &nbsp; <img src="{skins_url}/images/nav.gif" hspace="8" alt="" />{l_xfields_editfield} <a href="?mod=extra-config&plugin=xfields&action=edit&section={sectionID}&field={id}">{id}</a></td>
+<td colspan="5" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang['config_text'] }}: <a href="?mod=extra-config&plugin=xfields&section={{ sectionID }}" class="bold">xfields</a> &#8594; {{ lang.xfconfig['editfield'] }} <a href="?mod=extra-config&plugin=xfields&action=edit&section={{ sectionID }}&field={{ id }}">{{ id }}</a></td>
 </tr>
+</tbody>
 </table>
-<div style="margin-top: 10px; margin-bottom: 10px; padding: 5px; padding-left: 25px; font-weight: bold; border: 1px solid red; cursor: pointer; background: #FFFFFF; background-position: 8px center;">
-{l_xfields_savedone}
+
+<div style="margin-top: 10px; margin-bottom: 10px; padding: 5px; padding-top: 20px; padding-bottom: 20px; padding-left: 25px; font-weight: bold; border: 1px solid red; cursor: pointer; background: #FFFFFF; background-position: 8px center;">
+{{ lang.xfconfig['savedone'] }}
 </div>
