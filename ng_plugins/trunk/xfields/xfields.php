@@ -753,3 +753,13 @@ function xf_encode($fields){
 	if (!is_array($fields)) return '';
 	return 'SER|'.serialize($fields);
 }
+
+
+function xf_getTableBySectionID($sectionID) {
+	switch ($sectionID) {
+		case 'news':	return prefix.'_news';
+		case 'users':	return prefix.'_users';
+		case 'tdata':	return prefix.'_xfields';
+	}
+	return false;
+}
