@@ -167,12 +167,12 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		if ($data['type'] == 'select') {
 			if (is_array($data['options']))
 				foreach ($data['options'] as $k => $v) {
-					array_push($sOpts, '<tr><td><input size="12" name="so_data['.($fNum).'][0]" type="text" value="'.($data['storekeys']?htmlspecialchars($k):'').'"/></td><td><input type="text" size="55" name="so_data['.($fNum).'][1]" value="'.htmlspecialchars($v).'"/></td><td><a href="#"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+					array_push($sOpts, '<tr><td><input size="12" name="so_data['.($fNum).'][0]" type="text" value="'.($data['storekeys']?htmlspecialchars($k):'').'"/></td><td><input type="text" size="55" name="so_data['.($fNum).'][1]" value="'.htmlspecialchars($v).'"/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 					$fNum++;
 				}
 		}
 		if (!count($sOpts)) {
-			array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+			array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 		}
 
 		$tVars = $tVars + array(
@@ -193,7 +193,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 	//print "<pre>".var_export($tVars, true)."</pre>";
 	} else {
 		$sOpts = array();
-		array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#"><img src="{skins_url}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+		array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 
 		$tVars['flags']['editmode'] = 0;
 		$tVars['flags']['disabled'] = false;
@@ -394,14 +394,7 @@ function doAddEdit() {
 	}
 
 	// Now we should update table `_news` structure and content
-	$tableName = '';
-	if ($sectionID == 'news') {
-		$tableName = prefix.'_news';
-	} else if ($sectionID == 'tdata') {
-		$tableName = prefix.'_tdata';
-	} else if ($sectionID == 'users') {
-		$tableName = uprefix.'_users';
-	} else {
+	if (!($tableName = xf_getTableBySectionID($sectionID))) {
 		print 'Ошибка: неизвестная секция/блок ('.$sectionID.')';
 		return;
 	}
@@ -488,8 +481,13 @@ function doAddEdit() {
 
 //
 //
+/**
+ * doUpdate()
+ *
+ * @return
+ */
 function doUpdate() {
-	global $xf, $XF, $lang, $tpl, $sectionID;
+	global $xf, $XF, $lang, $tpl, $mysql, $sectionID;
 
 	$error = 0;
 	$field = $_REQUEST['field'];
@@ -502,7 +500,21 @@ function doUpdate() {
 
 	$notif = '';
 	switch ($_REQUEST['subaction']) {
-		case 'del':		unset($XF[$sectionID][$field]);
+		case 'del':		// Delete field from SQL table if required
+						if (($XF[$sectionID][$field]['storage'])&&($tableName = xf_getTableBySectionID($sectionID))) {
+							// Check if field really exist
+							$found = 0;
+							foreach ($mysql->select("describe ".$tableName, 1) as $row) {
+								if ($row['Field'] == 'xfields_'.$field) {
+									$found = 1;
+									break;
+								}
+							}
+							if ($found)
+								$mysql->query("alter table ".$tableName." drop column `xfields_".$field."`");
+						}
+
+						unset($XF[$sectionID][$field]);
 						$notif = $lang['xfields_done_del'];
 						break;
 		case 'up':		array_key_move($XF[$sectionID], $field, -1);
