@@ -290,8 +290,38 @@ class XFieldsNewsFilter extends NewsFilter {
 		if (!is_array($xf))
 			return 1;
 
-		xf_modifyAttachedImages(1, $newsid, $xf, array());
+		xf_modifyAttachedImages(1, $newsID, $xf, array());
 
+		// Scan fields and check if we have attached images for fields with type 'images'
+		$haveImages = false;
+		foreach ($xf['news'] as $fid => $fval) {
+			if ($fval['type'] == 'images') {
+				$haveImages = true;
+				break;
+			}
+		}
+
+		if ($haveImages) {
+			// Get real ID's of attached images and print here
+			$idlist = array();
+
+			foreach ($mysql->select("select id, plugin, pidentity from ".prefix."_images where (linked_ds = 1) and (linked_id = ".db_squote($newsID).")") as $irec) {
+				if ($irec['plugin'] == 'xfields') {
+					$idlist[$irec['pidentity']] []= $irec['id'];
+				}
+			}
+
+			// Decode xfields
+			$xdata = xf_decode($SQL['xfields']);
+			//print "<pre>IDLIST: ".var_export($idlist, tru)."</pre>";
+			// Scan for fields that should be configured to have attached images
+			foreach ($xf['news'] as $fid => $fval) {
+				if (($fval['type'] == 'images')&&(isset($idlist[$fid]))) {
+					$xdata[$fid] = join(",", $idlist[$fid]);
+				}
+			}
+			$mysql->query("update ".prefix."_news set xfields = ".db_squote(xf_encode($xdata))." where id = ".db_squote($newsID));
+		}
 
 		// Prepare table data [if needed]
 		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode(iconv('Windows-1251', 'UTF-8', $_POST['xftable']), true))) {
@@ -311,7 +341,7 @@ class XFieldsNewsFilter extends NewsFilter {
 
 					// Now update record info
 					$query = "insert into ".prefix."_xfields (".join(", ", array_keys($tRec)).", linked_ds, linked_id) values (".join(", ", array_values($tRec)).", 1, ".(intval($newsID)).")";
-					print "SQL: $query <br/>\n";
+					//print "SQL: $query <br/>\n";
 					$queryList []= $query;
 					//$mysql->query($query);
 
@@ -525,6 +555,35 @@ class XFieldsNewsFilter extends NewsFilter {
 		xf_modifyAttachedImages(1, $newsID, $xf, $SQLold['#images']);
 
 		$xdata = array();
+
+		// Scan fields and check if we have attached images for fields with type 'images'
+		$haveImages = false;
+		foreach ($xf['news'] as $fid => $fval) {
+			if ($fval['type'] == 'images') {
+				$haveImages = true;
+				break;
+			}
+		}
+
+		if ($haveImages) {
+			// Get real ID's of attached images and print here
+			$idlist = array();
+
+			foreach ($mysql->select("select id, plugin, pidentity from ".prefix."_images where (linked_ds = 1) and (linked_id = ".db_squote($newsID).")") as $irec) {
+				if ($irec['plugin'] == 'xfields') {
+					$idlist[$irec['pidentity']] []= $irec['id'];
+				}
+			}
+
+			// Scan for fields that should be configured to have attached images
+			foreach ($xf['news'] as $fid => $fval) {
+				if ($fval['type'] == 'images') {
+					$xdata[$fid] = join(",", $idlist[$fid]);
+				}
+			}
+		}
+
+
 		foreach ($xf['news'] as $id => $data) {
 			// Attached images are processed in special way
 			if ($data['type'] == 'images') {
@@ -619,18 +678,41 @@ class XFieldsNewsFilter extends NewsFilter {
 
 	// Show news call :: processor (call after all processing is finished and before show)
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+		global $mysql, $config;
 		// Try to load config. Stop processing if config was not loaded
 		if (($xf = xf_configLoad()) === false) return;
 
 		$fields = xf_decode($SQLnews['xfields']);
 		$content = $SQLnews['content'];
 
+		// Show extra fields if we have it
 		if (is_array($xf['news']))
 			foreach ($xf['news'] as $k => $v) {
-				$kp = preg_quote($k, "'");
+				$kp = preg_quote($k, "#");
 				$xfk = isset($fields[$k])?$fields[$k]:'';
-				$tvars['regx']["'\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]'is"] = ($xfk == "")?"":"$1";
-				$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':'')):$xfk;
+
+				// Our behaviour depends on field type
+				if ($v['type'] == 'images') {
+					// Check if there're attached images
+					if ($xfk && count($ilist = explode(",", $xfk)) && count($imglist = $mysql->select("select * from ".prefix."_images where id in (".$xfk.")"))) {
+						// Yes, get list of images
+						$imgInfo = $imglist[0];
+						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '$1';
+						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '';
+
+						$iname = ($imgInfo['storage']?$config['attach_url']:$config['files_url']).'/'.$imgInfo['folder'].'/'.$imgInfo['name'];
+						$tvars['vars']['[xvalue_'.$k.']'] = $iname;
+
+					} else {
+						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '';
+						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '$1';
+
+					}
+				} else {
+					$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = ($xfk == "")?"":"$1";
+					$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = ($xfk == "")?"$1":"";
+					$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':'')):$xfk;
+				}
 			}
 		$SQLnews['content'] = $content;
 	}
@@ -651,8 +733,10 @@ class XFieldsFilterAdminCategories extends FilterAdminCategories{
 
 		// Prepare select
 		$ms = '<select name="xf_group"><option value="">** все поля **</option>';
-		foreach ($xf['grp.news'] as $k => $v) {
-			$ms .= '<option value="'.$k.'">'.$k.' ('.$v['title'].')</option>';
+		if (isset($xf['grp.news'])) {
+			foreach ($xf['grp.news'] as $k => $v) {
+				$ms .= '<option value="'.$k.'">'.$k.' ('.$v['title'].')</option>';
+			}
 		}
 
 		$tvars['vars']['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['xfields:categories.group'].'<br/><small>'.$lang['xfields:categories.group#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
