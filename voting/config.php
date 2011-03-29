@@ -155,7 +155,7 @@ if ($_REQUEST['action'] == 'newvote') {
 		$allcnt = 0;
 		foreach ($mysql->select("select * from ".prefix."_voteline where voteid=".$vrow['id']) as $row) {
 			$tvars['vars'] = array(
-					'name' => $row['name'],
+					'name' => htmlspecialchars($row['name']),
 					'count' => $row['cnt'],
 					'id' => $row['id'],
 					'veactive' => $row['active']?'checked':'');
