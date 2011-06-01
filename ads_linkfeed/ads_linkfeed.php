@@ -31,7 +31,7 @@ function plugin_ads_linkfeed() {
 		// Not found. Don't activate plugin
 		if (!$found) {
 			for ($i = 1; $i <= $count; $i++) {
-				$template['vars']['plugin_ads_sape_'.$i] = '';
+				$template['vars']['plugin_ads_linkfeed_'.$i] = '';
 			}
 			return;
 		}
