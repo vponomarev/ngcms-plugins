@@ -4,7 +4,7 @@
 
 ID: ads_linkfeed
 Name: LINKFEED.RU links display
-Version: 0.02
+Version: 0.03
 Acts: index_post
 File: ads_linkfeed.php
 Config: config.php

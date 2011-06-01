@@ -1,10 +1,11 @@
 <?php
-/* LinkFeed script version 0.3.8
+/* LinkFeed script version 0.4.1
  * + SMALL FIX (c) Vitaly Ponomarev
- *   „®¡ ¢«¥­  ¯¥à¥¬¥­­ ï db_dir - ¯ãâì åà ­¥­¨ï ä ©«  ¤ ­­ëå
+ *   Äîáàâëåíà ïåðåìåííàÿ db_dir - ïóòü õðàíåíèÿ ôàéëà äàííûõ
 */
+
 class LinkfeedClient {
-    var $lc_version           = '0.3.8';
+    var $lc_version           = '0.4.1';
     var $lc_verbose           = false;
     var $lc_charset           = 'DEFAULT';
     var $lc_use_ssl           = false;
@@ -23,6 +24,7 @@ class LinkfeedClient {
     var $lc_force_show_code   = false;
     var $lc_multi_site        = false;
     var $lc_is_static         = false;
+    var $lc_ignore_tailslash  = false;
     var $lc_db_dir            = false;
 
     function LinkfeedClient($options = null) {
@@ -53,6 +55,10 @@ class LinkfeedClient {
             $this->lc_is_static = true;
         }
 
+        if (isset($options['ignore_tailslash']) && $options['ignore_tailslash']) {
+            $this->lc_ignore_tailslash = true;
+        }
+
         if (isset($options['request_uri']) && strlen($options['request_uri']) != 0) {
             $this->lc_request_uri = $options['request_uri'];
         } else {
@@ -63,6 +69,8 @@ class LinkfeedClient {
                 $this->lc_request_uri = $_SERVER['REQUEST_URI'];
             }
         }
+
+        $this->lc_request_uri = rawurldecode($this->lc_request_uri);
 
         if (isset($options['multi_site']) && $options['multi_site'] == true) {
             $this->lc_multi_site = true;
@@ -90,7 +98,7 @@ class LinkfeedClient {
             $this->lc_force_show_code = true;
         }
 
-        // Šã¤  ª« áâì ¤ ­­ë¥
+        // Êóäà êëàñòü äàííûå
         if (isset($options['db_dir']) && is_dir($options['db_dir'])) {
             $this->lc_db_dir = $options['db_dir'];
         } else {
@@ -158,9 +166,20 @@ class LinkfeedClient {
             $this->lc_links_delimiter = $this->lc_links['__linkfeed_delimiter__'];
         }
 
-        if (array_key_exists($this->lc_request_uri, $this->lc_links) && is_array($this->lc_links[$this->lc_request_uri])) {
-            $this->lc_links_page = $this->lc_links[$this->lc_request_uri];
+        $lc_links_temp=array();
+        foreach($this->lc_links as $key=>$value){
+          $lc_links_temp[rawurldecode($key)]=$value;
         }
+        $this->lc_links=$lc_links_temp;
+        if ($this->lc_ignore_tailslash && $this->lc_request_uri[strlen($this->lc_request_uri)-1]=='/') $this->lc_request_uri=substr($this->lc_request_uri,0,-1);
+	    $this->lc_links_page=array();
+        if (array_key_exists($this->lc_request_uri, $this->lc_links) && is_array($this->lc_links[$this->lc_request_uri])) {
+            $this->lc_links_page = array_merge($this->lc_links_page, $this->lc_links[$this->lc_request_uri]);
+        }
+	    if ($this->lc_ignore_tailslash && array_key_exists($this->lc_request_uri.'/', $this->lc_links) && is_array($this->lc_links[$this->lc_request_uri.'/'])) {
+            $this->lc_links_page =array_merge($this->lc_links_page, $this->lc_links[$this->lc_request_uri.'/']);
+        }
+
         $this->lc_links_count = count($this->lc_links_page);
     }
 
@@ -325,3 +344,5 @@ class LinkfeedClient {
         return false;
     }
 }
+
+?>
