@@ -12,7 +12,7 @@ class SimilarNewsfilter extends NewsFilter {
 	function addNewsNotify(&$tvars, $SQL, $newsid) {
 		global $mysql;
 
-		$scount = extra_get_param('similar', 'count');
+		$scount = pluginGetVariable('similar', 'count');
 		$scount = (($scount < 1)||($scount > 20))?5:$scount;
 
 		// Make reset for all tags for new news
@@ -41,14 +41,14 @@ class SimilarNewsfilter extends NewsFilter {
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		global $mysql, $tpl, $PFILTERS;
 
-		$tpath = locatePluginTemplates(array('similar', 'similar_entry'), 'similar', extra_get_param('similar', 'localsource'));
+		$tpath = locatePluginTemplates(array('similar', 'similar_entry'), 'similar', pluginGetVariable('similar', 'localsource'));
 
 		// Show similar news only in full mode
 		if ($mode['style'] == 'full') {
 			// Check if we have similar news
 			$similars = $SQLnews['similar_status'];
 			if (!$similars) {
-				$scount = extra_get_param('similar', 'count');
+				$scount = pluginGetVariable('similar', 'count');
 				$scount = (($scount < 1)||($scount > 20))?5:$scount;
 				$similars = plugin_similar_recover($newsID, $scount);
 			}
@@ -60,7 +60,7 @@ class SimilarNewsfilter extends NewsFilter {
 
 			// Filter for dimensions
 			$filter = '';
-			if (!($similar_enabled = intval(extra_get_param('similar', 'similar_enabled'))) || !($samecat_enabled=intval(extra_get_param('similar', 'samecat_enabled')))) {
+			if (!($similar_enabled = intval(pluginGetVariable('similar', 'similar_enabled'))) || !($samecat_enabled=intval(pluginGetVariable('similar', 'samecat_enabled')))) {
 				if ($similar_enabled) {
 					$filter = 'and (dimension = 0)';
 				} else if ($samecat_enabled) {
@@ -70,10 +70,10 @@ class SimilarNewsfilter extends NewsFilter {
 			}
 
 			$query = "select n.id, n.catid, n.alt_name, n.postdate, si.id as si_id, si.dimension as si_dimension, si.newsID as si_newsID, si.refNewsID as si_refNewsID, si.refNewsQuantaty as si_refNewsQuantaty, si.refNewsTitle as si_refNewsTitle, si.refNewsDate as si_refNewsDate from ".prefix."_similar_index si left join ".prefix."_news n on n.id = si.refNewsID where si.newsID = ". db_squote($newsID).' '.($filter!=''?$filter.' ':'')."order by si.refNewsQuantaty desc";
-			if (extra_get_param('similar', 'pcall')) {
+			if (pluginGetVariable('similar', 'pcall')) {
 				$query = "select n.*, si.id as si_id, si.dimension as si_dimension, si.newsID as si_newsID, si.refNewsID as si_refNewsID, si.refNewsQuantaty as si_refNewsQuantaty, si.refNewsTitle as si_refNewsTitle, si.refNewsDate as si_refNewsDate from ".prefix."_similar_index si left join ".prefix."_news n on n.id = si.refNewsID where si.newsID = ". db_squote($newsID).' '.($filter!=''?$filter.' ':'')."order by si.refNewsQuantaty desc";
 				$callingParams['plugin'] = 'lastnews';
-				switch (intval(extra_get_param('lastnews', 'pcall_mode'))) {
+				switch (intval(pluginGetVariable('similar', 'pcall_mode'))) {
 					case 1: $callingParams['style'] = 'short';
 							break;
 					case 2: $callingParams['style'] = 'full';
@@ -94,18 +94,18 @@ class SimilarNewsfilter extends NewsFilter {
 					$txvars = array ();
 
 					// Execute filters [ if requested ]
-					if (extra_get_param('similar', 'pcall') && is_array($PFILTERS['news']))
+					if (pluginGetVariable('similar', 'pcall') && is_array($PFILTERS['news']))
 						foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($similar['id'], $similar, $callingParams); }
 
 					// Set formatted date
-					$dformat = extra_get_param('similar','dateformat')?extra_get_param('similar','dateformat'):'{day0}.{month0}.{year}';
+					$dformat = pluginGetVariable('similar','dateformat')?pluginGetVariable('similar','dateformat'):'{day0}.{month0}.{year}';
 					$txvars['vars']['date'] = str_replace(array('{day}', '{day0}', '{month}', '{month0}', '{year}', '{year2}', '{month_s}', '{month_l}'),
 							array(date('j',$similar['si_refNewsDate']), date('d',$similar['si_refNewsDate']), date('n',$similar['si_refNewsDate']), date('m',$similar['si_refNewsDate']), date('y',$similar['si_refNewsDate']), date('Y',$similar['si_refNewsDate']), $langShortMonths[date('n',$similar['si_refNewsDate'])-1], $langMonths[date('n',$similar['si_refNewsDate'])-1]), $dformat);
 					$txvars['vars']['title'] = $similar['si_refNewsTitle'];
 					$txvars['vars']['url'] = newsGenerateLink($similar);
 
 					// Execute filters [ if requested ]
-					if (extra_get_param('lastnews', 'pcall') && is_array($PFILTERS['news']))
+					if (pluginGetVariable('similar', 'pcall') && is_array($PFILTERS['news']))
 						foreach ($PFILTERS['news'] as $k => $v) { $v->showNews($similar['id'], $similar, $txvars, $callingParams); }
 
 					$tpl -> template('similar_entry', $tpath['similar_entry']);
