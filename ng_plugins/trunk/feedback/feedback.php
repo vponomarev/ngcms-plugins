@@ -21,7 +21,7 @@ function plugin_feedback_screen(){
 // * 0 - initial show
 // * 1 - show filled earlier values (error filling some fields)
 function plugin_feedback_showScreen($mode = 0, $errorText = '') {
-	global $template, $tpl, $lang, $mysql, $userROW;
+	global $template, $tpl, $lang, $mysql, $userROW, $PFILTERS;
 
 	$ptpl_url = admin_url.'/plugins/feedback/tpl';
 
@@ -51,8 +51,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		$tvars['vars']['title']	= $fInfo['title'];
 
 		$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']), iconv('Windows-1251', 'UTF-8', $fInfo['title']));
-
-		$setValue = secure_html($mode?$_REQUEST[$fInfo['name']]:$fInfo['default']);
+		$setValue = secure_html($mode?$_REQUEST['feedback_'.$fInfo['name']]:$fInfo['default']);
 
 		switch ($fInfo['type']) {
 			case 'text':
@@ -184,6 +183,13 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	$tvars['vars']['entries']	= $output;
 	$tvars['vars']['elist']		= $elist;
 
+	$tvars['vars']['header'] = '';
+	$tvars['vars']['footer'] = '';
+
+	// Process filters (if any)
+	if (is_array($PFILTERS['feedback']))
+		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onShow($form_id, $frow, $fData, $tvars); }
+
 	$tpl->template('site.infoblock', $tpath['site.infoblock']);
 	$tpl->vars('site.infoblock', $tvars);
 	$template['vars']['mainblock']      =  $tpl->show('site.infoblock');
@@ -194,7 +200,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 //
 // Post feedback message
 function plugin_feedback_post() {
-	global $template, $tpl, $lang, $mysql, $userROW, $SYSTEM_FLAGS;
+	global $template, $tpl, $lang, $mysql, $userROW, $SYSTEM_FLAGS, $PFILTERS;
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('site.infoblock', 'site.form.hdr', 'site.form.row', 'htmail', 'htmail.body'), 'feedback', extra_get_param('feedback', 'localsource'));
@@ -255,6 +261,10 @@ function plugin_feedback_post() {
 		}
 	}
 
+	// Process filters (if any)
+	if (is_array($PFILTERS['feedback']))
+		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onProcess($form_id, $frow, $fData, $flagHTML, &$output); }
+
 	// Select recipient group
 	$em = unserialize($frow['emails']);
 	if ($em === false) {
@@ -300,5 +310,10 @@ function plugin_feedback_post() {
 	if (substr($frow['flags'],1,1)) {
 		$_SESSION['captcha.feedback'] = rand(00000, 99999);
 	}
+
+	// Do post processing notification
+	if (is_array($PFILTERS['feedback']))
+		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onProcessNotify($form_id); }
+
 
 }

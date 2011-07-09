@@ -4,7 +4,7 @@
 
 ID: feedback
 Name: Feedback forms
-Version: 0.11
+Version: 0.12
 Acts: ppages
 File: feedback.php
 Config: config.php
@@ -16,3 +16,4 @@ Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru
 Title: Формы обратной связи
 Information: Позволяет создавать различные формы обратной связи.
+Library: common; lib/common.php
