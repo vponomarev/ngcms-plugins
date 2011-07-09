@@ -247,6 +247,8 @@ class auth_basic {
 					$values['email'],
 					$lang['letter_title'],
 					$msg,
+					false,
+					false,
 					'html'
 				);
 				msg(array(
