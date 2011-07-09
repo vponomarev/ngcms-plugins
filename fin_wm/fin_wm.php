@@ -29,13 +29,13 @@ class Finance_Acceptor_WM extends Finance_Acceptor {
 	function paymentAcceptForm($sum = 0) {
 		global $tpl, $username, $userROW;
 
-		if ($_REQUEST['result_ok']) {
+		if (isset($_REQUEST['result_ok']) && $_REQUEST['result_ok']) {
 		$tpl->template('result_ok',extras_dir.'/fin_wm/tpl');
 			$tpl->vars('result_ok', array( 'vars' => array()));
 			return $tpl->show('result_ok');
  	 	}
 
-		if ($_REQUEST['result_fail']) {
+		if (isset($_REQUEST['result_fail']) && $_REQUEST['result_fail']) {
 			$tpl->template('result_fail',extras_dir.'/fin_wm/tpl');
 			$tpl->vars('result_fail', array( 'vars' => array()));
 			return $tpl->show('result_fail');
