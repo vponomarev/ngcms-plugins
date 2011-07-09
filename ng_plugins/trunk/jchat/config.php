@@ -12,10 +12,18 @@ plugins_load_config();
 
 loadPluginLang('jchat', 'config', '', '', ':');
 
+// Calculate row count
+$jcRowCount = $mysql->result("select count(*) from ".prefix."_jchat");
 // Fill configuration parameters
 $cfg = array();
+array_push($cfg, array('descr' => $lang['jchat:desc']));
+
 $cfgX = array();
-array_push($cfgX, array('descr' => $lang['jchat:desc']));
+array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2">Всего записей: '.$jcRowCount.'</td></tr>'));
+array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2"><input type="checkbox" name="purge" value="1"/> Удалить старые записи, оставив последние <input type="text" name="purge_save" size="3" value="50"/></td></tr>'));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['jchat:conf.stat'].'</b>', 'entries' => $cfgX));
+
+$cfgX = array();
 array_push($cfgX, array('name' => 'localsource', 'title' => $lang['jchat:localsource'], 'descr' => $lang['jchat:localsource#desc'], 'type' => 'select', 'values' => array ( '0' => $lang['jchat:lsrc.site'], '1' => $lang['jchat:lsrc.plugin']), 'value' => intval(pluginGetVariable($plugin,'localsource'))));
 array_push($cfgX, array('name' => 'access', 'title' => $lang['jchat:access'], 'descr' => $lang['jchat:access#desc'], 'type' => 'select', 'values' => array ('0' => $lang['jchat:access.off'], '1' => $lang['jchat:access.ro'], '2' => $lang['jchat:access.rw']), 'value' => pluginGetVariable($plugin,'access')));
 array_push($cfgX, array('name' => 'rate_limit', 'title' => $lang['jchat:rate_limit'], 'descr' => $lang['jchat:rate_limit#desc'], 'type' => 'input', 'value' => pluginGetVariable($plugin,'rate_limit')));
@@ -43,6 +51,17 @@ array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['jchat:conf.wi
 
 // RUN
 if ($_REQUEST['action'] == 'commit') {
+	// Check if we need to purge old messages
+	if ($_REQUEST['purge']) {
+		// Delete all extra records
+		$dc = $jcRowCount - intval($_REQUEST['purge_save']);
+		if (($_REQUEST['purge_save'] != '')&&($dc > 0)) {
+			$mysql->query("delete from ".prefix."_jchat order by id limit ".$dc);
+		}
+
+	}
+
+
 	// If submit requested, do config save
 	commit_plugin_config_changes($plugin, $cfg);
 	print_commit_complete($plugin);
