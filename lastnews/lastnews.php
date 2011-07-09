@@ -113,7 +113,7 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 
 		// Show edit/detele news buttons
 		if (is_array($userROW) && ($row['author_id'] == $userROW['id'] || $userROW['status'] == "1" || $userROW['status'] == "2")) {
-			$tvars['vars']['[edit-news]'] = "<a href=\"".admin_url."/admin.php?mod=editnews&amp;action=editnews&amp;id=".$row['id']."\" target=\"_blank\">";
+			$tvars['vars']['[edit-news]'] = "<a href=\"".admin_url."/admin.php?mod=news&amp;action=edit&amp;id=".$row['id']."\" target=\"_blank\">";
 			$tvars['vars']['[/edit-news]'] = "</a>";
 		} else {
 			$tvars['regx']["#\[edit-news\].*?\[/edit-news\]#si"] = "";
