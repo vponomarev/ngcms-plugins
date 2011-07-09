@@ -288,23 +288,31 @@ function plugin_tags_cloudblock() {
 
 //
 // Show current tag
-function plugin_tags_tag() {
+// $params - array with override params
+//		tag		- if set (defined) function will be runned for specified tag
+//
+function plugin_tags_tag($params = array()) {
 	global $tpl, $template, $mysql, $lang, $SYSTEM_FLAGS, $CurrentHandler, $TemplateCache;
 
-	// Determine MONTH and YEAR for current show process
-	if (($CurrentHandler['pluginName'] == 'tags')&&
-		($CurrentHandler['handlerName'] == 'tag') &&
+	// Determine TAG that will be used for output
+	if (isset($params['tag'])) {
+		$tag = $params['tag'];
+	} else {
+		if (($CurrentHandler['pluginName'] == 'tags')&&
+			($CurrentHandler['handlerName'] == 'tag') &&
 		isset($CurrentHandler['params']['tag'])) {
 			$tag = $CurrentHandler['params']['tag'];
-	} else {
-		$tag = $_REQUEST['tag'];
+		} else {
+			$tag = $_REQUEST['tag'];
+		}
 	}
 
 	$tag = str_replace(array('&', '<'), array('&amp;','&lt;'), $tag);
 
 	// IF no tag is specified - show cloud
 	if (!$tag) {
-		plugin_tags_cloud();
+		if (!isset($params['tag']))
+			plugin_tags_cloud();
 		return;
 	}
 
