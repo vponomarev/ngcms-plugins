@@ -11,7 +11,7 @@ if (!defined('NGCMS')) die ('HAL');
 // N - inform reporter about status changes of incident
 
 function plugin_complain_resolve_error($id) {
- foreach (explode("\n",extra_get_param('complain', 'errlist')) as $erow) {
+ foreach (explode("\n",pluginGetVariable('complain', 'errlist')) as $erow) {
   if (preg_match('#^(\d+)\|(.+?)$#', trim($erow), $m) && ($m[1] == $id)) {
    return $m[2];
   }
@@ -28,7 +28,7 @@ function plugin_complain_screen() {
  $SUPRESS_TEMPLATE_SHOW = 1;
 
  // Determine paths for all template files
- $tpath = locatePluginTemplates(array('list.entry', 'list.header', 'infoblock'), 'complain', extra_get_param('complain', 'localsource'));
+ $tpath = locatePluginTemplates(array('list.entry', 'list.header', 'infoblock'), 'complain', pluginGetVariable('complain', 'localsource'));
 
  // No access for unregistered users
  if (!is_array($userROW)) {
@@ -40,7 +40,7 @@ function plugin_complain_screen() {
 
  // Fetch error list
  $elist = array();
- foreach (explode("\n",extra_get_param('complain', 'errlist')) as $erow) {
+ foreach (explode("\n",pluginGetVariable('complain', 'errlist')) as $erow) {
   if (preg_match('#^(\d+)\|(.+?)$#', trim($erow), $m)) {
    $elist[$m[1]] = $m[2];
   }
@@ -53,7 +53,7 @@ function plugin_complain_screen() {
  $where = array ('(c.complete = 0)');
 
  // Populate admins array
- $admins = explode("\n", extra_get_param('complain', 'admins'));
+ $admins = preg_split("/\r\n|\n/", pluginGetVariable('complain', 'admins'));
 
  // Non admins will see only complains in which they are involved
  if (($userROW['status'] > 1)&&(!in_array($userROW['name'], $admins))) {
@@ -119,10 +119,10 @@ function plugin_complain_add() {
  $SUPRESS_TEMPLATE_SHOW = 1;
 
  // Determine paths for all template files
- $tpath = locatePluginTemplates(array('ext.form', 'infoblock'), 'complain', extra_get_param('complain', 'localsource'));
+ $tpath = locatePluginTemplates(array('ext.form', 'infoblock'), 'complain', pluginGetVariable('complain', 'localsource'));
 
  // Check if we shouldn't show block for unregs
- if ((!is_array($userROW)) && (!extra_get_param('complain', 'allow_unreg'))) {
+ if ((!is_array($userROW)) && (!pluginGetVariable('complain', 'allow_unreg'))) {
   $tpl->template('infoblock', $tpath['infoblock']);
   $tpl->vars('infoblock', array( 'vars' => array( 'infoblock' => $lang['complain:error.regonly'].$lang['complain:link.close'])));
   $template['vars']['mainblock']      =  $tpl->show('infoblock');
@@ -131,7 +131,7 @@ function plugin_complain_add() {
 
  // Prepare error list
  $err = '';
- foreach (explode("\n",extra_get_param('complain', 'errlist')) as $erow) {
+ foreach (explode("\n",pluginGetVariable('complain', 'errlist')) as $erow) {
   if (preg_match('#^(\d+)\|(.+?)$#', trim($erow), $m)) {
    $err .= '<option value="'.$m[1].'">'.htmlspecialchars($m[2]).'</option>'."\n";
   }
@@ -139,9 +139,9 @@ function plugin_complain_add() {
 
  $txvars = array();
  $txvars['vars'] = array ( 'ds_id' => intval($_REQUEST['ds_id']), 'entry_id' => intval($_REQUEST['entry_id']), 'errorlist' => $err );
- $txvars['regx']['#\[notify\](.*?)\[/notify\]#is'] = ((is_array($userROW)) &&(extra_get_param('complain', 'inform_reporter') == 2))?'$1':'';
- $txvars['regx']['#\[email\](.*?)\[/email\]#is'] = ((!is_array($userROW)) && extra_get_param('complain', 'allow_unreg_inform'))?'$1':'';
- $txvars['regx']['#\[text\](.*?)\[/text\]#is'] = ((is_array($userROW) && (extra_get_param('complain', 'allow_text')==1)) || (extra_get_param('complain', 'allow_text') == 2))?'$1':'';
+ $txvars['regx']['#\[notify\](.*?)\[/notify\]#is'] = ((is_array($userROW)) &&(pluginGetVariable('complain', 'inform_reporter') == 2))?'$1':'';
+ $txvars['regx']['#\[email\](.*?)\[/email\]#is'] = ((!is_array($userROW)) && pluginGetVariable('complain', 'allow_unreg_inform'))?'$1':'';
+ $txvars['regx']['#\[text\](.*?)\[/text\]#is'] = ((is_array($userROW) && (pluginGetVariable('complain', 'allow_text')==1)) || (pluginGetVariable('complain', 'allow_text') == 2))?'$1':'';
 
  $txvars['vars']['form_url'] = generateLink('core', 'plugin', array('plugin' => 'complain', 'handler' => 'post'));
 
@@ -160,10 +160,10 @@ function plugin_complain_post() {
  $SUPRESS_TEMPLATE_SHOW = 1;
 
  // Determine paths for all template files
- $tpath = locatePluginTemplates(array('ext.form', 'infoblock', 'error.noentry', 'form.confirm'), 'complain', extra_get_param('complain', 'localsource'));
+ $tpath = locatePluginTemplates(array('ext.form', 'infoblock', 'error.noentry', 'form.confirm'), 'complain', pluginGetVariable('complain', 'localsource'));
 
  // Check if we shouldn't show block for unregs
- if ((!is_array($userROW)) && (!extra_get_param('complain', 'allow_unreg'))) {
+ if ((!is_array($userROW)) && (!pluginGetVariable('complain', 'allow_unreg'))) {
   $tpl->template('infoblock', $tpath['infoblock']);
   $tpl->vars('infoblock', array( 'vars' => array( 'infoblock' => $lang['complain:error.regonly'].$lang['complain:link.close'])));
   $template['vars']['mainblock']      =  $tpl->show('infoblock');
@@ -208,7 +208,7 @@ function plugin_complain_post() {
 
  // Check reporter notification mode
  if (is_array($userROW)) {
-  $flagNotify = ((extra_get_param('complain', 'inform_reporter') == '1')||((extra_get_param('complain', 'inform_reporter') == '2') && ($_REQUEST['notify'])))?1:0;
+  $flagNotify = ((pluginGetVariable('complain', 'inform_reporter') == '1')||((pluginGetVariable('complain', 'inform_reporter') == '2') && ($_REQUEST['notify'])))?1:0;
   $publisherMail = $userROW['mail'];
  } else {
   if ((strlen($_REQUEST['mail']) < 70) && (preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $_REQUEST['mail']))) {
@@ -216,11 +216,11 @@ function plugin_complain_post() {
   } else {
    $publisherMail = '';
   }
-  $flagNotify = (extra_get_param('complain', 'allow_unreg_inform') && $publisherMail)?1:0;
+  $flagNotify = (pluginGetVariable('complain', 'allow_unreg_inform') && $publisherMail)?1:0;
  }
 
  // Text error description
- $errorText = ((is_array($userROW) && (extra_get_param('complain', 'allow_text') == 1)) || (extra_get_param('complain', 'allow_text') == 2))? $_REQUEST['error_text'] : '';
+ $errorText = ((is_array($userROW) && (pluginGetVariable('complain', 'allow_text') == 1)) || (pluginGetVariable('complain', 'allow_text') == 2))? $_REQUEST['error_text'] : '';
 
  // Fill flags variable
  $flags = $flagNotify?'N':'';
@@ -229,7 +229,7 @@ function plugin_complain_post() {
  $mysql->query("insert into ".prefix."_complain (author_id, publisher_id, publisher_ip, publisher_mail, date, ds_id, entry_id, error_code, error_text, flags) values (".db_squote($cdata['author_id']).", ".db_squote(is_array($userROW)?$userROW['id']:0).", ".db_squote($ip).", ".db_squote($publisherMail).", now(), ".db_squote($cdata['ds_id']).", ".db_squote($cdata['id']).", ".db_squote($errid).", ".db_squote($errorText).", ".db_squote($flags).")");
 
  // Write a mail (if needed)
- if (extra_get_param('complain', 'inform_author') || extra_get_param('complain', 'inform_admin') || extra_get_param('complain', 'inform_admins')) {
+ if (pluginGetVariable('complain', 'inform_author') || pluginGetVariable('complain', 'inform_admin') || pluginGetVariable('complain', 'inform_admins')) {
 
   $tmvars = array (
     'title' => $cdata['title'],
@@ -243,12 +243,12 @@ function plugin_complain_post() {
    $lang['complain:mail.open.body']);
 
   // Inform author
-  if (extra_get_param('complain', 'inform_author') && strlen($cdata['author_mail'])) {
+  if (pluginGetVariable('complain', 'inform_author') && strlen($cdata['author_mail'])) {
    zzMail($cdata['author_mail'], $lang['complain:mail.open.subj'], $mail_text, 'text');
   }
 
   // Inform site admins
-  if (extra_get_param('complain', 'inform_admin')) {
+  if (pluginGetVariable('complain', 'inform_admin')) {
    // Send to all admins
    foreach ($mysql->select("select mail from ".uprefix."_users where status = 1") as $urow) {
     if (strlen($urow['mail'])) {
@@ -258,8 +258,8 @@ function plugin_complain_post() {
   }
 
   // Inform PLUGIN admins
-  if (extra_get_param('complain', 'inform_admins')) {
-  	foreach (explode("\n", extra_get_param('complain', 'admins')) as $admin_name) {
+  if (pluginGetVariable('complain', 'inform_admins')) {
+  	foreach (explode("\n", pluginGetVariable('complain', 'admins')) as $admin_name) {
 		if ($urow = $mysql->record("select mail from ".uprefix."_users where name = ".db_squote($admin_name))) {
 		    if (strlen($urow['mail'])) {
 		     zzMail($urow['mail'], $lang['complain:mail.open.subj'], $mail_text, 'text');
@@ -284,7 +284,7 @@ function plugin_complain_update() {
  $SUPRESS_TEMPLATE_SHOW = 1;
 
  // Determine paths for all template files
- $tpath = locatePluginTemplates(array('infoblock'), 'complain', extra_get_param('complain', 'localsource'));
+ $tpath = locatePluginTemplates(array('infoblock'), 'complain', pluginGetVariable('complain', 'localsource'));
 
  $link_admin = str_replace('{link}', generateLink('core', 'plugin', array('plugin' => 'complain')), $lang['complain:link.admin']);
 
@@ -313,7 +313,7 @@ function plugin_complain_update() {
  }
 
  // Populate admins list
- $admins = explode("\n", extra_get_param('complain', 'admins'));
+ $admins = explode("\n", pluginGetVariable('complain', 'admins'));
 
  // ** Check requested actions **
  // Change ownership
@@ -331,7 +331,7 @@ function plugin_complain_update() {
    // If 'N' flag is set in `flags` field - we should make a notification of an author
    if (strpos($irow['flags'], 'N') !== false) {
     // // If links found and "inform_reporter" flag is ON and status is really changed - send message
-    // if (extra_get_param('complain', 'inform_reporter') && $irow['publisher_id'] && (is_array($prec = $mysql->record("select * from ".uprefix."_users where id = ".db_squote($irow['publisher_id']))) && $prec['mail']) && ($irow['status'] != $newstatus)) {
+    // if (pluginGetVariable('complain', 'inform_reporter') && $irow['publisher_id'] && (is_array($prec = $mysql->record("select * from ".uprefix."_users where id = ".db_squote($irow['publisher_id']))) && $prec['mail']) && ($irow['status'] != $newstatus)) {
     // We're ready to send mail
     // Check if reference storage & entry exists, fetch entrie's params
     $cdata = array();
@@ -383,16 +383,16 @@ class ComplainNewsFilter extends NewsFilter {
 		}
 
 		// Check if we shouldn't show block for unregs
-		if ((!is_array($userROW)) && (!extra_get_param('complain', 'allow_unreg'))) {
+		if ((!is_array($userROW)) && (!pluginGetVariable('complain', 'allow_unreg'))) {
 		        $tvars['vars']['plugin_complain'] = '';
 			return 1;
 		}
 
 		// Determine paths for all template files
-		$tpath = locatePluginTemplates(array('int.form', 'int.link'), 'complain', extra_get_param('complain', 'localsource'));
+		$tpath = locatePluginTemplates(array('int.form', 'int.link'), 'complain', pluginGetVariable('complain', 'localsource'));
 
 		// Check displayed information type - FORM or simple LINK
-		if (extra_get_param('complain', 'extform')) {
+		if (pluginGetVariable('complain', 'extform')) {
 			// External form
 			$link = generateLink('core', 'plugin', array('plugin' => 'complain', 'handler' => 'add'), array('ds_id' => '1', 'entry_id' => $newsID));
 
@@ -407,7 +407,7 @@ class ComplainNewsFilter extends NewsFilter {
 
 		// Prepare error list
 		$err = '';
-		foreach (explode("\n",extra_get_param('complain', 'errlist')) as $erow) {
+		foreach (explode("\n",pluginGetVariable('complain', 'errlist')) as $erow) {
 			if (preg_match('#^(\d+)\|(.+?)$#', trim($erow), $m)) {
 				$err .= '<option value="'.$m[1].'">'.htmlspecialchars($m[2]).'</option>'."\n";
 			}
