@@ -5,7 +5,7 @@
 ID: tracker
 Name: BitTorrent tracker
 Version: 0.03
-Acts: ppages, news_full, news:show:one, admin:mod:addnews, admin:mod:editnews
+Acts: ppages, news_full, news:show:one, admin:mod:news
 File: announce.php
 Config: config.php
 Install: install.php
