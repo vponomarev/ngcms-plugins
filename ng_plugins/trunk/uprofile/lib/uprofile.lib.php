@@ -15,7 +15,7 @@ class p_uprofileFilter {
 	function editProfileForm($userID, $SQLrow, &$tvars) { return 1; }
 
 	// Edit profile call :: processor  (call after all processing is finished and before real SQL update)
-	function editProfile($userID, $SQLrow) { return 1; }
+	function editProfile($userID, $SQLrow, &$SQLnew) { return 1; }
 
 	// Edit profile call :: notifier (call after successful editing )
 	function editProfileNotify($userID, $SQLrow, &$SQLnew) { return 1; }
