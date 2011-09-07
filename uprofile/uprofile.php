@@ -127,6 +127,7 @@ function uprofile_applyProfile() {
 	// Redirect back if we do not have any messages
 	if (!$template['vars']['mainblock']) {
 		@header("Location: ".generateLink('uprofile', 'edit', array()));
+		exit;
 	} else {
 		// We have some messages. Don't affect it, print editForm.
 		uprofile_editForm();
@@ -148,7 +149,7 @@ function profile_show() {
 
 // Show EDIT FORM for current user's profile
 function uprofile_editForm(){
-	global $mysql, $userROW, $lang, $config, $tpl, $template, $SYSTEM_FLAGS, $PFILTERS;
+	global $mysql, $userROW, $lang, $config, $tpl, $template, $SYSTEM_FLAGS, $PFILTERS, $DSlist;
 
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.edit'];
 
@@ -163,6 +164,11 @@ function uprofile_editForm(){
 
 	// Save current user's parameters
 	$currentUser = $userROW;
+
+	// Load list of attached images/files
+	//$currentUser['#files']	= $mysql->select("select *, date_format(from_unixtime(date), '%d.%m.%Y') as date from ".prefix."_files where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($currentUser['id']).')', 1);
+	$currentUser['#images']	= $mysql->select("select *, date_format(from_unixtime(date), '%d.%m.%Y') as date from ".prefix."_images where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($currentUser['id']).')', 1);
+
 
 	// Manage profile data [if needed]
 	if (is_array($PFILTERS['plugin.uprofile']))
@@ -232,8 +238,7 @@ function uprofile_editForm(){
 	);
 
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileForm($currentUser['id'], $currentUser, $tvars); }
-
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileForm($currentUser['id'], $currentUser, &$tvars); }
 
 	$tpl -> template('profile', $tpath['profile']);
 	$tpl -> vars('profile', $tvars);
@@ -242,7 +247,7 @@ function uprofile_editForm(){
 
 
 function uprofile_editApply(){
-	global $mysql, $tpl, $lang, $template, $userROW, $auth_db, $config, $PFILTERS;
+	global $mysql, $tpl, $lang, $template, $userROW, $auth_db, $config, $PFILTERS, $DSlist;
 
 	// Load required library
 	@include_once root.'includes/classes/upload.class.php';
@@ -253,6 +258,8 @@ function uprofile_editApply(){
 		return;
 	}
 
+	$currentUser = $userROW;
+
 	// Check if correct AUTH params are presented:
 	// * for all activities [except PW change] - token or password
 	// * for PW change - password
@@ -260,14 +267,14 @@ function uprofile_editApply(){
 	// If we want to change password
 	if ($_REQUEST['editpassword'] != '') {
 		// Correct OLD password must be presented
-		if (!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $userROW['pass'])) {
+		if (!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $currentUser['pass'])) {
 			msg(array("type" => "error", "text" => $lang['uprofile:msge_needoldpass']));
 			return;
 		}
 	} else {
 		// Token or correct OLD password must be presented
 		if ((!isset($_POST['token']) || ($_POST['token'] != genUToken('uprofile.update')))&&
-			(!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $userROW['pass']))) {
+			(!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $currentUser['pass']))) {
 				msg(array("type" => "error", "text" => $lang['uprofile:msge_needoldpass']));
 				return;
 		}
@@ -275,27 +282,27 @@ function uprofile_editApply(){
 
 	// Delete avatar if requested
 	if ($_REQUEST['delavatar']) {
-		uprofile_manageDelete('avatar', $userROW['id']);
+		uprofile_manageDelete('avatar', $currentUser['id']);
 	} else {
-		$avatar = $userROW['avatar'];
+		$avatar = $currentUser['avatar'];
 	}
 
 	// Delete photo if requested
 	if ($_REQUEST['delphoto']) {
-		uprofile_manageDelete('photo', $userROW['id']);
+		uprofile_manageDelete('photo', $currentUser['id']);
 	} else {
-		$photo = $userROW['photo'];
+		$photo = $currentUser['photo'];
 	}
 
 	// UPLOAD AVATAR
 	if ($_FILES['newavatar']['name']) {
 
 		// Delete an avatar if user already has it
-		uprofile_manageDelete('avatar', $userROW['id']);
+		uprofile_manageDelete('avatar', $currentUser['id']);
 
 		$fmanage = new file_managment();
 		$imanage = new image_managment();
-		$up = $fmanage->file_upload(array('type' => 'avatar', 'http_var' => 'newavatar', 'replace' => 1, 'manualfile' => $userROW['id'].'.'.strtolower($_FILES['newavatar']['name'])));
+		$up = $fmanage->file_upload(array('type' => 'avatar', 'http_var' => 'newavatar', 'replace' => 1, 'manualfile' => $currentUser['id'].'.'.strtolower($_FILES['newavatar']['name'])));
 
 		if (is_array($up)) {
 			// Now fetch information about size and prepare to write info into DB
@@ -324,20 +331,22 @@ function uprofile_editApply(){
 	if ($_FILES['newphoto']['name']) {
 
 		// Delete a photo if user already has it
-		uprofile_manageDelete('photo', $userROW['id']);
+		uprofile_manageDelete('photo', $currentUser['id']);
 
 		$fmanage = new file_managment();
 		$imanage = new image_managment();
-		$up = $fmanage->file_upload(array('type' => 'photo', 'http_var' => 'newphoto', 'replace' => 1, 'manualfile' => $userROW['id'].'.'.strtolower($_FILES['newphoto']['name'])));
+		$up = $fmanage->file_upload(array('type' => 'photo', 'http_var' => 'newphoto', 'replace' => 1, 'manualfile' => $currentUser['id'].'.'.strtolower($_FILES['newphoto']['name'])));
 		if (is_array($up)) {
 			// Now write info about image into DB
 			if (is_array($sz = $imanage->get_size($config['photos_dir'].$subdirectory.'/'.$up[1]))) {
 				$fmanage->get_limits('photo');
 
 				// Create preview for photo
-				$tsz = intval($config['photos_thumb_size']);
-				if (($tsz < 10)||($tsz > 1000)) $tsz = 150;
-				$thumb = $imanage->create_thumb($config['photos_dir'].$subdirectory, $up[1], $tsz,$tsz);
+				$tsx = intval($config['photos_thumb_size_x'])?intval($config['photos_thumb_size_x']):intval($config['photos_thumb_size']);
+				$tsy = intval($config['photos_thumb_size_y'])?intval($config['photos_thumb_size_y']):intval($config['photos_thumb_size']);
+				if (($tsx < 10)||($tsx > 1000)) $tsx = 150;
+				if (($tsy < 10)||($tsy > 1000)) $tsy = 150;
+				$thumb = $imanage->create_thumb($config['photos_dir'].$subdirectory, $up[1], $tsx,$tsy);
 
 				// If we were unable to create thumb - delete photo, it's damaged!
 				if (!$thumb) {
@@ -366,26 +375,30 @@ function uprofile_editApply(){
 	);
 	if ($_REQUEST['editpassword'] != '') {
 		if (method_exists($auth_db, 'save_profile')) {
-			$auth_db->save_profile($userROW['id'], array('password' => $_REQUEST['editpassword']));
+			$auth_db->save_profile($currentUser['id'], array('password' => $_REQUEST['editpassword']));
 		}
 		$sqlFields['pass'] = EncodePassword($_REQUEST['editpassword']);
 	}
 
+
+	// Get list of attached images
+	$currentUser['#images']	= $mysql->select("select *, date_format(from_unixtime(date), '%d.%m.%Y') as date from ".prefix."_images where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($currentUser['id']).')', 1);
+
 	// Call external plugins for request processing
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfile($useROW['id'], $userROW, $sqlFields); }
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfile($currentUser['id'], $currentUser, &$sqlFields); }
 
 	// Prepare SQL line
 	$sqlF = array();
 	foreach ($sqlFields as $f => $v)
 		array_push($sqlF, $f . " = " . db_squote($v));
 
-	$sqlUpdate = "update ".uprefix."_users set ".join(", ",$sqlF)." where id = ".db_squote($userROW['id']);
+	$sqlUpdate = "update ".uprefix."_users set ".join(", ",$sqlF)." where id = ".db_squote($currentUser['id']);
 	$mysql->query($sqlUpdate);
 
 	// Call external plugins for request processing
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileNotify($useROW['id'], $userROW, $sqlFields); }
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileNotify($currentUser['id'], $currentUser, $sqlFields); }
 
 
 	return true;
