@@ -15,15 +15,27 @@ LoadPluginLang('xfields', 'config');
 //
 // XFields: Add/Modify attached files
 function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
-	global $mysql, $config;
+	global $mysql, $config, $DSlist;
 
 	// Init file/image processing libraries
 	$fmanager = new file_managment();
 	$imanager = new image_managment();
 
+	// Select xf group name
+	$xfGroupName = '';
+	foreach (array('news', 'users') as $k) {
+		if ($DSlist[$k] == $dsID) {
+			$xfGroupName = $k;
+			break;
+		}
+	}
+
+	if (!$xfGroupName) {
+		return false;
+	}
 
 	$xdata = array();
-	foreach ($xf['news'] as $id => $data) {
+	foreach ($xf[$xfGroupName] as $id => $data) {
 		// Attached images are processed in special way
 		if ($data['type'] == 'images') {
 			// Check if we should delete some images
@@ -717,6 +729,216 @@ class XFieldsNewsFilter extends NewsFilter {
 		$SQLnews['content'] = $content;
 	}
 }
+
+// Manage uprofile modifications
+if (getPluginStatusActive('uprofile')) {
+	loadPluginLibrary('uprofile', 'lib');
+
+	class XFieldsUPrifileFilter extends p_uprofileFilter {
+		function editProfileForm($userID, $SQLrow, &$tvars) {
+			global $lang, $tpl, $catz, $mysql, $config, $twig, $twigLoader;
+
+			//print "<pre>".var_export($lang, true)."</pre>";
+			// Load config
+			$xf = xf_configLoad();
+			if (!is_array($xf))
+				return false;
+
+			// Fetch xfields data
+			$xdata = xf_decode($SQrow['xfields']);
+			if (!is_array($xdata))
+				return false;
+
+			$output = '';
+			$xfEntries = array();
+
+			foreach ($xf['users'] as $id => $data) {
+				if ($data['disabled'])
+					continue;
+
+				//print "FLD: [$id]<br>\n";
+				$xfEntry = array(
+					'title'		=>	$data['title'],
+					'id'		=>	$id,
+					'required'	=>	$lang['xfields_fld_'.($data['required']?'required':'optional')],
+					'flags'		=>	array(
+						'required'	=>	$data['required']?true:false,
+					),
+				);
+				switch ($data['type']) {
+					case 'text'  : 	$val = '<input type="text" name="xfields['.$id.']"  id="form_xfields_'.$id.'" title="'.$data['title'].'" value="'.secure_html($xdata[$id]).'" />';
+						$xfEntry['input'] = $val;
+						$xfEntries[] = $xfEntry;
+						break;
+					case 'select': 	$val = '<select name="xfields['.$id.']" id="form_xfields_'.$id.'" >';
+						if (!$data['required']) $val .= '<option value="">&nbsp;</option>';
+						if (is_array($data['options']))
+							foreach ($data['options'] as $k => $v) {
+								$val .= '<option value="'.secure_html(($data['storekeys'])?$k:$v).'"'.((($data['storekeys'] && ($xdata[$id] == $k))||(!$data['storekeys'] && ($xdata[$id] == $v)))?' selected':'').'>'.$v.'</option>';
+							}
+						$val .= '</select>';
+						$xfEntry['input'] = $val;
+						$xfEntries[] = $xfEntry;
+						break;
+					case 'textarea'	:
+						$val = '<textarea cols="30" rows="4" name="xfields['.$id.']" id="form_xfields_'.$id.'">'.$xdata[$id].'</textarea>';
+						$xfEntry['input'] = $val;
+						$xfEntries[] = $xfEntry;
+						break;
+					case 'images'	:
+						// First - show already attached images
+						$iCount = 0;
+						$input = '';
+						$tVars = array( 'images' => array());
+
+						if (is_array($SQLrow['#images'])) {
+							foreach ($SQLrow['#images'] as $irow) {
+								// Skip images, that are not related to current field
+								if (($irow['plugin'] != 'xfields') || ($irow['pidentity'] != $id)) continue;
+
+								// Show attached image
+								$iCount++;
+
+								$tImage = array(
+									'number'	=>	$iCount,
+									'id'		=>	$id,
+									'preview'	=>	array(
+										'width'		=>	$irow['p_width'],
+										'height'	=>	$irow['p_height'],
+										'url' 		=>	$config['attach_url'].'/'.$irow['folder'].'/thumb/'.$irow['name'],
+									),
+									'image'		=>	array(
+										'id'		=> $irow['id'],
+										'number'	=> $iCount,
+										'url'		=> $config['attach_url'].'/'.$irow['folder'].'/'.$irow['name'],
+										'width'		=> $irow['width'],
+										'height'	=> $irow['height'],
+									),
+									'flags'		=> array(
+										'preview'	=> $irow['preview']?true:false,
+										'exist'		=> true,
+									),
+								);
+								$tVars['images'][] = $tImage;
+							}
+						}
+
+						// Second - show entries for allowed number of attaches
+						for ($i = $iCount+1; $i <= intval($data['maxCount']); $i++) {
+							$tImage = array(
+								'number'	=>	$i,
+								'id'		=>	$id,
+								'flags'		=> array(
+									'exist'		=> false,
+								),
+							);
+							$tVars['images'][] = $tImage;
+						}
+
+						// Make template
+						$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_entry.image.tpl');
+						$val = $xt->render($tVars);
+						$xfEntry['input'] = $val;
+						$xfEntries[] = $xfEntry;
+						break;
+
+				}
+			}
+
+			$tVars = array(
+				'entries'		=>	$xfEntries,
+			);
+
+
+			$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_uprofile.tpl');
+			$tvars['vars']['plugin_xfields'] .= $xt->render($tVars);
+
+			return 1;
+
+		}
+
+		function editProfile($userID, $SQLrow, &$SQLnew) {
+			global $lang, $config, $mysql, $DSlist;
+
+			//print "<pre>editProfile() POST VARS: ".var_export($_POST, true)."</pre>";
+
+			// Load config
+			$xf = xf_configLoad();
+			if (!is_array($xf))
+				return 1;
+
+			$rcall = $_POST['xfields'];
+			if (!is_array($rcall)) $rcall = array();
+
+			// Decode previusly stored data
+			$oldFields = xf_decode($SQLrow['xfields']);
+
+			// Manage attached images
+			xf_modifyAttachedImages($DSlist['users'], $userID, $xf, $SQLrow['#images']);
+
+			$xdata = array();
+			//print "XF[users]: <pre>".var_export($xf['users'], true)."</pre>";
+			// Scan fields and check if we have attached images for fields with type 'images'
+			$haveImages = false;
+			foreach ($xf['users'] as $fid => $fval) {
+				if ($fval['type'] == 'images') {
+					$haveImages = true;
+					break;
+				}
+			}
+
+			if ($haveImages) {
+				// Get real ID's of attached images and print here
+				$idlist = array();
+
+				foreach ($mysql->select("select id, plugin, pidentity from ".prefix."_images where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($newsID).")") as $irec) {
+					if ($irec['plugin'] == 'xfields') {
+						$idlist[$irec['pidentity']] []= $irec['id'];
+					}
+				}
+
+				// Scan for fields that should be configured to have attached images
+				foreach ($xf['users'] as $fid => $fval) {
+					if (($fval['type'] == 'images')&&(is_array($idlist[$fid]))) {
+						$xdata[$fid] = join(",", $idlist[$fid]);
+					}
+				}
+			}
+
+
+			foreach ($xf['users'] as $id => $data) {
+				// Attached images are processed in special way
+				if ($data['type'] == 'images') {
+					continue;
+				}
+
+				// Skip disabled fields
+				if ($data['disabled']) {
+					$xdata[$id] = $oldFields[$id];
+					continue;
+				}
+
+				if ($rcall[$id] != '') {
+					$xdata[$id] = $rcall[$id];
+				} else if ($data['required']) {
+					msg(array("type" => "error", "text" => str_replace('{field}', $id, $lang['xfields_msge_emptyrequired'])));
+					return 0;
+				}
+				// Check if we should save data into separate SQL field
+				if ($data['storage'])
+					$SQLnew['xfields_'.$id] = $rcall[$id];
+			}
+
+			$SQLnew['xfields']   = xf_encode($xdata);
+
+			return 1;
+		}
+
+
+	}
+	register_filter('plugin.uprofile','xfields', new XFieldsUPrifileFilter);
+}
+
 
 class XFieldsFilterAdminCategories extends FilterAdminCategories{
 	function addCategory(&$tvars, &$SQL) {
