@@ -32,7 +32,7 @@ function plugin_gsmg_screen() {
 	// Ќадо ли выводить данные с головной страницы
 	if (extra_get_param('gsmg','main')) {
 		$output.= "<url>";
-		$output.= "<loc><![CDATA[".generateLink('news', 'main', array(), array(), false, true)."]]></loc>";
+		$output.= "<loc>".generateLink('news', 'main', array(), array(), false, true)."</loc>";
 		$output.= "<priority>".floatval(extra_get_param('gsmg', 'main_pr'))."</priority>";
 
 		$lm = $mysql->record("select date(from_unixtime(max(postdate))) as pd from ".prefix."_news");
@@ -46,7 +46,7 @@ function plugin_gsmg_screen() {
 			$pages = ceil($cnt['cnt'] / $config['number']);
 			for ($i = 2; $i <= $pages; $i++) {
 				$output.= "<url>";
-				$output.= "<loc><![CDATA[".generateLink('news', 'main', array('page' => $i), array(), false, true)."]]></loc>";
+				$output.= "<loc>".generateLink('news', 'main', array('page' => $i), array(), false, true)."</loc>";
 				$output.= "<priority>".floatval(extra_get_param('gsmg', 'mainp_pr'))."</priority>";
 				$output.= "<lastmod>".$lm['pd']."</lastmod>";
 				$output.= "<changefreq>daily</changefreq>";
@@ -59,7 +59,7 @@ function plugin_gsmg_screen() {
 	if (extra_get_param('gsmg','cat')) {
 		foreach  ($catmap as $id => $altname) {
 				$output.= "<url>";
-				$output.= "<loc><![CDATA[".generateLink('news', 'by.category', array('category' => $altname, 'catid' => $id), array(), false, true)."]]></loc>";
+				$output.= "<loc>".generateLink('news', 'by.category', array('category' => $altname, 'catid' => $id), array(), false, true)."</loc>";
 				$output.= "<priority>".floatval(extra_get_param('gsmg', 'cat_pr'))."</priority>";
 				$output.= "<lastmod>".$lm['pd']."</lastmod>";
 				$output.= "<changefreq>daily</changefreq>";
@@ -70,7 +70,7 @@ function plugin_gsmg_screen() {
 				$pages = ceil($catz[$altname]['posts'] / $cn);
 				for ($i = 2; $i <= $pages; $i++) {
 					$output.= "<url>";
-					$output.= "<loc><![CDATA[".generateLink('news', 'by.category', array('category' => $altname, 'catid' => $id, 'page' => $i), array(), false, true)."]]></loc>";
+					$output.= "<loc>".generateLink('news', 'by.category', array('category' => $altname, 'catid' => $id, 'page' => $i), array(), false, true)."</loc>";
 					$output.= "<priority>".floatval(extra_get_param('gsmg', 'catp_pr'))."</priority>";
 					$output.= "<lastmod>".$lm['pd']."</lastmod>";
 					$output.= "<changefreq>daily</changefreq>";
@@ -87,7 +87,7 @@ function plugin_gsmg_screen() {
 		foreach ($mysql->select($query,1) as $rec) {
 			$link = newsGenerateLink($rec, false, 0, true);
 			$output.= "<url>";
-			$output.= "<loc><![CDATA[".$link."]]></loc>";
+			$output.= "<loc>".$link."</loc>";
 			$output.= "<priority>".floatval(extra_get_param('gsmg', 'news_pr'))."</priority>";
 			$output.= "<lastmod>".strftime("%Y-%m-%d", max($rec['editdate'], $rec['postdate']))."</lastmod>";
 			$output.= "<changefreq>daily</changefreq>";
@@ -103,7 +103,7 @@ function plugin_gsmg_screen() {
 			$link = generatePluginLink('static', '', array('altname' => $rec['alt_name'], 'id' => $rec['id']), array(), false, true);
 			
 			$output.= "<url>";
-			$output.= "<loc><![CDATA[".$link."]]></loc>";
+			$output.= "<loc>".$link."</loc>";
 			$output.= "<priority>".floatval(extra_get_param('gsmg', 'static_pr'))."</priority>";
 			$output.= "<lastmod>".$lm['pd']."</lastmod>";
 			$output.= "<changefreq>weekly</changefreq>";
