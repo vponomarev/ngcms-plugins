@@ -13,14 +13,14 @@ function plugin_switcher(){
 	// Get chosen template
 	$sw_template = $_COOKIE['sw_template'];
 
-	$sw_count = intval(extra_get_param('switcher','count'));
+	$sw_count = intval(pluginGetVariable('switcher','count'));
 	if (!$sw_count) { $sw_count = 3; }
 
 	// If template is not selected, we can show default value
 	if (!$sw_template) {
 		// Check if we have default profile for this domain
 		for ($i = 0; $i <= $sw_count; $i++) {
-			$dlist = extra_get_param('switcher','profile'.$i.'_domains');
+			$dlist = pluginGetVariable('switcher','profile'.$i.'_domains');
 			if (!$dlist) continue;
 			if (!is_array($darr=explode("\n",$dlist))) continue;
 			$is_catched = 0;
@@ -36,12 +36,12 @@ function plugin_switcher(){
 		}
 	}
 
-	if (($sw_template> 0) && ($sw_template <= $sw_count) && extra_get_param('switcher','profile'.$sw_template.'_active')) {
-	        if (extra_get_param('switcher','profile'.$sw_template.'_template')) {
-			$config['theme'] = extra_get_param('switcher','profile'.$sw_template.'_template');
+	if (($sw_template> 0) && ($sw_template <= $sw_count) && pluginGetVariable('switcher','profile'.$sw_template.'_active')) {
+	        if (pluginGetVariable('switcher','profile'.$sw_template.'_template')) {
+			$config['theme'] = pluginGetVariable('switcher','profile'.$sw_template.'_template');
 		}
-	        if (extra_get_param('switcher','profile'.$sw_template.'_lang')) {
-			$config['default_lang'] = extra_get_param('switcher','profile'.$sw_template.'_lang');
+	        if (pluginGetVariable('switcher','profile'.$sw_template.'_lang')) {
+			$config['default_lang'] = pluginGetVariable('switcher','profile'.$sw_template.'_lang');
 		}
 	}
 
@@ -51,12 +51,12 @@ function plugin_switcher_menu(){
 	global $template, $tpl, $lang;
 
 	$list = '';
-	$sw_count = intval(extra_get_param('switcher','count'));
+	$sw_count = intval(pluginGetVariable('switcher','count'));
 	if (!$sw_count) { $sw_count = 3; }
 
 	for ($i=1; $i <= $sw_count ; $i++) {
-		if (extra_get_param('switcher','profile'.$i.'_active')) {
-			$list.="<option value='$i'>".extra_get_param('switcher', 'profile'.$i.'_name')."</option>\n";
+		if (pluginGetVariable('switcher','profile'.$i.'_active')) {
+			$list.="<option value='$i'>".pluginGetVariable('switcher', 'profile'.$i.'_name')."</option>\n";
 		}
 	}
 
@@ -74,12 +74,12 @@ function switcher_redirector(){
 	$templateID = $_REQUEST['profile'];
 
 	// Scan for template with this ID
-	$sw_count = intval(extra_get_param('switcher','count'));
+	$sw_count = intval(pluginGetVariable('switcher','count'));
 	if (!$sw_count) { $sw_count = 3; }
 
 	$templateNum = 0;
 	for ($i=1; $i <= $sw_count ; $i++) {
-		if (extra_get_param('switcher','profile'.$i.'_id') == $templateID) {
+		if (pluginGetVariable('switcher','profile'.$i.'_id') == $templateID) {
 			$templateNum = $i;
 			break;
 		}
@@ -88,6 +88,8 @@ function switcher_redirector(){
 	// Set cookie with template ID
 	@setcookie('sw_template', $templateNum, time() + 365 * 24 * 60 * 60, '/');
 
-	// Redirect to the root directory of the site
-	@header("Location: ".home);
+	// Redirect user:
+	// if `redirect` is set - to specified URL
+	// if `redirect` is not set - to root directory of the site
+	@header("Location: ".(pluginGetVariable('switcher', 'profile'.$i.'_redirect')?pluginGetVariable('switcher', 'profile'.$i.'_redirect'):home));
 }
