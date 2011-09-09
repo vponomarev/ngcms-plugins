@@ -4,7 +4,7 @@
 
 ID: switcher
 Name: Template/Language switcher
-Version: 0.07
+Version: 0.08
 Acts: core, index
 File: switcher.php
 Config: config.php
