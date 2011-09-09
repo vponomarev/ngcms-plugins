@@ -62,7 +62,8 @@ function plugin_switcher_menu(){
 
 	LoadPluginLang('switcher', 'main','','switcher');
 
-	$tpl->template('switcher',extras_dir.'/switcher/tpl');
+	$tpath = locatePluginTemplates(array('switcher'), 'switcher', pluginGetVariable('switcher', 'localsource'));
+	$tpl->template('switcher',$tpath['switcher']);
 
 	$tvars['vars']['list'] = $list;
 	$tpl->vars('switcher', $tvars);

@@ -29,6 +29,7 @@ if (!$profile_count) { $profile_count = 3; }
 
 array_push($cfgX, array('name' => 'count', 'title' => $lang['switcher_count'], 'descr' => $lang['switcher_count_desc'], 'type' => 'input', 'html_flags' => ' size="5"', 'value' => $profile_count));
 array_push($cfgX, array('name' => 'selfpage', 'title' => $lang['switcher_selfpage'], 'descr' => $lang['switcher_selfpage_desc'], 'type' => 'select', 'values' => array ( '1' => $lang['yesa'], '0' => $lang['noa']), 'value' => pluginGetVariable('switcher','selfpage')));
+array_push($cfgX, array('name' => 'localsource', 'title' => $lang['switcher_localsource'], 'descr' => $lang['switcher_localsource#desc'], 'type' => 'select', 'values' => array ( '0' => $lang['switcher_localsource_site'], '1' => $lang['switcher_localsource_plugin']), 'value' => intval(pluginGetVariable($plugin,'localsource'))));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['switcher_commonconfig'].'</b>', 'entries' => $cfgX));
 
 
