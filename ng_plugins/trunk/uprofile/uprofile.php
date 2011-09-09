@@ -99,7 +99,7 @@ function uprofile_showProfile($params) {
 	);
 
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->showProfile($urow['id'], $urow, $tvars); }
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->showProfile($urow['id'], $urow, &$tvars); }
 
 	$tpl -> vars('users', $tvars);
 	$template['vars']['mainblock'] .= $tpl -> show('users');
