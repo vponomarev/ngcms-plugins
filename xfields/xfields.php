@@ -745,7 +745,7 @@ if (getPluginStatusActive('uprofile')) {
 				return false;
 
 			// Fetch xfields data
-			$xdata = xf_decode($SQrow['xfields']);
+			$xdata = xf_decode($SQLrow['xfields']);
 			if (!is_array($xdata))
 				return false;
 
@@ -914,7 +914,7 @@ if (getPluginStatusActive('uprofile')) {
 
 				// Skip disabled fields
 				if ($data['disabled']) {
-					$xdata[$id] = $oldFields[$id];
+					$xdata[$id] = $SQLrow[$id];
 					continue;
 				}
 
@@ -934,7 +934,43 @@ if (getPluginStatusActive('uprofile')) {
 			return 1;
 		}
 
+		function showProfile($userID, $SQLrow, &$tvars) {
+		global $mysql, $config;
+			// Try to load config. Stop processing if config was not loaded
+			if (($xf = xf_configLoad()) === false) return;
 
+			$fields = xf_decode($SQLrow['xfields']);
+
+			// Show extra fields if we have it
+			if (is_array($xf['users']))
+				foreach ($xf['users'] as $k => $v) {
+					$kp = preg_quote($k, "#");
+					$xfk = isset($fields[$k])?$fields[$k]:'';
+
+					// Our behaviour depends on field type
+					if ($v['type'] == 'images') {
+						// Check if there're attached images
+						if ($xfk && count($ilist = explode(",", $xfk)) && count($imglist = $mysql->select("select * from ".prefix."_images where id in (".$xfk.")"))) {
+							// Yes, get list of images
+							$imgInfo = $imglist[0];
+							$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '$1';
+							$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '';
+
+							$iname = ($imgInfo['storage']?$config['attach_url']:$config['files_url']).'/'.$imgInfo['folder'].'/'.$imgInfo['name'];
+							$tvars['vars']['[xvalue_'.$k.']'] = $iname;
+
+						} else {
+							$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '';
+							$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '$1';
+
+						}
+					} else {
+						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = ($xfk == "")?"":"$1";
+						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = ($xfk == "")?"$1":"";
+						$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':'')):$xfk;
+					}
+				}
+		}
 	}
 	register_filter('plugin.uprofile','xfields', new XFieldsUPrifileFilter);
 }
