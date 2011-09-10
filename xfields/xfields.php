@@ -141,7 +141,7 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 // Perform replacements while showing news
 class XFieldsNewsFilter extends NewsFilter {
 	function addNewsForm(&$tvars) {
-		global $lang, $tpl, $twig, $catz;
+		global $lang, $twig, $catz;
 
 		// Load config
 		$xf = xf_configLoad();
@@ -346,10 +346,15 @@ class XFieldsNewsFilter extends NewsFilter {
 				if (is_array($v) && isset($v['#id'])) {
 					$editMode = 0;
 
-					$tRec = array();
+					$tRec = array('xfields' => array());
 					foreach ($xf['tdata'] as $fId => $fData) {
-						$tRec['xfields_'.$fId] = db_squote($v[$fId]);
+						if ($fData['storage']) {
+							$tRec['xfields_'.$fId] = db_squote($v[$fId]);
+						}
+						$tRec['xfields'][$fId] = $v[$fId];
 					}
+
+					$tRec['xfields'] = db_squote(serialize($tRec['xfields']));
 
 					// Now update record info
 					$query = "insert into ".prefix."_xfields (".join(", ", array_keys($tRec)).", linked_ds, linked_id) values (".join(", ", array_values($tRec)).", 1, ".(intval($newsID)).")";
@@ -371,7 +376,7 @@ class XFieldsNewsFilter extends NewsFilter {
 	}
 
 	function editNewsForm($newsID, $SQLold, &$tvars) {
-		global $lang, $tpl, $catz, $mysql, $config, $twig, $twigLoader;
+		global $lang, $catz, $mysql, $config, $twig, $twigLoader;
 		//print "<pre>".var_export($lang, true)."</pre>";
 		// Load config
 		$xf = xf_configLoad();
@@ -580,7 +585,6 @@ class XFieldsNewsFilter extends NewsFilter {
 		if ($haveImages) {
 			// Get real ID's of attached images and print here
 			$idlist = array();
-
 			foreach ($mysql->select("select id, plugin, pidentity from ".prefix."_images where (linked_ds = 1) and (linked_id = ".db_squote($newsID).")") as $irec) {
 				if ($irec['plugin'] == 'xfields') {
 					$idlist[$irec['pidentity']] []= $irec['id'];
@@ -589,7 +593,7 @@ class XFieldsNewsFilter extends NewsFilter {
 
 			// Scan for fields that should be configured to have attached images
 			foreach ($xf['news'] as $fid => $fval) {
-				if ($fval['type'] == 'images') {
+				if (($fval['type'] == 'images')&&(is_array($idlist[$fid]))) {
 					$xdata[$fid] = join(",", $idlist[$fid]);
 				}
 			}
@@ -634,10 +638,15 @@ class XFieldsNewsFilter extends NewsFilter {
 						$editMode = 1;
 					}
 
-					$tRec = array();
+					$tRec = array('xfields' => array());
 					foreach ($xf['tdata'] as $fId => $fData) {
+						if ($fData['storage']) {
 							$tRec['xfields_'.$fId] = db_squote($v[$fId]);
+						}
+						$tRec['xfields'][$fId]= $v[$fId];
 					}
+
+					$tRec['xfields'] = db_squote(serialize($tRec['xfields']));
 
 					// Now update record info
 					if ($editMode) {
@@ -736,7 +745,7 @@ if (getPluginStatusActive('uprofile')) {
 
 	class XFieldsUPrifileFilter extends p_uprofileFilter {
 		function editProfileForm($userID, $SQLrow, &$tvars) {
-			global $lang, $tpl, $catz, $mysql, $config, $twig, $twigLoader;
+			global $lang, $catz, $mysql, $config, $twig, $twigLoader;
 
 			//print "<pre>".var_export($lang, true)."</pre>";
 			// Load config
@@ -890,8 +899,7 @@ if (getPluginStatusActive('uprofile')) {
 			if ($haveImages) {
 				// Get real ID's of attached images and print here
 				$idlist = array();
-
-				foreach ($mysql->select("select id, plugin, pidentity from ".prefix."_images where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($newsID).")") as $irec) {
+				foreach ($mysql->select("select id, plugin, pidentity from ".prefix."_images where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($userID).")") as $irec) {
 					if ($irec['plugin'] == 'xfields') {
 						$idlist[$irec['pidentity']] []= $irec['id'];
 					}
@@ -951,6 +959,7 @@ if (getPluginStatusActive('uprofile')) {
 					if ($v['type'] == 'images') {
 						// Check if there're attached images
 						if ($xfk && count($ilist = explode(",", $xfk)) && count($imglist = $mysql->select("select * from ".prefix."_images where id in (".$xfk.")"))) {
+							print "-xGotIMG[$k]";
 							// Yes, get list of images
 							$imgInfo = $imglist[0];
 							$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '$1';
@@ -1048,7 +1057,17 @@ function xf_configLoad() {
 	}
 	include $confdir.'/config.php';
 	$XF_loaded = 1;
-	$XF = is_array($xarray)?$xarray:array( 'news' => array());
+
+	$XF = is_array($xarray)?$xarray:array();
+
+	// Init required blocks if they are not initialized yet
+	foreach (array('news', 'users', 'tdata') as $k) {
+		if (!is_array($XF[$k])) {
+			$XF[$k] = array();
+		}
+	}
+
+
 	return $XF;
 }
 
