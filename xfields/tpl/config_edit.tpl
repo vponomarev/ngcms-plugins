@@ -1,7 +1,7 @@
 <table class="content" border="0" cellpadding="1" cellspacing="1">
 <tbody>
 <tr>
-<td colspan="2" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="Управление плагинами">Управление плагинами</a> <b>=&gt;</b><a href="?mod=extra-config&plugin=xfields&section={{ sectionID }}">{{ lang.xfconfig['config_text'] }} xfields</a> <b>=&gt;</b>  {% if (not flags.editMode) %}{{ lang.xfconfig['title_add'] }}{% else %}{{ lang.xfconfig['title_edit'] }} ({{ id }}){% endif %} </td>
+<td colspan="2" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="Управление плагинами">Управление плагинами</a> &#8594; <a href="?mod=extra-config&plugin=xfields&section={{ sectionID }}">{{ lang.xfconfig['config_text'] }} xfields</a> &#8594; {% if (not flags.editMode) %}{{ lang.xfconfig['title_add'] }}{% else %}{{ lang.xfconfig['title_edit'] }} ({{ id }}){% endif %} </td>
 </tr>
 </tbody>
 </table>
