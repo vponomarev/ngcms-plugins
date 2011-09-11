@@ -82,7 +82,7 @@ border: #CFCFCF 1px solid;
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="content">
 <tbody>
 <tr>
-<td colspan="5" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang['config_text'] }}: xfields</td>
+<td colspan="5" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang['config_text'] }}: <a href="?mod=extra-config&plugin=xfields">xfields</a></td>
 </tr>
 </tbody>
 </table>
@@ -90,6 +90,9 @@ border: #CFCFCF 1px solid;
 {% include 'plugins/xfields/tpl/navi.tpl' %}
 
 <table width="100%">
+<tr>
+<td colspan="4" width="100%" class="contentHead"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang.xfconfig['list'] }}: {{ section_name }}</td>
+</tr>
 <tr align="left">
 <td class="contentHead" width="200" colspan="2"><b>Группы</b></td>
 <td class="contentHead" colspan="3"><b>Поля, находящиеся в группе (<span id="grpName">n/a</span>)</b></td>

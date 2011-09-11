@@ -48,7 +48,9 @@ function showSectionList(){
 	$output = '';
 	//$output .= "<pre>".var_export($xf[$sectionID], true)."</pre>";
 
-	$tVars = array();
+	$tVars = array(
+		'section_name'	=> $lang['xfconfig']['section.'.$sectionID],
+	);
 
 	// Prepare data
 	$grpNews = array();
@@ -114,7 +116,7 @@ function showFieldList(){
 
 	$tVars = array(
 		'entries'		=> $xEntries,
-		'section_name'	=> ($sectionID == 'news')?'Новости':'Пользователи',
+		'section_name'	=> $lang['xfconfig']['section.'.$sectionID],
 		'sectionID'		=> $sectionID,
 	);
 
