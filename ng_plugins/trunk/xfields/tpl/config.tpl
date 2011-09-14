@@ -75,7 +75,7 @@
 
 <table width="100%">
 <tr>
-<td colspan="7" width="100%" class="contentHead"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang.xfconfig['list'] }}: {{ section_name }}</td>
+<td colspan="8" width="100%" class="contentHead"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang.xfconfig['list'] }}: {{ section_name }}</td>
 </tr>
 <tr align="left">
 <td class="contentHead"><b>ID поля</b></td>
@@ -84,6 +84,7 @@
 <td class="contentHead"><b>Возможные значения</b></td>
 <td class="contentHead"><b>По умолчанию</b></td>
 <td class="contentHead"><b>Обязательно</b></td>
+{% if (sectionID != 'tdata') %}<td class="contentHead"><b>Блок</b></td>{% endif %}
 <td class="contentHead">&nbsp;</td>
 </tr>
 {% for entry in entries %}
@@ -94,6 +95,7 @@
 	<td>{{ entry.options }}</td>
 	<td>{% if (entry.flags.default) %}{{ entry.default }}{% else %}<font color="red">не задано</font>{% endif %}</td>
 	<td>{% if (entry.flags.required) %}<font color="red"><b>Да</b></font>{% else %}Нет{% endif %}</td>
+	{% if (sectionID != 'tdata') %}<td>{{ entry.area }}</td>{% endif %}
 	<td nowrap><a href="{{ entry.linkdel }}" onclick="return confirm('{{ lang.xfconfig['suretest'] }}');"><img src="{{ skins_url }}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td>
 </tr>
 {% endfor %}
