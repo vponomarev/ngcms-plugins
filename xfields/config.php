@@ -94,6 +94,7 @@ function showFieldList(){
 			'linkup'	=> '?mod=extra-config&plugin=xfields&action=update&subaction=up&section='.$sectionID.'&field='.$id,
 			'linkdown'	=> '?mod=extra-config&plugin=xfields&action=update&subaction=down&section='.$sectionID.'&field='.$id,
 			'linkdel'	=> '?mod=extra-config&plugin=xfields&action=update&subaction=del&section='.$sectionID.'&field='.$id,
+			'area'		=> (intval($data['area'])>0)?intval($data['area']):'',
 			'flags'		=> array(
 				'required'	=> $data['required']?true:false,
 				'default'	=> ($data['default'] != '')?true:false,
@@ -156,6 +157,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 			'storage'	=>	intval($data['storage']),
 			'db_type'	=>	$data['db.type'],
 			'db_len'	=>	(intval($data['db.len'])>0)?intval($data['db.len']):'',
+			'area'		=> (intval($data['area'])>0)?intval($data['area']):'',
 		);
 
 		$xsel = '';
@@ -269,6 +271,7 @@ function doAddEdit() {
 	$data['title']		= $_REQUEST['title'];
 	$data['required']	= intval($_REQUEST['required']);
 	$data['disabled']	= intval($_REQUEST['disabled']);
+	$data['area']		= intval($_REQUEST['area']);
 	$data['type']		= $_REQUEST['type'];
 	$data['default']	= '';
 

@@ -130,6 +130,7 @@ function storageMode(mode) {
 </table>
 <table border="0" cellspacing="1" cellpadding="1" class="content">
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['required'] }}</td><td width="47%"><select name="required">{{ required_opts }}</select></td></tr>
+<tr class="contRow1"><td width="50%">Блок:<br/><small>Этот параметр позволяет указать в каком именно месте интерфейса добавления/редактирования новости появится данная переменная.<br/>Значение по умолчанию (если переменную не заполнять): блок `дополнительно`<br/><b>1</b> - блок `основное содержание`<br/>другие (цифровые) значения - для блоков, добавленных в ручном режиме в админ панель</small></td><td width="47%"><input type="text" name="area" value="{{ area }}"/></td></tr>
 </table>
 
 <table width="100%">

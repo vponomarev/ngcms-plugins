@@ -217,14 +217,19 @@ class XFieldsNewsFilter extends NewsFilter {
 		}
 
 		// Prepare table data [if needed]
+		$flagTData = false;
 		if (isset($xf['tdata']) && is_array($xf['tdata'])) {
 			// Data are not provisioned
 			$tlist = array();
+			$flagTData = true;
 
 			// Prepare config
 			$tclist = array();
 			$thlist = array();
 			foreach ($xf['tdata'] as $fId => $fData) {
+				if ($fData['disabled'])
+					continue;
+
 				$tclist[$fId] = array(
 					'title'		=> $fData['title'],
 					'required'	=> $fData['required'],
@@ -254,11 +259,14 @@ class XFieldsNewsFilter extends NewsFilter {
 			'xtableHdr'		=>	$thlist,
 			'xtablecnt'		=>	count($thlist),
 			'flags'			=> array(
-				'tdata'			=> true,
+				'tdata'			=> $flagTData,
 			),
 		);
 		$xt = $twig->loadTemplate('plugins/xfields/tpl/add_news.tpl');
-		$tvars['plugin']['xfields'] .= $xt->render($tVars);;
+		$tvars['plugin']['xfields']['main'] .= $xt->render($tVars);
+
+		$xt = $twig->loadTemplate('plugins/xfields/tpl/news_general.tpl');
+		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
 
 
 		return 1;
@@ -511,6 +519,9 @@ class XFieldsNewsFilter extends NewsFilter {
 			$tclist = array();
 			$thlist = array();
 			foreach ($xf['tdata'] as $fId => $fData) {
+				if ($fData['disabled'])
+					continue;
+
 				$tclist[$fId] = array(
 					'title'		=> $fData['title'],
 					'required'	=> $fData['required'],
@@ -547,8 +558,10 @@ class XFieldsNewsFilter extends NewsFilter {
 
 
 		$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_news.tpl');
-		$tvars['plugin']['xfields'] .= $xt->render($tVars);
+		$tvars['plugin']['xfields']['main'] .= $xt->render($tVars);
 
+		$xt = $twig->loadTemplate('plugins/xfields/tpl/news_general.tpl');
+		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
 
 		return 1;
 	}
@@ -633,13 +646,23 @@ class XFieldsNewsFilter extends NewsFilter {
 			foreach ($xft as $k => $v) {
 				if (is_array($v) && isset($v['#id'])) {
 					$editMode = 0;
+					$tOldRec = array();
+					$tOldRecX = array();
 					if (intval($v['#id'])) {
 						$recList []= intval($v['#id']);
 						$editMode = 1;
+						$tOldRec = $mysql->record("select * from ".prefix."_xfields where (id = ".intval($v['#id']).") and (linked_ds = 1) and (linked_id = ".intval($newsID).")");
+						$tOldRecX = unserialize($tOldRec['xfields']);
 					}
 
 					$tRec = array('xfields' => array());
 					foreach ($xf['tdata'] as $fId => $fData) {
+						// Manage disabled fields
+						if ($fData['disabled']) {
+							$tRec['xfields'][$fId] = $tOldRecX[$fId];
+							continue;
+						}
+
 						if ($fData['storage']) {
 							$tRec['xfields_'.$fId] = db_squote($v[$fId]);
 						}
@@ -653,7 +676,7 @@ class XFieldsNewsFilter extends NewsFilter {
 						$vt = array();
 						foreach ($tRec as $kx => $vx) { $vt []= $kx." = ".$vx;	}
 
-						$query = "update ".prefix."_xfields set ".join(", ", $vt)." where id = ".intval($v['#id']);
+						$query = "update ".prefix."_xfields set ".join(", ", $vt)." where (id = ".intval($v['#id']).") and (linked_ds = 1) and (linked_id = ".intval($newsID).")";
 						//print "SQL: $query <br/>\n";
 						$queryList []= $query;
 						//$mysql->query($query);
