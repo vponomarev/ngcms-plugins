@@ -284,23 +284,12 @@ class XFieldsNewsFilter extends NewsFilter {
 			$tvars['plugin']['xfields'][$k] .= $xt->render($tVars);
 		}
 
-		//	$xt = $twig->loadTemplate('plugins/xfields/tpl/news.edit.0.tpl');
-		//	$tvars['plugin']['xfields'][0] .= $xt->render($tVars);
-
 		unset($tVars['entries']);
 		unset($tVars['area']);
 
 		// Render general part [with JavaScript]
 		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
 		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
-
-		/*
-		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.add.0.tpl');
-		$tvars['plugin']['xfields']['extra'] .= $xt->render($tVars);
-
-		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
-		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
-		*/
 
 		return 1;
 	}
@@ -574,8 +563,6 @@ class XFieldsNewsFilter extends NewsFilter {
 				}
 
 			}
-			//print "<pre>".var_export($tclist, true)."</pre>";
-			//print "<pre>".var_export($tlist, true)."</pre>";
 		}
 
 		// Prepare personal [group] variables
@@ -612,9 +599,6 @@ class XFieldsNewsFilter extends NewsFilter {
 			// Render block
 			$tvars['plugin']['xfields'][$k] .= $xt->render($tVars);
 		}
-
-	//	$xt = $twig->loadTemplate('plugins/xfields/tpl/news.edit.0.tpl');
-	//	$tvars['plugin']['xfields'][0] .= $xt->render($tVars);
 
 		unset($tVars['entries']);
 		unset($tVars['area']);
@@ -860,7 +844,7 @@ if (getPluginStatusActive('uprofile')) {
 				switch ($data['type']) {
 					case 'text'  : 	$val = '<input type="text" name="xfields['.$id.']"  id="form_xfields_'.$id.'" title="'.$data['title'].'" value="'.secure_html($xdata[$id]).'" />';
 						$xfEntry['input'] = $val;
-						$xfEntries[] = $xfEntry;
+						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
 					case 'select': 	$val = '<select name="xfields['.$id.']" id="form_xfields_'.$id.'" >';
 						if (!$data['required']) $val .= '<option value="">&nbsp;</option>';
@@ -870,12 +854,12 @@ if (getPluginStatusActive('uprofile')) {
 							}
 						$val .= '</select>';
 						$xfEntry['input'] = $val;
-						$xfEntries[] = $xfEntry;
+						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
 					case 'textarea'	:
 						$val = '<textarea cols="30" rows="4" name="xfields['.$id.']" id="form_xfields_'.$id.'">'.$xdata[$id].'</textarea>';
 						$xfEntry['input'] = $val;
-						$xfEntries[] = $xfEntry;
+						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
 					case 'images'	:
 						// First - show already attached images
@@ -931,20 +915,48 @@ if (getPluginStatusActive('uprofile')) {
 						$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_entry.image.tpl');
 						$val = $xt->render($tVars);
 						$xfEntry['input'] = $val;
-						$xfEntries[] = $xfEntry;
+						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
 
 				}
 			}
 
-			$tVars = array(
-				'entries'		=>	$xfEntries,
-			);
+			// Prepare configuration array
+			$tVars = array();
+
+			// Area 0 should always be configured
+			if (!isset($xfEntries[0])) {
+				$xfEntries[0] = array();
+			}
+
+			// For compatibility with old template engine, init values for blocks 0 and 1
+			$tvars['vars']['plugin_xfields_0'] = '';
+			$tvars['vars']['plugin_xfields_1'] = '';
+
+			foreach ($xfEntries as $k => $v) {
+				// Check if we have template for specific area, elsewhere - use basic [0] template
+				$templateName = 'plugins/xfields/tpl/uprofile.edit.'.(file_exists(root.'plugins/xfields/tpl/uprofile.edit.'.$k.'.tpl')?$k:'0').'.tpl';
+
+				$xt = $twig->loadTemplate($templateName);
+				$tVars['entries']		= $v;
+				$tVars['entryCount']	= count($v);
+				$tVars['area']			= $k;
+
+				// Render block
+				$tvars['vars']['plugin_xfields_'.$k] .= $xt->render($tVars);
+			}
+/*
+			unset($tVars['entries']);
+			unset($tVars['area']);
+
+			// Render general part [with JavaScript]
+			$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
+			$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
 
 
 			$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_uprofile.tpl');
 			$tvars['vars']['plugin_xfields'] .= $xt->render($tVars);
-
+*/
 			return 1;
 
 		}
