@@ -221,7 +221,6 @@ class XFieldsNewsFilter extends NewsFilter {
 		if (isset($xf['tdata']) && is_array($xf['tdata'])) {
 			// Data are not provisioned
 			$tlist = array();
-			$flagTData = true;
 
 			// Prepare config
 			$tclist = array();
@@ -229,6 +228,8 @@ class XFieldsNewsFilter extends NewsFilter {
 			foreach ($xf['tdata'] as $fId => $fData) {
 				if ($fData['disabled'])
 					continue;
+
+				$flagTData = true;
 
 				$tclist[$fId] = array(
 					'title'		=> $fData['title'],
@@ -262,10 +263,10 @@ class XFieldsNewsFilter extends NewsFilter {
 				'tdata'			=> $flagTData,
 			),
 		);
-		$xt = $twig->loadTemplate('plugins/xfields/tpl/add_news.tpl');
-		$tvars['plugin']['xfields']['main'] .= $xt->render($tVars);
+		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.add.extra.tpl');
+		$tvars['plugin']['xfields']['extra'] .= $xt->render($tVars);
 
-		$xt = $twig->loadTemplate('plugins/xfields/tpl/news_general.tpl');
+		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
 		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
 
 
@@ -496,6 +497,7 @@ class XFieldsNewsFilter extends NewsFilter {
 		}
 
 		// Prepare table data [if needed]
+		$flagTData = false;
 		if (isset($xf['tdata']) && is_array($xf['tdata'])) {
 			// Load table data for specific news
 			$tlist = array();
@@ -521,6 +523,8 @@ class XFieldsNewsFilter extends NewsFilter {
 			foreach ($xf['tdata'] as $fId => $fData) {
 				if ($fData['disabled'])
 					continue;
+
+				$flagTData = true;
 
 				$tclist[$fId] = array(
 					'title'		=> $fData['title'],
@@ -552,15 +556,15 @@ class XFieldsNewsFilter extends NewsFilter {
 			'xtableHdr'		=>	$thlist,
 			'xtablecnt'		=>	count($thlist),
 			'flags'			=> array(
-				'tdata'			=> true,
+				'tdata'		=> $flagTData,
 			),
 		);
 
 
-		$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_news.tpl');
-		$tvars['plugin']['xfields']['main'] .= $xt->render($tVars);
+		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.edit.extra.tpl');
+		$tvars['plugin']['xfields']['extra'] .= $xt->render($tVars);
 
-		$xt = $twig->loadTemplate('plugins/xfields/tpl/news_general.tpl');
+		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
 		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
 
 		return 1;
