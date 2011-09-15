@@ -169,7 +169,7 @@ class XFieldsNewsFilter extends NewsFilter {
 				switch ($data['type']) {
 					case 'text'  : 	$val = '<input type="text" id="form_xfields_'.$id.'" name="xfields['.$id.']" title="'.$data['title'].'" value="'.secure_html($data['default']).'"/>';
 									$xfEntry['input'] = $val;
-									$xfEntries[] = $xfEntry;
+									$xfEntries[intval($data['area'])][] = $xfEntry;
 									break;
 
 					case 'select': 	$val = '<select name="xfields['.$id.']" id="form_xfields_'.$id.'" >';
@@ -179,11 +179,11 @@ class XFieldsNewsFilter extends NewsFilter {
 											$val .= '<option value="'.secure_html(($data['storekeys'])?$k:$v).'"'.((($data['storekeys'] && $data['default'] == $k)||(!$data['storekeys'] && $data['default'] == $v))?' selected':'').'>'.$v.'</option>';
 									$val .= '</select>';
 									$xfEntry['input'] = $val;
-									$xfEntries[] = $xfEntry;
+									$xfEntries[intval($data['area'])][] = $xfEntry;
 									break;
 					case 'textarea'  :	$val = '<textarea cols="30" rows="5" name="xfields['.$id.']" id="form_xfields_'.$id.'" >'.$data['default'].'</textarea>';
 									$xfEntry['input'] = $val;
-									$xfEntries[] = $xfEntry;
+									$xfEntries[intval($data['area'])][] = $xfEntry;
 									break;
 					case 'images'	:
 						$iCount = 0;
@@ -206,7 +206,7 @@ class XFieldsNewsFilter extends NewsFilter {
 						$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_entry.image.tpl');
 						$val = $xt->render($tVars);
 						$xfEntry['input'] = $val;
-						$xfEntries[] = $xfEntry;
+						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
 				}
 			}
@@ -251,7 +251,7 @@ class XFieldsNewsFilter extends NewsFilter {
 
 
 		$tVars = array(
-			'entries'	=>	$xfEntries,
+		//	'entries'	=>	$xfEntries,
 			'xfGC'		=>	json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
 			'xfCat'		=>	json_encode(arrayCharsetConvert(0, $xfCategories)),
 			'xfList'	=>	json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
@@ -263,12 +263,44 @@ class XFieldsNewsFilter extends NewsFilter {
 				'tdata'			=> $flagTData,
 			),
 		);
-		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.add.extra.tpl');
+
+		if (!isset($xfEntries[0])) {
+			$xfEntries[0] = array();
+		}
+
+		foreach ($xfEntries as $k => $v) {
+			// Check if we have template for specific area, elsewhere - use basic [0] template
+			$templateName = 'plugins/xfields/tpl/news.add.'.(file_exists(root.'plugins/xfields/tpl/news.add.'.$k.'.tpl')?$k:'0').'.tpl';
+
+			$xt = $twig->loadTemplate($templateName);
+			$tVars['entries']		= $v;
+			$tVars['entryCount']	= count($v);
+			$tVars['area']			= $k;
+
+			// Table data is available only for area 0
+			$tVars['flags']['tdata']	= (!$k)?$flagTData:0;
+
+			// Render block
+			$tvars['plugin']['xfields'][$k] .= $xt->render($tVars);
+		}
+
+		//	$xt = $twig->loadTemplate('plugins/xfields/tpl/news.edit.0.tpl');
+		//	$tvars['plugin']['xfields'][0] .= $xt->render($tVars);
+
+		unset($tVars['entries']);
+		unset($tVars['area']);
+
+		// Render general part [with JavaScript]
+		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
+		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
+
+		/*
+		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.add.0.tpl');
 		$tvars['plugin']['xfields']['extra'] .= $xt->render($tVars);
 
 		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
 		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
-
+		*/
 
 		return 1;
 	}
@@ -415,7 +447,7 @@ class XFieldsNewsFilter extends NewsFilter {
 			switch ($data['type']) {
 				case 'text'  : 	$val = '<input type="text" name="xfields['.$id.']"  id="form_xfields_'.$id.'" title="'.$data['title'].'" value="'.secure_html($xdata[$id]).'" />';
 								$xfEntry['input'] = $val;
-								$xfEntries[] = $xfEntry;
+								$xfEntries[intval($data['area'])][] = $xfEntry;
 								break;
 				case 'select': 	$val = '<select name="xfields['.$id.']" id="form_xfields_'.$id.'" >';
 								if (!$data['required']) $val .= '<option value="">&nbsp;</option>';
@@ -425,12 +457,12 @@ class XFieldsNewsFilter extends NewsFilter {
 									}
 								$val .= '</select>';
 								$xfEntry['input'] = $val;
-								$xfEntries[] = $xfEntry;
+								$xfEntries[intval($data['area'])][] = $xfEntry;
 								break;
 				case 'textarea'	:
 								$val = '<textarea cols="30" rows="4" name="xfields['.$id.']" id="form_xfields_'.$id.'">'.$xdata[$id].'</textarea>';
 								$xfEntry['input'] = $val;
-								$xfEntries[] = $xfEntry;
+								$xfEntries[intval($data['area'])][] = $xfEntry;
 								break;
 				case 'images'	:
 					// First - show already attached images
@@ -487,7 +519,7 @@ class XFieldsNewsFilter extends NewsFilter {
 					$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_entry.image.tpl');
 					$val = $xt->render($tVars);
 					$xfEntry['input'] = $val;
-					$xfEntries[] = $xfEntry;
+					$xfEntries[intval($data['area'])][] = $xfEntry;
 					break;
 			}
 		}
@@ -546,8 +578,9 @@ class XFieldsNewsFilter extends NewsFilter {
 			//print "<pre>".var_export($tlist, true)."</pre>";
 		}
 
+		// Prepare personal [group] variables
 		$tVars = array(
-			'entries'		=>	$xfEntries,
+		//	'entries'		=>	$xfEntries[0],
 			'xfGC'			=>	json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
 			'xfCat'			=>	json_encode(arrayCharsetConvert(0, $xfCategories)),
 			'xfList'		=>	json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
@@ -560,10 +593,33 @@ class XFieldsNewsFilter extends NewsFilter {
 			),
 		);
 
+		if (!isset($xfEntries[0])) {
+			$xfEntries[0] = array();
+		}
 
-		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.edit.extra.tpl');
-		$tvars['plugin']['xfields']['extra'] .= $xt->render($tVars);
+		foreach ($xfEntries as $k => $v) {
+			// Check if we have template for specific area, elsewhere - use basic [0] template
+			$templateName = 'plugins/xfields/tpl/news.edit.'.(file_exists(root.'plugins/xfields/tpl/news.edit.'.$k.'.tpl')?$k:'0').'.tpl';
 
+			$xt = $twig->loadTemplate($templateName);
+			$tVars['entries']		= $v;
+			$tVars['entryCount']	= count($v);
+			$tVars['area']			= $k;
+
+			// Table data is available only for area 0
+			$tVars['flags']['tdata']	= (!$k)?$flagTData:0;
+
+			// Render block
+			$tvars['plugin']['xfields'][$k] .= $xt->render($tVars);
+		}
+
+	//	$xt = $twig->loadTemplate('plugins/xfields/tpl/news.edit.0.tpl');
+	//	$tvars['plugin']['xfields'][0] .= $xt->render($tVars);
+
+		unset($tVars['entries']);
+		unset($tVars['area']);
+
+		// Render general part [with JavaScript]
 		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
 		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
 
