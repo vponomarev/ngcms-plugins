@@ -4,7 +4,7 @@
 
 ID: voting
 Name: Voting manager
-Version: 0.12
+Version: 0.13
 Acts: index, ppages
 File: voting.php
 Install: install.php
