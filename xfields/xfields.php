@@ -681,6 +681,8 @@ class XFieldsNewsFilter extends NewsFilter {
 		}
 
 		// Prepare table data [if needed]
+		$haveTable = false;
+
 		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode(iconv('Windows-1251', 'UTF-8', $_POST['xftable']), true))) {
 			$xft = arrayCharsetConvert(1, $xft);
 			//print "<pre>[".(is_array($xft)?'ARR':'NOARR')."]INCOMING ARRAY: ".var_export($xft, true)."</pre>";
@@ -716,6 +718,7 @@ class XFieldsNewsFilter extends NewsFilter {
 					$tRec['xfields'] = db_squote(serialize($tRec['xfields']));
 
 					// Now update record info
+					$haveTable = true;
 					if ($editMode) {
 						$vt = array();
 						foreach ($tRec as $kx => $vx) { $vt []= $kx." = ".$vx;	}
@@ -749,6 +752,9 @@ class XFieldsNewsFilter extends NewsFilter {
 			}
 
 		}
+		// Save info about table data
+		if ($haveTable)
+			$xdata['#table'] = 1;
 
 	    $SQLnew['xfields']   = xf_encode($xdata);
 		return 1;
@@ -766,7 +772,7 @@ class XFieldsNewsFilter extends NewsFilter {
 
 	// Show news call :: processor (call after all processing is finished and before show)
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
-		global $mysql, $config;
+		global $mysql, $config, $twigLoader, $twig;
 		// Try to load config. Stop processing if config was not loaded
 		if (($xf = xf_configLoad()) === false) return;
 
@@ -802,6 +808,56 @@ class XFieldsNewsFilter extends NewsFilter {
 					$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':'')):$xfk;
 				}
 			}
+
+		// Show table if we have it
+		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($fields['#table']) && ($fields['#table'] == 1)) {
+			// Yes, we have table. Display it!
+
+			// Prepare conversion table
+			$conversionConfig = array(
+					'[entries]' => '{% for entry in entries %}',
+					'[/entries]' => '{% endfor %}',
+			);
+
+			$xrecs = array();
+			$npp = 1;
+			foreach ($mysql->select("select * from ".prefix."_xfields where (linked_ds = 1) and (linked_id = ".db_squote($newsID).") order by id", 1) as $trec) {
+				$xrec = array(
+					'num'	=> ($npp++),
+					'id'	=> $trec['id'],
+					'flags'	=> array(),
+				);
+
+				foreach ($xf['tdata'] as $tid => $tval) {
+					// Skip disabled
+					if ($tval['disabled'])
+						continue;
+
+					//  Populate field data
+					$drec = unserialize($trec['xfields']);
+					$xrec['field_'.$tid] = $drec[$tid];
+					$xrec['flags']['field_'.$tid] = ($drec[$tid] != '')?1:0;
+
+					$conversionConfig['{entry_field_'.$tid.'}'] = '{{ entry.field_'.$tid.' }}';
+				}
+
+				// Process filters (if any)
+				if (is_array($PFILTERS['xfields']))
+					foreach ($PFILTERS['xfields'] as $k => $v) { $v->showTableEntry($newsID, $SQLnews, $trec, $xrec); }
+
+				$xrecs []= $xrec;
+			}
+
+			// Show table
+			$templateName = 'plugins/xfields/table.tpl';
+			$twigLoader->setConversion($templateName, $conversionConfig);
+
+			$xt = $twig->loadTemplate($templateName);
+			$tvars['vars']['plugin_xfields_table'] = $xt->render(array('entries' => $xrecs));
+		} else {
+			$tvars['vars']['plugin_xfields_table'] = '';
+		}
+
 		$SQLnews['content'] = $content;
 	}
 }
@@ -1054,7 +1110,7 @@ if (getPluginStatusActive('uprofile')) {
 					if ($v['type'] == 'images') {
 						// Check if there're attached images
 						if ($xfk && count($ilist = explode(",", $xfk)) && count($imglist = $mysql->select("select * from ".prefix."_images where id in (".$xfk.")"))) {
-							print "-xGotIMG[$k]";
+							//print "-xGotIMG[$k]";
 							// Yes, get list of images
 							$imgInfo = $imglist[0];
 							$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '$1';

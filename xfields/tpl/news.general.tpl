@@ -1,3 +1,5 @@
+<input type="hidden" id="xftable" name="xftable" value=""/>
+
 <script type="text/javascript" language="javascript">
 <!--
 // XFields configuration profile mapping
@@ -152,4 +154,3 @@ $("#postForm").submit(function() { return tblSaveData(); });
 
 -->
 </script>
-<input type="hidden" id="xftable" name="xftable" value=""/>
