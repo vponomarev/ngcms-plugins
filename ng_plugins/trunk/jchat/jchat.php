@@ -6,7 +6,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Show current chat state
 //
-function jchat_show($start, $commands = array()){
+function jchat_show($lastEventID, $maxLoadedID, $commands = array()){
 	global $userROW, $mysql, $tpl;
 
 	// Check permissions [ guests do not see chat ]
@@ -22,7 +22,52 @@ function jchat_show($start, $commands = array()){
 	$maxID	= 0;
 	$data	= array();
 
-	foreach (array_reverse($mysql->select("select id, postdate, author, author_id, text from ".prefix."_jchat ".(intval($start)?"where id >".intval($start):'')." order by id desc limit ".$limit, 1)) as $row) {
+	// Prepare data bundle
+	$bundle = array(array(), array());
+
+	// Check if chat work in WINDOW mode
+	$winMode = intval($_REQUEST['win']);
+
+	$conf_maxidle = intval(pluginGetVariable('jchat', ($winMode?'win.':'').'maxidle'));
+	if (isset($_REQUEST['idle']) && ($conf_maxidle > 0) && (intval($_REQUEST['idle']) > $conf_maxidle)) {
+		$bundle[0] []= array('stop');
+	}
+
+	// Check if we have new events
+	$newEvents = $mysql->record("select max(id) as id, max(type) as type from ".prefix."_jchat_events where id > ".intval($lastEventID));
+
+	// Check if we have to update lastEventID
+	if ($newEvents['id'] > $lastEventID) {
+		$bundle[0] []= array('setLastEvent', intval($newEvents['id']));
+	} else {
+		// No new events
+		return $bundle;
+	}
+
+	// Possible actions
+	// * 3 = RELOAD
+	if ($newEvents['type'] == 3) {
+		$bundle[0] []= array('reload');
+		return $bundle;
+	}
+
+	// * 2 = There are deleted messages, return the whole list
+	if ($newEvents['type'] == 2) {
+		$bundle[0] []= array('clear');
+		$query = "select id, postdate, author, author_id, text from ".prefix."_jchat order by id desc limit ".$limit;
+	}
+
+	// * 1 = There are new messages
+	if ($newEvents['type'] == 1) {
+		$query = "select id, postdate, author, author_id, text from ".prefix."_jchat where id >".intval($maxLoadedID)." order by id desc limit ".$limit;
+	}
+
+	// * NO NEW EVENTS - do not fetch data
+	if (intval($newEvents['type']) < 1) {
+		return $bundle;
+	}
+
+	foreach (array_reverse($mysql->select($query, 1)) as $row) {
 		$maxID = max($maxID, $row['id']);
 		$row['author'] = iconv('Windows-1251', 'UTF-8', $row['author']);
 		$row['text'] = iconv('Windows-1251', 'UTF-8', preg_replace('#^\@(.+?)\:#','<i>$1</i>:',$row['text']));
@@ -38,20 +83,16 @@ function jchat_show($start, $commands = array()){
 		$data []= $row;
 	}
 
-	// Prepare data bundle
-	$bundle = array(array(), $data);
-	// 1. Check if we need to reconfigure refresh rate
+	// Attach messages to bundle
+	$bundle[1] = $data;
 
+	// 1. Check if we need to reconfigure refresh rate
 	$conf_refresh = intval(pluginGetVariable('jchat', 'refresh'));
 	if (($conf_refresh < 5)||($conf_refresh > 1800))
 		$conf_refresh = 120;
 
-	if (isset($_REQUEST['timer']) && ($conf_refresh >= 5) && (intval($_REQUEST['timer']) != $conf_refresh))
-		$bundle[0] []= array('reload', $conf_refresh);
-
-	$conf_maxidle = intval(pluginGetVariable('jchat', 'maxidle'));
-	if (isset($_REQUEST['idle']) && ($conf_maxidle > 0) && (intval($_REQUEST['idle']) > $conf_maxidle))
-		$bundle[0] []= array('stop', $conf_refresh);
+	//if (isset($_REQUEST['timer']) && ($conf_refresh >= 5) && (intval($_REQUEST['timer']) != $conf_refresh))
+	//	$bundle[0] []= array('settimer', $conf_refresh);
 
 	// Add extra commands (if passed)
 	if (is_array($commands) && count($commands)) {
@@ -64,10 +105,12 @@ function jchat_show($start, $commands = array()){
 }
 
 function plugin_jchat_show(){
-	global $template, $SUPRESS_TEMPLATE_SHOW;
+	global $template, $SUPRESS_TEMPLATE_SHOW, $mysql;
 
 	$SUPRESS_TEMPLATE_SHOW = 1;
-	$template['vars']['mainblock'] = json_encode(jchat_show(intval($_REQUEST['start'])));
+	//	$template['vars']['mainblock'] = json_encode(jchat_show(intval($_REQUEST['lastEvent']), intval($_REQUEST['start'])));
+	print json_encode(jchat_show(intval($_REQUEST['lastEvent']), intval($_REQUEST['start'])));
+	exit;
 }
 
 // Index screen for side panel
@@ -92,7 +135,7 @@ function plugin_jchat_index() {
 	$tpath = locatePluginTemplates(array('jchat'), 'jchat', pluginGetVariable('jchat', 'localsource'));
 	$tvars = array();
 	$start = isset($_REQUEST['start'])?intval($_REQUEST['start']):0;
-	$tvars['vars']['data'] = json_encode(jchat_show($start));
+	$tvars['vars']['data'] = json_encode(jchat_show(0,0));
 
 	$history = intval(pluginGetVariable('jchat', 'history'));
 	if (($history < 1)||($history > 500)) $history = 30;
@@ -137,7 +180,7 @@ function plugin_jchat_add() {
 	} else {
 		if (!trim($_REQUEST['name'])) {
 			print json_encode(array('status' => 0, 'error' => 'No name specified'));
-			return;
+			exit;
 		}
 		$SQL['author'] = secure_html(substr(trim(convert($_REQUEST['name'])),0,30));
 		$SQL['author_id'] = 0;
@@ -145,13 +188,13 @@ function plugin_jchat_add() {
 
 	if (!trim($_REQUEST['text'])) {
 			print json_encode(array('status' => 0, 'error' => 'No text specified'));
-			return;
+			exit;
 	}
 
 	// If we're guest - check if we can make posts
 	if (!is_array($userROW) && (pluginGetVariable('jchat', 'access') < 2)) {
 			print json_encode(array('status' => 0, 'error' => 'Guests are not allowed to post'));
-			return;
+			exit;
 	}
 
 	// Check for rate limit
@@ -160,7 +203,7 @@ function plugin_jchat_add() {
 
 	if (is_array($mysql->record("select id from ".prefix."_jchat where (ip = ".db_squote($ip).") and (postdate + ".$rate_limit.') > '.time()))) {
 			print json_encode(array('status' => 0, 'error' => 'Rate limit. Only 1 message per '.$rate_limit.' sec is allowed'));
-			return;
+			exit;
 	}
 
 	$maxlen = intval(pluginGetVariable('jchat', 'maxlen'));
@@ -193,8 +236,17 @@ function plugin_jchat_add() {
 	$vnames = array(); $vparams = array();
 	foreach ($SQL as $k => $v) { $vnames[]  = $k; $vparams[] = db_squote($v); }
 
+	// Add new message to chat
 	$mysql->query("insert into ".prefix."_jchat (".implode(",",$vnames).") values (".implode(",",$vparams).")");
-	print json_encode(array('status' => 1, 'bundle' => jchat_show(intval($_REQUEST['start']))));
+
+	// Update LastEventNotification
+	$mysql->query("insert into ".prefix."_jchat_events (chatid, postdate, type) values (".$SQL['chatid'].", ".db_squote($SQL['postdate']).", 1)");
+
+	$lid = $mysql->result("select LAST_INSERT_ID()");
+	$mysql->query("delete from ".prefix."_jchat_events where type=1 and id <> ".db_squote($lid));
+
+	print json_encode(array('status' => 1, 'bundle' => jchat_show(intval($_REQUEST['lastEvent']), intval($_REQUEST['start']))));
+	exit;
 }
 
 function plugin_jchat_del() {
@@ -205,7 +257,7 @@ function plugin_jchat_del() {
 	// Only ADMINS can delete items from chat
 	if (!is_array($userROW) || ($userROW['status'] > 1)) {
 		print json_encode(array('status' => 0, 'error' => 'Permission denied'));
-		return;
+		exit;
 	}
 
 	// Try to load chat message
@@ -213,15 +265,23 @@ function plugin_jchat_del() {
 
 	if (!($crow = $mysql->record("select * from ".prefix."_jchat where id = ".db_squote($id)))) {
 		print json_encode(array('status' => 0, 'error' => 'Item not found (ID: '.$id.')'));
-		return;
+		exit;
 	}
 
 
 	// Delete item
 	$mysql->query("delete from ".prefix."_jchat where id = ".$id);
 
+	// Update LastEventNotification
+	$mysql->query("insert into ".prefix."_jchat_events (chatid, postdate, type) values (1, unix_timestamp(now()), 2)");
+
+	$lid = $mysql->result("select LAST_INSERT_ID()");
+	$mysql->query("delete from ".prefix."_jchat_events where type=2 and id <> ".db_squote($lid));
+
+
 	// Return updated list of items from chat
-	print json_encode(array('status' => 1, 'bundle' => jchat_show(intval($_REQUEST['start']), array(array('clear')))));
+	print json_encode(array('status' => 1, 'bundle' => jchat_show(intval($_REQUEST['lastEvent']), intval($_REQUEST['start']))));
+	exit;
 }
 
 
@@ -247,7 +307,7 @@ function plugin_jchat_win() {
 	$tpath = locatePluginTemplates(array('jchat.main', 'jchat.self'), 'jchat', pluginGetVariable('jchat', 'localsource'));
 
 	$tvars = array();
-	$tvars['vars']['data'] = json_encode(jchat_show(intval($_REQUEST['start'])));
+	$tvars['vars']['data'] = json_encode(jchat_show(0,0, array(array('setWinMode', 1))));
 
 	$history = intval(pluginGetVariable('jchat', 'win_history'));
 	if (($history < 1)||($history > 500)) $history = 30;

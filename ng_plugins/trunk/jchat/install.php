@@ -33,7 +33,18 @@ function plugin_jchat_install($action) {
 	    array('action' => 'cmodify', 'name' => 'text', 'type' => 'text'),
 	  )
 	 ),
-	);
+	array(
+	 'table'  => 'jchat_events',
+	 'action' => 'cmodify',
+	 'key'    => 'primary key(id)',
+	 'fields' => array(
+	   array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
+	   array('action' => 'cmodify', 'name' => 'chatid', 'type' => 'int', 'params' => 'default 0'),
+	   array('action' => 'cmodify', 'name' => 'postdate', 'type' => 'int'),
+	   array('action' => 'cmodify', 'name' => 'type', 'type' => 'int'),
+	 )
+	),
+);
 
 	// Apply requested action
 	switch ($action) {

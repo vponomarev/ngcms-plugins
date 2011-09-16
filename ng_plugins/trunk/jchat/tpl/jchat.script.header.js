@@ -1,4 +1,4 @@
-<script language="javascript">
+f<script language="javascript">
 function chatSubmitForm() {
 	var formID = document.getElementById('jChatForm');
 	CHATTER.postMessage(formID.name.value, formID.text.value);
@@ -13,8 +13,10 @@ function jChat(maxRows, refresh, tableID, msgOrder) {
 		this.scanActive    = false;
 		this.timerID       = 0;
 		this.tickCount     = 0;
+		this.lastEventID   = 0;
 		this.maxLoadedID   = 0;
 		this.idleStart     = 0;
+		this.winMode       = 0;
 		this.messageOrder  = msgOrder;
 
 		this.maxRows       = maxRows?maxRows:40;
@@ -53,7 +55,9 @@ function jChat(maxRows, refresh, tableID, msgOrder) {
 					dateTime = new Date();
 					thisObject.linkRX.requestFile = '{link_show}';
 					//thisObject.linkRX.setVar('plugin_cmd', 'show');
+					thisObject.linkRX.setVar('lastEvent', thisObject.lastEventID);
 					thisObject.linkRX.setVar('start', thisObject.maxLoadedID);
+					thisObject.linkRX.setVar('win', thisObject.winMode);
 					thisObject.linkRX.setVar('timer', thisObject.timerInterval /1000);
 					thisObject.linkRX.setVar('idle', Math.round((dateTime.getTime()/1000) - thisObject.idleStart));
 					thisObject.linkRX.method='GET';
@@ -100,6 +104,12 @@ function jChat(maxRows, refresh, tableID, msgOrder) {
 			if (cmd[0] == 'clear') {
 				while (this.tableRef.rows.length) { this.tableRef.deleteRow(0); }
 				thisObject.maxLoadedID = 0;
+			}
+			if (cmd[0] == 'setLastEvent') {
+				this.lastEventID = cmd[1];
+			}
+			if (cmd[0] == 'setWinMode') {
+				this.winMode = cmd[1];
 			}
 		}
 
@@ -181,6 +191,8 @@ function jChat(maxRows, refresh, tableID, msgOrder) {
 		//TX.setVar('plugin_cmd', 'add');
 		[not-logged]
 		TX.setVar('name', name);[/not-logged]
+		TX.setVar('lastEvent', this.lastEventID);
+		TX.setVar('win', this.winMode);
 		TX.setVar('start', this.maxLoadedID);
 		TX.setVar('text', text);
 		TX.method='POST';
@@ -225,6 +237,8 @@ function jChat(maxRows, refresh, tableID, msgOrder) {
 		TX.requestFile = '{link_del}';
 		//TX.setVar('plugin_cmd', 'add');
 		TX.setVar('id', id);
+		TX.setVar('lastEvent', this.lastEventID);
+		TX.setVar('win', this.winMode);
 		TX.method='POST';
 		TX.onComplete = function() {
 			var data = eval('('+this.response+')');
