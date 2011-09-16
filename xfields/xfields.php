@@ -849,11 +849,12 @@ class XFieldsNewsFilter extends NewsFilter {
 			}
 
 			// Show table
-			$templateName = 'plugins/xfields/table.tpl';
+			$templateName = 'plugins/xfields/news.table.tpl';
 			$twigLoader->setConversion($templateName, $conversionConfig);
 
 			$xt = $twig->loadTemplate($templateName);
 			$tvars['vars']['plugin_xfields_table'] = $xt->render(array('entries' => $xrecs));
+
 		} else {
 			$tvars['vars']['plugin_xfields_table'] = '';
 		}
