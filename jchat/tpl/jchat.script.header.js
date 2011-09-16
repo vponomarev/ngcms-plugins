@@ -1,4 +1,4 @@
-f<script language="javascript">
+<script language="javascript">
 function chatSubmitForm() {
 	var formID = document.getElementById('jChatForm');
 	CHATTER.postMessage(formID.name.value, formID.text.value);
