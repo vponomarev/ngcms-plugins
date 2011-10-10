@@ -1,3 +1,5 @@
+{% include localPath(0) ~ "conf.navi.tpl" %}
+
 <script language="javascript">
 function clx(mode) {
  document.getElementById('type_text').style.display = (mode == 'text')?'block':'none';
@@ -7,45 +9,61 @@ function clx(mode) {
 }
 </script>
 
-<form action="?mod=extra-config&plugin=feedback&action=editrow&form_id={form_id}&name={name}" method="post" name="feedbackform">
-<input type="hidden" name="edit" value="[add]0[/add][edit]1[/edit]">
+<form action="?mod=extra-config&plugin=feedback&action=editrow&form_id={{ formID }}&name={{ fieldName }}" method="post" name="feedbackform">
+<input type="hidden" name="edit" value="{% if (flags.addField) %}0{% else %}1{% endif %}">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
-<tr>
-<td colspan="2" width=100% class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8">[add]{l_feedback:field.title.add}[/add][edit]{l_feedback:field.title.edit}[/edit]</td>
-</tr>
-<tr class="contRow1"><td width="50%">{l_feedback:field.id}</td><td width="47%"><input type="text" name="name" value="{name}" size="40" [edit]readonly[/edit]>[edit] &nbsp; &nbsp; {l_feedback:field.noedit}[/edit]</td></tr>
-<tr class="contRow1"><td width="50%">{l_feedback:field.title}</td><td><input type="text" name="title" value="{title}" size="40" /></td></tr>
-<tr class="contRow1"><td width="50%">{l_feedback:field.type}</td><td><select name="type" id="type" onclick="clx(this.value);" onchange="clx(this.value);" />{type_opts}</select></td></tr>
+<tr class="contRow1"><td width="50%">{{ lang['feedback:field.id'] }}</td><td width="47%"><input type="text" name="name" value="{{ field.name }}" size="40" {% if (not flags.addField) %}readonly{% endif %}>{% if (not flags.addField) %} &nbsp; &nbsp; {{ lang['feedback:field.noedit'] }}{% endif %}</td></tr>
+<tr class="contRow1"><td width="50%">{{ lang['feedback:field.title'] }}</td><td><input type="text" name="title" value="{{ field.title }}" size="40" /></td></tr>
+<tr class="contRow1"><td width="50%">{{ lang['feedback:field.type'] }}</td><td><select name="type" id="type" onclick="clx(this.value);" onchange="clx(this.value);" />
+{{ field.type.options }}
+</select></td></tr>
 </table>
 
 <div id="type_text">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
-<tr class="contRow1"><td width="5%" style="background-color: #E0FFFF;">{l_feedback:type.text}</td><td width="45%">{l_feedback:field.default}</td><td><input type="text" name="text_default" value="{text_default}" size=40></tr>
+<tr class="contRow1"><td width="5%" style="background-color: #E0FFFF;">{{ lang['feedback:type.text'] }}</td><td width="45%">{{ lang['feedback:field.default'] }}</td><td><input type="text" name="text_default" value="{{ field.text_default }}" size=40></tr>
 </table>
 </div>
 <div id="type_textarea">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
-<tr class="contRow1"><td width="5%" style="background-color: #FFE0FF;">{l_feedback:type.textarea}</td><td width="45%">{l_feedback:field.default}</td><td><textarea name="textarea_default" cols=70 rows=4>{textarea_default}</textarea></tr>
+<tr class="contRow1"><td width="5%" style="background-color: #FFE0FF;">{{ lang['feedback:type.textarea'] }}</td><td width="45%">{{ lang['feedback:field.default'] }}</td><td><textarea name="textarea_default" cols=70 rows=4>{{ field.textarea_default }}</textarea></tr>
 </table>
 </div>
 <div id="type_select">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
-<!-- <tr class="contRow1"><td width="5%" style="background-color: #FFFFE0;">{l_feedback:type.select}</td><td width="45%">{l_feedback:select.storekeys}</td><td><select name="select_storekeys">{storekeys_opts}</select></td></tr> -->
-<tr class="contRow1"><td width="5%" style="background-color: #FFFFE0;">{l_feedback:type.select}</td><td>{l_feedback:select.options}</td><td><textarea cols=70 rows=8 name="select_options">{select_options}</textarea></tr>
-<tr class="contRow1"><td width="5%" style="background-color: #FFFFE0;">{l_feedback:type.select}</td><td>{l_feedback:field.default}</td><td><input type="text" name="select_default" value="{select_default}" size=40></tr>
+<tr class="contRow1"><td width="5%" style="background-color: #FFFFE0;">{{ lang['feedback:type.select'] }}</td><td>{{ lang['feedback:select.options'] }}</td><td><textarea cols=70 rows=8 name="select_options">{{ field.select_options }}</textarea></tr>
+<tr class="contRow1"><td width="5%" style="background-color: #FFFFE0;">{{ lang['feedback:type.select'] }}</td><td>{{ lang['feedback:field.default'] }}</td><td><input type="text" name="select_default" value="{{ field.select_default }}" size=40></tr>
 </table>
 </div>
 <div id="type_date">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
-<tr class="contRow1"><td width="5%" style="background-color: #E0FFFF;">{l_feedback:type.date}</td><td width="45%">{l_feedback:field.default.date}</td><td><input type="text" name="date_default" value="{date_default}" size=10></tr>
+<tr class="contRow1"><td width="5%" style="background-color: #E0FFFF;">{{ lang['feedback:type.date'] }}</td><td width="45%">{{ lang['feedback:field.default.date'] }}</td><td><input type="text" name="date_default" value="{{ field.date_default }}" size=10></tr>
 </table>
 </div>
 <table border="0" cellspacing="1" cellpadding="1" class="content">
-<tr class="contRow1"><td width="50%">{l_feedback:field.required}</td><td width="47%"><select name="required">{required_opts}</select></td></tr>
-<tr class="contRow1"><td colspan=2 align="center"><input type="submit" class="button" value="{l_feedback:button.save}"></td></tr>
+<tr class="contRow1"><td width="50%">{{ lang['feedback:field.required'] }}</td><td width="47%"><select name="required">
+{% for x in field.required.options %}
+	<option value="{{ x }}" {% if (field.required.value == x) %}selected="selected"{% endif %}>{{ lang['feedback:field.required.' ~ x] }}</option>
+{% endfor %}
+</select></td></tr>
+<tr class="contRow1"><td width="50%">јвтозаполнение:<br/><small><b>Ќет</b> - пользователь должен самосто€тельно заполн€ть поле<br/><b>параметром</b> - значение пол€ может передаватьс€ в качестве параметра к URL'у вызова<br/><b>св€зкой</b> - значение пол€ может братьс€ из одноимЄнного пол€ плагина <b>xfields</b> св€занной новости</small></td><td>
+<select name="auto">
+{% for x in field.auto.options %}
+	<option value="{{ x }}" {% if (field.auto.value == x) %}selected="selected"{% endif %}>{{ lang['feedback:field.auto.' ~ x] }}</option>
+{% endfor %}
+</select>
+</td></tr>
+<tr class="contRow1"><td width="50%">Ѕлокировка:<br/><small><b>Ќет</b> - поле доступно дл€ редактировани€<br/><b>ƒа</b> - пользователь не может редактировать данное поле<br/><b>ƒа, невидимо</b> - поле невидимо, его редактирование запрещено</small></td><td>
+<select name="block">
+{% for x in field.block.options %}
+	<option value="{{ x }}" {% if (field.block.value == x) %}selected="selected"{% endif %}>{{ lang['feedback:field.block.' ~ x] }}</option>
+{% endfor %}
+</select>
+</td></tr>
+<tr class="contRow1"><td colspan=2 align="center"><input type="submit" class="button" value="{{ lang['feedback:button.save'] }}"></td></tr>
 </table>
 </form>
 
 <script type="text/javascript">
-clx('{type}');
+clx('{{ field.type.value }}');
 </script>
