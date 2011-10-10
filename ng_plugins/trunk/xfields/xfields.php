@@ -772,7 +772,7 @@ class XFieldsNewsFilter extends NewsFilter {
 
 	// Show news call :: processor (call after all processing is finished and before show)
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
-		global $mysql, $config, $twigLoader, $twig;
+		global $mysql, $config, $twigLoader, $twig, $PFILTERS;
 		// Try to load config. Stop processing if config was not loaded
 		if (($xf = xf_configLoad()) === false) return;
 
@@ -842,7 +842,7 @@ class XFieldsNewsFilter extends NewsFilter {
 				}
 
 				// Process filters (if any)
-				if (is_array($PFILTERS['xfields']))
+				if (isset($PFILTERS['xfields']) && is_array($PFILTERS['xfields']))
 					foreach ($PFILTERS['xfields'] as $k => $v) { $v->showTableEntry($newsID, $SQLnews, $trec, $xrec); }
 
 				$xrecs []= $xrec;
@@ -1213,7 +1213,7 @@ function xf_configLoad() {
 	$XF = is_array($xarray)?$xarray:array();
 
 	// Init required blocks if they are not initialized yet
-	foreach (array('news', 'users', 'tdata') as $k) {
+	foreach (array('news', 'grp.news', 'users', 'tdata') as $k) {
 		if (!is_array($XF[$k])) {
 			$XF[$k] = array();
 		}
