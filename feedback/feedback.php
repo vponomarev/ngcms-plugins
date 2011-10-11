@@ -21,7 +21,7 @@ function plugin_feedback_screen(){
 // * 0 - initial show
 // * 1 - show filled earlier values (error filling some fields)
 function plugin_feedback_showScreen($mode = 0, $errorText = '') {
-	global $template, $tpl, $lang, $mysql, $userROW, $PFILTERS, $twig;
+	global $template, $lang, $mysql, $userROW, $PFILTERS, $twig;
 
 	$output = '';
 	$hiddenFields = array();
@@ -239,11 +239,6 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	$tVars['hidden_fields'] = $hF;
 
 
-	// Show template of current form
-	$tpl->template($tN, $tP);
-	$tpl->vars($tN, $tvars);
-	$output = $tpl->show($tN);
-
 	// Process filters (if any)
 	if (is_array($PFILTERS['feedback']))
 		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onShow($form_id, $frow, $fData, $tvars); }
@@ -256,7 +251,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 //
 // Post feedback message
 function plugin_feedback_post() {
-	global $template, $tpl, $lang, $mysql, $userROW, $SYSTEM_FLAGS, $PFILTERS, $twig;
+	global $template, $lang, $mysql, $userROW, $SYSTEM_FLAGS, $PFILTERS, $twig;
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('site.form', 'site.notify', 'mail.html', 'mail.text'), 'feedback', pluginGetVariable('feedback', 'localsource'));
