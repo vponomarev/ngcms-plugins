@@ -6,10 +6,10 @@ function plugin_ads_pro_install($action) {
 		array(
 			'table' => 'ads_pro',
 			'action' => 'cmodify',
-			'key' => 'primary key (`id`)',
+			'key' => 'primary key (id)',
 			'fields' => array(
-				array('action' => 'cmodify', 'name' => '`id`', 'type' => 'int(11)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
-				array('action' => 'cmodify', 'name' => '`ads_blok`', 'type' => 'text', 'params' => 'NOT NULL DEFAULT \'\'')
+				array('action' => 'cmodify', 'name' => 'id', 'type' => 'int(11)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
+				array('action' => 'cmodify', 'name' => 'ads_blok', 'type' => 'text', 'params' => 'NOT NULL DEFAULT \'\'')
 			)
 		)
 	);

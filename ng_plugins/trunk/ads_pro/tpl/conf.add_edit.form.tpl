@@ -1,3 +1,66 @@
+<script language="javascript" type="text/javascript">
+function AddBlok() {
+	var tbl = document.getElementById('blokup');
+	var lastRow = tbl.rows.length;
+	var iteration = lastRow+1;
+	var row = tbl.insertRow(lastRow);
+	var cellRight = row.insertCell(0);
+	cellRight.innerHTML = iteration+': ';
+	cellRight = row.insertCell(1);
+	cellRight.setAttribute('align', 'left');
+
+	var el = '<select name="location[' + iteration + '][mode]" onchange="AddSubBlok(this, ' + iteration + ');"><option value=0>{l_ads_pro:around}</option><option value=1>{l_ads_pro:main}</option><option value=2>{l_ads_pro:not_main}</option><option value=3>{l_ads_pro:category}</option><option value=4>{l_ads_pro:static}</option><option value=5>{l_ads_pro:news}</option></select>';
+
+	cellRight.innerHTML += el;
+	
+	el = '<select name="location[' + iteration + '][view]"><option value=0>{l_ads_pro:view}</option><option value=1>{l_ads_pro:not_view}</option></select>';
+	
+	cellRight.innerHTML += el;
+}
+function AddSubBlok(el, iteration){
+	var subel = null;
+	var subsubel = null;
+	switch (el.value){
+		case '3':
+			subel = createNamedElement('select', 'location[' + iteration + '][id]');
+			{category_list}
+			break;
+		case '4':
+			subel = createNamedElement('select', 'location[' + iteration + '][id]');
+			{static_list}
+			break;
+		case '5':
+			subel = createNamedElement('select', 'location[' + iteration + '][id]');
+			{news_list}
+			break;			
+	}
+	if (el.nextSibling.name == 'location[' + iteration + '][id]')
+		el.parentNode.removeChild(el.nextSibling);
+	if (subel)
+		el.parentNode.insertBefore(subel, el.nextSibling);
+}
+function RemoveBlok() {
+	var tbl = document.getElementById('blokup');
+	var lastRow = tbl.rows.length;
+	if (lastRow > 0){
+		tbl.deleteRow(lastRow - 1);
+	}
+}
+function createNamedElement(type, name) {
+    var element = null;
+    try {
+        element = document.createElement('<'+type+' name="'+name+'">');
+    } catch (e) {
+    }
+    if (!element || element.nodeName != type.toUpperCase()) {
+        element = document.createElement(type);
+        element.setAttribute("name", name);
+    }
+    return element;
+}
+</script>
+
+
 <form method="post" action="admin.php?mod=extra-config&amp;plugin=ads_pro&amp;action=[add]add_submit[/add][edit]edit_submit[/edit]">
 <input type="hidden" name="id" value="[add]0[/add][edit]{id}[/edit]" />
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
@@ -58,60 +121,3 @@
 </table>
 </form>
 
-<script language="javascript" type="text/javascript">
-function AddBlok() {
-	var tbl = document.getElementById('blokup');
-	var lastRow = tbl.rows.length;
-	var iteration = lastRow+1;
-	var row = tbl.insertRow(lastRow);
-	var cellRight = row.insertCell(0);
-	cellRight.innerHTML = iteration+': ';
-	cellRight = row.insertCell(1);
-	cellRight.setAttribute('align', 'left');
-
-	var el = '<select name="location[' + iteration + '][mode]" onchange="AddSubBlok(this, ' + iteration + ');"><option value=0>{l_ads_pro:around}</option><option value=1>{l_ads_pro:main}</option><option value=2>{l_ads_pro:not_main}</option><option value=3>{l_ads_pro:category}</option><option value=4>{l_ads_pro:static}</option></select>';
-
-	cellRight.innerHTML += el;
-	
-	el = '<select name="location[' + iteration + '][view]"><option value=0>{l_ads_pro:view}</option><option value=1>{l_ads_pro:not_view}</option></select>';
-	
-	cellRight.innerHTML += el;
-}
-function AddSubBlok(el, iteration){
-	var subel = null;
-	var subsubel = null;
-	switch (el.value){
-		case '3':
-			subel = createNamedElement('select', 'location[' + iteration + '][id]');
-			{category_list}
-			break;
-		case '4':
-			subel = createNamedElement('select', 'location[' + iteration + '][id]');
-			{static_list}
-			break;
-	}
-	if (el.nextSibling.name == 'location[' + iteration + '][id]')
-		el.parentNode.removeChild(el.nextSibling);
-	if (subel)
-		el.parentNode.insertBefore(subel, el.nextSibling);
-}
-function RemoveBlok() {
-	var tbl = document.getElementById('blokup');
-	var lastRow = tbl.rows.length;
-	if (lastRow > 0){
-		tbl.deleteRow(lastRow - 1);
-	}
-}
-function createNamedElement(type, name) {
-    var element = null;
-    try {
-        element = document.createElement('<'+type+' name="'+name+'">');
-    } catch (e) {
-    }
-    if (!element || element.nodeName != type.toUpperCase()) {
-        element = document.createElement(type);
-        element.setAttribute("name", name);
-    }
-    return element;
-}
-</script>
