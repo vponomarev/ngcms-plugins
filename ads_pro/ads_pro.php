@@ -6,11 +6,11 @@ if (!defined('NGCMS')) die ('HAL');
 add_act('index_post', 'plugin_ads_pro');
 $plugin_ads_pro_data = array('stat' => false, 'stat_id' => null, 'news' => false, 'news_id' => null, 'cat' => false, 'cat_id' => null, 'main' => false);
 class ADSProStaticFilter extends StaticFilter {
-	function showStatic($staticID, $SQLstatic, &$tvars, $mode) { 
+	function showStatic($staticID, $SQLstatic, &$tvars, $mode) {
 		global $plugin_ads_pro_data;
 		$plugin_ads_pro_data['stat'] = true;
 		$plugin_ads_pro_data['stat_id'] = $staticID;
-		return 1; 
+		return 1;
 	}
 }
 register_filter('static','ads_pro', new ADSProStaticFilter);
@@ -22,14 +22,17 @@ class ADSProNewsFilter extends NewsFilter {
 			$plugin_ads_pro_data['news'] = true;
 			$plugin_ads_pro_data['news_id'] = $newsID;
 		}
-		return 1;				
+		return 1;
 	}
 }
-register_filter('news', 'ads_pro', new ADSProNewsFilter);
 
-function plugin_ads_pro($params) {	
+if (pluginGetVariable('ads_pro', 'support_news')) {
+	register_filter('news', 'ads_pro', new ADSProNewsFilter);
+}
+
+function plugin_ads_pro($params) {
 	global $template, $config, $CurrentHandler, $catmap, $mysql, $plugin_ads_pro_data;
-	
+
 	$var = pluginGetVariable('ads_pro', 'data');
 	if (!is_array($var)) return;
 
@@ -40,6 +43,10 @@ function plugin_ads_pro($params) {
 	} else if (isset($CurrentHandler['params']['category'])) {
 		$plugin_ads_pro_data['cat'] = true;
 		$plugin_ads_pro_data['cat_id'] = array_search($CurrentHandler['params']['category'], $catmap);
+	}
+	if($CurrentHandler['pluginName']) {
+		$plugin_ads_pro_data['plugin'] = true;
+		$plugin_ads_pro_data['plugin_id'] = $CurrentHandler['pluginName'];
 	}
 
 	$t_time = time();
@@ -97,6 +104,15 @@ function plugin_ads_pro($params) {
 								if (!$vvv['id']) {
 									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
 								} else if ($plugin_ads_pro_data['news_id'] == $vvv['id']) {
+									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+								}
+							}
+							break;
+						case 6:
+							if ($plugin_ads_pro_data['plugin']) {
+								if (!$vvv['id']) {
+									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+								} else if ($plugin_ads_pro_data['plugin_id'] == $vvv['id']) {
 									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
 								}
 							}
