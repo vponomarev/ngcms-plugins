@@ -8,6 +8,11 @@
 <td class="contentEntry1" align="left"><select name="support_news"><option value="0" {s_news0}>{l_noa}<option value="1" {s_news1}>{l_yesa}</select></td>
 </td>
 </tr>
+<tr>
+<td width="50%" class="contentEntry1" align="left">{l_ads_pro:news_cfg_sort}</td>
+<td class="contentEntry1" align="left"><select name="news_cfg_sort"><option value="0" {s_news_sort0}>{l_ads_pro:news_cfg_sort_id}<option value="1" {s_news_sort1}>{l_ads_pro:news_cfg_sort_title}</select></td>
+</td>
+</tr>
 </table>
 </fieldset>
 <input type="submit" value="{l_ads_pro:general_submit}"/>
