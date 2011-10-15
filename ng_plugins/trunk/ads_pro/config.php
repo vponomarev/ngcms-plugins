@@ -241,7 +241,7 @@ function add() {
 		$ttvars['vars']['location_list'] = '';
 		foreach($var['location'] as $k => $v) {
 			$ttvars['vars']['location_list'] .= '<tr><td>'.($k).': </td><td align="left">';
-			$ttvars['vars']['location_list'] .= MakeDropDown(array(0 => $lang['ads_pro:around'], 1 => $lang['ads_pro:main'], 2 => $lang['ads_pro:not_main'], 3 => $lang['ads_pro:category'], 4 => $lang['ads_pro:static'], 5 => $lang['ads_pro:plugins']), 'location['.($k).'][mode]" onchange="AddSubBlok(this, '.($k).');', $v['mode']);
+			$ttvars['vars']['location_list'] .= MakeDropDown(array(0 => $lang['ads_pro:around'], 1 => $lang['ads_pro:main'], 2 => $lang['ads_pro:not_main'], 3 => $lang['ads_pro:category'], 4 => $lang['ads_pro:static'], 5 => $lang['ads_pro:news'], 6 => $lang['ads_pro:plugins']), 'location['.($k).'][mode]" onchange="AddSubBlok(this, '.($k).');', $v['mode']);
 			if ($v['mode'] == 3) $ttvars['vars']['location_list'] .= MakeDropDown($t_category_list, 'location['.($k).'][id]', $v['id']);
 			if ($v['mode'] == 4) $ttvars['vars']['location_list'] .= MakeDropDown($t_static_list, 'location['.($k).'][id]', $v['id']);
 			if ($v['mode'] == 5) $ttvars['vars']['location_list'] .= MakeDropDown($t_news_list, 'location['.($k).'][id]', $v['id']);
