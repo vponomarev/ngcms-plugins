@@ -9,7 +9,7 @@ function AddBlok() {
 	cellRight = row.insertCell(1);
 	cellRight.setAttribute('align', 'left');
 
-	var el = '<select name="location[' + iteration + '][mode]" onchange="AddSubBlok(this, ' + iteration + ');"><option value=0>{l_ads_pro:around}</option><option value=1>{l_ads_pro:main}</option><option value=2>{l_ads_pro:not_main}</option><option value=3>{l_ads_pro:category}</option><option value=4>{l_ads_pro:static}</option><option value=5>{l_ads_pro:news}</option></select>';
+	var el = '<select name="location[' + iteration + '][mode]" onchange="AddSubBlok(this, ' + iteration + ');"><option value=0>{l_ads_pro:around}</option><option value=1>{l_ads_pro:main}</option><option value=2>{l_ads_pro:not_main}</option><option value=3>{l_ads_pro:category}</option><option value=4>{l_ads_pro:static}</option>[support_news]<option value=5>{l_ads_pro:news}</option>[/support_news]<option value=6>{l_ads_pro:plugins}</option></select>';
 
 	cellRight.innerHTML += el;
 	
@@ -29,10 +29,15 @@ function AddSubBlok(el, iteration){
 			subel = createNamedElement('select', 'location[' + iteration + '][id]');
 			{static_list}
 			break;
+[support_news]
 		case '5':
 			subel = createNamedElement('select', 'location[' + iteration + '][id]');
 			{news_list}
-			break;			
+			break;[/support_news]
+		case '6':
+			subel = createNamedElement('select', 'location[' + iteration + '][id]');
+			{plugins_list}
+			break;
 	}
 	if (el.nextSibling.name == 'location[' + iteration + '][id]')
 		el.parentNode.removeChild(el.nextSibling);
@@ -59,7 +64,6 @@ function createNamedElement(type, name) {
     return element;
 }
 </script>
-
 
 <form method="post" action="admin.php?mod=extra-config&amp;plugin=ads_pro&amp;action=[add]add_submit[/add][edit]edit_submit[/edit]">
 <input type="hidden" name="id" value="[add]0[/add][edit]{id}[/edit]" />
@@ -105,7 +109,10 @@ function createNamedElement(type, name) {
 <legend><b>{l_ads_pro:ads_blok_legend}</b></legend>
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-<td width="100%" class="contentEntry1" align="center"><TEXTAREA NAME="ads_blok" COLS="150" ROWS="30">[edit]{ads_blok}[/edit]</TEXTAREA></td>
+<td width="100%" class="contentEntry1" align="center">
+<div style="width:100%; text-align: left;">{l_ads_pro:ads_blok_info}</div>
+<TEXTAREA NAME="ads_blok" COLS="150" ROWS="30">[edit]{ads_blok}[/edit]</TEXTAREA>
+</td>
 </tr>
 </table>
 </fieldset>
@@ -120,4 +127,3 @@ function createNamedElement(type, name) {
 </tr>
 </table>
 </form>
-

@@ -8,25 +8,61 @@ LoadPluginLang('ads_pro', 'config', '', '', ':');
 //pluginsSaveConfig();
 
 switch ($_REQUEST['action']) {
-	case 'list': showlist(); break;
-	case 'add': add(); break;
-	case 'edit': add(); break;
-	case 'add_submit': add_submit(); break;
-	case 'edit_submit': add_submit(); break;
-	case 'move_up': move('up'); break;
-	case 'move_down': move('down'); break;
-	case 'dell': delete(); break;
-	case 'clear_cash': clear_cash();
+	case 'list':
+		showlist();
+		break;
 
-	default: main();
+	case 'add':
+		add();
+		break;
+
+	case 'edit':
+		add();
+		break;
+
+	case 'add_submit':
+		add_submit();
+		break;
+
+	case 'edit_submit':
+		add_submit();
+		break;
+
+	case 'move_up':
+		move('up');
+		break;
+
+	case 'move_down':
+		move('down');
+		break;
+
+	case 'dell':
+		delete();
+		break;
+
+	case 'main_submit':
+		main_submit();
+		break;
+
+	case 'clear_cash':
+		clear_cash();
+
+	default:
+		main();
 }
 
 function main() {
 	global $tpl, $lang;
 
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.general'), 'ads_pro', 1);
+	$s_news = pluginGetVariable('ads_pro', 'support_news');
 
-	$ttvars['vars']['action'] = $lang['ads_pro:button_general'];
+	$ttvars = array();
+	$ttvars['vars'] = array (
+		'action'	=> $lang['ads_pro:button_general'],
+		's_news0'	=> ($s_news?'':' selected'),
+		's_news1'	=> ($s_news?' selected':''),
+	);
 
 	$tpl->template('conf.general', $tpath['conf.general']);
 	$tpl->vars('conf.general', $ttvars);
@@ -39,13 +75,24 @@ function main() {
 	print $tpl->show('conf.main');
 }
 
+function main_submit() {
+	global $tpl, $lang;
+
+	$nv = intval($_REQUEST['support_news']);
+	if ($nv != pluginGetVariable('ads_pro', 'support_news')) {
+		pluginSetVariable('ads_pro', 'support_news', $nv);
+		pluginsSaveConfig();
+	}
+
+	main();
+}
+
 function showlist() {
 	global $tpl, $lang;
 
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.list', 'conf.list.row'), 'ads_pro', 1);
 
 	$var = pluginGetVariable('ads_pro', 'data');
-	//print "<pre>".var_export($var, true)."</pre>";
 
 	$output = '';
 	$t_time = time();
@@ -86,9 +133,11 @@ function showlist() {
 function add() {
 	global $mysql, $tpl, $lang;
 
+	$PluginsList = getPluginsActiveList();
+
 	// Load config
 	$pConfig = pluginGetVariable('ads_pro', 'data');
-
+	//print "<pre>".var_export($pConfig, true)."</pre>";
 	$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):0;
 	$var = '';
 	$name = '';
@@ -105,6 +154,20 @@ function add() {
 	}
 
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.add_edit.form'), 'ads_pro', 1);
+
+	$ttvars['vars']['plugins_list'] = "\n";
+	$ttvars['vars']['plugins_list'] .= "\n\t\t\t".'subsubel = document.createElement("option");'."\n";
+	$ttvars['vars']['plugins_list'] .= "\t\t\t".'subsubel.setAttribute("value", "0");'."\n";
+	$ttvars['vars']['plugins_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.$lang['ads_pro:all'].'"));'."\n";
+	$ttvars['vars']['plugins_list'] .= "\t\t\t".'subel.appendChild(subsubel);'."\n";
+	$t_plugin_list = array(0 => $lang['ads_pro:all']);
+	foreach ($PluginsList['actions']['ppages'] as $key => $value) {
+		$t_plugin_list[$key] = $key;
+		$ttvars['vars']['plugins_list'] .= "\n\t\t\t".'subsubel = document.createElement("option");'."\n";
+		$ttvars['vars']['plugins_list'] .= "\t\t\t".'subsubel.setAttribute("value", "'.$key.'");'."\n";
+		$ttvars['vars']['plugins_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.htmlspecialchars($key).'"));'."\n";
+		$ttvars['vars']['plugins_list'] .= "\t\t\t".'subel.appendChild(subsubel);'."\n";
+	}
 
 	$ttvars['vars']['category_list'] = "\n";
 	$ttvars['vars']['category_list'] .= "\t\t\t".'subsubel = document.createElement("option");'."\n";
@@ -134,18 +197,24 @@ function add() {
 		$ttvars['vars']['static_list'] .= "\t\t\t".'subel.appendChild(subsubel);'."\n";
 	}
 
-	$ttvars['vars']['news_list'] = "\n";
-	$ttvars['vars']['news_list'] .= "\n\t\t\t".'subsubel = document.createElement("option");'."\n";
-	$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.setAttribute("value", "0");'."\n";
-	$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.$lang['ads_pro:all'].'"));'."\n";
-	$ttvars['vars']['news_list'] .= "\t\t\t".'subel.appendChild(subsubel);'."\n";
-	$t_news_list = array(0 => $lang['ads_pro:all']);
-	foreach ($mysql->select("select id, title from ".prefix."_news") as $row) {
-		$t_news_list[$row['id']] = $row['title'];
+	if (pluginGetVariable('ads_pro', 'support_news')) {
+		$ttvars['vars']['news_list'] = "\n";
 		$ttvars['vars']['news_list'] .= "\n\t\t\t".'subsubel = document.createElement("option");'."\n";
-		$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.setAttribute("value", "'.$row['id'].'");'."\n";
-		$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.htmlspecialchars($row['title']).'"));'."\n";
+		$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.setAttribute("value", "0");'."\n";
+		$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.$lang['ads_pro:all'].'"));'."\n";
 		$ttvars['vars']['news_list'] .= "\t\t\t".'subel.appendChild(subsubel);'."\n";
+		$t_news_list = array(0 => $lang['ads_pro:all']);
+		foreach ($mysql->select("select id, title from ".prefix."_news") as $row) {
+			$t_news_list[$row['id']] = $row['title'];
+			$ttvars['vars']['news_list'] .= "\n\t\t\t".'subsubel = document.createElement("option");'."\n";
+			$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.setAttribute("value", "'.$row['id'].'");'."\n";
+			$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.htmlspecialchars($row['title']).'"));'."\n";
+			$ttvars['vars']['news_list'] .= "\t\t\t".'subel.appendChild(subsubel);'."\n";
+		}
+
+		$ttvars['regx']['#\[support_news\](.*?)\[\/support_news\]#si'] = '$1';
+	} else {
+		$ttvars['regx']['#\[support_news\](.*?)\[\/support_news\]#si'] = '';
 	}
 
 	if ($id) {
@@ -157,10 +226,12 @@ function add() {
 		$ttvars['vars']['location_list'] = '';
 		foreach($var['location'] as $k => $v) {
 			$ttvars['vars']['location_list'] .= '<tr><td>'.($k).': </td><td align="left">';
-			$ttvars['vars']['location_list'] .= MakeDropDown(array(0 => $lang['ads_pro:around'], 1 => $lang['ads_pro:main'], 2 => $lang['ads_pro:not_main'], 3 => $lang['ads_pro:category'], 4 => $lang['ads_pro:static'], 5 => $lang['ads_pro:news']), 'location['.($k).'][mode]" onchange="AddSubBlok(this, '.($k).');', $v['mode']);
+			$ttvars['vars']['location_list'] .= MakeDropDown(array(0 => $lang['ads_pro:around'], 1 => $lang['ads_pro:main'], 2 => $lang['ads_pro:not_main'], 3 => $lang['ads_pro:category'], 4 => $lang['ads_pro:static'], 5 => $lang['ads_pro:plugins']), 'location['.($k).'][mode]" onchange="AddSubBlok(this, '.($k).');', $v['mode']);
 			if ($v['mode'] == 3) $ttvars['vars']['location_list'] .= MakeDropDown($t_category_list, 'location['.($k).'][id]', $v['id']);
 			if ($v['mode'] == 4) $ttvars['vars']['location_list'] .= MakeDropDown($t_static_list, 'location['.($k).'][id]', $v['id']);
 			if ($v['mode'] == 5) $ttvars['vars']['location_list'] .= MakeDropDown($t_news_list, 'location['.($k).'][id]', $v['id']);
+			if ($v['mode'] == 6) $ttvars['vars']['location_list'] .= MakeDropDown($t_plugin_list, 'location['.($k).'][id]', $v['id']);
+
 
 			$ttvars['vars']['location_list'] .= MakeDropDown(array(0 => $lang['ads_pro:view'], 1 => $lang['ads_pro:not_view']), 'location['.($k).'][view]', $v['view']);
 			$ttvars['vars']['location_list'] .= '</td></tr>';
