@@ -56,12 +56,15 @@ function main() {
 
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.general'), 'ads_pro', 1);
 	$s_news = pluginGetVariable('ads_pro', 'support_news');
+	$s_news_sort = pluginGetVariable('ads_pro', 'news_cfg_sort');
 
 	$ttvars = array();
 	$ttvars['vars'] = array (
-		'action'	=> $lang['ads_pro:button_general'],
-		's_news0'	=> ($s_news?'':' selected'),
-		's_news1'	=> ($s_news?' selected':''),
+		'action'		=> $lang['ads_pro:button_general'],
+		's_news0'		=> ($s_news?'':' selected'),
+		's_news1'		=> ($s_news?' selected':''),
+		's_news_sort0'	=> ($s_news_sort?'':' selected'),
+		's_news_sort1'	=> ($s_news_sort?' selected':''),
 	);
 
 	$tpl->template('conf.general', $tpath['conf.general']);
@@ -78,9 +81,21 @@ function main() {
 function main_submit() {
 	global $tpl, $lang;
 
+	$chg = 0;
+
 	$nv = intval($_REQUEST['support_news']);
 	if ($nv != pluginGetVariable('ads_pro', 'support_news')) {
 		pluginSetVariable('ads_pro', 'support_news', $nv);
+		$chg++;
+	}
+
+	$ns = intval($_REQUEST['news_cfg_sort']);
+	if ($ns != pluginGetVariable('ads_pro', 'news_cfg_sort')) {
+		pluginSetVariable('ads_pro', 'news_cfg_sort', $ns);
+		$chg++;
+	}
+
+	if ($chg) {
 		pluginsSaveConfig();
 	}
 
@@ -204,11 +219,11 @@ function add() {
 		$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.$lang['ads_pro:all'].'"));'."\n";
 		$ttvars['vars']['news_list'] .= "\t\t\t".'subel.appendChild(subsubel);'."\n";
 		$t_news_list = array(0 => $lang['ads_pro:all']);
-		foreach ($mysql->select("select id, title from ".prefix."_news") as $row) {
+		foreach ($mysql->select("select id, title from ".prefix."_news order by ".(pluginGetVariable('ads_pro', 'news_cfg_sort')?'title':'id')) as $row) {
 			$t_news_list[$row['id']] = $row['title'];
 			$ttvars['vars']['news_list'] .= "\n\t\t\t".'subsubel = document.createElement("option");'."\n";
 			$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.setAttribute("value", "'.$row['id'].'");'."\n";
-			$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.htmlspecialchars($row['title']).'"));'."\n";
+			$ttvars['vars']['news_list'] .= "\t\t\t".'subsubel.appendChild(document.createTextNode("'.htmlspecialchars((pluginGetVariable('ads_pro', 'news_cfg_sort')?'':($row['id'].' :: ')).$row['title']).'"));'."\n";
 			$ttvars['vars']['news_list'] .= "\t\t\t".'subel.appendChild(subsubel);'."\n";
 		}
 
