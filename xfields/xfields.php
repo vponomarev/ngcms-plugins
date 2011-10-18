@@ -772,12 +772,26 @@ class XFieldsNewsFilter extends NewsFilter {
 
 	// Show news call :: processor (call after all processing is finished and before show)
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
-		global $mysql, $config, $twigLoader, $twig, $PFILTERS;
+		global $mysql, $config, $twigLoader, $twig, $PFILTERS, $twig, $twigLoader;
 		// Try to load config. Stop processing if config was not loaded
 		if (($xf = xf_configLoad()) === false) return;
 
 		$fields = xf_decode($SQLnews['xfields']);
 		$content = $SQLnews['content'];
+
+		// Check if we have at least one `image` field and load TWIG template if any
+		if (is_array($xf['news']))
+			foreach ($xf['news'] as $k => $v) {
+				if ($v['type'] == 'images') {
+
+					// Yes, we have it!
+					$conversionParams = array();
+					$imagesTemplateFileName = 'plugins/xfields/tpl/news.show.images.tpl';
+					$twigLoader->setConversion($imagesTemplateFileName, $conversionConfig);
+					$xtImages = $twig->loadTemplate($imagesTemplateFileName);
+					break;
+				}
+			}
 
 		// Show extra fields if we have it
 		if (is_array($xf['news']))
@@ -789,14 +803,43 @@ class XFieldsNewsFilter extends NewsFilter {
 				if ($v['type'] == 'images') {
 					// Check if there're attached images
 					if ($xfk && count($ilist = explode(",", $xfk)) && count($imglist = $mysql->select("select * from ".prefix."_images where id in (".$xfk.")"))) {
-						// Yes, get list of images
-						$imgInfo = $imglist[0];
+						// Yes, show field block
 						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '$1';
 						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '';
 
-						$iname = ($imgInfo['storage']?$config['attach_url']:$config['files_url']).'/'.$imgInfo['folder'].'/'.$imgInfo['name'];
-						$tvars['vars']['[xvalue_'.$k.']'] = $iname;
+						// Scan for images and prepare data for template show
+						$tiVars = array(
+							'fieldName'		=> $k,
+							'fieldTitle'	=> secure_html($v['title']),
+							'fieldType'		=> $v['type'],
+							'entriesCount'	=> count($imglist),
+							'entries'		=> array(),
+						);
+						foreach ($imglist as $imgInfo) {
+							$tiEntry = array(
+								'url'			=> ($imgInfo['storage']?$config['attach_url']:$config['files_url']).'/'.$imgInfo['folder'].'/'.$imgInfo['name'],
+								'width'			=> $imgInfo['width'],
+								'height'		=> $imgInfo['height'],
+								'pwidth'		=> $imgInfo['p_width'],
+								'pheight'		=> $imgInfo['p_height'],
+								'name'			=> $imgInfo['name'],
+								'origName'		=> secure_html($imgInfo['origName']),
+								'description'	=> secure_html($imgInfo['description']),
 
+								'flags'		=> array(
+									'hasPreview'	=> $imgInfo['preview'],
+								),
+							);
+
+							if ($imgInfo['preview']) {
+								$tiEntry['purl'] = ($imgInfo['storage']?$config['attach_url']:$config['files_url']).'/'.$imgInfo['folder'].'/thumb/'.$imgInfo['name'];
+							}
+
+							$tiVars['entries'] []= $tiEntry;
+						}
+
+						// Render field value
+						$tvars['vars']['[xvalue_'.$k.']'] = $xtImages->render($tiVars);
 					} else {
 						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '';
 						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '$1';
