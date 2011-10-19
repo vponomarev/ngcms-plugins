@@ -51,6 +51,14 @@
 	*	pheight		- высота уменьшенной копии
 	*	purl		- URL уменьшенной копии
 
+* execStyle	- указывает режим вызова дл€ отображени€ данных. ѕринимаемые значени€:
+	//		* short		- short new display
+	//		* full		- full news display
+	//		* export	- export data [ for plugins or so on. No counters are updated ]
+	//		* export_body	- export ONLY BODY short+full [ for plugins or so on... ]
+	//		* export_short	- export ONLY BODY short      [ for plugins or so on... ]
+	//		* export_full	- export ONLY BODY full       [ for plugins or so on... ]
+* execPlugin	- указывает через какой плагин производитс€ отображение данных. ѕри вызове из €дра не заполн€етс€ (пусто).
 
 
 ѕример использовани€ плагина:
