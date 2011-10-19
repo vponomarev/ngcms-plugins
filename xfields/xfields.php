@@ -814,6 +814,8 @@ class XFieldsNewsFilter extends NewsFilter {
 							'fieldType'		=> $v['type'],
 							'entriesCount'	=> count($imglist),
 							'entries'		=> array(),
+							'execStyle'		=> $mode['style'],
+							'execPlugin'	=> $mode['plugin'],
 						);
 						foreach ($imglist as $imgInfo) {
 							$tiEntry = array(
@@ -843,7 +845,7 @@ class XFieldsNewsFilter extends NewsFilter {
 					} else {
 						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '';
 						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '$1';
-
+						$tvars['vars']['[xvalue_'.$k.']'] = '';
 					}
 				} else {
 					$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = ($xfk == "")?"":"$1";
