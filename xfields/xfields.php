@@ -823,7 +823,7 @@ class XFieldsNewsFilter extends NewsFilter {
 								'pwidth'		=> $imgInfo['p_width'],
 								'pheight'		=> $imgInfo['p_height'],
 								'name'			=> $imgInfo['name'],
-								'origName'		=> secure_html($imgInfo['origName']),
+								'origName'		=> secure_html($imgInfo['orig_name']),
 								'description'	=> secure_html($imgInfo['description']),
 
 								'flags'		=> array(
