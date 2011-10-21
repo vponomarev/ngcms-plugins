@@ -26,7 +26,7 @@ function jchat_show($lastEventID, $maxLoadedID, $commands = array()){
 	$bundle = array(array(), array());
 
 	// Check if chat work in WINDOW mode
-	$winMode = intval($_REQUEST['win']);
+	$winMode = intval(isset($_REQUEST['win'])?$_REQUEST['win']:0);
 
 	$conf_maxidle = intval(pluginGetVariable('jchat', ($winMode?'win.':'').'maxidle'));
 	if (isset($_REQUEST['idle']) && ($conf_maxidle > 0) && (intval($_REQUEST['idle']) > $conf_maxidle)) {
