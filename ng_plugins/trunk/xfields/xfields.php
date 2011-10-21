@@ -69,6 +69,11 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 						continue;
 					}
 
+					// Check if we try to overcome limits
+					$currCount = $mysql->record("select count(*) as cnt from ".prefix."_images where (linked_ds = ".intval($dsID).") and (linked_id = ".intval($newsID).") and (plugin = 'xfields') and (pidentity=".db_squote($id).")");
+					if ($currCount['cnt'] >= $data['maxCount'])
+						continue;
+
 					// Upload file
 					$up = $fmanager->file_upload(array('dsn' => true, 'linked_ds' => $dsID, 'linked_id' => $newsID, 'type' => 'image', 'http_var' => 'xfields_'.$id, 'http_varnum' => $iId, 'plugin' => 'xfields', 'pidentity' => $id));
 
@@ -106,14 +111,33 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 							$shadowThumb = $data['thumbShadow'];
 							if ($shadowThumb || $stampThumb) {
 								$stamp = $imanager->image_transform(
-								array('image' => $config['attach_dir'].$up[2].'/thumb/'.$up[1],
-								'stamp' => $stampThumb,
-								'stamp_transparency' => $config['wm_image_transition'],
-								'stamp_noerror' => true,
-								'shadow' => $shadowThumb,
-								'stampfile' => $stampFileName));
+									array(
+										'image' => $config['attach_dir'].$up[2].'/thumb/'.$up[1],
+										'stamp' => $stampThumb,
+										'stamp_transparency' => $config['wm_image_transition'],
+										'stamp_noerror' => true,
+										'shadow' => $shadowThumb,
+										'stampfile' => $stampFileName
+									)
+								);
+								//print "THUMB [STAMP/SHADOW = (".$stamp.")]<br/>";
 							}
 						}
+					}
+
+					if ($mkStamp || $mkShadow) {
+						$stamp = $imanager->image_transform(
+						array(
+							'image' => $config['attach_dir'].$up[2].'/'.$up[1],
+							'stamp' => $mkStamp,
+							'stamp_transparency' => $config['wm_image_transition'],
+							'stamp_noerror' => true,
+							'shadow' => $mkThumb,
+							'stampfile' => $stampFileName
+						)
+						);
+						//print "IMG [STAMP/SHADOW = (".var_export($stamp, true).")]<br/>";
+
 					}
 
 					// Now write info about image into DB
