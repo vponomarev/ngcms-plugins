@@ -16,7 +16,7 @@ LoadPluginLang('xfields', 'config');
 // XFields: Add/Modify attached files
 function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 	global $mysql, $config, $DSlist;
-
+	//print "<pre>".var_export($_REQUEST, true)."</pre>";
 	// Init file/image processing libraries
 	$fmanager = new file_managment();
 	$imanager = new image_managment();
@@ -33,6 +33,18 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 	if (!$xfGroupName) {
 		return false;
 	}
+
+	// Scan if user want to change description
+	foreach ($attachList as $iRec) {
+		//print "[A:".$iRec['id']."]";
+		if (isset($_REQUEST['xfields_image_dscr']) && is_array($_REQUEST['xfields_image_dscr']) && isset($_REQUEST['xfields_image_dscr'][$iRec['id']])) {
+			// We have this field in EDIT mode
+			if ($_REQUEST['xfields_image_dscr'][$iRec['id']] != $iRec['decsription']) {
+				$mysql->query("update ".prefix."_images set description = ".db_squote($_REQUEST['xfields_image_dscr'][$iRec['id']])." where id = ".intval($iRec['id']));
+			}
+		}
+	}
+
 
 	$xdata = array();
 	foreach ($xf[$xfGroupName] as $id => $data) {
@@ -57,7 +69,7 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 					}
 				}
 			}
-			// Check for attaches
+			// Check for new attached files
 			if (isset($_FILES['xfields_'.$id]) && isset($_FILES['xfields_'.$id]['name']) && is_array($_FILES['xfields_'.$id]['name'])) {
 				foreach ($_FILES['xfields_'.$id]['name'] as $iId => $iName) {
 					if ($_FILES['xfields_'.$id]['error'][$iId] > 0) {
@@ -75,7 +87,19 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 						continue;
 
 					// Upload file
-					$up = $fmanager->file_upload(array('dsn' => true, 'linked_ds' => $dsID, 'linked_id' => $newsID, 'type' => 'image', 'http_var' => 'xfields_'.$id, 'http_varnum' => $iId, 'plugin' => 'xfields', 'pidentity' => $id));
+					$up = $fmanager->file_upload(
+						array(
+							'dsn' => true,
+							'linked_ds'		=> $dsID,
+							'linked_id'		=> $newsID,
+							'type'			=> 'image',
+							'http_var'		=> 'xfields_'.$id,
+							'http_varnum'	=> $iId,
+							'plugin'		=> 'xfields',
+							'pidentity'		=> $id,
+							'description'	=> (isset($_REQUEST['xfields_image_adscr']) && is_array($_REQUEST['xfields_image_adscr']) && isset($_REQUEST['xfields_image_adscr'][$iId]))?($_REQUEST['xfields_image_adscr'][$iId]):'',
+						)
+					);
 
 					// Process upload error
 					if (!is_array($up)) {
@@ -511,6 +535,7 @@ class XFieldsNewsFilter extends NewsFilter {
 									'preview'	=> $irow['preview']?true:false,
 									'exist'		=> true,
 								),
+								'description'	=> secure_html($irow['description']),
 							);
 							$tVars['images'][] = $tImage;
 						}
