@@ -37,10 +37,10 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 	// Scan if user want to change description
 	foreach ($attachList as $iRec) {
 		//print "[A:".$iRec['id']."]";
-		if (isset($_REQUEST['xfields_image_dscr']) && is_array($_REQUEST['xfields_image_dscr']) && isset($_REQUEST['xfields_image_dscr'][$iRec['id']])) {
+		if (isset($_REQUEST['xfields_'.$iRec['pidentity'].'_dscr']) && is_array($_REQUEST['xfields_'.$iRec['pidentity'].'_dscr']) && isset($_REQUEST['xfields_'.$iRec['pidentity'].'_dscr'][$iRec['id']])) {
 			// We have this field in EDIT mode
-			if ($_REQUEST['xfields_image_dscr'][$iRec['id']] != $iRec['decsription']) {
-				$mysql->query("update ".prefix."_images set description = ".db_squote($_REQUEST['xfields_image_dscr'][$iRec['id']])." where id = ".intval($iRec['id']));
+			if ($_REQUEST['xfields_'.$iRec['pidentity'].'_dscr'][$iRec['id']] != $iRec['decsription']) {
+				$mysql->query("update ".prefix."_images set description = ".db_squote($_REQUEST['xfields_'.$iRec['pidentity'].'_dscr'][$iRec['id']])." where id = ".intval($iRec['id']));
 			}
 		}
 	}
@@ -97,7 +97,7 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 							'http_varnum'	=> $iId,
 							'plugin'		=> 'xfields',
 							'pidentity'		=> $id,
-							'description'	=> (isset($_REQUEST['xfields_image_adscr']) && is_array($_REQUEST['xfields_image_adscr']) && isset($_REQUEST['xfields_image_adscr'][$iId]))?($_REQUEST['xfields_image_adscr'][$iId]):'',
+							'description'	=> (isset($_REQUEST['xfields_'.$id.'_adscr']) && is_array($_REQUEST['xfields_'.$id.'_adscr']) && isset($_REQUEST['xfields_'.$id.'_adscr'][$iId]))?($_REQUEST['xfields_'.$id.'_adscr'][$iId]):'',
 						)
 					);
 
