@@ -121,7 +121,7 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 					if ($mkThumb) {
 						// Calculate sizes
 						$tsx = $data['thumbWidth'];
-						$txy = $data['thumbHeight'];
+						$tsy = $data['thumbHeight'];
 
 						if ($tsx < 10) {	$tsx = 150;		}
 						if ($tsy < 10) {	$tsy = 150;		}
