@@ -1,0 +1,1 @@
+<div style="margin: 0; padding: 0; font: italic bold 12px Arial, Helvetica, sans-serif; border: solid #EEE; border-width: 1px 0;">{location} {separator} {location_last}</div>
