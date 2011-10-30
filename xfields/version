@@ -4,7 +4,7 @@
 
 ID: xfields
 Name: Custom fields
-Version: 0.12
+Version: 0.13
 Acts: core, admin:mod:news, admin:mod:categories
 File: xfields.php
 Actions: rpc;lib/librpc.php
@@ -18,3 +18,4 @@ Author_URI: http://ngcms.ru
 Title: ƒополнительные пол€
 Information: ѕозвол€ет создавать пользовательские дополнительные пол€ в новост€х.
 Preinstall: no
+Library: common; lib/common.php
