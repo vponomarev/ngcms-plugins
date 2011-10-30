@@ -1,0 +1,20 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: basket
+Name: Shop basket
+Version: 0.01
+Acts: core, admin:mod:news, admin:mod:categories
+File: basket.php
+Actions: rpc;lib/librpc.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Description: Корзина заказа
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru
+Title: Корзина заказа
+Information: Позволяет откладывать товары в корзину
+Preinstall: no
