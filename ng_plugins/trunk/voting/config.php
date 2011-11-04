@@ -153,7 +153,7 @@ if ($_REQUEST['action'] == 'newvote') {
 
 		$ll = '';
 		$allcnt = 0;
-		foreach ($mysql->select("select * from ".prefix."_voteline where voteid=".$vrow['id']) as $row) {
+		foreach ($mysql->select("select * from ".prefix."_voteline where voteid=".$vrow['id']." order by id") as $row) {
 			$tvars['vars'] = array(
 					'name' => secure_html($row['name']),
 					'count' => $row['cnt'],

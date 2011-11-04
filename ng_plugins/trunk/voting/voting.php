@@ -98,7 +98,7 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 
 		$cnt = 0;
 		//print ">Query: 'select * from ".prefix."_voteline where voteid = ".$row['id']." and active=1'<br>\n";
-		$lrows = $mysql->select("select * from ".prefix."_voteline where voteid = ".$row['id']." and active=1");
+		$lrows = $mysql->select("select * from ".prefix."_voteline where voteid = ".$row['id']." and active=1 order by id");
 		foreach ($lrows as $lrow) { $cnt += $lrow['cnt']; }
 		if (!$cnt) { $cnt = 1; }
 
