@@ -209,18 +209,18 @@ function breadcrumbs(){
 			
 			if(count($catids) != 1 || pluginGetVariable('breadcrumbs', 'block_full_path')){ 
 				if ($CurrentHandler['params']['category'] != 'none') 
-					$location[] = GetCategories(implode(",", $catids), false);
+					$location[] = GetCategories(implode(",", $catids), false); 
 			}	
 			else {
 				$id = $catz[$params['category']]['parent'];
 				$location_tmp[] = GetCategories($catz[$params['category']]['id'], false);
 
-				do{
+				while($id != 0){
 					$location_tmp[] = GetCategories($id, false);
 					$id = $catz[$catmap[$id]]['parent'];
-				} while($id != 0);
+				}
 
-				$location = array_merge($location, array_reverse($location_tmp));
+				$location = array_merge($location, array_reverse($location_tmp)); 
 			}
 		}
 	}
