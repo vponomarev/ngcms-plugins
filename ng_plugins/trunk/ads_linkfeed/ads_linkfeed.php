@@ -20,7 +20,7 @@ function plugin_ads_linkfeed() {
 	// Check if plugin should be activated on this domain
 	if (trim(pluginGetVariable('ads_linkfeed', 'domains'))) {
 		$found = false;
-		$list = split("\n", pluginGetVariable('ads_linkfeed', 'domains'));
+		$list = explode("\n", pluginGetVariable('ads_linkfeed', 'domains'));
 		foreach ($list as $dn) {
 			if (trim($_SERVER['HTTP_HOST']) == trim($dn)) {
 				$found = true;
@@ -38,7 +38,7 @@ function plugin_ads_linkfeed() {
 	}
 
 	$blen = array();
-	foreach (split(",", pluginGetVariable('ads_linkfeed', 'blength')) as $br) {
+	foreach (explode(",", pluginGetVariable('ads_linkfeed', 'blength')) as $br) {
 		$blen []= intval(trim($br));
 	}
 
