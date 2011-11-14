@@ -20,7 +20,7 @@ function plugin_ads_sape() {
 	// Check if plugin should be activated on this domain
 	if (trim(pluginGetVariable('ads_sape', 'domains'))) {
 		$found = false;
-		$list = split("\n", pluginGetVariable('ads_sape', 'domains'));
+		$list = explode("\n", pluginGetVariable('ads_sape', 'domains'));
 		foreach ($list as $dn) {
 			if (trim($_SERVER['HTTP_HOST']) == trim($dn)) {
 				$found = true;
@@ -38,7 +38,7 @@ function plugin_ads_sape() {
 	}
 
 	$blen = array();
-	foreach (split(",", pluginGetVariable('ads_sape', 'blength')) as $br) {
+	foreach (explode(",", pluginGetVariable('ads_sape', 'blength')) as $br) {
 		$blen []= intval(trim($br));
 	}
 
