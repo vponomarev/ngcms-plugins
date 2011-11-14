@@ -4,7 +4,7 @@
 
 ID: ads_sape
 Name: SAPE.RU links display
-Version: 0.04
+Version: 0.05
 Acts: index_post
 File: ads_sape.php
 Config: config.php
