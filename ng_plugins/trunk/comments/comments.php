@@ -311,7 +311,7 @@ function plugin_comments_add() {
 			$tavars = array( 'vars' => array(
 				'title'		=> $lang['comments:err.redir.title'],
 				'message'	=> $template['vars']['mainblock'],
-				'link'		=> ($_REQUEST['referer'])?$_REQUEST['referer']:'/',
+				'link'		=> secure_html(($_REQUEST['referer'])?$_REQUEST['referer']:'/'),
 				'linktext'	=> $lang['comments:err.redir.url'],
 			));
 			$tpl -> template('redirect', tpl_site);
@@ -392,7 +392,7 @@ function plugin_comments_show(){
 
 		templateLoadVariables(true);
 		$navigations = $TemplateCache['site']['#variables']['navigation'];
-		$tcvars['vars']['more_comments'] = generatePagination($page, 1, $pageCount, 10, $paginationParams, $navigations);
+		$tcvars['vars']['more_comments'] = generatePagination($page, 1, $pageCount, 10, $paginationParams, $navigations, true);
 		$tcvars['regx']['#\[more_comments\](.*?)\[\/more_comments\]#is'] = '$1';
 	} else {
 		$tcvars['vars']['more_comments'] = '';
