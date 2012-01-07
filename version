@@ -1,0 +1,17 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: top_news
+Name: Ёто просто новости
+Version: 1.5
+Acts: index
+File: top_news.php
+Config: config.php
+Type: widget
+Description: ќтображение попул€рных новостей
+Author: Alexey N. Zhukov (Wolverine)
+Author_URI: http://digitalplace.ru/
+Title: ѕопул€рные новости
+Information: ќтображение информационного блока с наиболее часто посещаемыми/просматриваемыми новост€ми.
+Preinstall: no
