@@ -3,7 +3,8 @@
 /*
  * top_news for NextGeneration CMS (http://ngcms.ru/)
  * Copyright (C) 2010-2012 Alexey N. Zhukov (http://digitalplace.ru)
- * http://digitalplace.ru
+ * web:    http://digitalplace.ru
+ * e-mail: zhukov.alexei@gmail.com
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
