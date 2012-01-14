@@ -57,14 +57,18 @@ function main() {
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.general'), 'ads_pro', 1);
 	$s_news = pluginGetVariable('ads_pro', 'support_news');
 	$s_news_sort = pluginGetVariable('ads_pro', 'news_cfg_sort');
+	$s_multidisplay = pluginGetVariable('ads_pro', 'multidisplay_mode');
 
 	$ttvars = array();
 	$ttvars['vars'] = array (
-		'action'		=> $lang['ads_pro:button_general'],
-		's_news0'		=> ($s_news?'':' selected'),
-		's_news1'		=> ($s_news?' selected':''),
-		's_news_sort0'	=> ($s_news_sort?'':' selected'),
-		's_news_sort1'	=> ($s_news_sort?' selected':''),
+		'action'				=> $lang['ads_pro:button_general'],
+		's_news0'				=> ($s_news?'':' selected'),
+		's_news1'				=> ($s_news?' selected':''),
+		's_news_sort0'			=> ($s_news_sort?'':' selected'),
+		's_news_sort1'			=> ($s_news_sort?' selected':''),
+		'multidisplay_mode_0'	=> (($s_multidisplay == 0)?' selected':''),
+		'multidisplay_mode_1'	=> (($s_multidisplay == 1)?' selected':''),
+		'multidisplay_mode_2'	=> (($s_multidisplay == 2)?' selected':''),
 	);
 
 	$tpl->template('conf.general', $tpath['conf.general']);
@@ -92,6 +96,12 @@ function main_submit() {
 	$ns = intval($_REQUEST['news_cfg_sort']);
 	if ($ns != pluginGetVariable('ads_pro', 'news_cfg_sort')) {
 		pluginSetVariable('ads_pro', 'news_cfg_sort', $ns);
+		$chg++;
+	}
+
+	$nm = intval($_REQUEST['multidisplay_mode']);
+	if ($nm != pluginGetVariable('ads_pro', 'multidisplay_mode')) {
+		pluginSetVariable('ads_pro', 'multidisplay_mode', $nm);
 		$chg++;
 	}
 
