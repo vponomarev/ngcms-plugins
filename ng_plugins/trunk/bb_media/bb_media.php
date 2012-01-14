@@ -84,7 +84,6 @@ class BBmediaNewsfilter extends NewsFilter {
 
 					foreach ($kdefault as $kscan => $kvalue) {
 						if (isset($keys[$kscan]) && preg_match("#^(\d+)(\%){0,1}$#", $keys[$kscan], $m)) {
-							 print $kscan."[".$m[1]."]";
 							if (isset($m[2]) && ($m[2] == '%')) {
 								if (($m[1] > 5) && ($m[1] <= 100)) {
 									$keys[$kscan] = $m[1].$m[2];
