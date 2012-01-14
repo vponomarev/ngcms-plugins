@@ -3,153 +3,226 @@
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
 
-add_act('index_post', 'plugin_ads_pro');
-$plugin_ads_pro_data = array('stat' => false, 'stat_id' => null, 'news' => false, 'news_id' => null, 'cat' => false, 'cat_id' => null, 'main' => false);
+// Classes for traffic handling
+// - static pages
 class ADSProStaticFilter extends StaticFilter {
 	function showStatic($staticID, $SQLstatic, &$tvars, $mode) {
-		global $plugin_ads_pro_data;
-		$plugin_ads_pro_data['stat'] = true;
-		$plugin_ads_pro_data['stat_id'] = $staticID;
+		global $adsPRO_cache;
+		$adsPRO_cache['flag.static'] = true;
+		$adsPRO_cache['static.id'] = $staticID;
 		return 1;
 	}
 }
-register_filter('static','ads_pro', new ADSProStaticFilter);
 
+// - news
 class ADSProNewsFilter extends NewsFilter {
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
-		global $plugin_ads_pro_data;
+		global $adsPRO_cache;
 		if ($mode['style'] == 'full') {
-			$plugin_ads_pro_data['news'] = true;
-			$plugin_ads_pro_data['news_id'] = $newsID;
+			$adsPRO_cache['flag.news'] = true;
+			$adsPRO_cache['news.id'] = $newsID;
 		}
 		return 1;
 	}
 }
 
+// Initiate interceptors
+// - for common pages [ process page, generate output ]
+add_act('index_post', 'plugin_ads_pro');
+// - for extracting data from static pages
+register_filter('static','ads_pro', new ADSProStaticFilter);
+// - for extracting data from news
 if (pluginGetVariable('ads_pro', 'support_news')) {
-	register_filter('news', 'ads_pro', new ADSProNewsFilter);
+	register_filter('flag.news', 'ads_pro', new ADSProNewsFilter);
 }
 
+// Initiate global internal variable
+$adsPRO_cache = array(
+	'flag.static' => false,
+	'static.id' => null,
+	'flag.news' => false,
+	'news.id' => null,
+	'flag.category' => false,
+	'category.id' => null,
+	'flag.main' => false
+);
+
+
+// Main function of plugin
 function plugin_ads_pro($params) {
-	global $template, $config, $CurrentHandler, $catmap, $mysql, $plugin_ads_pro_data;
+	global $template, $config, $CurrentHandler, $catmap, $mysql, $adsPRO_cache;
 
-	$var = pluginGetVariable('ads_pro', 'data');
-	if (!is_array($var)) return;
+	$dataConfig = pluginGetVariable('ads_pro', 'data');
+	if (!is_array($dataConfig)) return;
 
-	if ($CurrentHandler['params'][0] == '/') $plugin_ads_pro_data['main'] = true;
+	if ($CurrentHandler['params'][0] == '/') $adsPRO_cache['flag.main'] = true;
 	if (isset($CurrentHandler['params']['catid'])) {
-		$plugin_ads_pro_data['cat'] = true;
-		$plugin_ads_pro_data['cat_id'] = $CurrentHandler['params']['catid'];
+		$adsPRO_cache['flag.category'] = true;
+		$adsPRO_cache['category.id'] = $CurrentHandler['params']['catid'];
 	} else if (isset($CurrentHandler['params']['category'])) {
-		$plugin_ads_pro_data['cat'] = true;
-		$plugin_ads_pro_data['cat_id'] = array_search($CurrentHandler['params']['category'], $catmap);
+		$adsPRO_cache['flag.category'] = true;
+		$adsPRO_cache['category.id'] = array_search($CurrentHandler['params']['category'], $catmap);
 	}
 	if($CurrentHandler['pluginName']) {
-		$plugin_ads_pro_data['plugin'] = true;
-		$plugin_ads_pro_data['plugin_id'] = $CurrentHandler['pluginName'];
+		$adsPRO_cache['flag.plugin'] = true;
+		$adsPRO_cache['plugin.id'] = $CurrentHandler['pluginName'];
 	}
 
+	// Indexing structure for block display
+	$blockDisplayList = array();
+
 	$t_time = time();
-	foreach ($var as $k => $v) {
-		if (!$k) continue;
-		if (!isset($template['vars'][$k])) $template['vars'][$k] = '';
-		foreach ($v as $kk => $vv) {
-			if (!$vv['state']) continue;
-			$if_view = true;
-			if ($vv['state'] == 2) {
-				if ($vv['start_view'] && $vv['start_view'] > $t_time)
-					$if_view = false;
-				if ($vv['end_view'] && $vv['end_view'] <= $t_time)
-					$if_view = false;
+	foreach ($dataConfig as $blockID => $blockRecords) {
+		if (!$blockID) continue;
+
+		// Initiate block output if it's not filled yet
+		if (!isset($template['vars'][$blockID])) $template['vars'][$blockID] = '';
+
+		// Scan all records of this block
+		foreach ($blockRecords as $blockIndexNum => $blockInfo) {
+			//print "<pre>ADS_PRO_DATA [$blockID][$blockIndexNum]:".var_export($blockInfo, true)."</pre>";
+
+			// Skip inactive blocks
+			if (!$blockInfo['state']) continue;
+
+			// By default block is visible
+			$blockIsVisible = true;
+
+			// Skip blocks if they're displayed `by time` & shouldn't be displayed now
+			if ($blockInfo['state'] == 2) {
+				if ($blockInfo['start_view'] && $blockInfo['start_view'] > $t_time)
+					$blockIsVisible = false;
+				if ($blockInfo['end_view'] && $blockInfo['end_view'] <= $t_time)
+					$blockIsVisible = false;
 			}
-			if (!$if_view) continue;
-			if (is_array($vv['location'])) {
-				$if_view = false;
+			// Skip block if it's marked as `not to be displayed`
+			if (!$blockIsVisible) continue;
+
+			// Process location flags [if configured for specific block]
+			if (is_array($blockInfo['location'])) {
+				$blockIsVisible = false;
 				$if_break = false;
-				foreach ($vv['location'] as $kkk => $vvv) {
-					switch ($vvv['mode']) {
+				foreach ($blockInfo['location'] as $locRecord) {
+					// Scan visibility parameters
+					// view == 0 - display
+					// view == 1 - do not display
+					switch ($locRecord['mode']) {
+						// Everywhere
 						case 0:
-							if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+							if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
 							break;
+						// Main page
 						case 1:
-							if ($plugin_ads_pro_data['main']) {
-								if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+							if ($adsPRO_cache['flag.main']) {
+								if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
 							}
 							break;
+						// Everywhere EXCEPT main page
 						case 2:
-							if (!$plugin_ads_pro_data['main']) {
-								if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+							if (!$adsPRO_cache['flag.main']) {
+								if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
 							}
 							break;
+						// In category
 						case 3:
-							if ($plugin_ads_pro_data['cat']) {
-								if (!$vvv['id']) {
-									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
-								} else if ($plugin_ads_pro_data['cat_id'] == $vvv['id']) {
-									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+							if ($adsPRO_cache['flag.category']) {
+								if (!$locRecord['id']) {
+									if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
+								} else if ($adsPRO_cache['category.id'] == $locRecord['id']) {
+									if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
 								}
 							}
 							break;
+						// In static page
 						case 4:
-							if ($plugin_ads_pro_data['stat']) {
-								if (!$vvv['id']) {
-									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
-								} else if ($plugin_ads_pro_data['stat_id'] == $vvv['id']) {
-									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+							if ($adsPRO_cache['flag.static']) {
+								if (!$locRecord['id']) {
+									if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
+								} else if ($adsPRO_cache['static.id'] == $locRecord['id']) {
+									if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
 								}
 							}
 							break;
+						// In news page
 						case 5:
-							if ($plugin_ads_pro_data['news']) {
-								if (!$vvv['id']) {
-									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
-								} else if ($plugin_ads_pro_data['news_id'] == $vvv['id']) {
-									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+							if ($adsPRO_cache['flag.news']) {
+								if (!$locRecord['id']) {
+									if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
+								} else if ($adsPRO_cache['news.id'] == $locRecord['id']) {
+									if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
 								}
 							}
 							break;
+						// In plugin
 						case 6:
-							if ($plugin_ads_pro_data['plugin']) {
-								if (!$vvv['id']) {
-									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
-								} else if ($plugin_ads_pro_data['plugin_id'] == $vvv['id']) {
-									if ($vvv['view']) {$if_view = false; $if_break = true;} else $if_view = true;
+							if ($adsPRO_cache['flag.plugin']) {
+								if (!$locRecord['id']) {
+									if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
+								} else if ($adsPRO_cache['plugin.id'] == $locRecord['id']) {
+									if ($locRecord['view']) {$blockIsVisible = false; $if_break = true;} else $blockIsVisible = true;
 								}
 							}
 							break;
 					}
 					if ($if_break) break;
 				}
-				if (!$if_view) continue;
+				if (!$blockIsVisible) continue;
 			}
 
-			if ($vv['type'] != 1)
+			// Fine, block is visible, add it into display list
+			$blockDisplayList[$blockID] []= $blockIndexNum;
+		}
+	}
+
+	//print "<pre>ADS INDEXING:".var_export($blockDisplayList, true)."</pre>";
+
+	// Scan blocks, marked to be displayed
+	foreach ($blockDisplayList as $blockID => $blockRecList) {
+		// Process multidisplay mode
+		if ((count($blockRecList) > 1) && (($mdm = pluginGetVariable('ads_pro', 'multidisplay_mode')) > 0)) {
+			// - First active
+			if ($mdm == 1) {
+				$blockRecList = array($blockRecList[0]);
+			}
+			// - Random
+			if ($mdm == 2) {
+				$blockRecList = array($blockRecList[array_rand($blockRecList)]);
+			}
+		}
+
+
+		foreach ($blockRecList as $blockIndexNum) {
+			// Retrieve block info
+			$blockInfo = $dataConfig[$blockID][$blockIndexNum];
+			//print "<pre>BID:".var_export($blockInfo, true)."</pre>";
+
+			// Cache non-PHP ads blocks
+			if ($blockInfo['type'] != 1)
 			{
-				$cacheFileName = md5('ads_pro'.$kk.$vv['type']).'.txt';
+				$cacheFileName = md5('ads_pro'.$blockID.'.'.$blockIndexNum.'.'.$blockInfo['type']).'.txt';
 				$cacheData = cacheRetrieveFile($cacheFileName, 30000, 'ads_pro');
 				if ($cacheData != false) {
-					$template['vars'][$k] .= $cacheData;
+					$template['vars'][$blockID] .= $cacheData;
 					continue;
 				}
 				$description = '';
-				if (is_array($row = $mysql->record('select ads_blok from '.prefix.'_ads_pro where id='.db_squote($kk)))) {
-					$description = $vv['type']?nl2br(htmlspecialchars($row['ads_blok'])):$row['ads_blok'];
+				if (is_array($row = $mysql->record('select ads_blok from '.prefix.'_ads_pro where id='.db_squote($blockIndexNum)))) {
+					$description = $blockInfo['type']?nl2br(htmlspecialchars($row['ads_blok'])):$row['ads_blok'];
 				}
-				$template['vars'][$k] .= $description;
+				$template['vars'][$blockID] .= $description;
 				cacheStoreFile($cacheFileName, $description, 'ads_pro');
 			} else {
 				$description = '';
-				if (is_array($row = $mysql->record('select ads_blok from '.prefix.'_ads_pro where id='.db_squote($kk)))) {
+				if (is_array($row = $mysql->record('select ads_blok from '.prefix.'_ads_pro where id='.db_squote($blockIndexNum)))) {
 					$description = $row['ads_blok'];
 				}
 				ob_start();
 				@eval($description);
 				$out2 = ob_get_contents();
 				ob_end_clean();
-				$template['vars'][$k] .= $out2;
+				$template['vars'][$blockID] .= $out2;
 			}
+
 		}
-		if ($if_brek)
-			break;
 	}
 }
