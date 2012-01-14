@@ -52,7 +52,7 @@ class BBmediaNewsfilter extends NewsFilter {
 						// No params to scan
 						$keys = array();
 					}
-					                             
+
 					// Return an error if BB code is bad
 					if (!is_array($keys)) {
 						array_push($rdest,'[INVALID MEDIA BB CODE]');
@@ -63,8 +63,8 @@ class BBmediaNewsfilter extends NewsFilter {
 					$keys['file'] = ((!isset($keys['file']) || !$keys['file'])?$alt:$keys['file']);
 
 					// Let's extract file extension and try to retrieve file type
-					$fileExt = substr(strrchr($keys['file'], "."), 1);
-					switch (strtolower($fileExt)) {
+					$fileExt = strtolower(substr(strrchr($keys['file'], "."), 1));
+					switch ($fileExt) {
 						case 'mp3':
 						case 'aac':
 							$keys['type'] = 'sound';
@@ -72,11 +72,36 @@ class BBmediaNewsfilter extends NewsFilter {
 						case 'mp4':
 							$keys['type'] = 'video';
 							break;
+						case 'pdf':
+							$keys['type'] = 'pdf';
 					};
 
 					// Check required keys
-					$keys['width']  = (isset($keys['width']) && (intval($keys['width']) > 10))?intval($keys['width']):'320';
-					$keys['height'] = (isset($keys['height']) && (intval($keys['height']) > 10))?intval($keys['height']):(($keys['type'] == 'sound')?'20':'200');
+					$kdefault = array(
+						'width'		=> array('sound' => 320, 'video' => 320, 'pdf' => '100%'),
+						'height'	=> array('sound' => 20, 'video' => 200, 'pdf' => '350')
+					);
+
+					foreach ($kdefault as $kscan => $kvalue) {
+						if (isset($keys[$kscan]) && preg_match("#^(\d+)(\%){0,1}$#", $keys[$kscan], $m)) {
+							 print $kscan."[".$m[1]."]";
+							if (isset($m[2]) && ($m[2] == '%')) {
+								if (($m[1] > 5) && ($m[1] <= 100)) {
+									$keys[$kscan] = $m[1].$m[2];
+								} else {
+									$keys[$kscan] = $kvalue[$keys['type']];
+								}
+							} else {
+								if (($m[1] > 10) && ($m[1] < 2048)) {
+									$keys[$kscan] = $m[1];
+								} else {
+									$keys[$kscan] = $kvalue[$keys['type']];
+								}
+							}
+						} else {
+							$keys[$kscan] = $kvalue[$keys['type']];
+						}
+					}
 
 					// Return an error if BB code is bad
 					if (!trim($keys['file'])) {
@@ -90,14 +115,17 @@ class BBmediaNewsfilter extends NewsFilter {
 						switch ($kn) {
 							case 'width':
 							case 'height':
-								$outkeys [] = $kn.'="'.intval($kv).'"';
+								$outkeys [] = $kn.'="'.$kv.'"';
 								break;
 
 						}
 					}
 					// Fill an output replacing array
-					
-					array_push($rdest, '<embed type="application/x-shockwave-flash" src="'.$config['admin_url'].'/plugins/bb_media/swf/player.swf" quality="high" allowfullscreen="true" allowscriptaccess="always" flashvars="file='.urlencode($keys['file']).'" '.(implode(" ", $outkeys)).' />');
+					if ($fileExt == 'pdf') {
+						array_push($rdest, '<object type="application/pdf" data="'.$keys['file'].'" '.(implode(" ", $outkeys)).'>alt: <a href="'.$keys['file'].'">PDF document</a></object>');
+					} else {
+						array_push($rdest, '<embed type="application/x-shockwave-flash" src="'.$config['admin_url'].'/plugins/bb_media/swf/player.swf" quality="high" allowfullscreen="true" allowscriptaccess="always" flashvars="file='.urlencode($keys['file']).'" '.(implode(" ", $outkeys)).' />');
+					}
 				}
 				$tvars['vars'][$varKeyName] = str_replace($rsrc, $rdest, $tvars['vars'][$varKeyName]);
 			}
