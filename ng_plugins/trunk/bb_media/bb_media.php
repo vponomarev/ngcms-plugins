@@ -119,11 +119,23 @@ class BBmediaNewsfilter extends NewsFilter {
 
 						}
 					}
+
+					// Prepare output keys for `flashvars`
+					$outfkeys = array();
+					// - main file
+					$outfkeys []= 'file='.urlencode($keys['file']);
+					// - preview image
+					if (isset($keys['preview']) && preg_match("#^http\:\/\/.*?\.(png|jpg)$#i", $keys['preview'], $m)) {
+						$outfkeys []= 'image='.urlencode($keys['preview']);
+					}
+
+
 					// Fill an output replacing array
 					if ($fileExt == 'pdf') {
 						array_push($rdest, '<object type="application/pdf" data="'.$keys['file'].'" '.(implode(" ", $outkeys)).'>alt: <a href="'.$keys['file'].'">PDF document</a></object>');
 					} else {
-						array_push($rdest, '<embed type="application/x-shockwave-flash" src="'.$config['admin_url'].'/plugins/bb_media/swf/player.swf" quality="high" allowfullscreen="true" allowscriptaccess="always" flashvars="file='.urlencode($keys['file']).'" '.(implode(" ", $outkeys)).' />');
+//						array_push($rdest, '<embed type="application/x-shockwave-flash" src="'.$config['admin_url'].'/plugins/bb_media/swf/player.swf" quality="high" allowfullscreen="true" allowscriptaccess="always" flashvars="file='.urlencode($keys['file']).'" '.(implode(" ", $outkeys)).' />');
+						array_push($rdest, '<embed type="application/x-shockwave-flash" src="'.$config['admin_url'].'/plugins/bb_media/swf/player.swf" quality="high" allowfullscreen="true" allowscriptaccess="always" flashvars="'.implode('&amp;', $outfkeys).'" '.(implode(" ", $outkeys)).' />');
 					}
 				}
 				$tvars['vars'][$varKeyName] = str_replace($rsrc, $rdest, $tvars['vars'][$varKeyName]);
