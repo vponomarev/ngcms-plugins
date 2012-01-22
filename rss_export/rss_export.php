@@ -17,8 +17,7 @@ function plugin_rss_export_category($params) {
 }
 
 function plugin_rss_export_generate($catname = ''){
-   	global $lang, $PFILTERS;
-	global $template, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $mysql, $catz;
+   	global $lang, $PFILTERS, $template, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $mysql, $catz;
 
 	// Disable executing of `index` action (widget plugins and so on..)
 	actionDisable('index');
@@ -26,6 +25,12 @@ function plugin_rss_export_generate($catname = ''){
 	// Suppress templates
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 1;
+
+	// Break if category specified & doesn't exist
+	if (($catname != '') && (!isset($catz[$catname]))) {
+		header('HTTP/1.1 404 Not found');
+		exit;
+	}
 
 	// Generate header
 	$xcat = (($catname != '') && isset($catz[$catname]))?$catz[$catname]:'';
@@ -63,8 +68,8 @@ function plugin_rss_export_generate($catname = ''){
 		$hide_template = @file_get_contents(root.'plugins/rss_export/templates/hide.tpl');
 		$hide_template = str_replace('{text}',$lang['rexport_hide'],$hide_template);
 	}
-	
-	
+
+
 	foreach ($mysql->select($query." limit $limit") as $row) {
 	        // Make standart system call in 'export' mode
 	        $export_mode = 'export_body';
