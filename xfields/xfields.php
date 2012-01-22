@@ -822,7 +822,7 @@ class XFieldsNewsFilter extends NewsFilter {
 
 	// Show news call :: processor (call after all processing is finished and before show)
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
-		global $mysql, $config, $twigLoader, $twig, $PFILTERS, $twig, $twigLoader;
+		global $mysql, $config, $twigLoader, $twig, $PFILTERS, $twig, $twigLoader, $parse;
 		// Try to load config. Stop processing if config was not loaded
 		if (($xf = xf_configLoad()) === false) return;
 
@@ -852,8 +852,30 @@ class XFieldsNewsFilter extends NewsFilter {
 				// Our behaviour depends on field type
 				if ($v['type'] == 'images') {
 					// Check if there're attached images
-					if ($xfk && count($ilist = explode(",", $xfk)) && count($imglist = $mysql->select("select * from ".prefix."_images where id in (".$xfk.")"))) {
-						// Yes, show field block
+					$imglist = array();
+
+					if ($xfk && count($ilist = explode(",", $xfk))) {
+						// Check if we have already preloaded (by engine) images
+						$ilk = array();
+						foreach ($ilist as $irec) {
+							if (isset($mode['linkedImages']['data'][$irec])) {
+								$imglist []= $mode['linkedImages']['data'][$irec];
+							} else {
+								$ilk []= $irec;
+							}
+						}
+
+						// Check if we have some not loaded news
+						if (count($ilk) && count($timglist = $mysql->select("select * from ".prefix."_images where id in (".$xfk.")"))) {
+							$imglist = array_merge($imglist, $timglist);
+							unset($timglist);
+						}
+
+					}
+
+//					if ($xfk && count($ilist = explode(",", $xfk)) && count($imglist = $mysql->select("select * from ".prefix."_images where id in (".$xfk.")"))) {
+					if (count($imglist)) {
+					// Yes, show field block
 						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '$1';
 						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '';
 
@@ -900,6 +922,12 @@ class XFieldsNewsFilter extends NewsFilter {
 				} else {
 					$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = ($xfk == "")?"":"$1";
 					$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = ($xfk == "")?"$1":"";
+
+					// Parse BB code [if required]
+					if ($config['use_bbcodes'] && $v['bb_support']) {
+						$xfk = $parse-> bbcodes($xfk);
+					}
+
 					$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':'')):$xfk;
 				}
 			}
