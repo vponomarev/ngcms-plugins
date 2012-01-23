@@ -4,7 +4,19 @@
 if (!defined('NGCMS')) die ('HAL');
 
 add_act('index', 'plugin_voting');
-register_plugin_page('voting','','plugin_voting_screen',0);
+register_plugin_page('voting','panel','plugin_voting_panel',0);
+register_plugin_page('voting','','plugin_voting_page',0);
+
+loadPluginLang('voting', 'main', '', '', ':');
+
+function plugin_voting_panel() {
+	plugin_voting_screen(true);
+}
+
+function plugin_voting_page() {
+	plugin_voting_screen(false);
+}
+
 
 function plugin_voting() {
 	global $mysql, $tpl, $template, $REQUEST_URI;
@@ -34,15 +46,15 @@ function plugin_voting() {
 //  4. rand - rand flag (in show one mode)
 //	5. votedList - list of voted (in show list mode)
 function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = array()) {
-	global $tpl, $mysql, $username, $userROW, $ip, $REQUEST_URI, $TemplateCache, $SYSTEM_FLAGS;
+	global $tpl, $mysql, $username, $userROW, $ip, $REQUEST_URI, $TemplateCache, $SYSTEM_FLAGS, $lang;
 
 	$result = '';
-	$post_url = generateLink('core', 'plugin', array('plugin' => 'voting'), array());
 
 	$tpath = locatePluginTemplates(array('shls_vote', 'edls_vote', 'shls_vline', 'edls_vline', 'lshdr', 'sh_vote', 'ed_vote', 'sh_vline', 'ed_vline'), 'voting', pluginGetVariable('voting', 'localsource'), $tpl_skin);
 	// Preload templates
 	if ($mode<4) {
-	 	$tpl->template('shls_vote',$tpath['shls_vote']);
+		$post_url = generateLink('core', 'plugin', array('plugin' => 'voting'), array());
+		$tpl->template('shls_vote',$tpath['shls_vote']);
 	 	$tpl->template('edls_vote',$tpath['edls_vote']);
 	 	$tpl->template('shls_vline',$tpath['shls_vline']);
 	 	$tpl->template('edls_vline',$tpath['edls_vline']);
@@ -50,7 +62,8 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 	 	$tpl->vars('lshdr',array('vars' => array('home' => home, 'post_url' => $post_url)));
 	 	$result = $tpl->show('lshdr');
 	} else {
-	 	$tpl->template('sh_vote',$tpath['sh_vote']);
+		$post_url = generateLink('core', 'plugin', array('plugin' => 'voting','handler' => 'panel'), array());
+		$tpl->template('sh_vote',$tpath['sh_vote']);
 	 	$tpl->template('ed_vote',$tpath['ed_vote']);
 	 	$tpl->template('sh_vline',$tpath['sh_vline']);
 	 	$tpl->template('ed_vline',$tpath['ed_vline']);
@@ -162,67 +175,83 @@ function plugin_showvote($tpl_skin, $mode, $voteid = 0, $rand = 0, $votedList = 
 
 
 	if (!$vCount) {
-		$result = 'No votings found';
+		$result = $lang['voting:msg.nofound'];
 	}
 	return $result;
 }
 
 //
 //
-function plugin_voting_screen() {
- global $mysql, $tpl, $template, $SUPRESS_TEMPLATE_SHOW, $lang, $userROW, $ip;
+function plugin_voting_screen($flagPanel = false) {
+	global $mysql, $tpl, $template, $SUPRESS_TEMPLATE_SHOW, $lang, $userROW, $ip;
 
- @header('Content-type: text/html; charset="windows-1251"');
- $votedList = explode(",",$_COOKIE['ngcms_voting']);
+	// Determine calling mode
+	$is_ajax = (($_GET['style'] == 'ajax')||($_POST['style'] == 'ajax'))?1:0;
 
- $skin = pluginGetVariable('voting','skin');
- if ((!is_dir(extras_dir.'/voting/tpl/skins/'.$skin))||(!$skin)) { $skin = 'basic'; }
+	// Add own header for AJAX calls
+	if ($is_ajax) {
+		@header('Content-type: text/html; charset="windows-1251"');
+	}
 
- $is_ajax = (($_GET['style'] == 'ajax')||($_POST['style'] == 'ajax'))?1:0;
- if (($_REQUEST['mode'] == 'vote') && ($choice = intval($_REQUEST['choice']))) {
-    // VOTE REQUEST
-	if (($row = $mysql->record("select * from ".prefix."_voteline where id = $choice"))&&
-	    ($vrow = $mysql->record("select * from ".prefix."_vote where id = ".$row['voteid']))) {
-		// Line was found
-		// Check for dupes
-		$dup = 0;
-		if ($secure = pluginGetVariable('voting','secure')) {
-			$condition = (is_array($userROW))?"userid = ".$userROW['id']:"ip=".db_squote($ip);
-			if ($mysql->record("select * from ".prefix."_votestat where voteid = ".$vrow['id']." and $condition limit 1")) {
-				$dup = 1;
-			}
-		} else { $dup = array_key_exists($row['id'], $votedList); }
+	$votedList = explode(",",$_COOKIE['ngcms_voting']);
 
-		if ($dup) {
-			// Inform that vote is already accepted
-			$template['vars']['mainblock'] = 'Vote was already accepted';
-			if ($is_ajax) { $SUPRESS_TEMPLATE_SHOW = 1; }
-		} else {
-			$mysql->query("update ".prefix."_voteline set cnt=cnt+1 where id = ".$row['id']);
-			// DONE. Vote accepted
+	// Get current skin
+	$skin = pluginGetVariable('voting','skin');
+	if ((!is_dir(extras_dir.'/voting/tpl/skins/'.$skin))||(!$skin)) { $skin = 'basic'; }
 
-			if ($secure) {
-				$query = "insert into ".prefix."_votestat (userid, voteid, voteline, ip, dt) values (".(is_array($userROW)?$userROW['id']:'0').",".$vrow['id'].",".$row['id'].", '$ip', now() )";
-				$mysql->query($query);
-			} else {
-				if (!array_key_exists($vrow['id'],$votedList)) {
-					array_push($votedList,$vrow['id']);
-					@setcookie('ngcms_voting', implode(",",$votedList), time() + 3600 * 24 * 365, '/');
+	// ========================================
+	// MODE: Vote request
+	if (($_REQUEST['mode'] == 'vote') && ($choice = intval($_REQUEST['choice']))) {
+	    // Search for poll and poll line
+		if (($row = $mysql->record("select * from ".prefix."_voteline where id = $choice")) && ($vrow = $mysql->record("select * from ".prefix."_vote where id = ".$row['voteid']))) {
+			// Line was found
+			// Check is user already took part in this poll (according to security model)
+			$dup = 0;
+			if ($secure = pluginGetVariable('voting','secure')) {
+				$condition = (is_array($userROW))?"userid = ".$userROW['id']:"ip=".db_squote($ip);
+				if ($mysql->record("select * from ".prefix."_votestat where voteid = ".$vrow['id']." and $condition limit 1")) {
+					$dup = 1;
 				}
+			} else { $dup = array_key_exists($row['id'], $votedList); }
+
+			// Report an error if user tries to take part twice
+			if ($dup) {
+				// Inform that vote is already accepted
+				$template['vars']['mainblock'] = $lang['voting:msg.already'];
+				if ($is_ajax) { $SUPRESS_TEMPLATE_SHOW = 1; }
+			} else {
+				$mysql->query("update ".prefix."_voteline set cnt=cnt+1 where id = ".$row['id']);
+				// DONE. Vote accepted
+
+				if ($secure) {
+					$query = "insert into ".prefix."_votestat (userid, voteid, voteline, ip, dt) values (".(is_array($userROW)?$userROW['id']:'0').",".$vrow['id'].",".$row['id'].", '$ip', now() )";
+					$mysql->query($query);
+				} else {
+					if (!array_key_exists($vrow['id'],$votedList)) {
+						array_push($votedList,$vrow['id']);
+						@setcookie('ngcms_voting', implode(",",$votedList), time() + 3600 * 24 * 365, '/');
+					}
+				}
+
+				// Check returning mode for template
+				$retMode = 3;
+				if ($is_ajax && $flagPanel) {
+					$retMode = 6;
+				}
+
+				$template['vars']['mainblock'] = plugin_showvote($skin,$retMode,$vrow['id']);
+				if ($is_ajax) { $SUPRESS_TEMPLATE_SHOW = 1; }
 			}
-			$template['vars']['mainblock'] = plugin_showvote($skin,$_REQUEST['list']?3:6,$vrow['id']);
+		} else {
+			// No such vote line
+			$template['vars']['mainblock'] = $lang['voting:msg.norec'];
 			if ($is_ajax) { $SUPRESS_TEMPLATE_SHOW = 1; }
 		}
-	} else {
-		// No such vote line
-		$template['vars']['mainblock'] = 'No such voteline';
+	 } else if (($_REQUEST['mode'] == 'show') && ($voteid = intval($_REQUEST['voteid']))) {
+		$template['vars']['mainblock'] = plugin_showvote($skin, $flagPanel?6:3, $voteid);
 		if ($is_ajax) { $SUPRESS_TEMPLATE_SHOW = 1; }
-	}
- } else if (($_REQUEST['mode'] == 'show') && ($voteid = intval($_REQUEST['voteid']))) {
-	$template['vars']['mainblock'] = plugin_showvote($skin, 6, $voteid);
-	if ($is_ajax) { $SUPRESS_TEMPLATE_SHOW = 1; }
- } else {
- 	// SHOW REQUEST
-	$template['vars']['mainblock'] = plugin_showvote($skin, 0, 0, 0, $votedList);
- }
+	 } else {
+	 	// SHOW REQUEST
+		$template['vars']['mainblock'] = plugin_showvote($skin, 0, 0, 0, $votedList);
+	 }
 }
