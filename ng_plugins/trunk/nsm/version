@@ -1,0 +1,16 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: nsm
+Name: News OnSite Manager
+Version: 0.01
+Acts: ppages
+File: nsm.php
+Config: config.php
+Type: plugin
+Title: Правка новостей без админки
+Description: Позволяет добавлять/редактировать новости со страниц сайта, не заходя в админку
+Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
+preinstall: no
