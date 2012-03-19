@@ -15,8 +15,12 @@ class TagsNewsfilter extends NewsFilter {
 		return 1;
 	}
 	function addNews(&$tvars, &$SQL) {
+		if (!isset($SQL['tags']))
+			return 1;
+
 		// Scan tags, delete dups
 		$tags = array();
+
 		foreach (explode(",", $_REQUEST['tags']) as $tag) {
 			$tag = trim($tag);
 			if (!strlen($tag)) continue;
@@ -34,6 +38,9 @@ class TagsNewsfilter extends NewsFilter {
 
 		// Make activities only in case when news is marked as 'published'
 		if (!$SQL['approve'])
+			return 1;
+
+		if (!isset($SQL['tags']))
 			return 1;
 
 		// New Tags
@@ -72,6 +79,13 @@ class TagsNewsfilter extends NewsFilter {
 	function editNews($newsID, $SQLold, &$SQLnew, &$tvars) {
 		// Scan tags, delete dups
 		$tags = array();
+
+		// Activate only if tags parameter is passed
+		if (!isset($_REQUEST['tags'])) {
+			$SQLnew['tags']	= $SQLold['tags'];
+			return 1;
+		}
+
 		foreach (explode(",", $_REQUEST['tags']) as $tag) {
 			$tag = trim($tag);
 			if (!strlen($tag)) continue;
