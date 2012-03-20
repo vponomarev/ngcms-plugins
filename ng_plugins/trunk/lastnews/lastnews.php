@@ -106,10 +106,21 @@ function plugin_lastnewsGenerator($orderby = '', $categories = array(), $overrid
 		if (pluginGetVariable('lastnews', 'pcall') && is_array($PFILTERS['news']))
 				foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($row['id'], $row, $callingParams); }
 
+		$alink = checkLinkAvailable('uprofile', 'show')?
+				generateLink('uprofile', 'show', array('name' => $row['author'], 'id' => $row['author_id'])):
+				generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('name' => $row['author'], 'id' => $row['author_id']));
+
+
 		$tvars['vars'] = array(
 			'link'		=>	newsGenerateLink($row),
-			'views'		=>	$row['views']
+			'views'		=>	$row['views'],
+			'author'	=> 	"<a href=\"".$alink."\" target=\"_blank\">".$row['author']."</a>",
+			'author_link'	=>	$alink,
+			'author_name'	=>	$row['author'],
+			'category'	=>	@GetCategories($row['catid']),
+			'news-id'	=>	$row['id'],
 		);
+
 
 		// Show edit/detele news buttons
 		if (is_array($userROW) && ($row['author_id'] == $userROW['id'] || $userROW['status'] == "1" || $userROW['status'] == "2")) {
