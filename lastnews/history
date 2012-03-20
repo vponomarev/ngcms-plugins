@@ -1,3 +1,6 @@
+[0.15][2012-03-21]
++ В шаблоне entries.tpl добавлена поддержка переменных: {author}, {author_link}, {author_name}, {category}, {news-id}
+
 [0.14][2011-02-02]
 + В шаблоне entries.tpl добавлена поддержка блока [edit-news]..[/edit_news]
 
