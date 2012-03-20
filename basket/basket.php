@@ -136,7 +136,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 			}
 
 			$rowVars['flags']['basket_allow'] = true;
-			$rowVars['basket_link'] = generatePluginLink('basket', 'add', array('ds' => '1', 'id' => $rowData['id']), array(), false, true);
+			$rowVars['basket_link'] = generatePluginLink('basket', 'add', array('ds' => $DSlist['#xfields:tdata'], 'id' => $rowData['id']), array(), false, true);
 
 			// Строку можно добавлять в корзину
 			//print "rowData <pre>(".var_export($rowVars, true).")</pre><br/>\n";
@@ -185,7 +185,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 
 			// Выводим шаблон
 			$xt = $twig->loadTemplate('plugins/basket/lfeedback.tpl');
-			$tvars['vars']['header'] .= $xt->render($tVars);
+			$tvars['header'] .= $xt->render($tVars);
 		}
 
 
@@ -247,9 +247,37 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 	register_filter('xfields','basket', new BasketXFieldsFilter);
 	register_filter('feedback','basket', new BasketFeedbackFilter);
 } else {
-	print "Basket error: XFields and Feedback plugins must be activated";
+	//print "Basket error: XFields and Feedback plugins must be activated";
 }
 
+// Perform replacements while showing news
+class BasketNewsFilter extends NewsFilter {
+	// Show news call :: processor (call after all processing is finished and before show)
+	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+		global $DSlist;
+
+		// Определяем - работаем ли мы внутри строк таблиц
+		if (!pluginGetVariable('basket', 'news_flag')) {
+			$tvars['regx']['#\[basket\](.*?)\[\/basket\]#is'] = '';
+			return;
+		}
+
+		// Работаем. Определяем режим работы - по всем строкам или по условию "поле из xfields не равно нулю"
+		if (pluginGetVariable('basket', 'news_activated')) {
+			if (!$SQLnews['xfields_'.pluginGetVariable('basket', 'news_xfield')]) {
+
+				$tvars['regx']['#\[basket\](.*?)\[\/basket\]#is'] = '';
+				return;
+			}
+		}
+
+		$tvars['regx']['#\[basket\](.*?)\[\/basket\]#is'] = '$1';
+		$tvars['vars']['basket_link'] = generatePluginLink('basket', 'add', array('ds' => $DSlist['news'], 'id' => $SQLnews['id']), array(), false, true);
+	}
+
+}
+
+register_filter('news','basket', new BasketNewsFilter);
 
 //
 // Вызов обработчика

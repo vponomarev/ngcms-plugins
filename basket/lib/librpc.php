@@ -4,6 +4,41 @@
 // Shipping cart RPC manipulations
 //
 
+function basket_add_item($linked_ds, $linked_id, $title, $price, $count) {
+	global $mysql, $userROW, $twig;
+
+	// Check if now we're logged in and earlier we started filling basket before logging in
+	if (is_array($userROW)) {
+		$mysql->query("update ".prefix."_basket set user_id = ".db_squote($userROW['id'])." where (user_id = 0) and (cookie = ".db_squote($_COOKIE['ngTrackID']).")");
+	}
+
+	$mysql->query("insert into ".prefix."_basket (user_id, cookie, linked_ds, linked_id, title, price, count) values (".(is_array($userROW)?db_squote($userROW['id']):0).", ".db_squote($_COOKIE['ngTrackID']).", ".db_squote($linked_ds).", ".db_squote($linked_id).", ".db_squote($title).", ".db_squote($price).", ".db_squote($count).") on duplicate key update price=".db_squote($price).", count = count+".db_squote($count));
+
+	// ======== Prepare update of totals informer ========
+	$filter = array();
+	if (is_array($userROW)) {												$filter []= '(user_id = '.db_squote($userROW['id']).')';		}
+	if (isset($_COOKIE['ngTrackID']) && ($_COOKIE['ngTrackID'] != '')) {	$filter []= '(cookie = '.db_squote($_COOKIE['ngTrackID']).')';	}
+
+	$tCount = 0;
+	$tPrice = 0;
+
+	if (count($filter) && is_array($res = $mysql->record("select count(*) as count, sum(price*count) as price from ".prefix."_basket where ".join(" or ", $filter), 1))) {
+		$tCount = $res['count'];
+		$tPrice = $res['price'];
+	}
+
+	// Готовим переменные
+	$tVars = array(
+		'count' 		=> $tCount,
+		'price' 		=> $tPrice,
+		'ajaxUpdate'	=> 1,
+	);
+
+	// Выводим шаблон с общим итогом
+	$xt = $twig->loadTemplate('plugins/basket/total.tpl');
+	return array('status' => 1, 'errorCode' => 0, 'data' => 'Item added into basket', 'update' => arrayCharsetConvert(0, $xt->render($tVars)));
+}
+
 
 function basket_rpc_manage($params){
 	global $userROW, $DSlist, $mysql, $twig;
@@ -42,6 +77,32 @@ function basket_rpc_manage($params){
 					}
 
 					// DO ADD
+					// * Generate title
+					$btitle = pluginGetVariable('basket', 'news_itemname');
+
+					// Get price
+					if (pluginGetVariable('basket', 'news_price') && isset($rec['xfields_'.pluginGetVariable('basket', 'news_price')])) {
+						$price = $rec['xfields_'.pluginGetVariable('basket', 'ntable_price')];
+					} else {
+						$price = 0;
+					}
+
+					$replace = array();
+					$replace[0][]= '{title}';
+					$replace[1][]= $rec['title'];
+
+					$xc = xf_configLoad();
+
+					foreach ($xc['tdata'] as $k => $v) {
+						$replace[0][]= '{x:'.$k.'}';
+						$replace[1][]= $rec['xfields_'.$k];
+					}
+
+					$btitle = str_replace($replace[0], $replace[1], $btitle);
+
+
+					// Add data into basked
+					return basket_add_item($linked_ds, $linked_id, $btitle, $price, $count);
 
 					break;
 				case $DSlist['#xfields:tdata']:
@@ -85,36 +146,8 @@ function basket_rpc_manage($params){
 
 					$btitle = str_replace($replace[0], $replace[1], $btitle);
 
-					// Check if now we're logged in and earlier we started filling basket before logging in
-					if (is_array($userROW)) {
-						$mysql->query("update ".prefix."_basket set user_id = ".db_squote($userROW['id'])." where (user_id = 0) and (cookie = ".db_squote($_COOKIE['ngTrackID']).")");
-					}
-
-					$mysql->query("insert into ".prefix."_basket (user_id, cookie, linked_ds, linked_id, title, price, count) values (".(is_array($userROW)?db_squote($userROW['id']):0).", ".db_squote($_COOKIE['ngTrackID']).", ".db_squote($DSlist['#xfields:tdata']).", ".db_squote($linked_id).", ".db_squote($btitle).", ".db_squote($price).", ".db_squote($count).") on duplicate key update price=".db_squote($price).", count = count+".db_squote($count));
-
-					// ======== Prepare update of totals informer ========
-					$filter = array();
-					if (is_array($userROW)) {												$filter []= '(user_id = '.db_squote($userROW['id']).')';		}
-					if (isset($_COOKIE['ngTrackID']) && ($_COOKIE['ngTrackID'] != '')) {	$filter []= '(cookie = '.db_squote($_COOKIE['ngTrackID']).')';	}
-
-					$tCount = 0;
-					$tPrice = 0;
-
-					if (count($filter) && is_array($res = $mysql->record("select count(*) as count, sum(price*count) as price from ".prefix."_basket where ".join(" or ", $filter), 1))) {
-						$tCount = $res['count'];
-						$tPrice = $res['price'];
-					}
-
-					// Готовим переменные
-					$tVars = array(
-						'count' 		=> $tCount,
-						'price' 		=> $tPrice,
-						'ajaxUpdate'	=> 1,
-					);
-
-					// Выводим шаблон с общим итогом
-					$xt = $twig->loadTemplate('plugins/basket/total.tpl');
-					return array('status' => 1, 'errorCode' => 0, 'data' => 'Item added into basket', 'update' => arrayCharsetConvert(0, $xt->render($tVars)));
+					// Add data into basked
+					return basket_add_item($linked_ds, $linked_id, $title, $price, $count);
 
 					break;
 			}
