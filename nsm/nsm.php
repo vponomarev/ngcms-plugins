@@ -14,14 +14,22 @@ function plugin_nsm(){
 	global $userROW, $mysql, $twig, $lang, $template;
 
 	// Load permissions
-	$perm = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
+	$perm = checkPermission(array('plugin' => '#admin', 'item' => 'news'), null, array(
+		'personal.view',
+		'personal.modify',
+		'personal.modify.published',
+	));
+
+	$permPlugin = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
 		'view',
 		'view.draft',
 		'view.unpublished',
-		'view.published'
+		'view.published',
+		'edit',
+		'edit.published',
 	));
 
-	if (!is_array($userROW) || !$perm['view']) {
+	if (!is_array($userROW) || !$permPlugin['view']) {
 		print "PERM DENIED";
 		return;
 	}
@@ -31,6 +39,13 @@ function plugin_nsm(){
 	$query = "select * from ".prefix."_news where author_id = ".intval($userROW['id'])." order by id desc";
 
 	foreach ($mysql->select($query, 1) as $row) {
+		// Check if we can show this entry
+		if ((($row['approve'] == -1)&&(!$permPlugin['view.draft'])) ||
+			(($row['approve'] ==  0)&&(!$permPlugin['view.unpublished'])) ||
+			(($row['approve'] ==  1)&&(!$permPlugin['view.published']))) {
+			continue;
+		}
+
 		$tEntries []= array(
 			'php_self'		=> $PHP_SELF,
 			'home'			=> home,
@@ -47,7 +62,7 @@ function plugin_nsm(){
 			'state'			=> $row['approve'],
 			'editlink'		=> generatePluginLink('nsm', 'edit',array('id' => $row['id']), array('id' => $row['id'])),
 			'flags'			=> array(
-				'editable'		=> ($row['approve'] < 1 )?1:0,
+				'editable'		=> (($perm['personal.view'] && $permPlugin['edit']) && (($row['approve'] < 1)||($permPlugin['edit.published'])))?1:0,
 				'comments'		=> getPluginStatusInstalled('comments')?true:false,
 				'status'		=> ($row['approve'] == 1)?true:false,
 				'mainpage'		=> $row['mainpage']?true:false,
@@ -95,7 +110,7 @@ function plugin_nsm_add(){
 }
 
 function plugin_nsm_edit(){
-	global $lang;
+	global $lang, $SUPRESS_TEMPLATE_SHOW;
 
 	// Load permissions
 	$perm = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
@@ -105,6 +120,7 @@ function plugin_nsm_edit(){
 		'view.published',
 		'edit.draft',
 		'edit.unpublished',
+		'edit.published',
 	));
 
 	// Check permissions
@@ -122,10 +138,19 @@ function plugin_nsm_edit(){
 		require_once(root.'/includes/inc/lib_admin.php');
 		require_once root.'includes/classes/upload.class.php';
 
-		$o = editNews(array('no.meta' => true, 'no.files' => true));
-	//	if (!$o) {
-	//		plugin_nsm_addForm(json_encode(arrayCharsetConvert(0, $_POST)));
-	//	}
+		if (isset($_REQUEST['mod']) && ($_REQUEST['mod'] == 'preview')) {
+			include_once root.'includes/news.php';
+			$lang = LoadLang('preview', 'admin');
+
+			showPreview();
+			$SUPRESS_TEMPLATE_SHOW = 1;
+			} else {
+			$o = editNews(array('no.meta' => true, 'no.files' => true));
+			//	if (!$o) {
+			//		plugin_nsm_addForm(json_encode(arrayCharsetConvert(0, $_POST)));
+			//	}
+		}
+
 	}
 }
 
