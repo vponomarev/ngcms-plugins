@@ -185,11 +185,11 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 
 			// Выводим шаблон
 			$xt = $twig->loadTemplate('plugins/basket/lfeedback.tpl');
-			$tvars['header'] .= $xt->render($tVars);
+			$tvars['plugin_basket'] .= $xt->render($tVars);
 		}
 
 
-		function onProcess($formID, $formStruct, $formData, $flagHTML, &$output) {
+		function onProcess($formID, $formStruct, $formData, $flagHTML, &$tVars) {
 			global $userROW, $mysql, $twig;
 
 			// Определяем условия выборки
@@ -204,9 +204,11 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 
 			// Выполняем выборку
 			$recs = array();
+			$total = 0;
 			if (count($filter)) {
 				foreach ($mysql->select("select * from ".prefix."_basket where ".join(" or ", $filter)) as $rec) {
 					$rec['sum'] = sprintf('%9.2f', round($rec['price'] * $rec['count'], 0.01));
+					$total += round($rec['price'] * $rec['count'], 0.01);
 					$recs []= $rec;
 				}
 			}
@@ -214,11 +216,12 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 			$tVars = array(
 				'recs'		=> count($recs),
 				'entries'	=> $recs,
+				'total'		=> sprintf('%9.2f', $total),
 			);
 
 			// Выводим шаблон
 			$xt = $twig->loadTemplate('plugins/basket/lfeedback.tpl');
-			$output .= $xt->render($tVars);
+			$tVars['plugin_basket'] = $xt->render($tVars);
 		}
 
 		// Action executed when post request is completed
@@ -237,7 +240,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 
 			// Выполняем выборку
 			if (count($filter)) {
-				$mysql->query("delete from ".prefix."_basket where ".join(" or ", $filter));
+		//		$mysql->query("delete from ".prefix."_basket where ".join(" or ", $filter));
 			}
 		}
 	}

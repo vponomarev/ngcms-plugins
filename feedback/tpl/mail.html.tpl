@@ -38,13 +38,15 @@
 </tbody>
 </table>
 
+{{ plugin_basket }}
+
 <br/>
 <br/>
 ---<br/>
 С уважением,<br/>
 почтовый робот Вашего сайта (работает на базе <b><font color="#90b500">N</font><font color="#5a5047">ext</font> <font color="#90b500">G</font><font color="#5a5047">eneration</font> CMS</b> - http://ngcms.ru/)
 </div>
-
+{{ header }}
 </body>
 </html>
 

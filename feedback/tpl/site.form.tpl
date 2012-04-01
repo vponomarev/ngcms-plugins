@@ -5,6 +5,7 @@
 <br/><br/>
 {%endif %}
 {{ description }}
+{{ plugin_basket }}
 <br/><br/>
 {% if (flags.jcheck) %}
 <script language="JavaScript">
@@ -18,12 +19,12 @@ function FBF_CHECK() {
  	if (FBF_INIT[i][1]) {
  	 if (FBF_INIT[i][0] == 'date') {
 		if ((frm[i+':day'].value == '1') && (frm[i+':month'].value == '1') && (frm[i+':year'].value == '1970')) {
- 			alert('{l_feedback:form.err.notfilled} ('+FBF_INIT[i][2]+')!');
+ 			alert('{{ lang['feedback:form.err.notfilled'] }} ('+FBF_INIT[i][2]+')!');
  			frm[i+':day'].focus();
  			return false;
 		}
  	 } else if (frm[i].value == '') {
- 		alert('{l_feedback:form.err.notfilled} ('+FBF_INIT[i][2]+')!');
+ 		alert('{{ lang['feedback:form.err.notfilled'] }} ('+FBF_INIT[i][2]+')!');
  		frm[i].focus();
  		return false;
  	}
