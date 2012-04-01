@@ -10,7 +10,7 @@ class FeedbackFilter {
 	}
 
 	// Action executed when form is posted
-	function onProcess($formID, $formStruct, $formData, $flagHTML, &$output) {
+	function onProcess($formID, $formStruct, $formData, $flagHTML, &$tVars) {
 
 	}
 

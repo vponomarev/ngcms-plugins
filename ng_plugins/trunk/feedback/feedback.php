@@ -241,7 +241,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 
 	// Process filters (if any)
 	if (is_array($PFILTERS['feedback']))
-		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onShow($form_id, $frow, $fData, $tvars); }
+		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onShow($form_id, $frow, $fData, &$tVars); }
 
 	$template['vars']['mainblock']      =  $xt->render($tVars);
 
@@ -368,7 +368,7 @@ function plugin_feedback_post() {
 
 	// Process filters (if any)
 	if (is_array($PFILTERS['feedback']))
-		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onProcess($form_id, $frow, $fData, $flagHTML, &$output); }
+		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onProcess($form_id, $frow, $fData, $flagHTML, &$tVars); }
 
 	// Select recipient group
 	$em = unserialize($frow['emails']);
