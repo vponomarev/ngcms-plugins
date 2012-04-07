@@ -8,6 +8,8 @@ LoadPluginLang('nsm', 'main', '', '', '#');
 register_plugin_page('nsm','','plugin_nsm');
 register_plugin_page('nsm','add','plugin_nsm_add');
 register_plugin_page('nsm','edit','plugin_nsm_edit');
+register_plugin_page('nsm','del','plugin_nsm_del');
+
 
 // Show list of user's news
 function plugin_nsm(){
@@ -18,6 +20,8 @@ function plugin_nsm(){
 		'personal.view',
 		'personal.modify',
 		'personal.modify.published',
+		'personal.delete',
+		'personal.delete.published'
 	));
 
 	$permPlugin = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
@@ -25,8 +29,13 @@ function plugin_nsm(){
 		'view.draft',
 		'view.unpublished',
 		'view.published',
-		'edit',
-		'edit.published',
+		'modify.draft',
+		'modify.unpublished',
+		'modify.published',
+		'delete.draft',
+		'delete.unpublished',
+		'delete.draft',
+		'list'
 	));
 
 	if (!is_array($userROW) || !$permPlugin['view']) {
@@ -34,17 +43,31 @@ function plugin_nsm(){
 		return;
 	}
 
-	$tVars = array();
+	$tVars = array(
+		'token'	=> genUToken('nsm.edit'),
+	);
 	$tEntries = array();
 	$query = "select * from ".prefix."_news where author_id = ".intval($userROW['id'])." order by id desc";
 
 	foreach ($mysql->select($query, 1) as $row) {
 		// Check if we can show this entry
-		if ((($row['approve'] == -1)&&(!$permPlugin['view.draft'])) ||
+		if (((($row['approve'] == -1)&&(!$permPlugin['view.draft'])) ||
 			(($row['approve'] ==  0)&&(!$permPlugin['view.unpublished'])) ||
-			(($row['approve'] ==  1)&&(!$permPlugin['view.published']))) {
+			(($row['approve'] ==  1)&&(!$permPlugin['view.published']))) && (!$permPlugin['list'])) {
 			continue;
 		}
+
+		$canView	=	((($row['approve'] == -1) && ($permPlugin['view.draft'])) ||
+						(($row['approve'] ==  0) && ($permPlugin['view.unpublished'])) ||
+						(($row['approve'] ==  1) && ($permPlugin['view.published']))) && $perm['personal.view'];
+
+		$canEdit	=	(($row['approve'] == -1) && ($permPlugin['modify.draft'])) ||
+						(($row['approve'] ==  0) && ($permPlugin['modify.unpublished']) && ($perm['personal.modify'])) ||
+						(($row['approve'] ==  1) && ($permPlugin['modify.published']) && ($perm['personal.modify.published']));
+
+		$canDelete	=	(($row['approve'] == -1) && ($permPlugin['delete.draft'])) ||
+						(($row['approve'] ==  0) && ($permPlugin['delete.unpublished']) && ($perm['personal.delete'])) ||
+						(($row['approve'] ==  1) && ($permPlugin['delete.published']) && ($perm['personal.delete.published']));
 
 		$tEntries []= array(
 			'php_self'		=> $PHP_SELF,
@@ -62,7 +85,9 @@ function plugin_nsm(){
 			'state'			=> $row['approve'],
 			'editlink'		=> generatePluginLink('nsm', 'edit',array('id' => $row['id']), array('id' => $row['id'])),
 			'flags'			=> array(
-				'editable'		=> (($perm['personal.view'] && $permPlugin['edit']) && (($row['approve'] < 1)||($permPlugin['edit.published'])))?1:0,
+				'canEdit'		=> $canEdit?1:0,
+				'canView'		=> $canView?1:0,
+				'canDelete'		=> $canDelete?1:0,
 				'comments'		=> getPluginStatusInstalled('comments')?true:false,
 				'status'		=> ($row['approve'] == 1)?true:false,
 				'mainpage'		=> $row['mainpage']?true:false,
@@ -70,7 +95,7 @@ function plugin_nsm(){
 		);
 
 	}
-	$tVars['entries'] = $tEntries;
+	$tVars['entries']	= $tEntries;
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('news.list'), 'nsm', pluginGetVariable('nsm', 'localsource'));
@@ -83,12 +108,14 @@ function plugin_nsm_add(){
 	global $lang;
 
 	// Load permissions
-	$perm = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
+	$permPlugin = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
 		'add',
 	));
 
+	$perm = checkPermission(array('plugin' => '#admin', 'item' => 'news'), null, array('add'));
+
 	// Check permissions
-	if (!$perm['add']) {
+	if ((!$permPlugin['add'])||(!$perm['add'])) {
 		msg(array("type" => "error", "text" => $lang['perm.denied']));
 		return 0;
 	}
@@ -110,7 +137,7 @@ function plugin_nsm_add(){
 }
 
 function plugin_nsm_edit(){
-	global $lang, $SUPRESS_TEMPLATE_SHOW;
+	global $lang, $mysql, $userROW, $SUPRESS_TEMPLATE_SHOW;
 
 	// Load permissions
 	$perm = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
@@ -118,15 +145,33 @@ function plugin_nsm_edit(){
 		'view.draft',
 		'view.unpublished',
 		'view.published',
-		'edit.draft',
-		'edit.unpublished',
-		'edit.published',
+		'modify.draft',
+		'modify.unpublished',
+		'modify.published',
+		'delete.draft',
+		'delete.unpublished',
+		'delete.published',
 	));
 
-	// Check permissions
-	if (!$perm['view']) {
+	// Try to find news that we're trying to edit
+	if (!is_array($row = $mysql->record("select * from ".prefix."_news where (id = ".db_squote($_REQUEST['id']).") and (author_id = ".db_squote($userROW['id']).")", 1))) {
+		msg(array("type" => "error", "text" => $lang['msge_not_found']));
+		return;
+	}
+
+	// We can manage only OWN news
+	if ((!is_array($userROW)) || ($row['author_id'] != $userROW['id'])) {
 		msg(array("type" => "error", "text" => $lang['perm.denied']));
 		return 0;
+	}
+
+	// Check permissions for view
+	if ((!$perm['view']) ||
+		((($row['approve'] == -1)&&(!$perm['view.draft'])) ||
+		(($row['approve'] ==  0)&&(!$perm['view.unpublished'])) ||
+		(($row['approve'] ==  1)&&(!$perm['view.published'])))) {
+			msg(array("type" => "error", "text" => $lang['perm.denied']));
+			return 0;
 	}
 
 	LoadLang('editnews', 'admin');
@@ -134,6 +179,15 @@ function plugin_nsm_edit(){
 	if ($_SERVER['REQUEST_METHOD'] != "POST") {
 		plugin_nsm_editForm(null);
 	} else {
+		// Trying to edit, check if we have permissions for this
+		if ((!$perm['view']) ||
+			((($row['approve'] == -1)&&(!$perm['modify.draft'])) ||
+			(($row['approve'] ==  0)&&(!$perm['modify.unpublished'])) ||
+			(($row['approve'] ==  1)&&(!$perm['modify.published'])))) {
+				msg(array("type" => "error", "text" => $lang['perm.denied']));
+				return 0;
+		}
+
 		// Load library
 		require_once(root.'/includes/inc/lib_admin.php');
 		require_once root.'includes/classes/upload.class.php';
@@ -161,6 +215,7 @@ function plugin_nsm_addForm($retry = ''){
 
 	// Load permissions
 	$perm = checkPermission(array('plugin' => '#admin', 'item' => 'news'), null, array(
+		'add',
 		'add.approve',
 		'add.mainpage',
 		'add.pinned',
@@ -178,19 +233,24 @@ function plugin_nsm_addForm($retry = ''){
 		'personal.customdate',
 	));
 
+	$permPlugin = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
+		'add',
+	));
+
 	LoadLang('addnews', 'admin', 'addnews');
 
 	// Check if current user have permission to add news
-//	if (!$perm['add.onsite']) {
-//		msg(array("type" => "error", "text" => $lang['perm.denied']));
-//		return;
-//	}
+	if ((!$perm['add'])||(!$permPlugin['add'])) {
+		msg(array("type" => "error", "text" => $lang['perm.denied']));
+		return;
+	}
 
 	$tVars = array(
 		'php_self'			=> $PHP_SELF,
 		'changedate'		=> ChangeDate(),
 		'mastercat'			=>	makeCategoryList(array('doempty' => 1, 'nameval' => 0)),
 		'extcat'			=>  makeCategoryList(array('nameval' => 0, 'checkarea' => 1)),
+		'token'				=> genUToken('admin.news.add'),
 		'JEV'				=> $retry?$retry:'{}',
 		'smilies'			=> ($config['use_smilies'])?InsertSmilies('', 20, 'currentInputAreaID'):'',
 		'quicktags'			=> ($config['use_bbcodes'])?QuickTags('currentInputAreaID', 'news'):'',
@@ -244,6 +304,19 @@ function plugin_nsm_editForm($retry = ''){
 		'personal.altname',
 	));
 
+	$permPlugin = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
+		'view',
+		'view.draft',
+		'view.unpublished',
+		'view.published',
+		'modify.draft',
+		'modify.unpublished',
+		'modify.published',
+		'delete.draft',
+		'delete.unpublished',
+		'delete.draft',
+		'list'
+	));
 	LoadLang('editnews', 'admin', 'editnews');
 
 	// Get news id
@@ -289,6 +362,8 @@ function plugin_nsm_editForm($retry = ''){
 		'views'				=>	$row['views'],
 		'author'			=>  $row['author'],
 		'authorid'			=>  $row['author_id'],
+		'token'				=> genUToken('admin.news.edit'),
+		'deleteURL'			=> generateLink('core', 'plugin', array('plugin' => 'nsm', 'handler' => 'del'), array('token' => genUToken('admin.news.edit'), 'id' => $row['id'])),
 		'createdate'		=>  strftime('%d.%m.%Y %H:%M', $row['postdate']),
 		'editdate'			=>  ($row['editdate'] > $row['postdate'])?strftime('%d.%m.%Y %H:%M', $row['editdate']):'-',
 		'author_page'		=>  checkLinkAvailable('uprofile', 'show')?
@@ -365,5 +440,47 @@ function plugin_nsm_editForm($retry = ''){
 
 	$xt = $twig->loadTemplate($tpath['news.edit'].'news.edit.tpl');
 	$template['vars']['mainblock'] .= $xt->render($tVars);
+}
+
+
+function plugin_nsm_del(){
+	global $lang, $mysql, $userROW;
+
+	// Load permissions
+	$permPlugin = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
+			'delete.draft',
+			'delete.unpublished',
+			'delete.published',
+		));
+
+	$perm = checkPermission(array('plugin' => '#admin', 'item' => 'news'), null, array(
+			'personal.delete',
+			'personal.delete.published',
+		));
+
+	$id = intval($_REQUEST['id']);
+
+	// Try to find news that we're trying to edit
+	if (!is_array($row = $mysql->record("select * from ".prefix."_news where (id = ".db_squote($id).") and (author_id = ".db_squote($userROW['id']).")", 1))) {
+		msg(array("type" => "error", "text" => $lang['msge_not_found']));
+		return;
+	}
+
+	// Check permissions
+	if ((($row['approve'] == -1)&&(!$permPlugin['delete.draft'])) ||
+		(($row['approve'] ==  0)&&(!$permPlugin['delete.unpublished'])) ||
+		(($row['approve'] ==  1)&&(!$permPlugin['delete.published']))) {
+			msg(array("type" => "error", "text" => 'xx'.$lang['perm.denied']));
+			return;
+	}
+
+	// Load library
+	require_once(root.'includes/classes/upload.class.php');
+	require_once(root.'includes/inc/file_managment.php');
+	require_once(root.'includes/inc/lib_admin.php');
+
+	//LoadLang('addnews', 'admin', 'addnews');
+	massDeleteNews(array($row['id']));
 
 }
+
