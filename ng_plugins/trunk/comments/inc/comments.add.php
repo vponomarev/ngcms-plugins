@@ -210,13 +210,8 @@ function comments_add(){
 				continue;
 
 			msg(array("type" => "error", "text" => str_replace(array('{plugin}', '{errorText}'), array($k, (is_array($pluginResult) && isset($pluginResult['errorText'])?$pluginResult['errorText']:'')), $lang['comments:err.'.((is_array($pluginResult) && isset($pluginResult['errorText']))?'e':'').'pluginlock'])));
-			break;
+			return 0;
 		}
-
-	if (!$pluginNoError) {
-		return 0;
-	}
-
 
 	// Create comment
 	$vnames = array(); $vparams = array();

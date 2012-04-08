@@ -51,7 +51,7 @@ array_push($cfgX, array('name' => 'multi_scount', 'title' => "Кол-во комментарие
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>Многостраничное отображение</b>', 'entries' => $cfgX, 'toggle' => true, 'toggle.mode' => 'hide'));
 
 $cfgX = array();
-array_push($cfgX, array('name' => 'inform_author', 'title' => "Оповещать автора по email о новом комментарии", 'descr' => "<b>Да</b> - при добавлении каждого комментария автор будет получать e-mail сообщение<br/><b>Нет</b> - автор не будет получать e-mail нотификаций", 'type' => 'select', 'values' => array ( '0' => 'Нет', '1' => 'Да'), 'value' => intval(pluginGetVariable($plugin,'inform_author'))));
+array_push($cfgX, array('name' => 'inform_author', 'title' => "Оповещать автора новости по email о новом комментарии", 'descr' => "<b>Да</b> - при добавлении каждого комментария автор будет получать e-mail сообщение<br/><b>Нет</b> - автор не будет получать e-mail нотификаций", 'type' => 'select', 'values' => array ( '0' => 'Нет', '1' => 'Да'), 'value' => intval(pluginGetVariable($plugin,'inform_author'))));
 array_push($cfgX, array('name' => 'inform_admin', 'title' => "Оповещать администратора о новом комментарии", 'descr' => "<b>Да</b> - при добавлении каждого комментария администратор будет получать e-mail сообщение<br/><b>Нет</b> - администратор(ы) не будет получать e-mail нотификаций", 'type' => 'select', 'values' => array ( '0' => 'Нет', '1' => 'Да'), 'value' => intval(pluginGetVariable($plugin,'inform_admin'))));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>Настройки оповещений</b>', 'entries' => $cfgX, 'toggle' => true, 'toggle.mode' => 'hide'));
 
