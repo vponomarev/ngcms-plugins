@@ -21,7 +21,8 @@ function plugin_nsm(){
 		'personal.modify',
 		'personal.modify.published',
 		'personal.delete',
-		'personal.delete.published'
+		'personal.delete.published',
+		'add',
 	));
 
 	$permPlugin = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
@@ -35,7 +36,8 @@ function plugin_nsm(){
 		'delete.draft',
 		'delete.unpublished',
 		'delete.draft',
-		'list'
+		'list',
+		'add',
 	));
 
 	if (!is_array($userROW) || !$permPlugin['view']) {
@@ -84,6 +86,7 @@ function plugin_nsm(){
 			'link'			=> newsGenerateLink($row, false, 0, true),
 			'state'			=> $row['approve'],
 			'editlink'		=> generatePluginLink('nsm', 'edit',array('id' => $row['id']), array('id' => $row['id'])),
+			'deletelink'	=> generatePluginLink('nsm', 'del',array(), array('id' => $row['id'], 'token' => genUToken('admin.news.edit'))),
 			'flags'			=> array(
 				'canEdit'		=> $canEdit?1:0,
 				'canView'		=> $canView?1:0,
@@ -96,6 +99,10 @@ function plugin_nsm(){
 
 	}
 	$tVars['entries']	= $tEntries;
+
+	// Link for adding news
+	$tVars['flags']['canAdd'] = (($permPlugin['add']) && ($perm['add']))?1:0;
+	$tVars['addlink']	= generatePluginLink('nsm', 'add',array(), array());
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('news.list'), 'nsm', pluginGetVariable('nsm', 'localsource'));
@@ -122,6 +129,9 @@ function plugin_nsm_add(){
 
 
 	if ($_SERVER['REQUEST_METHOD'] != "POST") {
+		// Set "Allow comments = default"
+		$_REQUEST['allow_com'] = 2;
+
 		plugin_nsm_addForm(null);
 	} else {
 		// Load library
@@ -177,6 +187,10 @@ function plugin_nsm_edit(){
 	LoadLang('editnews', 'admin');
 
 	if ($_SERVER['REQUEST_METHOD'] != "POST") {
+		// Save old value of "Allow comments"
+		$_REQUEST['allow_com'] = $row['allow_com'];
+
+
 		plugin_nsm_editForm(null);
 	} else {
 		// Trying to edit, check if we have permissions for this
