@@ -92,10 +92,11 @@ function basket_rpc_manage($params){
 					$replace[1][]= $rec['title'];
 
 					$xc = xf_configLoad();
+					$xfData = xf_decode($rec['xfields']);
 
-					foreach ($xc['tdata'] as $k => $v) {
+					foreach ($xc['news'] as $k => $v) {
 						$replace[0][]= '{x:'.$k.'}';
-						$replace[1][]= $rec['xfields_'.$k];
+						$replace[1][]= $xfData[$k];
 					}
 
 					$btitle = str_replace($replace[0], $replace[1], $btitle);
@@ -138,10 +139,16 @@ function basket_rpc_manage($params){
 					$replace[1][]= $nrec['title'];
 
 					$xc = xf_configLoad();
+					$xfData = xf_decode($nrec['xfields']);
 
 					foreach ($xc['tdata'] as $k => $v) {
-						$replace[0][]= '{x:'.$k.'}';
+						$replace[0][]= '{xt:'.$k.'}';
 						$replace[1][]= $rec['xfields_'.$k];
+					}
+
+					foreach ($xc['news'] as $k => $v) {
+						$replace[0][]= '{x:'.$k.'}';
+						$replace[1][]= $xfData[$k];
 					}
 
 					$btitle = str_replace($replace[0], $replace[1], $btitle);
