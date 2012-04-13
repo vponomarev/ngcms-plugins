@@ -252,7 +252,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 
 			// Выполняем выборку
 			if (count($filter)) {
-		//		$mysql->query("delete from ".prefix."_basket where ".join(" or ", $filter));
+				$mysql->query("delete from ".prefix."_basket where ".join(" or ", $filter));
 			}
 		}
 	}
