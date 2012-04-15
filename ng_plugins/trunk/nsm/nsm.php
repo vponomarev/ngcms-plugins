@@ -46,8 +46,10 @@ function plugin_nsm(){
 	}
 
 	$tVars = array(
-		'token'	=> genUToken('nsm.edit'),
+		'token'		=> genUToken('nsm.edit'),
+		'addURL'	=> generatePluginLink('nsm', 'add',array(), array()),
 	);
+
 	$tEntries = array();
 	$query = "select * from ".prefix."_news where author_id = ".intval($userROW['id'])." order by id desc";
 
@@ -102,7 +104,6 @@ function plugin_nsm(){
 
 	// Link for adding news
 	$tVars['flags']['canAdd'] = (($permPlugin['add']) && ($perm['add']))?1:0;
-	$tVars['addlink']	= generatePluginLink('nsm', 'add',array(), array());
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('news.list'), 'nsm', pluginGetVariable('nsm', 'localsource'));
@@ -113,6 +114,8 @@ function plugin_nsm(){
 
 function plugin_nsm_add(){
 	global $lang;
+
+	LoadLang('addnews', 'admin', 'addnews');
 
 	// Load permissions
 	$permPlugin = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
@@ -148,6 +151,8 @@ function plugin_nsm_add(){
 
 function plugin_nsm_edit(){
 	global $lang, $mysql, $userROW, $SUPRESS_TEMPLATE_SHOW;
+
+	LoadLang('editnews', 'admin', 'editnews');
 
 	// Load permissions
 	$perm = checkPermission(array('plugin' => 'nsm', 'item' => ''), null, array(
@@ -214,9 +219,9 @@ function plugin_nsm_edit(){
 			$SUPRESS_TEMPLATE_SHOW = 1;
 			} else {
 			$o = editNews(array('no.meta' => true, 'no.files' => true));
-			//	if (!$o) {
-			//		plugin_nsm_addForm(json_encode(arrayCharsetConvert(0, $_POST)));
-			//	}
+			if (!$o) {
+					plugin_nsm_editForm(json_encode(arrayCharsetConvert(0, $_POST)));
+			}
 		}
 
 	}
@@ -244,6 +249,7 @@ function plugin_nsm_addForm($retry = ''){
 		'personal.favorite',
 		'personal.setviews',
 		'personal.multicat',
+		'personal.nocat',
 		'personal.customdate',
 	));
 
@@ -262,9 +268,10 @@ function plugin_nsm_addForm($retry = ''){
 	$tVars = array(
 		'php_self'			=> $PHP_SELF,
 		'changedate'		=> ChangeDate(),
-		'mastercat'			=>	makeCategoryList(array('doempty' => 1, 'nameval' => 0)),
+		'mastercat'			=>	makeCategoryList(array('doempty' => 1, 'greyempty' => !$perm['personal.nocat'], 'nameval' => 0)),
 		'extcat'			=>  makeCategoryList(array('nameval' => 0, 'checkarea' => 1)),
 		'token'				=> genUToken('admin.news.add'),
+		'listURL'			=> generateLink('core', 'plugin', array('plugin' => 'nsm'), array()),
 		'JEV'				=> $retry?$retry:'{}',
 		'smilies'			=> ($config['use_smilies'])?InsertSmilies('', 20, 'currentInputAreaID'):'',
 		'quicktags'			=> ($config['use_bbcodes'])?QuickTags('currentInputAreaID', 'news'):'',
@@ -285,6 +292,7 @@ function plugin_nsm_addForm($retry = ''){
 			'multicat.show'		=> $perm['personal.multicat'],
 			'extended_more'		=> ($config['extended_more'] || ($tvars['vars']['content.delimiter'] != ''))?true:false,
 			'can_publish'		=> $perm['personal.publish'],
+			'mondatory_cat'		=> (!$perm['personal.nocat'])?true:false,
 		),
 	);
 
@@ -314,6 +322,7 @@ function plugin_nsm_editForm($retry = ''){
 		'personal.favorite',
 		'personal.setviews',
 		'personal.multicat',
+		'personal.nocat',
 		'personal.customdate',
 		'personal.altname',
 	));
@@ -357,13 +366,13 @@ function plugin_nsm_editForm($retry = ''){
 	$row['#images'] = $mysql->select("select *, date_format(from_unixtime(date), '%d.%m.%Y') as date from ".prefix."_images where (linked_ds = 1) and (linked_id = ".db_squote($row['id']).')', 1);
 
 
-	$cats = explode(",", $row['catid']);
+	$cats = (strlen($row['catid'])>0)?explode(",", $row['catid']):array();
 	$content = $row['content'];
 
 	$tVars = array(
 		'php_self'			=>	$PHP_SELF,
 		'changedate'		=>	ChangeDate($row['postdate'], 1),
-		'mastercat'			=>	makeCategoryList(array('doempty' => 1, 'nameval' => 0,   'selected' => count($cats)?$cats[0]:0)),
+		'mastercat'			=>	makeCategoryList(array('doempty' => ($perm['personal.nocat'] || !count($cats))?1:0, 'greyempty' => !$perm['personal.nocat'], 'nameval' => 0,   'selected' => count($cats)?$cats[0]:0)),
 		'extcat'			=>  makeCategoryList(array('nameval' => 0, 'checkarea' => 1, 'selected' => (count($cats)>1)?array_slice($cats,1):array(), 'disabledarea' => !$perm[$permGroupMode.'.multicat'])),
 		'allcats'			=>	resolveCatNames($cats),
 		'id'				=>	$row['id'],
@@ -377,6 +386,8 @@ function plugin_nsm_editForm($retry = ''){
 		'author'			=>  $row['author'],
 		'authorid'			=>  $row['author_id'],
 		'token'				=> genUToken('admin.news.edit'),
+		'JEV'				=> $retry?$retry:'{}',
+		'listURL'			=> generateLink('core', 'plugin', array('plugin' => 'nsm'), array()),
 		'deleteURL'			=> generateLink('core', 'plugin', array('plugin' => 'nsm', 'handler' => 'del'), array('token' => genUToken('admin.news.edit'), 'id' => $row['id'])),
 		'createdate'		=>  strftime('%d.%m.%Y %H:%M', $row['postdate']),
 		'editdate'			=>  ($row['editdate'] > $row['postdate'])?strftime('%d.%m.%Y %H:%M', $row['editdate']):'-',
@@ -418,6 +429,7 @@ function plugin_nsm_editForm($retry = ''){
 			'multicat.disabled'	=> (!$perm[$permGroupMode.'.multicat'])?true:false,
 			'altname.disabled'	=> (!$perm[$permGroupMode.'.altname'])?true:false,
 			'multicat.show'		=> $perm['personal.multicat'],
+			'mondatory_cat'		=> (!$perm['personal.nocat'])?true:false,
 		)
 	);
 
