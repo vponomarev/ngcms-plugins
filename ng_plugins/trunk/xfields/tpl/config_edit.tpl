@@ -49,6 +49,11 @@ function storageMode(mode) {
 <table border="0" cellspacing="1" cellpadding="1" class="content">
  <tr class="contRow1">
   <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_texts'] }}</td>
+  <td width="45%">{{ lang.xfconfig['html_support'] }}</td>
+  <td><input type="checkbox" name="text_html_support" value="1" {{ html_support }}></td>
+ </tr>
+ <tr class="contRow1">
+  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_texts'] }}</td>
   <td width="45%">{{ lang.xfconfig['bb_support'] }}</td>
   <td><input type="checkbox" name="text_bb_support" value="1" {{ bb_support }}></td>
  </tr>
@@ -64,9 +69,19 @@ function storageMode(mode) {
 <div id="type_textarea">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
  <tr class="contRow1">
-  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_texts'] }}</td>
+  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_textareas'] }}</td>
+  <td width="45%">{{ lang.xfconfig['html_support'] }}</td>
+  <td><input type="checkbox" name="textarea_html_support" value="1" {{ html_support }}></td>
+ </tr>
+ <tr class="contRow1">
+  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_textareas'] }}</td>
   <td width="45%">{{ lang.xfconfig['bb_support'] }}</td>
   <td><input type="checkbox" name="textarea_bb_support" value="1" {{ bb_support }}></td>
+ </tr>
+ <tr class="contRow1">
+  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_textareas'] }}</td>
+  <td width="45%">{{ lang.xfconfig['noformat'] }}</td>
+  <td><input type="checkbox" name="textarea_noformat" value="1" {{ noformat }}></td>
  </tr>
  <tr class="contRow1">
   <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_textareas'] }}</td>

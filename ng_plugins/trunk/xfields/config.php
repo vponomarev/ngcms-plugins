@@ -151,14 +151,16 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		$tVars['flags']['editMode'] = 1;
 		$tVars['flags']['disabled'] = $data['disabled']?true:false;
 		$tVars = $tVars + array(
-			'id'		=>	$field,
-			'title'		=>	$data['title'],
-			'type'		=>	$data['type'],
-			'storage'	=>	intval($data['storage']),
-			'db_type'	=>	$data['db.type'],
-			'db_len'	=>	(intval($data['db.len'])>0)?intval($data['db.len']):'',
-			'area'		=> (intval($data['area'])>0)?intval($data['area']):'',
+			'id'			=>	$field,
+			'title'			=>	$data['title'],
+			'type'			=>	$data['type'],
+			'storage'		=>	intval($data['storage']),
+			'db_type'		=>	$data['db.type'],
+			'db_len'		=>	(intval($data['db.len'])>0)?intval($data['db.len']):'',
+			'area'			=>	(intval($data['area'])>0)?intval($data['area']):'',
 			'bb_support'	=> $data['bb_support']?'checked="checked"':'',
+			'html_support'	=> $data['html_support']?'checked="checked"':'',
+			'noformat'		=> $data['noformat']?'checked="checked"':'',
 		);
 
 		$xsel = '';
@@ -280,13 +282,16 @@ function doAddEdit() {
 	switch ($data['type']) {
 		case 'text':
 			if ($_REQUEST['text_default'] != '')
-				$data['default'] = $_REQUEST['text_default'];
-			$data['bb_support']	= $_REQUEST['text_bb_support']?1:0;
+				$data['default']	= $_REQUEST['text_default'];
+			$data['bb_support']		= $_REQUEST['text_bb_support']?1:0;
+			$data['html_support']	= $_REQUEST['text_html_support']?1:0;
 			break;
 		case 'textarea':
 			if ($_REQUEST['textarea_default'] != '')
 				$data['default'] = $_REQUEST['textarea_default'];
-			$data['bb_support']	= $_REQUEST['textarea_bb_support']?1:0;
+			$data['bb_support']		= $_REQUEST['textarea_bb_support']?1:0;
+			$data['html_support']	= $_REQUEST['textarea_html_support']?1:0;
+			$data['noformat']		= $_REQUEST['textarea_noformat']?1:0;
 			break;
 		case 'select':
 

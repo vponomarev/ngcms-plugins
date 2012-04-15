@@ -923,12 +923,21 @@ class XFieldsNewsFilter extends NewsFilter {
 					$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = ($xfk == "")?"":"$1";
 					$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = ($xfk == "")?"$1":"";
 
+					// Process `HTML` support feature
+					if ((!$v['html_support'])&&(($v['type'] == 'textarea')||($v['type'] == 'text'))) {
+						$xfk = str_replace("<","&lt;",$xfk);
+					}
+
 					// Parse BB code [if required]
 					if ($config['use_bbcodes'] && $v['bb_support']) {
 						$xfk = $parse-> bbcodes($xfk);
 					}
 
-					$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':'')):$xfk;
+					// Process formatting
+					if (($v['type'] == 'textarea') && (!$v['noformat'])) {
+						$xfk = (str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':''));
+					}
+					$tvars['vars']['[xvalue_'.$k.']'] = $xfk;
 				}
 			}
 
