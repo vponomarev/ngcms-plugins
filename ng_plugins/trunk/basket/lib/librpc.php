@@ -139,7 +139,7 @@ function basket_rpc_manage($params){
 
 					$xc = xf_configLoad();
 					$xfData = xf_decode($nrec['xfields']);
-					$xfTData = xf_decode($rec['xfields']);
+					$xfTData = unserialize($rec['xfields']);
 
 					foreach ($xc['tdata'] as $k => $v) {
 						$replace[0][]= '{xt:'.$k.'}';
@@ -154,7 +154,7 @@ function basket_rpc_manage($params){
 					$btitle = str_replace($replace[0], $replace[1], $btitle);
 
 					// Add data into basked
-					return basket_add_item($linked_ds, $linked_id, $title, $price, $count, array('news' => $xfData, 'tdata' => $xfTData));
+					return basket_add_item($linked_ds, $linked_id, $btitle, $price, $count, array('news' => $xfData, 'tdata' => $xfTData));
 
 					break;
 			}

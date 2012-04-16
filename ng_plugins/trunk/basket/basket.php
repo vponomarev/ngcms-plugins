@@ -65,7 +65,7 @@ function plugin_basket_list(){
 	$recs = array();
 	$total = 0;
 	if (count($filter)) {
-		foreach ($mysql->select("select * from ".prefix."_basket where ".join(" or ", $filter)) as $rec) {
+		foreach ($mysql->select("select * from ".prefix."_basket where ".join(" or ", $filter), 1) as $rec) {
 			$total += round($rec['price'] * $rec['count'], 0.01);
 
 			$rec['sum'] = sprintf('%9.2f', round($rec['price'] * $rec['count'], 0.01));
