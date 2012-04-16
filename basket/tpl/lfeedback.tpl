@@ -4,13 +4,13 @@
 <table class="basket_tb">
 <thead>
 <tr valign="top">
- <td>#</td><td>Наименование</td><td>Цена</td><td>Кол-во</td><td>Стоимость</td>
+ <td>#</td><td>Наименование</td><td>Размер</td><td>Цена</td><td>Кол-во</td><td>Стоимость</td>
 </tr>
 </thead>
 <tbody>
 {% for entry in entries %}
 <tr>
- <td>{{ loop.index }}</td><td>{{ entry.title }}</td><td align="right">{{ entry.price }}</td><td align="right">{{ entry.count }}</td><td align="right">{{ entry.sum }}</td>
+ <td>{{ loop.index }}</td><td>{{ entry.title }}</td><td>{{ entry.xfields.news.size }}</td><td align="right">{{ entry.price }}</td><td align="right">{{ entry.count }}</td><td align="right">{{ entry.sum }}</td>
 </tr>
 {% endfor %}
 </tbody>
