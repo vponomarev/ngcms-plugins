@@ -142,9 +142,12 @@ function plugin_nsm_add(){
 
 		LoadLang('addnews', 'admin', 'addnews');
 
-		$o = addNews(array('no.meta' => true, 'no.files' => true));
+		$o = addNews(array('no.meta' => true, 'no.files' => true, 'no.editurl' => true));
 		if (!$o) {
 			plugin_nsm_addForm(json_encode(arrayCharsetConvert(0, $_POST)));
+		} else {
+			// Show list of current news
+			plugin_nsm();
 		}
 	}
 }
@@ -505,8 +508,11 @@ function plugin_nsm_del(){
 	require_once(root.'includes/inc/file_managment.php');
 	require_once(root.'includes/inc/lib_admin.php');
 
-	//LoadLang('addnews', 'admin', 'addnews');
+	LoadLang('editnews', 'admin', 'editnews');
 	massDeleteNews(array($row['id']));
+
+	// Show again list of news
+	plugin_nsm();
 
 }
 
