@@ -51,7 +51,7 @@ class auth_basic {
 		$mysql->query($query);
 
 		// Вставить юзеру куку
-		@setcookie('zz_auth', $auth_cookie, ($config['remember']?(time() + 3600 * 24 * 365):0), '/');
+		@setcookie('zz_auth', $auth_cookie, ($config['remember']?(time() + 3600 * 24 * 365):0), '/', '', 0, 1);
 
 		return 1;
 	}
