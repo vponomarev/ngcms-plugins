@@ -4,7 +4,7 @@
 
 ID: auth_basic
 Name: Basic auth
-Version: 0.20
+Version: 0.21
 Acts: auth
 File: auth_basic.php
 Config: config.php
