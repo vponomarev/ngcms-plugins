@@ -37,10 +37,10 @@ function plugin_rss_export_generate($catname = ''){
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
 	// Take into account: FLAG: use_hide, check if user is logged in
-	$cacheFileName = md5('rss_export'.$config['theme'].$config['home_url'].$config['default_lang'].(is_array($xcat)?$xcat['id']:'').extra_get_param('rss_export','use_hide').is_array($userROW)).'.txt';
+	$cacheFileName = md5('rss_export'.$config['theme'].$config['home_url'].$config['default_lang'].(is_array($xcat)?$xcat['id']:'').pluginGetVariable('rss_export','use_hide').is_array($userROW)).'.txt';
 
-	if (extra_get_param('rss_export','cache')) {
-		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('rss_export','cacheExpire'), 'rss_export');
+	if (pluginGetVariable('rss_export','cache')) {
+		$cacheData = cacheRetrieveFile($cacheFileName, pluginGetVariable('rss_export','cacheExpire'), 'rss_export');
 		if ($cacheData != false) {
 			// We got data from cache. Return it and stop
 			print $cacheData;
@@ -51,19 +51,20 @@ function plugin_rss_export_generate($catname = ''){
 	// Generate output
 	$output = plugin_rss_export_mk_header($xcat);
 
-	$limit = extra_get_param('rss_export','news_count');
+	$limit = pluginGetVariable('rss_export','news_count');
+	$delay = intval(pluginGetVariable('rss_export', 'delay'));
 	if ((!is_numeric($limit)) || ($limit<0) || ($limit>500)) { $limit = 50; }
 	$old_locale = setlocale(LC_TIME,0);
 	setlocale(LC_TIME,'en_EN');
 	if (is_array($xcat)) {
 		$orderBy = ($xcat['orderby'] && in_array($xcat['orderby'], array('id desc', 'id asc', 'postdate desc', 'postdate asc', 'title desc', 'title asc')))?$xcat['orderby']:'id desc';
-		$query = "select * from ".prefix."_news where catid regexp '[[:<:]](".$xcat['id'].")[[:>:]]' and approve=1 order by ".$orderBy;
+		$query = "select * from ".prefix."_news where catid regexp '[[:<:]](".$xcat['id'].")[[:>:]]' and approve=1 ".(($delay>0)?(" and ((postdate + ".intval($delay*60).") < unix_timestamp(now())) "):'')."order by ".$orderBy;
 	} else {
-		$query = "select * from ".prefix."_news where approve=1 order by id desc";
+		$query = "select * from ".prefix."_news where approve=1".(($delay>0)?(" and ((postdate + ".intval($delay*60).") < unix_timestamp(now())) "):'')." order by id desc";
 	}
 
 	// Prepare hide template
-	if ($config['blocks_for_reg'] && extra_get_param('rss_export','use_hide')) {
+	if ($config['blocks_for_reg'] && pluginGetVariable('rss_export','use_hide')) {
 		LoadPluginLang('rss_export', 'main','','rexport');
 		$hide_template = @file_get_contents(root.'plugins/rss_export/templates/hide.tpl');
 		$hide_template = str_replace('{text}',$lang['rexport_hide'],$hide_template);
@@ -74,7 +75,7 @@ function plugin_rss_export_generate($catname = ''){
 	        // Make standart system call in 'export' mode
 	        $export_mode = 'export_body';
 
-		switch (extra_get_param('rss_export','content_show')) {
+		switch (pluginGetVariable('rss_export','content_show')) {
 			case '1': $export_mode = 'export_short'; break;
 			case '2': $export_mode = 'export_full'; break;
 		}
@@ -84,17 +85,17 @@ function plugin_rss_export_generate($catname = ''){
 		$enclosure = '';
 
 		// Check if Enclosure `xfields` integration is activated
-		if (extra_get_param('rss_export', 'xfEnclosureEnabled') && (true || getPluginStatusActive('xfields'))) {
+		if (pluginGetVariable('rss_export', 'xfEnclosureEnabled') && (true || getPluginStatusActive('xfields'))) {
 			// Load (if needed XFIELDS plugin
 			include_once(root."/plugins/xfields/xfields.php");
 
-			if (is_array($xfd = xf_decode($row['xfields'])) && isset($xfd[extra_get_param('rss_export','xfEnclosure')])) {
-				$enclosure = $xfd[extra_get_param('rss_export','xfEnclosure')];
+			if (is_array($xfd = xf_decode($row['xfields'])) && isset($xfd[pluginGetVariable('rss_export','xfEnclosure')])) {
+				$enclosure = $xfd[pluginGetVariable('rss_export','xfEnclosure')];
 			}
 		}
 
 		$output .= "  <item>\n";
-		$output .= "   <title><![CDATA[".((extra_get_param('rss_export','news_title') == 1)&&GetCategories($row['catid'],true)?GetCategories($row['catid'], true).' :: ':'').secure_html($row['title'])."]]></title>\n";
+		$output .= "   <title><![CDATA[".((pluginGetVariable('rss_export','news_title') == 1)&&GetCategories($row['catid'],true)?GetCategories($row['catid'], true).' :: ':'').secure_html($row['title'])."]]></title>\n";
 		$output .= "   <link><![CDATA[".newsGenerateLink($row, false, 0, true)."]]></link>\n";
 		$output .= "   <description><![CDATA[".$content."]]></description>\n";
 
@@ -113,7 +114,7 @@ function plugin_rss_export_generate($catname = ''){
 	// Print output
 	print $output;
 
-	if (extra_get_param('rss_export','cache')) {
+	if (pluginGetVariable('rss_export','cache')) {
 		cacheStoreFile($cacheFileName, $output, 'rss_export');
 	}
 }
@@ -124,9 +125,9 @@ function plugin_rss_export_mk_header($xcat) {
  $line = '<?xml version="1.0" encoding="windows-1251"?>'."\n";
  $line.= ' <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/">'."\n";
  $line.= " <channel>\n";
- if (extra_get_param('rss_export','feed_title_format') == 'handy') {
-	$line.= "  <title><![CDATA[".extra_get_param('rss_export', 'feed_title_value')."]]></title>\n";
- } else if ((extra_get_param('rss_export', 'feed_title_format') == 'site_title') && is_array($xcat)) {
+ if (pluginGetVariable('rss_export','feed_title_format') == 'handy') {
+	$line.= "  <title><![CDATA[".pluginGetVariable('rss_export', 'feed_title_value')."]]></title>\n";
+ } else if ((pluginGetVariable('rss_export', 'feed_title_format') == 'site_title') && is_array($xcat)) {
 	$line.= "  <title><![CDATA[".$config['home_title'].(is_array($xcat)?' :: '.$xcat['name']:'')."]]></title>\n";
  } else {
 	$line.= "  <title><![CDATA[".$config['home_title']."]]></title>\n";
