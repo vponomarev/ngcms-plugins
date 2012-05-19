@@ -271,7 +271,7 @@ add_act('index', 'plugin_tags_cloudblock');
 function plugin_tags_cloud(){
 	global $tpl, $template, $mysql, $lang, $SYSTEM_FLAGS;
 
-	plugin_tags_generatecloud(1);
+	plugin_tags_generatecloud(1, '', intval(pluginGetVariable('tags', 'age')));
 }
 
 //
@@ -297,7 +297,7 @@ function plugin_tags_cloudblock() {
 	//	print "<pre>".var_export($SYSTEM_FLAGS['news'], true)."</pre>";
 	}
 
-	plugin_tags_generatecloud(0, $cl);
+	plugin_tags_generatecloud(0, $cl, intval(pluginGetVariable('tags', 'age')));
 }
 
 //
@@ -400,7 +400,8 @@ function plugin_tags_tag($params = array()) {
 // Params
 // - $ppage - flag if separate plugin page should be generated (0 - no, 1 - yes)
 // - $catlist - array with list of categories for tag show (will not be filtered if variable is not an array)
-function plugin_tags_generatecloud($ppage = 0, $catlist = ''){
+// - $age - if specified, cloud will be build only for news not older than $age days
+function plugin_tags_generatecloud($ppage = 0, $catlist = '', $age = 0){
 	global $tpl, $template, $mysql, $lang, $config, $SYSTEM_FLAGS, $TemplateCache;
 
 	LoadPluginLang('tags', 'main', '', '', ':');
@@ -420,7 +421,7 @@ function plugin_tags_generatecloud($ppage = 0, $catlist = ''){
 	}
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
-	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang']).$masterTPL.(isset($_REQUEST['page'])?$_REQUEST['page']:'').(is_array($cl?join(",",$cl):$cl)).'.txt';
+	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang'].$masterTPL.('page'.isset($_REQUEST['page'])?$_REQUEST['page']:'').'age'.$age.'cat'.(is_array($cl)?join(",",$cl):$cl)).'.txt';
 
 	if (pluginGetVariable('tags','cache')) {
 		$cacheData = cacheRetrieveFile($cacheFileName, pluginGetVariable('tags','cacheExpire'), 'tags');
@@ -473,8 +474,11 @@ function plugin_tags_generatecloud($ppage = 0, $catlist = ''){
 
 	$rows = $mysql->select(
 		(count($cl)>0)?
-			("select DISTINCTROW nt.* from ".prefix."_tags nt left join ".prefix."_tags_index ti on nt.id = ti.tagID left join ".prefix."_news_map nm using(newsID) where nm.categoryID in (".join(",", $cl).") order by ".$orderby.' '.$limit):
-			("select * from ".prefix."_tags order by ".$orderby.' '.$limit));
+			("select DISTINCTROW nt.* from ".prefix."_tags nt left join ".prefix."_tags_index ti on nt.id = ti.tagID left join ".prefix."_news_map nm using(newsID) where nm.categoryID in (".join(",", $cl).")".(($age>0)?" and to_days(nm.dt) + ".intval($age)." >= to_days(now())":'')." order by ".$orderby.' '.$limit):
+			(($age == 0)?
+				("select * from ".prefix."_tags order by ".$orderby.' '.$limit):
+				("select DISTINCTROW nt.* from ".prefix."_tags nt left join ".prefix."_tags_index ti on nt.id = ti.tagID left join ".prefix."_news_map nm using(newsID) where to_days(nm.dt) + ".intval($age)." >= to_days(now()) order by ".$orderby.' '.$limit)
+			));
 
 	// Prepare style definition
 	$wlist = array();

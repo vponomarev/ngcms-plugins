@@ -30,6 +30,7 @@ array_push($cfgX, array('name' => 'limit', 'title' => $lang['tags:sidebar.limit'
 array_push($cfgX, array('name' => 'orderby', 'title' => $lang['tags:ppage.orderby'], 'descr' => $lang['tags:ppage.orderby#desc'], 'type' => 'select', 'values' => array ( '0' => $lang['tags:ppage.order.rand'], '1' => $lang['tags:ppage.order.tag_asc'], '2' => $lang['tags:ppage.order.tag_desc'], '3' => $lang['tags:ppage.order.pop_asc'], '4' => $lang['tags:ppage.order.pop_desc']), 'value' => pluginGetVariable($plugin, 'orderby')));
 array_push($cfgX, array('name' => 'catfilter', 'title' => $lang['tags:sidebar.catfilter'], 'descr' => $lang['tags:sidebar.catfilter#desc'], 'type' => 'select', 'values' => array ( '0' => $lang['tags:sidebar.filter.all'], '1' => $lang['tags:sidebar.filter.category']), 'value' => pluginGetVariable($plugin, 'catfilter')));
 array_push($cfgX, array('name' => 'newsfilter', 'title' => $lang['tags:sidebar.newsfilter'], 'descr' => $lang['tags:sidebar.newsfilter#desc'], 'type' => 'select', 'values' => array ( '0' => $lang['tags:sidebar.filter.all'], '1' => $lang['tags:sidebar.filter.news']), 'value' => pluginGetVariable($plugin, 'newsfilter')));
+array_push($cfgX, array('name' => 'age', 'title' => $lang['tags:sidebar.age'], 'descr' => $lang['tags:sidebar.age#desc'], 'type' => 'input', 'html_flags' => 'size="4"', 'value' => pluginGetVariable($plugin, 'age')));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['tags:block.sidebar'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
