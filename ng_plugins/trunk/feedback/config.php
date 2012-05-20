@@ -277,7 +277,7 @@ function showFormRow() {
 		$tVars['field']['type']['options'] = $xsel;
 		$tVars['field']['select_options'] = join("\n", $xRow['options']);
 		$tVars['field']['required']['options']	= array(0, 1);
-		$tVars['field']['auto']['options'] = array (0, 1, 2);
+		$tVars['field']['auto']['options'] = array (0, 1, 2, 3);
 		$tVars['field']['block']['options'] = array (0, 1, 2);
 
 		$recordFound = 1;

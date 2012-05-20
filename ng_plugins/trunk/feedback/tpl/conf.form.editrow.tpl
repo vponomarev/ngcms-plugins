@@ -46,7 +46,7 @@ function clx(mode) {
 	<option value="{{ x }}" {% if (field.required.value == x) %}selected="selected"{% endif %}>{{ lang['feedback:field.required.' ~ x] }}</option>
 {% endfor %}
 </select></td></tr>
-<tr class="contRow1"><td width="50%">Автозаполнение:<br/><small><b>Нет</b> - пользователь должен самостоятельно заполнять поле<br/><b>параметром</b> - значение поля может передаваться в качестве параметра к URL'у вызова<br/><b>связкой</b> - значение поля может браться из одноимённого поля плагина <b>xfields</b> связанной новости</small></td><td>
+<tr class="contRow1"><td width="50%">Автозаполнение:<br/><small><b>Нет</b> - пользователь должен самостоятельно заполнять поле<br/><b>параметром</b> - значение поля может передаваться в качестве параметра к URL'у вызова<br/><b>связкой с новостью</b> - значение поля может браться из одноимённого поля плагина <b>xfields</b> связанной новости<br/><b>связка с профилем</b> - значение поля может браться из одноимённого поля плагина <b>xfields</b> профиля пользователя</small></td><td>
 <select name="auto">
 {% for x in field.auto.options %}
 	<option value="{{ x }}" {% if (field.auto.value == x) %}selected="selected"{% endif %}>{{ lang['feedback:field.auto.' ~ x] }}</option>

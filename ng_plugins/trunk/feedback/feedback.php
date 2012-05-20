@@ -78,6 +78,12 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		}
 	}
 
+	// XFields values from user's profile
+	$xfUserValues = array();
+	if (function_exists('xf_decode') && isset($userROW['xfields']) && ($userROW['xfields'] != ''))
+		$xfUserValues = xf_decode($userROW['xfields']);
+
+
 
 	// Choose template to use
 	if ($frow['template'] && file_exists(root.'plugins/feedback/tpl/templates/'.$frow['template'])) {
@@ -140,6 +146,8 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 				$setValue = secure_html($_REQUEST['v_'.$fInfo['name']]);
 			} else if ($fInfo['auto'] == 2) {
 				$setValue = secure_html($xfValues[$fInfo['name']]);
+			} else if ($fInfo['auto'] == 3) {
+				$setValue = secure_html($xfUserValues[$fInfo['name']]);
 			}
 		}
 
