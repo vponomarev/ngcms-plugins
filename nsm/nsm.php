@@ -139,9 +139,18 @@ function plugin_nsm_add(){
 	} else {
 		// Load library
 		require_once(root.'/includes/inc/lib_admin.php');
+		require_once root.'includes/classes/upload.class.php';
 
 		LoadLang('addnews', 'admin', 'addnews');
 
+		if (isset($_REQUEST['mod']) && ($_REQUEST['mod'] == 'preview')) {
+			include_once root.'includes/news.php';
+			$lang = LoadLang('preview', 'admin');
+
+			showPreview();
+			$SUPRESS_TEMPLATE_SHOW = 1;
+			return;
+		}
 		$o = addNews(array('no.meta' => true, 'no.files' => true, 'no.editurl' => true));
 		if (!$o) {
 			plugin_nsm_addForm(json_encode(arrayCharsetConvert(0, $_POST)));
