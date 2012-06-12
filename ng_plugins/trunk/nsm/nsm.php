@@ -113,7 +113,7 @@ function plugin_nsm(){
 }
 
 function plugin_nsm_add(){
-	global $lang;
+	global $lang, $SUPRESS_TEMPLATE_SHOW;
 
 	LoadLang('addnews', 'admin', 'addnews');
 
