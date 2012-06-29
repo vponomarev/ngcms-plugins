@@ -41,7 +41,7 @@ function plugin_nsm(){
 	));
 
 	if (!is_array($userROW) || !$permPlugin['view']) {
-		print "PERM DENIED";
+		msg(array("type" => "error", "text" => $lang['perm.denied']));
 		return;
 	}
 
@@ -180,9 +180,14 @@ function plugin_nsm_edit(){
 		'delete.published',
 	));
 
+	// We can manage only OWN news
+	if (!is_array($userROW)) {
+		msg(array("type" => "error", "text" => $lang['perm.denied']));
+	}
+
 	// Try to find news that we're trying to edit
 	if (!is_array($row = $mysql->record("select * from ".prefix."_news where (id = ".db_squote($_REQUEST['id']).") and (author_id = ".db_squote($userROW['id']).")", 1))) {
-		msg(array("type" => "error", "text" => $lang['msge_not_found']));
+		msg(array("type" => "error", "text" => $lang['nsm']['err.news_not_found']));
 		return;
 	}
 
