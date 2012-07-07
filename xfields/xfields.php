@@ -157,7 +157,7 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 							'stamp' => $mkStamp,
 							'stamp_transparency' => $config['wm_image_transition'],
 							'stamp_noerror' => true,
-							'shadow' => $mkThumb,
+							'shadow' => $mkShadow,
 							'stampfile' => $stampFileName
 						)
 						);
@@ -849,6 +849,10 @@ class XFieldsNewsFilter extends NewsFilter {
 				$kp = preg_quote($k, "#");
 				$xfk = isset($fields[$k])?$fields[$k]:'';
 
+				// TWIG stype data fill
+				$tvars['vars']['p']['xfields'][$k]['type'] = $v['type'];
+				$tvars['vars']['p']['xfields'][$k]['title'] = secure_html($v['title']);
+
 				// Our behaviour depends on field type
 				if ($v['type'] == 'images') {
 					// Check if there're attached images
@@ -891,7 +895,7 @@ class XFieldsNewsFilter extends NewsFilter {
 						);
 						foreach ($imglist as $imgInfo) {
 							$tiEntry = array(
-								'url'			=> ($imgInfo['storage']?$config['attach_url']:$config['files_url']).'/'.$imgInfo['folder'].'/'.$imgInfo['name'],
+								'url'			=> ($imgInfo['storage']?$config['attach_url']:$config['images_url']).'/'.$imgInfo['folder'].'/'.$imgInfo['name'],
 								'width'			=> $imgInfo['width'],
 								'height'		=> $imgInfo['height'],
 								'pwidth'		=> $imgInfo['p_width'],
@@ -906,15 +910,28 @@ class XFieldsNewsFilter extends NewsFilter {
 							);
 
 							if ($imgInfo['preview']) {
-								$tiEntry['purl'] = ($imgInfo['storage']?$config['attach_url']:$config['files_url']).'/'.$imgInfo['folder'].'/thumb/'.$imgInfo['name'];
+								$tiEntry['purl'] = ($imgInfo['storage']?$config['attach_url']:$config['images_url']).'/'.$imgInfo['folder'].'/thumb/'.$imgInfo['name'];
 							}
 
 							$tiVars['entries'] []= $tiEntry;
 						}
 
-						// Render field value
-						$tvars['vars']['[xvalue_'.$k.']'] = $xtImages->render($tiVars);
+						// TWIG based variables
+						$tvars['vars']['p']['xfields'][$k]['entries'] = $tiVars['entries'];
+						$tvars['vars']['p']['xfields'][$k]['count'] = count($tiVars['entries']);
+
+						$xv = $xtImages->render($tiVars);
+
+						$tvars['vars']['p']['xfields'][$k]['value'] = $xv;
+						$tvars['vars']['[xvalue_'.$k.']'] = $xv;
+
 					} else {
+						// TWIG based variables
+						$tvars['vars']['p']['xfields'][$k]['value'] = '';
+						$tvars['vars']['p']['xfields'][$k]['count'] = 0;
+						$tvars['vars']['p']['xfields'][$k]['entries'] = array();
+
+						// General variables
 						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '';
 						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '$1';
 						$tvars['vars']['[xvalue_'.$k.']'] = '';
@@ -937,6 +954,7 @@ class XFieldsNewsFilter extends NewsFilter {
 					if (($v['type'] == 'textarea') && (!$v['noformat'])) {
 						$xfk = (str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':''));
 					}
+					$tvars['vars']['p']['xfields'][$k]['value'] = $xfk;
 					$tvars['vars']['[xvalue_'.$k.']'] = $xfk;
 				}
 			}
