@@ -820,6 +820,14 @@ class XFieldsNewsFilter extends NewsFilter {
 		return 1;
 	}
 
+	// Called before showing list of news
+	function onBeforeShowlist($callingParams) {
+		if (isset($linkedFiles['data']) && is_array($linkedFiles['data'])) {
+			// Check for news that have attached TABLE data and load this table into memory
+			// ...
+		}
+	}
+
 	// Show news call :: processor (call after all processing is finished and before show)
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 		global $mysql, $config, $twigLoader, $twig, $PFILTERS, $twig, $twigLoader, $parse;
@@ -1336,7 +1344,89 @@ class XFieldsFilterAdminCategories extends FilterAdminCategories{
 	}
 }
 
+class XFieldsCoreFilter extends CoreFilter {
+	function registerUserForm(&$tvars) {
+		// Load config
+		$xf = xf_configLoad();
+		if (!is_array($xf) || !isset($xf['users']) || !is_array($xf['users']))
+			return 1;
+
+
+		foreach ($xf['users'] as $k => $v) {
+			if ($v['regpage'] && !$v['disabled']) {
+				//print "$k: <pre>".var_export($v, true)."</pre>";
+				$tEntry = array(
+					'name'	=> 'xfield_'.$k,
+					'title'	=> $v['title'],
+				);
+				switch ($v['type']) {
+					case 'text':
+						$tEntry['type'] = 'input';
+						$tEntry['value'] = $v['default'];
+
+						break;
+					case 'textarea':
+						$tEntry['type'] = 'text';
+						$tEntry['value'] = $v['default'];
+						break;
+					case 'select':
+						$tEntry['type'] = 'select';
+						if ($v['required']) {
+							$tEntry['values'] = $v['options'];
+						} else {
+							$tEntry['values'] = array('' => '') + $v['options'];
+						}
+						$tEntry['value'] = $v['default'];
+						break;
+
+				}
+				$tvars['entries'] []= $tEntry;
+			}
+		}
+		return 1;
+	}
+
+	function registerUserNotify($userID, $userRec) {
+		global $mysql;
+
+		// Load config
+		$xf = xf_configLoad();
+		if (!is_array($xf) || !isset($xf['users']) || !is_array($xf['users']))
+			return 1;
+
+		$xdata = array();
+		$SQL = array();
+		foreach ($xf['users'] as $k => $v) {
+			if ($v['regpage'] && !$v['disabled']) {
+
+
+				switch ($v['type']) {
+					case 'text':
+					case 'textarea':
+					case 'select':
+						$xdata[$k] = $_POST['xfield_'.$k];
+						if ($v['storage'])
+							$SQL['xfields_'.$k] = $xdata[$k];
+						break;
+				}
+			}
+		}
+		$SQL['xfields']   = xf_encode($xdata);
+
+		$SQ = array();
+		foreach ($SQL as $sk => $sv) {
+			$SQ []= $sk.'='.db_squote($sv);
+		}
+
+		$mysql->query("update ".uprefix."_users set ".join(",", $SQ)." where id = ".intval($userID));
+
+
+		return 1;
+	}
+
+}
 
 register_filter('news','xfields', new XFieldsNewsFilter);
+register_filter('core.registerUser', 'xfields', new XFieldsCoreFilter);
 register_admin_filter('categories', 'xfields', new XFieldsFilterAdminCategories);
 

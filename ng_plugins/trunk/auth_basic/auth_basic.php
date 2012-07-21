@@ -20,22 +20,38 @@ class auth_basic {
 	function login($auto_scan = 1, $username = '', $password = '') {
 		global $mysql;
 
-	        if ($auto_scan) {
+        if ($auto_scan) {
 			$username = $_REQUEST['username'];
 			$password = $_REQUEST['password'];
 		}
 		$password = EncodePassword($password);
 
-		$sql = "select * from ".uprefix."_users where name = ".db_squote($username)." and pass=".db_squote($password);
-		$row = $mysql->record($sql);
+		//
+		$flagError = false;
+		$flagErrorText = '';
+		$returnValue = '';
+		$row = array();
 
-		// Проверяем нужна ли активация
-		if ($row['activation']) {
-			return 'ERR:NEED.ACTIVATE';
+		// Request record for specific user
+		if (!is_array($row = $mysql->record("select * from ".uprefix."_users where name =".db_squote($username)))) {
+			// ** UNKNOWN USER **
+			return 'ERR:INVALID.USER ['.$username.']';
 		}
 
-		if ($row) { return $row; }
-		return '';
+		// Check password
+		if ($row['pass'] != $password) {
+			// ** WRONG PASSWORD **
+			return 'ERR:INVALID.PASSWORD ['.$username.']';
+		}
+
+		// Check is activation is required
+		if ($row['activation']) {
+			return 'ERR:NEED.ACTIVATE ['.$username.']';
+		}
+
+		// Return user's record
+		return $row;
+
 	}
 
 	//
@@ -127,6 +143,7 @@ class auth_basic {
 		LoadPluginLang('auth_basic', 'auth','','auth');
 
 	 	$error = 0;
+		$userid = 0;
 	 	$values['login'] = trim($values['login']);
 
 	 	// Preprocess login
@@ -221,6 +238,7 @@ class auth_basic {
 			case 0:
 				$newpassword = MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
+				$userid			=	$mysql->result('select LAST_INSERT_ID()');
 				msg(array(
 					"text" => $lang['msgo_registered'],
 					"info" => str_replace(array('{login}', '{password}'), array($values['login'], $newpassword), $lang['auth_reg.success0'])
@@ -231,6 +249,7 @@ class auth_basic {
 			case 1:
 				$newpassword = MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
+				$userid			=	$mysql->result('select LAST_INSERT_ID()');
 
 				$tvars['vars'] = array( 'login' => $values['login'],
 										'home' => home,
@@ -261,8 +280,8 @@ class auth_basic {
 			case 2:
 				$newpassword	=	MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
-				$userid			=	$mysql->record('select LAST_INSERT_ID() as id');
-				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid['id'], 'code' => $actcode), array(), false, true);
+				$userid			=	$mysql->result('select LAST_INSERT_ID()');
+				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid, 'code' => $actcode), array(), false, true);
 
 				$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
 
@@ -292,6 +311,7 @@ class auth_basic {
 			// 3 - Ручная с нотификацией [ручная генерация пароля, email нотификация]
 			case 3:
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($values['password'])).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '')");
+				$userid			=	$mysql->result('select LAST_INSERT_ID()');
 
 				$tvars['vars'] = array( 'login' => $values['login'],
 										'home' => home,
@@ -321,8 +341,8 @@ class auth_basic {
 			case 4:
 				$actcode		=	MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($values['password'])).", ".db_squote($values['email']).", ".$regstatus.", '".$add_time."', '', ".db_squote($actcode).")");
-				$userid			=	$mysql->record('select LAST_INSERT_ID() as id');
-				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid['id'], 'code' => $actcode), array(), false, true);
+				$userid			=	$mysql->result('select LAST_INSERT_ID()');
+				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid, 'code' => $actcode), array(), false, true);
 
 				$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
 
@@ -352,7 +372,7 @@ class auth_basic {
 			//print "<pre>".var_export($lang, true)."</pre>";
 		}
 
-		return 1;
+		return ($userid>0)?$userid:1;
 
 	}
 
