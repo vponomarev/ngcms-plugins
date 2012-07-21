@@ -89,7 +89,7 @@
 </tr>
 {% for entry in entries %}
 <tr align="left" class="xListEntry{% if (entry.flags.disabled) %}Disabled{% endif %}">
-	<td style="padding:2px;"><a href="{{ entry.linkup }}"><img src="{{ skins_url }}/images/up.gif" width="16" height="16" alt="UP" /></a><a href="{{ entry.linkdown }}"><img src="{{ skins_url }}/images/down.gif" width="16" height="16" alt="DOWN" /></a> <a href="{{ entry.link }}">{{ entry.name }}</a></td>
+	<td style="padding:2px;"><a href="{{ entry.linkup }}"><img src="{{ skins_url }}/images/up.gif" width="16" height="16" alt="UP" /></a><a href="{{ entry.linkdown }}"><img src="{{ skins_url }}/images/down.gif" width="16" height="16" alt="DOWN" /></a> <a href="{{ entry.link }}">{{ entry.name }}</a>{% if (sectionID == 'users') and (entry.flags.regpage )%} <span title="{{ lang.xfconfig['show_regpage'] }}">[<b><font color="red">R</font></b>]{% endif %}</span></td>
 	<td>{{ entry.title }}</td>
 	<td>{{ entry.type }}</td>
 	<td>{{ entry.options }}</td>

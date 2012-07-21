@@ -99,6 +99,7 @@ function showFieldList(){
 				'required'	=> $data['required']?true:false,
 				'default'	=> ($data['default'] != '')?true:false,
 				'disabled'	=> $data['disabled']?true:false,
+				'regpage'	=> $data['regpage']?true:false,
 			),
 		);
 
@@ -150,6 +151,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 
 		$tVars['flags']['editMode'] = 1;
 		$tVars['flags']['disabled'] = $data['disabled']?true:false;
+		$tVars['flags']['regpage'] = $data['regpage']?true:false;
 		$tVars = $tVars + array(
 			'id'			=>	$field,
 			'title'			=>	$data['title'],
@@ -278,6 +280,9 @@ function doAddEdit() {
 	$data['type']		= $_REQUEST['type'];
 	$data['bb_support']	= $_REQUEST['bb_support']?1:0;
 	$data['default']	= '';
+
+	if (($sectionID == 'users') && ($data['type'] != 'images'))
+		$data['regpage']	= intval($_REQUEST['regpage']);
 
 	switch ($data['type']) {
 		case 'text':
@@ -495,11 +500,6 @@ function doAddEdit() {
 
 //
 //
-/**
- * doUpdate()
- *
- * @return
- */
 function doUpdate() {
 	global $xf, $XF, $lang, $tpl, $mysql, $sectionID;
 
@@ -546,11 +546,7 @@ function doUpdate() {
 	}
 
 	$xf = $XF;
-//
-//	$tvars = array ( 'vars' => array ( 'id' => $field, 'text' => $notif));
-//	$tpl -> template('config_updated', extras_dir.'/xfields/tpl');
-//	$tpl -> vars('config_updated', $tvars);
-//	echo $tpl -> show('config_updated');
+
 }
 
 

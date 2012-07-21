@@ -39,6 +39,7 @@ function storageMode(mode) {
 <td colspan="2" class="contentHead" width="100%"><img src="{{ skins_url }}/images/nav.gif" hspace="8">{% if (flags.editMode) %}{{ lang.xfconfig['title_edit'] }}{% else %}{{ lang.xfconfig['title_add'] }}{% endif %}</td>
 </tr>
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['disabled'] }}</td><td width="47%"><input type="checkbox" name="disabled" value="1"{% if (flags.disabled) %}checked="checked"{% endif %}></td></tr>
+{% if (sectionID == 'users') and (type != 'images') %}<tr class="contRow1"><td width="50%">{{ lang.xfconfig['regpage'] }}</td><td width="47%"><input type="checkbox" name="regpage" value="1"{% if (flags.regpage) %}checked="checked"{% endif %}></td></tr>{% endif %}
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['id'] }}</td><td width="47%"><input type="text" name="id" value="{{ id }}" size="40" {% if (flags.editMode) %}readonly{% endif %}>{% if (flags.editMode) %} &nbsp; &nbsp; {{ lang.xfconfig['noeditid'] }}{% endif %}</td></tr>
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['title'] }}</td><td><input type="text" name="title" value="{{ title }}" size="40" /></td></tr>
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['type'] }}</td><td><select name="type" size="4" id="xfSelectType" onclick="clx(this.value);" onchange="clx(this.value);" />{{ type_opts }}</select></td></tr>
