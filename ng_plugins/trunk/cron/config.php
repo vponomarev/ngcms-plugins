@@ -6,39 +6,113 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Configuration file for plugin
 //
+function plugin_cron_commit() {
+	global $CRONDATA;
+	if (!isset($_POST['data']) || !is_array($_POST['data'])) {
+		return false;
+	}
+
+	$cronLines = array();
+	foreach ($_POST['data'] as $k => $v) {
+		if (!is_array($v))
+			return false;
+
+		// Check if values are set
+		foreach (array('plugin', 'handler', 'min', 'hour', 'day', 'month', 'dow') as $xk) {
+			if (!isset($v[$xk]))
+				return array(false, $k, $xk);
+			$v[$xk] = trim($v[$xk]);
+		}
+		// Check content
+		if ($v['plugin'] == '') {
+			// EMPTY LINE, skip
+			continue;
+		}
+
+		if (($v['min'] != '*') && ((!preg_match('#^\d+$#', $v['min'], $null)) || ($v['min'] < 0) || ($v['min'] > 59)))
+			return array(false, $k, 'min', $v['min']);
+
+		if (($v['hour'] != '*') && ((!preg_match('#^\d+$#', $v['hour'], $null)) || ($v['hour'] < 0) || ($v['hour'] > 23)))
+			return array(false, $k, 'hour');
+
+		if (($v['day'] != '*') && ((!preg_match('#^\d+$#', $v['day'], $null)) || ($v['day'] < 1) || ($v['day'] > 31)))
+			return array(false, $k, 'day');
+
+		if (($v['month'] != '*') && ((!preg_match('#^\d+$#', $v['month'], $null)) || ($v['month'] < 1) || ($v['month'] > 31)))
+			return array(false, $k, 'month');
+
+		if (($v['dow'] != '*') && ((!preg_match('#^\d+$#', $v['dow'], $null)) || ($v['dow'] < 1) || ($v['dow'] > 6)))
+			return array(false, $k, 'dow');
+
+		$cronLines []= array($v['min']."\t".$v['hour']."\t".$v['day']."\t".$v['month']."\t".$v['dow']."\t".$v['plugin']."\t".$v['handler']);
+	}
+
+	// Populate cron info field
+	$CRONDATA = $cronLines;
+	cron_save();
+
+	return true;
+}
+
+
+function plugin_cron_fillEntries($cronData) {
+	$rowNum = 1;
+	$entries = array();
+	foreach ($cronData as $k => $v) {
+		$tEntry = array(
+			'id'		=> $rowNum,
+			'plugin'	=> $v[6],
+			'handler'	=> $v[7],
+			'min'		=> $v[1],
+			'hour'		=> $v[2],
+			'day'		=> $v[3],
+			'month'		=> $v[4],
+			'dow'		=> $v[5],
+		);
+
+		$entries[]= $tEntry;
+		$rowNum++;
+	}
+	$entries[] = array('id' => $rowNum);
+	return $entries;
+}
+
+
 
 // Preload config file
 plugins_load_config();
 
-// Preload engine
+// Load language
+LoadPluginLang('cron', 'config', '', '', '#');
+
+
+// Preload plugin engine
 include_once 'cron.php';
 
-global $CRONDATA;
-$cronLines = array();
-foreach ($cron=cron_load() as $k => $v) {
- $cronLines[] = $v[0];
-}
+$cronData	= cron_load();
+
+$tVars = array(
+	'token'		=> genUToken('admin.extra-config'),
+	'entries'	=> array(),
+);
 
 
-// Fill configuration parameters
-$cfg = array();
-array_push($cfg, array('descr' => 'ѕлагин реализует функционал аналогичный unix программе cron, а именно - позвол€ет запукать периодические задачи'));
-array_push($cfg, array('name' => 'crondata', 'title' => "—писок активных задач<br /><small> ажда€ строка представл€ет из себ€ набор параметров разделенных пробелом. ¬о всех параметрах св€занных со временем должно указыватьс€ либо конкретное значение, либо - <b>*</b>, что означает 'в любой момент'.<br />—писок параметров:<br /><b>min</b> - номер минуты<br /><b>hour</b> - номер часа<br /><b>day</b> - номер дн€<br /><b>month</b> - номер мес€ца<br /><b>DOW</b> - день недели [не поддерживаетс€]<br /><b>plugin</b> - ID плагина который надо запускать<br /><b>plugin CMD</b> - команда передаваема€ плагину<br /><br /><u>ѕример:</u><br /> <b><font color=blue>15 0 * * * test help</font></b><br /> - вызывать каждый день в 00:15 плагин <i>test</i> с параметром <i>help</i></small>", 'type' => 'text', 'html_flags' => 'rows=10 cols=100', 'value' => implode("\n",$cronLines)));
-
-// RUN 
+// Check for desired behaviour
 if ($_REQUEST['action'] == 'commit') {
-	// If submit requested, do config save
-	//commit_plugin_config_changes($plugin, $cfg);
-	$CRONDATA = array();
-	foreach (explode("\n",$_REQUEST['crondata']) as $v) {
-		array_push($CRONDATA, array($v));
-	}	
-	cron_save();
+	$tVars = array();
+	// ** Update request
+	$res = plugin_cron_commit();
+	if ($res !== true) {
+		// ERROR
+		$tVars['msg'] = $lang['cron']['result_err'];
+	} else {
+		$tVars['msg'] = $lang['cron']['result_ok'];
+	}
 
-	print_commit_complete($plugin);
+	$xt = $twig->loadTemplate('plugins/cron/tpl/done.tpl');
+	echo $xt->render($tVars);
 } else {
-	generate_config_page($plugin, $cfg);
+	$tVars['entries'] = plugin_cron_fillEntries($cronData);
+	$xt = $twig->loadTemplate('plugins/cron/tpl/config.tpl');
+	echo $xt->render($tVars);
 }
-
-
-?>
