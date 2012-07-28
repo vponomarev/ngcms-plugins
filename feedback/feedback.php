@@ -21,7 +21,7 @@ function plugin_feedback_screen(){
 // * 0 - initial show
 // * 1 - show filled earlier values (error filling some fields)
 function plugin_feedback_showScreen($mode = 0, $errorText = '') {
-	global $template, $lang, $mysql, $userROW, $PFILTERS, $twig;
+	global $template, $lang, $mysql, $userROW, $PFILTERS, $twig, $SYSTEM_FLAGS;
 
 	$output = '';
 	$hiddenFields = array();
@@ -29,6 +29,8 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('site.form', 'site.notify'), 'feedback', pluginGetVariable('feedback', 'localsource'));
+
+	$SYSTEM_FLAGS['info']['title']['group']		= $lang['feedback:header.title'];
 
 
 	$form_id = intval($_REQUEST['id']);
@@ -45,6 +47,8 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		$template['vars']['mainblock']      =  $xt->render($tVars);
 		return 1;
 	}
+
+	$SYSTEM_FLAGS['info']['title']['item']	= $frow['title'];
 
 	// Unpack form data
 	$fData = unserialize($frow['struct']);
@@ -404,7 +408,7 @@ function plugin_feedback_post() {
 	$xt = $twig->loadTemplate($tpath['site.notify'].'site.notify.tpl');
 
 	$tVars = array(
-		'title' => $lang['feedback:form.no.title'],
+		'title' => $frow['title'],
 		'ptpl_url' => $ptpl_url,
 		'entries' => str_replace('{ecount}', $mailCount, $lang['feedback:confirm.message']),
 	);
