@@ -4,16 +4,17 @@
 if (!defined('NGCMS')) die ('HAL');
 
 add_act('index_post', 'plugin_multi_main');
-add_act('news_full', 'plugin_multi_main_full', 3);
 
-function plugin_multi_main($params)
-{
+function plugin_multi_main($params) {
 	global $SYSTEM_FLAGS, $confArray, $CurrentHandler, $catmap, $userROW;
 
+	// ** MAIN PAGE
 	if (pluginGetVariable('multi_main', 'main') && isset($confArray['predefined']['REQUEST_URI']) && $confArray['predefined']['REQUEST_URI'] == '/'){
 		$SYSTEM_FLAGS['template.main.name'] = pluginGetVariable('multi_main', 'main');
 		return;
 	}
+
+	// ** NEWS CATEGORY PAGE
 	if($CurrentHandler['pluginName'] == 'news' && $CurrentHandler['handlerName'] == 'by.category'){
 		$catname = '';
 		if (isset($CurrentHandler['params']['category']))
@@ -26,6 +27,18 @@ function plugin_multi_main($params)
 			return;
 		}
 	}
+
+	// ** SHOW SPECIFIC NEWS PAGE
+	if (($CurrentHandler['pluginName'] == 'news') && ($CurrentHandler['handlerName'] == 'news')) {
+		$calt = $SYSTEM_FLAGS['news']['currentCategory.alt'];
+		$category = pluginGetVariable('multi_main', 'category');
+		if (is_array($category) && array_key_exists($calt, $category)){
+			$SYSTEM_FLAGS['template.main.name'] = $category[$calt];
+		}
+		return;
+	}
+
+	// ** DEFAULT ACTION
 	if (!isset($SYSTEM_FLAGS['template.main.name'])){
 		$main = '';
 		if (!is_array($userROW)) $main = pluginGetVariable('multi_main', 'guest');
@@ -34,15 +47,5 @@ function plugin_multi_main($params)
 		else if ($userROW['status'] == 3) $main = pluginGetVariable('multi_main', 'journ');
 		else if ($userROW['status'] == 4) $main = pluginGetVariable('multi_main', 'coment');
 		if ($main) $SYSTEM_FLAGS['template.main.name'] = $main;
-	}
-}
-
-function plugin_multi_main_full($sth, $row, &$tvars){
-	global $catmap, $SYSTEM_FLAGS;
-	$cid = intval(array_shift(explode(',', $row['catid'])));
-	$catname = $catmap[intval($cid)];
-	$category = pluginGetVariable('multi_main', 'category');
-	if (is_array($category) && array_key_exists($catname, $category)){
-		$SYSTEM_FLAGS['template.main.name'] = $category[$catname];
 	}
 }
