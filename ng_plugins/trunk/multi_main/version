@@ -1,6 +1,6 @@
 ID: multi_main
 Name: Multy main
-Version: 0.01
+Version: 0.02
 Actions: index_pre; multi_main.php
 Config: config.php
 Type: plugin
