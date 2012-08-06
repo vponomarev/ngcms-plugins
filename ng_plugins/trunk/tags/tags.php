@@ -15,8 +15,6 @@ class TagsNewsfilter extends NewsFilter {
 		return 1;
 	}
 	function addNews(&$tvars, &$SQL) {
-		if (!isset($SQL['tags']))
-			return 1;
 
 		// Scan tags, delete dups
 		$tags = array();
