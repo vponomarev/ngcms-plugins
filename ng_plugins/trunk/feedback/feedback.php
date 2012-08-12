@@ -88,9 +88,8 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		$xfUserValues = xf_decode($userROW['xfields']);
 
 
-
 	// Choose template to use
-	if ($frow['template'] && file_exists(root.'plugins/feedback/tpl/templates/'.$frow['template'])) {
+	if ($frow['template'] && file_exists(root.'plugins/feedback/tpl/templates/'.$frow['template'].'.tpl')) {
 		$tP = root.'plugins/feedback/tpl/templates/';
 		$tN = $frow['template'];
 	} else {
