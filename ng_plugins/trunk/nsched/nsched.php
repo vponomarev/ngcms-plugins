@@ -20,7 +20,7 @@ class NSchedNewsFilter extends NewsFilter {
 		if ($perm['personal.publish'] || $perm['personal.unpublish']) {
 			$tvars['plugin']['nsched'] .= '<tr><td width="100%" class="contentHead"><img src="'.admin_url.'/skins/default/images/nav.gif" hspace="8" alt="" />Управление публикацией новостей</td></tr><tr><td width="100%" class="contentEntry1"><table>';
 			if ($perm['personal.publish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>Дата включения:</td><td><input name="nsched_activate" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Дата включения:</td><td><input name="nsched_activate" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
 			}
 			if ($perm['personal.unpublish']) {
 				$tvars['plugin']['nsched'] .= '<tr><td>Дата отключения:</td><td><input name="nsched_deactivate" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
