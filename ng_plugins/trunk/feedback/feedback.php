@@ -216,6 +216,11 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	$tVars['entries'] = $tEntries;
 	$tVars['FBF_DATA'] = json_encode($FBF_DATA);
 
+	// Check if we need to check variable content via JScript
+	if (substr($frow['flags'], 0, 1)) {
+		$tVars['flags']['jcheck'] = 1;
+	}
+
 	// Check if we need captcha
 	if (substr($frow['flags'],1,1)) {
 		$tVars['flags']['captcha'] = 1;

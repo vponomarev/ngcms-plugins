@@ -18,14 +18,14 @@ function FBF_CHECK() {
  for (i in FBF_INIT) {
  	if (FBF_INIT[i][1]) {
  	 if (FBF_INIT[i][0] == 'date') {
-		if ((frm[i+':day'].value == '1') && (frm[i+':month'].value == '1') && (frm[i+':year'].value == '1970')) {
+		if ((frm['fld_'+i+':day'].value == '1') && (frm['fld_'+i+':month'].value == '1') && (frm['fld_'+i+':year'].value == '1970')) {
  			alert('{{ lang['feedback:form.err.notfilled'] }} ('+FBF_INIT[i][2]+')!');
- 			frm[i+':day'].focus();
+ 			frm['fld_'+i+':day'].focus();
  			return false;
 		}
- 	 } else if (frm[i].value == '') {
+ 	 } else if (frm['fld_'+i].value == '') {
  		alert('{{ lang['feedback:form.err.notfilled'] }} ('+FBF_INIT[i][2]+')!');
- 		frm[i].focus();
+ 		frm['fld_'+i].focus();
  		return false;
  	}
    }
