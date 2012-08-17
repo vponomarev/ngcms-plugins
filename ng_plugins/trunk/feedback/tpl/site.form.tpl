@@ -29,6 +29,14 @@ function FBF_CHECK() {
  		return false;
  	}
    }
+  // Check if captcha filled
+  var capt = frm.vcode;
+  if ((capt != null) && (capt.value == '')) {
+	alert('{{ lang['feedback:sform.captcha.badcode'] }}');
+	return false;
+  }
+
+
  }
  return true;
 }
