@@ -3,6 +3,7 @@
 <script language="javascript">
 function clx(mode) {
  document.getElementById('type_text').style.display = (mode == 'text')?'block':'none';
+ document.getElementById('type_email').style.display = (mode == 'email')?'block':'none';
  document.getElementById('type_textarea').style.display = (mode == 'textarea')?'block':'none';
  document.getElementById('type_select').style.display = (mode == 'select')?'block':'none';
  document.getElementById('type_date').style.display = (mode == 'date')?'block':'none';
@@ -22,6 +23,16 @@ function clx(mode) {
 <div id="type_text">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
 <tr class="contRow1"><td width="5%" style="background-color: #E0FFFF;">{{ lang['feedback:type.text'] }}</td><td width="45%">{{ lang['feedback:field.default'] }}</td><td><input type="text" name="text_default" value="{{ field.text_default }}" size=40></tr>
+</table>
+</div>
+<div id="type_email">
+<table border="0" cellspacing="1" cellpadding="1" class="content">
+<tr class="contRow1"><td width="5%" style="background-color: #E0FFFF;">{{ lang['feedback:type.email'] }}</td><td width="45%">{{ lang['feedback:email.sendmail'] }}</td><td>
+<select name="email_template">
+{% for x in field.email_template.options %}
+	<option value="{{ x }}" {% if (field.email_template.value == x) %}selected="selected"{% endif %}>{% if (x == '') %}{{ lang['feedback:email.sendmail.0'] }}{% else %}{{ x }}{% endif %}</option>
+{% endfor %}
+</tr>
 </table>
 </div>
 <div id="type_textarea">
