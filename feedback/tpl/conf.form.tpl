@@ -55,7 +55,7 @@
 		<a href="?mod=extra-config&plugin=feedback&action=update&subaction=down&id={{ formID }}&name={{ entry.name }}"><img src="{{ skins_url }}/images/down.gif" width="16" height="16" alt="DOWN" />
 		<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}&row={{ entry.name }}">{{ entry.name }}</a></td>
 	<td>{{ entry.title }}</td>
-	<td>{{ entry.type }}</td>
+	<td>{{ lang['feedback:type.' ~ entry.type] }}</td>
 	<td>{{ lang['feedback:field.auto.' ~ entry.auto] }}</td>
 	<td>{{ lang['feedback:field.block.' ~ entry.block] }}</td>
 	<td nowrap><a href="?mod=extra-config&plugin=feedback&action=update&subaction=del&id={{ formID }}&name={{ entry.name }}"><img src="{{ skins_url }}/images/delete.gif" alt="DEL" width="12" height="12" /></a></td>

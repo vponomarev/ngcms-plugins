@@ -257,6 +257,8 @@ function showFormRow() {
 			$tVars['field']['required']['value']	= $xRow['required'];
 			$tVars['field']['auto']['value']		= $xRow['auto'];
 			$tVars['field']['block']['value']		= $xRow['block'];
+			$tVars['field']['email_send']['value']	= $xRow['email_send'];
+			$tVars['field']['email_template']['value']	= $xRow['template'];
 
 		} else {
 			$tVars['flags']['addField']				= 1;
@@ -266,11 +268,12 @@ function showFormRow() {
 			$tVars['field']['type']['value']		= 'text';
 			$tVars['field']['required']['value']	= 0;
 			$tVars['field']['auto']['value']		= 0;
-			$tVars['field']['block']['value']	= 0;
+			$tVars['field']['block']['value']		= 0;
+			$tVars['field']['email_template']['value']	= '';
 		}
 
 		$xsel = '';
-		foreach (array('text', 'textarea', 'select', 'date') as $ts) {
+		foreach (array('text', 'email', 'textarea', 'select', 'date') as $ts) {
 			$tVars['field'][$ts.'_default'] = ($xRow['type'] == $ts)?secure_html($xRow['default']):'';
 			$xsel .= '<option value="'.$ts.'"'.(($xRow['type'] == $ts)?' selected':'').'>'.$lang['feedback:type.'.$ts];
 		}
@@ -279,6 +282,15 @@ function showFormRow() {
 		$tVars['field']['required']['options']	= array(0, 1);
 		$tVars['field']['auto']['options'] = array (0, 1, 2, 3);
 		$tVars['field']['block']['options'] = array (0, 1, 2);
+		$tVars['field']['email_send']['options'] = array (0, 1);
+
+		$tVars['field']['email_template']['options'] = array('') + ListFiles(extras_dir.'/feedback/tpl/tmail', 'html.tpl');
+		$lout = '';
+		foreach ($lf as $file)
+			$lout .= '<option value="'.$file.'"'.($frow['template'] == $file?' selected="selected"':'').'>'.($file == ''?'<автоматически>':$file).'</option>';
+
+		$tVars['template_options'] = $lout;
+
 
 		$recordFound = 1;
 	} while (0);
@@ -367,6 +379,12 @@ function editFormRow(){
 			case 'textarea':
 				$fld['type'] = 'textarea';
 				$fld['default'] = $_REQUEST['textarea_default'];
+				break;
+
+			case 'email':
+				$fld['type'] = 'email';
+				$fld['default'] = '';
+				$fld['template'] = $_REQUEST['email_template'];
 				break;
 
 			case 'select':

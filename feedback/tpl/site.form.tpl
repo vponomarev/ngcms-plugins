@@ -54,6 +54,12 @@ function FBF_CHECK() {
  <td><input style="width: 300px;" type="text" name="{{ entry.name }}" value="{{ entry.value }}"/></td>
 </tr>
 {% endif %}
+{% if entry.type == 'email' %}
+<tr>
+ <td>{{ entry.title }}:</td>
+ <td><input style="width: 300px;" type="text" name="{{ entry.name }}" value="{{ entry.value }}"/></td>
+</tr>
+{% endif %}
 {% if entry.type == 'textarea' %}
 <tr>
  <td>{{ entry.title }}:</td>

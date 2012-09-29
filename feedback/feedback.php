@@ -157,6 +157,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		switch ($fInfo['type']) {
 			case 'text':
 			case 'textarea':
+			case 'email':
 				$tEntry['value']	= $setValue;
 				break;
 
@@ -338,9 +339,6 @@ function plugin_feedback_post() {
 	$flagHTML = substr($frow['flags'], 2, 1) ? true : false;
 	$mailTN = 'mail.'.($flagHTML?'html':'text');
 
-	// Load template
-	$xt = $twig->loadTemplate($tpath[$mailTN].$mailTN.'.tpl');
-
 	// Scan all fields and fill data. Prepare outgoing email.
 	$output = '';
 	$tVars = array(
@@ -353,6 +351,8 @@ function plugin_feedback_post() {
 			'description'	=> $frow['description'],
 
 		),
+		'values'	=> array(),
+		'entries'	=> array(),
 	);
 
 	if ($linked_id > 0) {
@@ -364,6 +364,7 @@ function plugin_feedback_post() {
 	}
 
 	$tEntries = array();
+	$fieldValues = array();
 
 	foreach ($fData as $fName => $fInfo) {
 		switch ($fInfo['type']) {
@@ -371,16 +372,19 @@ function plugin_feedback_post() {
 		  					break;
 			default:		$fieldValue = $_REQUEST['fld_'.$fName];
 		}
+		$fieldValues[$fName] = str_replace("\n", "<br/>\n", secure_html($fieldValue));
 
 		$tEntry = array(
 			'id' => $fName,
 			'title' => secure_html($fInfo['title']),
-			'value' => str_replace("\n", "<br/>\n", secure_html($fieldValue)),
+			'value' => $fieldValues[$fName],
 		);
+
 		$tEntries []= $tEntry;
 	}
 
 	$tVars['entries'] = $tEntries;
+	$tVars['values'] = $fieldValues;
 
 	// Process filters (if any)
 	if (is_array($PFILTERS['feedback']))
@@ -395,8 +399,13 @@ function plugin_feedback_post() {
 	$elist = (isset($em[intval($_POST['recipient'])]))?$em[intval($_POST['recipient'])][2]:$em[1][2];
 	$eGroupName = (isset($em[intval($_POST['recipient'])]))?$em[intval($_POST['recipient'])][1]:$em[1][1];
 
+
 	// Prepare EMAIL content
 	$mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $lang['feedback:mail.subj']);
+
+	// Load template for ADMIN notification
+	$xt = $twig->loadTemplate($tpath[$mailTN].$mailTN.'.tpl');
+	// Render ADMIN email body
 	$mailBody = $xt->render($tVars);
 
 
@@ -409,12 +418,31 @@ function plugin_feedback_post() {
 		zzMail($email, $mailSubject, $mailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
 	}
 
+	// Check if we need to send notification to user
+	// -- list of user's email
+	$eSendList = array();
+	foreach ($fData as $fName => $fInfo) {
+		$tfn = extras_dir.'/feedback/tpl/tmail/'.$fInfo['template'].'.'.($flagHTML?'html':'text').'.tpl';
+		if (($fInfo['type'] == 'email') && ($fInfo['template'] != '') && (filter_var($fieldValues[$fName], FILTER_VALIDATE_EMAIL) !== false) && file_exists($tfn)) {
+			$eSendList []= $fieldValues[$fName];
+			$xtu = $twig->loadTemplate($tfn);
+			// Render ADMIN email body
+			$umailBody = $xtu->render($tVars);
+
+			zzMail($fieldValues[$fName], $mailSubject, $umailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+		}
+	}
+
 	$xt = $twig->loadTemplate($tpath['site.notify'].'site.notify.tpl');
 
 	$tVars = array(
 		'title' => $frow['title'],
 		'ptpl_url' => $ptpl_url,
 		'entries' => str_replace('{ecount}', $mailCount, $lang['feedback:confirm.message']),
+		'usermail'	=> array(
+			'count'		=> count($eSendList),
+			'list'		=> $eSendList,
+		),
 	);
 
 	$template['vars']['mainblock']      =  $xt->render($tVars);
