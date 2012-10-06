@@ -1,11 +1,12 @@
 ID: bookmarks
 Name: Users Bookmarks
-Version: 0.03
-Acts: news_full, news_short, index
+Version: 2.3
+Acts: index, news, ppages
 File: bookmarks.php
 Type: widget
 Install: install.php
+Deinstall: uninstall.php
 Config: config.php
 Description: Закладки пользователей
-Author: kt2k
-Author_URI: http://kt2k.ru/
+Author: Wolverine, kt2k
+Author_URI: http://digitalplace.ru/
