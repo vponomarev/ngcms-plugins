@@ -200,6 +200,10 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 		function onProcess($formID, $formStruct, $formData, $flagHTML, &$tVars) {
 			global $userROW, $mysql, $twig;
 
+			// Проверяем ID формы - данные корзины отображаются только в конкретной форме
+			if (pluginGetVariable('basket', 'feedback_form') != $formID)
+				return 1;
+
 			// Определяем условия выборки
 			$filter = array();
 			if (is_array($userROW)) {

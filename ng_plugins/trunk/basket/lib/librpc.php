@@ -80,13 +80,6 @@ function basket_rpc_manage($params){
 					// * Generate title
 					$btitle = pluginGetVariable('basket', 'news_itemname');
 
-					// Get price
-					if (pluginGetVariable('basket', 'news_price') && isset($rec['xfields_'.pluginGetVariable('basket', 'news_price')])) {
-						$price = $rec['xfields_'.pluginGetVariable('basket', 'ntable_price')];
-					} else {
-						$price = 0;
-					}
-
 					$replace = array();
 					$replace[0][]= '{title}';
 					$replace[1][]= $rec['title'];
@@ -100,6 +93,13 @@ function basket_rpc_manage($params){
 					}
 
 					$btitle = str_replace($replace[0], $replace[1], $btitle);
+
+					// Get price
+					if (pluginGetVariable('basket', 'news_price') && isset($xfData[pluginGetVariable('basket', 'news_price')])) {
+						$price = $xfData[pluginGetVariable('basket', 'news_price')];
+					} else {
+						$price = 0;
+					}
 
 					// Add data into basked
 					return basket_add_item($linked_ds, $linked_id, $btitle, $price, $count, array('news' => $xfData));
