@@ -4,7 +4,7 @@
 
 ID: similar
 Name: Похожие новости
-Version: 0.06
+Version: 0.07
 Acts: index,ppages,news
 File: similar.php
 Config: config.php
