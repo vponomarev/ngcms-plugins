@@ -95,7 +95,7 @@ class SimilarNewsfilter extends NewsFilter {
 
 					// Execute filters [ if requested ]
 					if (pluginGetVariable('similar', 'pcall') && is_array($PFILTERS['news']))
-						foreach ($PFILTERS['news'] as $k => $v) { $v->showNewsPre($similar['id'], $similar, $callingParams); }
+						foreach ($PFILTERS['news'] as $k => $v) { if ($k != 'similar') $v->showNewsPre($similar['id'], $similar, $callingParams); }
 
 					// Set formatted date
 					$dformat = pluginGetVariable('similar','dateformat')?pluginGetVariable('similar','dateformat'):'{day0}.{month0}.{year}';
@@ -106,7 +106,7 @@ class SimilarNewsfilter extends NewsFilter {
 
 					// Execute filters [ if requested ]
 					if (pluginGetVariable('similar', 'pcall') && is_array($PFILTERS['news']))
-						foreach ($PFILTERS['news'] as $k => $v) { $v->showNews($similar['id'], $similar, $txvars, $callingParams); }
+						foreach ($PFILTERS['news'] as $k => $v) { if ($k != 'similar') $v->showNews($similar['id'], $similar, $txvars, $callingParams); }
 
 					$tpl -> template('similar_entry', $tpath['similar_entry']);
 					$tpl -> vars('similar_entry', $txvars);
