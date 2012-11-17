@@ -4,7 +4,7 @@
 
 ID: gsmg
 Name: Google SiteMap Generator
-Version: 0.08
+Version: 0.09
 Acts: ppages
 File: gsmg.php
 Config: config.php
