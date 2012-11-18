@@ -39,7 +39,7 @@ function lastcomments($pp = 0) {
 		}
 	}
 
-
+	$comm_num = 0;
 	$number			= intval(extra_get_param('lastcomments',$pp.'number'));
 	$comm_length	= intval(extra_get_param('lastcomments',$pp.'comm_length'));
 	if (($number < 1)       || ($number > 50))          		  { $number      = $pp?30:10;  }
@@ -48,7 +48,7 @@ function lastcomments($pp = 0) {
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array($pp.'lastcomments', $pp.'entries'), 'lastcomments', extra_get_param('lastcomments', 'localsource'));
 
-	$query = "select c.id, c.postdate, c.author, c.author_id, c.text, n.id as nid, n.title, n.alt_name, n.catid, n.postdate as npostdate from ".prefix."_comments c left join ".prefix."_news n on c.post=n.id where n.approve=1 order by c.id desc limit ".$number;
+	$query = "select c.*, u.avatar as users_avatar, u.id as uid, n.id as nid, n.title, n.alt_name, n.catid, n.postdate as npostdate from ".prefix."_comments c left join ".prefix."_news n on c.post=n.id left join ".uprefix."_users u on c.author_id = u.id where n.approve=1 order by c.id desc limit ".$number;
 	$lastcomments = '';
 	foreach ($mysql->select($query) as $row) {
 
@@ -59,6 +59,7 @@ function lastcomments($pp = 0) {
 		if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 		if ($config['use_smilies'])			{ $text = $parse -> smilies($text); }
 	    if (strlen($text) > $comm_length)	{ $text = $parse -> truncateHTML($text, $comm_length);}
+	    ++$comm_num;
 
 		$tvars['vars'] = array(
 			'link'		=>	newsGenerateLink(array('id' => $row['nid'], 'alt_name' => $row['alt_name'], 'catid' => $row['catid'], 'postdate' => $row['npostdate'])),
@@ -67,8 +68,46 @@ function lastcomments($pp = 0) {
 			'author_id'	=>	$row['author_id'],
 			'title'		=>	str_replace('<', '&lt;', $row['title']),
 			'text'		=>	$text,
-			'category_link'	=>	GetCategories($row['catid'])
+			'category_link'	=>	GetCategories($row['catid']),
+			'comnum'	=>	$comm_num
 		);
+
+		// gen answer
+		if ($row['answer'] != '') {
+			$answer = $row['answer'];
+
+			if ($config['blocks_for_reg'])		{ $answer = $parse -> userblocks($answer); }
+			if ($config['use_htmlformatter'])	{ $answer = $parse -> htmlformatter($answer); }
+			if ($config['use_bbcodes'])			{ $answer = $parse -> bbcodes($answer); }
+			if ($config['use_smilies'])			{ $answer = $parse -> smilies($answer); }
+
+			$tvars['vars']['answer']	=	$answer;
+			$tvars['vars']['name']		=	$row['name'];
+			$tvars['regx']["'\[answer\](.*?)\[/answer\]'si"] = '$1';
+		} else {
+			$tvars['regx']["'\[answer\](.*?)\[/answer\]'si"] = '';
+		}
+
+		
+		// gen avatar
+		if ($config['use_avatars']) {
+			if ($row['users_avatar']) {
+				$tvars['vars']['avatar'] = "<img src=\"".avatars_url."/".$row['users_avatar']."\" alt=\"".$row['author']."\" />";
+				$tvars['vars']['avatar_url'] = avatars_url."/".$row['users_avatar'];
+			} else {
+				// If gravatar integration is active, show avatar from GRAVATAR.COM
+				if ($config['avatars_gravatar']) {
+					$tvars['vars']['avatar'] = '<img src="http://www.gravatar.com/avatar/'.md5(strtolower($row['mail'])).'?s='.$config['avatar_wh'].'&amp;d='.urlencode(avatars_url."/noavatar.png").'" alt=""/>';
+					$tvars['vars']['avatar_url'] = 'http://www.gravatar.com/avatar/'.md5(strtolower($row['mail'])).'?s='.$config['avatar_wh'].'&amp;d='.urlencode(avatars_url."/noavatar.gif");
+				} else {
+					$tvars['vars']['avatar'] = "<img src=\"".avatars_url."/noavatar.gif\" alt=\"\" />";
+					$tvars['vars']['avatar_url'] = avatars_url."/noavatar.gif";
+				}
+			}
+		} else {
+			$tvars['vars']['avatar'] = '';
+			$tvars['vars']['avatar_url'] = '';
+		}
 
 		if ($row['author_id'] && getPluginStatusActive('uprofile')) {
 			$tvars['vars']['author_link'] = checkLinkAvailable('uprofile', 'show')?
@@ -85,8 +124,20 @@ function lastcomments($pp = 0) {
         $lastcomments .= $tpl -> show($pp.'entries');
     }
 
+    unset($tvars);
+
+    $tvars['vars'] = array(
+    	'entries' => $lastcomments
+    );
+
+    if ($comm_num > 0) {
+    	$tvars['regx']["'\[nocomments\](.*?)\[/nocomments\]'si"] = '';
+    } else {
+    	$tvars['regx']["'\[nocomments\](.*?)\[/nocomments\]'si"] = '$1';
+    }
+
     $tpl -> template($pp.'lastcomments', $tpath[$pp.'lastcomments']);
-    $tpl -> vars($pp.'lastcomments', array ('vars' => array ('entries' => $lastcomments)));
+    $tpl -> vars($pp.'lastcomments', $tvars);
 
 	$output = $tpl -> show($pp.'lastcomments');
 	$template['vars'][($pp)?'mainblock':'plugin_lastcomments'] = $output;

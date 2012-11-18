@@ -4,13 +4,13 @@
 
 ID: lastcomments
 Name: Последние комментарии
-Version: 0.08
+Version: 0.09
 Acts: index, ppages 
 File: lastcomments.php
 Config: config.php
 Type: plugin
 Description: Вывод последних комментариев
-Author:  SwiZZeR, EsCaPeR, Vitaly
+Author:  SwiZZeR, EsCaPeR, Vitaly, knopik
 Title: Последние комментарии
 Information: Отображение последних комментариев, оставленных на страницах сайта
 Preinstall: default_no
