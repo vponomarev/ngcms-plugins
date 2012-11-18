@@ -13,7 +13,7 @@
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 	<tr>
 	<td style="background-image:url('{tpl_url}/images/2z_56.gif');" width="7">&nbsp;</td>
-	<td bgcolor="#FFFFFF">{entries}</td>
+	<td bgcolor="#FFFFFF">{entries}[nocomments]Комментариев пока что нету.[/nocomments]</td>
 	<td style="background-image:url('{tpl_url}/images/2z_58.gif');" width="7">&nbsp;</td>
 	</tr>
 	</table>
