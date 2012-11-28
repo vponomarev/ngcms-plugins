@@ -20,12 +20,12 @@ class NSchedNewsFilter extends NewsFilter {
 		if ($perm['personal.publish'] || $perm['personal.unpublish']) {
 			$tvars['plugin']['nsched'] .= '<tr><td width="100%" class="contentHead"><img src="'.admin_url.'/skins/default/images/nav.gif" hspace="8" alt="" />Управление публикацией новостей</td></tr><tr><td width="100%" class="contentEntry1"><table>';
 			if ($perm['personal.publish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td>Дата включения:</td><td><input name="nsched_activate" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Дата включения:</td><td><input id="nsched_activate" name="nsched_activate" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
 			}
 			if ($perm['personal.unpublish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td>Дата отключения:</td><td><input name="nsched_deactivate" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Дата отключения:</td><td><input id="nsched_deactivate" name="nsched_deactivate"/> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
 			}
-			$tvars['plugin']['nsched'] .= '</table></td></tr>';
+			$tvars['plugin']['nsched'] .= '</table></td></tr><script language="javascript" type="text/javascript">'."$('#nsched_activate').datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm'});$('#nsched_deactivate').datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm'});</script>";
 
 		}
 
@@ -49,21 +49,21 @@ class NSchedNewsFilter extends NewsFilter {
 
 		$ndeactivate = $SQLold['nsched_deactivate'];
 		$nactivate   = $SQLold['nsched_activate'];
-		if ($nactivate   == '0000-00-00 00:00:00') { $nactivate   = ''; }
-		if ($ndeactivate == '0000-00-00 00:00:00') { $ndeactivate = ''; }
+		if ($nactivate   == '0000-00-00 00:00') { $nactivate   = ''; }
+		if ($ndeactivate == '0000-00-00 00:00') { $ndeactivate = ''; }
 
 		$tvars['plugin']['nsched']  = '';
 		if ($perm[$permGroupMode.'.publish'] || $perm[$permGroupMode.'.unpublish']) {
 			$tvars['plugin']['nsched'] .= '<tr><td width="100%" class="contentHead"><img src="'.admin_url.'/skins/default/images/nav.gif" hspace="8" alt="" />Управление публикацией новостей</td></tr><tr><td width="100%" class="contentEntry1"><table>';
 
 			if ($perm[$permGroupMode.'.publish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td>Дата включения:</td><td><input name="nsched_activate" value="'.$nactivate.'" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Дата включения:</td><td><input name="nsched_activate" id="nsched_activate" value="'.$nactivate.'" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
 			}
 
 			if ($perm[$permGroupMode.'.unpublish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td>Дата отключения:</td><td><input name="nsched_deactivate" value="'.$ndeactivate.'" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Дата отключения:</td><td><input name="nsched_deactivate" id="nsched_deactivate" value="'.$ndeactivate.'" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
 			}
-			$tvars['plugin']['nsched'] .= '</table></td></tr>';
+			$tvars['plugin']['nsched'] .= '</table></td></tr><script language="javascript" type="text/javascript">'."$('#nsched_activate').datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm', currentText: '".$nactivate."'});$('#nsched_deactivate').datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm', currentText: '".$ndeactivate."'});</script>";
 		}
 		return 1;
 	}
