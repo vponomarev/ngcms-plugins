@@ -4,7 +4,7 @@
 
 ID: nsched
 Name: Новости по расписанию
-Version: 0.11
+Version: 0.12
 Acts: cron, admin:mod:news
 File: nsched.php
 Install: install.php
