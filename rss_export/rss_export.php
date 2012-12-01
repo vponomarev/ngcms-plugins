@@ -17,7 +17,7 @@ function plugin_rss_export_category($params) {
 }
 
 function plugin_rss_export_generate($catname = ''){
-   	global $lang, $PFILTERS, $template, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $mysql, $catz;
+   	global $lang, $PFILTERS, $template, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $mysql, $catz, $parse;
 
 	// Disable executing of `index` action (widget plugins and so on..)
 	actionDisable('index');
@@ -70,8 +70,40 @@ function plugin_rss_export_generate($catname = ''){
 		$hide_template = str_replace('{text}',$lang['rexport_hide'],$hide_template);
 	}
 
+	// Fetch SQL record
+	$sqlData = $mysql->select($query." limit $limit");
 
-	foreach ($mysql->select($query." limit $limit") as $row) {
+	// Check if enclosure is requested and used for "images" field
+	$xFList = array();
+	$encImages = array();
+	$enclosureIsImages = false;
+	if (pluginGetVariable('rss_export', 'xfEnclosureEnabled') && getPluginStatusActive('xfields')) {
+		$xFList = xf_configLoad();
+		$eFieldName = pluginGetVariable('rss_export','xfEnclosure');
+		if (isset($xFList['news'][$eFieldName]) && ($xFList['news'][$eFieldName]['type'] == 'images')) {
+			$enclosureIsImages = true;
+
+			// Prepare list of news with attached images
+			$nAList = array();
+
+			foreach ($sqlData as $row) {
+				if ($row['num_images'] > 0)
+					$nAList []= $row['id'];
+			}
+
+			$iQuery = "select * from ".prefix."_images where (linked_ds = 1) and (linked_id in (".join(",", $nAList).")) and (plugin = 'xfields') and (pidentity = ".db_squote($eFieldName).")";
+			foreach ($mysql->select($iQuery) as $row) {
+				if (!isset($encImages[$row['linked_id']]))
+					$encImages[$row['linked_id']] = $row;
+			}
+		}
+	}
+
+	$truncateLen = intval(pluginGetVariable('rss_export', 'truncate'));
+	if ($truncateLen < 0)
+		$truncateLen = 0;
+
+	foreach ($sqlData as $row) {
 	        // Make standart system call in 'export' mode
 	        $export_mode = 'export_body';
 
@@ -81,6 +113,10 @@ function plugin_rss_export_generate($catname = ''){
 		}
 
         $content = news_showone($row['id'], '', array( 'emulate' => $row, 'style' => $export_mode, 'plugin' => 'rss_export' ));
+		if ( $truncateLen > 0) {
+			$content = $parse->truncateHTML($content, $truncateLen, '...');
+		}
+
 
 		$enclosure = '';
 
@@ -90,7 +126,17 @@ function plugin_rss_export_generate($catname = ''){
 			include_once(root."/plugins/xfields/xfields.php");
 
 			if (is_array($xfd = xf_decode($row['xfields'])) && isset($xfd[pluginGetVariable('rss_export','xfEnclosure')])) {
-				$enclosure = $xfd[pluginGetVariable('rss_export','xfEnclosure')];
+				// Check enclosure field type
+				if ($enclosureIsImages) {
+					// images
+					if (isset($encImages[$row['id']])) {
+						$enclosure = ($encImages[$row['id']]['storage']?$config['attach_url']:$config['images_url']).'/'.$encImages[$row['id']]['folder'].'/'.$encImages[$row['id']]['name'];
+					}
+				} else {
+					// text
+					$enclosure = $xfd[pluginGetVariable('rss_export','xfEnclosure')];
+				}
+
 			}
 		}
 
