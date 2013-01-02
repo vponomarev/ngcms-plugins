@@ -172,7 +172,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 						(intval($_REQUEST['fld_'.$fInfo['name'].':month']) >= 1) &&
 						(intval($_REQUEST['fld_'.$fInfo['name'].':month']) <= 12) &&
 						(intval($_REQUEST['fld_'.$fInfo['name'].':year']) >= 1970) &&
-						(intval($_REQUEST['fld_'.$fInfo['name'].':year']) <= 2012)) {
+						(intval($_REQUEST['fld_'.$fInfo['name'].':year']) <= 2014)) {
 						$setValueDay	= intval($_REQUEST['fld_'.$fInfo['name'].':day']);
 						$setValueMonth	= intval($_REQUEST['fld_'.$fInfo['name'].':month']);
 						$setValueYear	= intval($_REQUEST['fld_'.$fInfo['name'].':year']);
@@ -228,7 +228,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		$tVars['captcha_url'] = admin_url."/captcha.php?id=feedback";
 		$tVars['captcha_rand'] = rand(00000, 99999);
 
-		$_SESSION['captcha.feedback'] = $tVars['captcha_rand'];
+		$_SESSION['captcha.feedback'] = rand(00000, 99999);
 	}
 
 	// Check if we need to show `select destination notification address` menu
@@ -250,7 +250,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	// Prepare hidden fields
 	$hF = '';
 	foreach ($hiddenFields as $k => $v) {
-		$hF .= '<input type="hidden" name="'.$k.'" value="'.htmlspecialchars($v).'"/>'."\n";
+		$hF .= '<input type="hidden" name="'.$k.'" value="'.htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251').'"/>'."\n";
 	}
 
 	$tVars['hidden_fields'] = $hF;
