@@ -28,6 +28,7 @@ include_once root.'includes/inc/libnews.php';
 // * showNoNews - flag if block should be showed even if there're no news
 // * skipCurrent - flag if we should not show current news in block content (if we're currently in news)
 // * template - ID/directory of template to use (directory from engine/plugins/xnews/tpl/
+// * extractEmbeddedItems - flag if news engine should extract embedded (via <img src=".."/>) images into array news.embed.images
 // * cacheAge - age of cache [in seconds]
 
 function xNewsShowBlock($params) {
@@ -45,7 +46,7 @@ function xNewsShowBlock($params) {
 				if (pluginGetVariable('xnews', 'cache') && (!isset($params['cacheAge']))) {
 					$params['cacheAge'] = pluginGetVariable('xnews', 'cacheExpire');
 				}
-				foreach (array('categoryMode', 'categories', 'visibilityMode', 'visibilityCList', 'mainMode', 'pinMode', 'favMode', 'count', 'skip', 'maxAge', 'order', 'showNoNews', 'skipCurrent') as $k)
+				foreach (array('categoryMode', 'categories', 'visibilityMode', 'visibilityCList', 'mainMode', 'pinMode', 'favMode', 'count', 'skip', 'maxAge', 'order', 'showNoNews', 'skipCurrent', 'extractEmbeddedItems') as $k)
 					if (!isset($params[$k]))		$params[$k] = pluginGetVariable('xnews', $i.'_'.$k);
 
 				// Load template only if it's defined
@@ -191,6 +192,7 @@ function xNewsShowBlock($params) {
 	$cacheKeys []= '|count='.$showCount;
 	$cacheKeys []= '|skip='.$showSkip;
 	$cacheKeys []= '|maxAge='.$showAge;
+	$cacheKeys []= '|embed='.intval($params['extractEmbeddedItems']);
 
 	$cacheKeys []= '|categoryMode='.$params['categoryMode'];
 	$cacheKeys []= '|categories='.join(",",$categoryList);
@@ -273,6 +275,7 @@ function xNewsShowBlock($params) {
 	// Retrieve data
 	$showResult = news_showlist(array(), array(), array(
 						'plugin'				=> 'xnews',
+						'extractEmbeddedItems'	=> $params['extractEmbeddedItems'],
 						'overrideSQLquery'		=> $requestQuery,
 						'extendedReturn'		=> true,
 						'extendedReturnData'	=> true,

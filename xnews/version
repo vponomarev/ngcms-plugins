@@ -4,7 +4,7 @@
 
 ID: xnews
 Name: Блоки новостей
-Version: 1.7
+Version: 0.02
 Acts: index, twig
 File: xnews.php
 Config: config.php
