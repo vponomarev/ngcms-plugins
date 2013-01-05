@@ -105,6 +105,14 @@ for ($i = 1; $i <= $count; $i++) {
 	));
 
 	array_push($cfgX, array(
+						'name'  => "{$currentVar}_extractEmbeddedItems",
+						'title' => "Извлекать URL'ы изображений из текста новости<br/><small>Список URL'ов будет доступен в массиве news.embed.images, кол-во - в news.embed.imgCount</small>",
+						'type' => 'select',
+						'value' => pluginGetVariable($plugin, "{$currentVar}_extractEmbeddedItems"),
+						'values' => array('0' => 'Нет', 1 => 'Да'),
+	));
+
+	array_push($cfgX, array(
 					'name' => "{$currentVar}_showEmpty",
 					'title' => 'Выводить блок если в нём нет новостей',
 					'type' => 'checkbox',
