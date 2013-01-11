@@ -4,7 +4,7 @@
 
 ID: ublog
 Name: User's blog
-Version: 0.01
+Version: 0.02
 Acts: ppages, action.ppages.uprofile
 File: ublog.php
 Config: config.php

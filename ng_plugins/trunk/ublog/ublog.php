@@ -12,7 +12,13 @@ include_once root.'includes/news.php';
 class UblogFilter extends p_uprofileFilter {
 	function showProfile($userID, $SQLrow, &$tvars) {
 		$link = generatePluginLink('ublog', null, array('uid' => $userID, 'uname' => $SQLrow['name']));
-		$tvars['vars']['news'] = '<a href="'.$link.'">'.$tvars['vars']['news'].'</a>';
+		if (pluginGetVariable('ublog','replaceCount') && ($SQLrow['news'] > 0)) {
+			$tvars['vars']['news'] = '<a href="'.$link.'">'.$SQLrow['news'].'</a>';
+			$tvars['vars']['p']['ublog']['flags']['haveBlog'] = true;
+			$tvars['vars']['p']['ublog']['blogLink'] = $link;
+		} else {
+			$tvars['vars']['p']['ublog']['flags']['haveBlog'] = false;
+		}
 		return 1;
 	}
 
@@ -65,12 +71,17 @@ function plugin_ublog() {
 
 	$SYSTEM_FLAGS['info']['title']['group'] = str_replace('{uname}', $urow['name'], $lang['ublog:header']);
 
+	$showNumber = intval(pluginGetVariable('ublog','personalCount'));
+	if (($showNumber < 2)||($showNumber > 100))
+		$showNumber = 10;
+
 
 	$callingParams = array(
 		'style' => 'short',
 		'searchFlag' => true,
 		'extendedReturn' => false,
 		'customCategoryTemplate' => false,
+		'showNumber'	=> $showNumber,
 		'page'	=> ((isset($_GET['page']) && (intval($_GET['page'])>0))?intval($_GET['page']):0),
 	);
 
