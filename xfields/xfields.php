@@ -70,6 +70,7 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 					}
 				}
 			}
+
 			// Check for new attached files
 			if (isset($_FILES['xfields_'.$id]) && isset($_FILES['xfields_'.$id]['name']) && is_array($_FILES['xfields_'.$id]['name'])) {
 				foreach ($_FILES['xfields_'.$id]['name'] as $iId => $iName) {
@@ -106,6 +107,7 @@ function xf_modifyAttachedImages($dsID, $newsID, $xf, $attachList) {
 					if (!is_array($up)) {
 						continue;
 					}
+
 					//print "<pre>CREATED: ".var_export($up, true)."</pre>";
 					// Check if we need to create preview
 					$mkThumb  = $data['imgThumb'];
@@ -1253,11 +1255,27 @@ if (getPluginStatusActive('uprofile')) {
 		}
 
 		function showProfile($userID, $SQLrow, &$tvars) {
-		global $mysql, $config;
+		global $mysql, $config, $twig, $twigLoader;
 			// Try to load config. Stop processing if config was not loaded
 			if (($xf = xf_configLoad()) === false) return;
 
 			$fields = xf_decode($SQLrow['xfields']);
+
+
+			// Check if we have at least one `image` field and load TWIG template if any
+			if (is_array($xf['users']))
+				foreach ($xf['users'] as $k => $v) {
+					if ($v['type'] == 'images') {
+
+						// Yes, we have it!
+						$conversionParams = array();
+						$imagesTemplateFileName = 'plugins/xfields/tpl/profile.show.images.tpl';
+						$twigLoader->setConversion($imagesTemplateFileName, $conversionConfig);
+						$xtImages = $twig->loadTemplate($imagesTemplateFileName);
+						break;
+					}
+				}
+
 
 			// Show extra fields if we have it
 			if (is_array($xf['users']))
@@ -1278,6 +1296,53 @@ if (getPluginStatusActive('uprofile')) {
 							$iname = ($imgInfo['storage']?$config['attach_url']:$config['files_url']).'/'.$imgInfo['folder'].'/'.$imgInfo['name'];
 							$tvars['vars']['[xvalue_'.$k.']'] = $iname;
 
+
+
+							// Scan for images and prepare data for template show
+							$tiVars = array(
+								'fieldName'		=> $k,
+								'fieldTitle'	=> secure_html($v['title']),
+								'fieldType'		=> $v['type'],
+								'entriesCount'	=> count($imglist),
+								'entries'		=> array(),
+								'execStyle'		=> $mode['style'],
+								'execPlugin'	=> $mode['plugin'],
+							);
+							foreach ($imglist as $imgInfo) {
+								$tiEntry = array(
+									'url'			=> ($imgInfo['storage']?$config['attach_url']:$config['images_url']).'/'.$imgInfo['folder'].'/'.$imgInfo['name'],
+									'width'			=> $imgInfo['width'],
+									'height'		=> $imgInfo['height'],
+									'pwidth'		=> $imgInfo['p_width'],
+									'pheight'		=> $imgInfo['p_height'],
+									'name'			=> $imgInfo['name'],
+									'origName'		=> secure_html($imgInfo['orig_name']),
+									'description'	=> secure_html($imgInfo['description']),
+
+									'flags'		=> array(
+										'hasPreview'	=> $imgInfo['preview'],
+									),
+								);
+
+								if ($imgInfo['preview']) {
+									$tiEntry['purl'] = ($imgInfo['storage']?$config['attach_url']:$config['images_url']).'/'.$imgInfo['folder'].'/thumb/'.$imgInfo['name'];
+								}
+
+								$tiVars['entries'] []= $tiEntry;
+							}
+
+							// TWIG based variables
+							$tvars['vars']['p']['xfields'][$k]['entries'] = $tiVars['entries'];
+							$tvars['vars']['p']['xfields'][$k]['count'] = count($tiVars['entries']);
+
+							$xv = $xtImages->render($tiVars);
+
+							$tvars['vars']['p']['xfields'][$k]['value'] = $xv;
+							//$tvars['vars']['[xvalue_'.$k.']'] = $xv;
+
+
+
+
 						} else {
 							$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = '';
 							$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = '$1';
@@ -1287,6 +1352,23 @@ if (getPluginStatusActive('uprofile')) {
 						$tvars['regx']["#\[xfield_".$kp."\](.*?)\[/xfield_".$kp."\]#is"] = ($xfk == "")?"":"$1";
 						$tvars['regx']["#\[nxfield_".$kp."\](.*?)\[/nxfield_".$kp."\]#is"] = ($xfk == "")?"$1":"";
 						$tvars['vars']['[xvalue_'.$k.']'] = ($v['type'] == 'textarea')?'<br/>'.(str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':'')):$xfk;
+						// 12345
+
+						// Process `HTML` support feature
+						if ((!$v['html_support'])&&(($v['type'] == 'textarea')||($v['type'] == 'text'))) {
+							$xfk = str_replace("<","&lt;",$xfk);
+						}
+
+						// Parse BB code [if required]
+						if ($config['use_bbcodes'] && $v['bb_support']) {
+							$xfk = $parse-> bbcodes($xfk);
+						}
+
+						// Process formatting
+						if (($v['type'] == 'textarea') && (!$v['noformat'])) {
+							$xfk = (str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':''));
+						}
+						$tvars['vars']['p']['xfields'][$k]['value'] = $xfk;
 					}
 				}
 		}
