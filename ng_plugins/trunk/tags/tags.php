@@ -9,7 +9,7 @@ class TagsNewsfilter extends NewsFilter {
 		$tpath = locatePluginTemplates(array('tags_addnews'), 'tags', pluginGetVariable('tags', 'localsource'), pluginGetVariable('tags', 'skin')?pluginGetVariable('tags', 'skin'):'default');
 
 		$tpl -> template('tags_addnews', $tpath['tags_addnews']);
-		$tpl -> vars('tags_addnews', array ( 'vars' => array ()));
+		$tpl -> vars('tags_addnews', array ( 'vars' => array ('localPrefix' => localPrefix)));
 		$tvars['plugin']['tags'] = $tpl -> show('tags_addnews');
 
 		return 1;
@@ -68,7 +68,7 @@ class TagsNewsfilter extends NewsFilter {
 		$tpath = locatePluginTemplates(array('tags_editnews'), 'tags', pluginGetVariable('tags', 'localsource'), pluginGetVariable('tags', 'skin')?pluginGetVariable('tags', 'skin'):'default');
 
 		$tpl -> template('tags_editnews', $tpath['tags_editnews']);
-		$tpl -> vars('tags_editnews', array ( 'vars' => array ( 'tags' => secure_html($SQLold['tags']))));
+		$tpl -> vars('tags_editnews', array ( 'vars' => array ( 'tags' => secure_html($SQLold['tags']), 'localPrefix' => localPrefix)));
 		$tvars['plugin']['tags'] = $tpl -> show('tags_editnews');
 
 		return 1;
@@ -163,6 +163,7 @@ class TagsNewsfilter extends NewsFilter {
 
 		// Check if we have tags in news
 		if (!$SQLnews['tags'] && !pluginGetVariable('tags', 'show_always')) {
+			$tvars['vars']['p']['tags']['flags']['haveTags'] = false;
 			$tvars['regx']["'\[tags\](.*?)\[/tags\]'si"] = '';
 			$tvars['vars']['tags'] = '';
 			return 1;
@@ -175,7 +176,9 @@ class TagsNewsfilter extends NewsFilter {
 		}
 
 		// Make a line for display
+		$twigTags = array();
 		$tags = array();
+
 		foreach (explode(",", $SQLnews['tags']) as $tag) {
 			$tag = trim($tag);
 			if (!$tag) continue;
@@ -183,7 +186,22 @@ class TagsNewsfilter extends NewsFilter {
 		    $link = checkLinkAvailable('tags', 'tag')?
 						generateLink('tags', 'tag', array('tag' => $tag)):
 						generateLink('core', 'plugin', array('plugin' => 'tags', 'handler' => 'tag'), array('tag' => $tag));
-			$tags[] = str_replace(array('{url}', '{tag}'), array($link, $tag), $this->displayParams['news.tag']);
+			$tagValue = str_replace(array('{url}', '{tag}'), array($link, $tag), $this->displayParams['news.tag']);
+			$twigTags []= array(
+				'name'	=> $tag,
+				'link'	=> $link,
+				'value'	=> $tagValue,
+			);
+			$tags[] = $tagValue;
+		}
+
+		if (count($twigTags)) {
+			$tvars['vars']['p']['tags']['flags']['haveTags'] = true;
+			$tvars['vars']['p']['tags']['count'] = count($twigTags);
+			$tvars['vars']['p']['tags']['list'] = $twigTags;
+			$tvars['vars']['p']['tags']['value'] = count($tags)?(join($this->displayParams['news.tag.delimiter'], $tags)):$this->displayParams['news.notags'];;
+		} else {
+			$tvars['vars']['p']['tags']['flags']['haveTags'] = false;
 		}
 
 		$tvars['vars']['tags'] = count($tags)?(join($this->displayParams['news.tag.delimiter'], $tags)):$this->displayParams['news.notags'];
@@ -281,7 +299,6 @@ function plugin_tags_cloudblock() {
 	$cl = '';
 	if (pluginGetVariable('tags', 'catfilter') && ($CurrentHandler['pluginName'] == 'news') &&  ($CurrentHandler['handlerName'] == 'by.category')) {
 		// Try to determine category ID
-		//print "<pre>".var_export($CurrentHandler['params'], true)."</pre>";
 		if (isset($CurrentHandler['params']['catid']) && isset($catmap[$CurrentHandler['params']['catid']])) {
 			$cl = array(intval($CurrentHandler['params']['catid']));
 		} else if (isset($CurrentHandler['params']['category']) && isset($catz[$CurrentHandler['params']['category']])) {
@@ -420,7 +437,6 @@ function plugin_tags_generatecloud($ppage = 0, $catlist = '', $age = 0){
 
 	// Generate cache file name [ we should take into account SWITCHER plugin ]
 	$cacheFileName = md5('tags'.$config['home_url'].$config['theme'].$config['default_lang'].$masterTPL.('page'.isset($_REQUEST['page'])?$_REQUEST['page']:'').'age'.$age.'cat'.(is_array($cl)?join(",",$cl):$cl)).'.txt';
-
 	if (pluginGetVariable('tags','cache')) {
 		$cacheData = cacheRetrieveFile($cacheFileName, pluginGetVariable('tags','cacheExpire'), 'tags');
 		if ($cacheData != false) {

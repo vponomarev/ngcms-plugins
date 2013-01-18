@@ -4,8 +4,9 @@
 
 ID: tags
 Name: Теги
-Version: 0.24
+Version: 0.25
 Acts: index,news,ppages,admin:mod:news,admin:mod:preview
+Actions: rpc;lib/librpc.php
 File: tags.php
 Config: config.php
 Install: install.php
