@@ -6,8 +6,25 @@
   <table>
    <tr>
     <td>Список тегов:<br/><small>указывается через запятую</small></td>
-    <td><input style="width: 300px;" name="tags" value="{tags}"/></td>
+    <td><input style="width: 300px;" id="pTags" name="tags" value="{tags}" autocomplete="off"/>  <span id="suggestLoader" style="width: 20px; visibility: hidden;"><img src="{skins_url}/images/loading.gif"/></span></td>
    </tr>
   </table>
  </td>
 </tr>
+<script language="javascript" type="text/javascript">
+// INIT NEW SUGGEST LIBRARY [ call only after full document load ]
+var aSuggest = new ngSuggest('pTags',
+								{
+									'localPrefix'	: '{localPrefix}',
+									'reqMethodName'	: 'plugin.tags.suggest',
+									'lId'		: 'suggestLoader',
+									'hlr'		: 'true',
+									'iMinLen'	: 1,
+									'stCols'	: 2,
+									'stColsClass': [ 'cleft', 'cright' ],
+									'stColsHLR'	: [ true, false ],
+									'listDelimiter' : ',',
+								}
+							);
+
+</script>
