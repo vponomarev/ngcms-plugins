@@ -1015,8 +1015,12 @@ class XFieldsNewsFilter extends NewsFilter {
 			$xt = $twig->loadTemplate($templateName);
 			$tvars['vars']['plugin_xfields_table'] = $xt->render(array('entries' => $xrecs));
 
+			$tvars['vars']['p']['xfields']['_table']['countRec']	= count($xrecs);
+			$tvars['vars']['p']['xfields']['_table']['data']		= $xrecs;
+
 		} else {
 			$tvars['vars']['plugin_xfields_table'] = '';
+			$tvars['vars']['p']['xfields']['_table']['countRec']	= 0;
 		}
 
 		$SQLnews['content'] = $content;
