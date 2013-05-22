@@ -15,8 +15,8 @@ include_once root.'includes/inc/libnews.php';
 // Params:
 // * id	- if specified, all params will be preloaded for specified configured entity
 // * categoryMode - way how to choose categories for this block
-// * pinMode - way how to work with "pinned" news [ 0 - does not matter, 1 - only not pinned, 2 - only pinned ]
-// * favMode - way how to work with "favorite" news [ 0 - does not matter, 1 - only not favorite, 2 - only favorite ]
+// * pinMode - way how to work with "pinned" news [ 0 - does not matter, 1 - only pinned, 2 - only not pinned ]
+// * favMode - way how to work with "favorite" news [ 0 - does not matter, 1 - only favorite, 2 - only not favorite ]
 // * categories - list of categories for categoryMode
 // * visibilityMode - way how to decide if this block should be displayed
 // * visibilityCList - list of categories where block should be displayed (in case if block is displayed only in specific categories)
