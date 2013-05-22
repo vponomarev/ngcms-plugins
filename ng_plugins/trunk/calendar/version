@@ -4,8 +4,8 @@
 
 ID: calendar
 Name: Show news calendar
-Version: 0.08
-Acts: index
+Version: 0.09
+Acts: index, twig, rpc
 File: calendar.php
 Config: config.php
 Type: widget
