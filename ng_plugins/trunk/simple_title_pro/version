@@ -1,0 +1,13 @@
+ID: simple_title_pro
+Name: Simple Title
+Version: 0.1 RC4
+Actions: index_post; index.php
+Actions: admin:mod:news; title_news.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Description: Управление заголовками страниц
+Author: Nail' R. Davydov (ROZARD)
+Author_URI: http://rozard.ngdemo.ru/
+preinstall: no
