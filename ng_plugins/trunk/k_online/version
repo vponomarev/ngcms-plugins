@@ -1,0 +1,13 @@
+ID: k_online
+Name: Кто сейчас в онлайн
+Version: 0.1
+Acts: index 
+File: k_online.php
+Type: plugin
+Install: install.php
+Description: Показвыает кто сейчас на сайте
+Author: Nail' R. Davydov (ROZARD)
+Author_URI: http://rozard.ngdemo.ru
+Title: Кто сейчас в онлайн
+Information: Показвыает кто сейчас на сайте
+Preinstall: default_no
