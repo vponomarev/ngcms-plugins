@@ -24,8 +24,8 @@ LoadPluginLang('k_online', 'main', '', '', '#');
 function k_online()
 {global $config, $twig, $template, $userROW, $ip, $mysql, $lang;
 
-$time = time() + ($config['date_adjust'] * 60);
-$last_time = time() + ($config['date_adjust'] * 60) - 500;
+$time = time() + ($config['date_adjust'] * 60 * 60);
+$last_time = $time - 500;
 $tpath = locatePluginTemplates(array('k_online'), 'k_online', pluginGetVariable('k_online', 'localsource'));
 $xt = $twig->loadTemplate($tpath['k_online'].'k_online.tpl');
 
@@ -54,22 +54,19 @@ if( is_array($userROW) ){
 $confdir = get_plugcfg_dir('k_online');
 
 if(!file_exists($confdir.'/date.php'))
-	file_put_contents($confdir.'/date.php', serialize(date('Y-m-d', strtotime('+1 day'))));
+	file_put_contents($confdir.'/date.php', serialize(date('Y-m-d', strtotime('+1 day', $time))));
 
 if(!file_exists($confdir.'/result.php'))
 	file_put_contents($confdir.'/result.php', '');
 
 $date = unserialize(file_get_contents($confdir.'/date.php'));
-$date_today = date('Y-m-d', strtotime('now'));
+$date_today = date('Y-m-d', strtotime('now', $time));
 
 $db = false;
 if($date <= $date_today){
-	file_put_contents($confdir.'/date.php', serialize(date('Y-m-d', strtotime('+1 day'))));
-	if($db){
-		$mysql->query('DELETE FROM '.prefix.'_k_online');
-	} else {
-		file_put_contents($confdir.'/result.php', '');
-	}
+	file_put_contents($confdir.'/date.php', serialize(date('Y-m-d', strtotime('+1 day', $time))));
+	$mysql->query('DELETE FROM '.prefix.'_k_online');
+	file_put_contents($confdir.'/result.php', '');
 }
 
 if($db)
