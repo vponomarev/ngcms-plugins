@@ -11,7 +11,7 @@ global $AUTH_METHOD;
 global $AUTH_CAPABILITIES;
 global $config;
 
-class auth_basic {
+class auth_basic extends CoreAuthPlugin {
 
 	// Осуществить вход
 	// $username	= логин
@@ -120,12 +120,12 @@ class auth_basic {
 		global $config, $lang;
 		$params = array();
 		LoadPluginLang('auth_basic', 'auth','','auth');
-		array_push($params, array('name' => 'login', title => $lang['auth_login'], 'descr' => $lang['auth_login_descr'],'type' => 'input'));
+		array_push($params, array('name' => 'login', 'id' => 'reg_login', title => $lang['auth_login'], 'descr' => $lang['auth_login_descr'],'type' => 'input'));
 		if ($config['register_type'] >= 3) {
-                	array_push($params, array('name' => 'password', title => $lang['auth_pass'], 'descr' => $lang['auth_pass_descr'], 'type' => 'password'));
-			array_push($params, array('name' => 'password2', title => $lang['auth_pass2'], 'descr' => $lang['auth_pass2_descr'],'type' => 'password'));
+            array_push($params, array('id' => 'reg_password', 'name' => 'password', title => $lang['auth_pass'], 'descr' => $lang['auth_pass_descr'], 'type' => 'password'));
+			array_push($params, array('id' => 'reg_password2', 'name' => 'password2', title => $lang['auth_pass2'], 'descr' => $lang['auth_pass2_descr'],'type' => 'password'));
 		}
-		array_push($params, array('name' => 'email', title => $lang['auth_email'], 'descr' => $lang['auth_email_descr'],'type' => 'input'));
+		array_push($params, array('name' => 'email', id => 'reg_email', title => $lang['auth_email'], 'descr' => $lang['auth_email_descr'],'type' => 'input'));
 		return $params;
 	}
 
@@ -459,25 +459,131 @@ class auth_basic {
 			$msg = $lang['auth_nouser'];
 			return 0;
 		}
-        }
+    }
+
+	// AJAX call - online check registration parameters for correct valuescheck if login is available
+	// Input:
+	// $params - array of 'fieldName' => 'fieldValue' for checking
+	// Returns:
+	// $result - array of 'fieldName' => status
+	// List of statuses:
+	// 0	- Method not implemented [ this field is not checked/can't be checked/... ] OR NOT SET
+	// 1	- Occupied
+	// 2	- Incorrect length
+	// 3	- Incorrect format
+	// 100	- Available for registration
+	function onlineCheckRegistration($params) {
+		global $config, $mysql;
+
+		// Prepare basic reply array
+		$results = array();
+
+		// Check for login
+		if (isset($params['login'])) {
+			$params['login'] = trim($params['login']);
+
+			// Check for incorrect chars
+			if (strlen($params['login'])<3) {
+				// Login is too short
+				$results['login'] = 2;
+				goto endLoginCheck;
+			}
+
+			// Check for incorrect chars
+			$csError = false;
+			switch (pluginGetVariable('auth_basic', 'regcharset')) {
+				case 0:
+					if (!preg_match('#^[A-Za-z0-9\.\_\-]+$#s', $params['login'])) {
+						$csError = true;
+					}
+					break;
+				case 1:
+					if (!preg_match('#^[А-Яа-яёЁ0-9\.\_\-]+$#s', $params['login'])) {
+						$csError = true;
+					}
+					break;
+				case 2:
+					if (!preg_match('#^[А-Яа-яёЁA-Za-z0-9\.\_\-]+$#s', $params['login'])) {
+						print "CASE2-err [".$values['login']."]";
+						$csError = true;
+					}
+					break;
+				case 3:
+					if (!preg_match('#^[\x21-\x7e\xc0-\xffёЁ]+$#s', $params['login'])) {
+						$csError = true;
+					}
+					break;
+				case 4:
+					break;
+
+			}
+
+
+			if (preg_match('/[&<>\\"'."'".']/', $params['login']) || $csError) {
+				// Incorrect chars
+				$results['login'] = 3;
+				goto endLoginCheck;
+			}
+
+			// Check if login is occupied
+			$row = $mysql->record("select * from ".uprefix."_users where lower(name)=".db_squote(strtolower($params['login'])));
+			if (is_array($row)) {
+				$results['login'] = 1;
+				goto endLoginCheck;
+			}
+
+			// All tests are passed, login can be used
+			$results['login'] = 100;
+		}
+		endLoginCheck:
+
+		// Check for email
+		if (isset($params['email'])) {
+			$params['email'] = trim($params['email']);
+
+			if (strlen($params['email']) > 70) {
+				$results['email'] = 2;
+				goto endEmailCheck;
+			}
+
+			if (!preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $params['email'])) {
+				$results['email'] = 3;
+				// Неверный email
+				goto endEmailCheck;
+			}
+
+			$row = $mysql->record("select * from ".uprefix."_users where lower(mail)=".db_squote($params['email']));
+			if (is_array($row)) {
+				$results['email'] = 1;
+				goto endEmailCheck;
+			}
+			// All tests are passed, email can be used
+			$results['email'] = 100;
+		}
+		endEmailCheck:
+
+		// Return
+		return $results;
+	}
+
 
 	//
-  // Подтверждение восстановления пароля
-  //
-  function confirm_restorepw(&$msg, $reqid = NULL, $reqsecret = NULL) {
+	// Подтверждение восстановления пароля
+	//
+	function confirm_restorepw(&$msg, $reqid = NULL, $reqsecret = NULL) {
 		global $config, $mysql, $lang, $tpl;
 
 		LoadPluginLang('auth_basic', 'auth','','auth');
 
-	 	$row = $mysql->record("select * from ".uprefix."_users where id = ".db_squote($reqid));
-	 	if (is_array($row)) {
-	 		if ($reqsecret == $row['newpw']) {
-	 			// OK !!!
-	 			$msg = $lang['auth_newpw_ok'];
-	 			$mysql->query('update '.uprefix.'_users set pass=newpw where id = '.db_squote($reqid));
-	 			return 1;
-	 		}
-	 	}
+			$row = $mysql->record("select * from ".uprefix."_users where id = ".db_squote($reqid));
+			if (is_array($row)) {
+				if ($reqsecret == $row['newpw']) {
+					// OK !!!
+					$msg = $lang['auth_newpw_ok'];
+					$mysql->query('update '.uprefix.'_users set pass=newpw where id = '.db_squote($reqid));
+					return 1;
+				}
+			}
 		$msg = $lang['auth_newpw_fail'];
 		return 0;
 	}
