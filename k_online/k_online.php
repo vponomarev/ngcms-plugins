@@ -24,7 +24,7 @@ LoadPluginLang('k_online', 'main', '', '', '#');
 function k_online()
 {global $config, $twig, $template, $userROW, $ip, $mysql, $lang;
 
-$time = time() + ($config['date_adjust'] * 60 * 60);
+$time = time() + ($config['date_adjust'] * 60);
 $last_time = $time - 500;
 $tpath = locatePluginTemplates(array('k_online'), 'k_online', pluginGetVariable('k_online', 'localsource'));
 $xt = $twig->loadTemplate($tpath['k_online'].'k_online.tpl');
