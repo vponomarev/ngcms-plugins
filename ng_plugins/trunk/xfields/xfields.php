@@ -1151,8 +1151,8 @@ if (getPluginStatusActive('uprofile')) {
 			}
 
 			// For compatibility with old template engine, init values for blocks 0 and 1
-			$tvars['vars']['plugin_xfields_0'] = '';
-			$tvars['vars']['plugin_xfields_1'] = '';
+			$tvars['plugin_xfields_0'] = '';
+			$tvars['plugin_xfields_1'] = '';
 
 			foreach ($xfEntries as $k => $v) {
 				// Check if we have template for specific area, elsewhere - use basic [0] template
@@ -1164,7 +1164,9 @@ if (getPluginStatusActive('uprofile')) {
 				$tVars['area']			= $k;
 
 				// Render block
-				$tvars['vars']['plugin_xfields_'.$k] .= $xt->render($tVars);
+				$render = $xt->render($tVars);
+				$tvars['plugin_xfields_'.$k] .= $render;
+				$tvars['p']['xfields'][$k] .= $render;
 			}
 /*
 			unset($tVars['entries']);
@@ -1336,12 +1338,12 @@ if (getPluginStatusActive('uprofile')) {
 							}
 
 							// TWIG based variables
-							$tvars['vars']['p']['xfields'][$k]['entries'] = $tiVars['entries'];
-							$tvars['vars']['p']['xfields'][$k]['count'] = count($tiVars['entries']);
+							$tvars['p']['xfields'][$k]['entries'] = $tiVars['entries'];
+							$tvars['p']['xfields'][$k]['count'] = count($tiVars['entries']);
 
 							$xv = $xtImages->render($tiVars);
 
-							$tvars['vars']['p']['xfields'][$k]['value'] = $xv;
+							$tvars['p']['xfields'][$k]['value'] = $xv;
 							//$tvars['vars']['[xvalue_'.$k.']'] = $xv;
 
 
