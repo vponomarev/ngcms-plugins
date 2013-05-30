@@ -4,8 +4,8 @@
 
 ID: uprofile
 Name: Users profile
-Version: 0.06
-Acts: ppages
+Version: 0.08
+Acts: ppages,rpc
 File: uprofile.php
 Config: config.php
 Type: plugin

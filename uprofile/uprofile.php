@@ -3,22 +3,21 @@
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
 
-LoadPluginLang('uprofile', 'main', '', '', ':');
+//LoadPluginLang('uprofile', 'main', '', '', ':');
+LoadPluginLang('uprofile', 'main', '', 'uprofile', '#');
 register_plugin_page('uprofile','edit','uprofile_editProfile',0);
 register_plugin_page('uprofile','apply','uprofile_applyProfile',0);
 register_plugin_page('uprofile','show','uprofile_showProfile',0);
 
+LoadPluginLibrary('uprofile', 'lib');
 
 
 // =============================================================
 // External functions of plugin
 // =============================================================
-function uprofile_list() {
-}
-
 
 function uprofile_showProfile($params) {
-	global $mysql, $lang, $tpl, $template, $SYSTEM_FLAGS, $PFILTERS;
+	global $mysql, $userROW, $config, $lang, $twig, $twigLoader, $template, $SYSTEM_FLAGS, $PFILTERS;
 
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.view'];
 	//LoadPluginLang('uprofile', 'users', '', '', ':');
@@ -35,7 +34,7 @@ function uprofile_showProfile($params) {
 		$urow = $mysql->record("select * from ".uprefix."_users where name = ".db_squote($_REQUEST['name']));
 	}
 	if (!is_array($urow)) {
-		msg(array("type" => "error", "text" => $lang['uprofile:msge_no_user']));
+		error404();
 		return;
 	}
 
@@ -49,60 +48,68 @@ function uprofile_showProfile($params) {
 	$SYSTEM_FLAGS['info']['title']['group']	= $lang['loc_userinfo'];
 	$SYSTEM_FLAGS['info']['title']['item']	= $urow['name'];
 
-	$status = (($urow['status'] >= 1)&&($urow['status'] <= 4))?$lang['uprofile:st_'.$urow['status']]:$lang['uprofile:st_unknown'];
+	$status = (($urow['status'] >= 1)&&($urow['status'] <= 4))?$lang['uprofile']['st_'.$urow['status']]:$lang['uprofile:st_unknown'];
 
-	// Check for new style of photos storing
-	if (preg_match('/^'.$urow['id'].'\./', $urow['photo'])) {
-		$uphoto = $urow['photo'];
-	} else {
-		$uphoto = $urow['id'].'.'.$urow['photo'];
-	}
+	// Get user's photo and avatar
+	$userPhoto	= userGetPhoto($urow);
+	$userAvatar	= userGetAvatar($urow);
 
-	// Check for new style of avatars storing
-	if (preg_match('/^'.$urow['id'].'\./', $urow['avatar'])) {
-		$uavatar = $urow['avatar'];
-	} else {
-		$uavatar = $urow['id'].'.'.$urow['avatar'];
-	}
-
-	$photo	= photos_url.'/'.(($urow['photo'] != "")?'thumb/'.$uphoto:'nophoto.gif');
-
-	// GRAVATAR.COM integration ** BEGIN **
-	if ($urow['avatar'] != '') {
-		$avatar	= avatars_url.'/'.$uavatar;
-	} else {
-		if ($config['avatars_gravatar']) {
-			$avatar	= 'http://www.gravatar.com/avatar/'.md5(strtolower($userROW['mail'])).'.jpg?s='.$config['avatar_wh'].'&d='.urlencode(avatars_url."/noavatar.gif");
-		} else {
-			$avatar = avatars_url."/noavatar.gif";
-		}
-	}
-	// GRAVATAR.COM integration ** END **
-
-
-	$tpl -> template('users', $tpath['users']);
-	$tvars['vars'] = array(
-		'user'		=>	$urow['name'],
-		'news'		=>	$urow['news'],
-		'com'		=>	$urow['com'],
-		'status'	=>	$status,
-		'last'		=>	langdate("j Q Y", $urow['last']),
-		'reg'		=>	langdate("j Q Y", $urow['reg']),
-		'site'		=>	secure_html($urow['site']),
-		'icq'		=>	is_numeric($urow['icq']) ? '<a target="_blank" href="http://www.icq.com/people/about_me.php?uin='.$urow['icq'].'">'.$urow['icq'].'</a>' : secure_html($urow['icq']),
-		'icqimg'	=>	is_numeric($urow['icq']) ? '<img src="http://status.icq.com/online.gif?icq='.$urow['icq'].'&img=1" />' : '',
-		'from'		=>	secure_html($urow['where_from']),
-		'info'		=>	secure_html($urow['info']),
-		'photo'		=>	$photo,
-		'photo_link'=>	($urow['photo'] != "") ? photos_url.'/'.$uphoto:'',
-		'avatar'	=>	$avatar
+	$tVars = array(
+		'userRec'		=> $urow,
+		'user'			=> array(
+			'id'			=>	$urow['id'],
+			'name'			=>	$urow['name'],
+			'news'			=>	$urow['news'],
+			'com'			=>	$urow['com'],
+			'status'		=>	$status,
+			'last'			=>	($urow['last'] > 0) ? LangDate("l, j Q Y - H:i", $urow['last']) : $lang['no_last'],
+			'reg'			=>	langdate("j Q Y", $urow['reg']),
+			'site'			=>	secure_html($urow['site']),
+			'icq'			=>	secure_html($urow['icq']),
+			'from'			=>	secure_html($urow['where_from']),
+			'info'			=>	secure_html($urow['info']),
+			'photo_thumb'	=>	$userPhoto[1],
+			'photo'			=>	$userPhoto[2],
+			'avatar'		=>	$userAvatar[1],
+			'flags'			=> array(
+				'hasPhoto'		=> $config['use_photos'] && $userPhoto[0],
+				'hasAvatar'		=> $config['use_avatars'] && $userAvatar[0],
+				'hasIcq'		=> is_numeric($urow['icq'])?1:0,
+				'isOwnProfile'	=> (isset($userROW) && is_array($userROW) && ($userROW['id'] == $urow['id']))?1:0,
+			),
+		),
+		'token'				=> genUToken('uprofile.editForm'),
 	);
 
-	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->showProfile($urow['id'], $urow, &$tvars); }
 
-	$tpl -> vars('users', $tvars);
-	$template['vars']['mainblock'] .= $tpl -> show('users');
+	$conversionConfig = array(
+		'{user}'		=> '{{ user.name }}',
+		'{news}'		=> '{{ user.news }}',
+		'{com}'			=> '{{ user.com }}',
+		'{status}'		=> '{{ user.status }}',
+		'{last}'		=> '{{ user.last }}',
+		'{reg}'			=> '{{ user.reg }}',
+		'{site}'		=> '{{ user.site }}',
+		'{icq}'			=> '{{ user.icq }}',
+		'{from}'		=> '{{ user.from }}',
+		'{info}'		=> '{{ user.info }}',
+		'{photo}'		=> '{{ user.photo_thumb }}',
+		'{photo_link}'	=> '{{ user.photo }}',
+		'{avatar}'		=> '{{ user.avatar }}',
+		'{tpl_url}'		=> '{{ tpl_url }}',
+	);
+	$conversionConfigRegex = array(
+		'#{l_uprofile:(.+?)}#'	=> '{{ lang.uprofile[\'$1\'] }}',
+	);
+
+
+	if (is_array($PFILTERS['plugin.uprofile']))
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->showProfile($urow['id'], $urow, &$tVars); }
+
+
+	$twigLoader->setConversion($tpath['users'].'users.tpl', $conversionConfig, $conversionConfigRegex);
+	$xt = $twig->loadTemplate($tpath['users'].'users.tpl');
+	$template['vars']['mainblock'] .= $xt->render($tVars);
 }
 
 function uprofile_editProfile(){
@@ -141,15 +148,9 @@ function uprofile_applyProfile() {
 // =============================================================
 
 
-// Show profile for specified user
-function profile_show() {
-	global $mysql;
-}
-
-
 // Show EDIT FORM for current user's profile
-function uprofile_editForm(){
-	global $mysql, $userROW, $lang, $config, $tpl, $template, $SYSTEM_FLAGS, $PFILTERS, $DSlist;
+function uprofile_editForm($ajaxMode = false){
+	global $mysql, $userROW, $lang, $config, $tpl, $template, $twig, $twigLoader, $SYSTEM_FLAGS, $PFILTERS, $DSlist;
 
 	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.edit'];
 
@@ -163,86 +164,101 @@ function uprofile_editForm(){
 	// Show profile
 
 	// Save current user's parameters
-	$currentUser = $userROW;
+	$urow = $userROW;
 
 	// Load list of attached images/files
 	//$currentUser['#files']	= $mysql->select("select *, date_format(from_unixtime(date), '%d.%m.%Y') as date from ".prefix."_files where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($currentUser['id']).')', 1);
-	$currentUser['#images']	= $mysql->select("select *, date_format(from_unixtime(date), '%d.%m.%Y') as date from ".prefix."_images where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($currentUser['id']).')', 1);
+	$urow['#images']	= $mysql->select("select *, date_format(from_unixtime(date), '%d.%m.%Y') as date from ".prefix."_images where (linked_ds = ".$DSlist['users'].") and (linked_id = ".db_squote($urow['id']).')', 1);
 
 
 	// Manage profile data [if needed]
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileFormPre($currentUser['id'], $currentUser); }
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileFormPre($urow['id'], $urow); }
 
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('profile'), 'uprofile', pluginGetVariable('uprofile', 'localsource'));
 
-	// If AVATARs are enabled
-	if ($config['use_avatars']) {
-		if ($currentUser['avatar'] !== "") {
-			// Check for new style of avatar storing
-			if (preg_match('/^'.$currentUser['id'].'\./', $currentUser['avatar'])) {
-				$avatar = $currentUser['avatar'];
-			} else {
-				$avatar = $currentUser['id'].'.'.$currentUser['avatar'];
-			}
 
-			$imgavatar = '<img src="'.avatars_url.'/'.$avatar.'" style="margin: 5px; border: 0px;" alt="" />';
-			$delavatar = '<input type="checkbox" name="delavatar" id="delavatar" class="check" />&nbsp;<label for="delavatar">'.$lang["uprofile:delete"].'</label>';
-		}
-		$showrow_avatar = '<input type="file" name="newavatar" size="40" /><br />'.$imgavatar.'<br />'.$delavatar;
-	} else {
-		$showrow_avatar = $lang['uprofile:avatars_denied'];
-	}
+	$status = (($urow['status'] >= 1)&&($urow['status'] <= 4))?$lang['uprofile:st_'.$urow['status']]:$lang['uprofile:st_unknown'];
 
-	// If PHOTOS are enabled
-	if ($config['use_photos']) {
-		if ($currentUser['photo'] !== "") {
-			// Check for new style of avatar storing
-			if (preg_match('/^'.$currentUser['id'].'\./', $currentUser['photo'])) {
-				$photo = $currentUser['photo'];
-			} else {
-				$photo = $currentUser['id'].'.'.$currentUser['photo'];
-			}
-			$imgphoto = '<a href="'.photos_url.'/'.$photo.'" target="_blank"><img src="'.photos_url.'/thumb/'.$photo.'" style="margin: 5px; border: 0px;" alt="" /></a>';
-			$delphoto = '<input type="checkbox" name="delphoto" id="delphoto" class="check" />&nbsp;<label for="delphoto">'.$lang["uprofile:delete"].'</label>';
-		}
-		$showrow_photo = '<input type="file" name="newphoto" size="40" /><br />'.$imgphoto.'<br />'.$delphoto;
-	} else {
-		$showrow_photo = $lang['uprofile:photos_denied'];
-	}
+	// Get user's photo and avatar
+	$userPhoto	= userGetPhoto($urow);
+	$userAvatar	= userGetAvatar($urow);
 
-	$status = (($currentUser['status'] >= 1)&&($currentUser['status'] <= 4))?$lang['uprofile:st_'.$currentUser['status']]:$lang['uprofile:st_unknown'];
+	$tVars = array(
+		'userRec'		=> $urow,
+		'user'			=> array(
+			'id'			=>	$urow['id'],
+			'name'			=>	$urow['name'],
+			'news'			=>	$urow['news'],
+			'com'			=>	$urow['com'],
+			'status'		=>	$status,
+			'last'			=>	($urow['last'] > 0) ? LangDate("l, j Q Y - H:i", $urow['last']) : $lang['no_last'],
+			'reg'			=>	langdate("j Q Y", $urow['reg']),
+			'email'			=>	secure_html($urow['mail']),
+			'site'			=>	secure_html($urow['site']),
+			'icq'			=>	secure_html($urow['icq']),
+			'from'			=>	secure_html($urow['where_from']),
+			'info'					=>	secure_html($urow['info']),
+			'photo_thumb'	=>	$userPhoto[1],
+			'photo'			=>	$userPhoto[2],
+			'avatar'		=>	$userAvatar[1],
+			'php_self'		=> $PHP_SELF,
+			'flags'			=> array(
+				'hasPhoto'		=> $config['use_photos'] && $userPhoto[0],
+				'hasAvatar'		=> $config['use_avatars'] && $userAvatar[0],
+				'hasIcq'		=> is_numeric($urow['icq'])?1:0,
+			),
+		),
+		'flags'		=> array(
+			'photoAllowed'	=> $config['use_photos']?1:0,
+			'avatarAllowed'	=> $config['use_avatars']?1:0,
+		),
+		'form_action'		=>	generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'apply')),
+		'token'				=> genUToken('uprofile.update'),
+		'info_sizelimit_text'	=> str_replace('{limit}', intval($config['user_aboutsize']), $lang['uprofile:about_sizelimit']),
+		'info_sizelimit'		=> intval($config['user_aboutsize']),
+	);
 
-	$tvars['vars'] = array(
-		'php_self'	=>	$PHP_SELF,
-		'name'		=>	$currentUser['name'],
-		'regdate'	=>	LangDate("l, j Q Y - H:i", $currentUser['reg']),
-		'last'		=>	(empty($currentUser['last'])) ? $lang['no_last'] : LangDate("l, j Q Y - H:i", $currentUser['last']),
-		'status'	=>	$status,
-		'news'		=>	$currentUser['news'],
-		'comments'	=>	$currentUser['com'],
-		'email'		=>	secure_html($currentUser['mail']),
-		'ifchecked'	=>	$ifchecked,
-		'site'		=>	secure_html($currentUser['site']),
-		'icq'		=>	secure_html($currentUser['icq']),
-		'from'		=>	secure_html($currentUser['where_from']),
-		'about'		=>	secure_html($currentUser['info']),
-		'about_sizelimit_text'	=> str_replace('{limit}', intval($config['user_aboutsize']), $lang['uprofile:about_sizelimit']),
-		'about_sizelimit'	=> intval($config['user_aboutsize']),
-		'avatar'	=>	$showrow_avatar,
-		'photo'		=>	$showrow_photo,
-		'form_action'	=>	generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'apply')),
-		'token'		=> genUToken('uprofile.update'),
+	$conversionConfig = array(
+		'{php_self}'	=> '{{ php_self }}',
+		'{name}'		=> '{{ user.name }}',
+		'{regdate}'		=> '{{ user.reg }}',
+		'{last}'		=> '{{ user.last }}',
+		'{status}'		=> '{{ user.status }}',
+		'{news}'		=> '{{ user.news }}',
+		'{comments}'	=> '{{ user.com }}',
+		'{email}'		=> '{{ user.email }}',
+		'{from}'		=> '{{ user.from }}',
+		'{site}'		=> '{{ user.site }}',
+		'{icq}'			=> '{{ user.icq }}',
+		'{about}'		=> '{{ user.info }}',
+		'{about_sizelimit_text}'	=> '{{ info_sizelimit_text }}',
+		'{about_sizelimit}'			=> '{{ info_sizelimit }}',
+		'{photo}'		=> '{% if (flags.photoAllowed) %}<input type="file" name="newphoto" size="40" /><br />{% if (user.flags.hasPhoto) %}<a href="{{ user.photo }}" target="_blank"><img src="{{ user.photo_thumb }}" style="margin: 5px; border: 0px; alt=""/></a><br/><input type="checkbox" name="delphoto" id="delphoto" class="check" />&nbsp;<label for="delphoto">{{ lang.uprofile[\'delete\'] }}</label>{% endif %}{% else %}{{ lang.uprofile[\'photos_denied\'] }}{% endif %}',
+		'{avatar}'		=> '{% if (flags.avatarAllowed) %}<input type="file" name="newavatar" size="40" /><br />{% if (user.flags.hasAvatar) %}<img src="{{ user.avatar }}" style="margin: 5px; border: 0px; alt=""/><br/><input type="checkbox" name="delavatar" id="delavatar" class="check" />&nbsp;<label for="delavatar">{{ lang.uprofile[\'delete\'] }}</label>{% endif %}{% else %}{{ lang.uprofile[\'avatars_denied\'] }}{% endif %}',
+		'{form_action}'	=> '{{ form_action }}',
+		'{token}'		=> '{{ token }}',
+		'{tpl_url}'		=> '{{ tpl_url }}',
+	);
+	$conversionConfigRegex = array(
+		'#{l_uprofile:(.+?)}#'		=> '{{ lang.uprofile[\'$1\'] }}',
+		'#{plugin_xfields_(\d+)}#'	=> ' {{ p.xfields[$1] }}',
 	);
 
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileForm($currentUser['id'], $currentUser, &$tvars); }
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileForm($urow['id'], $urow, &$tVars); }
 
-	$tpl -> template('profile', $tpath['profile']);
-	$tpl -> vars('profile', $tvars);
-	$template['vars']['mainblock'] .= $tpl -> show('profile');
+	$twigLoader->setConversion($tpath['profile'].'profile.tpl', $conversionConfig, $conversionConfigRegex);
+	$xt = $twig->loadTemplate($tpath['profile'].'profile.tpl');
+
+	$render = $xt->render($tVars);
+
+	if ($ajaxMode)
+		return $render;
+
+	$template['vars']['mainblock'] .= $render;
 }
 
 
@@ -405,7 +421,6 @@ function uprofile_editApply(){
 }
 
 
-
 function uprofile_manageDelete($type, $userID){
 	global $mysql, $userROW;
 
@@ -436,3 +451,13 @@ function uprofile_manageDelete($type, $userID){
 	$mysql->query("update ".uprefix."_users set ".($type=='photo'?'photo':'avatar')." = '' where id = ".$userID);
 	if ($localUpdate) $userROW[$type] = '';
 }
+
+
+function uprofile_rpc_manage($params){
+	$uprofileOutput = uprofile_editForm(true);
+
+	return array('status' => 1, 'errorCode' => 0, 'data' => arrayCharsetConvert(0, $uprofileOutput));
+}
+
+rpcRegisterFunction('plugin.uprofile.editForm', 'uprofile_rpc_manage');
+
