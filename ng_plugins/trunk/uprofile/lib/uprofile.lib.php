@@ -21,3 +21,37 @@ class p_uprofileFilter {
 	function editProfileNotify($userID, $SQLrow, &$SQLnew) { return 1; }
 
 }
+
+// Returns array
+// 0 - Status [ 0 - no avatar, 1 - have avatar ]
+// 1 - Avatar URL
+function userGetAvatar($urow){
+	global $config;
+
+	// If avatar is set
+	if ($urow['avatar'] != '') {
+		return array(1, avatars_url.'/'.((preg_match('/^'.$urow['id'].'\./', $urow['avatar']))?'':($urow['id'].'.')).$urow['avatar']);
+	}
+
+	// Use GRAVATAR (if set)
+	if ($config['avatars_gravatar']) {
+		$avatar	= 'http://www.gravatar.com/avatar/'.md5(strtolower($urow['mail'])).'.jpg?s='.$config['avatar_wh'].'&d='.urlencode(avatars_url."/noavatar.gif");
+	} else {
+		$avatar = avatars_url."/noavatar.gif";
+	}
+	return array(1, $avatar);
+}
+
+// Results array
+// 0 - Status [ 0 - no photo, 1 - have photo ]
+// 1 - Photo preview
+// 2 - Full photo
+function userGetPhoto($urow) {
+
+	if (!$urow['photo'])
+		return array(0, photos_url.'/nophoto.gif', photos_url.'/nophoto.gif');
+
+	$photoName = ((preg_match('/^'.$urow['id'].'\./', $urow['photo']))?($urow['id'].'.'):'').$urow['photo'];
+
+	return	array(1, photos_url.'/thumb/'.$photoName, photos_url.'/'.$photoName);
+}
