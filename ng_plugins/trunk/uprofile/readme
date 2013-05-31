@@ -1,0 +1,149 @@
+# =========================================================================== #
+# NG CMS // Плагины // Просмотр/редактирование профиля пользователя           #
+# =========================================================================== #
+
+Плагин обеспечивает функционал просмотра и редактирования профиля пользователей.
+За данные функции отвечают следующие шаблоны:
+
+users.tpl	- просмотр профиля пользователя (как чужого так и своего)
+profile.tpl	- страница редактирования собственного профиля
+
+
+[TWIG] users.tpl
+------------------------------------------------
+Шаблон используется для просмотра профиля любого пользователя (а также своего в
+режиме "как меня видят другие")
+
+Некоторые переменные оставлены в шаблоне в целях совместимости с предыдущими версиями.
+
+Список переменных:
+* user		- массив с данными пользователя, взятыми из таблицы БД users
+  * id		- ID пользователя
+  * name	- логин пользователя
+  * news        - кол-во новостей пользователя
+  * com		- кол-во комментариев пользователя
+  * status	- наименование группы пользователя
+  * last	- дата/время последнего посещения
+  * reg		- дата/время регистрации
+  * site	- URL сайта
+  * icq		- номер ICQ
+  * from	- Поле "откуда"
+  * info	- Поле "информация обо мне"
+  * photo	- URL фотографии
+  * photo_thumb - URL уменьшенной копии
+  * flags	- Массив с признаками/флагами
+    * hasPhoto		- Флаг: у пользователя есть фотография
+    * hasAvatar		- Флаг: у пользователя есть аватарка
+    * hasIcq		- Флаг: у пользователя есть ICQ
+    * isOwnProfile	- Флаг: пользователь просматривает _собственный_ профиль
+* token	- Токен безопасности для передачи в RPC функцию plugin.uprofile.editForm
+
+HINT: Переменные из плагина xfields (доп. поля) доступны в ветке p.xfields.
+Интересующиеся могут выполнить {{ debugValue(p.xfields) }} и посмотреть какую именно информацию
+предоставляет xfields в данный шаблон.
+
+Для "перехода" из режима "просмотра собственного профиля" в его редактирование можно использовать
+следующую конструкцию.
+Необходимые предыдущие шаги:
+* в шаблоне создана ссылка с текстом "редактировать профиль" и событием onclick = "ng_uprofile_editCall(); return false"
+* всё содержимое шаблона users.tpl помещено в div с ID "uprofileReplaceForm"
+
+{% if (user.flags.isOwnProfile) %}
+<script type="text/javascript" language="javascript">
+function ng_uprofile_editCall() {
+	$.post('/engine/rpc.php', { json : 1, methodName : 'plugin.uprofile.editForm', rndval: new Date().getTime(), params : json_encode({ 'token' : '{{ token }}' }) }, function(data) {
+		// Try to decode incoming data
+		try {
+			resTX = eval('('+data+')');
+		} catch (err) { alert('Error parsing JSON output. Result: '+linkTX.response); }
+		if (!resTX['status']) {
+			ngNotifyWindow('Error ['+resTX['errorCode']+']: '+resTX['errorText'], 'ERROR');
+		} else {
+			$('#uprofileReplaceForm').html(resTX['data']);
+		}
+	}).error(function() { ngNotifyWindow('HTTP error during request', 'ERROR'); });
+
+}
+</script>
+{% endif %}
+
+
+
+[TWIG] profile.tpl
+------------------------------------------------
+Шаблон для редактирования собственного профиля
+Шаблон используется для просмотра профиля любого пользователя (а также своего в
+режиме "как меня видят другие")
+
+* user		- массив с данными пользователя, взятыми из таблицы БД users
+  * id		- ID пользователя
+  * name	- логин пользователя
+  * news        - кол-во новостей пользователя
+  * com		- кол-во комментариев пользователя
+  * status	- наименование группы пользователя
+  * last	- дата/время последнего посещения
+  * reg		- дата/время регистрации
+  * email	- email пользователя
+  * site	- URL сайта
+  * icq		- номер ICQ
+  * from	- Поле "откуда"
+  * info	- Поле "информация обо мне"
+  * photo	- URL фотографии
+  * photo_thumb - URL уменьшенной копии
+  * flags	- Массив с признаками/флагами
+    * hasPhoto		- Флаг: у пользователя есть фотография
+    * hasAvatar		- Флаг: у пользователя есть аватарка
+* flags		- Набор глобальных флагов
+  * photoAllowed	- Флаг: пользователям разрешено использовать фотографии
+  * avatarAllowed	- Флаг: пользователям разрешено иметь аватары
+* info_sizelimit_text	- текстовое сообщение для выдачи пользователю при превышении размера поля "обо мне" (info)
+* info_sizelimit	- ограничение (в символах) на максимальный размер поля "обо мне" (info)
+* form_action		- URL формы, на который необходимо отправлять пользователя для сохранения профиля
+* token	- Токен безопасности для изменения профиля пользователя
+
+
+Для сохранения настроек профиля необходимо создать форму, отправляющую POST запрос на URL {{ form_action }}.
+При этом необходимо добавить следующие невидимые (hidden) поля:
+* token со значением {{ token }}
+
+Информация передаётся в следующих полях:
+* editemail	- для {{ user.email }}
+* editsite	- для {{ user.site }}
+* editicq	- для {{ user.icq }}
+* editfrom	- для {{ user.from }}
+* editabout	- для {{ user.about }}
+* editpassword	- для задания нового пароля
+* oldpass	- для указания старого пароля (требуется только при попытке смены пароля)
+* newphoto	- тип "file", для заливки новой фотографии
+* delphoto	- тип "checkbox", для отметки "удалить фотографию"
+* newavatar	- тип "file", для заливки новой аватарки
+* delavatar	- тип "checkbox", для отметки "удалить аватарку"
+
+
+Для вывода фотографии пользователя можно использовать следующую конструкцию:
+{% if (flags.photoAllowed) %}
+ <input type="file" name="newphoto" size="40" /><br />
+ {% if (user.flags.hasPhoto) %}
+  <a href="{{ user.photo }}" target="_blank">
+   <img src="{{ user.photo_thumb }}" style="margin: 5px; border: 0px; alt=""/>
+  </a><br/>
+  <input type="checkbox" name="delphoto" id="delphoto" class="check" />&nbsp;
+  <label for="delphoto">{{ lang.uprofile['delete'] }}</label>
+ {% endif %}
+{% else %}
+  {{ lang.uprofile['photos_denied'] }}
+{% endif %}
+
+Для вывода аватара можно использовать конструкцию:
+{% if (flags.avatarAllowed) %}
+ <input type="file" name="newavatar" size="40" /><br />
+ {% if (user.flags.hasAvatar) %}
+  <img src="{{ user.avatar }}" style="margin: 5px; border: 0px; alt=""/><br/>
+  <input type="checkbox" name="delavatar" id="delavatar" class="check" />&nbsp;
+  <label for="delavatar">{{ lang.uprofile['delete'] }}</label>
+ {% endif %}
+{% else %}
+ {{ lang.uprofile['avatars_denied'] }}
+{% endif %}
+
+
