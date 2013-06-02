@@ -16,6 +16,10 @@ $db_update = array(
 		'table'		=>	'jchat',
 		'action'	=>	'drop',
 	),
+	array(
+		'table'		=>	'jchat_events',
+		'action'	=>	'drop',
+	),
 );
 
 if ($_REQUEST['action'] == 'commit') {

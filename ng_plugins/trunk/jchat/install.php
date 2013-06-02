@@ -21,6 +21,7 @@ function plugin_jchat_install($action) {
 	 array(
 	  'table'  => 'jchat',
 	  'action' => 'cmodify',
+          'charset'=> 'UTF8',
 	  'key'    => 'primary key(id)',
 	  'fields' => array(
 	    array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
