@@ -21,6 +21,7 @@ array_push($cfg, array('descr' => $lang['jchat:desc']));
 $cfgX = array();
 array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2">Всего записей: '.$jcRowCount.'</td></tr>'));
 array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2"><input type="checkbox" name="purge" value="1"/> Удалить старые записи, оставив последние <input type="text" name="purge_save" size="3" value="50"/></td></tr>'));
+array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2"><input type="checkbox" name="reload" value="1"/> Перезагрузить страницу у всех посетителей</td></tr>'));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['jchat:conf.stat'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
@@ -29,6 +30,8 @@ array_push($cfgX, array('name' => 'access', 'title' => $lang['jchat:access'], 'd
 array_push($cfgX, array('name' => 'rate_limit', 'title' => $lang['jchat:rate_limit'], 'descr' => $lang['jchat:rate_limit#desc'], 'type' => 'input', 'value' => pluginGetVariable($plugin,'rate_limit')));
 array_push($cfgX, array('name' => 'maxwlen', 'title' => $lang['jchat:maxwlen'], 'descr' => $lang['jchat:maxwlen#desc'], 'type' => 'input', 'value' => pluginGetVariable($plugin,'maxwlen')));
 array_push($cfgX, array('name' => 'maxlen', 'title' => $lang['jchat:maxlen'], 'descr' => $lang['jchat:maxlen#desc'], 'type' => 'input', 'value' => pluginGetVariable($plugin,'maxlen')));
+array_push($cfgX, array('name' => 'format_time', 'title' => $lang['jchat:format_time'], 'descr' => $lang['jchat:format_time#desc'], 'type' => 'input', 'value' => pluginGetVariable($plugin,'format_time')));
+array_push($cfgX, array('name' => 'format_date', 'title' => $lang['jchat:format_date'], 'descr' => $lang['jchat:format_date#desc'], 'type' => 'input', 'value' => pluginGetVariable($plugin,'format_date')));
 array_push($cfg,  array('mode' => 'group', 'title' => '<b>'.$lang['jchat:conf.main'].'</b>', 'entries' => $cfgX));
 
 $cfgX = array();
@@ -58,6 +61,14 @@ if ($_REQUEST['action'] == 'commit') {
 		if (($_REQUEST['purge_save'] != '')&&($dc > 0)) {
 			$mysql->query("delete from ".prefix."_jchat order by id limit ".$dc);
 		}
+
+	}
+
+	// Check if we need to reload page
+	if ($_REQUEST['reload']) {
+		$mysql->query("insert into ".prefix."_jchat_events (chatid, postdate, type) values (1, unix_timestamp(now()), 3)");
+		$lid = $mysql->result("select LAST_INSERT_ID()");
+		$mysql->query("delete from ".prefix."_jchat_events where type=3 and id <> ".db_squote($lid));
 
 	}
 
