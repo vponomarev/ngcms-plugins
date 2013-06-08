@@ -113,10 +113,10 @@ for ($i = 1; $i <= $count; $i++) {
 	));
 
 	array_push($cfgX, array(
-					'name' => "{$currentVar}_showEmpty",
+					'name' => "{$currentVar}_showNoNews",
 					'title' => 'Выводить блок если в нём нет новостей',
 					'type' => 'checkbox',
-					'value' => pluginGetVariable($plugin ,"{$currentVar}_showEmpty"))
+					'value' => pluginGetVariable($plugin ,"{$currentVar}_showNoNews"))
 	);
 
 	array_push($cfgX, array(
