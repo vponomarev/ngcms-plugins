@@ -228,9 +228,6 @@ function xNewsShowBlock($params) {
 	// Prepare SQL query
 	$requestQuery = "SELECT * FROM ".prefix."_news ".((count($filterList)>0)?"WHERE ".implode(" AND ", $filterList):"")." ORDER BY {$orderBy} LIMIT {$showSkip}, {$showCount}";
 
-	if (!count($requestQuery) && (!isset($params['showNoNews']) || (!$params['showNoNews'])))
-		return;
-
 	// Check if template directory is specified and exists
 	$templateDir = '';
 
@@ -292,6 +289,11 @@ function xNewsShowBlock($params) {
 
 	$xt = $twig->loadTemplate($templateDir.'/xnews.tpl');
 	$xOut = $xt->render($tVars);
+
+	// Manage `showNoNews` flag
+	if (($showResult['count'] < 1) && (isset($params['showNoNews']) || ($params['showNoNews']))) {
+		$xOut = '';
+	}
 
 	if (!$cacheDisabled && ($params['cacheAge'] > 0)) {
 		cacheStoreFile($cacheFileName, $xOut, 'xnews');
