@@ -43,8 +43,8 @@ function xNewsShowBlock($params) {
 				// BLOCK FOUND. MAKE PRESETS !!!
 				$isFound = true;
 
-				if (pluginGetVariable('xnews', 'cache') && (!isset($params['cacheAge']))) {
-					$params['cacheAge'] = pluginGetVariable('xnews', 'cacheExpire');
+				if (pluginGetVariable('xnews', $i.'_'.'cache') && (!isset($params['cacheAge']))) {
+					$params['cacheAge'] = pluginGetVariable('xnews', $i.'_'.'cacheExpire');
 				}
 				foreach (array('categoryMode', 'categories', 'visibilityMode', 'visibilityCList', 'mainMode', 'pinMode', 'favMode', 'count', 'skip', 'maxAge', 'order', 'showNoNews', 'skipCurrent', 'extractEmbeddedItems') as $k)
 					if (!isset($params[$k]))		$params[$k] = pluginGetVariable('xnews', $i.'_'.$k);
