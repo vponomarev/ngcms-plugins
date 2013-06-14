@@ -81,7 +81,7 @@
 				'send_pm' => link_send_pm($row['uid']),
 				'active' => ($users_online[$row['uid']])?1:0,
 				'pmid'		=>	$row['pid'],
-				'pmdate'	=>	show_date($row['pmdate']),
+				'pmdate'	=>	$row['pmdate'],
 				'pmdate2'	=>	$row['pmdate'],
 				'title'		=>	$row['title'],
 				'link_pm_reply'		=>	link_send_pm($row['uid'], $row['pid']),
@@ -125,7 +125,7 @@
 		ORDER BY pm.id DESC LIMIT '.$limitStart.', '.$limitCount) as $row){
 		$tEntry[] = array(
 			'pmid'			=>	$row['pid'],
-			'pmdate'		=>	show_date($row['pmdate']),
+			'pmdate'		=>	$row['pmdate'],
 			'title'			=>	$row['title'],
 			'link_pm'		=>	link_list_pm($row['pid'], $pageNo, $io),
 			'profile_link'	=>	link_profile($row['uid'], '', $row['uname']),
@@ -159,8 +159,8 @@
 											"$1",
 											str_replace('%link%', 
 												checkLinkAvailable('forum', 'list_pm')?
-												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'list_pm', 'params' => array(), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev = floor($limitStart / $limitCount)):
-												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'list_pm'), 'xparams' => array(), 'paginator' => array('page', 1, false)), $prev = floor($limitStart / $limitCount)), 
+												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'list_pm', 'params' => array('folder' => $io), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev = floor($limitStart / $limitCount)):
+												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'list_pm'), 'xparams' => array('folder' => $io), 'paginator' => array('page', 1, false)), $prev = floor($limitStart / $limitCount)), 
 												isset($navigations['prevlink'])?$navigations['prevlink']:''
 											)
 					),
@@ -171,8 +171,8 @@
 											"$1",
 											str_replace('%link%', 
 												checkLinkAvailable('forum', 'list_pm')?
-												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'list_pm', 'params' => array(), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev+2):
-												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'list_pm'), 'xparams' => array(), 'paginator' => array('page', 1, false)), $prev+2), 
+												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'list_pm', 'params' => array('folder' => $io), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev+2):
+												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'list_pm'), 'xparams' => array('folder' => $io), 'paginator' => array('page', 1, false)), $prev+2), 
 												isset($navigations['nextlink'])?$navigations['nextlink']:''
 											)
 					),

@@ -30,7 +30,13 @@
 					</td>
 					<td class="tc2"><a href='{{ entry.forum_link }}'>{{ entry.forum_name }}</a></td>
 					<td class="tc3">{{ entry.num_replies }}</td>
-					<td class='tcr'><a href='{{ entry.last_post_forum.topic_link }}'>{{ entry.last_post_forum.date }}</a> оставил&nbsp;<a href='{{ entry.last_post_forum.profile_link }}'>{{ entry.last_post_forum.profile }}</a></td>
+					<td class='tcr'><a href='{{ entry.last_post_forum.topic_link }}'>{% if entry.last_post_forum.date|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ entry.last_post_forum.date|date('H:i') }}
+{% elseif entry.last_post_forum.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ entry.last_post_forum.date|date('H:i') }}
+{% else %}
+	{{ entry.last_post_forum.date|date('d-m-Y H:i') }}
+{% endif %}</a> оставил&nbsp;<a href='{{ entry.last_post_forum.profile_link }}'>{{ entry.last_post_forum.profile }}</a></td>
 				</tr>
 				{% else %}
 				<tr> 

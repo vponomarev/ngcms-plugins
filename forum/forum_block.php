@@ -17,14 +17,19 @@
 */
 if (!defined('NGCMS')) die ('HAL');
 
+include_once(dirname(__FILE__).'/includes/bb_code.php');
+include_once(dirname(__FILE__).'/includes/rewrite.php');
+
 function forum_show_topics($params) {
-	global $CurrentHandler, $twig, $mysql;
+	global $twig, $mysql;
 	
-	$tpath = locatePluginTemplates(array('show_topics'), 'forum', 1, '', 'block');
-	$xt = $twig->loadTemplate($tpath['show_topics'].'show_topics.tpl');
+	$limit = $params['limit']?$params['limit']:5;
+	$templates = $params['temp']?$params['temp']:'show_topics';
+	$tpath = locatePluginTemplates(array($templates), 'forum', 1, '', 'block');
+	$xt = $twig->loadTemplate($tpath[$templates].$templates.'.tpl');
 	
 	$i=1;
-	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_topics ORDER BY l_date DESC LIMIT '.$params['limit']) as $row){
+	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_topics ORDER BY l_date DESC LIMIT '.$limit) as $row){
 		
 		$entries[] = array(
 			'num'=>$i++,
@@ -45,14 +50,45 @@ function forum_show_topics($params) {
 
 }
 
+function forum_show_topics_top($params) {
+	global $twig, $mysql;
+	
+	$limit = $params['limit']?$params['limit']:5;
+	$templates = $params['temp']?$params['temp']:'show_topics_top';
+	$tpath = locatePluginTemplates(array($templates), 'forum', 1, '', 'block');
+	$xt = $twig->loadTemplate($tpath[$templates].$templates.'.tpl');
+	
+	$i=1;
+	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_topics ORDER BY int_views DESC LIMIT '.$limit) as $row){
+		
+		$entries[] = array(
+			'num'=>$i++,
+			'topic_link' => link_topic($row['id'], 'last'),
+			'subject' => $row['title'],
+			'profile_link' => link_profile($row['l_author_id'], '',$row['l_author'] ),
+			'profile' => $row['l_author'],
+			'num_views' => $row['int_views'],
+			'num_replies' => $row['int_post'],
+		);
+	}
+	
+	$tVars = array(
+		'entries' => $entries,
+	);
+	
+	return $xt->render($tVars);
+}
+
 function forum_show_a_users($params) {
 	global $CurrentHandler, $twig, $mysql;
 	
-	$tpath = locatePluginTemplates(array('show_a_users'), 'forum', 1, '', 'block');
-	$xt = $twig->loadTemplate($tpath['show_a_users'].'show_a_users.tpl');
+	$limit = $params['limit']?$params['limit']:5;
+	$templates = $params['temp']?$params['temp']:'show_a_users';
+	$tpath = locatePluginTemplates(array($templates), 'forum', 1, '', 'block');
+	$xt = $twig->loadTemplate($tpath[$templates].$templates.'.tpl');
 	
 	$i=1;
-	foreach ($mysql->select('SELECT * FROM '.prefix.'_users ORDER BY int_post DESC LIMIT '.$params['limit']) as $row){
+	foreach ($mysql->select('SELECT * FROM '.prefix.'_users ORDER BY int_post DESC LIMIT '.$limit) as $row){
 		switch($row['status']){
 			case 1: $color_start = '<span style="color:red;">'; $color_end = '</span>'; break;
 			case 2: $color_start = '<span style="color:green;">'; $color_end = '</span>'; break;
@@ -80,14 +116,14 @@ function forum_show_a_users($params) {
 
 function forum_show_news($params)
 {global $CurrentHandler, $twig, $mysql;
-	include_once(dirname(__FILE__).'/includes/bb_code.php');
-	include_once(dirname(__FILE__).'/includes/rewrite.php');
 	
-	$tpath = locatePluginTemplates(array('show_news'), 'forum', 1, '', 'block');
-	$xt = $twig->loadTemplate($tpath['show_news'].'show_news.tpl');
+	$limit = $params['limit']?$params['limit']:5;
+	$templates = $params['temp']?$params['temp']:'show_news';
+	$tpath = locatePluginTemplates(array($templates), 'forum', 1, '', 'block');
+	$xt = $twig->loadTemplate($tpath['show_news'].$templates.'.tpl');
 	
 	$i=1;
-	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_news ORDER BY c_data LIMIT '.$params['limit']) as $row){
+	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_news ORDER BY c_data LIMIT '.$limit) as $row){
 		$i++;
 		$entries[] = array(
 			'num'=> $i,
@@ -106,6 +142,8 @@ function forum_show_news($params)
 	return $xt->render($tVars);
 }
 
+
 twigRegisterFunction('forum', 'ShowListNews', forum_show_news);
 twigRegisterFunction('forum', 'ShowTopics', forum_show_topics);
+twigRegisterFunction('forum', 'ShowTopicsTop', forum_show_topics_top);
 twigRegisterFunction('forum', 'ShowAUsers', forum_show_a_users);

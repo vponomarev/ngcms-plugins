@@ -147,7 +147,7 @@
 		LIMIT '.$limitCount.'
 	') as $row){
 		$tEntry[] = array(
-			'date' => show_date($row['c_data']),
+			'date' => $row['c_data'],
 			'author' => $row['author'],
 			'message' => bb_codes($row['message']),
 		

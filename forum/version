@@ -5,7 +5,7 @@ Actions: ppages; forum.php
 Actions: admin:mod:news; forum_news.php
 Actions: news_short, news_full; show_news_forum.php
 Actions: comments; forum_news_post.php
-Actions: index; forum_block.php
+Actions: index, plugin.forum; forum_block.php
 Config: config.php
 Install: install.php
 Deinstall: uninstall.php

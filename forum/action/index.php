@@ -52,7 +52,8 @@
 					'last_post_forum' => array(
 						'topic_name' => $row_2['l_topic_title'],
 						'topic_link' => link_topic($row_2['l_post'], 'pid').'#'.$row_2['l_post'],
-						'date' => show_date($row_2['l_date']),
+						//'date' => show_date($row_2['l_date']),
+						'date' => $row_2['l_date'],
 						'profile_link' => link_profile($row_2['l_author_id'], '', $row_2['l_author']),
 						'profile' => $row_2['l_author'],
 						'profile_avatar' => array(

@@ -92,7 +92,7 @@
 			'last_post_forum' => array(
 				'topic_name' => $row['title'],
 				'topic_link' => link_topic($row['l_post'], 'pid').'#'.$row['l_post'],
-				'date' => show_date($row['l_date']),
+				'date' => $row['l_date'],
 				'profile_link' => link_profile($row['l_author_id'], '', $row['l_author']),
 				'profile' => $row['l_author'],
 				'profile_avatar' => array(
@@ -122,7 +122,7 @@
 			'last_post_forum' => array(
 				'topic_name' => $row['title'],
 				'topic_link' => link_topic($row['l_post'], 'pid').'#'.$row['l_post'],
-				'date' => show_date($row['l_date']),
+				'date' => $row['l_date'],
 				'profile_link' => link_profile($row['l_author_id'], '', $row['l_author']),
 				'profile' => $row['l_author'],
 				'profile_avatar' => array(

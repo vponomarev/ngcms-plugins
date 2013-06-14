@@ -252,7 +252,7 @@ function show_main_page($a_stat = false, $output = '', $dis_wel = false, $dis_ev
 		
 		'out' => link_out(),
 		'home' => link_home(),
-		'pm' => link_list_pm(),
+		'pm' => link_list_pm(0,0,'inbox'),
 		'login' => link_login(),
 		'search' => link_search(),
 		'register' => link_register(),
@@ -272,8 +272,8 @@ function show_main_page($a_stat = false, $output = '', $dis_wel = false, $dis_ev
 		),
 		
 		'profile' => link_profile($userROW['id'], '', $userROW['name']),
-		'last_visit_u' => show_date(isset($userROW['last'])?$userROW['last']:0),
-		'last_visit_g' => show_date(isset($ipis[$ip])?$ipis[$ip]:0),
+		'last_visit_u' => $userROW['last'],
+		'last_visit_g' => $ipis[$ip],
 		'announc_on_off' => (pluginGetVariable('forum', 'announcement_on_off'))?1:0,
 		'announce' => bb_codes(pluginGetVariable('forum', 'announcement')),
 		
