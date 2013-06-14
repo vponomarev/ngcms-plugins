@@ -66,9 +66,9 @@ function plugin_basket_list(){
 	$total = 0;
 	if (count($filter)) {
 		foreach ($mysql->select("select * from ".prefix."_basket where ".join(" or ", $filter), 1) as $rec) {
-			$total += round($rec['price'] * $rec['count'], 0.01);
+			$total += round($rec['price'] * $rec['count'], 2);
 
-			$rec['sum'] = sprintf('%9.2f', round($rec['price'] * $rec['count'], 0.01));
+			$rec['sum'] = sprintf('%9.2f', round($rec['price'] * $rec['count'], 2));
 			$rec['xfields'] = unserialize($rec['linked_fld']);
 			unset($rec['linked_fld']);
 
@@ -174,9 +174,9 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 			$total = 0;
 			if (count($filter)) {
 				foreach ($mysql->select("select * from ".prefix."_basket where ".join(" or ", $filter)) as $rec) {
-					$total += round($rec['price'] * $rec['count'], 0.01);
+					$total += round($rec['price'] * $rec['count'], 2);
 
-					$rec['sum'] = sprintf('%9.2f', round($rec['price'] * $rec['count'], 0.01));
+					$rec['sum'] = sprintf('%9.2f', round($rec['price'] * $rec['count'], 2));
 					$rec['xfields'] = unserialize($rec['linked_fld']);
 					unset($rec['linked_fld']);
 
@@ -219,9 +219,9 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 			$total = 0;
 			if (count($filter)) {
 				foreach ($mysql->select("select * from ".prefix."_basket where ".join(" or ", $filter)) as $rec) {
-					$total += round($rec['price'] * $rec['count'], 0.01);
+					$total += round($rec['price'] * $rec['count'], 2);
 
-					$rec['sum'] = sprintf('%9.2f', round($rec['price'] * $rec['count'], 0.01));
+					$rec['sum'] = sprintf('%9.2f', round($rec['price'] * $rec['count'], 2));
 					$rec['xfields'] = unserialize($rec['linked_fld']);
 					unset($rec['linked_fld']);
 

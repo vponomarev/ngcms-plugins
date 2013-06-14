@@ -58,7 +58,7 @@ class auth_basic extends CoreAuthPlugin {
 	// Сохранить в БД информацию о том, что пользователь авторизовался
 	// $dbrow	= строка из нашей таблицы пользователей
 	function save_auth($dbrow) {
-		global $config, $mysql, $ip;
+		global $config, $mysql, $ip, $ngCookieDomain;
 
         // создаём random cookie
         $auth_cookie = md5((isset($config['crypto_salt'])?$config['crypto_salt']:'').uniqid(rand(),1));
@@ -67,7 +67,7 @@ class auth_basic extends CoreAuthPlugin {
 		$mysql->query($query);
 
 		// Вставить юзеру куку
-		@setcookie('zz_auth', $auth_cookie, ($config['remember']?(time() + 3600 * 24 * 365):0), '/', '', 0, 1);
+		@setcookie('zz_auth', $auth_cookie, ($config['remember']?(time() + 3600 * 24 * 365):0), '/', $ngCookieDomain, 0, 1);
 
 		return 1;
 	}
