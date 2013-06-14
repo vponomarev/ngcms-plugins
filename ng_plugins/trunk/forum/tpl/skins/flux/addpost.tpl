@@ -62,8 +62,13 @@
 			<div class="postleft">
 				<dl>
 					<dt><strong>{{ entry.author }}</strong></dt>
-					<dd>{{ entry.date }}</dd>
-
+					<dd>{% if entry.date|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ entry.date|date('H:i') }}
+{% elseif entry.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ entry.date|date('H:i') }}
+{% else %}
+	{{ entry.date|date('d-m-Y H:i') }}
+{% endif %}</dd>
 				</dl>
 			</div>
 			<div class="postright">

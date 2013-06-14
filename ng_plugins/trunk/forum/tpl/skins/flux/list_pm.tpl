@@ -18,10 +18,15 @@
 		<div class="clearer"></div>
 	</div>
 </div>
-
 {% if (pm.pm_true) %}
 <div id="p579" class="blockpost row_odd firstpost">
-		<h2><span>{{ pm.pmdate }}</span></h2>
+		<h2><span>{% if pm.pmdate|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ pm.pmdate|date('H:i') }}
+{% elseif pm.pmdate|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ pm.pmdate|date('H:i') }}
+{% else %}
+	{{ pm.pmdate|date('d-m-Y H:i') }}
+{% endif %}</span></h2>
 		<div class="box">
 			<div class="inbox">
 				<div class="postleft">
@@ -79,7 +84,13 @@
 			</div>
 		</td>
 		<td class="tc2" style="white-space: nowrap; OVERFLOW: hidden"><a href="{{ entry.profile_link }}">{{ entry.profile }}</a></td>
-		<td class="tcr" style="white-space: nowrap">{{ entry.pmdate }}</td>
+		<td class="tcr" style="white-space: nowrap">{% if entry.pmdate|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ entry.pmdate|date('H:i') }}
+{% elseif entry.pmdate|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ entry.pmdate|date('H:i') }}
+{% else %}
+	{{ entry.pmdate|date('d-m-Y H:i') }}
+{% endif %}</td>
 		<td class="tcr" style="white-space: nowrap">{% if (entry.viewed == 0) %}<font color=green><b>Непрочитанное</b></font>{% else %}Прочитанное{% endif %}</td>
 		<td><input name="sel_pm[{{ entry.pmid }}]" value="1" class="check" type="checkbox" /></td>
 	</tr>
@@ -126,7 +137,13 @@
 			</div>
 		</td>
 		<td class="tc2" style="white-space: nowrap; OVERFLOW: hidden"><a href="{{ entry.profile_link }}">{{ entry.profile }}</a></td>
-		<td class="tcr" style="white-space: nowrap">{{ entry.pmdate }}</td>
+		<td class="tcr" style="white-space: nowrap">{% if entry.pmdate|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ entry.pmdate|date('H:i') }}
+{% elseif entry.pmdate|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ entry.pmdate|date('H:i') }}
+{% else %}
+	{{ entry.pmdate|date('d-m-Y H:i') }}
+{% endif %}</td>
 		<td><input name="sel_pm[{{ entry.pmid }}]" value="1" class="check" type="checkbox" /></td>
 	</tr>
 	{% else %}

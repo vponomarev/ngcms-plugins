@@ -210,8 +210,7 @@ function generatePagination_forum($countPages, $pageNo, $paginationParams, $navi
 		$link_to_all = true;
 	}
 	
-
-	if ($pageNo > 10){
+	if ($pageNo > 5){
 		$pages[] = str_replace( array('%link%', '%page%'), array(generatePageLink($paginationParams, 1, $intlink), 1), $navigations['link_page']);
 		if ($pageNo > 5) $pages[] = $navigations['dots'];
 	}
@@ -582,7 +581,7 @@ function checkPermission_forum($moder_array = ''){
 }
 
 //Вынести в шаблон
-function show_date($row)
+/* function show_date($row)
 {global $config;
 	
 	$time = time() + ($config['date_adjust'] * 60);
@@ -601,7 +600,7 @@ function show_date($row)
 		$date = date('Y-m-d H:i', $row);
 	
 	return $date;
-}
+} */
 
 function forum_upload_files(){
 	$max_file_size = 7 * 1024 * 1024;

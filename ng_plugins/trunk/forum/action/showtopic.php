@@ -101,7 +101,7 @@
 	$SYSTEM_FLAGS['info']['title']['item'] = $result['Ftitle'];
 	$SYSTEM_FLAGS['info']['title']['name_topic'] = $result['Ttitle'];
 	checkPermission_forum($result['moderators']);
-	print "<pre>".var_export($group_perm, true)."</pre>";
+	//print "<pre>".var_export($group_perm, true)."</pre>";
 	if(isset($search))
 		$count_2 = $mysql->result('SELECT COUNT(*) FROM `'.prefix.'_forum_posts` AS p WHERE p.`tid` = '.securemysql($id).' '.$search);
 	else 
@@ -184,7 +184,7 @@
 			'i' => $i,
 			'editdate' => array(
 				'true' => ($row['who_e_author'] && $row['e_date']),
-				'time' => show_date($row['e_date']),
+				'time' => $row['e_date'],
 				'edited_by' => $row['who_e_author']
 			),
 			'del_link' => link_del_post($row['pid']),
@@ -209,7 +209,7 @@
 			),
 			'topic_link' => link_topic($row['pid'], 'pid'),
 			'complaints_link' => link_complaints($row['pid']),
-			'date' => show_date($row['c_data']),
+			'date' => $row['c_data'],
 			'post_id' => $row['pid'],
 			'author' => $row['author'],
 			'profile_link' => link_profile($row['uid'], '', $row['name']),

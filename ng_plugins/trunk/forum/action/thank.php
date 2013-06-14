@@ -98,9 +98,9 @@
 					'link' => str_replace('%page%',
 											"$1",
 											str_replace('%link%', 
-												checkLinkAvailable('forum', 'rep')?
-												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'rep', 'params' => array('id' => $id), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev = floor($limitStart / $limitCount)):
-												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'rep'), 'xparams' => array('id' => $id), 'paginator' => array('page', 1, false)), $prev = floor($limitStart / $limitCount)), 
+												checkLinkAvailable('forum', 'thank')?
+												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'thank', 'params' => array('id' => $id), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev = floor($limitStart / $limitCount)):
+												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'thank'), 'xparams' => array('id' => $id), 'paginator' => array('page', 1, false)), $prev = floor($limitStart / $limitCount)), 
 												isset($navigations['prevlink'])?$navigations['prevlink']:''
 											)
 					),
@@ -110,9 +110,9 @@
 					'link' => str_replace('%page%',
 											"$1",
 											str_replace('%link%', 
-												checkLinkAvailable('forum', 'rep')?
-												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'rep', 'params' => array('id' => $id), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev+2):
-												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'rep'), 'xparams' => array('id' => $id), 'paginator' => array('page', 1, false)), $prev+2), 
+												checkLinkAvailable('forum', 'thank')?
+												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'thank', 'params' => array('id' => $id), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev+2):
+												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'thank'), 'xparams' => array('id' => $id), 'paginator' => array('page', 1, false)), $prev+2), 
 												isset($navigations['nextlink'])?$navigations['nextlink']:''
 											)
 					),

@@ -7,7 +7,7 @@
 <meta name='description' content='{{ description }}' />
 <link rel="stylesheet" href="{{ forum_tpl }}/style.css" type="text/css" />
 <link rel="stylesheet" href="{{ forum_tpl }}/wbbtheme.css" type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script> -->
 <script src="{{ forum_tpl }}/jquery.wysibb.min.js"></script>
 </head>{% endif %}
 <body>
@@ -45,7 +45,27 @@
 				<div id="brdwelcome" class="inbox">
 					<ul class="conl">
 						{% if (global.user) %}<li>Вы вошли как: <strong>{{ global.user['name'] }}</strong></li>{% else %}<li>Вы вошли как: <strong>Гость</strong></li>{% endif %}
-						{% if (global.user) %}<li>Ваш последний визит: {{ last_visit_u }}</li>{% else %}<li>Ваш последний визит: {% if (last_visit_g) %}{{ last_visit_g }}{% else %}только зашли{% endif %}</li>{% endif %}
+						{% if (global.user) %}<li>Ваш последний визит: {% if (last_visit_u) %}
+{% if last_visit_u|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ last_visit_u|date('H:i') }}
+{% elseif last_visit_u|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ last_post_forum.date|date('H:i') }}
+{% else %}
+	{{ last_post_forum.date|date('d-m-Y H:i') }}
+{% endif %}
+{% else %}
+0
+{% endif %}</li>{% else %}<li>Ваш последний визит: {% if (last_visit_g) %}
+{% if last_visit_g|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ last_visit_g|date('H:i') }}
+{% elseif last_visit_g|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ last_post_forum.date|date('H:i') }}
+{% else %}
+	{{ last_post_forum.date|date('d-m-Y H:i') }}
+{% endif %}
+{% else %}
+Только вошли
+{% endif %}</li>{% endif %}
 					</ul>
 					
 					<div class="clearer"></div>

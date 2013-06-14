@@ -87,7 +87,7 @@
 			'closed' => $row['state'],
 			'last_post_forum' => array(
 				'topic_link' => link_topic($row['tid'], 'last'),
-				'date' => show_date($row['l_date']),
+				'date' => $row['l_date'],
 				'profile_link' => link_profile($row['l_author_id'], '', $row['l_author_id']),
 				'profile' => $row['l_author'],
 			),

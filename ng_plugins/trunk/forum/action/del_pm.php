@@ -28,6 +28,6 @@
 	if(!is_array($userROW))
 		return $output = information('У вас нет прав доступа', $title = 'Информация');
 	
-	$mysql->query('DELETE FROM '.prefix.'_pm WHERE ((`from_id`='.securemysql($userROW['id']).' AND `folder`=\'outbox\') OR (`to_id`='.securemysql($userROW['id']).') AND `folder`=\'inbox\') AND id = \''.intval($id).'\'' LIMIT 1');
+	$mysql->query('DELETE FROM '.prefix.'_pm WHERE ((`from_id`='.securemysql($userROW['id']).' AND `folder`=\'outbox\') OR (`to_id`='.securemysql($userROW['id']).') AND `folder`=\'inbox\') AND id = \''.intval($id).'\' LIMIT 1');
 	
-	return $output = announcement_forum('Данные внесены', link_list_pm(), 2);
+	return $output = announcement_forum('Сообщение удалено', link_list_pm(), 2);
