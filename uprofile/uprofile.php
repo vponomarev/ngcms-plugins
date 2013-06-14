@@ -104,7 +104,7 @@ function uprofile_showProfile($params) {
 
 
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->showProfile($urow['id'], $urow, &$tVars); }
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->showProfile($urow['id'], $urow, $tVars); }
 
 
 	$twigLoader->setConversion($tpath['users'].'users.tpl', $conversionConfig, $conversionConfigRegex);
