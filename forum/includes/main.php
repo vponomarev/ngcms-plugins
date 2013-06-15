@@ -419,11 +419,13 @@ global $viewers, $online, $CurrentHandler, $lang_forum;
 function recent_events_forum()
 {global $mysql, $last_topic, $new_user, $active_user;
 	$i=1;
-	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_topics ORDER BY l_date DESC LIMIT 10') as $row){
+	foreach ($mysql->select('SELECT t.id as tid, t.title as Ttitle, t.l_author_id , t.l_author, t.int_views, t.int_post, t.c_data, f.id as fid, f.title as Ftitle FROM '.prefix.'_forum_topics AS t LEFT JOIN '.prefix.'_forum_forums AS f ON t.fid = f.id ORDER BY t.l_date DESC LIMIT 10') as $row){
 		$last_topic[] = array(
 			'num'=>$i++,
-			'topic_link' => link_topic($row['id'], 'last'),
-			'subject' => $row['title'],
+			'topic_link' => link_topic($row['tid'], 'last'),
+			'topic_date' => $row['c_data'],
+			'forum_link' => link_forum($row['fid']),
+			'subject' => $row['Ttitle'],
 			'profile_link' => link_profile($row['l_author_id'], '',$row['l_author'] ),
 			'profile' => $row['l_author'],
 			'num_views' => $row['int_views'],

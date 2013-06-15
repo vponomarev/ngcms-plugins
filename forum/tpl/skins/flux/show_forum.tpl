@@ -40,12 +40,12 @@
 								<a href="{{ entry.last_post_forum.profile_link }}" title="Профиль {{ entry.last_post_forum.profile }}"><img src="{% if (entry.last_post_forum.profile_avatar.true) %}{{ entry.last_post_forum.profile_avatar.print }}{% else %}{{ entry.last_post_forum.profile_avatar.print }}/noavatar.gif{% endif %}" width="100" height="100" alt="" /></a>
 							</span>
 							<a href="{{ entry.last_post_forum.topic_link }}">{{ entry.last_post_forum.topic_name }}</a> <span class="byuser">Автор: <a href="{{ entry.last_post_forum.profile_link }}" title="Профиль {{ entry.last_post_forum.profile }}">{{ entry.last_post_forum.profile }}</a> 
-							(<i style="font-size: 11px;">{% if last_post_forum.date|date('d-m-Y') == "now"|date('d-m-Y') %}
-	Сегодня {{ last_post_forum.date|date('H:i') }}
-{% elseif last_post_forum.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-	Вчера {{ last_post_forum.date|date('H:i') }}
+							(<i style="font-size: 11px;">{% if entry.last_post_forum.date|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ entry.last_post_forum.date|date('H:i') }}
+{% elseif entry.last_post_forum.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ entry.last_post_forum.date|date('H:i') }}
 {% else %}
-	{{ last_post_forum.date|date('d-m-Y H:i') }}
+	{{ entry.last_post_forum.date|date('d-m-Y H:i') }}
 {% endif %}</i>)</span>
 						</div>
 						{% else %}нет сообщений{% endif %}
@@ -99,12 +99,12 @@
 								<a href="{{ entry.last_post_forum.profile_link }}" title="Профиль {{ entry.last_post_forum.profile }}"><img src="{% if (entry.last_post_forum.profile_avatar.true) %}{{ entry.last_post_forum.profile_avatar.print }}{% else %}{{ entry.last_post_forum.profile_avatar.print }}/noavatar.gif{% endif %}" width="100" height="100" alt="" /></a>
 							</span>
 							<a href="{{ entry.last_post_forum.topic_link }}">{{ entry.last_post_forum.topic_name }}</a> <span class="byuser">Автор: <a href="{{ entry.last_post_forum.profile_link }}" title="Профиль {{ entry.last_post_forum.profile }}">{{ entry.last_post_forum.profile }}</a> 
-							(<i style="font-size: 11px;">{% if last_post_forum.date|date('d-m-Y') == "now"|date('d-m-Y') %}
-	Сегодня {{ last_post_forum.date|date('H:i') }}
-{% elseif last_post_forum.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-	Вчера {{ last_post_forum.date|date('H:i') }}
+							(<i style="font-size: 11px;">{% if entry.last_post_forum.date|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ entry.last_post_forum.date|date('H:i') }}
+{% elseif entry.last_post_forum.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ entry.last_post_forum.date|date('H:i') }}
 {% else %}
-	{{ last_post_forum.date|date('d-m-Y H:i') }}
+	{{ entry.last_post_forum.date|date('d-m-Y H:i') }}
 {% endif %}</i>)</span>
 						</div>
 						{% else %}нет сообщений{% endif %}

@@ -7,7 +7,7 @@
 <meta name='description' content='{{ description }}' />
 <link rel="stylesheet" href="{{ forum_tpl }}/style.css" type="text/css" />
 <link rel="stylesheet" href="{{ forum_tpl }}/wbbtheme.css" type="text/css" />
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 <script src="{{ forum_tpl }}/jquery.wysibb.min.js"></script>
 </head>{% endif %}
 <body>

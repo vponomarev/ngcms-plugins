@@ -8,6 +8,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=> 'forum_complaints',
 		'action'	=> 'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'		=> 'primary key(id)',
 		'fields'	=> array(
 			array('action'	=> 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -24,6 +25,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=> 'forum_attach',
 		'action'	=> 'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'		=> 'primary key(id), KEY (tid), KEY (pid)',
 		'fields'	=> array(
 			array('action'	=> 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -41,6 +43,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=> 'forum_thank',
 		'action'	=> 'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'		=> 'primary key(id), KEY(`tid`), KEY(`pid`), KEY(`to_author_id`)',
 		'fields'	=> array(
 			array('action'	=> 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -56,6 +59,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=> 'forum_news',
 		'action'	=> 'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'		=> 'primary key(id), KEY(c_data)',
 		'fields'	=> array(
 			array('action'	=> 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -67,6 +71,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=> 'forum_forums',
 		'action'	=> 'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'		=> 'primary key(id), KEY `count` (`int_topic`, `int_post`), KEY (position)',
 		'fields'	=> array(
 			array('action'	=> 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -89,6 +94,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'  => 'forum_topics',
 		'action' => 'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'    => 'primary key(id), KEY (l_date), KEY (fid), KEY `showforum`(`fid`,`l_date`), KEY `int_post`(`fid`,`int_post`), FULLTEXT (title)',
 		'fields' => array(
 			array('action' => 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -112,6 +118,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'  => 'forum_posts',
 		'action' => 'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'    => 'primary key(id), KEY(tid), KEY `showtopic` (`tid`, `c_data`), KEY `delpost` (`tid`, `author_id`), FULLTEXT (message)',
 		'fields' => array(
 			array('action' => 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -129,6 +136,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=>	'forum_online',
 		'action'	=>	'cmodify',
+		'engine'	=> 'MyISAM',
 		'fields'	=>	array(
 			array('action' => 'cmodify', 'name' => 'sess_id', 'type' => 'char(255)', 'params' => 'default \'\''),
 			array('action' => 'cmodify', 'name' => 'last_time', 'type' => 'char(255)', 'params' => 'DEFAULT \'0\''),
@@ -141,6 +149,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=>	'forum_subscriptions',
 		'action'	=>	'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'    => 'KEY `search` (`uid`, `tid`)',
 		'fields'	=>	array(
 			array('action' => 'cmodify', 'name' => 'uid', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL'),
@@ -150,6 +159,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=>	'forum_reputation',
 		'action'	=>	'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'    => 'primary key(id), KEY(to_author_id)',
 		'fields'	=>	array(
 			array('action'	=> 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -168,6 +178,7 @@ function plugin_forum_install($action) {
 	array(
 		'table' => 'pm',
 		'action' => 'cmodify',
+		'engine'	=> 'MyISAM',
 		'key' => 'primary key (`id`), KEY `count_pm` (`to_id`, `viewed`, `folder`)',
 		'fields' => array(
 			array('action' => 'cmodify', 'name' => 'id', 'type' => 'int(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
@@ -198,6 +209,7 @@ function plugin_forum_install($action) {
 	array(
 		'table'		=>	'news',
 		'action'	=>	'cmodify',
+		'engine'	=> 'MyISAM',
 		'key'    => '',
 		'fields'	=>	array(
 			array('action'	=> 'cmodify', 'name' => 'tid', 'type' => 'INT(10)', 'params' => 'UNSIGNED DEFAULT "0"'),
