@@ -62,6 +62,7 @@
 						)
 					),
 				);
+				$moder_print = array();
 				$entries[$row_2['parent']] .= $xt->render($tVars);
 			}
 		}
