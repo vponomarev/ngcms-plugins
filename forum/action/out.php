@@ -24,5 +24,5 @@
 	
 	if(is_array($userROW)){
 		$auth_db->drop_auth();
-		return $output = announcement_forum('Вы вышли из форума', str_replace( array( '{url}' ), array( link_home() ), $lang['forum']['link_out'] ), 2, true);
+		return $output = announcement_forum('Вы вышли из форума', link_home(), 2);
 	} else return $output = announcement_forum('Сначала вы должны авторизироваться чтобы выйти!', link_login(), 2);

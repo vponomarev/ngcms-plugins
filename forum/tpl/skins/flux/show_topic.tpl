@@ -60,13 +60,13 @@
 					<h3></h3>
 						<div class="postmsg"> 
 							<p>{{ entry.message }}</p>
-							{% if (entry.editdate.true) %}<p class="postedit"><em>Отредактированно {% if entry.editdate.edited_by|date('d-m-Y') == "now"|date('d-m-Y') %}
-	Сегодня {{ entry.editdate.edited_bydate('H:i') }}
-{% elseif entry.editdate.edited_by|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-	Вчера {{ entry.editdate.edited_by|date('H:i') }}
+							{% if (entry.editdate.true) %}<p class="postedit"><em>Отредактированно {{ entry.editdate.edited_by }} ({% if entry.editdate.time|date('d-m-Y') == "now"|date('d-m-Y') %}
+	Сегодня {{ entry.editdate.time|date('H:i') }}
+{% elseif entry.editdate.time|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
+	Вчера {{ entry.editdate.time|date('H:i') }}
 {% else %}
-	{{ entry.editdate.edited_by|date('d-m-Y H:i') }}
-{% endif %} ({{ entry.editdate.time }})</em></p>{% endif %}
+	{{ entry.editdate.time|date('d-m-Y H:i') }}
+{% endif %})</em></p>{% endif %}
 							{% if (entry.list_attach) %}
 							<div class="postsignature"><hr />Прикрепленные файлы: <br />
 							{% for entry in entry.list_attach %}

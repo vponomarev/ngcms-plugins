@@ -181,15 +181,20 @@ global $twig, $plugin, $mysql;
 	if (isset($_REQUEST['submit'])){
 		if(empty($name)) $error_text[] = 'Название форума не заполнено';
 		
-		if($type <> 0){
-			$moder = array_map('trim', explode(',',$moder));
-			$i=0;
-			foreach ($moder as $row){
-				if(!$user[] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = \''.$row.'\' LIMIT 1')){
-					$error_text[] = 'Пользователь '.$row.' не найден';
-					array_splice($user, $i, 1);
+		if($type <> 0 or $type == null){
+			if(isset($moder) && $moder){
+				$moder = array_map('trim', explode(',',$moder));
+				
+				$i=0;
+				foreach ($moder as $row){
+					if(!$user[] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
+						$error_text[] = 'Пользователь '.$row.' не найден';
+						array_splice($user, $i, 1);
+					}
+					$i++;
 				}
-				$i++;
+			} else {
+				$user = null;
 			}
 		}
 		
@@ -198,7 +203,7 @@ global $twig, $plugin, $mysql;
 			if(isset($edit_id) && $edit_id){
 				$SQL = array();
 				
-				if(isset($user) && $user) $SQL['moderators'] = serialize($user);
+				$SQL['moderators'] = serialize($user);
 				
 				if(isset($name) && $name) $SQL['title'] = $name;
 				
