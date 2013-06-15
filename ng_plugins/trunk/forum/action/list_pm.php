@@ -46,6 +46,7 @@
 				$pid = intval($pid);
 				$mysql->query('DELETE FROM '.prefix.'_pm WHERE ((`from_id`='.db_squote($userROW['id']).' AND `folder`=\'outbox\') OR (`to_id`='.db_squote($userROW['id']).') AND `folder`=\'inbox\') AND id = \''.intval($pid).'\'');
 			}
+			return $output = announcement_forum('Сообщения удалены', link_list_pm(0, 0, $io), 2);
 		}
 	}
 	

@@ -85,7 +85,7 @@ function forum_show_a_users($params) {
 	
 	$limit = $params['limit']?$params['limit']:5;
 	$templates = $params['temp']?$params['temp']:'show_a_users';
-	$tpath = locatePluginTemplates(array($templates), pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'), 'block');
+	$tpath = locatePluginTemplates(array($templates), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'), 'block');
 	$xt = $twig->loadTemplate($tpath[$templates].$templates.'.tpl');
 	
 	$i=1;
@@ -120,8 +120,8 @@ function forum_show_news($params)
 	
 	$limit = $params['limit']?$params['limit']:5;
 	$templates = $params['temp']?$params['temp']:'show_news';
-	$tpath = locatePluginTemplates(array($templates), 'forum', 1, '', 'block');
-	$xt = $twig->loadTemplate($tpath['show_news'].$templates.'.tpl');
+	$tpath = locatePluginTemplates(array($templates), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'), 'block');
+	$xt = $twig->loadTemplate($tpath[$templates].$templates.'.tpl');
 	
 	$i=1;
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_news ORDER BY c_data LIMIT '.$limit) as $row){
