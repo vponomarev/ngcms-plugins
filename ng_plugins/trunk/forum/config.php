@@ -184,7 +184,7 @@ global $twig, $plugin, $mysql;
 		if($type <> 0 or $type == null){
 			if(isset($moder) && $moder){
 				$moder = array_map('trim', explode(',',$moder));
-				
+				$moder = array_unique($moder);
 				$i=0;
 				foreach ($moder as $row){
 					if(!$user[] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
@@ -193,6 +193,7 @@ global $twig, $plugin, $mysql;
 					}
 					$i++;
 				}
+				
 			} else {
 				$user = null;
 			}
@@ -228,7 +229,7 @@ global $twig, $plugin, $mysql;
 				');
 			}
 			generate_index_cache(true);
-			//redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
 	
