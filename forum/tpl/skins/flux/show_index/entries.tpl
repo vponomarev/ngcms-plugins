@@ -4,7 +4,7 @@
 			<div class="{% if (status) %}icon inew{% else %}icon{% endif %}"><div class="nosize"><!-- --></div></div>
 			<div class="tclcon">
 				<h3><a href='{{ forum_link }}'>{{ forum_name }}</a></h3>{{ forum_desc }}
-				{% if (moder_print) %}i<p><em>(Модераторы:</em> {{ moder_print }})</p>{% endif %}
+				{% if (moder_print) %}<p><em>(Модераторы:</em> {{ moder_print }})</p>{% endif %}
 			</div>
 		</div>
 	</td>
