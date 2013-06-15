@@ -348,12 +348,12 @@ function link_send_pm($id, $reply = '', $quote = ''){
 	return $url;
 }
 
-function link_del_pm($id){
+function link_del_pm($id, $folder = ''){
 	$id = intval($id);
 	
 	$url = checkLinkAvailable('forum', 'del_pm')?
-			generateLink('forum', 'del_pm', array('id' => $id)):
-			generateLink('core', 'plugin', array('plugin' => 'forum', 'handler' => 'del_pm'), array('id' => $id));
+			generateLink('forum', 'del_pm', array('id' => $id, 'folder' => $folder)):
+			generateLink('core', 'plugin', array('plugin' => 'forum', 'handler' => 'del_pm'), array('id' => $id,'folder' => $folder));
 	
 	return $url;
 }

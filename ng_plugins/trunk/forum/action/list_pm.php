@@ -28,7 +28,13 @@
 	else
 		$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):0;
 	
-	switch($_REQUEST['folder']){
+	if(isset($params['folder']))
+		$folder = isset($params['folder'])?$params['folder']:0;
+	else
+		$folder = isset($_REQUEST['folder'])?$_REQUEST['folder']:0;
+	
+	
+	switch($folder){
 		case 'inbox': $io = 'inbox'; $_sql = 'pm.from_id = u.id'; $show_id = 'to_id'; break;
 		case 'outbox': $io = 'outbox'; $_sql = 'pm.to_id = u.id'; $show_id = 'from_id'; break;
 		default: $io = 'inbox'; $_sql = 'pm.from_id = u.id'; $show_id = 'to_id';
@@ -86,7 +92,7 @@
 				'title'		=>	$row['title'],
 				'link_pm_reply'		=>	link_send_pm($row['uid'], $row['pid']),
 				'link_pm_quote'		=>	link_send_pm($row['uid'], '', $row['pid']),
-				'link_del_pm'		=>	link_del_pm($row['pid']),
+				'link_del_pm'		=>	link_del_pm($row['pid'], $io),
 				'profile_link' => link_profile($row['uid'], '', $row['uname']),
 				'profile' => $row['uname'],
 			);

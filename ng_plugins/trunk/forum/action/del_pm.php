@@ -22,6 +22,17 @@
 	else
 		$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):0;
 	
+	if(isset($params['folder']))
+		$folder = isset($params['folder'])?$params['folder']:'';
+	else
+		$folder = isset($_REQUEST['folder'])?$_REQUEST['folder']:'';
+	
+	switch($folder){
+		case 'inbox': $io = 'inbox'; break;
+		case 'outbox': $io = 'outbox';  break;
+		default: $io = 'inbox';
+	}
+	
 	if(empty($id))
 		return $output = information('id сообщения не передан', $title = 'Информация');
 	
@@ -30,4 +41,4 @@
 	
 	$mysql->query('DELETE FROM '.prefix.'_pm WHERE ((`from_id`='.securemysql($userROW['id']).' AND `folder`=\'outbox\') OR (`to_id`='.securemysql($userROW['id']).') AND `folder`=\'inbox\') AND id = \''.intval($id).'\' LIMIT 1');
 	
-	return $output = announcement_forum('Сообщение удалено', link_list_pm(0,0,'inbox'), 2);
+	return $output = announcement_forum('Сообщение удалено', link_list_pm(0,0,$folder), 2);

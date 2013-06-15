@@ -73,7 +73,6 @@
 		$s = $params['s']?secure_search_forum($params['s']):secure_search_forum($_REQUEST['s']);
 		if( strlen($s) < 3 )
 			return $output = information('Слишком короткое слово', $title = 'Информация', true);
-		
 		$search = 'AND MATCH (p.message) AGAINST (\''.mysql_real_escape_string($s).'\')';
 		$search_p = array('id' => $id, 's'=> $s);
 		if(checkLinkAvailable('forum', 'showtopic')){
