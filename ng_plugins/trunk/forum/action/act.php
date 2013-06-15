@@ -63,15 +63,15 @@
 	if (!isset($limitStart)) $limitStart = ($pageNo - 1)* $limitCount;
 	
 	if ($countPages > 1 && $countPages >= $pageNo){
-		$paginationParams = checkLinkAvailable('forum', 'show_new')?
-			array('pluginName' => 'forum', 'pluginHandler' => 'show_new', 'params' => array(), 'xparams' => array(), 'paginator' => array('page', 0, false)):
-			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'show_new'), 'xparams' => array(), 'paginator' => array('page', 1, false));
+		$paginationParams = checkLinkAvailable('forum', 'act')?
+			array('pluginName' => 'forum', 'pluginHandler' => 'act', 'params' => array('s' => $s), 'xparams' => array(), 'paginator' => array('page', 0, false)):
+			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'act'), 'xparams' => array('s' => $s), 'paginator' => array('page', 1, false));
 		
 		$navigations = LoadVariables();
 		$pages = generatePagination($pageNo, 1, $countPages, 10, $paginationParams, $navigations);
 	}
 	
-	foreach ($mysql->select('SELECT t.`id` as tid, t.`author`, t.`title` as Ttitle, t.`l_date`, t.`l_author_id`, t.`l_author`, t.`int_post`, t.`state`, f.`id` as fid, f.`title` as Ftitle
+	foreach ($mysql->select('SELECT t.`id` as tid, t.`author`, t.`title` as Ttitle, t.`l_date`, t.`l_author_id`, t.`l_author`, t.`int_post`, t.`l_post`, t.`state`, f.`id` as fid, f.`title` as Ftitle
 			FROM `'.prefix.'_forum_topics` AS t
 			LEFT JOIN '.prefix.'_forum_forums AS f ON f.id = t.fid
 			WHERE '.$where_2.'
@@ -86,7 +86,7 @@
 			'status' => status_forum($row['l_date']),
 			'closed' => $row['state'],
 			'last_post_forum' => array(
-				'topic_link' => link_topic($row['tid'], 'last'),
+				'topic_link' => link_topic($row['l_post'], 'pid').'#'.$row['l_post'],
 				'date' => $row['l_date'],
 				'profile_link' => link_profile($row['l_author_id'], '', $row['l_author_id']),
 				'profile' => $row['l_author'],
@@ -106,9 +106,9 @@
 					'link' => str_replace('%page%',
 											"$1",
 											str_replace('%link%', 
-												checkLinkAvailable('forum', 'show_new')?
-												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'show_new', 'params' => array(), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev = floor($limitStart / $limitCount)):
-												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'show_new'), 'xparams' => array(), 'paginator' => array('page', 1, false)), $prev = floor($limitStart / $limitCount)), 
+												checkLinkAvailable('forum', 'act')?
+												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'act', 'params' => array('s' => $s), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev = floor($limitStart / $limitCount)):
+												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'act'), 'xparams' => array('s' => $s), 'paginator' => array('page', 1, false)), $prev = floor($limitStart / $limitCount)), 
 												isset($navigations['prevlink'])?$navigations['prevlink']:''
 											)
 					),
@@ -118,9 +118,9 @@
 					'link' => str_replace('%page%',
 											"$1",
 											str_replace('%link%', 
-												checkLinkAvailable('forum', 'show_new')?
-												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'show_new', 'params' => array(), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev+2):
-												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'show_new'), 'xparams' => array(), 'paginator' => array('page', 1, false)), $prev+2), 
+												checkLinkAvailable('forum', 'act')?
+												generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'act', 'params' => array('s' => $s), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev+2):
+												generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'act'), 'xparams' => array('s' => $s), 'paginator' => array('page', 1, false)), $prev+2), 
 												isset($navigations['nextlink'])?$navigations['nextlink']:''
 											)
 					),

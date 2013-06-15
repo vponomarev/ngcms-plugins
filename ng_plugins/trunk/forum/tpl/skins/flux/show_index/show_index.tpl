@@ -1,5 +1,5 @@
 <div id='idx{{ cat_id }}' class='blocktable'>
-	<h2><span>{{ cat_name }}</span></h2>
+	<h2><span>{{ cat_name }}<br />{{ cat_desc }}</span></h2>
 	<div class="box">
 		<div class="inbox">
 			<table cellspacing="0">

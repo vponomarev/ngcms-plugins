@@ -25,16 +25,17 @@ function forum_show_topics($params) {
 	
 	$limit = $params['limit']?$params['limit']:5;
 	$templates = $params['temp']?$params['temp']:'show_topics';
-	$tpath = locatePluginTemplates(array($templates), 'forum', 1, '', 'block');
+	$tpath = locatePluginTemplates(array($templates), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'), 'block');
 	$xt = $twig->loadTemplate($tpath[$templates].$templates.'.tpl');
 	
 	$i=1;
-	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_topics ORDER BY l_date DESC LIMIT '.$limit) as $row){
-		
-		$entries[] = array(
+	foreach ($mysql->select('SELECT t.id as tid, t.title as Ttitle, t.l_author_id , t.l_author, t.int_views, t.int_post, t.c_data, f.id as fid, f.title as Ftitle FROM '.prefix.'_forum_topics AS t LEFT JOIN '.prefix.'_forum_forums AS f ON t.fid = f.id ORDER BY t.l_date DESC LIMIT '.$limit) as $row){
+		$last_topic[] = array(
 			'num'=>$i++,
-			'topic_link' => link_topic($row['id'], 'last'),
-			'subject' => $row['title'],
+			'topic_link' => link_topic($row['tid'], 'last'),
+			'topic_date' => $row['c_data'],
+			'forum_link' => link_forum($row['fid']),
+			'subject' => $row['Ttitle'],
 			'profile_link' => link_profile($row['l_author_id'], '',$row['l_author'] ),
 			'profile' => $row['l_author'],
 			'num_views' => $row['int_views'],
@@ -55,7 +56,7 @@ function forum_show_topics_top($params) {
 	
 	$limit = $params['limit']?$params['limit']:5;
 	$templates = $params['temp']?$params['temp']:'show_topics_top';
-	$tpath = locatePluginTemplates(array($templates), 'forum', 1, '', 'block');
+	$tpath = locatePluginTemplates(array($templates), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'), 'block');
 	$xt = $twig->loadTemplate($tpath[$templates].$templates.'.tpl');
 	
 	$i=1;
@@ -84,7 +85,7 @@ function forum_show_a_users($params) {
 	
 	$limit = $params['limit']?$params['limit']:5;
 	$templates = $params['temp']?$params['temp']:'show_a_users';
-	$tpath = locatePluginTemplates(array($templates), 'forum', 1, '', 'block');
+	$tpath = locatePluginTemplates(array($templates), pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'), 'block');
 	$xt = $twig->loadTemplate($tpath[$templates].$templates.'.tpl');
 	
 	$i=1;

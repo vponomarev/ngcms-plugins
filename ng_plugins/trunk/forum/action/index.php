@@ -72,6 +72,7 @@
 				$tVars = array(
 					'cat_id' => $row['id'], 
 					'cat_name' => $row['title'],
+					'cat_desc' => $row['description'],
 					'entries' => array(
 						'true' => isset($entries[$row['id']])?1:0,
 						'print' => isset($entries[$row['id']])?$entries[$row['id']]:''

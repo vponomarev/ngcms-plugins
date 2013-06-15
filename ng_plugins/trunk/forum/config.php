@@ -246,6 +246,7 @@ global $twig, $plugin, $mysql;
 		$Sdesc = $F['description'];
 		$Skeyw = $F['keywords'];
 		
+		$moder = array();
 		foreach (unserialize($F['moderators']) as $row){
 			$moder[] = $row['name'];
 		}

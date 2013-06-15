@@ -37,18 +37,18 @@
 	$tpath = locatePluginTemplates(array('show_forum', ':'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
 	$xt = $twig->loadTemplate($tpath['show_forum'].'show_forum.tpl');
 	
-	$title = $mysql->record('SELECT `title`, `int_topic` FROM `'.prefix.'_forum_forums` WHERE `id` = '.securemysql($id).' LIMIT 1');
-	if(empty($title))
+	$forum = $mysql->record('SELECT `title`, `description`, `int_topic` FROM `'.prefix.'_forum_forums` WHERE `id` = '.securemysql($id).' LIMIT 1');
+	if(empty($forum))
 		return $output = information('Этого раздела не существует', $title = 'Информация');
 	
-	$SYSTEM_FLAGS['info']['title']['item'] = $title['title'];
+	$SYSTEM_FLAGS['info']['title']['item'] = $forum['title'];
 	
 	$limitCount = intval(pluginGetVariable('forum', 'forum_per_page'));
 	
 	if (($limitCount < 2)||($limitCount > 2000)) $limitCount = 2;
 	
 	
-	$count = $title['int_topic'];
+	$count = $forum['int_topic'];
 	//$count = $mysql->result('SELECT COUNT(*) FROM `'.prefix.'_forum_topics` WHERE `fid` = '.securemysql($id));
 	
 	$countPages = ceil($count / $limitCount);
@@ -144,7 +144,8 @@
 		'addtopic' => link_add_topic($id),
 		'link_rss' => link_rss($id),
 		'home_link' => link_home(),
-		'Ftitle' => $title['title'],
+		'Ftitle' => $forum['title'],
+		'Fdesc' => $forum['description'],
 		'tpl' => $tpath['url::'],
 		'local' => array(
 				'num_guest_loc' => $viewers['num_guest_loc'],
