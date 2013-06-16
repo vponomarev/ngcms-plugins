@@ -503,8 +503,8 @@ function edit_forum(){
 					'read_forum' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['read_forum'] ),
 					'read_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['read_topic'] ),
 					'send_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['send_topic'] ),
-					'remove_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['send_topic'] ),
-					'remove_your_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['send_topic'] ),
+					'remove_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['remove_topic'] ),
+					'remove_your_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['remove_your_topic'] ),
 				);
 			}
 			
