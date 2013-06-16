@@ -33,6 +33,7 @@ switch ($_REQUEST['action']) {
 	case 'closed_complaints': closed_complaints(); break;
 	
 	case 'permission': permission(); break;
+	case 'edit_permission': edit_permission(); break;
 	
 	case 'list_news': list_news(); break;
 	case 'new_news': new_news(); break;
@@ -48,17 +49,141 @@ switch ($_REQUEST['action']) {
 	default: general();
 }
 
-function permission()
-{global $plugin, $twig;
-	$tpath = locatePluginTemplates(array('main', 'permission'), $plugin, 1, '', 'config');
-	$xt = $twig->loadTemplate($tpath['about'].'permission.tpl');
+function edit_permission(){
+	global $plugin, $twig;
 	
-	$tVars = array();
+	$id = intval($_REQUEST['id']);
+	if(empty($id))
+		redirect_forum_config('?mod=extra-config&plugin=forum&action=permission');
+	
+	include_once(dirname(__FILE__).'/includes/security.php');
+	include_once(dirname(__FILE__).'/includes/constants.php');
+	include_once(FORUM_CACHE.'/permission.php');
+	
+	
+	//print "<pre>".var_export($group, true)."</pre>";
+	$tpath = locatePluginTemplates(array('main', 'edit_permission'), $plugin, 1, '', 'config');
+	$xt = $twig->loadTemplate($tpath['edit_permission'].'edit_permission.tpl');
+	
+	
+	
+	if (isset($_REQUEST['submit'])){
+		if(empty($error_text)){
+			$merger = array_merge($group[$id], secureinput($_REQUEST['group'][$id]));
+			$group[$id] = $merger;
+			file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$group = '.var_export($group, true).';');
+			//redirect_forum_config('?mod=extra-config&plugin=forum&action=permission');
+		}
+	}
+	
+	$error_input = array();
+	if(isset($error_text) && is_array($error_text))
+		foreach($error_text as $error)
+			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
+	
+	$tVars = array(
+		'id' => $id,
+		'name' => $group[$id]['name'],
+		'color' => $group[$id]['color'],
+		'read' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$id.'][read]', $group[$id]['read']),
+		'read_news' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$id.'][read_news]', $group[$id]['read_news']),
+		'search' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$id.'][search]', $group[$id]['search']),
+		'pm' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$id.'][pm]', $group[$id]['pm']),
+		'list_error' => $error_input,
+	);
 	
 	$xg = $twig->loadTemplate($tpath['main'].'main.tpl');
 	
 	$tVars = array(
 		'global' => 'Редактор прав',
+		'entries' => $xt->render($tVars)
+	);
+	
+	print $xg->render($tVars);
+}
+
+function permission()
+{global $plugin, $twig;
+	
+	
+	include_once(dirname(__FILE__).'/includes/security.php');
+	include_once(dirname(__FILE__).'/includes/constants.php');
+	include_once(FORUM_CACHE.'/permission.php');
+	
+	$tpath = locatePluginTemplates(array('main', 'permission'), $plugin, 1, '', 'config');
+	$xt = $twig->loadTemplate($tpath['permission'].'permission.tpl');
+	
+	if(file_exists(FORUM_CACHE.'/permission.php'))
+		include(FORUM_CACHE.'/permission.php');
+	else
+		$group = array('1' => 
+		array(
+			'name' => 'Администратор',
+			'read' => true, 
+			'replies' => true, 
+			'modify' => true, 
+			'modify_your' => true, 
+			'remove' => true,
+			'remove_your' => true,
+			'modunit' => true,
+			'topic_closed' => true,
+			'topic_remove' => true,
+			'topic_move' => true,
+		),'2' => 
+		array(
+			'name' => 'Редактор',
+			'read' => true, 
+			'replies' => true, 
+			'modify' => true, 
+			'modify_your' => true, 
+			'remove' => true,
+			'remove_your' => true,
+		),'3' => 
+		array(
+			'name' => 'Журналист',
+			'read' => true, 
+			'replies' => true, 
+			'modify' => true, 
+			'modify_your' => true, 
+			'remove' => true,
+			'remove_your' => true,
+		),'4' => 
+		array(
+			'name' => 'Комментатор',
+			'read' => true, 
+			'replies' => true, 
+			'modify' => true, 
+			'modify_your' => true, 
+			'remove' => true,
+			'remove_your' => true,
+		),'5' => 
+		array(
+			'name' => 'Боты',
+			'read' => true, 
+			'replies' => false, 
+			'modify' => false, 
+			'modify_your' => false, 
+			'remove' => false,
+			'remove_your' => false,
+		)
+	);
+	
+	foreach ($group as $key => $value){
+		//print "<pre>".var_export($key, true).'-'.var_export($value, true)."</pre>";
+		$tEntry[] = array(
+			'id' => $key,
+			'name' => $value['name']
+		);
+	}
+	
+	$tVars = array(
+		'entries' => $tEntry,
+	);
+	
+	$xg = $twig->loadTemplate($tpath['main'].'main.tpl');
+	
+	$tVars = array(
+		'global' => 'Группы',
 		'entries' => $xt->render($tVars)
 	);
 	
@@ -317,8 +442,15 @@ function send_section(){
 function edit_forum(){
 	global $twig, $plugin, $mysql;
 	
+	include_once(dirname(__FILE__).'/includes/security.php');
 	include_once(dirname(__FILE__).'/includes/constants.php');
 	include_once(dirname(__FILE__).'/includes/cache.php');
+	
+	include_once(FORUM_CACHE.'/permission.php');
+	if(empty($group['moderators']))
+		$group['moderators'] = array(
+			'name'=> 'Модератор'
+		);
 	
 	$tpath = locatePluginTemplates(array('main', 'edit_forum'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['edit_forum'].'edit_forum.tpl');
@@ -365,6 +497,19 @@ function edit_forum(){
 			
 			if(isset($parent) && $parent) $SQL['parent'] = $parent;
 			
+			foreach ($group as $key => $value){
+				print "<pre>".var_export($key, true)."</pre>";
+				$group[$key]['forum_prem'][$id] = array(
+					'read_forum' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['read_forum'] ),
+					'read_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['read_topic'] ),
+					'send_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['send_topic'] ),
+					'remove_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['send_topic'] ),
+					'remove_your_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['send_topic'] ),
+				);
+			}
+			
+			file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$group = '.var_export($group, true).';');
+			
 			$vnamess = array();
 			foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
 				$mysql->query('update '.prefix.'_forum_forums set '.implode(', ',$vnamess).' where id = \''.intval($id).'\'');
@@ -373,12 +518,26 @@ function edit_forum(){
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
-	
+	//print "<pre>".var_export($_REQUEST['group'], true)."</pre>";
 	foreach ($mysql-> select("SELECT id, title FROM ".prefix."_forum_forums WHERE parent = '0' ORDER BY position", 1 ) as $row){
 		$tEntry[] = array(
 			'id'		=>	$row['id'],
 			'title'		=>	$row['title'],
 			'id_set'	=> intval($parent)
+		);
+	}
+	
+	print "<pre>".var_export($group, true)."</pre>";
+	foreach ($group as $key => $value){
+		//print "<pre>".var_export($key, true).' --'.var_export($value, true)."</pre>";
+		$tEntry2[] = array(
+			'id' => $key,
+			'name' => $value['name'],
+			'read_forum' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][read_forum]', $group[$key]['forum_prem'][$id]['read_forum']),
+			'read_topic' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][read_topic]', $group[$key]['forum_prem'][$id]['read_topic']),
+			'send_topic' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][send_topic]', $group[$key]['forum_prem'][$id]['send_topic']),
+			'remove_topic' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][remove_topic]', $group[$key]['forum_prem'][$id]['remove_topic']),
+			'remove_your_topic' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][remove_your_topic]', $group[$key]['forum_prem'][$id]['remove_your_topic']),
 		);
 	}
 	
@@ -403,6 +562,7 @@ function edit_forum(){
 		'keywords' => $keywords,
 		'moderators' => $moderators,
 		'list_forum' => $tEntry,
+		'list_group' => $tEntry2,
 		'list_error' => $error_input,
 	);
 	
