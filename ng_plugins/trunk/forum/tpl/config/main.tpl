@@ -11,14 +11,14 @@
 		<tr align="center">
 			<td width="100%" class="contentNav" align="center" style="background-repeat: no-repeat; background-position: left;">
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum'" value="Общие" class="navbutton" />
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=permission'" value="Права пользователя" class="navbutton" />
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=permission'" value="Группы" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ads'" value="Объявления" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=rules'" value="Правила" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_forum'" value="Список форумов" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_news'" value="Список новостей" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_complaints'" value="Список жалоб" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=url'" value="ЧПУ" class="navbutton" />
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=title'" value="Управление заголовками форума" class="navbutton" />
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=title'" value="Управление заголовками" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=about'" value="О плагине" class="navbutton" />
 			</td>
 		</tr>

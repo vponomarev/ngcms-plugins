@@ -21,11 +21,18 @@ plugins_load_config();
 
 switch ($_REQUEST['action']) {
 	case 'send_forum': send_forum(); break;
+	case 'edit_forum': edit_forum(); break;
 	case 'list_forum': list_forum(); break;
 	case 'del_forum':  del_forum(); break;
 	
+	case 'send_section': send_section(); break;
+	case 'edit_section': edit_section(); break;
+	case 'del_section': del_section(); break;
+	
 	case 'list_complaints': list_complaints(); break;
 	case 'closed_complaints': closed_complaints(); break;
+	
+	case 'permission': permission(); break;
 	
 	case 'list_news': list_news(); break;
 	case 'new_news': new_news(); break;
@@ -39,6 +46,23 @@ switch ($_REQUEST['action']) {
 	
 	case 'about': about(); break;
 	default: general();
+}
+
+function permission()
+{global $plugin, $twig;
+	$tpath = locatePluginTemplates(array('main', 'permission'), $plugin, 1, '', 'config');
+	$xt = $twig->loadTemplate($tpath['about'].'permission.tpl');
+	
+	$tVars = array();
+	
+	$xg = $twig->loadTemplate($tpath['main'].'main.tpl');
+	
+	$tVars = array(
+		'global' => 'Редактор прав',
+		'entries' => $xt->render($tVars)
+	);
+	
+	print $xg->render($tVars);
 }
 
 function about()
@@ -147,9 +171,8 @@ global $twig, $plugin, $mysql;
 	$id = intval($_REQUEST['id']);
 	
 	$c = $mysql->result('SELECT 1 FROM '.prefix.'_forum_topics WHERE fid = '.db_squote($id).' LIMIT 1');
-	$f = $mysql->result('SELECT 1 FROM '.prefix.'_forum_forums WHERE parent = '.db_squote($id).' LIMIT 1');
 	
-	if($c != 1 and $f != 1){
+	if(!$mysql->result('SELECT 1 FROM '.prefix.'_forum_topics WHERE fid = '.db_squote($id).' LIMIT 1')){
 		$mysql->query('DELETE FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
 		$_SESSION['forum']['info'] = 'Форум удален';
 		generate_index_cache(true);
@@ -162,6 +185,236 @@ global $twig, $plugin, $mysql;
 
 }
 
+function del_section(){
+	global $plugin, $mysql;
+	
+	include_once(dirname(__FILE__).'/includes/constants.php');
+	include_once(dirname(__FILE__).'/includes/cache.php');
+	
+	$id = intval($_REQUEST['id']);
+	
+	if(!$mysql->result('SELECT 1 FROM '.prefix.'_forum_forums WHERE parent = '.db_squote($id).' LIMIT 1')){
+		$mysql->query('DELETE FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
+		$_SESSION['forum']['info'] = 'Раздел удален';
+		generate_index_cache(true);
+	}else
+		$_SESSION['forum']['info'] = 'Нельзя удалять раздел с форумом';
+	
+	redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+}
+
+function edit_section(){
+	global $twig, $plugin, $mysql;
+	
+	include_once(dirname(__FILE__).'/includes/constants.php');
+	include_once(dirname(__FILE__).'/includes/cache.php');
+	
+	$tpath = locatePluginTemplates(array('main', 'edit_section'), $plugin, 1, '', 'config');
+	$xg = $twig->loadTemplate($tpath['edit_section'].'edit_section.tpl');
+	
+	$id = intval($_REQUEST['id']);
+	if(empty($id))
+		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+	
+	$forum = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
+	
+	$name = isset($_REQUEST['name'])?secure_html(trim($_REQUEST['name'])):secure_html(trim($forum['title']));
+	$description = isset($_REQUEST['description'])?secure_html(trim($_REQUEST['description'])):secure_html(trim($forum['description']));
+	$keywords = isset($_REQUEST['keywords'])?secure_html(trim($_REQUEST['keywords'])):secure_html(trim($forum['keywords']));
+	
+	if (isset($_REQUEST['submit'])){
+		if(empty($name)) $error_text[] = 'Название раздела обязательно для заполнения';
+		
+		if(empty($error_text)){
+			if(isset($name) && $name) $SQL['title'] = $name;
+			
+			if(isset($description) && $description) $SQL['description'] = $description;
+			
+			if(isset($keywords) && $keywords) $SQL['keywords'] = $keywords;
+			
+			$vnamess = array();
+			foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
+				$mysql->query('update '.prefix.'_forum_forums set '.implode(', ',$vnamess).' where id = \''.intval($id).'\' LIMIT 1');
+			
+			generate_index_cache(true);
+			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+		}
+	}
+	
+	$error_input = array();
+	if(isset($error_text) && is_array($error_text))
+		foreach($error_text as $error)
+			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
+	
+	$tVars = array(
+		'name' => $name,
+		'description' => $description,
+		'keywords' => $keywords,
+		'list_error' => $error_input,
+	);
+	
+	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
+	$tVars = array(
+		'global' => 'Редактирование раздела',
+		'entries' => $xg->render($tVars)
+	);
+	
+	print $xt->render($tVars);
+}
+
+function send_section(){
+	global $twig, $plugin, $mysql;
+	
+	include_once(dirname(__FILE__).'/includes/constants.php');
+	include_once(dirname(__FILE__).'/includes/cache.php');
+	
+	$tpath = locatePluginTemplates(array('main', 'send_section'), $plugin, 1, '', 'config');
+	$xg = $twig->loadTemplate($tpath['send_section'].'send_section.tpl');
+	
+	$name = secure_html(convert($_REQUEST['name']));
+	$description = secure_html(convert($_REQUEST['description']));
+	$keywords = secure_html(convert($_REQUEST['keywords']));
+	
+	if (isset($_REQUEST['submit'])){
+		if(empty($name)) $error_text[] = 'Название раздела обязательно для заполнения';
+		
+		if(empty($error_text)){
+			$sql = 'SELECT MAX(position) FROM '.prefix.'_forum_forums where parent = \'0\'';
+			$posit = $mysql-> result( $sql ) + 1;
+			
+			$mysql->query('INSERT INTO '.prefix.'_forum_forums
+				(title, description, keywords, position)
+				VALUES
+				('.db_squote($name).', '.db_squote($description).', '.db_squote($keywords).', '.intval($posit).')
+			');
+			
+			generate_index_cache(true);
+			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+		}
+	}
+	
+	$error_input = array();
+	if(isset($error_text) && is_array($error_text))
+		foreach($error_text as $error)
+			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
+	
+	$tVars = array(
+		'name' => $name,
+		'description' => $description,
+		'keywords' => $keywords,
+		'list_error' => $error_input,
+	);
+	
+	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
+	$tVars = array(
+		'global' => 'Добавить раздел',
+		'entries' => $xg->render($tVars)
+	);
+	
+	print $xt->render($tVars);
+}
+
+function edit_forum(){
+	global $twig, $plugin, $mysql;
+	
+	include_once(dirname(__FILE__).'/includes/constants.php');
+	include_once(dirname(__FILE__).'/includes/cache.php');
+	
+	$tpath = locatePluginTemplates(array('main', 'edit_forum'), $plugin, 1, '', 'config');
+	$xg = $twig->loadTemplate($tpath['edit_forum'].'edit_forum.tpl');
+	
+	
+	$id = intval($_REQUEST['id']);
+	if(empty($id))
+		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+	
+	$forum = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
+	
+	$name = isset($_REQUEST['name'])?secure_html(trim($_REQUEST['name'])):secure_html(trim($forum['title']));
+	$description = isset($_REQUEST['description'])?secure_html(trim($_REQUEST['description'])):secure_html(trim($forum['description']));
+	$keywords = isset($_REQUEST['keywords'])?secure_html(trim($_REQUEST['keywords'])):secure_html(trim($forum['keywords']));
+	$moderators = isset($_REQUEST['moderators'])?secure_html(trim($_REQUEST['moderators'])):secure_html(trim($forum['moderators']));
+	$parent = isset($_REQUEST['parent'])?(int)$_REQUEST['parent']:$forum['parent'];
+	
+	if (isset($_REQUEST['submit'])){
+		if(empty($name)) $error_text[] = 'Название форума не заполнено';
+		
+		if(isset($moderators) && $moderators){
+			$moder_array = array_map('trim', explode(',',$moderators));
+			$moder_array = array_unique($moder_array);
+			$i=0;
+			foreach ($moder_array as $row){
+				if(!$user[] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
+					$error_text[] = 'Пользователь '.$row.' не найден';
+					array_splice($user, $i, 1);
+				}
+				$i++;
+			}
+		} else $user = array();
+		
+		if(empty($error_text)){
+			$SQL = array();
+			
+			$SQL['moderators'] = serialize($user);
+			
+			if(isset($name) && $name) $SQL['title'] = $name;
+			
+			if(isset($desc) && $desc) $SQL['description'] = $desc;
+			
+			if(isset($keyw) && $keyw) $SQL['keywords'] = $keyw;
+			
+			if(isset($parent) && $parent) $SQL['parent'] = $parent;
+			
+			$vnamess = array();
+			foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
+				$mysql->query('update '.prefix.'_forum_forums set '.implode(', ',$vnamess).' where id = \''.intval($id).'\'');
+			
+			generate_index_cache(true);
+			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+		}
+	}
+	
+	foreach ($mysql-> select("SELECT id, title FROM ".prefix."_forum_forums WHERE parent = '0' ORDER BY position", 1 ) as $row){
+		$tEntry[] = array(
+			'id'		=>	$row['id'],
+			'title'		=>	$row['title'],
+			'id_set'	=> intval($parent)
+		);
+	}
+	
+	if(!$_REQUEST['moderators']){
+		$moderators = array();
+		foreach (unserialize($forum['moderators']) as $row){
+			$moderators[] = $row['name'];
+		}
+		
+		$moderators = array_unique($moderators);
+		$moderators = implode(', ',$moderators);
+	}
+	
+	$error_input = array();
+	if(isset($error_text) && is_array($error_text))
+		foreach($error_text as $error)
+			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
+	
+	$tVars = array(
+		'name' => $name,
+		'description' => $description,
+		'keywords' => $keywords,
+		'moderators' => $moderators,
+		'list_forum' => $tEntry,
+		'list_error' => $error_input,
+	);
+	
+	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
+	$tVars = array(
+		'global' => 'Редактировать форум',
+		'entries' => $xg->render($tVars)
+	);
+	
+	print $xt->render($tVars);
+}
+
 function send_forum(){
 global $twig, $plugin, $mysql;
 	
@@ -171,104 +424,61 @@ global $twig, $plugin, $mysql;
 	$tpath = locatePluginTemplates(array('main', 'send_forum'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['send_forum'].'send_forum.tpl');
 	
-	$name = secure_html(convert($_REQUEST['name']));
-	$desc = secure_html(convert($_REQUEST['desc']));
-	$keyw = secure_html(convert($_REQUEST['keyw']));
-	$moder = secure_html(convert($_REQUEST['moder']));
-	$type = (int)$_REQUEST['type'];
-	$edit_id = intval($_REQUEST['id']);
+	$id = intval($_REQUEST['id']);
+	if(empty($id))
+		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+	
+	$forum = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
+	
+	$name = isset($_REQUEST['name'])?secure_html(trim($_REQUEST['name'])):'';
+	$description = isset($_REQUEST['description'])?secure_html(trim($_REQUEST['description'])):'';
+	$keywords = isset($_REQUEST['keywords'])?secure_html(trim($_REQUEST['keywords'])):'';
+	$moderators = isset($_REQUEST['moderators'])?secure_html(trim($_REQUEST['moderators'])):'';
+	//$parent = isset($_REQUEST['parent'])?(int)$_REQUEST['parent']:'';
 	
 	if (isset($_REQUEST['submit'])){
 		if(empty($name)) $error_text[] = 'Название форума не заполнено';
 		
-		if($type <> 0 or $type == null){
-			if(isset($moder) && $moder){
-				$moder = array_map('trim', explode(',',$moder));
-				$moder = array_unique($moder);
-				$i=0;
-				foreach ($moder as $row){
-					if(!$user[] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
-						$error_text[] = 'Пользователь '.$row.' не найден';
-						array_splice($user, $i, 1);
-					}
-					$i++;
+		if(isset($moderators) && $moderators){
+			$moder_array = array_map('trim', explode(',',$moderators));
+			$moder_array = array_unique($moder_array);
+			$i=0;
+			foreach ($moder_array as $row){
+				if(!$user[] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
+					$error_text[] = 'Пользователь '.$row.' не найден';
+					array_splice($user, $i, 1);
 				}
-				
-			} else {
-				$user = null;
+				$i++;
 			}
-		}
+		} else $user = array();
 		
 		//print "<pre>".var_export($user, true)."</pre>";
 		if(empty($error_text)){
-			if(isset($edit_id) && $edit_id){
-				$SQL = array();
-				
-				$SQL['moderators'] = serialize($user);
-				
-				if(isset($name) && $name) $SQL['title'] = $name;
-				
-				if(isset($desc) && $desc) $SQL['description'] = $desc;
-				
-				if(isset($keyw) && $keyw) $SQL['keywords'] = $keyw;
-				
-				if(isset($type) && $type) $SQL['parent'] = $type;
-				
-				$vnamess = array();
-				foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
-					$mysql->query('update '.prefix.'_forum_forums set '.implode(', ',$vnamess).' where id = \''.intval($edit_id).'\'');
+			$sql = 'SELECT MAX(position) FROM '.prefix.'_forum_forums where parent = '.intval($forum['id']).'';
+			$posit = $mysql-> result( $sql ) + 1;
 			
-			} else {
-				$sql = 'SELECT MAX(position) FROM '.prefix.'_forum_forums where parent = '.intval($type).'';
-				$Sposit = $mysql-> result( $sql ) + 1;
-				
-				$mysql->query('INSERT INTO '.prefix.'_forum_forums
-					(title, description, keywords, parent, position)
-					VALUES
-					('.db_squote($name).', '.db_squote($desc).', '.db_squote($keyw).', '.intval($type).', '.intval($Sposit).')
-				');
-			}
+			$mysql->query('INSERT INTO '.prefix.'_forum_forums
+				(title, description, keywords, parent, moderators, position)
+				VALUES
+				('.db_squote($name).', '.db_squote($description).', '.db_squote($keywords).', '.intval($forum['id']).', \''.serialize($user).'\', '.intval($posit).')
+			');
+			
 			generate_index_cache(true);
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
 	
-	$print_forum = 1;
-	$print_forum_et = true;
-	if(isset($edit_id) && $edit_id){
-		$F = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($edit_id));
-		$c = $mysql->result('SELECT 1 FROM '.prefix.'_forum_topics WHERE fid = '.db_squote($edit_id));
-		$f = $mysql->result('SELECT 1 FROM '.prefix.'_forum_forums WHERE parent = '.db_squote($edit_id));
-		
-		
-		if($F['parent'] == 0 && $f == 1){
-			$print_forum = 0; 
-		} elseif($F['parent'] > 0){
-			$print_forum = 1;
-			$print_forum_et = false; 
+	if(!$_REQUEST['moderators']){
+		$moderators = array();
+		foreach (unserialize($forum['moderators']) as $row){
+			$moderators[] = $row['name'];
 		}
 		
-		$Sname = $F['title'];
-		$Sdesc = $F['description'];
-		$Skeyw = $F['keywords'];
-		
-		$moder = array();
-		foreach (unserialize($F['moderators']) as $row){
-			$moder[] = $row['name'];
-		}
-		
-		$moder = array_unique($moder);
-		$Smoder = implode(', ',$moder);
+		$moderators = array_unique($moderators);
+		$moderators = implode(', ',$moderators);
 	}
 	
 	//print "<pre>".var_export($Smoder, true)."</pre>";
-	foreach ($mysql-> select("SELECT id, title FROM ".prefix."_forum_forums WHERE parent = '0' and id != ".db_squote($edit_id)." ORDER BY position", 1 ) as $row){
-		$tEntry[] = array(
-			'id'		=>	$row['id'],
-			'title'		=>	$row['title'],
-			'id_set'	=> intval($edit_id)
-		);
-	}
 	
 	$error_input = array();
 	if(isset($error_text) && is_array($error_text))
@@ -276,15 +486,14 @@ global $twig, $plugin, $mysql;
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
 	
 	$tVars = array(
-		'Sname' => $Sname,
-		'Sdesc' => $Sdesc,
-		'Skeyw' => $Skeyw,
-		'Sposit' => $Sposit,
-		'Smoder' => $Smoder,
+		'name' => $name,
+		'description' => $description,
+		'keywords' => $keywords,
+		'moderators' => $moderators,
+		'forum_name' => $forum['title'],
+		'forum_id' => $forum['id'],
 		'list_forum' => $tEntry,
 		'list_error' => $error_input,
-		'print' => $print_forum,
-		'print_et' => $print_forum_et
 	);
 	
 	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
@@ -373,7 +582,7 @@ global $twig, $plugin;
 		),
 		'forums_title' => array(
 			'print' => $forums_title,
-			'error' => empty($forums_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %cat_forum% / %name_forum% [/ %num%]':''
+			'error' => empty($forums_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %4% / %name_forum% [/ %num%]':''
 		),
 		'topic_title' => array(
 			'print' => $topic_title,
