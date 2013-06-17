@@ -53,7 +53,7 @@ function edit_permission(){
 	global $plugin, $twig;
 	
 	$id = intval($_REQUEST['id']);
-	if(empty($id))
+	if(!isset($id) & $id <> '')
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=permission');
 	
 	include_once(dirname(__FILE__).'/includes/security.php');
@@ -61,7 +61,7 @@ function edit_permission(){
 	include_once(FORUM_CACHE.'/permission.php');
 	
 	
-	//print "<pre>".var_export($group, true)."</pre>";
+	//print "<pre>".var_export($GROUP_PERM, true)."</pre>";
 	$tpath = locatePluginTemplates(array('main', 'edit_permission'), $plugin, 1, '', 'config');
 	$xt = $twig->loadTemplate($tpath['edit_permission'].'edit_permission.tpl');
 	
@@ -69,10 +69,10 @@ function edit_permission(){
 	
 	if (isset($_REQUEST['submit'])){
 		if(empty($error_text)){
-			$merger = array_merge($group[$id], secureinput($_REQUEST['group'][$id]));
-			$group[$id] = $merger;
-			file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$group = '.var_export($group, true).';');
-			//redirect_forum_config('?mod=extra-config&plugin=forum&action=permission');
+			$merger = array_merge($GROUP_PERM[$id], secureinput($_REQUEST['GROUP_PERM'][$id]));
+			$GROUP_PERM[$id] = $merger;
+			file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$GROUP_PERM = '.var_export($GROUP_PERM, true).';');
+			redirect_forum_config('?mod=extra-config&plugin=forum&action=permission');
 		}
 	}
 	
@@ -83,12 +83,12 @@ function edit_permission(){
 	
 	$tVars = array(
 		'id' => $id,
-		'name' => $group[$id]['name'],
-		'color' => $group[$id]['color'],
-		'read' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$id.'][read]', $group[$id]['read']),
-		'read_news' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$id.'][read_news]', $group[$id]['read_news']),
-		'search' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$id.'][search]', $group[$id]['search']),
-		'pm' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$id.'][pm]', $group[$id]['pm']),
+		'name' => $GROUP_PERM[$id]['name'],
+		'color' => $GROUP_PERM[$id]['color'],
+		'read' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$id.'][read]', $GROUP_PERM[$id]['read']),
+		'news' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$id.'][news]', $GROUP_PERM[$id]['news']),
+		'search' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$id.'][search]', $GROUP_PERM[$id]['search']),
+		'pm' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$id.'][pm]', $GROUP_PERM[$id]['pm']),
 		'list_error' => $error_input,
 	);
 	
@@ -115,60 +115,64 @@ function permission()
 	
 	if(file_exists(FORUM_CACHE.'/permission.php'))
 		include(FORUM_CACHE.'/permission.php');
-	else
-		$group = array('1' => 
-		array(
-			'name' => 'Администратор',
-			'read' => true, 
-			'replies' => true, 
-			'modify' => true, 
-			'modify_your' => true, 
-			'remove' => true,
-			'remove_your' => true,
-			'modunit' => true,
-			'topic_closed' => true,
-			'topic_remove' => true,
-			'topic_move' => true,
-		),'2' => 
-		array(
-			'name' => 'Редактор',
-			'read' => true, 
-			'replies' => true, 
-			'modify' => true, 
-			'modify_your' => true, 
-			'remove' => true,
-			'remove_your' => true,
-		),'3' => 
-		array(
-			'name' => 'Журналист',
-			'read' => true, 
-			'replies' => true, 
-			'modify' => true, 
-			'modify_your' => true, 
-			'remove' => true,
-			'remove_your' => true,
-		),'4' => 
-		array(
-			'name' => 'Комментатор',
-			'read' => true, 
-			'replies' => true, 
-			'modify' => true, 
-			'modify_your' => true, 
-			'remove' => true,
-			'remove_your' => true,
-		),'5' => 
-		array(
-			'name' => 'Боты',
-			'read' => true, 
-			'replies' => false, 
-			'modify' => false, 
-			'modify_your' => false, 
-			'remove' => false,
-			'remove_your' => false,
-		)
-	);
+	else {
+		$GROUP_PERM = array('0' => 
+			array(
+				'name' => 'Гость',
+				'read' => true, 
+				'color' => 'red', 
+				'news' => '1',
+				'search' => '1',
+				'pm' => '1',
+			),'1' => 
+			array(
+				'name' => 'Администратор',
+				'read' => true, 
+				'color' => 'red', 
+				'news' => '1',
+				'search' => '1',
+				'pm' => '1',
+			),'2' => 
+			array(
+				'name' => 'Редактор',
+				'read' => true, 
+				'color' => 'green', 
+				'news' => '1',
+				'search' => '1',
+				'pm' => '1',
+			),'3' => 
+			array(
+				'name' => 'Журналист',
+				'read' => true, 
+				'color' => 'blue', 
+				'news' => '1',
+				'search' => '1',
+				'pm' => '1',
+			),'4' => 
+			array(
+				'name' => 'Комментатор',
+				'read' => true, 
+				'color' => 'gold', 
+				'news' => '1',
+				'search' => '1',
+				'pm' => '1',
+			),'5' => 
+			array(
+				'name' => 'Боты',
+				'read' => true, 
+				'color' => 'red', 
+				'news' => '1',
+				'search' => '1',
+				'pm' => '1',
+			),'moderators' => 
+			array(
+				'name' => 'Модератор',
+			)
+		);
+		file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$GROUP_PERM = '.var_export($GROUP_PERM, true).';');
+	}
 	
-	foreach ($group as $key => $value){
+	foreach ($GROUP_PERM as $key => $value){
 		//print "<pre>".var_export($key, true).'-'.var_export($value, true)."</pre>";
 		$tEntry[] = array(
 			'id' => $key,
@@ -447,10 +451,6 @@ function edit_forum(){
 	include_once(dirname(__FILE__).'/includes/cache.php');
 	
 	include_once(FORUM_CACHE.'/permission.php');
-	if(empty($group['moderators']))
-		$group['moderators'] = array(
-			'name'=> 'Модератор'
-		);
 	
 	$tpath = locatePluginTemplates(array('main', 'edit_forum'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['edit_forum'].'edit_forum.tpl');
@@ -497,18 +497,23 @@ function edit_forum(){
 			
 			if(isset($parent) && $parent) $SQL['parent'] = $parent;
 			
-			foreach ($group as $key => $value){
-				print "<pre>".var_export($key, true)."</pre>";
-				$group[$key]['forum_prem'][$id] = array(
-					'read_forum' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['read_forum'] ),
-					'read_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['read_topic'] ),
-					'send_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['send_topic'] ),
-					'remove_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['remove_topic'] ),
-					'remove_your_topic' => secureinput($_REQUEST['group'][$key]['forum_prem'][$id]['remove_your_topic'] ),
+			foreach ($GROUP_PERM as $key => $value){
+				//print "<pre>".var_export($key, true)."</pre>";
+				$GROUP_PERM[$key]['forum_prem'][$id] = array(
+					'forum_read' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['forum_read'] ),
+					'topic_read' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['read_topic'] ),
+					'topic_send' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_send'] ),
+					'topic_modify' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_modify'] ),
+					'topic_modify_your' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_modify_your'] ),
+					'topic_closed' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_closed'] ),
+					'topic_closed_your' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_closed_your'] ),
+					'topic_remove' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_remove'] ),
+					'topic_remove_your' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_remove_your'] ),
+					'post_send' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['post_send'] ),
 				);
 			}
 			
-			file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$group = '.var_export($group, true).';');
+			file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$GROUP_PERM = '.var_export($GROUP_PERM, true).';');
 			
 			$vnamess = array();
 			foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
@@ -518,7 +523,7 @@ function edit_forum(){
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
-	//print "<pre>".var_export($_REQUEST['group'], true)."</pre>";
+	//print "<pre>".var_export($_REQUEST['GROUP_PERM'], true)."</pre>";
 	foreach ($mysql-> select("SELECT id, title FROM ".prefix."_forum_forums WHERE parent = '0' ORDER BY position", 1 ) as $row){
 		$tEntry[] = array(
 			'id'		=>	$row['id'],
@@ -527,17 +532,22 @@ function edit_forum(){
 		);
 	}
 	
-	print "<pre>".var_export($group, true)."</pre>";
-	foreach ($group as $key => $value){
+	print "<pre>".var_export($GROUP_PERM, true)."</pre>";
+	foreach ($GROUP_PERM as $key => $value){
 		//print "<pre>".var_export($key, true).' --'.var_export($value, true)."</pre>";
 		$tEntry2[] = array(
 			'id' => $key,
 			'name' => $value['name'],
-			'read_forum' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][read_forum]', $group[$key]['forum_prem'][$id]['read_forum']),
-			'read_topic' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][read_topic]', $group[$key]['forum_prem'][$id]['read_topic']),
-			'send_topic' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][send_topic]', $group[$key]['forum_prem'][$id]['send_topic']),
-			'remove_topic' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][remove_topic]', $group[$key]['forum_prem'][$id]['remove_topic']),
-			'remove_your_topic' => MakeDropDown(array(false => 'нет', true => 'да'), 'group['.$key.'][forum_prem]['.$id.'][remove_your_topic]', $group[$key]['forum_prem'][$id]['remove_your_topic']),
+			'forum_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][forum_read]', $GROUP_PERM[$key]['forum_prem'][$id]['forum_read']),
+			'topic_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_read]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_read']),
+			'topic_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_send]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_send']),
+			'topic_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_modify]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_modify']),
+			'topic_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_modify_your]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_modify_your']),
+			'topic_closed' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_closed]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_closed']),
+			'topic_closed_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_closed_your]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_closed_your']),
+			'topic_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_remove]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_remove']),
+			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_remove_your]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_remove_your']),
+			'post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][post_send]', $GROUP_PERM[$key]['forum_prem'][$id]['post_send']),
 		);
 	}
 	

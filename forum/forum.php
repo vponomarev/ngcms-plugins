@@ -71,79 +71,116 @@ include_once(dirname(__FILE__).'/includes/bb_code.php');
 include_once(dirname(__FILE__).'/includes/cache.php');
 
 function plugin_show_forum()
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
+	$welcome = true;
+	$event = true;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/index.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/index.php');
-	else
-		$output = information('Вы забанены!!!');
-	
-	show_main_page(true, $output, true, true);
+	show_main_page(true, $output, $welcome, $event);
 }
 
 function plugin_showforum_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/showforum.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/showforum.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_showtopic_forum($params)
-{global $userROW, $mysql,  $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $online, $twig, $viewers, $lang_forum, $group_perm;
+{global $userROW, $mysql,  $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $online, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/showtopic.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/showtopic.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_userlist_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/userlist.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/userlist.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_search_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -151,296 +188,451 @@ function plugin_search_forum($params)
 	
 	include('includes/root_word.php');
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/search.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/search.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_register_forum()
-{global $userROW, $template, $config, $ip, $mysql, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum;
+{global $userROW, $template, $config, $ip, $mysql, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/register.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/register.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_login_forum()
-{global $userROW, $config, $ip, $template, $mysql, $auth_db, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum;
+{global $userROW, $config, $ip, $template, $mysql, $auth_db, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
+	
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
 	
 	if($ban[$ip] < 3)
 		include(FORUM_DIR.'/action/login.php');
 	else
 		$output = information('Вы забанены!!!');
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_profile_forum($params)
-{global $userROW, $template, $mysql, $SYSTEM_FLAGS, $CurrentHandler,  $ban, $twig, $ip, $lang_forum;
+{global $userROW, $template, $mysql, $SYSTEM_FLAGS, $CurrentHandler,  $ban, $twig, $ip, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/profile.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/profile.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_out_forum()
-{global $userROW, $config, $template, $mysql, $CurrentHandler, $auth_db, $ban, $ip, $SYSTEM_FLAGS, $lang_forum;
+{global $userROW, $config, $template, $mysql, $CurrentHandler, $auth_db, $ban, $ip, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
 	if($ban[$ip] < 3)
 		include(FORUM_DIR.'/action/out.php');
 	else
 		$output = information('Вы забанены!!!');
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_newpost_forum($params)
-{global $userROW, $config, $ip, $ban, $template, $CurrentHandler, $mysql, $SYSTEM_FLAGS, $twig, $lang_forum;
+{global $userROW, $config, $ip, $ban, $template, $CurrentHandler, $mysql, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/newpost.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/newpost.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
-	
-	unset($userROW, $config, $ip, $mysql, $template, $SYSTEM_FLAGS);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_newtopic_forum($params)
-{global $userROW, $config, $ip, $mysql, $ban, $CurrentHandler, $template, $SYSTEM_FLAGS, $twig, $lang_forum;
+{global $userROW, $config, $ip, $mysql, $ban, $CurrentHandler, $template, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/newtopic.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/newtopic.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_delpost_forum($params)
-{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum;
+{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/delpost.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/delpost.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_edit_forum($params)
-{global $userROW, $config, $mysql, $template, $CurrentHandler, $ip, $ban, $SYSTEM_FLAGS, $twig, $lang_forum;
+{global $userROW, $config, $mysql, $template, $CurrentHandler, $ip, $ban, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/edit.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/edit.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_rules_forum()
-{global $userROW, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum;
+{global $userROW, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/rules.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/rules.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_unsubscribe_forum($params)
-{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/uns.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/uns.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_markread_forum()
-{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/markread.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/markread.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_reputation_forum($params)
-{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/reputation.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/reputation.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_add_reputation_forum($params)
-{global $userROW, $mysql, $config, $template, $CurrentHandler, $SYSTEM_FLAGS, $ip, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $config, $template, $CurrentHandler, $SYSTEM_FLAGS, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/addrep.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/addrep.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_act_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/act.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/act.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output, true);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_news_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/news.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = true;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/news.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output, true);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_news_feed_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/news_feed.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = true;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/news_feed.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output, true);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_rss_feed_forum($params)
-{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 0;
@@ -449,18 +641,28 @@ function plugin_rss_feed_forum($params)
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
-	if($ban[$ip] < 3)
-		$output = rss_export_generate_forum();
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			$output = rss_export_generate_forum();
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output, true);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_rss_forum($params)
-{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum;
+{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 0;
@@ -469,6 +671,7 @@ function plugin_rss_forum($params)
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
 	
 	if(isset($params['id']))
@@ -476,251 +679,211 @@ function plugin_rss_forum($params)
 	else
 		$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):0;
 	
-	if($ban[$ip] < 3)
-		$output = rss_export_generate_forum($id);
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			$output = rss_export_generate_forum($id);
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output, true);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_add_thank_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/add_thank.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/add_thank.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_thank_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/thank.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/thank.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_complaints_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/complaints.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/complaints.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_send_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/send_pm.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/send_pm.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_list_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $online, $CurrentHandler, $ban, $twig, $viewers, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $online, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
 	banned_users();
 	
+	status_user_forum();
 	check_online_forum();
-	
 	viewers_forum();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/list_pm.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/list_pm.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_del_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
+	status_user_forum();
+	
 	banned_users();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/del_pm.php');
-	else
-		$output = information('Вы забанены!!!');
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/del_pm.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
 	
-	show_main_page(false, $output);
+	show_main_page(false, $output, $welcome, $event);
 }
 
 function plugin_downloads_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
+	status_user_forum();
+	
 	banned_users();
 	
-	if($ban[$ip] < 3)
-		include(FORUM_DIR.'/action/downloads.php');
-	else
-		$output = information('Вы забанены!!!');
-	
-	show_main_page(false, $output);
-}
-
-function plugin_test_forum1()
-{global $template, $mysql, $parse, $userROW, $config, $SUPRESS_TEMPLATE_SHOW, $ip, $lang_forum;
-	
- 	$id = 9437;
-	$subject = 'Проверка нагрузки';
-	$message = 'Проверка нагрузки';
-	$time = time() + ($config['date_adjust'] * 60);
-	/*
-	while (true)
-	{
-		$mysql->query('insert into '.prefix.'_forum_topics (
-					author,
-					author_id,
-					title,
-					c_data,
-					l_date,
-					l_author_id,
-					l_author,
-					fid
-				)values(
-					'.securemysql($userROW['name']).', 
-					'.securemysql($userROW['id']).', 
-					'.securemysql($subject).', 
-					'.securemysql($time).', 
-					'.securemysql($time).', 
-					'.securemysql($userROW['id']).', 
-					'.securemysql($userROW['name']).', 
-					'.securemysql($id).'
-				)
-			');
-			$topic_id = $mysql->lastid('forum_topics');
-			
-			$mysql->query('insert into '.prefix.'_forum_posts (
-					author, 
-					author_id, 
-					author_ip, 
-					message, 
-					c_data, 
-					tid
-				)values(
-					'.securemysql($userROW['name']).', 
-					'.securemysql($userROW['id']).', 
-					'.securemysql($ip).', 
-					'.securemysql($message).', 
-					'.securemysql($time).', 
-					'.securemysql($topic_id).'
-				)
-			');
-			
-			$post_id = $mysql->lastid('forum_posts');
-			
-			update_forum($topic_id, $subject, $time, $userROW['name'], $userROW['id'], $id);
-			update_users_mes();
-			
-			if(isset($_REQUEST['subscribe']))
-				subscribe($userROW['id'], $id);
-			
-			$file = forum_upload_files();
-			
-			if($file)
-				$mysql->query('INSERT INTO '.prefix.'_forum_attach (
-						tid,
-						pid,
-						c_data,
-						file,
-						size,
-						location,
-						author,
-						author_id
-					) values (
-						'.securemysql($topic_id).',
-						'.securemysql($post_id).',
-						'.securemysql($time).',
-						'.securemysql($file[0]).',
-						'.securemysql($file[1]).',
-						'.securemysql($file[2]).',
-						'.securemysql($userROW['name']).',
-						'.securemysql($userROW['id']).'
-					)
-				');
-			
-			
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	if($GROUP_PERM[$GROUP_STATUS]['read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/downloads.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
 	}
-	generate_index_cache(true); */
-	while (true)
-	{
-	$mysql->query('INSERT INTO '.prefix.'_forum_posts (
-					author,
-					author_id,
-					message,
-					author_ip,
-					c_data,
-					tid
-				) values (
-					'.securemysql($userROW['name']).',
-					'.securemysql($userROW['id']).',
-					'.securemysql($message).',
-					'.securemysql($ip).',
-					'.securemysql($time).',
-					'.securemysql($id).')
-				');
-				
-				$post_id = $mysql->lastid('forum_posts');
-				$result = $mysql->record('SELECT fid, title FROM '.prefix.'_forum_topics WHERE id = '.securemysql($id).' LIMIT 1');
-				update_users_mes();
-				update_topic($time, $userROW['name'], $userROW['id'], $id);
-				update_forum($id, $result['title'], $time, $userROW['name'], $userROW['id'], $result['fid']);
-				
-				if(isset($_REQUEST['subscribe']))
-					subscribe($userROW['id'], $id);
-				
-				generate_index_cache(true);
-	}
+	
+	show_main_page(false, $output, $welcome, $event);
 }
-

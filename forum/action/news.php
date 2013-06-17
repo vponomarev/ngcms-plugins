@@ -29,6 +29,9 @@
 	if(empty($id))
 		return $output = information('id новости не указан', $title = 'Информация');
 	
+	if(empty($GROUP_PERM[$GROUP_STATUS]['news']))
+		return $output = permissions_forum('Доступ в новости запрещен');
+	
 	//if(!is_array($userROW))
 	//	return $output = information('Читать новости могут только авторизованные!', $title = 'Информация');
 	

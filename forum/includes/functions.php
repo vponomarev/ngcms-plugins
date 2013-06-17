@@ -259,6 +259,26 @@ function update_lastdate_user($update = false)
 		$mysql->query('UPDATE '.prefix.'_users SET last = '.intval($time).' WHERE id = '.intval($userROW['id']));
 }
 
+function status_user_forum(){
+	global $userROW, $GROUP_STATUS, $GROUP_PERM;
+	
+	if(file_exists(FORUM_CACHE.'/permission.php'))
+		include(FORUM_CACHE.'/permission.php');
+	
+	$bot = forum_filter_bots($_SERVER['HTTP_USER_AGENT']);
+	
+	if( is_array($userROW) ){
+		$GROUP_STATUS = $userROW['status'];
+	} elseif($bot){
+		$GROUP_STATUS = 5;
+	} else {
+		$GROUP_STATUS = 0;
+	}
+	
+	$twig->addGlobal('GROUP_STATUS', $GROUP_STATUS);
+	$twig->addGlobal('GROUP_PERM', $GROUP_PERM);
+}
+
 function check_online_forum()
 {global $mysql, $config, $userROW, $ip, $online, $ipis, $CurrentHandler;
 	
@@ -579,28 +599,6 @@ function checkPermission_forum($moder_array = ''){
 	$group_perm = $group[$userROW['status']];
 	//print "<pre>".var_export($group, true)."</pre>";
 }
-
-//Вынести в шаблон
-/* function show_date($row)
-{global $config;
-	
-	$time = time() + ($config['date_adjust'] * 60);
-	
-	if(empty($row)) return;
-	
-	$date = date('Y-m-d', $row);
-	$today = date('Y-m-d', $time);
-	$yesterday = date('Y-m-d', $time-86400);
-	
-	if ($date == $today)
-		$date = 'Сегодня '.date('H:i', $row);
-	elseif ($date == $yesterday)
-		$date = 'Вчера '.date('H:i', $row);
-	else
-		$date = date('Y-m-d H:i', $row);
-	
-	return $date;
-} */
 
 function forum_upload_files(){
 	$max_file_size = 7 * 1024 * 1024;

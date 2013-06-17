@@ -22,6 +22,9 @@
 	else
 		$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):'';
 	
+	if(empty($GROUP_PERM[$GROUP_STATUS]['forum_prem'][$id]['forum_read']))
+		return $output = permissions_forum('Доступ в форум запрещен');
+	
 	if(isset($params['page']))
 		$pageNo = isset($params['page'])?intval($params['page']):0;
 	else

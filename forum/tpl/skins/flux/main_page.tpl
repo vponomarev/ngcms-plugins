@@ -7,7 +7,7 @@
 <meta name='description' content='{{ description }}' />
 <link rel="stylesheet" href="{{ forum_tpl }}/style.css" type="text/css" />
 <link rel="stylesheet" href="{{ forum_tpl }}/wbbtheme.css" type="text/css" />
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script> -->
 <script src="{{ forum_tpl }}/jquery.wysibb.min.js"></script>
 </head>{% endif %}
 <body>
@@ -82,7 +82,7 @@
 			</div> 
 		</div>
 		{% endif %}
-		{% if (dis_wel) %}{% if (global.user) %}
+		{% if (welcome) %}{% if (global.user) %}
 		<div class="blocktable" style="MARGIN-BOTTOM: 12px">
 			<h2><span>Добро пожаловать <strong>{{ global.user['name'] }}</strong></span></h2>
 			<div class="box">
@@ -172,7 +172,7 @@
 			</div>
 		</div>
 		{% endif %}{% endif %}
-		{% if (dis_event) %}
+		{% if (event) %}
 		<div class="blocktable" style="MARGIN-BOTTOM: 12px">
 			<h2><span>Последние события</span></h2>
 			<div class="box">

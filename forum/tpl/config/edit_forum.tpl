@@ -51,31 +51,61 @@
 					<tr class="contentEntry1">
 						<td><strong>Просматривать форумы</strong></td><td>-</td>
 						<td>
-							{{ entry.read_forum }}
+							{{ entry.forum_read }}
 						</td>
 					</tr>
 					<tr class="contentEntry1">
 						<td><strong>Просматривать темы</strong></td><td>-</td>
 						<td>
-							{{ entry.read_topic }}
+							{{ entry.topic_read }}
 						 </td>
 					</tr>
 					<tr class="contentEntry1">
 						<td><strong>Добавлять темы</strong></td><td>-</td>
 						<td>
-							{{ entry.send_topic }}
+							{{ entry.topic_send }}
 						</td>
 					</tr>
 					<tr class="contentEntry1">
 						<td><strong>Редактирова темы</strong></td><td>-</td>
 						<td>
-							{{ entry.remove_topic }}
+							{{ entry.topic_modify }}
 						</td>
 					</tr>
 					<tr class="contentEntry1">
 						<td><strong>Редактировать свои темы</strong></td><td>-</td>
 						<td>
-							{{ entry.remove_your_topic }}
+							{{ entry.topic_modify_your }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Закрывать тему</strong></td><td>-</td>
+						<td>
+							{{ entry.topic_closed }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Закрывать свою тему</strong></td><td>-</td>
+						<td>
+							{{ entry.topic_closed_your }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Удалять темы</strong></td><td>-</td>
+						<td>
+							{{ entry.topic_remove }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Удалять свои темы</strong></td><td>-</td>
+						<td>
+							{{ entry.topic_remove_your }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Отвечать в темах</strong></td><td>-</td>
+						<td>
+							{{ entry.post_send }}
 						</td>
 					</tr>
 				</table>

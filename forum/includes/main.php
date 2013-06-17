@@ -200,6 +200,12 @@ function header_show()
 					array ($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
 					'Информация / %name_forum%');
 		break;
+		case 'perm':
+			$titles = str_replace(
+					array ('%name_site%', '%name_forum%'),
+					array ($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
+					'Нет доступа / %name_forum%');
+		break;
 	}
 	
 	$titles  = preg_replace('/\[([^\[\]]+)\]/' , (isset($pageNo) && $pageNo)?'\\1':'', $titles);
@@ -213,7 +219,7 @@ function header_show()
 	}
 }
 
-function show_main_page($a_stat = false, $output = '', $dis_wel = false, $dis_event = false)
+function show_main_page($a_stat = false, $output = '', $welcome = false, $event = false)
 {global $userROW, $template, $online, $SUPRESS_TEMPLATE_SHOW, $CurrentHandler, $list_news, $lang_forum, $ban, $last_topic, $new_user, $active_user, $SYSTEM_FLAGS, $twig, $show_main, $ipis, $ip, $titles, $timer, $timer_forum, $mysql, $stat, $viewers, $result_last_users, $topic_sum, $post_sum, $result_users, $list_bans;
 	
 	header_show();
@@ -228,15 +234,15 @@ function show_main_page($a_stat = false, $output = '', $dis_wel = false, $dis_ev
 		statistics_forum();
 	
 	if($ban[$ip] < 3){
-		if($dis_wel)
+		if($welcome)
 			show_news_forum();
 		
-		if($dis_event)
+		if($event)
 			recent_events_forum();
 	
-	}else{$dis_wel = false; $dis_event = false;}
+	}else{$welcome = false; $event = false;}
 	
-	if(is_array($userROW))
+	if(is_array($userROW) && $GROUP_PERM[$GROUP_STATUS]['pm'])
 		$int_pm = $mysql->result('SELECT COUNT(*) FROM `'.prefix.'_pm` WHERE to_id = '.securemysql($userROW['id']).' AND viewed = \'0\' AND folder=\'inbox\'');
 	
 	$tpath = locatePluginTemplates(array('main_page', ':'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
@@ -281,8 +287,8 @@ function show_main_page($a_stat = false, $output = '', $dis_wel = false, $dis_ev
 		
 		'stat' => ($a_stat)?1:0,
 		
-		'dis_wel' => $dis_wel,
-		'dis_event' => $dis_event,
+		'welcome' => $welcome,
+		'event' => $event,
 		
 		'local' => array(
 			'num_guest_loc' => $viewers['num_guest_loc'],
@@ -346,6 +352,10 @@ function show_main_page($a_stat = false, $output = '', $dis_wel = false, $dis_ev
 
 function show_news_forum()
 {global $mysql, $list_news; $i=0;
+	
+	if(empty($GROUP_PERM[$GROUP_STATUS]['news']))
+		return false;
+	
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_news ORDER BY c_data DESC LIMIT 5') as $row){
 		$i++;
 		$list_news[] = array(
@@ -373,7 +383,7 @@ global $ban, $list_bans;
 }
 
 function viewers_forum(){
-global $viewers, $online, $CurrentHandler, $lang_forum;
+global $viewers, $online, $CurrentHandler, $lang_forum, $GROUP_PERM;
 	
 	$last_time = time() + ($config['date_adjust'] * 60) - pluginGetVariable('forum', 'online_time');
 	
@@ -386,19 +396,20 @@ global $viewers, $online, $CurrentHandler, $lang_forum;
 					if(isset($row['users_status']) && $row['users_status'] == 0){
 						$viewers['num_guest_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 1){
-						$color_start = '<span style="color:red;">'; $color_end = '</span>';
+						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
 						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['admin_url'] );
 						$viewers['num_user_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 2){
-						$color_start = '<span style="color:green;">'; $color_end = '</span>';
+						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
 						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['editor_url'] );
 						$viewers['num_user_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 3){
-						$color_start = '<span style="color:blue;">'; $color_end = '</span>';
+						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
 						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['publicist_url'] );
 						$viewers['num_user_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 4){
-						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}'), array( link_profile($row['users_id'], '', $row['users']), $row['users']), $lang_forum['active_users'] );
+						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['com_url'] );
 						$viewers['num_user_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 5){
 						$viewers['active_bot_loc'][] = $lang_forum[$row['users']];
@@ -417,7 +428,7 @@ global $viewers, $online, $CurrentHandler, $lang_forum;
 }
 
 function recent_events_forum()
-{global $mysql, $last_topic, $new_user, $active_user;
+{global $mysql, $last_topic, $new_user, $active_user, $GROUP_PERM;
 	$i=1;
 	foreach ($mysql->select('SELECT t.l_post, t.title as Ttitle, t.l_author_id , t.l_author, t.int_views, t.int_post, t.c_data, f.id as fid, f.title as Ftitle FROM '.prefix.'_forum_topics AS t LEFT JOIN '.prefix.'_forum_forums AS f ON t.fid = f.id ORDER BY t.l_date DESC LIMIT 10') as $row){
 		$last_topic[] = array(
@@ -436,9 +447,10 @@ function recent_events_forum()
 	$i=1;
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_users ORDER BY reg DESC LIMIT 10') as $row){
 		switch($row['status']){
-			case 1: $color_start = '<span style="color:red;">'; $color_end = '</span>'; break;
-			case 2: $color_start = '<span style="color:green;">'; $color_end = '</span>'; break;
-			case 3: $color_start = '<span style="color:blue;">'; $color_end = '</span>'; break;
+			case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
+			case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
+			case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
+			case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
 			default: $color_start = ''; $color_end = '';
 		}
 		$new_user[] = array(
@@ -454,9 +466,10 @@ function recent_events_forum()
 	$i=1;
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_users ORDER BY int_post DESC LIMIT 10') as $row){
 		switch($row['status']){
-			case 1: $color_start = '<span style="color:red;">'; $color_end = '</span>'; break;
-			case 2: $color_start = '<span style="color:green;">'; $color_end = '</span>'; break;
-			case 3: $color_start = '<span style="color:blue;">'; $color_end = '</span>'; break;
+			case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
+			case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
+			case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
+			case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
 			default: $color_start = ''; $color_end = '';
 		}
 		
@@ -472,7 +485,7 @@ function recent_events_forum()
 }
 
 function statistics_forum()
-{global $mysql, $online, $lang_forum, $config, $twig, $stat, $result_last_users, $topic_sum, $post_sum, $result_users;
+{global $mysql, $online, $lang_forum, $config, $twig, $stat, $result_last_users, $topic_sum, $post_sum, $result_users, $GROUP_PERM;
 	
 	$last_time = time() + ($config['date_adjust'] * 60) - pluginGetVariable('forum', 'online_time');
 	
@@ -488,19 +501,20 @@ function statistics_forum()
 				if(isset($row['users_status']) && $row['users_status'] == 0){
 					$stat['num_guest']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 1){
-					$color_start = '<span style="color:red;">'; $color_end = '</span>';
+					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
 					$stat['active_users'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['admin_url'] );
 					$stat['num_user']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 2){
-					$color_start = '<span style="color:green;">'; $color_end = '</span>';
+					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
 					$stat['active_users'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['editor_url'] );
 					$stat['num_user']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 3){
-					$color_start = '<span style="color:blue;">'; $color_end = '</span>';
+					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
 					$stat['active_users'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['publicist_url'] );
 					$stat['num_user']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 4){
-					$stat['active_users'][] = str_replace( array('{url}', '{name}'), array( link_profile($row['users_id'], '', $row['users']), $row['users']), $lang_forum['active_users'] );
+					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+					$stat['active_users'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end), $lang_forum['com_url'] );
 					$stat['num_user']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 5){
 					$stat['active_users'][] =  $lang_forum[$row['users']];
@@ -512,9 +526,10 @@ function statistics_forum()
 					$stat['num_guest_today']++;
 				}elseif(isset($row['users_status']) && ($row['users_status'] == 1 or $row['users_status'] == 2 or $row['users_status'] == 3 or $row['users_status'] == 4)){
 					switch($row['users_status']){
-						case 1: $color_start = '<span style="color:red;">'; $color_end = '</span>'; break;
-						case 2: $color_start = '<span style="color:green;">'; $color_end = '</span>'; break;
-						case 3: $color_start = '<span style="color:blue;">'; $color_end = '</span>'; break;
+						case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>'; break;
+						case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>'; break;
+						case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>'; break;
+						case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>'; break;
 						default: $color_start = ''; $color_end = '';
 					}
 					$last_date = date('H:i:s', intval($row['last_time']));
@@ -571,7 +586,7 @@ function announcement_forum($message, $url, $banned = 0,  $referer = false)
 	return $xt->render($tVars);
 }
 
-function information($info, $title = 'Информация', $error_404 = true)
+function information($info, $title = 'Информация', $error_404 = false)
 {global $twig, $SYSTEM_FLAGS, $CurrentHandler;
 	
 	$CurrentHandler['handlerName'] = 'erro404';
@@ -584,6 +599,24 @@ function information($info, $title = 'Информация', $error_404 = true)
 	$xt = $twig->loadTemplate($tpath['information'].'information.tpl');
 	
 	$tVars = array(
+		'title' => $title,
+		'info' => $info,
+	);
+	
+	return $xt->render($tVars);
+}
+
+function permissions_forum($info, $title = 'Информация')
+{global $twig, $SYSTEM_FLAGS, $CurrentHandler;
+	
+	$CurrentHandler['handlerName'] = 'perm';
+	
+	$tpath = locatePluginTemplates(array('permissions'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
+	
+	$xt = $twig->loadTemplate($tpath['permissions'].'permissions.tpl');
+	
+	$tVars = array(
+		'action' => link_login(),
 		'title' => $title,
 		'info' => $info,
 	);

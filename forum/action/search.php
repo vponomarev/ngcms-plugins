@@ -20,6 +20,9 @@
 	$tpath = locatePluginTemplates(array('search'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
 	$xt = $twig->loadTemplate($tpath['search'].'search.tpl');
 	
+	if(empty($GROUP_PERM[$GROUP_STATUS]['search']))
+		return $output = permissions_forum('ѕользование поиском дл€ вас запрещено');
+	
 	if(isset($_REQUEST['submit']) && $_REQUEST['submit']){
 		$keywords = secure_search_forum($_REQUEST['keywords']);
 		$forum_id = securenum($_REQUEST['forum_id']);
