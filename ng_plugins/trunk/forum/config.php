@@ -501,7 +501,7 @@ function edit_forum(){
 				//print "<pre>".var_export($key, true)."</pre>";
 				$GROUP_PERM[$key]['forum_prem'][$id] = array(
 					'forum_read' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['forum_read'] ),
-					'topic_read' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['read_topic'] ),
+					'topic_read' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_read'] ),
 					'topic_send' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_send'] ),
 					'topic_modify' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_modify'] ),
 					'topic_modify_your' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_modify_your'] ),
@@ -510,6 +510,10 @@ function edit_forum(){
 					'topic_remove' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_remove'] ),
 					'topic_remove_your' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['topic_remove_your'] ),
 					'post_send' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['post_send'] ),
+					'post_modify' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['post_modify'] ),
+					'post_modify_your' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['post_modify_your'] ),
+					'post_remove' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['post_remove'] ),
+					'post_remove_your' => secureinput($_REQUEST['GROUP_PERM'][$key]['forum_prem'][$id]['post_remove_your'] ),
 				);
 			}
 			
@@ -548,6 +552,10 @@ function edit_forum(){
 			'topic_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_remove]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_remove']),
 			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][topic_remove_your]', $GROUP_PERM[$key]['forum_prem'][$id]['topic_remove_your']),
 			'post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][post_send]', $GROUP_PERM[$key]['forum_prem'][$id]['post_send']),
+			'post_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][post_modify]', $GROUP_PERM[$key]['forum_prem'][$id]['post_modify']),
+			'post_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][post_modify_your]', $GROUP_PERM[$key]['forum_prem'][$id]['post_modify_your']),
+			'post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][post_remove]', $GROUP_PERM[$key]['forum_prem'][$id]['post_remove']),
+			'post_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][post_remove_your]', $GROUP_PERM[$key]['forum_prem'][$id]['post_remove_your']),
 		);
 	}
 	

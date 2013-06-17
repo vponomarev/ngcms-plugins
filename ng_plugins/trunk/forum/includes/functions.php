@@ -260,7 +260,7 @@ function update_lastdate_user($update = false)
 }
 
 function status_user_forum(){
-	global $userROW, $GROUP_STATUS, $GROUP_PERM;
+	global $twig, $userROW, $GROUP_STATUS, $GROUP_PERM, $GROUP_PS;
 	
 	if(file_exists(FORUM_CACHE.'/permission.php'))
 		include(FORUM_CACHE.'/permission.php');
@@ -274,9 +274,9 @@ function status_user_forum(){
 	} else {
 		$GROUP_STATUS = 0;
 	}
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS], true)."</pre>";
 	
-	$twig->addGlobal('GROUP_STATUS', $GROUP_STATUS);
-	$twig->addGlobal('GROUP_PERM', $GROUP_PERM);
+	$GROUP_PS = $GROUP_PERM[$GROUP_STATUS];
 }
 
 function check_online_forum()
@@ -529,75 +529,21 @@ function add_banned_users()
 		file_put_contents(FORUM_CACHE.'/ban.php', '<?php'."\n\n".'$ban = '.var_export($ban, true).';'."\n\n");
 }
 
-function checkPermission_forum($moder_array = ''){
-	global $userROW, $group_perm;
+function moderators_forum($moderators = ''){
+	global $userROW, $GROUP_PERM, $GROUP_PS;
 	
-	$group = array('1' => 
-		array(
-			'read' => true, 
-			'replies' => true, 
-			'modify' => true, 
-			'modify_your' => true, 
-			'remove' => true,
-			'remove_your' => true,
-			'modunit' => true,
-			'topic_closed' => true,
-			'topic_remove' => true,
-			'topic_move' => true,
-		),'2' => 
-		array(
-			'read' => true, 
-			'replies' => true, 
-			'modify' => true, 
-			'modify_your' => true, 
-			'remove' => true,
-			'remove_your' => true,
-		),'3' => 
-		array(
-			'read' => true, 
-			'replies' => true, 
-			'modify' => true, 
-			'modify_your' => true, 
-			'remove' => true,
-			'remove_your' => true,
-		),'4' => 
-		array(
-			'read' => true, 
-			'replies' => true, 
-			'modify' => true, 
-			'modify_your' => true, 
-			'remove' => true,
-			'remove_your' => true,
-		),'5' => 
-		array(
-			'read' => true, 
-			'replies' => false, 
-			'modify' => false, 
-			'modify_your' => false, 
-			'remove' => false,
-			'remove_your' => false,
-		)
-	); 
-	
-	if(isset($moder_array) && $moder_array)
-		foreach (unserialize($moder_array) as $row){
-			$moder[] = $row['id'];
+	if(isset($moderators) && $moderators)
+		foreach (unserialize($moderators) as $row){
+			$list_moder[] = $row['id'];
 		}
+	else return false;
 	
-	if(is_array($userROW) && array_key_exists($userROW['id'], $moder)){
-		$group[$userROW['status']]['modunit'] = true;
-		$group[$userROW['status']]['topic_closed'] = true;
-		$group[$userROW['status']]['topic_remove'] = true;
-		$group[$userROW['status']]['topic_move'] = true;
-	} else {
-		$group[$userROW['status']]['modunit'] = false;
-		$group[$userROW['status']]['topic_closed'] = false;
-		$group[$userROW['status']]['topic_remove'] = false;
-		$group[$userROW['status']]['topic_move'] = false;
-	}
 	
-	$group_perm = $group[$userROW['status']];
-	//print "<pre>".var_export($group, true)."</pre>";
+	
+	if(is_array($userROW) && array_key_exists($userROW['id'], $list_moder))
+		$GROUP_PS['forum_prem'] = $GROUP_PERM['moderators']['forum_prem'];
+	
+	print "<pre>".var_export($GROUP_PS, true)."</pre>";
 }
 
 function forum_upload_files(){

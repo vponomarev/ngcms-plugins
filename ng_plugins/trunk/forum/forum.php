@@ -71,7 +71,7 @@ include_once(dirname(__FILE__).'/includes/bb_code.php');
 include_once(dirname(__FILE__).'/includes/cache.php');
 
 function plugin_show_forum()
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -97,7 +97,7 @@ function plugin_show_forum()
 }
 
 function plugin_showforum_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -125,7 +125,7 @@ function plugin_showforum_forum($params)
 }
 
 function plugin_showtopic_forum($params)
-{global $userROW, $mysql,  $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $online, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql,  $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $online, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -153,7 +153,7 @@ function plugin_showtopic_forum($params)
 }
 
 function plugin_userlist_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -180,7 +180,7 @@ function plugin_userlist_forum($params)
 }
 
 function plugin_search_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -209,7 +209,7 @@ function plugin_search_forum($params)
 }
 
 function plugin_register_forum()
-{global $userROW, $template, $config, $ip, $mysql, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $template, $config, $ip, $mysql, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -236,7 +236,7 @@ function plugin_register_forum()
 }
 
 function plugin_login_forum()
-{global $userROW, $config, $ip, $template, $mysql, $auth_db, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $config, $ip, $template, $mysql, $auth_db, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -258,7 +258,7 @@ function plugin_login_forum()
 }
 
 function plugin_profile_forum($params)
-{global $userROW, $template, $mysql, $SYSTEM_FLAGS, $CurrentHandler,  $ban, $twig, $ip, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $template, $mysql, $SYSTEM_FLAGS, $CurrentHandler,  $ban, $twig, $ip, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -285,7 +285,7 @@ function plugin_profile_forum($params)
 }
 
 function plugin_out_forum()
-{global $userROW, $config, $template, $mysql, $CurrentHandler, $auth_db, $ban, $ip, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $config, $template, $mysql, $CurrentHandler, $auth_db, $ban, $ip, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -306,7 +306,7 @@ function plugin_out_forum()
 }
 
 function plugin_newpost_forum($params)
-{global $userROW, $config, $ip, $ban, $template, $CurrentHandler, $mysql, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $config, $ip, $ban, $template, $CurrentHandler, $mysql, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -333,7 +333,7 @@ function plugin_newpost_forum($params)
 }
 
 function plugin_newtopic_forum($params)
-{global $userROW, $config, $ip, $mysql, $ban, $CurrentHandler, $template, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $config, $ip, $mysql, $ban, $CurrentHandler, $template, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -360,7 +360,7 @@ function plugin_newtopic_forum($params)
 }
 
 function plugin_delpost_forum($params)
-{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -387,7 +387,7 @@ function plugin_delpost_forum($params)
 }
 
 function plugin_edit_forum($params)
-{global $userROW, $config, $mysql, $template, $CurrentHandler, $ip, $ban, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $config, $mysql, $template, $CurrentHandler, $ip, $ban, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -414,7 +414,7 @@ function plugin_edit_forum($params)
 }
 
 function plugin_rules_forum()
-{global $userROW, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -441,7 +441,7 @@ function plugin_rules_forum()
 }
 
 function plugin_unsubscribe_forum($params)
-{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -468,7 +468,7 @@ function plugin_unsubscribe_forum($params)
 }
 
 function plugin_markread_forum()
-{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -495,7 +495,7 @@ function plugin_markread_forum()
 }
 
 function plugin_reputation_forum($params)
-{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -522,7 +522,7 @@ function plugin_reputation_forum($params)
 }
 
 function plugin_add_reputation_forum($params)
-{global $userROW, $mysql, $config, $template, $CurrentHandler, $SYSTEM_FLAGS, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $config, $template, $CurrentHandler, $SYSTEM_FLAGS, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -549,7 +549,7 @@ function plugin_add_reputation_forum($params)
 }
 
 function plugin_act_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -576,7 +576,7 @@ function plugin_act_forum($params)
 }
 
 function plugin_news_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -604,7 +604,7 @@ function plugin_news_forum($params)
 }
 
 function plugin_news_feed_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -632,7 +632,7 @@ function plugin_news_feed_forum($params)
 }
 
 function plugin_rss_feed_forum($params)
-{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 0;
@@ -662,7 +662,7 @@ function plugin_rss_feed_forum($params)
 }
 
 function plugin_rss_forum($params)
-{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 0;
@@ -697,7 +697,7 @@ function plugin_rss_forum($params)
 }
 
 function plugin_add_thank_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -725,7 +725,7 @@ function plugin_add_thank_forum($params)
 }
 
 function plugin_thank_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -753,7 +753,7 @@ function plugin_thank_forum($params)
 }
 
 function plugin_complaints_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -781,7 +781,7 @@ function plugin_complaints_forum($params)
 }
 
 function plugin_send_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -809,7 +809,7 @@ function plugin_send_pm_forum($params)
 }
 
 function plugin_list_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $online, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $online, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -837,7 +837,7 @@ function plugin_list_pm_forum($params)
 }
 
 function plugin_del_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -863,7 +863,7 @@ function plugin_del_pm_forum($params)
 }
 
 function plugin_downloads_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
