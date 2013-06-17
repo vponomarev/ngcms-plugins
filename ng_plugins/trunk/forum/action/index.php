@@ -36,10 +36,12 @@
 		$entries = array();
 		foreach ( $result as $row_2 ){
 			if($row_2['parent'] != 0){
+				if(!$GROUP_PERM[$GROUP_STATUS]['forum_prem'][$row_2['id']]['forum_read']) continue;
 				$moder_array = unserialize($row_2['moderators']);
 				foreach ($moder_array as $author){
-						$moder_print[] = str_replace( array('{url}', '{name}',), array( link_profile($author['id'], '', $author['name']), $author['name']), $lang_forum['moder_url']);
+					$moder_print[] = str_replace( array('{url}', '{name}',), array( link_profile($author['id'], '', $author['name']), $author['name']), $lang_forum['moder_url']);
 				}
+				
 				//print "<pre>".var_export($lang_forum['moder_url'], true)."</pre>";
 				$tVars = array(
 					'forum_link' => link_forum($row_2['id']),

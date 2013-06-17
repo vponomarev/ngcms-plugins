@@ -17,6 +17,9 @@
 	*/
 	if (!defined('NGCMS')) die ('HAL');
 	
+	if(empty($GROUP_PERM[$GROUP_STATUS]['pm']))
+		return $output = permissions_forum('У вас нет доступа к сообщениям');
+	
 	$tpath = locatePluginTemplates(array('list_pm'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
 	$xt = $twig->loadTemplate($tpath['list_pm'].'list_pm.tpl');
 	

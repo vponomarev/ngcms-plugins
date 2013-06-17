@@ -20,6 +20,9 @@
 	
 	$tpath = locatePluginTemplates(array( 'news_feed'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
 	
+	if(empty($GROUP_PERM[$GROUP_STATUS]['news']))
+		return $output = permissions_forum('Доступ в новости запрещен');
+	
 	$limitCount = intval(pluginGetVariable('forum', 'news_per_page'));
 	
 	if (($limitCount < 2) or ($limitCount > 2000)) $limitCount = 2;
