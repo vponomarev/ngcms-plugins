@@ -145,6 +145,7 @@
 			'print' => isset($pages)?$pages:''
 		),
 		'addtopic' => link_add_topic($id),
+		'GROUP_PS' => $GROUP_PS['forum_prem'][$id],
 		'link_rss' => link_rss($id),
 		'home_link' => link_home(),
 		'Ftitle' => $forum['title'],
