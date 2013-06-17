@@ -532,18 +532,17 @@ function add_banned_users()
 function moderators_forum($moderators = ''){
 	global $userROW, $GROUP_PERM, $GROUP_PS;
 	
-	if(isset($moderators) && $moderators)
+	if(isset($moderators) && $moderators){
+		$list_moder = array();
 		foreach (unserialize($moderators) as $row){
-			$list_moder[] = $row['id'];
+			$list_moder[$row['id']] = '';
 		}
-	else return false;
-	
-	
+	} else return false;
 	
 	if(is_array($userROW) && array_key_exists($userROW['id'], $list_moder))
 		$GROUP_PS['forum_prem'] = $GROUP_PERM['moderators']['forum_prem'];
 	
-	print "<pre>".var_export($GROUP_PS, true)."</pre>";
+	print "<pre>".var_export($GROUP_PS, true).' - '.$userROW['id']."</pre>";
 }
 
 function forum_upload_files(){

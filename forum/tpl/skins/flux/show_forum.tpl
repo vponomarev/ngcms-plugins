@@ -1,7 +1,7 @@
 <div class="linkst"> 
 	<div class="inbox"> 
 		<p class="pagelink conl">{% if (pages.true) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages.print }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p> 
-		{% if (global.user) %}<p class="postlink conr"><a href='{{ addtopic }}'>Добавить тему</a></p>{% endif %}
+		{% if (GROUP_PS['topic_send']) %}<p class="postlink conr"><a href='{{ addtopic }}'>Добавить тему</a></p>{% endif %}
 		<ul><li><a href='{{ home_link }}'>Список</a>&nbsp;</li><li>&raquo;&nbsp;{{ Ftitle }}</li></ul>
 		<div class="clearer"></div>
 	</div>

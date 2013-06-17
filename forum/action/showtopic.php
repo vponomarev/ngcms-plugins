@@ -168,13 +168,27 @@
 	
 	foreach ($result_2 as $row){
 		$i++;
-		switch ($row['status']){
-			case 1:$userstatus = "Администратор";	break;
-			case 2:$userstatus = "Редактор";		break;
-			case 3:$userstatus = "Журналист";		break;
-			case 4:$userstatus = "Пользователь";	break;
-			default:$userstatus = "Забанен или удален";
-		};
+		
+		//'GROUP_PS' => $GROUP_PS['forum_prem'][$result['fid']],
+		if($GROUP_PS['forum_prem'][$result['fid']]['post_modify'])
+			$modify = true; 
+		elseif($GROUP_PS['forum_prem'][$result['fid']]['post_modify_your']){
+			if($userROW['status'] == $row['author_id']) 
+				$modify = true; 
+			else 
+				$modify = false;
+		}
+		
+		if($GROUP_PS['forum_prem'][$result['fid']]['post_remove'])
+			$remove = true; 
+		elseif($GROUP_PS['forum_prem'][$result['fid']]['post_remove_your']){
+			if($userROW['status'] == $row['author_id']) 
+				$remove = true; 
+			else 
+				$remove = false;
+		}
+		
+		$send = $GROUP_PS['forum_prem'][$result['fid']]['post_send'];
 		
 		$tEntry[] = array(
 			'i' => $i,
@@ -183,6 +197,9 @@
 				'time' => $row['e_date'],
 				'edited_by' => $row['who_e_author']
 			),
+			'modify' => $modify,
+			'remove' => $remove,
+			'send' => $send,
 			'del_link' => link_del_post($row['pid']),
 			'edit_link' => link_edit_post($row['pid']),
 			'tc' => ($result['uid'] == $row['uid'])?1:0,
@@ -207,6 +224,7 @@
 			'complaints_link' => link_complaints($row['pid']),
 			'date' => $row['c_data'],
 			'post_id' => $row['pid'],
+			'author_id' => $row['author_id'],
 			'author' => $row['author'],
 			'profile_link' => link_profile($row['uid'], '', $row['name']),
 			'reputation_link' => link_reputation($row['uid']),
@@ -234,7 +252,7 @@
 			'message' => bb_codes($row['message']),
 			'signature' =>  bb_codes($row['signature']),
 			'num_post' =>  $row['int_post'],
-			'userstatus' => $userstatus,
+			'userstatus' => $GROUP_PERM[$row['status']]['name'],
 		);
 	}
 	
@@ -283,7 +301,7 @@
 		'forum_link' => link_forum($result['fid']),
 		'forum_name' => $result['Ftitle'],
 		'subject' => $result['Ttitle'],
-		'group_perm' => $group_perm,
+		'GROUP_PS' => $GROUP_PS['forum_prem'][$result['fid']],
 		'local' => array(
 				'num_guest_loc' => $viewers['num_guest_loc'],
 				'num_user_loc' => $viewers['num_user_loc'],
