@@ -3,7 +3,7 @@
 		<p class="pagelink conl">{% if (pages.true) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages.print }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p> 
 		<p class="postlink conr">{% if ((group_perm.replies and state == 'open') or (group_perm.modunit)) %}<a href='{{ addpost }}'>Добавить сообщение</a>{% endif %}</p>
 		<ul><li><a href='{{ home_link }}'>Список</a>&nbsp;</li><li>&raquo;&nbsp;<a href='{{ forum_link }}'>{{ forum_name }}</a>&nbsp;</li><li>&raquo;&nbsp;{{ subject }}</li></ul>
-		<div class="clearer"></div> 
+		<div class="clearer"></div> {{ GROUP_PS['forum_prem'][3]['forum_read'] }} 
 	</div> 
 </div> 
 <div id="msg" class="block"> 

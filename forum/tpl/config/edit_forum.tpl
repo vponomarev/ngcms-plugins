@@ -103,9 +103,33 @@
 						</td>
 					</tr>
 					<tr class="contentEntry1">
-						<td><strong>Отвечать в темах</strong></td><td>-</td>
+						<td><strong>Добавлять посты</strong></td><td>-</td>
 						<td>
 							{{ entry.post_send }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Редактировать посты</strong></td><td>-</td>
+						<td>
+							{{ entry.post_modify }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Редактировать свои посты</strong></td><td>-</td>
+						<td>
+							{{ entry.post_modify_your }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Удалять посты</strong></td><td>-</td>
+						<td>
+							{{ entry.post_remove }}
+						</td>
+					</tr>
+					<tr class="contentEntry1">
+						<td><strong>Удалять свои посты</strong></td><td>-</td>
+						<td>
+							{{ entry.post_remove_your }}
 						</td>
 					</tr>
 				</table>

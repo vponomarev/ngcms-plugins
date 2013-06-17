@@ -49,11 +49,6 @@
 			return redirect_forum(link_topic($pid, 'pid'));
 	}
 	
-	checkPermission_forum();
-	
-	if(empty($group_perm['read']))
-		return $output = information('Доступ закрыт', $title = 'Информация');
-	
 	$limitCount = intval(pluginGetVariable('forum', 'topic_per_page'));
 	
 	if (($limitCount < 2) or ($limitCount > 2000)) $limitCount = 2;
@@ -97,10 +92,12 @@
 	if(empty($result))
 		return $output = information('Этой темы не существует', $title = 'Информация');
 	
+	moderators_forum($result['moderators']);
+	if(empty($GROUP_PS['forum_prem'][$result['fid']]['topic_read']))
+		return $output = permissions_forum('Доступ в тему запрещен');
+	
 	$SYSTEM_FLAGS['info']['title']['item'] = $result['Ftitle'];
 	$SYSTEM_FLAGS['info']['title']['name_topic'] = $result['Ttitle'];
-	checkPermission_forum($result['moderators']);
-	//print "<pre>".var_export($group_perm, true)."</pre>";
 	if(isset($search))
 		$count_2 = $mysql->result('SELECT COUNT(*) FROM `'.prefix.'_forum_posts` AS p WHERE p.`tid` = '.securemysql($id).' '.$search);
 	else 
