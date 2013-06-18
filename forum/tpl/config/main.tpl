@@ -11,7 +11,7 @@
 		<tr align="center">
 			<td width="100%" class="contentNav" align="center" style="background-repeat: no-repeat; background-position: left;">
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum'" value="Общие" class="navbutton" />
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=permission'" value="Группы" class="navbutton" />
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=group'" value="Группы" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ads'" value="Объявления" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=rules'" value="Правила" class="navbutton" />
 				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_forum'" value="Список форумов" class="navbutton" />

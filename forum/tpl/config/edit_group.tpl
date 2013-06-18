@@ -5,11 +5,11 @@
 		{% endfor %}
 		<tr>
 			<td width="50%" class="contentEntry1">Наименование группы:<br /><small></small></td>
-			<td width="50%" class="contentEntry2"><input type="text" size="80" name="GROUP_PERM[{{ id }}][name]" value="{{ name }}" /></td>
+			<td width="50%" class="contentEntry2"><input type="text" size="80" name="name" value="{{ name }}" /></td>
 		</tr>
 		<tr>
 			<td width="50%" class="contentEntry1">Цвет</td>
-			<td width="50%" class="contentEntry2"><input type="text" size="80" name="GROUP_PERM[{{ id }}][color]" value="{{ color }}" /></td>
+			<td width="50%" class="contentEntry2"><input type="text" size="80" name="color" value="{{ color }}" /></td>
 		</tr>
 		<tr>
 			<td width="50%" class="contentEntry1">Чтение форума<br /><small></small></td>

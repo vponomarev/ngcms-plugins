@@ -32,8 +32,8 @@ switch ($_REQUEST['action']) {
 	case 'list_complaints': list_complaints(); break;
 	case 'closed_complaints': closed_complaints(); break;
 	
-	case 'permission': permission(); break;
-	case 'edit_permission': edit_permission(); break;
+	case 'group': group(); break;
+	case 'edit_group': edit_group(); break;
 	
 	case 'list_news': list_news(); break;
 	case 'new_news': new_news(); break;
@@ -49,30 +49,35 @@ switch ($_REQUEST['action']) {
 	default: general();
 }
 
-function edit_permission(){
+function edit_group(){
 	global $plugin, $twig;
 	
 	$id = intval($_REQUEST['id']);
 	if(!isset($id) & $id <> '')
-		redirect_forum_config('?mod=extra-config&plugin=forum&action=permission');
+		redirect_forum_config('?mod=extra-config&plugin=forum&action=group');
 	
 	include_once(dirname(__FILE__).'/includes/security.php');
 	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(FORUM_CACHE.'/permission.php');
-	
+	include_once(dirname(__FILE__).'/includes/sqlite.php');
 	
 	//print "<pre>".var_export($GROUP_PERM, true)."</pre>";
-	$tpath = locatePluginTemplates(array('main', 'edit_permission'), $plugin, 1, '', 'config');
-	$xt = $twig->loadTemplate($tpath['edit_permission'].'edit_permission.tpl');
+	$tpath = locatePluginTemplates(array('main', 'edit_group'), $plugin, 1, '', 'config');
+	$xt = $twig->loadTemplate($tpath['edit_group'].'edit_group.tpl');
 	
+	$GROUP_PERM = $sqlite_forum->record('SELECT * from _group WHERE group_id = '.$id.' LIMIT 1');
+	print "<pre>".var_export($_REQUEST, true)."</pre>";
 	
+	$name = isset($_REQUEST['name'])?secure_html(trim($_REQUEST['name'])):secure_html(trim($GROUP_PERM['name']));
+	$color = isset($_REQUEST['color'])?secure_html(trim($_REQUEST['color'])):secure_html(trim($GROUP_PERM['color']));
+	$read = isset($_REQUEST['read'])?secure_html(trim($_REQUEST['read'])):secure_html(trim($GROUP_PERM['read']));
+	$news = isset($_REQUEST['news'])?secure_html(trim($_REQUEST['news'])):secure_html(trim($GROUP_PERM['news']));
+	$search = isset($_REQUEST['search'])?secure_html(trim($_REQUEST['search'])):secure_html(trim($GROUP_PERM['search']));
+	$pm = isset($_REQUEST['pm'])?secure_html(trim($_REQUEST['pm'])):secure_html(trim($GROUP_PERM['pm']));
 	
 	if (isset($_REQUEST['submit'])){
 		if(empty($error_text)){
-			$merger = array_merge($GROUP_PERM[$id], secureinput($_REQUEST['GROUP_PERM'][$id]));
-			$GROUP_PERM[$id] = $merger;
-			file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$GROUP_PERM = '.var_export($GROUP_PERM, true).';');
-			redirect_forum_config('?mod=extra-config&plugin=forum&action=permission');
+			$sqlite_forum->query('UPDATE _group SET name = \''.$name.'\', color = \''.$color.'\', read = '.$read.', news = '.$news.', search = '.$search.', pm = '.$pm.' WHERE group_id = '.$id);
+			//redirect_forum_config('?mod=extra-config&plugin=forum&action=group');
 		}
 	}
 	
@@ -83,12 +88,12 @@ function edit_permission(){
 	
 	$tVars = array(
 		'id' => $id,
-		'name' => $GROUP_PERM[$id]['name'],
-		'color' => $GROUP_PERM[$id]['color'],
-		'read' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$id.'][read]', $GROUP_PERM[$id]['read']),
-		'news' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$id.'][news]', $GROUP_PERM[$id]['news']),
-		'search' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$id.'][search]', $GROUP_PERM[$id]['search']),
-		'pm' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$id.'][pm]', $GROUP_PERM[$id]['pm']),
+		'name' => $name,
+		'color' => $color,
+		'read' => MakeDropDown(array(false => 'нет', true => 'да'), 'read', $read),
+		'news' => MakeDropDown(array(false => 'нет', true => 'да'), 'news]', $news),
+		'search' => MakeDropDown(array(false => 'нет', true => 'да'), 'search', $search),
+		'pm' => MakeDropDown(array(false => 'нет', true => 'да'), 'pm', $pm),
 		'list_error' => $error_input,
 	);
 	
@@ -102,81 +107,44 @@ function edit_permission(){
 	print $xg->render($tVars);
 }
 
-function permission()
+function group()
 {global $plugin, $twig;
 	
 	
 	include_once(dirname(__FILE__).'/includes/security.php');
 	include_once(dirname(__FILE__).'/includes/constants.php');
+	include_once(dirname(__FILE__).'/includes/sqlite.php');
+	
 	include_once(FORUM_CACHE.'/permission.php');
 	
-	$tpath = locatePluginTemplates(array('main', 'permission'), $plugin, 1, '', 'config');
-	$xt = $twig->loadTemplate($tpath['permission'].'permission.tpl');
+	$tpath = locatePluginTemplates(array('main', 'group'), $plugin, 1, '', 'config');
+	$xt = $twig->loadTemplate($tpath['group'].'group.tpl');
 	
-	if(file_exists(FORUM_CACHE.'/permission.php'))
-		include(FORUM_CACHE.'/permission.php');
-	else {
-		$GROUP_PERM = array('0' => 
-			array(
-				'name' => 'Гость',
-				'read' => true, 
-				'color' => 'red', 
-				'news' => '1',
-				'search' => '1',
-				'pm' => '1',
-			),'1' => 
-			array(
-				'name' => 'Администратор',
-				'read' => true, 
-				'color' => 'red', 
-				'news' => '1',
-				'search' => '1',
-				'pm' => '1',
-			),'2' => 
-			array(
-				'name' => 'Редактор',
-				'read' => true, 
-				'color' => 'green', 
-				'news' => '1',
-				'search' => '1',
-				'pm' => '1',
-			),'3' => 
-			array(
-				'name' => 'Журналист',
-				'read' => true, 
-				'color' => 'blue', 
-				'news' => '1',
-				'search' => '1',
-				'pm' => '1',
-			),'4' => 
-			array(
-				'name' => 'Комментатор',
-				'read' => true, 
-				'color' => 'gold', 
-				'news' => '1',
-				'search' => '1',
-				'pm' => '1',
-			),'5' => 
-			array(
-				'name' => 'Боты',
-				'read' => true, 
-				'color' => 'red', 
-				'news' => '1',
-				'search' => '1',
-				'pm' => '1',
-			),'moderators' => 
-			array(
-				'name' => 'Модератор',
-			)
-		);
-		file_put_contents(FORUM_CACHE.'/permission.php', '<?php'."\n\n".'$GROUP_PERM = '.var_export($GROUP_PERM, true).';');
+	if(!file_exists(FORUM_CACHE.'/forum.db')){
+		$sqlite_forum->query("CREATE TABLE _group 
+			(group_id INTEGER,
+			name TEXT,
+			color TEXT,
+			read INTEGER,
+			news INTEGER,
+			search INTEGER,
+			pm INTEGER);
+		");
+		
+	
+		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('0', 'Гость', 'red', '1', '1', '1', '1')");
+		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('1', 'Администратор', 'red', '1', '1', '1', '1')");
+		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('2', 'Редактор', 'red', '1', '1', '1', '1')");
+		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('3', 'Журналист', 'blue', '1', '1', '1', '1')");
+		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('4', 'Комментатор', 'gold', '1', '1', '1', '1')");
+		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('5', 'Бот', 'red', '1', '1', '1', '1')");
 	}
 	
-	foreach ($GROUP_PERM as $key => $value){
-		//print "<pre>".var_export($key, true).'-'.var_export($value, true)."</pre>";
+	foreach ($sqlite_forum->select('SELECT * from _group') as  $row){
+		print "<pre>".var_export($row, true)."</pre>";
 		$tEntry[] = array(
-			'id' => $key,
-			'name' => $value['name']
+			'id' => $row['group_id'],
+			'name' => $row['name']
 		);
 	}
 	
@@ -468,6 +436,34 @@ function edit_forum(){
 	$moderators = isset($_REQUEST['moderators'])?secure_html(trim($_REQUEST['moderators'])):secure_html(trim($forum['moderators']));
 	$parent = isset($_REQUEST['parent'])?(int)$_REQUEST['parent']:$forum['parent'];
 	
+	if(!file_exists(FORUM_CACHE.'/forum.db')){
+		$db = sqlite_open(FORUM_CACHE.'/forum.db');
+		if (!$db) exit("Невозможно создать базу данных!"); 
+		
+		$query_table = sqlite_query($db, 
+			'CREATE TABLE permission(
+				id INTEGER PRIMARY KEY,
+				user_id INTEGER
+				forum_id INTEGER
+				forum_read INTEGER,
+				topic_read INTEGER,
+				topic_send INTEGER,
+				topic_modify INTEGER,
+				topic_modify_your INTEGER,
+				topic_closed INTEGER,
+				topic_closed_your INTEGER,
+				topic_remove INTEGER,
+				topic_remove_your INTEGER,
+				post_send INTEGER,
+				post_modify INTEGER,
+				post_modify_your INTEGER,
+				post_remove INTEGER,
+				post_remove_your INTEGER
+			);
+		');
+		if (!$query_table) exit("Невозможно создать таблицу в базе данных!");
+	}
+	
 	if (isset($_REQUEST['submit'])){
 		if(empty($name)) $error_text[] = 'Название форума не заполнено';
 		
@@ -536,7 +532,7 @@ function edit_forum(){
 		);
 	}
 	
-	print "<pre>".var_export($GROUP_PERM, true)."</pre>";
+	//print "<pre>".var_export($GROUP_PERM, true)."</pre>";
 	foreach ($GROUP_PERM as $key => $value){
 		//print "<pre>".var_export($key, true).' --'.var_export($value, true)."</pre>";
 		$tEntry2[] = array(
