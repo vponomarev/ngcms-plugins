@@ -10,18 +10,18 @@ class sqlite_forum {
 		$this->connect = sqlite_open(FORUM_CACHE.'/'.$db) or die('Нет подключения к БД');
 	}
 	
-	function select($sql, $assocMode = 1) {
+	function select($sql, $assocMode = 1){
 		$query = @sqlite_query($sql, $this->connect);
 		
 		$result = array();
-		switch ($assocMode) {
+		switch ($assocMode){
 			case -1: $am = MYSQL_NUM; break;
 			case  1: $am = MYSQL_ASSOC; break;
 			case  0:
 			default: $am = MYSQL_BOTH;
 		}
-
-		while($item = sqlite_fetch_array($query, $am)) {
+		
+		while($item = sqlite_fetch_array($query, $am)){
 			$result[] = $item;
 		}
 		return $result;
