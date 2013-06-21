@@ -10,7 +10,7 @@ if (!defined('NGCMS')) die ('HAL');
 plugins_load_config();
 
 $db_update = array(
-	/* array(
+	array(
 		'table'		=>	'forum_complaints',
 		'action'	=>	'drop',
 	),
@@ -43,13 +43,25 @@ $db_update = array(
 		'action'	=>	'drop',
 	),
 	array(
+		'table'		=>	'forum_group',
+		'action'	=>	'drop',
+	),
+	array(
+		'table'		=>	'forum_moderators',
+		'action'	=>	'drop',
+	),
+	array(
+		'table'		=>	'forum_permission',
+		'action'	=>	'drop',
+	),
+	array(
 		'table'		=>	'forum_subscriptions',
 		'action'	=>	'drop',
 	),
 	array(
 		'table'		=>	'forum_reputation',
 		'action'	=>	'drop',
-	), */
+	),
 	array(
 		'table'  => 'news',
 		'action' => 'modify',
