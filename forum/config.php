@@ -50,43 +50,41 @@ switch ($_REQUEST['action']) {
 }
 
 function edit_group(){
-	global $plugin, $twig;
+	global $plugin, $twig, $mysql;
 	
 	$id = intval($_REQUEST['id']);
 	if(!isset($id) & $id <> '')
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=group');
 	
 	include_once(dirname(__FILE__).'/includes/security.php');
-	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/sqlite.php');
 	
 	//print "<pre>".var_export($group, true)."</pre>";
 	$tpath = locatePluginTemplates(array('main', 'edit_group'), $plugin, 1, '', 'config');
 	$xt = $twig->loadTemplate($tpath['edit_group'].'edit_group.tpl');
 	
-	$group = $sqlite_forum->record('SELECT * from _group WHERE group_id = '.$id.' LIMIT 1');
+	$group = $mysql->record('SELECT * from '.prefix.'_forum_group WHERE id = '.$id.' LIMIT 1');
 	//print "<pre>".var_export($_REQUEST, true)."</pre>";
 	
-	$name = isset($_REQUEST['name'])?secure_html(trim($_REQUEST['name'])):secure_html(trim($group['name']));
-	$color = isset($_REQUEST['color'])?secure_html(trim($_REQUEST['color'])):secure_html(trim($group['color']));
-	$read = isset($_REQUEST['read'])?intval(trim($_REQUEST['read'])):intval(trim($group['read']));
-	$news = isset($_REQUEST['news'])?intval(trim($_REQUEST['news'])):intval(trim($group['news']));
-	$search = isset($_REQUEST['search'])?intval(trim($_REQUEST['search'])):intval(trim($group['search']));
-	$pm = isset($_REQUEST['pm'])?intval(trim($_REQUEST['pm'])):intval(trim($group['pm']));
+	$group_name = isset($_REQUEST['group_name'])?secure_html(trim($_REQUEST['group_name'])):secure_html(trim($group['group_name']));
+	$group_color = isset($_REQUEST['group_color'])?secure_html(trim($_REQUEST['group_color'])):secure_html(trim($group['group_color']));
+	$group_read = isset($_REQUEST['group_read'])?intval(trim($_REQUEST['group_read'])):intval(trim($group['group_read']));
+	$group_news = isset($_REQUEST['group_news'])?intval(trim($_REQUEST['group_news'])):intval(trim($group['group_news']));
+	$group_search = isset($_REQUEST['group_search'])?intval(trim($_REQUEST['group_search'])):intval(trim($group['group_search']));
+	$group_pm = isset($_REQUEST['group_pm'])?intval(trim($_REQUEST['group_pm'])):intval(trim($group['group_pm']));
 	
 	if (isset($_REQUEST['submit'])){
-		if(empty($name)) $error_text[] = 'Название группы обязательно для заполнения';
-		if(empty($color)) $error_text[] = 'Забыли указать цвет';
+		if(empty($group_name)) $error_text[] = 'Название группы обязательно для заполнения';
+		if(empty($group_color)) $error_text[] = 'Забыли указать цвет';
 		
 		if(empty($error_text)){
-			$test = $sqlite_forum->query('UPDATE _group SET 
-				name = '.securesqlite($name).', 
-				color = '.securesqlite($color).', 
-				read = '.securesqlite($read).', 
-				news = '.securesqlite($news).', 
-				search = '.securesqlite($search).', 
-				pm = '.securesqlite($pm).' 
-				WHERE group_id = '.securesqlite($id)
+			$test = $mysql->query('UPDATE '.prefix.'_forum_group SET 
+				group_name = '.securesqlite($group_name).', 
+				group_color = '.securesqlite($group_color).', 
+				group_read = '.securesqlite($group_read).', 
+				group_news = '.securesqlite($group_news).', 
+				group_search = '.securesqlite($group_search).', 
+				group_pm = '.securesqlite($group_pm).' 
+				WHERE id = '.securesqlite($id)
 			);
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=group');
 		}
@@ -98,13 +96,12 @@ function edit_group(){
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
 	
 	$tVars = array(
-		'id' => $id,
-		'name' => $name,
-		'color' => $color,
-		'read' => MakeDropDown(array(false => 'нет', true => 'да'), 'read', $read),
-		'news' => MakeDropDown(array(false => 'нет', true => 'да'), 'news]', $news),
-		'search' => MakeDropDown(array(false => 'нет', true => 'да'), 'search', $search),
-		'pm' => MakeDropDown(array(false => 'нет', true => 'да'), 'pm', $pm),
+		'group_name' => $group_name,
+		'group_color' => $group_color,
+		'group_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_read', $group_read),
+		'group_news' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_news', $group_news),
+		'group_search' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_search', $group_search),
+		'group_pm' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_pm', $group_pm),
 		'list_error' => $error_input,
 	);
 	
@@ -119,45 +116,25 @@ function edit_group(){
 }
 
 function group()
-{global $plugin, $twig;
+{global $plugin, $twig, $mysql;
 	
 	
 	include_once(dirname(__FILE__).'/includes/security.php');
-	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/sqlite.php');
 	
 	$tpath = locatePluginTemplates(array('main', 'group'), $plugin, 1, '', 'config');
 	$xt = $twig->loadTemplate($tpath['group'].'group.tpl');
 	
-	$query_table = $sqlite_forum->query("CREATE TABLE _group 
-		(group_id INTEGER,
-		name TEXT,
-		color TEXT,
-		read INTEGER,
-		news INTEGER,
-		search INTEGER,
-		pm INTEGER);
-	");
-	
-	if($query_table){
-		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('0', 'Гость', 'red', '1', '1', '1', '1')");
-		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('1', 'Администратор', 'red', '1', '1', '1', '1')");
-		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('2', 'Редактор', 'red', '1', '1', '1', '1')");
-		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('3', 'Журналист', 'blue', '1', '1', '1', '1')");
-		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('4', 'Комментатор', 'gold', '1', '1', '1', '1')");
-		$sqlite_forum->query("INSERT INTO _group (group_id, name, color, read, news, search, pm) VALUES ('5', 'Бот', 'red', '1', '1', '1', '1')");
-	}
-	
-	foreach ($sqlite_forum->select('SELECT * from _group') as  $row){
+	foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as  $row){
 		//print "<pre>".var_export($row, true)."</pre>";
 		$tEntry[] = array(
-			'id' => $row['group_id'],
-			'name' => $row['name'],
-			'color' => $row['color'],
-			'read' => $row['read'],
-			'news' => $row['news'],
-			'search' => $row['search'],
-			'pm' => $row['pm'],
+			'id' => $row['id'],
+			'group_id' => $row['group_id'],
+			'group_name' => $row['group_name'],
+			'group_color' => $row['group_color'],
+			'group_read' => $row['group_read'],
+			'group_news' => $row['group_news'],
+			'group_search' => $row['group_search'],
+			'group_pm' => $row['group_pm'],
 		);
 	}
 	
@@ -429,54 +406,41 @@ function edit_forum(){
 	
 	include_once(dirname(__FILE__).'/includes/security.php');
 	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/sqlite.php');
 	include_once(dirname(__FILE__).'/includes/cache.php');
-	include_once(FORUM_CACHE.'/permission.php');
 	
 	$tpath = locatePluginTemplates(array('main', 'edit_forum'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['edit_forum'].'edit_forum.tpl');
 	
-	foreach ($sqlite_forum->select('SELECT * from _moderators') as  $row){
-		//print "<pre>".var_export($row, true)."</pre>";
-	}
 	
-	$sqlite_forum->query("CREATE TABLE _permission 
-		(id INTEGER PRIMARY KEY,
-		user_id INTEGER
-		forum_id INTEGER
-		forum_read INTEGER,
-		topic_read INTEGER,
-		topic_send INTEGER,
-		topic_modify INTEGER,
-		topic_modify_your INTEGER,
-		topic_closed INTEGER,
-		topic_closed_your INTEGER,
-		topic_remove INTEGER,
-		topic_remove_your INTEGER,
-		post_send INTEGER,
-		post_modify INTEGER,
-		post_modify_your INTEGER,
-		post_remove INTEGER,
-		post_remove_your INTEGER);
-	");
 	
 	$id = intval($_REQUEST['id']);
 	if(empty($id))
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 	
 	$forum = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
-	$permission = $sqlite_forum->record('SELECT * from _permission WHERE forum_id = '.securesqlite($id).' LIMIT 1');
-	//$moderators = $sqlite_forum->record('SELECT * from _moderators WHERE m_forum_id = '.securesqlite($id).' LIMIT 1');
-	foreach ($sqlite_forum->select('SELECT * from _moderators WHERE m_forum_id = '.securesqlite($id).'') as $rew){
-		print "<pre>".var_export($rew, true)."</pre>";
+	$forum_perm = $mysql->record('SELECT * from '.prefix.'_forum_permission WHERE forum_id = '.securemysql($id).' LIMIT 1');
+	foreach ($mysql->select('SELECT m_user_name from '.prefix.'_forum_moderators WHERE m_forum_id = '.securemysql($id)) as $row){
+		print "<pre>".var_export($row, true)."</pre>";
+		$forum_moderators[] = $row['m_user_name'];
+		
 	}
 	
+	$forum_moderators = implode(', ',$forum_moderators);
+	print "<pre>".var_export($forum_moderators, true)."</pre>";
+	$forum_name = isset($_REQUEST['forum_name'])?secure_html(trim($_REQUEST['forum_name'])):'';
+	$forum_description = isset($_REQUEST['forum_description'])?secure_html(trim($_REQUEST['forum_description'])):'';
+	$forum_keywords = isset($_REQUEST['forum_keywords'])?secure_html(trim($_REQUEST['forum_keywords'])):'';
+	$forum_moderators = isset($_REQUEST['forum_moderators'])?secure_html(trim($_REQUEST['forum_moderators'])):$forum_moderators;
 	
-	$name = isset($_REQUEST['name'])?secure_html(trim($_REQUEST['name'])):secure_html(trim($forum['title']));
-	$description = isset($_REQUEST['description'])?secure_html(trim($_REQUEST['description'])):secure_html(trim($forum['description']));
-	$keywords = isset($_REQUEST['keywords'])?secure_html(trim($_REQUEST['keywords'])):secure_html(trim($forum['keywords']));
-	$moderators = isset($_REQUEST['moderators'])?secure_html(trim($_REQUEST['moderators'])):secure_html(trim($moderators['moderators']));
-	$parent = isset($_REQUEST['parent'])?(int)$_REQUEST['parent']:$forum['parent'];
+	$m_topic_send = isset($_REQUEST['m_topic_send'])?secure_html(trim($_REQUEST['m_topic_send'])):'';
+	$m_topic_modify = isset($_REQUEST['m_topic_modify'])?secure_html(trim($_REQUEST['m_topic_modify'])):'';
+	$m_topic_closed = isset($_REQUEST['m_topic_closed'])?secure_html(trim($_REQUEST['m_topic_closed'])):'';
+	$m_topic_remove = isset($_REQUEST['m_topic_remove'])?secure_html(trim($_REQUEST['m_topic_remove'])):'';
+	$m_post_send = isset($_REQUEST['m_post_send'])?secure_html(trim($_REQUEST['m_post_send'])):'';
+	$m_post_modify = isset($_REQUEST['m_post_modify'])?secure_html(trim($_REQUEST['m_post_modify'])):'';
+	$m_post_remove = isset($_REQUEST['m_post_remove'])?secure_html(trim($_REQUEST['m_post_remove'])):'';
+	
+	$forum_perm = is_array($_REQUEST['forum_perm'])?$_REQUEST['forum_perm']:array();
 	
 	if (isset($_REQUEST['submit'])){
 		if(empty($name)) $error_text[] = 'Название форума не заполнено';
@@ -537,9 +501,14 @@ function edit_forum(){
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
+	
+	/* foreach ($sqlite_forum->select('SELECT * from _moderators') as  $row){
+		//print "<pre>".var_export($row, true)."</pre>";
+	} */
+	
 	//print "<pre>".var_export($_REQUEST['GROUP_PERM'], true)."</pre>";
 	foreach ($mysql-> select("SELECT id, title FROM ".prefix."_forum_forums WHERE parent = '0' ORDER BY position", 1 ) as $row){
-		$tEntry[] = array(
+		$tEntry2[] = array(
 			'id'		=>	$row['id'],
 			'title'		=>	$row['title'],
 			'id_set'	=> intval($parent)
@@ -547,9 +516,9 @@ function edit_forum(){
 	}
 	
 	//print "<pre>".var_export($GROUP_PERM, true)."</pre>";
-	foreach ($sqlite_forum->select('SELECT * from _group') as $row){
+	/* foreach ($sqlite_forum->select('SELECT * from _group') as $row){
 		print "<pre>".var_export($row, true)."</pre>";
-		$tEntry2[] = array(
+		$tEntry[] = array(
 			'id' => $row['group_id'],
 			'name' => $row['name'],
 			
@@ -568,7 +537,7 @@ function edit_forum(){
 			'post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][post_remove]', $GROUP_PERM[$key]['forum_prem'][$id]['post_remove']),
 			'post_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'GROUP_PERM['.$key.'][forum_prem]['.$id.'][post_remove_your]', $GROUP_PERM[$key]['forum_prem'][$id]['post_remove_your']),
 		);
-	}
+	} */
 	
 	if(!$_REQUEST['moderators']){
 		$moderators = array();
@@ -586,12 +555,23 @@ function edit_forum(){
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
 	
 	$tVars = array(
-		'name' => $name,
-		'description' => $description,
-		'keywords' => $keywords,
-		'moderators' => $moderators,
-		'list_forum' => $tEntry,
-		'list_group' => $tEntry2,
+		'forum_name' => $forum_name,
+		'forum_description' => $forum_description,
+		'forum_keywords' => $forum_keywords,
+		'forum_moderators' => $forum_moderators,
+		'forum_title' => $forum['title'],
+		'forum_id' => $forum['id'],
+		'list_group' => $tEntry,
+		'list_forum' => $tEntry2,
+		
+		'm_topic_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_send', $m_topic_send),
+		'm_topic_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_modify', $m_topic_modify),
+		'm_topic_closed' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_closed', $m_topic_closed),
+		'm_topic_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_remove', $m_topic_remove),
+		'm_post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_send', $m_post_send),
+		'm_post_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_modify', $m_post_modify),
+		'm_post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_remove', $m_post_remove),
+		
 		'list_error' => $error_input,
 	);
 	
@@ -610,24 +590,9 @@ global $twig, $plugin, $mysql;
 	include_once(dirname(__FILE__).'/includes/security.php');
 	include_once(dirname(__FILE__).'/includes/constants.php');
 	include_once(dirname(__FILE__).'/includes/cache.php');
-	include_once(dirname(__FILE__).'/includes/sqlite.php');
 	
 	$tpath = locatePluginTemplates(array('main', 'send_forum'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['send_forum'].'send_forum.tpl');
-	
-	$sqlite_forum->query("CREATE TABLE _moderators 
-		(id INTEGER PRIMARY KEY,
-		m_user_id INTEGER,
-		m_user_name TEXT,
-		m_forum_id INTEGER,
-		m_topic_send INTEGER,
-		m_topic_modify INTEGER,
-		m_topic_closed INTEGER,
-		m_topic_remove INTEGER,
-		m_post_send INTEGER,
-		m_post_modify INTEGER,
-		m_post_remove INTEGER);
-	");
 	
 	$id = intval($_REQUEST['id']);
 	if(empty($id))
@@ -635,10 +600,10 @@ global $twig, $plugin, $mysql;
 	
 	$forum = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
 	
-	$name = isset($_REQUEST['name'])?secure_html(trim($_REQUEST['name'])):'';
-	$description = isset($_REQUEST['description'])?secure_html(trim($_REQUEST['description'])):'';
-	$keywords = isset($_REQUEST['keywords'])?secure_html(trim($_REQUEST['keywords'])):'';
-	$moderators = isset($_REQUEST['moderators'])?secure_html(trim($_REQUEST['moderators'])):'';
+	$forum_name = isset($_REQUEST['forum_name'])?secure_html(trim($_REQUEST['forum_name'])):'';
+	$forum_description = isset($_REQUEST['forum_description'])?secure_html(trim($_REQUEST['forum_description'])):'';
+	$forum_keywords = isset($_REQUEST['forum_keywords'])?secure_html(trim($_REQUEST['forum_keywords'])):'';
+	$forum_moderators = isset($_REQUEST['forum_moderators'])?secure_html(trim($_REQUEST['forum_moderators'])):'';
 	
 	$m_topic_send = isset($_REQUEST['m_topic_send'])?secure_html(trim($_REQUEST['m_topic_send'])):'';
 	$m_topic_modify = isset($_REQUEST['m_topic_modify'])?secure_html(trim($_REQUEST['m_topic_modify'])):'';
@@ -648,11 +613,13 @@ global $twig, $plugin, $mysql;
 	$m_post_modify = isset($_REQUEST['m_post_modify'])?secure_html(trim($_REQUEST['m_post_modify'])):'';
 	$m_post_remove = isset($_REQUEST['m_post_remove'])?secure_html(trim($_REQUEST['m_post_remove'])):'';
 	
+	$forum_perm = is_array($_REQUEST['forum_perm'])?$_REQUEST['forum_perm']:array();
+	//print "<pre>".var_export($forum_perm, true)."</pre>";
 	if (isset($_REQUEST['submit'])){
-		if(empty($name)) $error_text[] = 'Название форума не заполнено';
+		if(empty($forum_name)) $error_text[] = 'Название форума не заполнено';
 		
-		if(isset($moderators) && $moderators){
-			$moder_array = array_map('trim', explode(',',$moderators));
+		if(isset($forum_moderators) && $forum_moderators){
+			$moder_array = array_map('trim', explode(',',$forum_moderators));
 			$moder_array = array_unique($moder_array);
 			$i=0;
 			foreach ($moder_array as $row){
@@ -669,12 +636,12 @@ global $twig, $plugin, $mysql;
 			$mysql->query('INSERT INTO '.prefix.'_forum_forums
 				(title, description, keywords, parent, position)
 				VALUES
-				('.db_squote($name).', '.db_squote($description).', '.db_squote($keywords).', '.intval($forum['id']).', '.intval($posit).')
+				('.db_squote($forum_name).', '.db_squote($forum_description).', '.db_squote($forum_keywords).', '.intval($forum['id']).', '.intval($posit).')
 			');
 			$forum_id = $mysql->lastid('forum_forums');
 			
 			foreach ($user as $row){
-				$sqlite_forum->query('INSERT INTO _moderators 
+				$mysql->query('INSERT INTO '.prefix.'_forum_moderators 
 					(
 						m_user_id,
 						m_user_name,
@@ -701,22 +668,73 @@ global $twig, $plugin, $mysql;
 				');
 			}
 			
+			foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as $row){
+				$mysql->query('INSERT INTO '.prefix.'_forum_permission 
+					(
+						group_id,
+						forum_id,
+						topic_read,
+						topic_send,
+						topic_modify,
+						topic_modify_your,
+						topic_closed,
+						topic_closed_your,
+						topic_remove,
+						topic_remove_your,
+						post_send,
+						post_modify,
+						post_modify_your,
+						post_remove,
+						post_remove_your
+					) VALUES (
+						'.$row['group_id'].',
+						'.$forum_id.',
+						'.secureinput($forum_perm[$row['group_id']]['topic_read']).',
+						'.secureinput($forum_perm[$row['group_id']]['topic_send']).',
+						'.secureinput($forum_perm[$row['group_id']]['topic_modify']).',
+						'.secureinput($forum_perm[$row['group_id']]['topic_modify_your']).',
+						'.secureinput($forum_perm[$row['group_id']]['topic_closed']).',
+						'.secureinput($forum_perm[$row['group_id']]['topic_closed_your']).',
+						'.secureinput($forum_perm[$row['group_id']]['topic_remove']).',
+						'.secureinput($forum_perm[$row['group_id']]['topic_remove_your']).',
+						'.secureinput($forum_perm[$row['group_id']]['post_send']).',
+						'.secureinput($forum_perm[$row['group_id']]['post_modify']).',
+						'.secureinput($forum_perm[$row['group_id']]['post_modify_your']).',
+						'.secureinput($forum_perm[$row['group_id']]['post_remove']).',
+						'.secureinput($forum_perm[$row['group_id']]['post_remove_your']).'
+					)
+				');
+			}
+			
 			generate_index_cache(true);
-			//redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
+			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
 	
-	if(!$_REQUEST['moderators']){
-		$moderators = array();
-		foreach (unserialize($forum['moderators']) as $row){
-			$moderators[] = $row['name'];
-		}
-		
-		$moderators = array_unique($moderators);
-		$moderators = implode(', ',$moderators);
-	}
+	//print "<pre>".var_export($forum_moderators, true)."</pre>";
 	
-	//print "<pre>".var_export($Smoder, true)."</pre>";
+	foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as $row){
+		//print "<pre>".var_export($row, true)."</pre>";
+		$tEntry[] = array(
+			'group_id' => $row['group_id'],
+			'group_name' => $row['group_name'],
+			
+			'forum_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
+			'topic_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
+			'topic_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
+			'topic_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
+			'topic_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
+			'topic_closed' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
+			'topic_closed_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
+			'topic_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
+			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
+			'post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_send]', $forum_perm[$row['group_id']]['post_send']),
+			'post_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
+			'post_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
+			'post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
+			'post_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
+		);
+	}
 	
 	$error_input = array();
 	if(isset($error_text) && is_array($error_text))
@@ -724,13 +742,13 @@ global $twig, $plugin, $mysql;
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
 	
 	$tVars = array(
-		'name' => $name,
-		'description' => $description,
-		'keywords' => $keywords,
-		'moderators' => $moderators,
-		'forum_name' => $forum['title'],
+		'forum_name' => $forum_name,
+		'forum_description' => $forum_description,
+		'forum_keywords' => $forum_keywords,
+		'forum_moderators' => $forum_moderators,
+		'forum_title' => $forum['title'],
 		'forum_id' => $forum['id'],
-		'list_forum' => $tEntry,
+		'list_group' => $tEntry,
 		
 		'm_topic_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_send', $m_topic_send),
 		'm_topic_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_modify', $m_topic_modify),
@@ -739,6 +757,9 @@ global $twig, $plugin, $mysql;
 		'm_post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_send', $m_post_send),
 		'm_post_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_modify', $m_post_modify),
 		'm_post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_remove', $m_post_remove),
+		
+
+		
 		'list_error' => $error_input,
 	);
 	

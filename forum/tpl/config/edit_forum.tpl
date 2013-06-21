@@ -16,30 +16,30 @@
 		</tr>
 		<tr>
 			<td width="50%" class="contentEntry1">Название форума:<br /><small></small></td>
-			<td width="50%" class="contentEntry2"><input type="text" size="80" name="name" value="{{ name }}" /></td>
+			<td width="50%" class="contentEntry2"><input type="text" size="80" name="forum_name" value="{{ forum_name }}" /></td>
 		</tr>
 		<tr>
 			<td width="50%" class="contentEntry1">Описание форума<br /><small></small></td>
-			<td width="50%" class="contentEntry2"><textarea name="description" cols="77" rows="4" />{{ description }}</textarea></td>
+			<td width="50%" class="contentEntry2"><textarea name="forum_description" cols="77" rows="4" />{{ forum_description }}</textarea></td>
 		</tr>
 		<tr>
 			<td width="50%" class="contentEntry1">Ключевые слова<br /><small></small></td>
-			<td width="50%" class="contentEntry2"><textarea name="keywords" cols="77" rows="4" />{{ keywords }}</textarea></td>
+			<td width="50%" class="contentEntry2"><textarea name="forum_keywords" cols="77" rows="4" />{{ forum_keywords }}</textarea></td>
 		</tr>
 		<tr>
 			<td width="50%" class="contentEntry1">Модераторы<br /><small>Укажите логины пользователей через запятую</small></td>
-			<td width="50%" class="contentEntry2"><input type="text" size="80" name="moderators" value="{{ moderators }}" /></td>
+			<td width="50%" class="contentEntry2"><input type="text" size="80" name="forum_moderators" value="{{ forum_moderators }}" /></td>
 		</tr>
 	</table>
 	<div id="userTabs">
 		<ul>
 			{% for entry in list_group %}
-				<li><a href="#userTabs-{{ entry.id }}">{{ entry.name }}</a></li>
+				<li><a href="#userTabs-{{ entry.forum_id }}">{{ entry.forum_name }}</a></li>
 			{% endfor %}
 		</ul>
 		{% for entry in list_group %}
 		<div id="userTabs-{{ entry.id }}">
-			<div><i>Управление правами группы пользователей: <b>{{ entry.name }}</b></i></div>
+			<div><i>Управление правами группы пользователей: <b>{{ entry.forum_name }}</b></i></div>
 			<br/>
 			<div class="pconf">
 				<h1></h1>
