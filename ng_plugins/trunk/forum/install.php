@@ -132,18 +132,76 @@ function plugin_forum_install($action) {
 			array('action' => 'cmodify', 'name' => 'e_date', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL DEFAULT "0"'),
 		)
 	),
-	
 	array(
 		'table'		=>	'forum_online',
 		'action'	=>	'cmodify',
 		'engine'	=> 'MyISAM',
 		'fields'	=>	array(
-			array('action' => 'cmodify', 'name' => 'sess_id', 'type' => 'char(255)', 'params' => 'default \'\''),
+			array('action' => 'cmodify', 'name' => 'sess_id', 'type' => 'char(255)', 'params' => 'DEFAULT \'\''),
 			array('action' => 'cmodify', 'name' => 'last_time', 'type' => 'char(255)', 'params' => 'DEFAULT \'0\''),
-			array('action' => 'cmodify', 'name' => 'ip', 'type' => 'varchar(15)', 'params' => 'default 0'),
-			array('action' => 'cmodify', 'name' => 'users_name', 'type' => 'varchar(100)', 'params' => 'default \'\''),
+			array('action' => 'cmodify', 'name' => 'ip', 'type' => 'varchar(15)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'users_name', 'type' => 'varchar(100)', 'params' => 'DEFAULT \'\''),
 			array('action' => 'cmodify', 'name' => 'users_id', 'type' => 'int(11)', 'params' => 'DEFAULT 0'),
-			array('action' => 'cmodify', 'name' => 'users_status', 'type' => 'tinyint(1)', 'params' => 'default 0'),
+			array('action' => 'cmodify', 'name' => 'users_status', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+		)
+	),
+	array(
+		'table'		=>	'forum_group',
+		'action'	=>	'cmodify',
+		'engine'	=> 'MyISAM',
+		'key'    => 'primary key(id)',
+		'fields'	=>	array(
+			array('action' => 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
+			array('action' => 'cmodify', 'name' => 'group_id', 'type' => 'int(11)', 'params' => 'UNSIGNED NOT NULL'),
+			array('action' => 'cmodify', 'name' => 'group_name', 'type' => 'varchar(100)', 'params' => 'NOT NULL'),
+			array('action' => 'cmodify', 'name' => 'group_color', 'type' => 'varchar(15)', 'params' => 'NOT NULL'),
+			array('action' => 'cmodify', 'name' => 'group_read', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'group_news', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'group_search', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'group_pm', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+		)
+	),
+	array(
+		'table'		=>	'forum_moderators',
+		'action'	=>	'cmodify',
+		'engine'	=> 'MyISAM',
+		'key'    => 'primary key(id)',
+		'fields'	=>	array(
+			array('action' => 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
+			array('action' => 'cmodify', 'name' => 'm_user_id', 'type' => 'int(11)', 'params' => 'UNSIGNED NOT NULL'),
+			array('action' => 'cmodify', 'name' => 'm_user_name', 'type' => 'varchar(100)', 'params' => 'NOT NULL'),
+			array('action' => 'cmodify', 'name' => 'm_forum_id', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'm_topic_send', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'm_topic_modify', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'm_topic_closed', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'm_topic_remove', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'm_post_send', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'm_post_modify', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'm_post_remove', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+		)
+	),
+	array(
+		'table'		=>	'forum_permission',
+		'action'	=>	'cmodify',
+		'engine'	=> 'MyISAM',
+		'key'    => 'primary key(id)',
+		'fields'	=>	array(
+			array('action' => 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
+			array('action' => 'cmodify', 'name' => 'group_id', 'type' => 'int(11)', 'params' => 'UNSIGNED NOT NULL'),
+			array('action' => 'cmodify', 'name' => 'forum_id', 'type' => 'int(11)', 'params' => 'UNSIGNED NOT NULL'),
+			array('action' => 'cmodify', 'name' => 'topic_read', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'topic_send', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'topic_modify', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'topic_modify_your', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'topic_closed', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'topic_closed_your', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'topic_remove', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'topic_remove_your', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'post_send', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'post_modify', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'post_modify_your', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'post_remove', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'post_remove_your', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
 		)
 	),
 	array(
@@ -229,6 +287,15 @@ function plugin_forum_install($action) {
 			
 			if($install){
 				if (fixdb_plugin_install('forum', $db_update, 'install', ($action=='autoapply')?true:false)) {
+					
+					if(!$mysql->result('SELECT 1 FROM '.prefix.'_forum_group')){
+						$mysql->query('INSERT INTO '.prefix.'_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'0\', \'Гость\', \'red\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO '.prefix.'_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'1\', \'Администратор\', \'red\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO '.prefix.'_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'2\', \'Редактор\', \'red\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO '.prefix.'_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'3\', \'Журналист\', \'blue\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO '.prefix.'_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'4\', \'Комментатор\', \'gold\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO '.prefix.'_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'5\', \'Бот\', \'red\', \'1\', \'1\', \'1\', \'1\')');
+					}
 					
 					if(!$mysql->record('SHOW INDEX FROM '.prefix.'_pm WHERE Key_name = \'count_pm\''))
 						$mysql->query('alter table '.prefix.'_pm add index count_pm (`to_id`, `viewed`, `folder`)');
