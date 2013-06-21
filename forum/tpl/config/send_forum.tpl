@@ -23,6 +23,10 @@
 			<td width="50%" class="contentEntry2"><textarea name="forum_keywords" cols="77" rows="4" />{{ forum_keywords }}</textarea></td>
 		</tr>
 		<tr>
+			<td width="50%" class="contentEntry1">Закрыть на пароль<br /><small></small></td>
+			<td width="50%" class="contentEntry2"><input type="text" size="80" name="forum_lock_passwd" value="{{ forum_lock_passwd }}" /></td>
+		</tr>
+		<tr>
 			<td width="50%" class="contentEntry1">Модераторы<br /><small>Укажите логины пользователей через запятую</small></td>
 			<td width="50%" class="contentEntry2"><input type="text" size="80" name="forum_moderators" value="{{ forum_moderators }}" /></td>
 		</tr>
@@ -73,7 +77,7 @@
 				<table width="100%" class="content">
 					<thead><tr class="contHead"><td><b>Действие</b></td><td><b>Описание</b></td><td width="90"><b>Доступ</b></td></td></thead>
 					<tr class="contentEntry1">
-						<td><strong>Просматривать форумы</strong></td><td>-</td>
+						<td><strong>Просматривать форум</strong></td><td>-</td>
 						<td>
 							{{ entry.forum_read }}
 						</td>
