@@ -6,7 +6,7 @@
 		<tr>
 			<td width="50%" class="contentEntry1">Отображение<br /><small></small></td>
 			<td width="50%" class="contentEntry2">
-				<select size=1 name="parent">
+				<select size=1 name="forum_parent">
 						{% for entry in list_forum %}
 							<option value="{{ entry.id }}" {% if (entry.id_set == entry.id) %}selected="selected"{% endif %}>{{ entry.title }}</option>
 						{% endfor %}
@@ -27,19 +27,51 @@
 			<td width="50%" class="contentEntry2"><textarea name="forum_keywords" cols="77" rows="4" />{{ forum_keywords }}</textarea></td>
 		</tr>
 		<tr>
+			<td width="50%" class="contentEntry1">Закрыть на пароль<br /><small></small></td>
+			<td width="50%" class="contentEntry2"><input type="text" size="80" name="forum_lock_passwd" value="{{ forum_lock_passwd }}" /></td>
+		</tr>
+		<tr>
 			<td width="50%" class="contentEntry1">Модераторы<br /><small>Укажите логины пользователей через запятую</small></td>
 			<td width="50%" class="contentEntry2"><input type="text" size="80" name="forum_moderators" value="{{ forum_moderators }}" /></td>
+		</tr>
+		<tr>
+			<td width="50%" class="contentEntry1">Создавать темы</td>
+			<td width="50%" class="contentEntry2">{{ m_topic_send }}</td>
+		</tr>
+		<tr>
+			<td width="50%" class="contentEntry1">Редактировать тему</td>
+			<td width="50%" class="contentEntry2">{{ m_topic_modify }}</td>
+		</tr>
+		<tr>
+			<td width="50%" class="contentEntry1">Закрывать тему</td>
+			<td width="50%" class="contentEntry2">{{ m_topic_closed }}</td>
+		</tr>
+		<tr>
+			<td width="50%" class="contentEntry1">Удалять тему</td>
+			<td width="50%" class="contentEntry2">{{ m_topic_remove }}</td>
+		</tr>
+		<tr>
+			<td width="50%" class="contentEntry1">Отвечать в темах</td>
+			<td width="50%" class="contentEntry2">{{ m_post_send }}</td>
+		</tr>
+		<tr>
+			<td width="50%" class="contentEntry1">Редактировать сообщения</td>
+			<td width="50%" class="contentEntry2">{{ m_post_modify }}</td>
+		</tr>
+		<tr>
+			<td width="50%" class="contentEntry1">Удалять сообщения</td>
+			<td width="50%" class="contentEntry2">{{ m_post_remove }}</td>
 		</tr>
 	</table>
 	<div id="userTabs">
 		<ul>
 			{% for entry in list_group %}
-				<li><a href="#userTabs-{{ entry.forum_id }}">{{ entry.forum_name }}</a></li>
+				<li><a href="#userTabs-{{ entry.group_id }}">{{ entry.group_name }}</a></li>
 			{% endfor %}
 		</ul>
 		{% for entry in list_group %}
-		<div id="userTabs-{{ entry.id }}">
-			<div><i>Управление правами группы пользователей: <b>{{ entry.forum_name }}</b></i></div>
+		<div id="userTabs-{{ entry.group_id }}">
+			<div><i>Управление правами группы пользователей: <b>{{ entry.group_name }}</b></i></div>
 			<br/>
 			<div class="pconf">
 				<h1></h1>

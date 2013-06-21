@@ -93,12 +93,6 @@ function securemysql($sql){
 	return $sql;
 }
 
-function securesqlite($sql){
-	if (is_array($sql)) return false;
-	
-	return '\''.sqlite_escape_string($sql).'\'';
-}
-
 function securenum($value) {
 	$value = intval($value);
 	return $value;
