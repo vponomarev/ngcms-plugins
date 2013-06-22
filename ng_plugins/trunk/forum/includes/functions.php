@@ -259,26 +259,6 @@ function update_lastdate_user($update = false)
 		$mysql->query('UPDATE '.prefix.'_users SET last = '.intval($time).' WHERE id = '.intval($userROW['id']));
 }
 
-function status_user_forum(){
-	global $twig, $userROW, $GROUP_STATUS, $GROUP_PERM, $GROUP_PS;
-	
-	if(file_exists(FORUM_CACHE.'/permission.php'))
-		include(FORUM_CACHE.'/permission.php');
-	
-	$bot = forum_filter_bots($_SERVER['HTTP_USER_AGENT']);
-	
-	if( is_array($userROW) ){
-		$GROUP_STATUS = $userROW['status'];
-	} elseif($bot){
-		$GROUP_STATUS = 5;
-	} else {
-		$GROUP_STATUS = 0;
-	}
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS], true)."</pre>";
-	
-	$GROUP_PS = $GROUP_PERM[$GROUP_STATUS];
-}
-
 function check_online_forum()
 {global $mysql, $config, $userROW, $ip, $online, $ipis, $CurrentHandler;
 	
@@ -529,20 +509,35 @@ function add_banned_users()
 		file_put_contents(FORUM_CACHE.'/ban.php', '<?php'."\n\n".'$ban = '.var_export($ban, true).';'."\n\n");
 }
 
-function moderators_forum($moderators = ''){
-	global $userROW, $GROUP_PERM, $GROUP_PS;
+function status_user_forum(){
+	global $twig, $userROW, $GROUP_PS, $FORUM_PS, $MODE_PERM, $GROUP_PERM;
 	
-	if(isset($moderators) && $moderators){
-		$list_moder = array();
-		foreach (unserialize($moderators) as $row){
-			$list_moder[$row['id']] = '';
-		}
-	} else return false;
+	if(file_exists(FORUM_CACHE.'/forum_perm.php'))
+		include(FORUM_CACHE.'/forum_perm.php');
 	
-	if(is_array($userROW) && array_key_exists($userROW['id'], $list_moder))
-		$GROUP_PS['forum_prem'] = $GROUP_PERM['moderators']['forum_prem'];
+	if(file_exists(FORUM_CACHE.'/group_perm.php'))
+		include(FORUM_CACHE.'/group_perm.php');
 	
-	print "<pre>".var_export($GROUP_PS, true).' - '.$userROW['id']."</pre>";
+	if(file_exists(FORUM_CACHE.'/mode_perm.php'))
+		include(FORUM_CACHE.'/mode_perm.php');
+	
+	$bot = forum_filter_bots($_SERVER['HTTP_USER_AGENT']);
+	
+	if( is_array($userROW) ){
+		$GROUP_STATUS = $userROW['status'];
+	} elseif($bot){
+		$GROUP_STATUS = 5;
+	} else {
+		$GROUP_STATUS = 0;
+	}
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS], true)."</pre>";
+	
+	$GROUP_PS = $GROUP_PERM[$GROUP_STATUS];
+	$FORUM_PS = $FORUM_PERM[$GROUP_STATUS];
+	
+	//print "<pre>".var_export($GROUP_PS, true)."</pre>";
+	
+	//print "<pre>".var_export($FORUM_PS, true)."</pre>";
 }
 
 function forum_upload_files(){

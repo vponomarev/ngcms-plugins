@@ -12,9 +12,9 @@
 					</tr>
 				</thead>
 				<tbody>
-				{% if (entries.true) %}
-					{{ entries.print }}
-					{% else %}
+				{% if (entries) %}
+					{{ entries }}
+				{% else %}
 					<tr>
 						<td class="tcl">
 							<div class="intd">

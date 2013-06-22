@@ -28,7 +28,11 @@
 		</tr>
 		<tr>
 			<td width="50%" class="contentEntry1">Закрыть на пароль<br /><small></small></td>
-			<td width="50%" class="contentEntry2"><input type="text" size="80" name="forum_lock_passwd" value="{{ forum_lock_passwd }}" /></td>
+			<td width="50%" class="contentEntry2"><input type="password" size="80" name="forum_lock_passwd" value="{{ forum_lock_passwd }}" /></td>
+		</tr>
+		<tr>
+			<td width="50%" class="contentEntry1">Редирект<br /><small></small></td>
+			<td width="50%" class="contentEntry2"><input type="password" size="80" name="forum_redirect_url" value="{{ forum_redirect_url }}" /></td>
 		</tr>
 		<tr>
 			<td width="50%" class="contentEntry1">Модераторы<br /><small>Укажите логины пользователей через запятую</small></td>

@@ -80,6 +80,7 @@ function plugin_forum_install($action) {
 			array('action'	=> 'cmodify', 'name' => 'description', 'type' => 'TEXT', 'params' => 'NOT NULL'),
 			array('action'	=> 'cmodify', 'name' => 'keywords', 'type' => 'TEXT', 'params' => 'NOT NULL'),
 			array('action'	=> 'cmodify', 'name' => 'lock_passwd', 'type' => 'varchar(30)', 'params' => 'NOT NULL DEFAULT "0"'),
+			array('action'	=> 'cmodify', 'name' => 'redirect_url', 'type' => 'varchar(100)', 'params' => 'NULL'),
 			array('action'	=> 'cmodify', 'name' => 'moderators', 'type' => 'TEXT', 'params' => 'NULL'),
 			array('action'	=> 'cmodify', 'name' => 'int_topic', 'type' => 'mediumINT(8)', 'params' => 'UNSIGNED NOT NULL DEFAULT "0"'),
 			array('action'	=> 'cmodify', 'name' => 'int_post', 'type' => 'mediumINT(8)', 'params' => 'UNSIGNED NOT NULL DEFAULT "0"'),

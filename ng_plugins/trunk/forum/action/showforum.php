@@ -37,12 +37,20 @@
 	$tpath = locatePluginTemplates(array('show_forum', ':'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
 	$xt = $twig->loadTemplate($tpath['show_forum'].'show_forum.tpl');
 	
-	$forum = $mysql->record('SELECT `title`, `description`, `int_topic`, `moderators` FROM `'.prefix.'_forum_forums` WHERE `id` = '.securemysql($id).' LIMIT 1');
+	$forum = $mysql->record('SELECT `title`, `description`, `int_topic`, `moderators`, `lock_passwd`, `redirect_url` FROM `'.prefix.'_forum_forums` WHERE `id` = '.securemysql($id).' LIMIT 1');
 	if(empty($forum))
 		return $output = information('Этого раздела не существует', $title = 'Информация');
 	
-	moderators_forum($forum['moderators']);
-	if(empty($GROUP_PS['forum_prem'][$id]['forum_read']))
+	if((isset($forum['lock_passwd']) && $forum['lock_passwd']) && empty($_SESSION['lock_passwd_'.$id]))
+		return redirect_forum(link_lock_passwd($id));
+	
+	$moderators = unserialize($forum['moderators']);
+	if(array_key_exists($userROW['name'], $moderators))
+		$MODE_PS = $MODE_PERM[$id];
+	else
+		$MODE_PS = array();
+	
+	if(empty($FORUM_PS[$id]['forum_read']))
 		return $output = permissions_forum('Доступ в форум запрещен');
 	
 	$SYSTEM_FLAGS['info']['title']['item'] = $forum['title'];

@@ -36,14 +36,15 @@
 		$entries = array();
 		foreach ( $result as $row_2 ){
 			if($row_2['parent'] != 0){
-				moderators_forum($row_2['moderators']);
-				if(!$GROUP_PS['forum_prem'][$row_2['id']]['forum_read']) continue;
-				$moder_array = unserialize($row_2['moderators']);
-				foreach ($moder_array as $author){
+				$moderators = unserialize($row_2['moderators']);
+				foreach ($moderators as $author)
 					$moder_print[] = str_replace( array('{url}', '{name}',), array( link_profile($author['id'], '', $author['name']), $author['name']), $lang_forum['moder_url']);
-				}
 				
-				//print "<pre>".var_export($GROUP_PERM['moderators']['forum_prem'][$row_2['id']], true)."</pre>";
+				if(array_key_exists($userROW['name'], $moderators))
+					$MODE_PS = $MODE_PERM[$row_2['id']];
+				else
+					$MODE_PS = array();
+				
 				$tVars = array(
 					'forum_link' => link_forum($row_2['id']),
 					'forum_name' => $row_2['title'],
@@ -52,10 +53,10 @@
 					'num_post' => $row_2['int_post'],
 					'status' => status_forum($row_2['l_date']),
 					'moder_print' => implode(', ', $moder_print),
+					'MODE_PS' => $MODE_PS,
 					'last_post_forum' => array(
 						'topic_name' => $row_2['l_topic_title'],
 						'topic_link' => link_topic($row_2['l_post'], 'pid').'#'.$row_2['l_post'],
-						//'date' => show_date($row_2['l_date']),
 						'date' => $row_2['l_date'],
 						'profile_link' => link_profile($row_2['l_author_id'], '', $row_2['l_author']),
 						'profile' => $row_2['l_author'],
@@ -77,10 +78,7 @@
 					'cat_id' => $row['id'], 
 					'cat_name' => $row['title'],
 					'cat_desc' => $row['description'],
-					'entries' => array(
-						'true' => isset($entries[$row['id']])?1:0,
-						'print' => isset($entries[$row['id']])?$entries[$row['id']]:''
-					),
+					'entries' => isset($entries[$row['id']])?$entries[$row['id']]:''
 				);
 				
 				$output .= $xg->render($tVars);

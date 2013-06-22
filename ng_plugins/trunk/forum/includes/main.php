@@ -206,6 +206,12 @@ function header_show()
 					array ($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
 					'Нет доступа / %name_forum%');
 		break;
+		case 'lock_passwd':
+			$titles = str_replace(
+					array ('%name_site%', '%name_forum%'),
+					array ($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
+					'Форум запаролен / %name_forum%');
+		break;
 	}
 	
 	$titles  = preg_replace('/\[([^\[\]]+)\]/' , (isset($pageNo) && $pageNo)?'\\1':'', $titles);
@@ -396,19 +402,19 @@ global $viewers, $online, $CurrentHandler, $lang_forum, $GROUP_PERM;
 					if(isset($row['users_status']) && $row['users_status'] == 0){
 						$viewers['num_guest_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 1){
-						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
 						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['admin_url'] );
 						$viewers['num_user_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 2){
-						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
 						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['editor_url'] );
 						$viewers['num_user_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 3){
-						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
 						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['publicist_url'] );
 						$viewers['num_user_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 4){
-						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
 						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['com_url'] );
 						$viewers['num_user_loc']++;
 					}elseif(isset($row['users_status']) && $row['users_status'] == 5){
@@ -447,10 +453,10 @@ function recent_events_forum()
 	$i=1;
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_users ORDER BY reg DESC LIMIT 10') as $row){
 		switch($row['status']){
-			case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
-			case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
-			case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
-			case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
+			case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['group_color'].';">'; $color_end = '</span>'; break;
+			case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['group_color'].';">'; $color_end = '</span>'; break;
+			case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['group_color'].';">'; $color_end = '</span>'; break;
+			case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['group_color'].';">'; $color_end = '</span>'; break;
 			default: $color_start = ''; $color_end = '';
 		}
 		$new_user[] = array(
@@ -466,10 +472,10 @@ function recent_events_forum()
 	$i=1;
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_users ORDER BY int_post DESC LIMIT 10') as $row){
 		switch($row['status']){
-			case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
-			case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
-			case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
-			case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['color'].';">'; $color_end = '</span>'; break;
+			case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['group_color'].';">'; $color_end = '</span>'; break;
+			case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['group_color'].';">'; $color_end = '</span>'; break;
+			case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['group_color'].';">'; $color_end = '</span>'; break;
+			case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['status']]['group_color'].';">'; $color_end = '</span>'; break;
 			default: $color_start = ''; $color_end = '';
 		}
 		
@@ -501,19 +507,19 @@ function statistics_forum()
 				if(isset($row['users_status']) && $row['users_status'] == 0){
 					$stat['num_guest']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 1){
-					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
 					$stat['active_users'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['admin_url'] );
 					$stat['num_user']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 2){
-					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
 					$stat['active_users'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['editor_url'] );
 					$stat['num_user']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 3){
-					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
 					$stat['active_users'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['publicist_url'] );
 					$stat['num_user']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 4){
-					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>';
+					$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
 					$stat['active_users'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end), $lang_forum['com_url'] );
 					$stat['num_user']++;
 				}elseif(isset($row['users_status']) && $row['users_status'] == 5){
@@ -526,10 +532,10 @@ function statistics_forum()
 					$stat['num_guest_today']++;
 				}elseif(isset($row['users_status']) && ($row['users_status'] == 1 or $row['users_status'] == 2 or $row['users_status'] == 3 or $row['users_status'] == 4)){
 					switch($row['users_status']){
-						case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>'; break;
-						case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>'; break;
-						case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>'; break;
-						case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['color'].';">'; $color_end = '</span>'; break;
+						case 1: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>'; break;
+						case 2: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>'; break;
+						case 3: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>'; break;
+						case 4: $color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>'; break;
 						default: $color_start = ''; $color_end = '';
 					}
 					$last_date = date('H:i:s', intval($row['last_time']));

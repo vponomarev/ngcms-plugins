@@ -60,7 +60,7 @@ register_plugin_page('forum','list_pm','plugin_list_pm_forum');
 
 register_plugin_page('forum','downloads','plugin_downloads_forum');
 
-register_plugin_page('forum','test','plugin_test_forum1');
+register_plugin_page('forum','lock_passwd','lock_passwd_forum');
 
 include_once(dirname(__FILE__).'/includes/constants.php');
 include_once(dirname(__FILE__).'/includes/rewrite.php');
@@ -71,7 +71,7 @@ include_once(dirname(__FILE__).'/includes/bb_code.php');
 include_once(dirname(__FILE__).'/includes/cache.php');
 
 function plugin_show_forum()
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -81,8 +81,8 @@ function plugin_show_forum()
 	check_online_forum();
 	$welcome = true;
 	$event = true;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/index.php');
 		else
@@ -97,7 +97,7 @@ function plugin_show_forum()
 }
 
 function plugin_showforum_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -109,8 +109,8 @@ function plugin_showforum_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/showforum.php');
 		else
@@ -125,7 +125,7 @@ function plugin_showforum_forum($params)
 }
 
 function plugin_showtopic_forum($params)
-{global $userROW, $mysql,  $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $online, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql,  $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $online, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -137,8 +137,8 @@ function plugin_showtopic_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/showtopic.php');
 		else
@@ -153,7 +153,7 @@ function plugin_showtopic_forum($params)
 }
 
 function plugin_userlist_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -164,8 +164,8 @@ function plugin_userlist_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/userlist.php');
 		else
@@ -180,7 +180,7 @@ function plugin_userlist_forum($params)
 }
 
 function plugin_search_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -193,8 +193,8 @@ function plugin_search_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/search.php');
 		else
@@ -209,7 +209,7 @@ function plugin_search_forum($params)
 }
 
 function plugin_register_forum()
-{global $userROW, $template, $config, $ip, $mysql, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $template, $config, $ip, $mysql, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -220,8 +220,8 @@ function plugin_register_forum()
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/register.php');
 		else
@@ -236,7 +236,7 @@ function plugin_register_forum()
 }
 
 function plugin_login_forum()
-{global $userROW, $config, $ip, $template, $mysql, $auth_db, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $config, $ip, $template, $mysql, $auth_db, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -247,7 +247,7 @@ function plugin_login_forum()
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
 	
 	if($ban[$ip] < 3)
 		include(FORUM_DIR.'/action/login.php');
@@ -258,7 +258,7 @@ function plugin_login_forum()
 }
 
 function plugin_profile_forum($params)
-{global $userROW, $template, $mysql, $SYSTEM_FLAGS, $CurrentHandler,  $ban, $twig, $ip, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $template, $mysql, $SYSTEM_FLAGS, $CurrentHandler,  $ban, $twig, $ip, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -269,8 +269,8 @@ function plugin_profile_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/profile.php');
 		else
@@ -285,7 +285,7 @@ function plugin_profile_forum($params)
 }
 
 function plugin_out_forum()
-{global $userROW, $config, $template, $mysql, $CurrentHandler, $auth_db, $ban, $ip, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $config, $template, $mysql, $CurrentHandler, $auth_db, $ban, $ip, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -296,7 +296,7 @@ function plugin_out_forum()
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
 	if($ban[$ip] < 3)
 		include(FORUM_DIR.'/action/out.php');
 	else
@@ -306,7 +306,7 @@ function plugin_out_forum()
 }
 
 function plugin_newpost_forum($params)
-{global $userROW, $config, $ip, $ban, $template, $CurrentHandler, $mysql, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $config, $ip, $ban, $template, $CurrentHandler, $mysql, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -317,8 +317,8 @@ function plugin_newpost_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/newpost.php');
 		else
@@ -333,7 +333,7 @@ function plugin_newpost_forum($params)
 }
 
 function plugin_newtopic_forum($params)
-{global $userROW, $config, $ip, $mysql, $ban, $CurrentHandler, $template, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $config, $ip, $mysql, $ban, $CurrentHandler, $template, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -344,8 +344,8 @@ function plugin_newtopic_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/newtopic.php');
 		else
@@ -360,7 +360,7 @@ function plugin_newtopic_forum($params)
 }
 
 function plugin_delpost_forum($params)
-{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -371,8 +371,8 @@ function plugin_delpost_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/delpost.php');
 		else
@@ -387,7 +387,7 @@ function plugin_delpost_forum($params)
 }
 
 function plugin_edit_forum($params)
-{global $userROW, $config, $mysql, $template, $CurrentHandler, $ip, $ban, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $config, $mysql, $template, $CurrentHandler, $ip, $ban, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -398,8 +398,8 @@ function plugin_edit_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/edit.php');
 		else
@@ -414,7 +414,7 @@ function plugin_edit_forum($params)
 }
 
 function plugin_rules_forum()
-{global $userROW, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -425,8 +425,8 @@ function plugin_rules_forum()
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/rules.php');
 		else
@@ -441,7 +441,7 @@ function plugin_rules_forum()
 }
 
 function plugin_unsubscribe_forum($params)
-{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -452,8 +452,8 @@ function plugin_unsubscribe_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/uns.php');
 		else
@@ -468,7 +468,7 @@ function plugin_unsubscribe_forum($params)
 }
 
 function plugin_markread_forum()
-{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -479,8 +479,8 @@ function plugin_markread_forum()
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/markread.php');
 		else
@@ -495,7 +495,7 @@ function plugin_markread_forum()
 }
 
 function plugin_reputation_forum($params)
-{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -506,8 +506,8 @@ function plugin_reputation_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/reputation.php');
 		else
@@ -522,7 +522,7 @@ function plugin_reputation_forum($params)
 }
 
 function plugin_add_reputation_forum($params)
-{global $userROW, $mysql, $config, $template, $CurrentHandler, $SYSTEM_FLAGS, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $config, $template, $CurrentHandler, $SYSTEM_FLAGS, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -533,8 +533,8 @@ function plugin_add_reputation_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/addrep.php');
 		else
@@ -549,7 +549,7 @@ function plugin_add_reputation_forum($params)
 }
 
 function plugin_act_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -560,8 +560,8 @@ function plugin_act_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/act.php');
 		else
@@ -576,7 +576,7 @@ function plugin_act_forum($params)
 }
 
 function plugin_news_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -588,8 +588,8 @@ function plugin_news_forum($params)
 	
 	$welcome = true;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/news.php');
 		else
@@ -604,7 +604,7 @@ function plugin_news_forum($params)
 }
 
 function plugin_news_feed_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -616,8 +616,8 @@ function plugin_news_feed_forum($params)
 	
 	$welcome = true;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/news_feed.php');
 		else
@@ -632,7 +632,7 @@ function plugin_news_feed_forum($params)
 }
 
 function plugin_rss_feed_forum($params)
-{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 0;
@@ -646,8 +646,8 @@ function plugin_rss_feed_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			$output = rss_export_generate_forum();
 		else
@@ -662,7 +662,7 @@ function plugin_rss_feed_forum($params)
 }
 
 function plugin_rss_forum($params)
-{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $config, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler, $ip, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 0;
@@ -681,8 +681,8 @@ function plugin_rss_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			$output = rss_export_generate_forum($id);
 		else
@@ -697,7 +697,7 @@ function plugin_rss_forum($params)
 }
 
 function plugin_add_thank_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -709,8 +709,8 @@ function plugin_add_thank_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/add_thank.php');
 		else
@@ -725,7 +725,7 @@ function plugin_add_thank_forum($params)
 }
 
 function plugin_thank_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -737,8 +737,8 @@ function plugin_thank_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/thank.php');
 		else
@@ -753,7 +753,7 @@ function plugin_thank_forum($params)
 }
 
 function plugin_complaints_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -765,8 +765,8 @@ function plugin_complaints_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/complaints.php');
 		else
@@ -781,7 +781,7 @@ function plugin_complaints_forum($params)
 }
 
 function plugin_send_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -793,8 +793,8 @@ function plugin_send_pm_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/send_pm.php');
 		else
@@ -809,7 +809,7 @@ function plugin_send_pm_forum($params)
 }
 
 function plugin_list_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $online, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $online, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -821,8 +821,8 @@ function plugin_list_pm_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/list_pm.php');
 		else
@@ -837,7 +837,7 @@ function plugin_list_pm_forum($params)
 }
 
 function plugin_del_pm_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -847,8 +847,8 @@ function plugin_del_pm_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/del_pm.php');
 		else
@@ -862,8 +862,30 @@ function plugin_del_pm_forum($params)
 	show_main_page(false, $output, $welcome, $event);
 }
 
+function lock_passwd_forum($params){
+	global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
+	
+	status_user_forum();
+	
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/lock_passwd.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
+	
+	show_main_page(false, $output, $welcome, $event);
+}
+
 function plugin_downloads_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $GROUP_PERM,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -873,8 +895,8 @@ function plugin_downloads_forum($params)
 	
 	$welcome = false;
 	$event = false;
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS]['read'], true)."</pre>";
-	if($GROUP_PERM[$GROUP_STATUS]['read']){
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/downloads.php');
 		else
