@@ -86,6 +86,13 @@ function edit_group(){
 				group_pm = '.securemysql($group_pm).' 
 				WHERE id = '.securemysql($id)
 			);
+			
+			$row = ''; $result = '';
+			foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_group') as $row){
+				$result[$row['group_id']] = $row;
+			}
+			file_put_contents(FORUM_CACHE.'/group_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$GROUP_PERM = '.var_export($result, true).';'."\n\n");
+			
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=group');
 		}
 	}
@@ -263,6 +270,18 @@ global $twig, $plugin, $mysql;
 		$mysql->query('DELETE FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
 		$mysql->query('DELETE FROM '.prefix.'_forum_moderators WHERE m_forum_id = '.db_squote($id).' LIMIT 1');
 		$mysql->query('DELETE FROM '.prefix.'_forum_permission WHERE forum_id = '.db_squote($id).' LIMIT 1');
+		
+		foreach ($mysql->select('SELECT * from '.prefix.'_forum_permission') as $row){
+			$result[$row['group_id']][$row['forum_id']] = $row;
+		}
+		file_put_contents(FORUM_CACHE.'/forum_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$FORUM_PERM = '.var_export($result, true).';'."\n\n");
+		
+		$row = ''; $result = '';
+		foreach ($mysql->select('SELECT * from '.prefix.'_forum_moderators') as $row){
+			$result[$row['m_forum_id']] = $row;
+		}
+		file_put_contents(FORUM_CACHE.'/mode_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$MODE_PERM = '.var_export($result, true).';'."\n\n");
+		
 		$_SESSION['forum']['info'] = 'Форум удален';
 		generate_index_cache(true);
 	} else {
@@ -435,6 +454,7 @@ function edit_forum(){
 	$forum_description = isset($_REQUEST['forum_description'])?secure_html(trim($_REQUEST['forum_description'])):$forum['description'];
 	$forum_keywords = isset($_REQUEST['forum_keywords'])?secure_html(trim($_REQUEST['forum_keywords'])):$forum['keywords'];
 	$forum_lock_passwd = isset($_REQUEST['forum_lock_passwd'])?secure_html(trim($_REQUEST['forum_lock_passwd'])):$forum['lock_passwd'];
+	$forum_redirect_url = isset($_REQUEST['forum_redirect_url'])?secure_html(trim($_REQUEST['forum_redirect_url'])):$forum['redirect_url'];
 	$forum_moderators = isset($_REQUEST['forum_moderators'])?secure_html(trim($_REQUEST['forum_moderators'])):$forum_moderators;
 	$forum_parent = isset($_REQUEST['forum_parent'])?secure_html(trim($_REQUEST['forum_parent'])):$forum['parent'];
 	
@@ -448,7 +468,6 @@ function edit_forum(){
 	
 	$forum_perm = is_array($_REQUEST['forum_perm'])?$_REQUEST['forum_perm']:$forum_perm;
 	
-	
 	if (isset($_REQUEST['submit'])){
 		if(empty($forum_name)) $error_text[] = 'Название форума не заполнено';
 		
@@ -456,7 +475,7 @@ function edit_forum(){
 			$moder_array = array_map('trim', explode(',',$forum_moderators));
 			$moder_array = array_unique($moder_array);
 			foreach ($moder_array as $row){
-				if(!$user[] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
+				if(!$user[$row] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
 					$error_text[] = 'Пользователь '.$row.' не найден';
 				}
 				
@@ -470,6 +489,7 @@ function edit_forum(){
 			if(isset($forum_description) && $forum_description) $SQL['description'] = $forum_description;
 			if(isset($forum_keywords) && $forum_keywords) $SQL['keywords'] = $forum_keywords;
 			$SQL['lock_passwd'] = $forum_lock_passwd;
+			$SQL['redirect_url'] = $forum_redirect_url;
 			$SQL['moderators'] = serialize($user);
 			
 			if(isset($forum_parent) && $forum_parent) $SQL['parent'] = $forum_parent;
@@ -478,36 +498,116 @@ function edit_forum(){
 			foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
 				$mysql->query('UPDATE '.prefix.'_forum_forums SET '.implode(', ',$vnamess).' WHERE id = \''.intval($id).'\' LIMIT 1');
 			
-			$mysql->query('UPDATE '.prefix.'_forum_moderators SET 
-				m_topic_send = '.securemysql($m_topic_send).',
-				m_topic_modify = '.securemysql($m_topic_modify).',
-				m_topic_closed = '.securemysql($m_topic_closed).',
-				m_topic_remove = '.securemysql($m_topic_remove).',
-				m_post_send = '.securemysql($m_post_send).',
-				m_post_modify = '.securemysql($m_post_modify).',
-				m_post_remove = '.securemysql($m_post_remove).'
-			where m_forum_id = \''.intval($id).'\' LIMIT 1');
-			
-			foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as $row){
-				$mysql->query('UPDATE '.prefix.'_forum_permission SET 
-						forum_read = '.securemysql($forum_perm[$row['group_id']]['forum_read']).',
-						topic_read = '.securemysql($forum_perm[$row['group_id']]['topic_read']).',
-						topic_send = '.securemysql($forum_perm[$row['group_id']]['topic_send']).',
-						topic_modify = '.securemysql($forum_perm[$row['group_id']]['topic_modify']).',
-						topic_modify_your = '.securemysql($forum_perm[$row['group_id']]['topic_modify_your']).',
-						topic_closed = '.securemysql($forum_perm[$row['group_id']]['topic_closed']).',
-						topic_closed_your = '.securemysql($forum_perm[$row['group_id']]['topic_closed_your']).',
-						topic_remove = '.securemysql($forum_perm[$row['group_id']]['topic_remove']).',
-						topic_remove_your = '.securemysql($forum_perm[$row['group_id']]['topic_remove_your']).',
-						post_send = '.securemysql($forum_perm[$row['group_id']]['post_send']).',
-						post_modify = '.securemysql($forum_perm[$row['group_id']]['post_modify']).',
-						post_modify_your = '.securemysql($forum_perm[$row['group_id']]['post_modify_your']).',
-						post_remove = '.securemysql($forum_perm[$row['group_id']]['post_remove']).',
-						post_remove_your = '.securemysql($forum_perm[$row['group_id']]['post_remove_your']).'
-						where forum_id = \''.intval($id).'\' and group_id = \''.$row['group_id'].'\' LIMIT 1
+			if($mysql->result('SELECT 1 FROM '.prefix.'_forum_moderators WHERE m_forum_id = \''.intval($id).'\' LIMIT 1')){
+				$mysql->query('UPDATE '.prefix.'_forum_moderators SET 
+					m_topic_send = '.securemysql($m_topic_send).',
+					m_topic_modify = '.securemysql($m_topic_modify).',
+					m_topic_closed = '.securemysql($m_topic_closed).',
+					m_topic_remove = '.securemysql($m_topic_remove).',
+					m_post_send = '.securemysql($m_post_send).',
+					m_post_modify = '.securemysql($m_post_modify).',
+					m_post_remove = '.securemysql($m_post_remove).'
+				WHERE m_forum_id = \''.intval($id).'\' LIMIT 1');
+			} else {
+				$mysql->query('INSERT INTO '.prefix.'_forum_moderators 
+					(
+						m_forum_id,
+						m_topic_send,
+						m_topic_modify,
+						m_topic_closed,
+						m_topic_remove,
+						m_post_send,
+						m_post_modify,
+						m_post_remove
+					) VALUES (
+						'.securemysql($id).',
+						'.securemysql($m_topic_send).',
+						'.securemysql($m_topic_modify).',
+						'.securemysql($m_topic_closed).',
+						'.securemysql($m_topic_remove).',
+						'.securemysql($m_post_send).',
+						'.securemysql($m_post_modify).',
+						'.securemysql($m_post_remove).'
+					)
 				');
 			}
 			
+			foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as $row){
+				if($mysql->result('SELECT 1 FROM '.prefix.'_forum_permission WHERE forum_id = \''.intval($id).'\' AND group_id = \''.$row['group_id'].'\' LIMIT 1')){
+					$mysql->query('UPDATE '.prefix.'_forum_permission SET 
+							forum_read = '.securemysql($forum_perm[$row['group_id']]['forum_read']).',
+							topic_read = '.securemysql($forum_perm[$row['group_id']]['topic_read']).',
+							topic_send = '.securemysql($forum_perm[$row['group_id']]['topic_send']).',
+							topic_modify = '.securemysql($forum_perm[$row['group_id']]['topic_modify']).',
+							topic_modify_your = '.securemysql($forum_perm[$row['group_id']]['topic_modify_your']).',
+							topic_closed = '.securemysql($forum_perm[$row['group_id']]['topic_closed']).',
+							topic_closed_your = '.securemysql($forum_perm[$row['group_id']]['topic_closed_your']).',
+							topic_remove = '.securemysql($forum_perm[$row['group_id']]['topic_remove']).',
+							topic_remove_your = '.securemysql($forum_perm[$row['group_id']]['topic_remove_your']).',
+							post_send = '.securemysql($forum_perm[$row['group_id']]['post_send']).',
+							post_modify = '.securemysql($forum_perm[$row['group_id']]['post_modify']).',
+							post_modify_your = '.securemysql($forum_perm[$row['group_id']]['post_modify_your']).',
+							post_remove = '.securemysql($forum_perm[$row['group_id']]['post_remove']).',
+							post_remove_your = '.securemysql($forum_perm[$row['group_id']]['post_remove_your']).'
+							where forum_id = \''.intval($id).'\' and group_id = \''.$row['group_id'].'\' LIMIT 1
+					');
+				} else {
+					$mysql->query('INSERT INTO '.prefix.'_forum_permission 
+						(
+							group_id,
+							forum_id,
+							forum_read,
+							topic_read,
+							topic_send,
+							topic_modify,
+							topic_modify_your,
+							topic_closed,
+							topic_closed_your,
+							topic_remove,
+							topic_remove_your,
+							post_send,
+							post_modify,
+							post_modify_your,
+							post_remove,
+							post_remove_your
+						) VALUES (
+							'.$row['group_id'].',
+							'.$id.',
+							'.secureinput($forum_perm[$row['group_id']]['forum_read']).',
+							'.secureinput($forum_perm[$row['group_id']]['topic_read']).',
+							'.secureinput($forum_perm[$row['group_id']]['topic_send']).',
+							'.secureinput($forum_perm[$row['group_id']]['topic_modify']).',
+							'.secureinput($forum_perm[$row['group_id']]['topic_modify_your']).',
+							'.secureinput($forum_perm[$row['group_id']]['topic_closed']).',
+							'.secureinput($forum_perm[$row['group_id']]['topic_closed_your']).',
+							'.secureinput($forum_perm[$row['group_id']]['topic_remove']).',
+							'.secureinput($forum_perm[$row['group_id']]['topic_remove_your']).',
+							'.secureinput($forum_perm[$row['group_id']]['post_send']).',
+							'.secureinput($forum_perm[$row['group_id']]['post_modify']).',
+							'.secureinput($forum_perm[$row['group_id']]['post_modify_your']).',
+							'.secureinput($forum_perm[$row['group_id']]['post_remove']).',
+							'.secureinput($forum_perm[$row['group_id']]['post_remove_your']).'
+						)
+					');
+				}
+			}
+			
+			foreach ($mysql->select('SELECT * from '.prefix.'_forum_permission') as $row){
+				$result[$row['group_id']][$row['forum_id']] = $row;
+			}
+			file_put_contents(FORUM_CACHE.'/forum_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$FORUM_PERM = '.var_export($result, true).';'."\n\n");
+			
+			$row = ''; $result = '';
+			foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_group') as $row){
+				$result[$row['group_id']] = $row;
+			}
+			file_put_contents(FORUM_CACHE.'/group_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$GROUP_PERM = '.var_export($result, true).';'."\n\n");
+			
+			$row = ''; $result = '';
+			foreach ($mysql->select('SELECT * from '.prefix.'_forum_moderators') as $row){
+				$result[$row['m_forum_id']] = $row;
+			}
+			file_put_contents(FORUM_CACHE.'/mode_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$MODE_PERM = '.var_export($result, true).';'."\n\n");
 			generate_index_cache(true);
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
@@ -518,7 +618,7 @@ function edit_forum(){
 		$tEntry2[] = array(
 			'id'		=>	$row['id'],
 			'title'		=>	$row['title'],
-			'id_set'	=> intval($parent)
+			'id_set'	=> intval($forum_parent)
 		);
 	}
 	
@@ -555,6 +655,7 @@ function edit_forum(){
 		'forum_description' => $forum_description,
 		'forum_keywords' => $forum_keywords,
 		'forum_lock_passwd' => $forum_lock_passwd,
+		'forum_redirect_url' => $forum_redirect_url,
 		'forum_moderators' => $forum_moderators,
 		'forum_title' => $forum['title'],
 		'forum_id' => $forum['id'],
@@ -600,6 +701,7 @@ global $twig, $plugin, $mysql;
 	$forum_name = isset($_REQUEST['forum_name'])?secure_html(trim($_REQUEST['forum_name'])):'';
 	$forum_description = isset($_REQUEST['forum_description'])?secure_html(trim($_REQUEST['forum_description'])):'';
 	$forum_keywords = isset($_REQUEST['forum_keywords'])?secure_html(trim($_REQUEST['forum_keywords'])):'';
+	$forum_redirect_url = isset($_REQUEST['forum_redirect_url'])?secure_html(trim($_REQUEST['forum_redirect_url'])):'';
 	$forum_lock_passwd = isset($_REQUEST['forum_lock_passwd'])?secure_html(trim($_REQUEST['forum_lock_passwd'])):'0';
 	$forum_moderators = isset($_REQUEST['forum_moderators'])?secure_html(trim($_REQUEST['forum_moderators'])):'';
 	
@@ -717,7 +819,7 @@ global $twig, $plugin, $mysql;
 			$moder_array = array_map('trim', explode(',',$forum_moderators));
 			$moder_array = array_unique($moder_array);
 			foreach ($moder_array as $row){
-				if(!$user[] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
+				if(!$user[$row] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
 					$error_text[] = 'Пользователь '.$row.' не найден';
 				}
 				
@@ -732,17 +834,15 @@ global $twig, $plugin, $mysql;
 			$forum_moderators = serialize($user);
 			
 			$mysql->query('INSERT INTO '.prefix.'_forum_forums
-				(title, description, keywords, lock_passwd, moderators, parent, position)
+				(title, description, keywords, lock_passwd, redirect_url, moderators, parent, position)
 				VALUES
-				('.db_squote($forum_name).', '.db_squote($forum_description).', '.db_squote($forum_keywords).', '.db_squote($forum_lock_passwd).', '.db_squote($forum_moderators).', '.intval($forum['id']).', '.intval($posit).')
+				('.db_squote($forum_name).', '.db_squote($forum_description).', '.db_squote($forum_keywords).', '.db_squote($forum_lock_passwd).', '.db_squote($forum_redirect_url).','.db_squote($forum_moderators).', '.intval($forum['id']).', '.intval($posit).')
 			');
 			$forum_id = $mysql->lastid('forum_forums');
 			
 			foreach ($user as $row){
 				$mysql->query('INSERT INTO '.prefix.'_forum_moderators 
 					(
-						m_user_id,
-						m_user_name,
 						m_forum_id,
 						m_topic_send,
 						m_topic_modify,
@@ -752,8 +852,6 @@ global $twig, $plugin, $mysql;
 						m_post_modify,
 						m_post_remove
 					) VALUES (
-						'.securemysql($row['id']).',
-						'.securemysql($row['name']).',
 						'.securemysql($forum_id).',
 						'.securemysql($m_topic_send).',
 						'.securemysql($m_topic_modify).',
@@ -806,6 +904,23 @@ global $twig, $plugin, $mysql;
 				');
 			}
 			
+			foreach ($mysql->select('SELECT * from '.prefix.'_forum_permission') as $row){
+				$result[$row['group_id']][$row['forum_id']] = $row;
+			}
+			file_put_contents(FORUM_CACHE.'/forum_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$FORUM_PERM = '.var_export($result, true).';'."\n\n");
+			
+			$row = ''; $result = '';
+			foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_group') as $row){
+				$result[$row['group_id']] = $row;
+			}
+			file_put_contents(FORUM_CACHE.'/group_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$GROUP_PERM = '.var_export($result, true).';'."\n\n");
+			
+			$row = ''; $result = '';
+			foreach ($mysql->select('SELECT * from '.prefix.'_forum_moderators') as $row){
+				$result[$row['m_forum_id']] = $row;
+			}
+			file_put_contents(FORUM_CACHE.'/mode_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$MODE_PERM = '.var_export($result, true).';'."\n\n");
+			
 			generate_index_cache(true);
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
@@ -846,6 +961,7 @@ global $twig, $plugin, $mysql;
 		'forum_description' => $forum_description,
 		'forum_keywords' => $forum_keywords,
 		'forum_lock_passwd' => $forum_lock_passwd,
+		'forum_redirect_url' => $forum_redirect_url,
 		'forum_moderators' => $forum_moderators,
 		'forum_title' => $forum['title'],
 		'forum_id' => $forum['id'],
