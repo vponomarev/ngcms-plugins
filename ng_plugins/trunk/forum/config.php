@@ -475,7 +475,7 @@ function edit_forum(){
 			$moder_array = array_map('trim', explode(',',$forum_moderators));
 			$moder_array = array_unique($moder_array);
 			foreach ($moder_array as $row){
-				if(!$user[$row] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
+				if(!$user[strtolower($row)] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
 					$error_text[] = 'Пользователь '.$row.' не найден';
 				}
 				
@@ -486,8 +486,8 @@ function edit_forum(){
 			$SQL = array();
 			
 			if(isset($forum_name) && $forum_name) $SQL['title'] = $forum_name;
-			if(isset($forum_description) && $forum_description) $SQL['description'] = $forum_description;
-			if(isset($forum_keywords) && $forum_keywords) $SQL['keywords'] = $forum_keywords;
+			$SQL['description'] = $forum_description;
+			$SQL['keywords'] = $forum_keywords;
 			$SQL['lock_passwd'] = $forum_lock_passwd;
 			$SQL['redirect_url'] = $forum_redirect_url;
 			$SQL['moderators'] = serialize($user);
@@ -819,7 +819,7 @@ global $twig, $plugin, $mysql;
 			$moder_array = array_map('trim', explode(',',$forum_moderators));
 			$moder_array = array_unique($moder_array);
 			foreach ($moder_array as $row){
-				if(!$user[$row] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
+				if(!$user[strtolower($row)] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
 					$error_text[] = 'Пользователь '.$row.' не найден';
 				}
 				

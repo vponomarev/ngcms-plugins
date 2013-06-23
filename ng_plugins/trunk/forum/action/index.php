@@ -40,7 +40,7 @@
 				foreach ($moderators as $author)
 					$moder_print[] = str_replace( array('{url}', '{name}',), array( link_profile($author['id'], '', $author['name']), $author['name']), $lang_forum['moder_url']);
 				
-				if(array_key_exists($userROW['name'], $moderators))
+				if(array_key_exists(strtolower($userROW['name']), $moderators))
 					$MODE_PS = $MODE_PERM[$row_2['id']];
 				else
 					$MODE_PS = array();

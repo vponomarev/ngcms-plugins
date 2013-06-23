@@ -258,8 +258,8 @@ function show_main_page($a_stat = false, $output = '', $welcome = false, $event 
 		'headr' => ($SUPRESS_TEMPLATE_SHOW)?1:0,
 		'css' => $tpath['url::'],
 		'titles' => $titles,
-		'keywords' => isset($SYSTEM_FLAGS['meta']['keywords'])?$SYSTEM_FLAGS['meta']['keywords']:'',
-		'description' => isset($SYSTEM_FLAGS['meta']['description'])?$SYSTEM_FLAGS['meta']['description']:'',
+		'keywords' => (isset($SYSTEM_FLAGS['meta']['keywords'])&& $SYSTEM_FLAGS['meta']['keywords'])?$SYSTEM_FLAGS['meta']['keywords']:pluginGetVariable('forum','forum_keywords'),
+		'description' => (isset($SYSTEM_FLAGS['meta']['description'])&& $SYSTEM_FLAGS['meta']['description'])?$SYSTEM_FLAGS['meta']['description']:pluginGetVariable('forum','forum_description'),
 		'title' => pluginGetVariable('forum', 'forum_title'),
 		
 		'out' => link_out(),

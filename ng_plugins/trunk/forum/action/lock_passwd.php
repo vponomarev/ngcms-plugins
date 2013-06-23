@@ -23,7 +23,10 @@
 		$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):'';
 	
 	if(empty($id))
-		return redirect_forum(link_home);
+		return redirect_forum(link_home());
+	
+	if(!empty($_SESSION['lock_passwd_'.$id]))
+		return redirect_forum(link_forum($id));
 	
 	$lock_passwd = isset($_REQUEST['lock_passwd'])?secureinput($_REQUEST['lock_passwd']):'';
 	
@@ -37,9 +40,6 @@
 			return redirect_forum(link_forum($id));
 		}
 	}
-	
-	if(!empty($_SESSION['lock_passwd_'.$id]))
-		return redirect_forum(link_forum($id));
 	
 	$tpath = locatePluginTemplates(array('lock_passwd'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
 	$xt = $twig->loadTemplate($tpath['lock_passwd'].'lock_passwd.tpl');

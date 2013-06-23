@@ -8,7 +8,7 @@
 						<div class="infldset"> 
 							{% if (error_text['empty_passwd']) %}Вы не ввели пароль<br />{% endif %}
 							{% if (error_text['error_passwd']) %}Неверный пароль{% endif %}
-							<label class="conl"><strong>Пароль</strong><br /><input type="password" name="lock_passwd" size="16" maxlength="16" tabindex="2" /><br /></label> 
+							<label class="conl"><strong>Пароль</strong><br /><input type="password" name="lock_passwd" size="30" maxlength="30" tabindex="2" value="{{ lock_passwd }}" /><br /></label> 
 						</div> 
 				</fieldset> 
 			</div> 
