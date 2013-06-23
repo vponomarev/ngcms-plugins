@@ -41,10 +41,8 @@
 	if(empty($forum))
 		return $output = information('Этого раздела не существует', $title = 'Информация');
 	
-	print_r ($_SESSION['lock_passwd_'.$id]);
-	
-	//if((isset($forum['lock_passwd']) && $forum['lock_passwd']) && empty($_SESSION['lock_passwd_'.$id]))
-	//	return redirect_forum(link_lock_passwd($id));
+	if((isset($forum['lock_passwd']) && $forum['lock_passwd']) && empty($_SESSION['lock_passwd_'.$id]))
+		return redirect_forum(link_lock_passwd($id));
 	
 	if((isset($forum['redirect_url']) && $forum['redirect_url']))
 		return redirect_forum($forum['redirect_url']);
