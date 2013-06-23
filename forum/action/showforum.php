@@ -37,23 +37,30 @@
 	$tpath = locatePluginTemplates(array('show_forum', ':'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
 	$xt = $twig->loadTemplate($tpath['show_forum'].'show_forum.tpl');
 	
-	$forum = $mysql->record('SELECT `title`, `description`, `int_topic`, `moderators`, `lock_passwd`, `redirect_url` FROM `'.prefix.'_forum_forums` WHERE `id` = '.securemysql($id).' LIMIT 1');
+	$forum = $mysql->record('SELECT `title`, `description`, `keywords`, `int_topic`, `moderators`, `lock_passwd`, `redirect_url` FROM `'.prefix.'_forum_forums` WHERE `id` = '.securemysql($id).' LIMIT 1');
 	if(empty($forum))
 		return $output = information('Этого раздела не существует', $title = 'Информация');
 	
-	if((isset($forum['lock_passwd']) && $forum['lock_passwd']) && empty($_SESSION['lock_passwd_'.$id]))
-		return redirect_forum(link_lock_passwd($id));
+	print_r ($_SESSION['lock_passwd_'.$id]);
+	
+	//if((isset($forum['lock_passwd']) && $forum['lock_passwd']) && empty($_SESSION['lock_passwd_'.$id]))
+	//	return redirect_forum(link_lock_passwd($id));
+	
+	if((isset($forum['redirect_url']) && $forum['redirect_url']))
+		return redirect_forum($forum['redirect_url']);
 	
 	$moderators = unserialize($forum['moderators']);
-	if(array_key_exists($userROW['name'], $moderators))
+	if(array_key_exists(strtolower($userROW['name']), $moderators)){
 		$MODE_PS = $MODE_PERM[$id];
-	else
+	}else
 		$MODE_PS = array();
 	
 	if(empty($FORUM_PS[$id]['forum_read']))
 		return $output = permissions_forum('Доступ в форум запрещен');
 	
 	$SYSTEM_FLAGS['info']['title']['item'] = $forum['title'];
+	$SYSTEM_FLAGS['meta']['description'] = $forum['description'];
+	$SYSTEM_FLAGS['meta']['keywords'] = $forum['keywords'];
 	
 	$limitCount = intval(pluginGetVariable('forum', 'forum_per_page'));
 	
@@ -81,7 +88,7 @@
 	
 	foreach($mysql->select('SELECT t.*, u.avatar FROM `'.prefix.'_forum_topics` as t
 		LEFT JOIN '.prefix.'_users AS u ON u.id = t.l_author_id
-		WHERE `fid` = '.securemysql($id).' ORDER BY `l_date` DESC LIMIT '.$limitStart.', '.$limitCount) as $row)
+		WHERE t.`fid` = '.securemysql($id).' ORDER BY t.`l_date` DESC LIMIT '.$limitStart.', '.$limitCount) as $row)
 		$topics[$row['pinned']][$row['id']] = $row;
 	
 	foreach($topics[1] as $row){
@@ -92,10 +99,10 @@
 			array('pluginName' => 'forum', 'pluginHandler' => 'showtopic', 'params' => array('id' => $row['id']), 'xparams' => array(), 'paginator' => array('page', 0, false)):
 			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'showtopic'), 'xparams' => array('id' => $row['id']), 'paginator' => array('page', 1, false));
 		
-		$important[] = array (
-			'Ttitle' => $row['title'],
+		$tEntry_imp[] = array (
+			'topic_name' => $row['title'],
 			'topic_link' => link_topic($row['id']),
-			'author' => $row['author'],
+			'topic_author' => $row['author'],
 			'int_post' => $row['int_post'],
 			'int_views' => $row['int_views'],
 			'status' => status_forum($row['l_date']),
@@ -104,9 +111,9 @@
 				'topic_name' => $row['title'],
 				'topic_link' => link_topic($row['l_post'], 'pid').'#'.$row['l_post'],
 				'date' => $row['l_date'],
-				'profile_link' => link_profile($row['l_author_id'], '', $row['l_author']),
-				'profile' => $row['l_author'],
-				'profile_avatar' => array(
+				'l_author_link' => link_profile($row['l_author_id'], '', $row['l_author']),
+				'l_author' => $row['l_author'],
+				'l_author_avatar' => array(
 					'true' => ($row['avatar'] != '')?1:0,
 					'print' => ($row['avatar'] != '')?avatars_url.'/'.$row['avatar']:avatars_url,
 				)
@@ -122,21 +129,37 @@
 			array('pluginName' => 'forum', 'pluginHandler' => 'showtopic', 'params' => array('id' => $row['id']), 'xparams' => array(), 'paginator' => array('page', 0, false)):
 			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'showtopic'), 'xparams' => array('id' => $row['id']), 'paginator' => array('page', 1, false));
 		
+		//print "<pre>".var_export($row, true)."</pre>";
+		if(isset($MODE_PS) && $MODE_PS){
+			$topic_modify = $MODE_PS['m_topic_modify'];
+		}elseif($FORUM_PS[$id]['topic_modify']){
+			$topic_modify = true;
+		}elseif($FORUM_PS[$id]['topic_modify_your']){
+			if($userROW['id'] == $row['author_id'])
+				$topic_modify = true;
+			else
+				$topic_modify = false;
+		} else $topic_modify = false;
+		
+		
 		$tEntry[] = array (
-			'Ttitle' => $row['title'],
+			'topic_name' => $row['title'],
 			'topic_link' => link_topic($row['id']),
-			'author' => $row['author'],
+			'topic_author' => $row['author'],
 			'int_post' => $row['int_post'],
 			'int_views' => $row['int_views'],
 			'status' => status_forum($row['l_date']),
 			'state' => $row['state'],
+			
+			'topic_modify' => $topic_modify,
+			
 			'last_post_forum' => array(
 				'topic_name' => $row['title'],
 				'topic_link' => link_topic($row['l_post'], 'pid').'#'.$row['l_post'],
 				'date' => $row['l_date'],
-				'profile_link' => link_profile($row['l_author_id'], '', $row['l_author']),
-				'profile' => $row['l_author'],
-				'profile_avatar' => array(
+				'l_author_link' => link_profile($row['l_author_id'], '', $row['l_author']),
+				'l_author' => $row['l_author'],
+				'l_author_avatar' => array(
 					'true' => ($row['avatar'] != '')?1:0,
 					'print' => ($row['avatar'] != '')?avatars_url.'/'.$row['avatar']:avatars_url,
 				)
@@ -145,19 +168,25 @@
 		);
 	}
 	
+	print "<pre>".var_export($MODE_PS, true)."</pre>";
+	print "<pre>".var_export($FORUM_PS[$id], true)."</pre>";
+	
+	//'topic_modify' => (isset($MODE_PS) && $MODE_PS)?$MODE_PS['m_topic_modify']:$FORUM_PS[$id]['topic_modify'],
+	
 	$tVars = array(
-		'entries_imp' => isset($important)?$important:'',
 		'entries' => isset($tEntry)?$tEntry:'',
-		'pages' => array(
-			'true' => (isset($pages) && $pages)?1:0,
-			'print' => isset($pages)?$pages:''
-		),
-		'addtopic' => link_add_topic($id),
-		'GROUP_PS' => $GROUP_PS['forum_prem'][$id],
+		'entries_imp' => isset($tEntry_imp)?$tEntry_imp:'',
+		
+		'pages' => isset($pages)?$pages:'',
+		
+		'send_topic' => link_add_topic($id),
 		'link_rss' => link_rss($id),
 		'home_link' => link_home(),
-		'Ftitle' => $forum['title'],
-		'Fdesc' => $forum['description'],
+		
+		'topic_send' => (isset($MODE_PS) && $MODE_PS)?$MODE_PS['m_topic_send']:$FORUM_PS[$id]['topic_send'],
+		
+		'forum_name' => $forum['title'],
+		'forum_description' => $forum['description'],
 		'tpl' => $tpath['url::'],
 		'local' => array(
 				'num_guest_loc' => $viewers['num_guest_loc'],

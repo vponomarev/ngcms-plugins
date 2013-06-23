@@ -17,6 +17,9 @@
 	*/
 	if (!defined('NGCMS')) die ('HAL');
 	
+	if(empty($GROUP_PS['group_pm']))
+		return $output = permissions_forum('У вас нет доступа к сообщениям');
+	
 	if(isset($params['id']))
 		$id = isset($params['id'])?intval($params['id']):0;
 	else
