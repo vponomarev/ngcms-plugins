@@ -150,6 +150,7 @@
 			'state' => $row['state'],
 			
 			'topic_modify' => $topic_modify,
+			'topic_modify_link' => link_topic_modify($row['id']),
 			
 			'last_post_forum' => array(
 				'topic_name' => $row['title'],

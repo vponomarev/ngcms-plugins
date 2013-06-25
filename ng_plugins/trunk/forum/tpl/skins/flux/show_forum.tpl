@@ -86,7 +86,7 @@
 						<div class="intd">
 							<div class="{% if (entry.status) %}icon inew{% else %}icon{% endif %}"><div class="nosize"><!-- --></div></div>
 							<div class="tclcon">
-								<a href='{{ entry.topic_link }}'>{{ entry.topic_name }}</a><span class='byuser'> оставил&nbsp;{{ entry.topic_author }}</span>{% if (entry.topic_modify) %}(Редактировать){% endif %} {% if (entry.pag_topic) %}( {{ entry.pag_topic }} ){% endif %}
+								<a href='{{ entry.topic_link }}'>{{ entry.topic_name }}</a><span class='byuser'> оставил&nbsp;{{ entry.topic_author }}</span> {% if (entry.topic_modify) %}<a href="{{ entry.topic_modify_link }}">(Редактировать)</a>{% endif %} {% if (entry.pag_topic) %}( {{ entry.pag_topic }} ){% endif %}
 							</div>
 						</div>
 					</td>
