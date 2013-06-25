@@ -29,6 +29,17 @@ function link_lock_passwd($id)
 	return $url;
 }
 
+function link_topic_modify($id)
+{
+	$id = intval($id);
+	
+	$url = checkLinkAvailable('forum', 'topic_modify')?
+			generateLink('forum', 'topic_modify', array('id' => $id)):
+			generateLink('core', 'plugin', array('plugin' => 'forum', 'handler' => 'topic_modify'), array('id' => $id));
+	
+	return $url;
+}
+
 function link_edit_post($id)
 {
 	$id = intval($id);

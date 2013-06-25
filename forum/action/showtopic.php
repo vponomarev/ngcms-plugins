@@ -79,22 +79,34 @@
 		$search_p = array('id' => $id);
 	
 	if(is_array($userROW))
-		$result = $mysql->record('SELECT t.id as tid, t.title as Ttitle, t.author_id, t.state, t.int_post, f.id as fid, f.title as Ftitle, f.moderators, s.uid 
+		$result = $mysql->record('SELECT t.id as tid, t.title as Ttitle, t.author_id, t.state, t.int_post, f.id as fid, f.title as Ftitle, f.moderators, f.lock_passwd, f.redirect_url, s.uid 
 				FROM '.prefix.'_forum_topics AS t 
 				INNER JOIN '.prefix.'_forum_forums AS f ON f.id = t.fid
 				LEFT JOIN '.prefix.'_forum_subscriptions AS s ON s.tid = t.id AND s.uid = '.securemysql($userROW['id']).'
 				WHERE t.id = '.securemysql($id).' LIMIT 1');
 	else
-		$result = $mysql->record('SELECT t.id as tid, t.title as Ttitle, t.author_id, t.state, t.int_post, f.id as fid, f.title as Ftitle, f.moderators 
+		$result = $mysql->record('SELECT t.id as tid, t.title as Ttitle, t.author_id, t.state, t.int_post, f.id as fid, f.title as Ftitle, f.moderators, f.lock_passwd, f.redirect_url 
 				FROM '.prefix.'_forum_topics AS t 
 				INNER JOIN '.prefix.'_forum_forums AS f ON f.id = t.fid 
 				WHERE t.id = '.securemysql($id).' LIMIT 1');
 	if(empty($result))
 		return $output = information('Этой темы не существует', $title = 'Информация');
 	
-	moderators_forum($result['moderators']);
-	if(empty($GROUP_PS['forum_prem'][$result['fid']]['topic_read']))
+	if((isset($result['lock_passwd']) && $result['lock_passwd']) && empty($_SESSION['lock_passwd_'.$id]))
+		return redirect_forum(link_lock_passwd($id));
+	
+	if((isset($result['redirect_url']) && $result['redirect_url']))
+		return redirect_forum($result['redirect_url']);
+	
+	$moderators = unserialize($result['moderators']);
+	if(array_key_exists(strtolower($userROW['name']), $moderators)){
+		$MODE_PS = $MODE_PERM[$id];
+	}else
+		$MODE_PS = array();
+	
+	if(empty($FORUM_PS[$id]['forum_read']) or empty($FORUM_PS[$id]['topic_read']))
 		return $output = permissions_forum('Доступ в тему запрещен');
+	
 	
 	$SYSTEM_FLAGS['info']['title']['item'] = $result['Ftitle'];
 	$SYSTEM_FLAGS['info']['title']['name_topic'] = $result['Ttitle'];

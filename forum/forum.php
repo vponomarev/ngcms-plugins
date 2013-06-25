@@ -34,7 +34,10 @@ register_plugin_page('forum','login','plugin_login_forum');
 register_plugin_page('forum','profile','plugin_profile_forum');
 register_plugin_page('forum','out','plugin_out_forum');
 register_plugin_page('forum','addreply','plugin_newpost_forum');
+
 register_plugin_page('forum','newtopic','plugin_newtopic_forum');
+register_plugin_page('forum','topic_modify','plugin_topic_modify_forum');
+
 register_plugin_page('forum','delpost','plugin_delpost_forum');
 register_plugin_page('forum','edit','plugin_edit_forum');
 register_plugin_page('forum','rules','plugin_rules_forum');
@@ -348,6 +351,33 @@ function plugin_newtopic_forum($params)
 	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/newtopic.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
+	
+	show_main_page(false, $output, $welcome, $event);
+}
+
+function plugin_topic_modify_forum($params)
+{global $userROW, $mysql, $twig, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
+	
+	//set_error_handler('my_error_handler');
+	
+	banned_users();
+	
+	status_user_forum();
+	check_online_forum();
+	
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/topic_modify.php');
 		else
 			$output = information('Вы забанены!!!');
 	} else {
