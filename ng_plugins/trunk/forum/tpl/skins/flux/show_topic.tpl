@@ -1,7 +1,7 @@
 <div class="linkst"> 
 	<div class="inbox"> 
 		<p class="pagelink conl">{% if (pages.true) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages.print }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p> 
-		<p class="postlink conr">{% if (GROUP_PS['post_send'] and state == 'open') %}<a href='{{ addpost }}'>Добавить сообщение</a>{% endif %}</p>
+		<p class="postlink conr">{% if (post_send and state == 'open') %}<a href='{{ addpost }}'>Добавить сообщение</a>{% endif %}</p>
 		<ul><li><a href='{{ home_link }}'>Список</a>&nbsp;</li><li>&raquo;&nbsp;<a href='{{ forum_link }}'>{{ forum_name }}</a>&nbsp;</li><li>&raquo;&nbsp;{{ subject }}</li></ul>
 		<div class="clearer"></div>
 	</div> 
@@ -84,10 +84,10 @@
 				<div class="postfootright">
 					<ul>
 						{% if (global.user) %}<li class="postreport"><a href="{{ entry.complaints_link }}">Сообщить модератору</a></li>{% endif %}
-						{% if (entry.remove and state == 'open') %}<li class="postdelete"><a href='{{ entry.del_link }}'>Удалить</a></li>{% endif %}
-						{% if (entry.modify and state == 'open') %}<li class="postedit"><a href='{{ entry.edit_link }}'>Редактировать</a></li>{% endif %}
-						{% if (entry.send and state == 'open') %}<li class="postquote"><a href='{{ entry.quote.print }}'>Ответить</a></li>{% endif %}
-						{% if (entry.send and state == 'open') %}
+						{% if (entry.post_remove and state == 'open') %}<li class="postdelete"><a href='{{ entry.del_link }}'>Удалить</a></li>{% endif %}
+						{% if (entry.post_modify and state == 'open') %}<li class="postedit"><a href='{{ entry.edit_link }}'>Редактировать</a></li>{% endif %}
+						{% if (entry.post_send and state == 'open') %}<li class="postquote"><a href='{{ entry.quote.print }}'>Ответить</a></li>{% endif %}
+						{% if (entry.post_send and state == 'open') %}
 						<script>
 							$(document).ready(function() {
 							  $("#IncertText_{{ entry.post_id }}").click(function() {
@@ -107,7 +107,7 @@
 <div class="linkst"> 
 	<div class="inbox"> 
 		<p class="pagelink conl">{% if (pages.true) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages.print }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p> 
-		<p class="postlink conr">{% if (GROUP_PS['post_send'] and state == 'open') %}<a href='{{ addpost }}'>Добавить сообщение</a>{% endif %}</p>
+		<p class="postlink conr">{% if (post_send and state == 'open') %}<a href='{{ addpost }}'>Добавить сообщение</a>{% endif %}</p>
 		<ul><li><a href='{{ home_link }}'>Список</a>&nbsp;</li><li>&raquo;&nbsp;<a href='{{ forum_link }}'>{{ forum_name }}</a>&nbsp;</li><li>&raquo;&nbsp;{{ subject }}</li></ul>
 		{% if (subscript.true) %}Вы подписаны на эту тему - <a href='{{ subscript.uns }}'>Отписаться</a>{% else %}<a href='{{ subscript.sus }}'>Подписаться и отслеживать тему</a>{% endif %}
 		<div class="clearer"></div> 
@@ -126,7 +126,7 @@
 </div>
 <div style="float:right"><script src="http://pip.qip.ru/js/pip_button.js?type=3" type="text/javascript" charset="UTF-8"></script></div>
 <div class="clearer"></div><br />
-{% if (GROUP_PS['post_send'] and state == 'open') %}
+{% if (post_send and state == 'open') %}
 
 <div class="blockform">
 	<h2><span>Быстрый ответ</span></h2>

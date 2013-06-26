@@ -167,10 +167,10 @@ function plugin_forum_install($action) {
 		'table'		=>	'forum_moderators',
 		'action'	=>	'cmodify',
 		'engine'	=> 'MyISAM',
-		'key'    => 'primary key(id)',
+		'key'    => 'primary key(id), UNIQUE(m_forum_id)',
 		'fields'	=>	array(
 			array('action' => 'cmodify', 'name' => 'id', 'type' => 'INT(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
-			array('action' => 'cmodify', 'name' => 'm_forum_id', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
+			array('action' => 'cmodify', 'name' => 'm_forum_id', 'type' => 'int(11)', 'params' => 'NOT NULL'),
 			array('action' => 'cmodify', 'name' => 'm_topic_send', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
 			array('action' => 'cmodify', 'name' => 'm_topic_modify', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),
 			array('action' => 'cmodify', 'name' => 'm_topic_closed', 'type' => 'tinyint(1)', 'params' => 'DEFAULT 0'),

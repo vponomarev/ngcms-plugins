@@ -100,11 +100,14 @@
 	
 	$moderators = unserialize($result['moderators']);
 	if(array_key_exists(strtolower($userROW['name']), $moderators)){
-		$MODE_PS = $MODE_PERM[$id];
+		$MODE_PS = $MODE_PERM[$result['fid']];
 	}else
 		$MODE_PS = array();
 	
-	if(empty($FORUM_PS[$id]['forum_read']) or empty($FORUM_PS[$id]['topic_read']))
+	print "<pre>".var_export($MODE_PERM[$result['fid']], true)."</pre>";
+	print "<pre>".var_export($FORUM_PS[$result['fid']], true)."</pre>";
+	
+	if(empty($FORUM_PS[$result['fid']]['forum_read']) or empty($FORUM_PS[$result['fid']]['topic_read']))
 		return $output = permissions_forum('Доступ в тему запрещен');
 	
 	
@@ -181,26 +184,33 @@
 	foreach ($result_2 as $row){
 		$i++;
 		
-		//'GROUP_PS' => $GROUP_PS['forum_prem'][$result['fid']],
-		if($GROUP_PS['forum_prem'][$result['fid']]['post_modify'])
-			$modify = true; 
-		elseif($GROUP_PS['forum_prem'][$result['fid']]['post_modify_your']){
-			if($userROW['status'] == $row['author_id']) 
-				$modify = true; 
-			else 
-				$modify = false;
-		}
+		if(isset($MODE_PS) && $MODE_PS)
+			$post_send = $MODE_PS['m_post_send'];
+		elseif($FORUM_PS[$result['fid']]['post_send'])
+			$post_send = true;
+		else $post_send = false;
 		
-		if($GROUP_PS['forum_prem'][$result['fid']]['post_remove'])
-			$remove = true; 
-		elseif($GROUP_PS['forum_prem'][$result['fid']]['post_remove_your']){
-			if($userROW['status'] == $row['author_id']) 
-				$remove = true; 
-			else 
-				$remove = false;
-		}
+		if(isset($MODE_PS) && $MODE_PS)
+			$post_modify = $MODE_PS['m_post_modify'];
+		elseif($FORUM_PS[$result['fid']]['post_modify'])
+			$post_modify = true;
+		elseif($FORUM_PS[$result['fid']]['post_modify_your']){
+			if($userROW['id'] == $row['author_id'])
+				$post_modify = true;
+			else
+				$post_modify = false;
+		}else $post_modify = false;
 		
-		$send = $GROUP_PS['forum_prem'][$result['fid']]['post_send'];
+		if(isset($MODE_PS) && $MODE_PS){
+			$post_remove = $MODE_PS['m_post_remove'];
+		}elseif($FORUM_PS[$result['fid']]['post_remove']){
+			$post_remove = true;
+		}elseif($FORUM_PS[$result['fid']]['post_remove_your']){
+			if($userROW['id'] == $row['author_id'])
+				$post_remove = true;
+			else
+				$post_remove = false;
+		} else $post_remove = false;
 		
 		$tEntry[] = array(
 			'i' => $i,
@@ -209,9 +219,9 @@
 				'time' => $row['e_date'],
 				'edited_by' => $row['who_e_author']
 			),
-			'modify' => $modify,
-			'remove' => $remove,
-			'send' => $send,
+			'post_modify' => $post_modify,
+			'post_remove' => $post_remove,
+			'post_send' => $post_send,
 			'del_link' => link_del_post($row['pid']),
 			'edit_link' => link_edit_post($row['pid']),
 			'tc' => ($result['uid'] == $row['uid'])?1:0,
@@ -313,7 +323,7 @@
 		'forum_link' => link_forum($result['fid']),
 		'forum_name' => $result['Ftitle'],
 		'subject' => $result['Ttitle'],
-		'GROUP_PS' => $GROUP_PS['forum_prem'][$result['fid']],
+		'post_send' => (isset($MODE_PS) && $MODE_PS)?$MODE_PS['m_post_send']:$FORUM_PS[$result['fid']]['post_send'],
 		'local' => array(
 				'num_guest_loc' => $viewers['num_guest_loc'],
 				'num_user_loc' => $viewers['num_user_loc'],
