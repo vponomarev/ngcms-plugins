@@ -128,6 +128,13 @@
 			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'showtopic'), 'xparams' => array('id' => $row['id']), 'paginator' => array('page', 1, false));
 		
 		//print "<pre>".var_export($row, true)."</pre>";
+		
+		if(isset($MODE_PS) && $MODE_PS)
+			$topic_send = $MODE_PS['m_topic_send'];
+		elseif($FORUM_PS[$result['fid']]['topic_send'])
+			$topic_send = true;
+		else $topic_send = false;
+		
 		if(isset($MODE_PS) && $MODE_PS){
 			$topic_modify = $MODE_PS['m_topic_modify'];
 		}elseif($FORUM_PS[$id]['topic_modify']){
@@ -139,6 +146,17 @@
 				$topic_modify = false;
 		} else $topic_modify = false;
 		
+		if(isset($MODE_PS) && $MODE_PS){
+			$topic_remove = $MODE_PS['m_topic_remove'];
+		}elseif($FORUM_PS[$id]['topic_remove']){
+			$topic_remove = true;
+		}elseif($FORUM_PS[$id]['topic_remove_your']){
+			if($userROW['id'] == $row['author_id'])
+				$topic_remove = true;
+			else
+				$topic_remove = false;
+		} else $topic_remove = false;
+		
 		
 		$tEntry[] = array (
 			'topic_name' => $row['title'],
@@ -148,6 +166,10 @@
 			'int_views' => $row['int_views'],
 			'status' => status_forum($row['l_date']),
 			'state' => $row['state'],
+			
+			'topic_send' => $topic_send,
+			
+			'topic_remove' => $topic_remove,
 			
 			'topic_modify' => $topic_modify,
 			'topic_modify_link' => link_topic_modify($row['id']),
