@@ -124,6 +124,7 @@ class CreateNewsFilter extends NewsFilter {
 			
 			$mysql->query('UPDATE '.prefix.'_news SET tid = '.intval($topic_id).' WHERE id = '.securemysql($newsid).' LIMIT 1');
 			update_forum($topic_id, $subject, 1,$time, $userROW['name'], $userROW['id'], $id);
+			$mysql->query('UPDATE '.prefix.'_forum_topics SET l_post = '.securemysql($post_id).' WHERE id = '.securemysql($topic_id).' LIMIT 1');
 			$mysql->query('UPDATE '.prefix.'_users SET int_post = int_post + 1, l_post = '.securemysql($time).' WHERE id = '.securemysql($userROW['id']).' LIMIT 1');
 			
 			generate_index_cache(true);
