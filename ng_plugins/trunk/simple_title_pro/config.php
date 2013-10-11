@@ -492,6 +492,7 @@ function main()
 		pluginSetVariable('simple_title_pro', 'num_news', secure_html(trim($_REQUEST['num_news'])));
 		pluginSetVariable('simple_title_pro', 'num_static', secure_html(trim($_REQUEST['num_static'])));
 		pluginSetVariable('simple_title_pro', 'o_title', secure_html(trim($_REQUEST['o_title'])));
+		pluginSetVariable('simple_title_pro', 'e_title', secure_html(trim($_REQUEST['e_title'])));
 		pluginSetVariable('simple_title_pro', 'html_secure', secure_html(trim($_REQUEST['html_secure'])));
 		pluginSetVariable('simple_title_pro', 'p_title', secure_html(trim($_REQUEST['p_title'])));
 		pluginSetVariable('simple_title_pro', 'cache', secure_html(trim($_REQUEST['cache'])));
@@ -504,6 +505,7 @@ function main()
 	$m_title = pluginGetVariable('simple_title_pro', 'm_title');
 	$static_title = pluginGetVariable('simple_title_pro', 'static_title');
 	$o_title = pluginGetVariable('simple_title_pro', 'o_title');
+	$e_title = pluginGetVariable('simple_title_pro', 'e_title');
 	$p_title = pluginGetVariable('simple_title_pro', 'p_title');
 	$num_title = pluginGetVariable('simple_title_pro', 'num_title');
 	$num_cat = pluginGetVariable('simple_title_pro', 'num_cat');
@@ -535,6 +537,10 @@ function main()
 		'o_title' => array(
 						'print' => $o_title,
 						'error' => empty($o_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %home% / %other% %html% %num%':''
+		),
+		'e_title' => array(
+						'print' => $e_title,
+						'error' => empty($e_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %home% / %other%':''
 		),
 		'num_title' => array(
 						'print' => $num_title,

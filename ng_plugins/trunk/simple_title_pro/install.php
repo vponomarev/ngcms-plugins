@@ -54,6 +54,7 @@ function plugin_simple_title_pro_install($action) {
 				'static_title' => '%home% / %static%',
 				'num_title' => 'Страница %count%',
 				'o_title' => '%home% / %other% %html% [/ %num%]',
+				'e_title' => '%home% / %other%',
 				'html_secure' => '/ %html%',
 				'cache' => '1', 
 				'num_cat' => 20,
