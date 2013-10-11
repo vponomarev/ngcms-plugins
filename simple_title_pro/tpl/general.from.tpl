@@ -44,6 +44,9 @@
 					<td class="contentEntry1" valign=top>Дополнительная информация для страницы<br /><small>Вывод дополнительной информацию о странице (прим. имя тега)  - данных передадутся в переменную %html%</small></td>
 					<td class="contentEntry2" valign=top>{{html_secure.error}}<input name="html_secure" type="text" title="Дополнительная информация для страницы" size=40 value="{{html_secure.print}}" /></td>
 				</tr><tr>
+					<td class="contentEntry1" valign=top>Страница ошибки 404<br /><small>Вывод дополнительной информацию о странице (прим. имя тега)  - данных передадутся в переменную %html%</small></td>
+					<td class="contentEntry2" valign=top>{{e_title.error}}<input name="e_title" type="text" title="Дополнительная информация для страницы" size=40 value="{{e_title.print}}" /></td>
+				</tr><tr>
 					<td class="contentEntry1" valign=top>Плагины исключения<br /><small>Список плагинов на которых работа плагина не распространяется</small></td>
 					<td class="contentEntry2" valign=top>{{p_title.error}}<input name="p_title" type="text" title="Список плагинов на которых работа плагина не распространяется" size=40 value="{{p_title.print}}" /></td>
 				</tr><tr>

@@ -25,7 +25,10 @@ function simple_title_pro()
 	$pageNo = isset($CurrentHandler['params']['page'])?str_replace('%count%',intval($CurrentHandler['params']['page']), pluginGetVariable('simple_title_pro', 'num_title')):'';
 	
 	$html = !empty($SYSTEM_FLAGS['info']['title']['secure_html'])?str_replace('%html%', $SYSTEM_FLAGS['info']['title']['secure_html'], pluginGetVariable('simple_title_pro', 'html_secure')):'';
+	//$runResult = $UHANDLER->run($systemAccessURL, array('debug' => true));
+	//print "<pre>".var_export($runResult, true)."</pre>";
 	//print "<pre>".var_export($CurrentHandler, true)."</pre>";
+	//print "<pre>".var_export($SYSTEM_FLAGS, true)."</pre>";
 	
 	switch ($CurrentHandler['pluginName']){
 		case 'news':
@@ -75,7 +78,10 @@ function simple_title_pro()
 			if ($CurrentHandler['handlerName'] == 'news'){
 				if(isset($SYSTEM_FLAGS['news']['currentCategory.alt'])){
 					$cat_name[] = $catz[$SYSTEM_FLAGS['news']['currentCategory.alt']]['name'];
+					
 					$id = $catz[$CurrentHandler['params']['category']]['parent'];
+					//print "<pre>".var_export($catz, true)."</pre>";
+					//print "<pre>".var_export($catmap, true)."</pre>";
 					while($id <> 0){
 						$cat_name[] = $catz[$catmap[$id]]['name'];
 						$id = $catz[$catmap[$id]]['parent'];
@@ -161,12 +167,21 @@ function simple_title_pro()
 		
 		default:
 			$list_plugin = array_map('trim', explode(',',pluginGetVariable('simple_title_pro', 'p_title')));
-			if(!in_array($CurrentHandler['pluginName'], $list_plugin)){
-				$o_title = preg_replace('/\[([^\[\]]+)\]/' , (isset($pageNo) && $pageNo)?'\\1':'', pluginGetVariable('simple_title_pro', 'o_title'));
+			print "<pre>".var_export($list_plugin, true)."</pre>";
+			if(isset($CurrentHandler['pluginName']) && $CurrentHandler['pluginName']){
+				if(!in_array($CurrentHandler['pluginName'], $list_plugin)){
+					$o_title = preg_replace('/\[([^\[\]]+)\]/' , (isset($pageNo) && $pageNo)?'\\1':'', pluginGetVariable('simple_title_pro', 'o_title'));
+					$template ['vars'] ['titles'] = trim(str_replace(
+						array ('%home%', '%other%', '%html%','%num%'),
+						array ($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group'], $html, $pageNo ),
+						$o_title));
+				}
+			} else {;
+				$e_title = pluginGetVariable('simple_title_pro', 'e_title');
 				$template ['vars'] ['titles'] = trim(str_replace(
-					array ('%home%', '%other%', '%html%','%num%'),
-					array ($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group'], $html, $pageNo ),
-					$o_title));
+						array ('%home%', '%other%'),
+						array ($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group'] ),
+						$e_title));
 			}
 	}
 }
