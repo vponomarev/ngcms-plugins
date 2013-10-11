@@ -26,7 +26,15 @@ class p_uprofileFilter {
 // 0 - Status [ 0 - no avatar, 1 - have avatar ]
 // 1 - Avatar URL
 function userGetAvatar($urow){
-	global $config;
+	global $config, $TemplateCache;
+
+	// Preload template configuration variables
+	templateLoadVariables();
+
+	// Use default <noavatar> file
+	// - Check if noavatar is defined on template level
+	$tplVars = $TemplateCache['site']['#variables'];
+	$noAvatarURL = (isset($tplVars['configuration']) && is_array($tplVars['configuration']) && isset($tplVars['configuration']['noAvatarImage']) && $tplVars['configuration']['noAvatarImage'])?(tpl_url."/".$tplVars['configuration']['noAvatarImage']):(avatars_url."/noavatar.gif");
 
 	// If avatar is set
 	if ($urow['avatar'] != '') {
@@ -35,9 +43,9 @@ function userGetAvatar($urow){
 
 	// Use GRAVATAR (if set)
 	if ($config['avatars_gravatar']) {
-		$avatar	= 'http://www.gravatar.com/avatar/'.md5(strtolower($urow['mail'])).'.jpg?s='.$config['avatar_wh'].'&d='.urlencode(avatars_url."/noavatar.gif");
+		$avatar	= 'http://www.gravatar.com/avatar/'.md5(strtolower($urow['mail'])).'.jpg?s='.$config['avatar_wh'].'&d='.urlencode($noAvatarURL);
 	} else {
-		$avatar = avatars_url."/noavatar.gif";
+		$avatar = $noAvatarURL;
 	}
 	return array(1, $avatar);
 }
