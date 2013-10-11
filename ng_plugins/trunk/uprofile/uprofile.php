@@ -19,7 +19,6 @@ LoadPluginLibrary('uprofile', 'lib');
 function uprofile_showProfile($params) {
 	global $mysql, $userROW, $config, $lang, $twig, $twigLoader, $template, $SYSTEM_FLAGS, $PFILTERS;
 
-	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.view'];
 	//LoadPluginLang('uprofile', 'users', '', '', ':');
 
 	// Check if valid user identity is specified
@@ -45,7 +44,7 @@ function uprofile_showProfile($params) {
 	$tpath = locatePluginTemplates(array('users'), 'uprofile', pluginGetVariable('uprofile', 'localsource'));
 
 	// Make page title
-	$SYSTEM_FLAGS['info']['title']['group']	= $lang['loc_userinfo'];
+	$SYSTEM_FLAGS['info']['title']['group']	= $lang['uprofile']['header.view'];
 	$SYSTEM_FLAGS['info']['title']['item']	= $urow['name'];
 
 	$status = (($urow['status'] >= 1)&&($urow['status'] <= 4))?$lang['uprofile']['st_'.$urow['status']]:$lang['uprofile:st_unknown'];
@@ -124,7 +123,7 @@ function uprofile_applyProfile() {
 
 	// Check if user is logged in
 	if (!is_array($userROW)) {
-		msg(array("type" => "error", "text" => $lang['uprofile:msge_notlogged']));
+		msg(array("type" => "error", "text" => $lang['uprofile']['msge_notlogged']));
 		return;
 	}
 
@@ -152,11 +151,11 @@ function uprofile_applyProfile() {
 function uprofile_editForm($ajaxMode = false){
 	global $mysql, $userROW, $lang, $config, $tpl, $template, $twig, $twigLoader, $SYSTEM_FLAGS, $PFILTERS, $DSlist;
 
-	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile:header.edit'];
+	$SYSTEM_FLAGS['info']['title']['group']		= $lang['uprofile']['header.edit'];
 
 	// Check if user is logged in
 	if (!is_array($userROW)) {
-		msg(array("type" => "error", "text" => $lang['uprofile:msge_notlogged']));
+		msg(array("type" => "error", "text" => $lang['uprofile']['msge_notlogged']));
 		return;
 	}
 
@@ -180,7 +179,7 @@ function uprofile_editForm($ajaxMode = false){
 	$tpath = locatePluginTemplates(array('profile'), 'uprofile', pluginGetVariable('uprofile', 'localsource'));
 
 
-	$status = (($urow['status'] >= 1)&&($urow['status'] <= 4))?$lang['uprofile:st_'.$urow['status']]:$lang['uprofile:st_unknown'];
+	$status = ((($urow['status'] >= 1)&&($urow['status'] <= 4))?$lang['uprofile']['st_'.$urow['status']]:$lang['uprofile']['st_unknown']);
 
 	// Get user's photo and avatar
 	$userPhoto	= userGetPhoto($urow);
@@ -217,7 +216,7 @@ function uprofile_editForm($ajaxMode = false){
 		),
 		'form_action'		=>	generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'apply')),
 		'token'				=> genUToken('uprofile.update'),
-		'info_sizelimit_text'	=> str_replace('{limit}', intval($config['user_aboutsize']), $lang['uprofile:about_sizelimit']),
+		'info_sizelimit_text'	=> str_replace('{limit}', intval($config['user_aboutsize']), $lang['uprofile']['about_sizelimit']),
 		'info_sizelimit'		=> intval($config['user_aboutsize']),
 	);
 
@@ -270,7 +269,7 @@ function uprofile_editApply(){
 
 	// Check if user is logged in
 	if (!is_array($userROW)) {
-		msg(array("type" => "error", "text" => $lang['uprofile:msge_notlogged']));
+		msg(array("type" => "error", "text" => $lang['uprofile']['msge_notlogged']));
 		return;
 	}
 
@@ -284,14 +283,14 @@ function uprofile_editApply(){
 	if ($_REQUEST['editpassword'] != '') {
 		// Correct OLD password must be presented
 		if (!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $currentUser['pass'])) {
-			msg(array("type" => "error", "text" => $lang['uprofile:msge_needoldpass']));
+			msg(array("type" => "error", "text" => $lang['uprofile']['msge_needoldpass']));
 			return;
 		}
 	} else {
 		// Token or correct OLD password must be presented
 		if ((!isset($_POST['token']) || ($_POST['token'] != genUToken('uprofile.update')))&&
 			(!isset($_POST['oldpass']) || (EncodePassword($_POST['oldpass']) != $currentUser['pass']))) {
-				msg(array("type" => "error", "text" => $lang['uprofile:msge_needoldpass']));
+				msg(array("type" => "error", "text" => $lang['uprofile']['msge_needoldpass']));
 				return;
 		}
 	}
@@ -329,7 +328,7 @@ function uprofile_editApply(){
 				$lwh = intval($config['avatar_wh']);
 				if ($lwh && (($sz[1] > $lwh)||($sz[2] > $lwh))) {
 					// Fatal: uploaded avatar mismatch size limits !
-					msg(array("type" => "error", "text" => $lang['uprofile:msge_size'], "info" => sprintf($lang['uprofile:msgi_size'], $lwh.'x'.$lwh)));
+					msg(array("type" => "error", "text" => $lang['uprofile']['msge_size'], "info" => sprintf($lang['uprofile']['msgi_size'], $lwh.'x'.$lwh)));
 					$fmanage->file_delete(array('type' => 'avatar', 'id' => $up[0]));
 				} else {
 					$mysql->query("update ".prefix."_".$fmanage->tname." set width=".db_squote($sz[1]).", height=".db_squote($sz[2])." where id = ".db_squote($up[0]));
@@ -337,7 +336,7 @@ function uprofile_editApply(){
 				}
 			} else {
 				// We were unable to fetch image size. Damaged file, delete it!
-				msg(array("type" => "error", "text" => $lang['uprofile:msge_damaged']));
+				msg(array("type" => "error", "text" => $lang['uprofile']['msge_damaged']));
 				$fmanage->file_delete(array('type' => 'avatar', 'id' => $up[0]));
 			}
 		}
@@ -366,7 +365,7 @@ function uprofile_editApply(){
 
 				// If we were unable to create thumb - delete photo, it's damaged!
 				if (!$thumb) {
-					msg(array("type" => "error", "text" => $lang['uprofile:msge_damaged']));
+					msg(array("type" => "error", "text" => $lang['uprofile']['msge_damaged']));
 					$fmanage->file_delete(array('type' => 'avatar', 'id' => $up[0]));
 				} else {
 					$mysql->query("update ".prefix."_".$fmanage->tname." set width=".db_squote($sz[1]).", height=".db_squote($sz[2]).", preview=1 where id = ".db_squote($up[0]));
@@ -374,7 +373,7 @@ function uprofile_editApply(){
 				}
 			} else {
 				// We were unable to fetch image size. Damaged file, delete it!
-				msg(array("type" => "error", "text" => $lang['uprofile:msge_damaged']));
+				msg(array("type" => "error", "text" => $lang['uprofile']['msge_damaged']));
 				$fmanage->file_delete(array('type' => 'avatar', 'id' => $up[0]));
 			}
 		}
