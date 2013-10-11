@@ -25,7 +25,16 @@ if (!defined('NGCMS')) die ('HAL');
 //		'outprint'	 => flag: if set, output will be returned, elsewhere - will be added to mainblock
 //		'total'		=> total number of comments in this news
 function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams = array()){
-	global $mysql, $tpl, $template, $config, $userROW, $parse, $lang, $PFILTERS;
+	global $mysql, $tpl, $template, $config, $userROW, $parse, $lang, $PFILTERS, $TemplateCache;
+
+	// Preload template configuration variables
+	templateLoadVariables();
+
+	// Use default <noavatar> file
+	// - Check if noavatar is defined on template level
+	$tplVars = $TemplateCache['site']['#variables'];
+	$noAvatarURL = (isset($tplVars['configuration']) && is_array($tplVars['configuration']) && isset($tplVars['configuration']['noAvatarImage']) && $tplVars['configuration']['noAvatarImage'])?(tpl_url."/".$tplVars['configuration']['noAvatarImage']):(avatars_url."/noavatar.gif");
+
 
 	// -> desired template path
 	$templatePath = ($callingParams['overrideTemplatePath'])?$callingParams['overrideTemplatePath']:(tpl_site.'plugins/comments');
@@ -136,10 +145,12 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 				$tvars['vars']['avatar'] = "<img src=\"".avatars_url."/".$row['users_avatar']."\" alt=\"".$row['author']."\" />";
 			} else {
 				// If gravatar integration is active, show avatar from GRAVATAR.COM
+
+
 				if ($config['avatars_gravatar']) {
-					$tvars['vars']['avatar'] = '<img src="http://www.gravatar.com/avatar/'.md5(strtolower($row['mail'])).'.jpg?s='.$config['avatar_wh'].'&amp;d='.urlencode(avatars_url."/noavatar.gif").'" alt=""/>';
+					$tvars['vars']['avatar'] = '<img src="http://www.gravatar.com/avatar/'.md5(strtolower($row['mail'])).'.jpg?s='.$config['avatar_wh'].'&amp;d='.urlencode($noAvatarURL).'" alt=""/>';
 				} else {
-					$tvars['vars']['avatar'] = "<img src=\"".avatars_url."/noavatar.gif\" alt=\"\" />";
+					$tvars['vars']['avatar'] = "<img src=\"".$noAvatarURL."\" alt=\"\" />";
 				}
 			}
 		} else {
