@@ -22,6 +22,10 @@ array_push($cfgX, array('name' => 'tcounter', 'title' => $lang['archive:tcounter
 array_push($cfg,  array('mode' => 'group', 'title' => $lang['archive:group.config'], 'entries' => $cfgX));
 
 $cfgX = array();
+array_push($cfgX, array('name' => 'mode', 'title' => "В каком режиме генерируется вывод плагина<br /><small><b>Автоматически</b> - при включении плагина автоматически генерируется блок {plugin_comments}<br /><b>TWIG</b> - вывод плагина генерируется только через TWIG функцию <b>callPlugin()</b></small>", 'type' => 'select', 'values' => array ( '0' => 'Автоматически', '1' => 'TWIG'), 'value' => intval(pluginGetVariable($plugin,'mode'))));
+array_push($cfg,  array('mode' => 'group', 'title' => '<b>Режим запуска</b>', 'entries' => $cfgX));
+
+$cfgX = array();
 array_push($cfgX, array('name' => 'localsource', 'title' => $lang['archive:localsource'], 'descr' => $lang['archive:localsource#desc'], 'type' => 'select', 'values' => array ( '0' => 'Шаблон сайта', '1' => 'Плагин'), 'value' => intval(pluginGetVariable($plugin,'localsource'))));
 array_push($cfg,  array('mode' => 'group', 'title' => $lang['archive:group.source'], 'entries' => $cfgX));
 
