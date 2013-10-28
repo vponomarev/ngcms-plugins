@@ -1,1 +1,1 @@
-<li><a href="{link}">{title} [counter] <b>[ {cnt}]</b>[/counter]</a></li>
+<li><a href="{link}">{title} [counter] <b>[ {cnt} {ctext} ]</b>[/counter]</a></li>
