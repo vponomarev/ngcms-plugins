@@ -3,53 +3,120 @@
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
 
-add_act('index', 'lastcomments_block');
-register_plugin_page('lastcomments','','lastcomments_page',0);
+define('lastcomments_version', '0.10');
 
-
+// ==============================================
+// Side bar widget
+// ==============================================
 function lastcomments_block() {
+	global $template;
+
 	// Action if sidepanel is enabled
-	if (extra_get_param('lastcomments','sidepanel')) {
-		lastcomments();
+	if (pluginGetVariable('lastcomments','sidepanel')) {
+		$template['vars']['plugin_lastcomments'] = lastcomments();
+	} else {
+		$template['vars']['plugin_lastcomments'] = "";
 	}
 }
 
+registerActionHandler('index', 'lastcomments_block');
+// ==============================================
 
+
+// ==============================================
+// Plugin page
+// ==============================================
 function lastcomments_page() {
-	// Action if sidepanel is enabled
-	if (extra_get_param('lastcomments','ppage')) {
-		lastcomments(1);
+	global $SYSTEM_FLAGS, $template, $CurrentHandler;
+
+	// Action if ppage is enabled
+	if (pluginGetVariable('lastcomments','ppage') && (checkLinkAvailable('lastcomments', '') && $CurrentHandler['handlerParams']['value']['pluginName'] == 'core')) {
+		$SYSTEM_FLAGS['info']['title']['group'] = "lastcomments";
+		$template['vars']['mainblock'] = lastcomments(1);
+	} else {
+		error404();
 	}
 }
 
-function lastcomments($pp = 0) {
-    global $config, $mysql, $template, $tvars, $tpl, $parse;
+register_plugin_page('lastcomments','','lastcomments_page',0);
+// ==============================================
 
-	if ($pp) { $pp = 'pp_'; } else { $pp = '';}
+// ==============================================
+// Rss feed
+// ==============================================
+function lastcomments_rssfeed(){
+	global $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW, $CurrentHandler;
 
+	// Action if rssfeed is enabled
+	if (pluginGetVariable('lastcomments','rssfeed') && !(checkLinkAvailable('lastcomments', 'rss') && $CurrentHandler['handlerParams']['value']['pluginName'] == 'core')) {		
+		// Hide Template
+		$SUPRESS_TEMPLATE_SHOW = true;
+		$SUPRESS_MAINBLOCK_SHOW = true;
+
+		// Disable index actions
+		actionDisable("index");
+		actionDisable("index_pre");
+		actionDisable("index_post");
+
+		// launch rss
+		echo lastcomments(2);
+	} else {
+		error404();
+	}
+}
+
+register_plugin_page('lastcomments','rss','lastcomments_rssfeed',0);
+// ==============================================
+
+// ==============================================
+// Some magic
+// ==============================================
+function lastcomments($mode = 0) {
+	global $config, $mysql, $twig, $twigLoader, $parse, $TemplateCache;
+
+	switch ($mode) {
+		case 1: 
+			$tpl_prefix = "pp_"; 	// plugin page
+		break;
+		case 2:
+			$tpl_prefix = "rss_"; 	// rss feed
+		break;
+		case 0:
+		default:
+			$tpl_prefix = ""; 		// sidepanel widget
+		break;
+	}
+	
 	// Generate cache file name [ we should take into account SWITCHER plugin & calling parameters ]
-	$cacheFileName = md5('lastcomments'.$config['theme'].$config['default_lang'].$pp).'.txt';
-
-	if (extra_get_param('lastcomments','cache')) {
-		$cacheData = cacheRetrieveFile($cacheFileName, extra_get_param('lastcomments','cacheExpire'), 'lastcomments');
+	$cacheFileName = md5('lastcomments'.$config['theme'].$config['default_lang'].$tpl_prefix).'.txt';
+	if (pluginGetVariable('lastcomments','cache')) {
+		$cacheData = cacheRetrieveFile($cacheFileName, pluginGetVariable('lastcomments','cacheExpire'), 'lastcomments');
 		if ($cacheData != false) {
 			// We got data from cache. Return it and stop
-			$template['vars'][($pp)?'mainblock':'plugin_lastcomments'] = $cacheData;
-			return;
+			return $cacheData;
 		}
 	}
 
-	$comm_num = 0;
-	$number			= intval(extra_get_param('lastcomments',$pp.'number'));
-	$comm_length	= intval(extra_get_param('lastcomments',$pp.'comm_length'));
-	if (($number < 1)       || ($number > 50))          		  { $number      = $pp?30:10;  }
-	if (($comm_length < 10) || ($comm_length > ($pp?500:100))) { $comm_length = $pp?500:50; }
+	// Preload template configuration variables
+	@templateLoadVariables();
 
-	// Determine paths for all template files
-	$tpath = locatePluginTemplates(array($pp.'lastcomments', $pp.'entries'), 'lastcomments', extra_get_param('lastcomments', 'localsource'));
+	// Use default <noavatar> file
+	// - Check if noavatar is defined on template level
+	$tplVars = $TemplateCache['site']['#variables'];
+	$noAvatarURL = (isset($tplVars['configuration']) && is_array($tplVars['configuration']) && isset($tplVars['configuration']['noAvatarImage']) && $tplVars['configuration']['noAvatarImage'])?(tpl_url."/".$tplVars['configuration']['noAvatarImage']):(avatars_url."/noavatar.gif");
+
+	//
+	// Prepare for battle
+	$comm_num = 0;
+	$number			= intval(pluginGetVariable('lastcomments', $tpl_prefix.'number'));
+	$comm_length	= intval(pluginGetVariable('lastcomments', $tpl_prefix.'comm_length'));
+	if (($number < 1)       || ($number > 50))          		  			{ $number      = $tpl_prefix? 30 : 10;  }
+	if (($comm_length < 10) || ($comm_length > ($tpl_prefix? 500 : 100)))	{ $comm_length = $tpl_prefix? 500 : 50; }
+	if ($mode == 2) { $old_locale = setlocale(LC_TIME,0); setlocale(LC_TIME,'en_EN'); }
 
 	$query = "select c.*, u.avatar as users_avatar, u.id as uid, n.id as nid, n.title, n.alt_name, n.catid, n.postdate as npostdate from ".prefix."_comments c left join ".prefix."_news n on c.post=n.id left join ".uprefix."_users u on c.author_id = u.id where n.approve=1 order by c.id desc limit ".$number;
-	$lastcomments = '';
+	$data = array();
+
 	foreach ($mysql->select($query) as $row) {
 
 		// Parse comments
@@ -59,90 +126,128 @@ function lastcomments($pp = 0) {
 		if ($config['use_htmlformatter'])	{ $text = $parse -> htmlformatter($text); }
 		if ($config['use_smilies'])			{ $text = $parse -> smilies($text); }
 	    if (strlen($text) > $comm_length)	{ $text = $parse -> truncateHTML($text, $comm_length);}
-	    ++$comm_num;
-
-		$tvars['vars'] = array(
-			'link'		=>	newsGenerateLink(array('id' => $row['nid'], 'alt_name' => $row['alt_name'], 'catid' => $row['catid'], 'postdate' => $row['npostdate'])),
-			'date'		=>	langdate('d.m.Y', $row['postdate']),
-			'author'	=>	str_replace('<', '&lt;', $row['author']),
-			'author_id'	=>	$row['author_id'],
-			'title'		=>	str_replace('<', '&lt;', $row['title']),
-			'text'		=>	$text,
-			'category_link'	=>	GetCategories($row['catid']),
-			'comnum'	=>	$comm_num
-		);
+	    $comm_num++;
 
 		// gen answer
 		if ($row['answer'] != '') {
 			$answer = $row['answer'];
+			$name = $row['name'];
 
 			if ($config['blocks_for_reg'])		{ $answer = $parse -> userblocks($answer); }
 			if ($config['use_htmlformatter'])	{ $answer = $parse -> htmlformatter($answer); }
 			if ($config['use_bbcodes'])			{ $answer = $parse -> bbcodes($answer); }
 			if ($config['use_smilies'])			{ $answer = $parse -> smilies($answer); }
-
-			$tvars['vars']['answer']	=	$answer;
-			$tvars['vars']['name']		=	$row['name'];
-			$tvars['regx']["'\[answer\](.*?)\[/answer\]'si"] = '$1';
-		} else {
-			$tvars['regx']["'\[answer\](.*?)\[/answer\]'si"] = '';
 		}
-
 		
 		// gen avatar
 		if ($config['use_avatars']) {
 			if ($row['users_avatar']) {
-				$tvars['vars']['avatar'] = "<img src=\"".avatars_url."/".$row['users_avatar']."\" alt=\"".$row['author']."\" />";
-				$tvars['vars']['avatar_url'] = avatars_url."/".$row['users_avatar'];
+				$avatar = "<img src=\"".avatars_url."/".$row['users_avatar']."\" alt=\"".$row['author']."\" />";
+				$avatar_url = avatars_url."/".$row['users_avatar'];
 			} else {
 				// If gravatar integration is active, show avatar from GRAVATAR.COM
 				if ($config['avatars_gravatar']) {
-					$tvars['vars']['avatar'] = '<img src="http://www.gravatar.com/avatar/'.md5(strtolower($row['mail'])).'?s='.$config['avatar_wh'].'&amp;d='.urlencode(avatars_url."/noavatar.png").'" alt=""/>';
-					$tvars['vars']['avatar_url'] = 'http://www.gravatar.com/avatar/'.md5(strtolower($row['mail'])).'?s='.$config['avatar_wh'].'&amp;d='.urlencode(avatars_url."/noavatar.gif");
+					$avatar = '<img src="http://www.gravatar.com/avatar/'.md5(strtolower($row['mail'])).'?s='.$config['avatar_wh'].'&amp;d='.urlencode($noAvatarURL).'" alt=""/>';
+					$avatar_url = 'http://www.gravatar.com/avatar/'.md5(strtolower($row['mail'])).'?s='.$config['avatar_wh'].'&amp;d='.urlencode($noAvatarURL);
 				} else {
-					$tvars['vars']['avatar'] = "<img src=\"".avatars_url."/noavatar.gif\" alt=\"\" />";
-					$tvars['vars']['avatar_url'] = avatars_url."/noavatar.gif";
+					$avatar = "<img src=\"".$noAvatarURL."\" alt=\"\" />";
+					$avatar_url = $noAvatarURL;
 				}
 			}
 		} else {
-			$tvars['vars']['avatar'] = '';
-			$tvars['vars']['avatar_url'] = '';
+			$avatar = '';
+			$avatar_url = '';
 		}
 
 		if ($row['author_id'] && getPluginStatusActive('uprofile')) {
-			$tvars['vars']['author_link'] = checkLinkAvailable('uprofile', 'show')?
+			$author_link = checkLinkAvailable('uprofile', 'show')?
 				generateLink('uprofile', 'show', array('name' => $row['author'], 'id' => $row['author_id'])):
 				generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('id' => $row['author_id']));
-			$tvars['regx']["'\[profile\](.*?)\[/profile\]'si"] = '$1';
 		} else {
-			$tvars['vars']['author_link'] = '';
-			$tvars['regx']["'\[profile\](.*?)\[/profile\]'si"] = '';
+			$author_link = '';
+			
 		}
 
-        $tpl -> template($pp.'entries', $tpath[$pp.'entries']);
-        $tpl -> vars($pp.'entries', $tvars);
-        $lastcomments .= $tpl -> show($pp.'entries');
+
+		$data[] = array(
+			'link'			=>	newsGenerateLink(array('id' => $row['nid'], 'alt_name' => $row['alt_name'], 'catid' => $row['catid'], 'postdate' => $row['npostdate'])),
+			'date'			=>	langdate('d.m.Y', $row['postdate']),
+			'author'		=>	str_replace('<', '&lt;', $row['author']),
+			'author_id'		=>	$row['author_id'],
+			'title'			=>	str_replace('<', '&lt;', $row['title']),
+			'text'			=>	$text,
+			'category_link'	=>	GetCategories($row['catid']),
+			'comnum'		=>	$comm_num,
+			'author_link' 	=>	$author_link,
+			'avatar' 		=>	$avatar,
+			'avatar_url'	=>	$avatar_url,
+			'answer'		=>  $answer,
+			'name'			=>  $name,
+			'alternating'	=>  ($comnum%2)?"lastcomments_even":"lastcomments_odd",
+			'rsslink'		=>  home."?id=".$row['nid'],
+			'rssdate'		=> 	gmstrftime('%a, %d %b %Y %H:%M:%S GMT',$row['postdate']),
+		);
     }
 
-    unset($tvars);
 
-    $tvars['vars'] = array(
-    	'entries' => $lastcomments
+    $tpath = locatePluginTemplates(array($tpl_prefix.'lastcomments', $tpl_prefix.'entries'), 'lastcomments', pluginGetVariable('lastcomments', 'localsource'));
+
+
+    // Prepare REGEX conversion table
+	$conversionConfigRegex = array(
+			"#\[profile\](.*?)\[/profile\]#si"			=> '{% if (row.author_id) %}$1{% endif %}',
+			"#\[answer\](.*?)\[/answer\]#si"			=> '{% if (row.answer != "") %}$1{% endif %}',
+			"#\[nocomments\](.*?)\[/nocomments\]#si"	=> "{% if (comnum == 0) %}$1{% endif %}",
+	//		"#\{l_([0-9a-zA-Z\-\_\.\#]+)}#"					=> "{{ lang['$1'] }}",
+	);
+
+	// Prepare conversion table
+	$conversionConfig = array(
+		'{tpl_url}'			=>  '{{ tpl_url }}',
+		'{link}'			=>	'{{ entry.link }}',
+		'{date}'			=>	'{{ entry.date }}',
+		'{author}'			=>	'{{ entry.author }}',
+		'{author_id}'		=>	'{{ entry.author_id }}',
+		'{title}'			=>	'{{ entry.title }}',
+		'{text}'			=>	'{{ entry.text }}',
+		'{category_link}'	=>	'{{ entry.category_link }}',
+		'{comnum}'			=>	'{{ entry.comnum }}',
+		'{author_link}' 	=>	'{{ entry.author_link }}',
+		'{avatar}' 			=>	'{{ entry.avatar }}',
+		'{avatar_url}'		=>	'{{ entry.avatar_url }}',
+		'{answer}'			=>  '{{ entry.answer }}',
+		'{name}'			=>  '{{ entry.name }}',
+		'{alternating}'		=>	'{{ entry.alternating }}',
+		'{entries}'			=>  '{% for entry in entries %}{% include localPath(0) ~ "entries.tpl" %}{% endfor %}',
+		'{tpl_url}'			=>  '{{ tpl_url }}',
+	);
+
+	$twigLoader->setConversion($tpath[$tpl_prefix.'lastcomments'].$tpl_prefix."lastcomments".'.tpl', $conversionConfig, $conversionConfigRegex);
+	$twigLoader->setConversion($tpath[$tpl_prefix.'entries'].$tpl_prefix."entries".'.tpl', $conversionConfig, $conversionConfigRegex);
+
+    if (isset($tpath[$tpl_prefix.'entries']))
+		$twig->loadTemplate($tpath[$tpl_prefix.'entries'].$tpl_prefix.'entries'.'.tpl');
+
+    $xt = $twig->loadTemplate($tpath[$tpl_prefix.'lastcomments'].$tpl_prefix."lastcomments".'.tpl');
+    $tVars = array(
+    	'comnum' 		=> $comm_num,
+    	'entries' 		=> $data,
+    		
+    	'home_title'	=> $config['home_title'],
+	    'home_url'		=> $config['home_url'],
+	    'description'	=> $config['description'],
+
+	    'generator'    => 'Plugin Lastcomments ('.lastcomments_version.') // Next Generation CMS ('.engineName.' '.engineVersion.')',
+
     );
 
-    if ($comm_num > 0) {
-    	$tvars['regx']["'\[nocomments\](.*?)\[/nocomments\]'si"] = '';
-    } else {
-    	$tvars['regx']["'\[nocomments\](.*?)\[/nocomments\]'si"] = '$1';
-    }
+    $output = $xt->render($tVars);
 
-    $tpl -> template($pp.'lastcomments', $tpath[$pp.'lastcomments']);
-    $tpl -> vars($pp.'lastcomments', $tvars);
+    if ($mode == 2) setlocale(LC_TIME,$old_locale);
 
-	$output = $tpl -> show($pp.'lastcomments');
-	$template['vars'][($pp)?'mainblock':'plugin_lastcomments'] = $output;
-
-	if (extra_get_param('lastcomments','cache')) {
+	if (pluginGetVariable('lastcomments','cache')) {
 		cacheStoreFile($cacheFileName, $output, 'lastcomments');
 	}
+
+	return $output;
 }
