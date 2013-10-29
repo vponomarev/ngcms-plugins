@@ -1,0 +1,11 @@
+ID: top_active_users
+Name: Top active users
+Version: 0.4
+Acts: index
+File: top_active_users.php
+Config: config.php
+Type: plugin
+Description: Топ активных пользователей
+Author: Rostunov Sergey
+Author_URI: http://rostunov.com
+preinstall: no
