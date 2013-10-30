@@ -1,0 +1,118 @@
+# =========================================================================== #
+# NG CMS // Плагины // auth_loginza - авторизация через OpenID/oAuth/OpenAPI  #
+# =========================================================================== #
+
+Плагин не является самостоятельным модулем авторизации, а работает лишь, как 
+дополнение к одному из уже работающих плагинов, например auth_basic.
+
+# это текстовая инструкция
+# полную версию в картинках см. на http://digitalplace.ru/webdev/plugin-loginza-ngcms.html
+
+1. В первую очередь необходимо в \templates\%ваш_шаблон%\usermenu.tpl подключить
+JavaScript виджет: 
+
+&lt;script src=&quot;http://loginza.ru/js/widget.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+
+В этом же файле необходимо разместить ссылку, при нажатии на которую будет
+всплывать окошко с набором провайдеров для авторизации, например:
+
+&lt;a href=&quot;http://loginza.ru/api/widget?token_url=[RETURN_URL]&quot; class=&quot;loginza&quot;&gt;
+&lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/sign_in_button_gray.gif&quot; alt=&quot;Войти через loginza&quot;/&gt;
+&lt;/a&gt;
+
+RETURN_URL - это ссылка такого типа http://ваш_домен.ру/plugin/auth_loginza/
+
+Если вы не хотите выводить всех провайдеров, а только избранных, то на помощь приходит параметр 
+providers_set (если используется несколько значений, перечислите их через зяпятую):
+google, yandex, mailruapi, mailru, vkontakte, facebook, twitter, loginza, myopenid, webmoney, 
+rambler, flickr, lastfm, verisign, aol, steam, openid.
+
+Ссылка выше будет выглядеть как http://loginza.ru/api/widget?token_url=http://ваш_домен.ру/plugin/auth_loginza/&amp;providers_set=vkontakte,twitter,google,yandex,mailru,facebook,openid
+
+Также виджет мультиязычный: поддерживается три языка русский - ru, украинский - uk и английский - en.
+Использовать по аналогии http://loginza.ru/api/widget?token_url=http://ваш_домен.ру/plugin/auth_loginza/&amp;lang=ru
+
+Все это, следуя логике, нужно размещать в блоке [login][/login], который отображается
+только для незарегистрированных посетителей.
+
+Тут возникает самый первый вопрос, а не генерировать ли эту ссылку самому, чтобы в usermenu.tpl можно 
+было просто вставить переменную loginza_link? Но плагин вообще хорош тем, что вставить ссылку можно в любое место,
+например в комментарии таким образом: (да и вообще в любое место, хоть в news.short.tpl)
+
+в \templates\%ваш_шаблон%\plugins\comments\comments.form.tpl вставить блок
+
+[isnt-logged]
+&lt;script src=&quot;http://loginza.ru/js/widget.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+Также Вы можете войти используя:
+&lt;a href=&quot;https://loginza.ru/api/widget?token_url=[RETURN_URL]&quot; class=&quot;loginza&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/yandex.png&quot; alt=&quot;Yandex&quot; title=&quot;Yandex&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/google.png&quot; alt=&quot;Google&quot; title=&quot;Google Accounts&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/vkontakte.png&quot; alt=&quot;Вконтакте&quot; title=&quot;Вконтакте&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/mailru.png&quot; alt=&quot;Mail.ru&quot; title=&quot;Mail.ru&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/twitter.png&quot; alt=&quot;Twitter&quot; title=&quot;Twitter&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/loginza.png&quot; alt=&quot;Loginza&quot; title=&quot;Loginza&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/myopenid.png&quot; alt=&quot;MyOpenID&quot; title=&quot;MyOpenID&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/openid.png&quot; alt=&quot;OpenID&quot; title=&quot;OpenID&quot;&gt;
+    &lt;img src=&quot;/engine/plugins/auth_loginza/tpl/img/webmoney.png&quot; alt=&quot;WebMoney&quot; title=&quot;WebMoney&quot;&gt;
+&lt;/a&gt;
+[/isnt-logged]
+
+Ну или в login.tpl или registration.tpl вставить
+
+&lt;iframe src=&quot;http://loginza.ru/api/widget?overlay=loginza&amp;token_url=[RETURN_URL]&quot; 
+style=&quot;width:359px;height:300px;&quot; scrolling=&quot;no&quot; frameborder=&quot;no&quot;&gt;&lt;/iframe&gt;
+
+Вариантов масса.
+
+2. Далее при нажатии на ссылку открывается окно выбора провайдера. Мы выбираем одного из предложенных,
+Логинза отправляет нас на его сайт, там мы подтверждаем что мы это мы и в результате нам приходят
+данные о пользователе. Тут начинается самое интересное.
+
+3. При установке плагин добавляет в таблицу *_users свое поле, в котором хранит идентификатор
+пользователя. Если присылаемый идентификатор уже привязан к какому-то пользователю, то мы 
+без вопросов его авторизуем.
+
+Если нет, то мы показываем ему упрощенную форму регистрации. 
+
+Зачем вообще нужна форма регистрации? Лично меня дико раздражает, когда сайт генерирует
+никнейм автоматически на основе идентификатора и не дает выбрать его самостоятельно.
+Например zhukov-alexey-open-id. А если взять Гугловcкий идентификатор, то там вообще 
+темный лес из 30 символов нечитаемого формата.
+
+Поэтому плагин подбирает никнейм на основе определенных данных, но дает его откорректировать.
+Также создаем произвольный пароль, сохраняя возможность для входа, используя стандартную пару 
+логин/пароль. И если провайдер не отдал email также предлагаем его ввести, но это совершенно
+не обязательно. По крайней мере пока.
+
+#=================================================#
+Интеграция с комментариями сайта (плагин  comments)
+#=================================================#
+
+Для тех учетных записей, у которых есть привязка профиля к одному из сервисов, в шаблоне 
+\templates\ваш_шаблон\plugins\comments\comments.show.tpl становится доступна переменная loginza_icon, 
+являющаяся пиктограммой этого сервиса.  В файле providers.ini уже прописаны все основные 
+сервисы в формате домен = имя_картинки. Его можно дополнять на свой вкус.
+
+#=====================================#
+Интеграция с профилем (плагин uprofile)
+#=====================================#
+
+В шаблоне \templates\ваш_шаблон\plugins\uprofile\users.tpl доступна переменная loginza_account, 
+являющаяся ссылкой на идентификатор.
+
+Также есть условный блок if-loginza, содержимое которого отображается только в случае наличия идентификатора.
+
+В шаблоне \templates\ваш_шаблон\plugins\uprofile\profile.tpl доступна переменная loginza_account, 
+являющаяся ссылкой на идентификатор.
+
+Также есть условные блоки:
+* if-loginza, содержимое которого отображается только в случае наличия идентификатора/
+  В этот блок удобно брать ссылку на удаление привязанного аккаунта. Она имеет вид
+  /plugin/auth_loginza/delete/ Или на изменение аккаунта, ссылка идентична ссылке
+  для авторизации
+ 
+* if-not-loginza - в случае отсутствия идентификатора. В этот блок удобно брать ссылку 
+  на вход по аналогии с usermenu.tpl. Если такой идентификатор уникален на сайте, то
+  даем зеленый свет, привязываем аккаунт и показываем содержимое append.account.tpl
+  Если кто-то уже зарегистрировался с этой учетной записи, то показываем
+  append.account.error.tpl

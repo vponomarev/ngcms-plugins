@@ -1,0 +1,18 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: auth_loginza
+Name: openID/oAuth auth
+Version: 0.2.1
+Acts: ppages, action.ppages.uprofile, comments:show
+File: loginza.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Description: Аутентификация через Google, Yandex, Twitter, Facebook и т.д.
+Author: Alexey N. Zhukov (Wolverine)
+Author_URI: http://digitalplace.ru/
+URI: http://no_url.com/
+Information: Аутентификация через Google, Yandex, Twitter, Facebook и т.д.
