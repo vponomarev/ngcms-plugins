@@ -1,0 +1,24 @@
+# =========================================================================== #
+# NG CMS // Плагины // Подписка на комментарии                           #
+# =========================================================================== #
+
+Плагин позволяет подписываться на комментарии.
+
+Для установки плагина требуется:
+1. Установить его в разделе Настройки плагинов в админ-панели NGCMS.
+2. Добавить JS переменные в функции add_comment() в файле-шаблоне comments.form.tpl:
+	cajax.setVar("subscribe_box", form.subscribe_box.value);
+	cajax.setVar("subscribe_checked", form.subscribe_box.checked);
+Добавить элемент-управления подпиской (checkbox) в нужном месте шаблона comments.form.tpl, например:
+<td style="padding: 15px;" align="left" colspan="2">
+Подписаться на комментарии по e-mail <input type="checkbox" name="subscribe_box" value="1" {subscribe_box_checked} />
+</td>
+3. В случае, если требуется добавить блок подписок без комментирования новости, требуется добавить примерно следующую форму в шаблон comments.internal.tpl:
+<form method="post" action="{post_url_f}" name="subscribe">
+<table>
+<tr>
+<td style="padding: 15px;" align="left" colspan="2">Подписаться, не комментрируя<br/>
+E-mail: <input type="text" name="subscribe_field" value="" /> <input type="submit" name="subscribe_me" class="button" value="Подписаться" /></td>
+</tr>
+</table>
+</form>
