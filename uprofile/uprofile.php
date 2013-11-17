@@ -247,7 +247,7 @@ function uprofile_editForm($ajaxMode = false){
 	);
 
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileForm($urow['id'], $urow, &$tVars); }
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfileForm($urow['id'], $urow, $tVars); }
 
 	$twigLoader->setConversion($tpath['profile'].'profile.tpl', $conversionConfig, $conversionConfigRegex);
 	$xt = $twig->loadTemplate($tpath['profile'].'profile.tpl');
@@ -401,7 +401,7 @@ function uprofile_editApply(){
 
 	// Call external plugins for request processing
 	if (is_array($PFILTERS['plugin.uprofile']))
-		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfile($currentUser['id'], $currentUser, &$sqlFields); }
+		foreach ($PFILTERS['plugin.uprofile'] as $k => $v) { $v->editProfile($currentUser['id'], $currentUser, $sqlFields); }
 
 	// Prepare SQL line
 	$sqlF = array();

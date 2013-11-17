@@ -38,7 +38,7 @@ function userGetAvatar($urow){
 
 	// If avatar is set
 	if ($urow['avatar'] != '') {
-		return array(1, avatars_url.'/'.((preg_match('/^'.$urow['id'].'\./', $urow['avatar']))?'':($urow['id'].'.')).$urow['avatar']);
+		return array(1, avatars_url.'/'.((preg_match('/^'.$urow['id'].'\./', $urow['avatar']))?($urow['id'].'.'):'').$urow['avatar']);
 	}
 
 	// Use GRAVATAR (if set)
