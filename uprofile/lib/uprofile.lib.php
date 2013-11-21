@@ -56,10 +56,22 @@ function userGetAvatar($urow){
 // 2 - Full photo
 function userGetPhoto($urow) {
 
-	if (!$urow['photo'])
-		return array(0, photos_url.'/nophoto.gif', photos_url.'/nophoto.gif');
+	// Preload template configuration variables
+	templateLoadVariables();
 
-	$photoName = ((preg_match('/^'.$urow['id'].'\./', $urow['photo']))?($urow['id'].'.'):'').$urow['photo'];
+	// Use default <nophoto> file
+	// - Check if nophoto is defined on template level
+	$tplVars = $TemplateCache['site']['#variables'];
+	$noPhotoURL = (isset($tplVars['configuration']) && is_array($tplVars['configuration']) && isset($tplVars['configuration']['noPhotoImage']) && $tplVars['configuration']['noPhotoImage'])?(tpl_url."/".$tplVars['configuration']['noPhotoImage']):(photos_url."/nophoto.gif");
 
-	return	array(1, photos_url.'/thumb/'.$photoName, photos_url.'/'.$photoName);
+	// If photo is set
+	if ($urow['photo'] != '') {
+		$photoName = ((preg_match('/^'.$urow['id'].'\./', $urow['photo']))?($urow['id'].'.'):'').$urow['photo'];
+		return	array(1, photos_url.'/thumb/'.$photoName, photos_url.'/'.$photoName);
+	}
+	else {
+		$photo = $noPhotoURL;
+		return	array(0, $photo, $photo);
+	}
+	
 }
