@@ -55,6 +55,7 @@ function userGetAvatar($urow){
 // 1 - Photo preview
 // 2 - Full photo
 function userGetPhoto($urow) {
+	global $config, $TemplateCache;
 
 	// Preload template configuration variables
 	templateLoadVariables();
