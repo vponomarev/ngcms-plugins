@@ -44,10 +44,11 @@ function userGetAvatar($urow){
 	// Use GRAVATAR (if set)
 	if ($config['avatars_gravatar']) {
 		$avatar	= 'http://www.gravatar.com/avatar/'.md5(strtolower($urow['mail'])).'.jpg?s='.$config['avatar_wh'].'&d='.urlencode($noAvatarURL);
+		return array(1, $avatar);
 	} else {
 		$avatar = $noAvatarURL;
+		return array(0, $avatar);
 	}
-	return array(1, $avatar);
 }
 
 // Results array
