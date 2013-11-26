@@ -167,7 +167,7 @@ function simple_title_pro()
 		
 		default:
 			$list_plugin = array_map('trim', explode(',',pluginGetVariable('simple_title_pro', 'p_title')));
-			print "<pre>".var_export($list_plugin, true)."</pre>";
+			//print "<pre>".var_export($list_plugin, true)."</pre>";
 			if(isset($CurrentHandler['pluginName']) && $CurrentHandler['pluginName']){
 				if(!in_array($CurrentHandler['pluginName'], $list_plugin)){
 					$o_title = preg_replace('/\[([^\[\]]+)\]/' , (isset($pageNo) && $pageNo)?'\\1':'', pluginGetVariable('simple_title_pro', 'o_title'));
