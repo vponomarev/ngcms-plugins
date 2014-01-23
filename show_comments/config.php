@@ -103,7 +103,7 @@ while( $prd = mysql_fetch_array( $res ) )
     echo '<tr>'; 
 	echo '<th>'.langdate('d.m.Y H:i:s', $prd['postdate']).' [<a href="/engine/admin.php?mod=editcomments&newsid='.$prd['nid'].'&comid='.$prd['id'].'" target="_blank">#</a>] [<a href="/engine/admin.php?mod=editcomments&subaction=deletecomment&newsid='.$prd['nid'].'&comid='.$prd['id'].'&poster='.$prd['author'].'" target="_blank">X</a>]</th>';
     echo '<th>'.$text.'</th>';
-	echo '<th><a href="'.newsGenerateLink(array('id' => $prd['nid'], 'alt_name' => $prd['alt_name'], 'catid' => $prd['catid'], 'postdate' => $prd['npostdate'])).'" target="_blank">'.str_replace('<', '&lt;', $prd['title']).'</a> [<a href="/engine/admin.php?mod=editnews&action=editnews&id='.$prd['nid'].'" target="_blank">E</a>]</th>';
+	echo '<th><a href="'.newsGenerateLink(array('id' => $prd['nid'], 'alt_name' => $prd['alt_name'], 'catid' => $prd['catid'], 'postdate' => $prd['npostdate'])).'" target="_blank">'.str_replace('<', '&lt;', $prd['title']).'</a> [<a href="/engine/admin.php?mod=news&action=edit&id='.$prd['nid'].'" target="_blank">E</a>]</th>';
 	if ($prd['author_id']) {
 	echo '<th><a href="/engine/admin.php?mod=users&action=editForm&id='.$prd['author_id'].'" target="_blank">'.str_replace('<', '&lt;', $prd['author']).'</a><br/><small><a href="mailto:'.$prd['mail'].'">'.$prd['mail'].'</a></small></th>';
 	}
