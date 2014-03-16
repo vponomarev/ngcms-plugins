@@ -382,7 +382,7 @@ function doAddEdit() {
 
 	if ($data['storage']) {
 		// Check for correct DB type
-		if (!in_array($data['db.type'], array('int', 'decimal', 'char', 'datetime'))) {
+		if (!in_array($data['db.type'], array('int', 'decimal', 'char', 'datetime', 'text'))) {
 			msg(array("type" => "error", "text" => $lang['xfields_error.db.type']));
 			$error = 1;
 		}
@@ -446,6 +446,7 @@ function doAddEdit() {
 			case 'decimal':		$ftype = 'decimal (12,2)'; break;
 			case 'datetime':	$ftype = 'datetime'; break;
 			case 'char':		if (($DB['new']['db.len'] > 0)&&($DB['new']['db.len'] <= 255)) { $ftype = 'char('.intval($DB['new']['db.len']).')'; break; }
+			case 'text':	$ftype = 'text'; break;
 		}
 
 		if ($ftype) {

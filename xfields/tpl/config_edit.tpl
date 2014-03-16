@@ -147,10 +147,11 @@ function storageMode(mode) {
  <select name="db_type" value="{{ db_type }}" id="db.type" />
   <option value="int">int - только цифры</option>
   <option value="decimal">decimal - число с фиксированной точкой</option>
-  <option value="char">char - текст с ограничением длины</option>
+  <option value="char">char - текст с ограничением длины (255)</option>
+  <option value="text">text - текст с ограничением длины (65535)</option>
   <option value="datetime">datetime - дата-время</option>
  </select>
- <input maxlength="3" size="3" type="text" name="db_len" value="{{ db_len }}" id="db.len" />
+ <input maxlength="5" size="5" type="text" name="db_len" value="{{ db_len }}" id="db.len" />
 </td>
 </tr>
 </table>
