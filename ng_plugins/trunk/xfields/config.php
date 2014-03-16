@@ -217,7 +217,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		);
 
 		$xsel = '';
-		foreach (array('text', 'textarea', 'select', 'images') as $ts) {
+		foreach (array('text', 'textarea', 'select', 'checkbox', 'images') as $ts) {
 			$tVars['defaults'][$ts] = '';
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == 'text')?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
