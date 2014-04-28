@@ -8,10 +8,62 @@
 #pm .button { border-top:1px solid #f2f2f2; border-left:1px solid #f2f2f2; border-right:2px solid #aaa; border-bottom:2px solid #aaa; font:11px normal Arial, Sans-serif; color:#333; background-color:#fff; padding:1px 3px; }
 #pm form { display:inline; }
 form.pm,label.pm,input.pm { margin:0; padding:0; }
-select.pm,option.pm,textarea.content,input.pm { color:#333; background-color:#f9fafb; font:11px verdana, sans-serif; }
-textarea.content,input.pm { border:1px solid #ccc; padding:2px; }
-input.pm:focus,textarea.content:focus { background-attachment:scroll; background-repeat:repeat; background-position:0 0; background-color:#fff; background-image:none; border-color:#aaa; border-style:solid; border-width:1px; }
+select.pm,option.pm,textarea.pm_content,input.pm { color:#333; background-color:#f9fafb; font:11px verdana, sans-serif; }
+textarea.pm_content,input.pm { border:1px solid #ccc; padding:2px; }
+input.pm:focus,textarea.pm_content:focus { background-attachment:scroll; background-repeat:repeat; background-position:0 0; background-color:#fff; background-image:none; border-color:#aaa; border-style:solid; border-width:1px; }
 #pm blockquote { border:1px solid #eeeeef; font:11px Verdana, sans-serif; margin:5px; padding:5px; }
 #pm textarea { font-family:Verdana, Tahoma, Arial, sans-serif; font-style:normal; font-variant:normal; font-weight:400; font-size:11px; line-height:normal; margin:5px; }
 #newpm { text-decoration:blink; display:inline; }
 #pm .check,#pm .check:focus { border:0; background:transparent; margin:0; }
+.suggestWindow {
+ background:#f6f8fb;
+ border: 1px solid #aaaaaa;
+ color: #232323;
+ width: 255px;
+ display: block;
+ visibility: hidden;
+ padding: 0px;
+ font: normal 12px  tahoma, sans-serif;
+ position: absolute; right: 0;
+}
+
+#suggestBlock {
+ padding-top: 2px;
+ padding-bottom: 2px;  width: 100%;
+ border: 0px;
+}
+
+#suggestBlock td {
+ padding-left: 2px;
+}
+
+#suggestBlock tr {
+ padding: 3px;
+ padding-left: 8px;
+ background: white;
+}
+
+/* #suggestBlock tr:hover, */
+#suggestBlock .suggestRowHighlight {
+ background: #59a6ec url(images/1px.png) repeat-x;
+ color: white;
+ cursor: default;
+}
+
+#suggestBlock .cleft {
+ padding-left: 5px;
+}
+
+#suggestBlock .cright {
+ text-align: right;
+ padding-right: 5px;
+}
+
+.suggestClose {
+ display: block;
+ text-align: right;
+ font: normal 10px verdana, tahoma, sans-serif;
+ background:#3c9c08;
+ color: white;
+ padding:3px; cursor: pointer;
+}

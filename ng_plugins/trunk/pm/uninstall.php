@@ -33,6 +33,17 @@ $db_update = array(
 		'table'		=>	'pm',
 		'action'	=>	'drop',
 	),
+	
+	array(
+		'table'  => 'users',
+		'action' => 'modify',
+		'fields' => array(
+					array('action' => 'drop', 'name' => 'pm_unread'),
+					array('action' => 'drop', 'name' => 'pm_all'),
+					array('action' => 'drop', 'name' => 'pm_sync'),
+					array('action' => 'drop', 'name' => 'pm_email'),
+		)
+	),
 );
 
 if ($_REQUEST['action'] == 'commit') {
