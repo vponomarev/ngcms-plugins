@@ -4,7 +4,7 @@
 
 ID: pm
 Name: Личные сообщения
-Version: 0.4
+Version: 0.5
 Acts: usermenu, ppages 
 Actions: rpc; pm_ajax.php
 File: pm.php
@@ -18,3 +18,4 @@ Author_URI: http://digitalplace.ru/
 Title: Личные сообщения
 Information: Плагин организует возможность обмена приватными сообщениями между зарегистрированными пользователями сайта
 Preinstall: default_no
+Library: lib; lib/pm.lib.php
