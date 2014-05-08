@@ -16,9 +16,17 @@ $lang = LoadLang('users', 'admin');
 // Load lang files
 LoadPluginLang('auth_basic', 'config', '', 'auth', ':');
 
-$regstatus = intval(pluginGetVariable('auth_basic','regstatus'));
-if (($regstatus < 1)||($regstatus > 4))
- $regstatus = 4;
+// Default user group for new users
+$regGroup = intval(pluginGetVariable('auth_basic','regstatus'));
+if (!isset($UGROUP[$regGroup])) {
+	// If GROUP is not defined - set "4" as default
+	$regGroup = 4; // Commenter
+}
+$groupOptions = array();
+foreach ($UGROUP as $k => $v) {
+	$groupOptions[$k] = $k . ' - '. $v['name'];
+}
+
 
 $lastupdate = intval(pluginGetVariable('auth_basic', 'lastupdate'));
 if ($lastupdate<1) { $lastupdate = ''; }
@@ -28,7 +36,7 @@ $cfg = array();
 $cfgX = array();
 array_push($cfg, array('descr' => $lang['auth:description']));
 array_push($cfgX, array('name' => 'lastupdate', 'title' => $lang['auth:lastupdate'], 'descr' => $lang['auth:lastupdate_descr'],'type' => 'input', value => $lastupdate));
-array_push($cfgX, array('name' => 'regstatus', 'title' => $lang['auth:regstatus'], 'descr' => $lang['auth:regstatus_descr'],'type' => 'select',  'values' => array ( '1' => '1 - '.$lang['st_1'], '2' => '2 - '.$lang['st_2'], '3' => '3 - '.$lang['st_3'], '4' => '4 - '.$lang['st_4']), value => $regstatus));
+array_push($cfgX, array('name' => 'regstatus', 'title' => $lang['auth:regstatus'], 'descr' => $lang['auth:regstatus_descr'],'type' => 'select',  'values' => $groupOptions, value => $regGroup));
 array_push($cfgX, array('name' => 'restorepw', 'title' => $lang['auth:restorepw'], 'descr' => $lang['auth:restorepw_descr'],'type' => 'select',  'values' => array ( '0' => $lang['auth:restore_disabled'], 'login' => $lang['auth:restore_login'], 'email' => $lang['auth:restore_email'], 'both' => $lang['auth:restore_both']), value => pluginGetVariable('auth_basic','restorepw')));
 array_push($cfgX, array('name' => 'regcharset', 'title' => $lang['auth:regcharset'], 'descr' => $lang['auth:regcharset_descr'],'type' => 'select',  'values' => array ( '0' => 'Eng', '1' => 'Rus', '2' => 'Eng+Rus', '3' => 'All'), value => pluginGetVariable('auth_basic','regcharset')));
 array_push($cfgX, array('name' => 'iplock', 'title' => $lang['auth:iplock'], 'descr' => $lang['auth:iplock_descr'],'type' => 'select',  'values' => array ( '0' => $lang['noa'], '1' => $lang['yesa']), value => pluginGetVariable('auth_basic','iplock')));
