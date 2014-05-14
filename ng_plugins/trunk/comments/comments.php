@@ -201,7 +201,7 @@ class CommentsFilterAdminCategories extends FilterAdminCategories{
 			$ms .= '<option value="'.$i.'"'.(($allowCom == $i)?' selected="selected"':'').'>'.$cv[$i].'</option>';
 		}
 
-		$tvars['vars']['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['comments:categories.comments'].'<br/><small>'.$lang['comments:categories.comments#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
+		$tvars['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['comments:categories.comments'].'<br/><small>'.$lang['comments:categories.comments#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
 		return 1;
 	}
 
@@ -220,7 +220,7 @@ class CommentsFilterAdminCategories extends FilterAdminCategories{
 			$ms .= '<option value="'.$i.'"'.(($SQL['allow_com'] == $i)?' selected="selected"':'').'>'.$cv[$i].'</option>';
 		}
 
-		$tvars['vars']['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['comments:categories.comments'].'<br/><small>'.$lang['comments:categories.comments#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
+		$tvars['extend'] .= '<tr><td width="70%" class="contentEntry1">'.$lang['comments:categories.comments'].'<br/><small>'.$lang['comments:categories.comments#desc'].'</small></td><td width="30%" class="contentEntry2">'.$ms.'</td></tr>';
 		return 1;
 	}
 
