@@ -5,7 +5,7 @@
 
 <table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 	<tr>
-		<td width=100% colspan="4" class="contentHead"><img src="{{admin_url}}/plugins/pm/img/nav.gif" hspace="8" align=left>{{ lang['pm:inbox'] }}</td>
+		<td width=100% colspan="4" class="contentHead"><img src="{{admin_url}}/plugins/pm/img/nav.gif" hspace="8" align="left">{{ lang['pm:outbox'] }}</td>
 	</tr>
 	
 	<tr>

@@ -36,8 +36,8 @@ define ('INBOX_LINK', generatePluginLink('pm', null, ($_GET['location'] ? array(
 
 /* 
   fill variables in usermenu.tpl
-  + {{ p.pm.new }} - кол-во новых входящих сообщений
-  + {{ p.pm.total }} - общее кол-во входящих сообщений
+  + {{ p.pm.pm_unread }} - кол-во новых входящих сообщений
+  + {{ p.pm.pm_all }} - общее кол-во входящих сообщений
   + {{ p.pm.link }} - URL на страницу со входящими сообщениями
 */
 
