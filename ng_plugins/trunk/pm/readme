@@ -32,7 +32,7 @@ usermenu.tpl
 
 Пример заполнения шаблона usermenu.tpl:
 --cut--
-{% if p.pm.new > 0 %}<a href="{{ p.pm.link }}">Новые сообщения: {{ p.pm.new }}</a> / {% endif %} {{ p.pm.total }}
+{% if not p.pm.pm_unread == 0 %}<a href="{{ p.pm.link }}">Новые сообщения: {{ p.pm.pm_unread }}</a> / {% endif %} {{ p.pm.pm_all }}
 --cut--
 
 
@@ -48,7 +48,13 @@ usermenu.tpl
  
 Шаблоны плагина
 ----------------------------------------
-* entries.tpl — строка входящего сообщения
+
+* inbox.tpl — контейнер входящих сообщений
+
+	- php_self - ссылка на страницу плагина вида site.ru/plugin/pm/
+	- pagination - навигация по страницам, она же пагинация
+	
+	В цикле {% for entry in entries %}{% endfor %}
 	- pmdate - дата и время отправки сообщения
 	- php_self - ссылка на страницу плагина вида site.ru/plugin/pm/
 	- pmid - ID сообщения в БД
@@ -56,25 +62,17 @@ usermenu.tpl
 	- link - ссылка на отправителя письма
 	- viewed - изображение статуса письма, viewed.yes.gif и viewed.no.gif
 
-* inbox.tpl — контейнер входящих сообщений
+* outbox.tpl — контейнер исходящих сообщений
 
 	- php_self - ссылка на страницу плагина вида site.ru/plugin/pm/
-	- entries - список писем, формируемый из entries.tpl
 	- pagination - навигация по страницам, она же пагинация
-
-* outbox_entries.tpl — строка исходящего сообщения
-
+	
+	В цикле {% for entry in entries %}{% endfor %}
 	- pmdate - дата и время отправки сообщения
 	- php_self - ссылка на страницу плагина вида site.ru/plugin/pm/
 	- pmid - ID сообщения в БД
 	- subject - тема письма
 	- link - ссылка на отправителя письма
-
-* outbox.tpl — контейнер исходящих сообщений
-
-	- php_self - ссылка на страницу плагина вида site.ru/plugin/pm/
-	- entries - список писем, формируемый из entries.tpl
-	- pagination - навигация по страницам, она же пагинация
 
 * read.tpl — форма чтения сообщения
 
@@ -85,9 +83,6 @@ usermenu.tpl
 	- pmdate - дата и время отправки сообщения
 	- content - текст сообщения
 	- author - ссылка на получателя/отправителя
-
-Также в шаблоне доступны две условные конструкции if-inbox и if-outbox, 
-текст между которыми доступен если сообщение входящее или исходящее.
 
 * reply.tpl — форма ответа на сообщение
 
