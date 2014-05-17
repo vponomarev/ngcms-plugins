@@ -89,7 +89,7 @@ function showFieldList(){
 			'name'		=> $id,
 			'title'		=> $data['title'],
 			'type'		=> $lang['xfconfig']['type_'.$data['type']].$storage,
-			'default'	=> $data['default'],
+			'default'	=> (($data['type']=="checkbox")?($data['default']?$lang['yesa']:$lang['noa']):($data['default'])),
 			'link'		=> '?mod=extra-config&plugin=xfields&action=edit&section='.$sectionID.'&field='.$id,
 			'linkup'	=> '?mod=extra-config&plugin=xfields&action=update&subaction=up&section='.$sectionID.'&field='.$id,
 			'linkdown'	=> '?mod=extra-config&plugin=xfields&action=update&subaction=down&section='.$sectionID.'&field='.$id,
@@ -97,7 +97,7 @@ function showFieldList(){
 			'area'		=> (intval($data['area'])>0)?intval($data['area']):'',
 			'flags'		=> array(
 				'required'	=> $data['required']?true:false,
-				'default'	=> ($data['default'] != '')?true:false,
+				'default'	=> (($data['default'] != '') || ($data['type']=="checkbox"))?true:false,
 				'disabled'	=> $data['disabled']?true:false,
 				'regpage'	=> $data['regpage']?true:false,
 			),
@@ -167,7 +167,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 
 		$xsel = '';
 		foreach (array('text', 'textarea', 'select', 'checkbox', 'images') as $ts) {
-			$tVars['defaults'][$ts] = ($data['type'] == $ts)?$data['default']:'';
+			$tVars['defaults'][$ts] = ($data['type'] == $ts)?(($ts=="checkbox")?($data['default']?' checked="checked"':''):$data['default']):'';
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == $ts)?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
 
@@ -285,6 +285,9 @@ function doAddEdit() {
 		$data['regpage']	= intval($_REQUEST['regpage']);
 
 	switch ($data['type']) {
+		case 'checkbox':
+				$data['default']	= $_REQUEST['checkbox_default']?1:0;
+			break;
 		case 'text':
 			if ($_REQUEST['text_default'] != '')
 				$data['default']	= $_REQUEST['text_default'];

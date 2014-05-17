@@ -218,6 +218,11 @@ class XFieldsNewsFilter extends NewsFilter {
 
 
 				switch ($data['type']) {
+					case 'checkbox'  : 	$val = '<input type="checkbox" id="form_xfields_'.$id.'" name="xfields['.$id.']" title="'.$data['title'].'" value="1" '.($data['default']?'checked="checked"':'').'"/>';
+									$xfEntry['input'] = $val;
+									$xfEntries[intval($data['area'])][] = $xfEntry;
+									break;
+
 					case 'text'  : 	$val = '<input type="text" id="form_xfields_'.$id.'" name="xfields['.$id.']" title="'.$data['title'].'" value="'.secure_html($data['default']).'"/>';
 									$xfEntry['input'] = $val;
 									$xfEntries[intval($data['area'])][] = $xfEntry;
@@ -485,6 +490,11 @@ class XFieldsNewsFilter extends NewsFilter {
 				),
 			);
 			switch ($data['type']) {
+				case 'checkbox'  : 	$val = '<input type="checkbox" id="form_xfields_'.$id.'" name="xfields['.$id.']" title="'.$data['title'].'" value="1" '.($xdata[$id]?'checked="checked"':'').'"/>';
+							$xfEntry['input'] = $val;
+							$xfEntries[intval($data['area'])][] = $xfEntry;
+							break;
+
 				case 'text'  : 	$val = '<input type="text" name="xfields['.$id.']"  id="form_xfields_'.$id.'" title="'.$data['title'].'" value="'.secure_html($xdata[$id]).'" />';
 								$xfEntry['input'] = $val;
 								$xfEntries[intval($data['area'])][] = $xfEntry;
@@ -1008,8 +1018,11 @@ class XFieldsNewsFilter extends NewsFilter {
 				$xrecs []= $xrec;
 			}
 
+			// Search for news.table.tpl template file
+			$tpath = locatePluginTemplates(array('news.table'), 'xfields');
+
 			// Show table
-			$templateName = 'plugins/xfields/news.table.tpl';
+			$templateName = $tpath['news.table'].'news.table.tpl';
 			$twigLoader->setConversion($templateName, $conversionConfig);
 
 			$xt = $twig->loadTemplate($templateName);
