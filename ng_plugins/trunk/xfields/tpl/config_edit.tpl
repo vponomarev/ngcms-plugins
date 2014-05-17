@@ -11,6 +11,7 @@ function clx(mode) {
  document.getElementById('type_text').style.display		= (mode == 'text')?		'block':'none';
  document.getElementById('type_textarea').style.display = (mode == 'textarea')?	'block':'none';
  document.getElementById('type_select').style.display	= (mode == 'select')?	'block':'none';
+ document.getElementById('type_checkbox').style.display	= (mode == 'checkbox')?	'block':'none';
  document.getElementById('type_images').style.display	= (mode == 'images')?	'block':'none';
 }
 function storageMode(mode) {
@@ -42,7 +43,7 @@ function storageMode(mode) {
 {% if (sectionID == 'users') and (type != 'images') %}<tr class="contRow1"><td width="50%">{{ lang.xfconfig['regpage'] }}</td><td width="47%"><input type="checkbox" name="regpage" value="1"{% if (flags.regpage) %}checked="checked"{% endif %}></td></tr>{% endif %}
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['id'] }}</td><td width="47%"><input type="text" name="id" value="{{ id }}" size="40" {% if (flags.editMode) %}readonly{% endif %}>{% if (flags.editMode) %} &nbsp; &nbsp; {{ lang.xfconfig['noeditid'] }}{% endif %}</td></tr>
 <tr class="contRow1"><td width="50%">{{ lang.xfconfig['title'] }}</td><td><input type="text" name="title" value="{{ title }}" size="40" /></td></tr>
-<tr class="contRow1"><td width="50%">{{ lang.xfconfig['type'] }}</td><td><select name="type" size="4" id="xfSelectType" onclick="clx(this.value);" onchange="clx(this.value);" />{{ type_opts }}</select></td></tr>
+<tr class="contRow1"><td width="50%">{{ lang.xfconfig['type'] }}</td><td><select name="type" size="5" id="xfSelectType" onclick="clx(this.value);" onchange="clx(this.value);" />{{ type_opts }}</select></td></tr>
 </table>
 
 <!-- FIELD TYPE: TEXT -->
@@ -121,6 +122,17 @@ function storageMode(mode) {
  <tr class="contRow1">
   <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
   <td>{{ lang.xfconfig['tselect_default'] }}</td><td><input type="text" name="select_default" value="{{ defaults.select }}" size=40></td>
+ </tr>
+</table>
+</div>
+
+<!-- FIELD TYPE: CHECKBOX -->
+<div id="type_checkbox">
+<table border="0" cellspacing="1" cellpadding="1" class="content">
+ <tr class="contRow1">
+  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_checkboxs'] }}</td>
+  <td width="45%">{{ lang.xfconfig['default'] }}</td>
+  <td><input type="checkbox" name="checkbox_default" value="1" {{ defaults.checkbox }}></td>
  </tr>
 </table>
 </div>
