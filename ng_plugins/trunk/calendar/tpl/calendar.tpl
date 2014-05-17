@@ -1,7 +1,7 @@
 {% if (not flags.ajax) %}
 <script type="text/javascript" language="javascript">
-function ng_calendar_walk(month, year, offset) {
-	$.post('/engine/rpc.php', { json : 1, methodName : 'plugin.calendar.show', rndval: new Date().getTime(), params : json_encode({ 'year' : year, 'offset' : offset, 'month' : month }) }, function(data) {
+function ng_calendar_walk(month, year, offset, category) {
+	$.post('/engine/rpc.php', { json : 1, methodName : 'plugin.calendar.show', rndval: new Date().getTime(), params : json_encode({ 'year' : year, 'offset' : offset, 'month' : month, 'category' : category }) }, function(data) {
 		// Try to decode incoming data
 		try {
 			resTX = eval('('+data+')');
@@ -35,9 +35,9 @@ function ng_calendar_walk(month, year, offset) {
 	<div class="block_cal" align="left">
 <table id="calendar" align="center">
 <tr>
-	<td class="month" onclick="ng_calendar_walk({{ currentEntry.month }}, {{ currentEntry.year }}, 'prev'); return false;">[prev_link]&laquo;[/prev_link]</td>
+	<td class="month" onclick="ng_calendar_walk({{ currentEntry.month }}, {{ currentEntry.year }}, 'prev', '{{currentEntry.categories}}'); return false;">[prev_link]&laquo;[/prev_link]</td>
 	<td colspan="5" class="month"><a href="{{ currentMonth.link }}">{{ currentMonth.name }}</a></td>
-	<td class="month" onclick="ng_calendar_walk({{ currentEntry.month }}, {{ currentEntry.year }}, 'next'); return false;">[next_link]&raquo;[/next_link]</td>
+	<td class="month" onclick="ng_calendar_walk({{ currentEntry.month }}, {{ currentEntry.year }}, 'next', '{{currentEntry.categories}}'); return false;">[next_link]&raquo;[/next_link]</td>
 </tr>
 <tr>
 	<td class="weekday">{{ weekdays[1] }}</td>
