@@ -93,13 +93,14 @@
 * offset	- "смещение" относительно указанного года и месяца.
 			  может принимать значения "prev" (показать предыдущий) и "next"
 			  (показать следующий) месяц
+* category	- категория
 
 
 Пример JScript'а для переключения между месяцами:
 
-function ng_calendar_walk(month, year, offset) {
+function ng_calendar_walk(month, year, offset, category) {
 	// Вызов AJAX/RPC метода 'plugin.calendar.show'
-	$.post('/engine/rpc.php', { json : 1, methodName : 'plugin.calendar.show', rndval: new Date().getTime(), params : json_encode({ 'year' : year, 'offset' : offset, 'month' : month }) }, function(data) {
+	$.post('/engine/rpc.php', { json : 1, methodName : 'plugin.calendar.show', rndval: new Date().getTime(), params : json_encode({ 'year' : year, 'offset' : offset, 'month' : month, 'category' : category }) }, function(data) {
 		// В качестве результата нам передаётся JSON массив данных.
 		// Ключевые поля:
 		// * status - 1 (успешное выполнение), 0 - ошибка

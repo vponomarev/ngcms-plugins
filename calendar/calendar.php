@@ -36,7 +36,7 @@ function plugin_calendar() {
 }
 
 
-function plug_calgen($month, $year, $overrideTemplateName = false, $categoryList = array(), $cacheExpire = 0, $flagAJAX = false) {
+function plug_calgen($month, $year, $overrideTemplateName = false, $categoryList = array(), $offset = false, $cacheExpire = 0, $flagAJAX = false) {
 	global $config, $lang, $mysql, $tpl, $template, $langMonths, $twig, $twigLoader;
 
 	// Add leading zeroes to month (if needed)
@@ -56,27 +56,34 @@ function plug_calgen($month, $year, $overrideTemplateName = false, $categoryList
 	LoadPluginLang('calendar', 'main');
 
 	// Разные запросы в зависимости от указания категорий
+	/*
 	if (!is_array($categoryList)) {
 		$categoryList = intval($categoryList)?array(intval($categoryList)):array();
-
 	}
+	*/
+	
+	$arrList = explode(',', $categoryList);
+	/*
+		foreach ($categoryList as $c) {
+			if (intval($c) > 0)
+				array_push($sqlList, intval($c));
+		}
+	*/
+	
 
-	if (!count($categoryList)) {
+
+	if (!strlen($categoryList)) {
 		$sql = "SELECT day(from_unixtime(postdate)) as day, count(id) as count FROM ".prefix."_news WHERE approve = '1' AND postdate >= unix_timestamp('".$year."-".$month."-01 00:00:00') AND postdate < unix_timestamp(date_add('".$year."-".$month."-01 00:00:00', interval 1 month)) group by to_days(from_unixtime(postdate))";
 	} else {
 
-		$sqlList = array();
-		foreach ($categoryList as $c) {
-			if (intval($c) > 0)
-				$sqlList []= intval($c);
-		}
-
-
-		$sql = "SELECT day(from_unixtime(dt)) as day, count(newsID) as count FROM ".prefix."_news_map WHERE categoryID in (".join(",", $sqlList).") AND dt >= unix_timestamp('".$year."-".$month."-01 00:00:00') AND dt < unix_timestamp(date_add('".$year."-".$month."-01 00:00:00', interval 1 month)) group by to_days(from_unixtime(dt))";
+		$sql = "SELECT day(from_unixtime(postdate)) as day, count(id) as count FROM ".prefix."_news WHERE catid IN (".$categoryList.") AND approve = '1' AND postdate >= unix_timestamp('".$year."-".$month."-01 00:00:00') AND postdate < unix_timestamp(date_add('".$year."-".$month."-01 00:00:00', interval 1 month)) group by to_days(from_unixtime(postdate))";
 	}
+		//var_dump( $mysql->select($sql));
+	
 	foreach ($mysql->select($sql) as $row) {
 	        $counters[$row['day']] = $row['count'];
 	}
+	
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('entries', 'calendar'), 'calendar', pluginGetVariable('calendar', 'localsource'));
@@ -146,7 +153,7 @@ function plug_calgen($month, $year, $overrideTemplateName = false, $categoryList
 		'month'		=> $month,
 		'year'		=> $year,
 		'template'	=> $overrideTemplateName,
-		'categories'	=> join(",", $categoryList),
+		'categories'	=> join(",", $arrList),
 	);
 
 	// If cache is activated - calculate MIN and MAX dates for news
@@ -282,7 +289,7 @@ function plugin_calendar_showTwig($params) {
 		$year--;
 	}
 
-	return	plug_calgen($month, $year, isset($params['template'])?$params['template']:false, array(), $params['cache'], $params['flagAJAX']);
+	return	plug_calgen($month, $year, isset($params['template'])?$params['template']:false, isset($params['category'])?$params['category']:false, isset($params['offset'])?$params['offset']:false, $params['cache'], $params['flagAJAX']);
 }
 
 twigRegisterFunction('calendar', 'show', plugin_calendar_showTwig);
@@ -290,9 +297,10 @@ twigRegisterFunction('calendar', 'show', plugin_calendar_showTwig);
 
 
 function calendar_rpc_manage($params){
+
 	$params['flagAJAX'] = true;
 	$calendarOutput = plugin_calendar_showTwig($params);
-
+	
 	return array('status' => 1, 'errorCode' => 0, 'data' => arrayCharsetConvert(0, $calendarOutput));
 }
 
