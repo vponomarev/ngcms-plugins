@@ -4,7 +4,7 @@
 
 ID: feedback
 Name: Feedback forms
-Version: 0.20
+Version: 0.21
 Acts: ppages
 File: feedback.php
 Config: config.php
