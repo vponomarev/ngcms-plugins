@@ -95,7 +95,7 @@
 							  });
 							})
 						</script>
-						<li><a href="#" id="IncertText_{{ entry.post_id }}">Цитировать</a></li>
+						<li><a href="javascript:ShowOrHide('#');" id="IncertText_{{ entry.post_id }}">Цитировать</a></li>
 						{% endif %}
 					</ul>
 				</div>

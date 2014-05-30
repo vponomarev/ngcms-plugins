@@ -104,8 +104,8 @@
 	}else
 		$MODE_PS = array();
 	
-	print "<pre>".var_export($MODE_PERM[$result['fid']], true)."</pre>";
-	print "<pre>".var_export($FORUM_PS[$result['fid']], true)."</pre>";
+	//print "<pre>".var_export($MODE_PERM[$result['fid']], true)."</pre>";
+	//print "<pre>".var_export($FORUM_PS[$result['fid']], true)."</pre>";
 	
 	if(empty($FORUM_PS[$result['fid']]['forum_read']) or empty($FORUM_PS[$result['fid']]['topic_read']))
 		return $output = permissions_forum('Доступ в тему запрещен');

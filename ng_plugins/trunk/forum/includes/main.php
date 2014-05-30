@@ -248,7 +248,7 @@ function show_main_page($a_stat = false, $output = '', $welcome = false, $event 
 	
 	}else{$welcome = false; $event = false;}
 	
-	if(is_array($userROW) && $GROUP_PERM[$GROUP_STATUS]['pm'])
+	if(is_array($userROW) && $GROUP_PS['group_news'])
 		$int_pm = $mysql->result('SELECT COUNT(*) FROM `'.prefix.'_pm` WHERE to_id = '.securemysql($userROW['id']).' AND viewed = \'0\' AND folder=\'inbox\'');
 	
 	$tpath = locatePluginTemplates(array('main_page', ':'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
@@ -357,11 +357,12 @@ function show_main_page($a_stat = false, $output = '', $welcome = false, $event 
 }
 
 function show_news_forum()
-{global $mysql, $list_news; $i=0;
+{global $mysql, $list_news, $GROUP_PS;
 	
-	if(empty($GROUP_PERM[$GROUP_STATUS]['news']))
+	if(empty($GROUP_PS['group_news']))
 		return false;
 	
+	$i=0;
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_news ORDER BY c_data DESC LIMIT 5') as $row){
 		$i++;
 		$list_news[] = array(
