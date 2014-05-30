@@ -189,8 +189,8 @@
 		);
 	}
 	
-	print "<pre>".var_export($MODE_PS, true)."</pre>";
-	print "<pre>".var_export($FORUM_PS[$id], true)."</pre>";
+	//print "<pre>".var_export($MODE_PS, true)."</pre>";
+	//print "<pre>".var_export($FORUM_PS[$id], true)."</pre>";
 	
 	//'topic_modify' => (isset($MODE_PS) && $MODE_PS)?$MODE_PS['m_topic_modify']:$FORUM_PS[$id]['topic_modify'],
 	

@@ -183,7 +183,7 @@ function plugin_userlist_forum($params)
 }
 
 function plugin_search_forum($params)
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS, $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
 	
@@ -197,7 +197,7 @@ function plugin_search_forum($params)
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
-	if($GROUP_PS['group_read']){
+	if($GROUP_PS['group_search']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/search.php');
 		else
