@@ -719,7 +719,7 @@ global $twig, $plugin, $mysql;
 	$forum_description = isset($_REQUEST['forum_description'])?secure_html(trim($_REQUEST['forum_description'])):'';
 	$forum_keywords = isset($_REQUEST['forum_keywords'])?secure_html(trim($_REQUEST['forum_keywords'])):'';
 	$forum_redirect_url = isset($_REQUEST['forum_redirect_url'])?secure_html(trim($_REQUEST['forum_redirect_url'])):'';
-	$forum_lock_passwd = isset($_REQUEST['forum_lock_passwd'])?secure_html(trim($_REQUEST['forum_lock_passwd'])):'0';
+	$forum_lock_passwd = isset($_REQUEST['forum_lock_passwd'])?secure_html(trim($_REQUEST['forum_lock_passwd'])):'';
 	$forum_moderators = isset($_REQUEST['forum_moderators'])?secure_html(trim($_REQUEST['forum_moderators'])):'';
 	
 	$m_topic_send = isset($_REQUEST['m_topic_send'])?secure_html(trim($_REQUEST['m_topic_send'])):'';
