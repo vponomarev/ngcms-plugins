@@ -208,6 +208,7 @@
 		
 		'forum_name' => $forum['title'],
 		'forum_description' => $forum['description'],
+		'lock_passwd' => (isset($forum['lock_passwd']) && $forum['lock_passwd'])?1:0,
 		'tpl' => $tpath['url::'],
 		'local' => array(
 				'num_guest_loc' => $viewers['num_guest_loc'],

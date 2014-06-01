@@ -2,7 +2,7 @@
 	<div class="inbox"> 
 		<p class="pagelink conl">{% if (pages) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p> 
 		{% if (topic_send) %}<p class="postlink conr"><a href='{{ send_topic }}'>Добавить тему</a></p>{% endif %}
-		<ul><li><a href='{{ home_link }}'>Список</a>&nbsp;</li><li>&raquo;&nbsp;{{ forum_name }}</li></ul>
+		<ul><li><a href='{{ home_link }}'>Список</a>&nbsp;</li><li>&raquo;&nbsp;{{ forum_name }}{% if (lock_passwd) %}<sup>Запаролен</sup>{% endif %}</li></ul>
 		<div class="clearer"></div>
 	</div>
 </div>
