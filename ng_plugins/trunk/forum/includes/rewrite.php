@@ -18,14 +18,18 @@
 
 if (!defined('NGCMS')) die ('HAL');
 
-function link_lock_passwd($id)
+function link_lock_passwd($id, $act = '', $pid)
 {
 	$id = intval($id);
 	
-	$url = checkLinkAvailable('forum', 'lock_passwd')?
+	switch($act){
+		case '': $url = checkLinkAvailable('forum', 'lock_passwd')?
 			generateLink('forum', 'lock_passwd', array('id' => $id)):
-			generateLink('core', 'plugin', array('plugin' => 'forum', 'handler' => 'lock_passwd'), array('id' => $id));
-	
+			generateLink('core', 'plugin', array('plugin' => 'forum', 'handler' => 'lock_passwd'), array('id' => $id)); break;
+		case 'pid': $url = checkLinkAvailable('forum', 'lock_passwd')?
+			generateLink('forum', 'lock_passwd', array('id' => $id, 'pid' => $pid)):
+			generateLink('core', 'plugin', array('plugin' => 'forum', 'handler' => 'lock_passwd'), array('id' => $id, 'pid' => $pid)); break;
+	}
 	return $url;
 }
 

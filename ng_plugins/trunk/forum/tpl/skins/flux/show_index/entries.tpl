@@ -3,7 +3,7 @@
 		<div class="intd">
 			<div class="{% if (status) %}icon inew{% else %}icon{% endif %}"><div class="nosize"><!-- --></div></div>
 			<div class="tclcon">
-				<h3><a href='{{ forum_link }}'>{{ forum_name }}</a></h3>{{ forum_desc }}
+				<h3><a href='{{ forum_link }}'>{{ forum_name }}</a> {% if (lock_passwd) %}<sup>Запаролен</sup>{% endif %}</h3>{{ forum_desc }}
 				{% if (moder_print) %}<p><em>(Модераторы:</em> {{ moder_print }})</p>{% endif %}
 			</div>
 		</div>

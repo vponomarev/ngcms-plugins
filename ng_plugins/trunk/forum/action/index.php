@@ -51,6 +51,7 @@
 					'forum_desc' => $row_2['description'],
 					'num_topic' => $row_2['int_topic'],
 					'num_post' => $row_2['int_post'],
+					'lock_passwd' => (isset($row_2['lock_passwd']) && $row_2['lock_passwd'])?1:0,
 					'status' => status_forum($row_2['l_date']),
 					'moder_print' => implode(', ', $moder_print),
 					'MODE_PS' => $MODE_PS,

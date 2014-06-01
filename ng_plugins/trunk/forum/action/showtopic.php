@@ -92,8 +92,8 @@
 	if(empty($result))
 		return $output = information('Этой темы не существует', $title = 'Информация');
 	
-	if((isset($result['lock_passwd']) && $result['lock_passwd']) && empty($_SESSION['lock_passwd_'.$id]))
-		return redirect_forum(link_lock_passwd($id));
+	if((isset($result['lock_passwd']) && $result['lock_passwd']) && empty($_SESSION['lock_passwd_'.$result['fid']]))
+		return redirect_forum(link_lock_passwd($result['fid'], 'pid', $pid));
 	
 	if((isset($result['redirect_url']) && $result['redirect_url']))
 		return redirect_forum($result['redirect_url']);
