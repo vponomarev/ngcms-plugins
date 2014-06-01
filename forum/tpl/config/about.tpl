@@ -18,7 +18,7 @@ function ChangeOption(selectedOption) {
 	<dt><center><strong>Nail' Davydov</strong></center></dt>
 	<dt><center><strong><a href="http://rozard.net" target="_blank">http://rozard.net</a></strong></center></dt>
 	<dt><center><strong><a href="http://rozard.ngdemo.ru/" target="_blank">http://rozard.ngdemo.ru/</a></strong></center></dt><br />
-	<dt><center>© 2009-2013 Nail' Davydov</center></dt>
+	<dt><center>© 2009-2014 Nail' Davydov</center></dt>
 </dl>
 </table>
 </fieldset>
@@ -30,7 +30,7 @@ function ChangeOption(selectedOption) {
 <dl>
 	<dt><center><strong>Forum Next Generation CMS</strong></center></dt><br />
 	<dt><center></center></dt><br />
-	<dt><center>© 2009-2013 Nail' Davydov</center></dt>
+	<dt><center>© 2009-2014 Nail' Davydov</center></dt>
 </dl>
 </table>
 </fieldset>
@@ -41,7 +41,7 @@ function ChangeOption(selectedOption) {
 <dl>
 	<dt><strong>Закрытое тестирование и аудит:</strong></dt>
 	<dd>Sergey Rostunov -(<a href="http://ngcms.ru/forum/profile.php?id=62">infinity237</a>)</dd>
-	<dt><center>© 2009-2013 Nail' Davydov</center></dt>
+	<dt><center>© 2009-2014 Nail' Davydov</center></dt>
 </dl>
 </table>
 </fieldset>
@@ -50,7 +50,7 @@ function ChangeOption(selectedOption) {
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <dl>
 	<dt><strong>По всем проблема и предложениям обращаться на: <a href="http://ngcms.ru/forum/viewtopic.php?id=592" target="_blank"><b>Тестирование и обсуждения плагина форум</b></a></strong></dt>
-	<br /><dt><center>© 2009-2013 Nail' Davydov</center></dt>
+	<br /><dt><center>© 2009-2014 Nail' Davydov</center></dt>
 </dl>
 </table>
 </fieldset>
