@@ -19,6 +19,12 @@ if(!defined('NGCMS')) exit('HAL');
 
 plugins_load_config();
 
+include_once(dirname(__FILE__).'/includes/security.php');
+include_once(dirname(__FILE__).'/includes/rewrite.php');
+include_once(dirname(__FILE__).'/includes/constants.php');
+include_once(dirname(__FILE__).'/includes/cache.php');
+include_once(dirname(__FILE__).'/includes/bb_code.php');
+
 switch ($_REQUEST['action']) {
 	case 'send_forum': send_forum(); break;
 	case 'edit_forum': edit_forum(); break;
@@ -46,7 +52,57 @@ switch ($_REQUEST['action']) {
 	case 'title': title(); break;
 	
 	case 'about': about(); break;
-	default: general();
+	default: general();;
+}
+
+function main($entries){
+	global $plugin, $twig;
+	
+	$tpath = locatePluginTemplates(array('main'), $plugin, 1, '', 'config');
+	
+	if(!file_exists(files_dir.'forum'))
+		$_SESSION['forum']['info'][1] = 'Критическая ошибка: не найдена папка '.files_dir . 'forum';
+	
+	if(!is_writable(files_dir . 'forum'))
+		$_SESSION['forum']['info'][2] = 'Критическая ошибка: нет прав на запись '.files_dir . 'forum';
+	
+	if(!is_writable(FORUM_CACHE))
+		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE;
+	
+	if(!is_writable(FORUM_CACHE))
+		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE;
+	
+	if(!is_writable(FORUM_CACHE.'/group_perm.php'))
+		$_SESSION['forum']['info'][5] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE.'/group_perm.php';
+	
+	if(!is_writable(FORUM_CACHE.'/group_perm.php'))
+		$_SESSION['forum']['info'][6] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/group_perm.php';
+	
+	if(!is_writable(FORUM_CACHE.'/forum_perm.php'))
+		$_SESSION['forum']['info'][7] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE.'/forum_perm.php';
+	
+	if(!is_writable(FORUM_CACHE.'/forum_perm.php'))
+		$_SESSION['forum']['info'][8] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/forum_perm.php';
+	
+	if(isset($_SESSION['forum']['info'])){
+		$inf =  $_SESSION['forum']['info'];
+		
+		if(is_array($inf))
+			$info = implode('<br />', $inf);
+		else
+			$info = $inf;
+		
+		session_destroy();
+	}
+	
+	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
+	$tVars = array(
+		'info' => $info,
+		'global' => $entries['mode'],
+		'entries' => $entries['show']
+	);
+	
+	print $xt->render($tVars);
 }
 
 function edit_group(){
@@ -56,10 +112,8 @@ function edit_group(){
 	if(!isset($id) & $id <> '')
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=group');
 	
-	include_once(dirname(__FILE__).'/includes/security.php');
-	
 	//print "<pre>".var_export($group, true)."</pre>";
-	$tpath = locatePluginTemplates(array('main', 'edit_group'), $plugin, 1, '', 'config');
+	$tpath = locatePluginTemplates(array('edit_group'), $plugin, 1, '', 'config');
 	$xt = $twig->loadTemplate($tpath['edit_group'].'edit_group.tpl');
 	
 	$group = $mysql->record('SELECT * from '.prefix.'_forum_group WHERE id = '.$id.' LIMIT 1');
@@ -112,23 +166,18 @@ function edit_group(){
 		'list_error' => $error_input,
 	);
 	
-	$xg = $twig->loadTemplate($tpath['main'].'main.tpl');
-	
-	$tVars = array(
-		'global' => 'Редактор прав',
-		'entries' => $xt->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Редактор прав',
 	);
 	
-	print $xg->render($tVars);
+	main($entries_main);
 }
 
 function group()
 {global $plugin, $twig, $mysql;
 	
-	
-	include_once(dirname(__FILE__).'/includes/security.php');
-	
-	$tpath = locatePluginTemplates(array('main', 'group'), $plugin, 1, '', 'config');
+	$tpath = locatePluginTemplates(array('group'), $plugin, 1, '', 'config');
 	$xt = $twig->loadTemplate($tpath['group'].'group.tpl');
 	
 	foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as  $row){
@@ -149,33 +198,28 @@ function group()
 		'entries' => $tEntry,
 	);
 	
-	$xg = $twig->loadTemplate($tpath['main'].'main.tpl');
-	
-	$tVars = array(
-		'global' => 'Группы',
-		'entries' => $xt->render($tVars)
+	$entries_main = array(
+		'show' => $xt->render($tVars),
+		'mode' => 'Группы',
 	);
 	
-	print $xg->render($tVars);
+	main($entries_main);
 }
 
 function about()
 {global $plugin, $twig;
-	$tpath = locatePluginTemplates(array('main', 'about'), $plugin, 1, '', 'config');
-	
+	$tpath = locatePluginTemplates(array('about'), $plugin, 1, '', 'config');
 	
 	$xt = $twig->loadTemplate($tpath['about'].'about.tpl');
 	
 	$tVars = array();
 	
-	$xg = $twig->loadTemplate($tpath['main'].'main.tpl');
-	
-	$tVars = array(
-		'global' => 'О плагине',
-		'entries' => $xt->render($tVars)
+	$entries_main = array(
+		'show' => $xt->render($tVars),
+		'mode' => 'О плагине',
 	);
 	
-	print $xg->render($tVars);
+	main($entries_main);
 }
 
 function closed_complaints(){
@@ -209,10 +253,8 @@ global $twig, $plugin, $config, $mysql;
 		session_destroy();
 	}
 	
-	$tpath = locatePluginTemplates(array('main', 'complaints'), $plugin, 1, '', 'config');
+	$tpath = locatePluginTemplates(array('complaints'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['complaints'].'complaints.tpl');
-	include_once(dirname(__FILE__).'/includes/rewrite.php');
-	include_once(dirname(__FILE__).'/includes/security.php');
 	
 	$news_per_page = 5;
 	
@@ -246,21 +288,16 @@ global $twig, $plugin, $config, $mysql;
 		'pagesss' => generateAdminPagelist( array('current' => $pageNo, 'count' => $countPages, 'url' => admin_url.'/admin.php?mod=extra-config&plugin=forum&action=complaints'.($_REQUEST['news_per_page']?'&news_per_page='.$news_per_page:'').($_REQUEST['author']?'&author='.$_REQUEST['author']:'').($_REQUEST['sort']?'&sort='.$_REQUEST['sort']:'').($postdate?'&postdate='.$postdate:'').($author?'&author='.$author:'').($status?'&status='.$status:'').'&page=%page%'))
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'info' => $info,
-		'global' => 'Список жалоб',
-		'entries' => $xg->render($tVars),
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Список жалоб',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function del_forum(){
 global $twig, $plugin, $mysql;
-	
-	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/cache.php');
 	
 	$id = intval($_REQUEST['id']);
 	
@@ -296,9 +333,6 @@ global $twig, $plugin, $mysql;
 function del_section(){
 	global $plugin, $mysql;
 	
-	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/cache.php');
-	
 	$id = intval($_REQUEST['id']);
 	
 	if(!$mysql->result('SELECT 1 FROM '.prefix.'_forum_forums WHERE parent = '.db_squote($id).' LIMIT 1')){
@@ -314,10 +348,7 @@ function del_section(){
 function edit_section(){
 	global $twig, $plugin, $mysql;
 	
-	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/cache.php');
-	
-	$tpath = locatePluginTemplates(array('main', 'edit_section'), $plugin, 1, '', 'config');
+	$tpath = locatePluginTemplates(array('edit_section'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['edit_section'].'edit_section.tpl');
 	
 	$id = intval($_REQUEST['id']);
@@ -361,22 +392,18 @@ function edit_section(){
 		'list_error' => $error_input,
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'global' => 'Редактирование раздела',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Редактирование раздела',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function send_section(){
 	global $twig, $plugin, $mysql;
 	
-	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/cache.php');
-	
-	$tpath = locatePluginTemplates(array('main', 'send_section'), $plugin, 1, '', 'config');
+	$tpath = locatePluginTemplates(array('send_section'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['send_section'].'send_section.tpl');
 	
 	$name = secure_html(convert($_REQUEST['name']));
@@ -413,23 +440,18 @@ function send_section(){
 		'list_error' => $error_input,
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'global' => 'Добавить раздел',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Добавить раздел',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function edit_forum(){
 	global $twig, $plugin, $mysql;
 	
-	include_once(dirname(__FILE__).'/includes/security.php');
-	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/cache.php');
-	
-	$tpath = locatePluginTemplates(array('main', 'edit_forum'), $plugin, 1, '', 'config');
+	$tpath = locatePluginTemplates(array('edit_forum'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['edit_forum'].'edit_forum.tpl');
 	
 	$id = intval($_REQUEST['id']);
@@ -673,23 +695,18 @@ function edit_forum(){
 		'list_error' => $error_input,
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'global' => 'Редактировать форум',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Редактировать форум',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function send_forum(){
 global $twig, $plugin, $mysql;
 	
-	include_once(dirname(__FILE__).'/includes/security.php');
-	include_once(dirname(__FILE__).'/includes/constants.php');
-	include_once(dirname(__FILE__).'/includes/cache.php');
-	
-	$tpath = locatePluginTemplates(array('main', 'send_forum'), $plugin, 1, '', 'config');
+	$tpath = locatePluginTemplates(array('send_forum'), $plugin, 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['send_forum'].'send_forum.tpl');
 	
 	$id = intval($_REQUEST['id']);
@@ -980,18 +997,17 @@ global $twig, $plugin, $mysql;
 		'list_error' => $error_input,
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'global' => 'Добавить форум',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Добавить форум',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function title(){
 global $twig, $plugin;
-	$tpath = locatePluginTemplates(array('main', 'title'), 'forum', 1, '', 'config');
+	$tpath = locatePluginTemplates(array('title'), 'forum', 1, '', 'config');
 	
 	if (isset($_REQUEST['submit'])){
 		pluginSetVariable($plugin, 'home_title', secure_html(trim($_REQUEST['home_title'])));
@@ -1178,18 +1194,17 @@ global $twig, $plugin;
 		),
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'global' => 'Заголовки форума',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Заголовки форума',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function url()
 {global $twig, $plugin;
-	$tpath = locatePluginTemplates(array('main', 'url'), 'forum', 1, '', 'config');
+	$tpath = locatePluginTemplates(array('url'), 'forum', 1, '', 'config');
 	
 	if($_REQUEST['id']){
 		$ULIB = new urlLibrary();
@@ -1781,18 +1796,18 @@ function url()
 		'showtopic_forum' => checkLinkAvailable('forum', 'showtopic'),
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'global' => 'ЧПУ',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'ЧПУ',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
+//непонятная функция :))
 function moderat()
 {global $mysql;
-	include_once(dirname(__FILE__).'/includes/rewrite.php');
+	
 	
 	switch ($_REQUEST['act']) {
 		case 'pinned': 
@@ -1818,7 +1833,7 @@ function rules()
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=rules');
 	}
 	
-	$tpath = locatePluginTemplates(array('main', 'rules', ':'), 'forum', 1, '', 'config');
+	$tpath = locatePluginTemplates(array('rules', ':'), 'forum', 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['rules'].'rules.tpl');
 	$tVars = array(
 		'rules_on_off' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'rules_on_off', (int)pluginGetVariable($plugin,'rules_on_off')),
@@ -1826,13 +1841,12 @@ function rules()
 		'forum_tpl' => $tpath['url::'],
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'global' => 'Правила',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Правила',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function ads()
@@ -1844,7 +1858,7 @@ function ads()
 		//redirect_forum_config('?mod=extra-config&plugin=forum&action=ads');
 	}
 	
-	$tpath = locatePluginTemplates(array('main', 'ads', ':'), 'forum', 1, '', 'config');
+	$tpath = locatePluginTemplates(array('ads', ':'), 'forum', 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['ads'].'ads.tpl');
 	$tVars = array(
 		'announcement_on_off' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'announcement_on_off', (int)pluginGetVariable($plugin,'announcement_on_off')),
@@ -1852,23 +1866,19 @@ function ads()
 		'forum_tpl' => $tpath['url::'],
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'global' => 'Объявления',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Объявления',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 function new_news()
 {global $twig, $plugin, $mysql, $SYSTEM_FLAGS;
-	$tpath = locatePluginTemplates(array('new_news', 'main', 'htmail', ':'), 'forum', 1, '', 'config');
+	$tpath = locatePluginTemplates(array('new_news', 'htmail', ':'), 'forum', 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['new_news'].'new_news.tpl');
 	$xs = $twig->loadTemplate($tpath['htmail'].'htmail.tpl');
 	$time = time() + ($config['date_adjust'] * 60);
-	include_once(dirname(__FILE__).'/includes/rewrite.php');
-	include_once(dirname(__FILE__).'/includes/security.php');
-	include_once(dirname(__FILE__).'/includes/bb_code.php');
 	$edit_id = intval($_REQUEST['id']);
 	
 	$news_ar = $mysql->record('SELECT * FROM '.prefix.'_forum_news WHERE id = '.db_squote($edit_id).' LIMIT 1');
@@ -1947,14 +1957,12 @@ function new_news()
 		'error' => $error_input,
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'info' => $info,
-		'global' => 'Список новостей',
-		'entries' => $xg->render($tVars),
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Список новостей',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function del_news(){
@@ -1976,7 +1984,7 @@ function list_news()
 		session_destroy();
 	}
 	
-	$tpath = locatePluginTemplates(array('news', 'main'), 'forum', 1, '', 'config');
+	$tpath = locatePluginTemplates(array('news'), 'forum', 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['news'].'news.tpl');
 	
 	$news_per_page = 5;
@@ -2005,21 +2013,18 @@ function list_news()
 		'pagesss' => generateAdminPagelist( array('current' => $pageNo, 'count' => $countPages, 'url' => admin_url.'/admin.php?mod=extra-config&plugin=forum&action=list_news'.($_REQUEST['news_per_page']?'&news_per_page='.$news_per_page:'').($_REQUEST['author']?'&author='.$_REQUEST['author']:'').($_REQUEST['sort']?'&sort='.$_REQUEST['sort']:'').($postdate?'&postdate='.$postdate:'').($author?'&author='.$author:'').($status?'&status='.$status:'').'&page=%page%'))
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'info' => $info,
-		'global' => 'Список новостей',
-		'entries' => $xg->render($tVars),
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Список новостей',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function list_forum()
 {global $twig, $plugin, $mysql, $config;
 	
-	$tpath = locatePluginTemplates(array('main', 'list_forum', 'list_forum_entries', 'list_forum_main'), 'forum', 1, '', 'config');
-	include_once(dirname(__FILE__).'/includes/rewrite.php');
+	$tpath = locatePluginTemplates(array('list_forum', 'list_forum_entries', 'list_forum_main'), 'forum', 1, '', 'config');
 	
 	if(isset($_SESSION['forum']['info'])){
 		$info =  $_SESSION['forum']['info'];
@@ -2083,32 +2088,16 @@ function list_forum()
 		'entries' => $output
 	);
 	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'info' => $info,
-		'global' => 'Список форумов',
-		'entries' => $xe->render($tVars)
+	$entries_main = array(
+		'show' => $xe->render($tVars),
+		'mode' => 'Список форумов',
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function general()
 {global $twig, $plugin;
-	
-	auxiliary_forum();
-	
-	if(isset($_SESSION['forum']['info'])){
-		$inf =  $_SESSION['forum']['info'];
-		
-		if(is_array($inf)){
-			$info = implode('<br />', $inf);
-		} else {
-			$info = $inf;
-		}
-		
-		session_destroy();
-	}
 	
 	if (isset($_REQUEST['submit'])){
 		pluginSetVariable('forum', 'localsource', (int)$_REQUEST['localsource']);
@@ -2138,7 +2127,7 @@ function general()
 		redirect_forum_config('?mod=extra-config&plugin=forum');
 	}
 	
-	$tpath = locatePluginTemplates(array('main', 'general'), 'forum', 1, '', 'config');
+	$tpath = locatePluginTemplates(array('general'), 'forum', 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['general'].'general.tpl');
 	$tVars = array(
 		'localsource' => MakeDropDown(array(0 => 'Шаблон сайта', 1 => 'Плагина'), 'localsource', (int)pluginGetVariable($plugin,'localsource')),
@@ -2165,16 +2154,12 @@ function general()
 		'list_pm_per_page' => (int)pluginGetVariable($plugin,'list_pm_per_page'),
 	);
 	
-	
-	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
-	$tVars = array(
-		'info' => $info,
-		'global' => 'Общие',
-		'entries' => $xg->render($tVars)
+	$entries_main = array(
+		'show' => $xg->render($tVars),
+		'mode' => 'Общие'
 	);
 	
-	print $xt->render($tVars);
+	main($entries_main);
 }
 
 function auxiliary_forum(){
@@ -2183,6 +2168,24 @@ function auxiliary_forum(){
 	
 	if(!is_writable(files_dir . 'forum'))
 		$_SESSION['forum']['info'][2] = 'Критическая ошибка: нет прав на запись '.files_dir . 'forum';
+	
+	if(!is_writable(FORUM_CACHE))
+		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE;
+	
+	if(!is_writable(FORUM_CACHE))
+		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE;
+	
+	if(!is_writable(FORUM_CACHE.'/group_perm.php'))
+		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE.'/group_perm.php';
+	
+	if(!is_writable(FORUM_CACHE.'/group_perm.php'))
+		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/group_perm.php';
+	
+	if(!is_writable(FORUM_CACHE.'/forum_perm.php'))
+		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE.'/forum_perm.php';
+	
+	if(!is_writable(FORUM_CACHE.'/forum_perm.php'))
+		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/forum_perm.php';
 }
 
 function redirect_forum_config($url){
