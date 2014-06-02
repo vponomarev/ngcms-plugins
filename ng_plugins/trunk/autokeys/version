@@ -1,6 +1,6 @@
 ID: autokeys
 Name: Auto Keywords
-Version: 0.21.0
+Version: 0.23.0
 Acts: admin:mod:news
 Actions: rpc;lib/librpc.php
 File: autokeys.php

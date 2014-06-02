@@ -23,7 +23,7 @@ var autokeysAjaxUpdate = function() {
 
 		$("#autokeysArea").html(resTX['data']);
 		$("#autokeysButton").show();
-	}).error(function() { ngHideLoading(); ngNotifyWindow('HTTP error during request', 'ERROR'); });
+	}, "text").error(function() { ngHideLoading(); ngNotifyWindow('HTTP error during request', 'ERROR'); });
 };
 $("#autokeysButton").hide();
 
