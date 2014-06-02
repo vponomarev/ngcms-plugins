@@ -99,7 +99,7 @@ function ng_uprofile_editCall() {
 		} else {
 			$('#uprofileReplaceForm').html(resTX['data']);
 		}
-	}).error(function() { ngNotifyWindow('HTTP error during request', 'ERROR'); });
+	}, "text").error(function() { ngNotifyWindow('HTTP error during request', 'ERROR'); });
 
 }
 </script>
