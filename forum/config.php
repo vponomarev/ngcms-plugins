@@ -167,7 +167,7 @@ function edit_group(){
 	);
 	
 	$entries_main = array(
-		'show' => $xg->render($tVars),
+		'show' => $xt->render($tVars),
 		'mode' => 'Редактор прав',
 	);
 	
