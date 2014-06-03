@@ -509,37 +509,6 @@ function add_banned_users()
 		file_put_contents(FORUM_CACHE.'/ban.php', '<?php'."\n\n".'$ban = '.var_export($ban, true).';'."\n\n");
 }
 
-function status_user_forum(){
-	global $twig, $userROW, $GROUP_PS, $FORUM_PS, $MODE_PERM, $GROUP_PERM;
-	
-	if(file_exists(FORUM_CACHE.'/forum_perm.php'))
-		include(FORUM_CACHE.'/forum_perm.php');
-	
-	if(file_exists(FORUM_CACHE.'/group_perm.php'))
-		include(FORUM_CACHE.'/group_perm.php');
-	
-	if(file_exists(FORUM_CACHE.'/mode_perm.php'))
-		include(FORUM_CACHE.'/mode_perm.php');
-	
-	$bot = forum_filter_bots($_SERVER['HTTP_USER_AGENT']);
-	
-	if( is_array($userROW) ){
-		$GROUP_STATUS = $userROW['status'];
-	} elseif($bot){
-		$GROUP_STATUS = 5;
-	} else {
-		$GROUP_STATUS = 0;
-	}
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS], true)."</pre>";
-	
-	$GROUP_PS = $GROUP_PERM[$GROUP_STATUS];
-	$FORUM_PS = $FORUM_PERM[$GROUP_STATUS];
-	
-	//print "<pre>".var_export($GROUP_PS, true)."</pre>";
-	
-	//print "<pre>".var_export($FORUM_PS, true)."</pre>";
-}
-
 function forum_upload_files(){
 	$max_file_size = 7 * 1024 * 1024;
 	$extensions = array_map('trim', explode(',', 'zip, rar, 7zip, 7z, gif, jpg, png, jpe, jpeg'));

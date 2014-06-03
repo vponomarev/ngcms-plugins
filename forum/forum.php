@@ -939,3 +939,36 @@ function plugin_downloads_forum($params)
 	
 	show_main_page(false, $output, $welcome, $event);
 }
+
+function status_user_forum(){
+	global $twig, $userROW, $GROUP_PS, $FORUM_PS, $MODE_PERM, $GROUP_PERM;
+	
+	if(file_exists(FORUM_CACHE.'/forum_perm.php'))
+		include(FORUM_CACHE.'/forum_perm.php');
+	
+	if(file_exists(FORUM_CACHE.'/group_perm.php'))
+		include(FORUM_CACHE.'/group_perm.php');
+	
+	if(file_exists(FORUM_CACHE.'/mode_perm.php'))
+		include(FORUM_CACHE.'/mode_perm.php');
+	
+	$bot = forum_filter_bots($_SERVER['HTTP_USER_AGENT']);
+	
+	if( is_array($userROW) ){
+		$GROUP_STATUS = $userROW['status'];
+	} elseif($bot){
+		$GROUP_STATUS = 5;
+	} else {
+		$GROUP_STATUS = 0;
+	}
+	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS], true)."</pre>";
+	
+	$GROUP_PS = $GROUP_PERM[$GROUP_STATUS];
+	$FORUM_PS = $FORUM_PERM[$GROUP_STATUS];
+	
+	//print "<pre>".var_export($GROUP_PS, true)."</pre>";
+	
+	//print "<pre>".var_export($FORUM_PS, true)."</pre>";
+}
+
+add_act('index_pre', 'status_user_forum');
