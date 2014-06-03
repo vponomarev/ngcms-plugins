@@ -22,7 +22,9 @@ function header_show()
 {global $CurrentHandler, $SYSTEM_FLAGS, $SUPRESS_TEMPLATE_SHOW, $template, $twig, $titles;
 	
 	$tpath = locatePluginTemplates(array(':'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
-	
+	print '<pre>';
+	print_r ($tpath);
+	print '</pre>';
 	$SYSTEM_FLAGS['info']['title']['group'] = pluginGetVariable('forum', 'forum_title');
 	
 	if(isset($CurrentHandler['params']['page']) && $CurrentHandler['params']['page'])

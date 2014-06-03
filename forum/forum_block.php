@@ -91,7 +91,7 @@ function forum_show_a_users($params) {
 	$i=1;
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_users ORDER BY int_post DESC LIMIT '.$limit) as $row){
 		$entries[] = array(
-			'num'=>$i++,
+			'num' => $i++,
 			'profile_link' => link_profile($row['id'], '', $row['name']),
 			'profile' => $row['name'],
 			'num_post' => $row['int_post'],
