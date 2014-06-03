@@ -2129,6 +2129,12 @@ function general()
 	
 	$tpath = locatePluginTemplates(array('general'), 'forum', 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['general'].'general.tpl');
+	
+	if(pluginGetVariable($plugin,'localsource'))
+		$localskin = extras_dir.'/'.$plugin.'/tpl/skins/';
+	else
+		$localskin = tpl_site.'plugins/'.$plugin.'/skins/';
+	
 	$tVars = array(
 		'localsource' => MakeDropDown(array(0 => 'Шаблон сайта', 1 => 'Плагина'), 'localsource', (int)pluginGetVariable($plugin,'localsource')),
 		'online' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'online', (int)pluginGetVariable($plugin,'online')),
@@ -2137,7 +2143,7 @@ function general()
 		'forum_title' => secure_html(trim(pluginGetVariable($plugin,'forum_title'))),
 		'forum_description' => secure_html(trim(pluginGetVariable($plugin,'forum_description'))),
 		'forum_keywords' => secure_html(trim(pluginGetVariable($plugin,'forum_keywords'))),
-		'localskin' => MakeDropDown(ListFiles('../engine/plugins/forum/tpl/skins', ''), 'localskin', pluginGetVariable($plugin,'localskin')),
+		'localskin' => MakeDropDown(ListFiles($localskin, ''), 'localskin', pluginGetVariable($plugin,'localskin')),
 		'edit_del_time' => (int)pluginGetVariable($plugin,'edit_del_time'),
 		'display_main' =>  MakeDropDown(array(0 => 'Основной шаблон', 1 => 'Отдельная страница'), 'display_main', (int)pluginGetVariable($plugin,'display_main')),
 		
@@ -2160,32 +2166,6 @@ function general()
 	);
 	
 	main($entries_main);
-}
-
-function auxiliary_forum(){
-	if(!file_exists(files_dir.'forum'))
-		$_SESSION['forum']['info'][1] = 'Критическая ошибка: не найдена папка '.files_dir . 'forum';
-	
-	if(!is_writable(files_dir . 'forum'))
-		$_SESSION['forum']['info'][2] = 'Критическая ошибка: нет прав на запись '.files_dir . 'forum';
-	
-	if(!is_writable(FORUM_CACHE))
-		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE;
-	
-	if(!is_writable(FORUM_CACHE))
-		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE;
-	
-	if(!is_writable(FORUM_CACHE.'/group_perm.php'))
-		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE.'/group_perm.php';
-	
-	if(!is_writable(FORUM_CACHE.'/group_perm.php'))
-		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/group_perm.php';
-	
-	if(!is_writable(FORUM_CACHE.'/forum_perm.php'))
-		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE.'/forum_perm.php';
-	
-	if(!is_writable(FORUM_CACHE.'/forum_perm.php'))
-		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/forum_perm.php';
 }
 
 function redirect_forum_config($url){
