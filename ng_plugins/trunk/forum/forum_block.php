@@ -81,8 +81,10 @@ function forum_show_topics_top($params) {
 }
 
 function forum_show_a_users($params) {
-	global $CurrentHandler, $twig, $mysql;
-	
+	global $CurrentHandler, $twig, $mysql, $GROUP_PERM;
+	print '<pre>';
+	print_r ($GROUP_PERM);
+	print '</pre>';
 	$limit = $params['limit']?$params['limit']:5;
 	$templates = $params['temp']?$params['temp']:'show_a_users';
 	$tpath = locatePluginTemplates(array($templates), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'), 'block');
@@ -90,13 +92,6 @@ function forum_show_a_users($params) {
 	
 	$i=1;
 	foreach ($mysql->select('SELECT * FROM '.prefix.'_users ORDER BY int_post DESC LIMIT '.$limit) as $row){
-		switch($row['status']){
-			case 1: $color_start = '<span style="color:red;">'; $color_end = '</span>'; break;
-			case 2: $color_start = '<span style="color:green;">'; $color_end = '</span>'; break;
-			case 3: $color_start = '<span style="color:blue;">'; $color_end = '</span>'; break;
-			default: $color_start = ''; $color_end = '';
-		}
-		
 		$entries[] = array(
 			'num'=>$i++,
 			'profile_link' => link_profile($row['id'], '', $row['name']),
@@ -106,6 +101,9 @@ function forum_show_a_users($params) {
 			'color_end' => $color_end,
 			'avatar' => $row['avatar'],
 			'avatars_url' => avatars_url,
+			'int_post' => $row['int_post'],
+			'reputation' => $row['reputation'],
+			'group' => $GROUP_PERM[$row['status']]
 		);
 	}
 	

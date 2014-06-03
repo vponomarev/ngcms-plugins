@@ -21,7 +21,7 @@
 				<td bgcolor="#FFFFFF">
 <ul>
 {% for entry in entries %}
-<li>{{ entry.num }}<a href="{{ entry.profile_link }}">{{ color_start }}{{ entry.profile }}{{ color_end }}</a></li>
+<li>{{ entry.num }}<a href="{{ entry.profile_link }}">{% if (entry.group.group_color) %}<span style="color:{{ entry.group.group_color }};">{% endif %}{{ entry.profile }}{% if (entry.group.group_color) %}</span>{% endif %}</a></li>
 {% endfor %}
 </ul>
 				</td>
