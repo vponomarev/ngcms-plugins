@@ -82,9 +82,7 @@ function forum_show_topics_top($params) {
 
 function forum_show_a_users($params) {
 	global $CurrentHandler, $twig, $mysql, $GROUP_PERM;
-	print '<pre>';
-	print_r ($GROUP_PERM);
-	print '</pre>';
+	
 	$limit = $params['limit']?$params['limit']:5;
 	$templates = $params['temp']?$params['temp']:'show_a_users';
 	$tpath = locatePluginTemplates(array($templates), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'), 'block');
