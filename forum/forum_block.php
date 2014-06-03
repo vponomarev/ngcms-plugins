@@ -104,6 +104,8 @@ function forum_show_a_users($params) {
 			'num_post' => $row['int_post'],
 			'color_start' => $color_start,
 			'color_end' => $color_end,
+			'avatar' => $row['avatar'],
+			'avatars_url' => avatars_url,
 		);
 	}
 	
