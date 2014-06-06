@@ -141,11 +141,10 @@ if($result){
 	} else {
 		if($sess[$id]){
 			if($sess[$id] < $last_time)
-				
 				while ($count >= 0){
 					$res = $result[$count];
 					if (isset($res['sess_id']) && ($res['sess_id'] == $id)){
-						$result[$count] = array('ip' => $ips, 'last_time' => $time, 'users' => $users, 'users_id' => $users_id);
+						$result[$count] = array('sess_id' => $id, 'last_time' => $time, 'ip' => $ips, 'users' => $users, 'users_id' => $users_id, 'users_status' => $users_status);
 						if($db)
 							$mysql->query('UPDATE '.prefix.'_k_online SET last_time = '.intval($time).', ip = '.db_squote($ips).' WHERE sess_id = '.db_squote($id).' LIMIT 1');
 						else
@@ -160,7 +159,7 @@ if($result){
 					while ($count >= 0){
 						$res = $result[$count];
 						if (isset($res['ip']) && ($res['ip'] == $ip)){
-							$result[$count] = array('sess_id' => $id, 'last_time' => $time, 'users' => $users, 'users_id' => $users_id); 
+							$result[$count] = array('sess_id' => $id, 'last_time' => $time, 'ip' => $ips, 'users' => $users, 'users_id' => $users_id, 'users_status' => $users_status); 
 							if($db)
 								$mysql->query('UPDATE '.prefix.'_k_online SET sess_id = '.db_squote($id).', last_time = '.intval($time).' WHERE ip = '.db_squote($ip).' LIMIT 1');
 							else
@@ -171,7 +170,7 @@ if($result){
 					}
 				}
 			} else {
-				$result[] = array('sess_id' => $id, 'last_time' => $time, 'ip' => $ips, 'users' => $users,'users_id' => $users_id,'users_status' => $users_status); 
+				$result[] = array('sess_id' => $id, 'last_time' => $time, 'ip' => $ips, 'users' => $users, 'users_id' => $users_id, 'users_status' => $users_status); 
 				if($db){
 					$mysql->query('INSERT INTO '.prefix.'_k_online (sess_id, last_time, ip, users, users_id, users_status) 
 					VALUES ('.db_squote($id).', '.intval($time).', '.db_squote($ips).', '.db_squote($users).', '.db_squote($users_id).', '.db_squote($users_status).')');
