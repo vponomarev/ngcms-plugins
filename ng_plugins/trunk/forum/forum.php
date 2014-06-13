@@ -65,23 +65,23 @@ register_plugin_page('forum','downloads','plugin_downloads_forum');
 
 register_plugin_page('forum','lock_passwd','lock_passwd_forum');
 
-include_once(dirname(__FILE__).'/includes/constants.php');
-include_once(dirname(__FILE__).'/includes/rewrite.php');
-include_once(dirname(__FILE__).'/includes/security.php');
-include_once(dirname(__FILE__).'/includes/functions.php');
-include_once(dirname(__FILE__).'/includes/main.php');
-include_once(dirname(__FILE__).'/includes/bb_code.php');
-include_once(dirname(__FILE__).'/includes/cache.php');
+executeActionHandler('forum:core');
+
+include_once( dirname(__FILE__) . '/includes/security.php');
+include_once( dirname(__FILE__) . '/includes/functions.php');
+include_once( dirname(__FILE__) . '/includes/main.php');
+include_once( dirname(__FILE__) . '/includes/bb_code.php');
+include_once( dirname(__FILE__) . '/includes/cache.php');
+
+
 
 function plugin_show_forum()
-{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS, $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
+	executeActionHandler('forum:function');
 	
-	status_user_forum();
-	check_online_forum();
 	$welcome = true;
 	$event = true;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -104,11 +104,7 @@ function plugin_showforum_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -128,15 +124,11 @@ function plugin_showforum_forum($params)
 }
 
 function plugin_showtopic_forum($params)
-{global $userROW, $mysql,  $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $online, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
+{global $userROW, $mysql,  $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $online, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $GROUP_PERM, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -160,11 +152,6 @@ function plugin_userlist_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -187,12 +174,7 @@ function plugin_search_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
 	include('includes/root_word.php');
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -212,14 +194,9 @@ function plugin_search_forum($params)
 }
 
 function plugin_register_forum()
-{global $userROW, $template, $config, $ip, $mysql, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
+{global $userROW, $template, $config, $ip, $mysql, $CurrentHandler, $SYSTEM_FLAGS, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS, $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -243,11 +220,6 @@ function plugin_login_forum()
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -264,11 +236,6 @@ function plugin_profile_forum($params)
 {global $userROW, $template, $mysql, $SYSTEM_FLAGS, $CurrentHandler,  $ban, $twig, $ip, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -292,11 +259,6 @@ function plugin_out_forum()
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -312,11 +274,6 @@ function plugin_newpost_forum($params)
 {global $userROW, $config, $ip, $ban, $template, $CurrentHandler, $mysql, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -340,11 +297,6 @@ function plugin_newtopic_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -366,11 +318,6 @@ function plugin_topic_modify_forum($params)
 {global $userROW, $mysql, $twig, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -394,11 +341,6 @@ function plugin_delpost_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -420,11 +362,6 @@ function plugin_edit_forum($params)
 {global $userROW, $config, $mysql, $template, $CurrentHandler, $ip, $ban, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -448,11 +385,6 @@ function plugin_rules_forum()
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -474,11 +406,6 @@ function plugin_unsubscribe_forum($params)
 {global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -502,11 +429,6 @@ function plugin_markread_forum()
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -528,11 +450,6 @@ function plugin_reputation_forum($params)
 {global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -556,11 +473,6 @@ function plugin_add_reputation_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -582,11 +494,6 @@ function plugin_act_forum($params)
 {global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -610,11 +517,7 @@ function plugin_news_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = true;
 	$event = false;
@@ -638,11 +541,7 @@ function plugin_news_feed_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = true;
 	$event = false;
@@ -669,11 +568,6 @@ function plugin_rss_feed_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -698,11 +592,6 @@ function plugin_rss_forum($params)
 	$SUPRESS_MAINBLOCK_SHOW = 0;
 	
 	//set_error_handler('my_error_handler');
-	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
 	
 	if(isset($params['id']))
 		$id = isset($params['id'])?intval($params['id']):0;
@@ -731,11 +620,7 @@ function plugin_add_thank_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -759,11 +644,7 @@ function plugin_thank_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -787,11 +668,7 @@ function plugin_complaints_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -815,11 +692,7 @@ function plugin_send_pm_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -843,11 +716,7 @@ function plugin_list_pm_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	banned_users();
-	
-	status_user_forum();
-	check_online_forum();
-	viewers_forum();
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -871,10 +740,6 @@ function plugin_del_pm_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	status_user_forum();
-	
-	banned_users();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -894,8 +759,6 @@ function plugin_del_pm_forum($params)
 
 function lock_passwd_forum($params){
 	global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
-	
-	status_user_forum();
 	
 	$welcome = false;
 	$event = false;
@@ -919,10 +782,6 @@ function plugin_downloads_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
-	status_user_forum();
-	
-	banned_users();
-	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -940,35 +799,3 @@ function plugin_downloads_forum($params)
 	show_main_page(false, $output, $welcome, $event);
 }
 
-function status_user_forum(){
-	global $twig, $userROW, $GROUP_PS, $FORUM_PS, $MODE_PERM, $GROUP_PERM;
-	
-	if(file_exists(FORUM_CACHE.'/forum_perm.php'))
-		include(FORUM_CACHE.'/forum_perm.php');
-	
-	if(file_exists(FORUM_CACHE.'/group_perm.php'))
-		include(FORUM_CACHE.'/group_perm.php');
-	
-	if(file_exists(FORUM_CACHE.'/mode_perm.php'))
-		include(FORUM_CACHE.'/mode_perm.php');
-	
-	$bot = forum_filter_bots($_SERVER['HTTP_USER_AGENT']);
-	
-	if( is_array($userROW) ){
-		$GROUP_STATUS = $userROW['status'];
-	} elseif($bot){
-		$GROUP_STATUS = 5;
-	} else {
-		$GROUP_STATUS = 0;
-	}
-	//print "<pre>".var_export($GROUP_PERM[$GROUP_STATUS], true)."</pre>";
-	
-	$GROUP_PS = $GROUP_PERM[$GROUP_STATUS];
-	$FORUM_PS = $FORUM_PERM[$GROUP_STATUS];
-	
-	//print "<pre>".var_export($GROUP_PS, true)."</pre>";
-	
-	//print "<pre>".var_export($FORUM_PS, true)."</pre>";
-}
-
-add_act('index_pre', 'status_user_forum');

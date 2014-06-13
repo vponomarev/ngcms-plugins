@@ -274,7 +274,7 @@
 			'message' => bb_codes($row['message']),
 			'signature' =>  bb_codes($row['signature']),
 			'num_post' =>  $row['int_post'],
-			'userstatus' => $GROUP_PERM[$row['status']]['name'],
+			'userstatus' => $GROUP_PERM[$row['status']]['group_name'],
 		);
 	}
 	

@@ -210,13 +210,7 @@
 		'forum_description' => $forum['description'],
 		'lock_passwd' => (isset($forum['lock_passwd']) && $forum['lock_passwd'])?1:0,
 		'tpl' => $tpath['url::'],
-		'local' => array(
-				'num_guest_loc' => $viewers['num_guest_loc'],
-				'num_user_loc' => $viewers['num_user_loc'],
-				'num_bot_loc' => $viewers['num_bot_loc'],
-				'list_loc_user' => $viewers['list_loc_user'],
-				'list_loc_bot' => $viewers['list_loc_bot']
-		),
+		'local' => $viewers,
 		'prevlink' => array(
 					'true' => !empty($limitStart)?1:0,
 					'link' => str_replace('%page%',

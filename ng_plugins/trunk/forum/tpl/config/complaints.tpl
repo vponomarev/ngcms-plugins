@@ -10,7 +10,7 @@
 	<tr align="left" >
 		<td class="contentEntry1">{{ entry.id }}</td>
 		<td class="contentEntry1">{{ entry.author }}<br/><small><a href="{{ entry.author_link }}">{{ entry.home_url }}{{ entry.author_link }}</a></small></td>
-		<td class="contentEntry1">{{ entry.message }}<br/><small><a href="{{ entry.post_link }}">{{ entry.home_url }}{{ entry.post_link }}</a></small></td>
+		<td class="contentEntry1">{{ entry.message }}<br/><small><a href="{{ entry.post_link }}">{{ entry.home_url }}{{ entry.post_link }}#{{ entry.post_id }}</a></small></td>
 		<td class="contentEntry1">{% if (entry.viewed == 0) %}<input class="button" onmousedown="javascript:window.location.href='{{admin_url}}/admin.php?mod=extra-config&plugin=forum&action=closed_complaints&id={{ entry.id }}'" value="Закрыть" />{% else %}<input class="button" value="Закрыто" />{% endif %}</td>
 		<td class="contentEntry1">{% if (entry.viewed == 0) %}Пока открыа{% else %}{{ entry.who_author }}<br/><small><a href="{{ entry.who_author_link }}">{{ entry.home_url }}{{ entry.who_author_link }}</a></small>{% endif %}</td>
 	</tr>

@@ -35,6 +35,12 @@ switch ($_REQUEST['action']) {
 	case 'edit_section': edit_section(); break;
 	case 'del_section': del_section(); break;
 	
+	case 'ban': ban(); break;
+	case 'ban_ip_list': ban_ip_list(); break;
+	case 'ban_ip_list_del': ban_ip_list_del(); break;
+	case 'ban_ip_range': ban_ip_range(); break;
+	case 'ban_user': ban_user(); break;
+	
 	case 'list_complaints': list_complaints(); break;
 	case 'closed_complaints': closed_complaints(); break;
 	
@@ -174,6 +180,79 @@ function edit_group(){
 	main($entries_main);
 }
 
+function ban()
+{global $plugin, $twig;
+	
+	$tpath = locatePluginTemplates(array('ban'), $plugin, 1, '', 'config');
+	$xt = $twig->loadTemplate($tpath['ban'].'ban.tpl');
+	
+	$tVars = array(
+		'entries' => $tEntry,
+	);
+	
+	$entries_main = array(
+		'show' => $xt->render($tVars),
+		'mode' => 'Забаненые',
+	);
+	
+	main($entries_main);
+}
+
+function ban_ip_list_del()
+{global $plugin, $twig;
+	$tpath = locatePluginTemplates(array('ban_ip_list_send'), $plugin, 1, '', 'config');
+	$xt = $twig->loadTemplate($tpath['ban_ip_list_send'].'ban_ip_list_send.tpl');
+	
+	$tVars = array(
+		'entries' => $tEntry,
+	);
+	
+	$entries_main = array(
+		'show' => $xt->render($tVars),
+		'mode' => 'Добавить',
+	);
+	
+	main($entries_main);
+}
+
+function ban_ip_list()
+{global $plugin, $twig;
+	$tpath = locatePluginTemplates(array('ban_ip_list'), $plugin, 1, '', 'config');
+	$xt = $twig->loadTemplate($tpath['ban_ip_list'].'ban_ip_list.tpl');
+	
+	$ban_ip_list = array(
+		'127.0.0.1' => array(
+			array('desc_error' => 'Описание нарушения'),
+			array('desc_error' => 'Описание нарушения'),
+			array('desc_error' => 'Описание нарушения'),
+		),
+		'127.0.0.2' => array(
+			array('desc_error' => 'Описание нарушения_2')
+		),
+	);
+	
+	foreach ($ban_ip_list as  $key => $value){
+		foreach ($value as  $value){
+			$tEntry[$key] .= $value['desc_error'].'<br />';
+		}
+		$entries[] = array(
+			'ip' => $key,
+			'desc_error' => $tEntry[$key],
+		);
+	}
+	print "<pre>".var_export($entry, true)."</pre>";
+	$tVars = array(
+		'entries' => $entries,
+	);
+	
+	$entries_main = array(
+		'show' => $xt->render($tVars),
+		'mode' => 'Забаненые IP',
+	);
+	
+	main($entries_main);
+}
+
 function group()
 {global $plugin, $twig, $mysql;
 	
@@ -277,7 +356,8 @@ global $twig, $plugin, $config, $mysql;
 			'author_link' => link_profile($row['author_id'], '', $row['author']),
 			'who_author_link' => link_profile($row['who_author_id'], '', $row['who_author']),
 			'message' => $row['message'],
-			'post_link' => link_post($row['pid']),
+			'post_link' => link_topic($row['pid'], 'pid'),
+			'post_id' => $row['pid'],
 			'home_url' => $config['home_url'],
 			'viewed' => $row['viewed']
 		);

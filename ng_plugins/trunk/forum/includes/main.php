@@ -236,8 +236,9 @@ function show_main_page($a_stat = false, $output = '', $welcome = false, $event 
 	
 	list_ban_forum();
 	
-	if($a_stat)
+	if($a_stat) {
 		statistics_forum();
+	}
 	
 	if($ban[$ip] < 3){
 		if($welcome)
@@ -296,13 +297,7 @@ function show_main_page($a_stat = false, $output = '', $welcome = false, $event 
 		'welcome' => $welcome,
 		'event' => $event,
 		
-		'local' => array(
-			'num_guest_loc' => $viewers['num_guest_loc'],
-			'num_user_loc' => $viewers['num_user_loc'],
-			'num_bot_loc' => $viewers['num_bot_loc'],
-			'list_loc_user' => $viewers['list_loc_user'],
-			'list_loc_bot' => $viewers['list_loc_bot']
-		),
+		'local' => $viewers,
 		
 		'entries_last_topic' => $last_topic,
 		'entries_new_user' => $new_user,
@@ -389,51 +384,6 @@ global $ban, $list_bans;
 		$list_bans = implode(', ', $list_ban);
 }
 
-function viewers_forum(){
-global $viewers, $online, $CurrentHandler, $lang_forum, $GROUP_PERM;
-	
-	$last_time = time() + ($config['date_adjust'] * 60) - pluginGetVariable('forum', 'online_time');
-	
-	$viewers['num_guest_loc'] = 0; $viewers['num_user_loc'] = 0; $viewers['num_bot_loc'] = 0;
-	if( is_array($online) ){
-		foreach ($online as $row){
-			if($row['last_time'] > $last_time){
-				if($row['location'] == $CurrentHandler['handlerName']){
-					//print "<pre>".var_export($row, true)."</pre>";
-					if(isset($row['users_status']) && $row['users_status'] == 0){
-						$viewers['num_guest_loc']++;
-					}elseif(isset($row['users_status']) && $row['users_status'] == 1){
-						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
-						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['admin_url'] );
-						$viewers['num_user_loc']++;
-					}elseif(isset($row['users_status']) && $row['users_status'] == 2){
-						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
-						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['editor_url'] );
-						$viewers['num_user_loc']++;
-					}elseif(isset($row['users_status']) && $row['users_status'] == 3){
-						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
-						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['publicist_url'] );
-						$viewers['num_user_loc']++;
-					}elseif(isset($row['users_status']) && $row['users_status'] == 4){
-						$color_start = '<span style="color:'.$GROUP_PERM[$row['users_status']]['group_color'].';">'; $color_end = '</span>';
-						$viewers['active_users_loc'][] = str_replace( array('{url}', '{name}', '{color_start}', '{color_end}'), array( link_profile($row['users_id'], '', $row['users']), $row['users'], $color_start, $color_end ), $lang_forum['com_url'] );
-						$viewers['num_user_loc']++;
-					}elseif(isset($row['users_status']) && $row['users_status'] == 5){
-						$viewers['active_bot_loc'][] = $lang_forum[$row['users']];
-						$viewers['num_bot_loc']++;
-					}
-				}
-			}
-		}
-	}
-	
-	if( isset($viewers['active_users_loc']) && is_array($viewers['active_users_loc']) )
-		$viewers['list_loc_user'] = implode(", ", $viewers['active_users_loc']);
-	
-	if( isset($viewers['active_bot_loc']) && is_array($viewers['active_bot_loc']) )
-		$viewers['list_loc_bot'] = implode(", ", $viewers['active_bot_loc']);
-}
-
 function recent_events_forum()
 {global $mysql, $last_topic, $new_user, $active_user, $GROUP_PERM;
 	$i=1;
@@ -495,6 +445,8 @@ function statistics_forum()
 {global $mysql, $online, $lang_forum, $config, $twig, $stat, $result_last_users, $topic_sum, $post_sum, $result_users, $GROUP_PERM;
 	
 	$last_time = time() + ($config['date_adjust'] * 60) - pluginGetVariable('forum', 'online_time');
+	
+	executeActionHandler('forum:statistic');
 	
 	generate_statistics_cache();
 	
