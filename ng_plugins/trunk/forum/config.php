@@ -73,16 +73,16 @@ function main($entries){
 		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.files_dir . 'forum';
 	
 	if(!is_writable(FORUM_CACHE))
-		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE;
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE;
 	
 	if(!is_writable(FORUM_CACHE))
-		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE;
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE;
 	
 	if(file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE.'/group_perm.php'))
-		$_SESSION['forum']['info'][6] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/group_perm.php';
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/group_perm.php';
 	
 	if(file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE.'/forum_perm.php'))
-		$_SESSION['forum']['info'][7] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/forum_perm.php';
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/forum_perm.php';
 	
 	if(isset($_SESSION['forum']['info'])){
 		$inf =  $_SESSION['forum']['info'];
