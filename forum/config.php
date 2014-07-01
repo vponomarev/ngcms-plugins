@@ -67,10 +67,10 @@ function main($entries){
 	$tpath = locatePluginTemplates(array('main'), $plugin, 1, '', 'config');
 	
 	if(!file_exists(files_dir.'forum'))
-		$_SESSION['forum']['info'][1] = 'Критическая ошибка: не найдена папка '.files_dir . 'forum';
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка '.files_dir . 'forum';
 	
 	if(!is_writable(files_dir . 'forum'))
-		$_SESSION['forum']['info'][2] = 'Критическая ошибка: нет прав на запись '.files_dir . 'forum';
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.files_dir . 'forum';
 	
 	if(!is_writable(FORUM_CACHE))
 		$_SESSION['forum']['info'][3] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE;
@@ -78,17 +78,11 @@ function main($entries){
 	if(!is_writable(FORUM_CACHE))
 		$_SESSION['forum']['info'][4] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE;
 	
-	if(!is_writable(FORUM_CACHE.'/group_perm.php'))
-		$_SESSION['forum']['info'][5] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE.'/group_perm.php';
-	
-	if(!is_writable(FORUM_CACHE.'/group_perm.php'))
+	if(file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE.'/group_perm.php'))
 		$_SESSION['forum']['info'][6] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/group_perm.php';
 	
-	if(!is_writable(FORUM_CACHE.'/forum_perm.php'))
-		$_SESSION['forum']['info'][7] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE.'/forum_perm.php';
-	
-	if(!is_writable(FORUM_CACHE.'/forum_perm.php'))
-		$_SESSION['forum']['info'][8] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/forum_perm.php';
+	if(file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE.'/forum_perm.php'))
+		$_SESSION['forum']['info'][7] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/forum_perm.php';
 	
 	if(isset($_SESSION['forum']['info'])){
 		$inf =  $_SESSION['forum']['info'];
@@ -2212,8 +2206,14 @@ function general()
 	
 	if(pluginGetVariable($plugin,'localsource'))
 		$localskin = extras_dir.'/'.$plugin.'/tpl/skins/';
-	else
-		$localskin = tpl_site.'plugins/'.$plugin.'/skins/';
+	else {
+		if(file_exists(tpl_site.'plugins/'.$plugin.'/skins/'))
+			$localskin = tpl_site.'plugins/'.$plugin.'/skins/';
+		else {
+			$localskin = extras_dir.'/'.$plugin.'/tpl/skins/';
+			$_SESSION['forum']['info'][] = 'Ошибка с выбором шаблона. Выбран шаблон: '.extras_dir.'/'.$plugin.'/tpl/skins/';
+		}
+	}
 	
 	$tVars = array(
 		'localsource' => MakeDropDown(array(0 => 'Шаблон сайта', 1 => 'Плагина'), 'localsource', (int)pluginGetVariable($plugin,'localsource')),
