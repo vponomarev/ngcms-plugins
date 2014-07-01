@@ -38,7 +38,7 @@ global $userROW, $GROUP_PS, $FORUM_PS, $MODE_PERM, $GROUP_PERM;
 	//print "<pre>".var_export($FORUM_PS, true)."</pre>";
 }
 
-function viewers_forum(){
+function forum_browsing(){
 global $viewers, $online, $CurrentHandler, $lang_forum, $GROUP_PERM;
 	
 	$last_time = time() + ($config['date_adjust'] * 60) - pluginGetVariable('forum', 'online_time');
@@ -270,4 +270,4 @@ add_act('forum:core', 'forum_group');
 add_act('index_post', 'forum_group');
 
 add_act('forum:function', 'forum_online');
-add_act('forum:function', 'viewers_forum');
+add_act('forum:function', 'forum_browsing');

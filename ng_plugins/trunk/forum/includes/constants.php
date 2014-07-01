@@ -18,7 +18,7 @@
 	if (!defined('NGCMS')) die ('HAL'); global $twig;
 	$tpath = locatePluginTemplates(array(':'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum','localskin'));
 	
-	@define('FORUM_VERSION', '0.1 RC8');
+	@define('FORUM_VERSION', '0.1 RC9');
 	@define('FORUM_AVATAR_DIR', dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/uploads/avatars');
 	@define('FORUM_AVATAR_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/uploads/avatars');
 	@define('FORUM_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/engine/plugins/forum/');

@@ -73,8 +73,6 @@ include_once( dirname(__FILE__) . '/includes/main.php');
 include_once( dirname(__FILE__) . '/includes/bb_code.php');
 include_once( dirname(__FILE__) . '/includes/cache.php');
 
-
-
 function plugin_show_forum()
 {global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $viewers, $lang_forum, $GROUP_STATUS, $FORUM_PS, $GROUP_PS, $MODE_PERM;
 	
@@ -152,6 +150,8 @@ function plugin_userlist_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -173,6 +173,8 @@ function plugin_search_forum($params)
 {global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS, $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
+	
+	executeActionHandler('forum:function');
 	
 	include('includes/root_word.php');
 	
@@ -198,6 +200,8 @@ function plugin_register_forum()
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -220,6 +224,8 @@ function plugin_login_forum()
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -236,6 +242,8 @@ function plugin_profile_forum($params)
 {global $userROW, $template, $mysql, $SYSTEM_FLAGS, $CurrentHandler,  $ban, $twig, $ip, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
+	
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -259,6 +267,8 @@ function plugin_out_forum()
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -274,6 +284,8 @@ function plugin_newpost_forum($params)
 {global $userROW, $config, $ip, $ban, $template, $CurrentHandler, $mysql, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
+	
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -297,6 +309,8 @@ function plugin_newtopic_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -318,6 +332,8 @@ function plugin_topic_modify_forum($params)
 {global $userROW, $mysql, $twig, $template, $ip, $CurrentHandler, $ban, $SYSTEM_FLAGS, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
+	
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -341,6 +357,8 @@ function plugin_delpost_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -362,6 +380,8 @@ function plugin_edit_forum($params)
 {global $userROW, $config, $mysql, $template, $CurrentHandler, $ip, $ban, $SYSTEM_FLAGS, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
 	
 	//set_error_handler('my_error_handler');
+	
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -385,6 +405,8 @@ function plugin_rules_forum()
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -406,6 +428,8 @@ function plugin_unsubscribe_forum($params)
 {global $userROW, $mysql, $template, $ip, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
+	
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -429,6 +453,8 @@ function plugin_markread_forum()
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -450,6 +476,8 @@ function plugin_reputation_forum($params)
 {global $userROW, $mysql, $template, $SYSTEM_FLAGS, $CurrentHandler, $ip, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
+	
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -473,6 +501,8 @@ function plugin_add_reputation_forum($params)
 	
 	//set_error_handler('my_error_handler');
 	
+	executeActionHandler('forum:function');
+	
 	$welcome = false;
 	$event = false;
 	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
@@ -494,6 +524,8 @@ function plugin_act_forum($params)
 {global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $CurrentHandler, $ban, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS;
 	
 	//set_error_handler('my_error_handler');
+	
+	executeActionHandler('forum:function');
 	
 	$welcome = false;
 	$event = false;
@@ -798,4 +830,3 @@ function plugin_downloads_forum($params)
 	
 	show_main_page(false, $output, $welcome, $event);
 }
-
