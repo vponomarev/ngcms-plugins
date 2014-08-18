@@ -283,7 +283,7 @@ function plugin_calendar_showTwig($params) {
 		$year--;
 	}
 
-	return	plug_calgen($month, $year, isset($params['template'])?$params['template']:false, array(1), 0, $params['flagAJAX']);
+	return	plug_calgen($month, $year, isset($params['template'])?$params['template']:false, array(), 0, $params['flagAJAX']);
 }
 
 twigRegisterFunction('calendar', 'show', plugin_calendar_showTwig);
