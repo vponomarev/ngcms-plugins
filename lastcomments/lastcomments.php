@@ -30,7 +30,7 @@ function lastcomments_page() {
 	global $SYSTEM_FLAGS, $template, $CurrentHandler;
 
 	// Action if ppage is enabled
-	if (pluginGetVariable('lastcomments','ppage') && (checkLinkAvailable('lastcomments', '') && $CurrentHandler['handlerParams']['value']['pluginName'] == 'core')) {
+	if (pluginGetVariable('lastcomments','ppage') && ($CurrentHandler['handlerParams']['value']['pluginName'] == 'core')) {
 		$SYSTEM_FLAGS['info']['title']['group'] = "lastcomments";
 		$template['vars']['mainblock'] = lastcomments(1);
 	} else {
