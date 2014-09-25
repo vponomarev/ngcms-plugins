@@ -195,8 +195,8 @@ function lastcomments($mode = 0) {
 
     // Prepare REGEX conversion table
 	$conversionConfigRegex = array(
-			"#\[profile\](.*?)\[/profile\]#si"			=> '{% if (row.author_id) %}$1{% endif %}',
-			"#\[answer\](.*?)\[/answer\]#si"			=> '{% if (row.answer != "") %}$1{% endif %}',
+			"#\[profile\](.*?)\[/profile\]#si"			=> "{% if (entry.author_id) and (pluginIsActive('uprofile')) %}$1{% endif %}",
+			"#\[answer\](.*?)\[/answer\]#si"			=> "{% if (entry.answer != '') %}$1{% endif %}",
 			"#\[nocomments\](.*?)\[/nocomments\]#si"	=> "{% if (comnum == 0) %}$1{% endif %}",
 	//		"#\{l_([0-9a-zA-Z\-\_\.\#]+)}#"					=> "{{ lang['$1'] }}",
 	);
@@ -218,8 +218,7 @@ function lastcomments($mode = 0) {
 		'{answer}'			=>  '{{ entry.answer }}',
 		'{name}'			=>  '{{ entry.name }}',
 		'{alternating}'		=>	'{{ entry.alternating }}',
-		'{entries}'			=>  '{% for entry in entries %}{% include localPath(0) ~ "entries.tpl" %}{% endfor %}',
-		'{tpl_url}'			=>  '{{ tpl_url }}',
+		'{entries}'			=>  '{% for entry in entries %}{% include localPath(0) ~ "entries.tpl" %}{% endfor %}'
 	);
 
 	$twigLoader->setConversion($tpath[$tpl_prefix.'lastcomments'].$tpl_prefix."lastcomments".'.tpl', $conversionConfig, $conversionConfigRegex);
