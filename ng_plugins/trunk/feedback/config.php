@@ -318,6 +318,12 @@ function editFormRow(){
 			$tVars['content'] = "Указанная форма [".$id."] не существует!";
 			break;
 		}
+          
+        // Check if row id is not valid
+        if ( is_numeric(substr($fRowId, 0, 1)) || (!preg_match("/^[a-zA-Z\d]+$/", $fRowId)) || (strlen($fRowId) < 3) ) {
+            $tVars['content'] = "Необходимо соблюдать правила формирования ID!";
+            break;
+        }
 
 		$tVars['flags']['haveForm']	= 1;
 		$tVars['formID']			= $frow['id'];
