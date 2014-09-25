@@ -4,7 +4,7 @@
 
 ID: basket
 Name: Shop basket
-Version: 0.05
+Version: 0.06
 Acts: core, admin:mod:news, admin:mod:categories
 File: basket.php
 Actions: rpc;lib/librpc.php

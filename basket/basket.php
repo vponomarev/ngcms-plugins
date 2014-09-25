@@ -197,7 +197,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 		}
 
 
-		function onProcess($formID, $formStruct, $formData, $flagHTML, &$tVars) {
+		function onProcess($formID, $formStruct, $formData, $flagHTML, &$tvars) {
 			global $userROW, $mysql, $twig;
 
 			// Проверяем ID формы - данные корзины отображаются только в конкретной форме
@@ -229,7 +229,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 				}
 			}
 
-			$tVars = array(
+			$bVars = array(
 				'recs'		=> count($recs),
 				'entries'	=> $recs,
 				'total'		=> sprintf('%9.2f', $total),
@@ -237,7 +237,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 
 			// Выводим шаблон
 			$xt = $twig->loadTemplate('plugins/basket/lfeedback.tpl');
-			$tVars['plugin_basket'] = $xt->render($tVars);
+			$tvars['plugin_basket'] = $xt->render($bVars);
 		}
 
 		// Action executed when post request is completed
