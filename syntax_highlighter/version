@@ -1,0 +1,8 @@
+ID: syntax_highlighter
+Name: Syntax Highlighter
+Version: 1.0.3
+Acts: admin_header
+File: syntax_highlighter.php
+Type: plugin
+Description: Syntax Highlighter for Templates.
+Author: Maksym D.
