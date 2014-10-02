@@ -5,7 +5,6 @@
 <br/><br/>
 {%endif %}
 {{ description }}
-{{ plugin_basket }}
 <br/><br/>
 {% if (flags.jcheck) %}
 <script language="JavaScript">
@@ -18,25 +17,17 @@ function FBF_CHECK() {
  for (i in FBF_INIT) {
  	if (FBF_INIT[i][1]) {
  	 if (FBF_INIT[i][0] == 'date') {
-		if ((frm['fld_'+i+':day'].value == '1') && (frm['fld_'+i+':month'].value == '1') && (frm['fld_'+i+':year'].value == '1970')) {
- 			alert('{{ lang['feedback:form.err.notfilled'] }} ('+FBF_INIT[i][2]+')!');
- 			frm['fld_'+i+':day'].focus();
+		if ((frm[i+':day'].value == '1') && (frm[i+':month'].value == '1') && (frm[i+':year'].value == '1970')) {
+ 			alert('{l_feedback:form.err.notfilled} ('+FBF_INIT[i][2]+')!');
+ 			frm[i+':day'].focus();
  			return false;
 		}
- 	 } else if (frm['fld_'+i].value == '') {
- 		alert('{{ lang['feedback:form.err.notfilled'] }} ('+FBF_INIT[i][2]+')!');
- 		frm['fld_'+i].focus();
+ 	 } else if (frm[i].value == '') {
+ 		alert('{l_feedback:form.err.notfilled} ('+FBF_INIT[i][2]+')!');
+ 		frm[i].focus();
  		return false;
  	}
    }
-  // Check if captcha filled
-  var capt = frm.vcode;
-  if ((capt != null) && (capt.value == '')) {
-	alert('{{ lang['feedback:sform.captcha.badcode'] }}');
-	return false;
-  }
-
-
  }
  return true;
 }
@@ -45,54 +36,59 @@ function FBF_CHECK() {
 <form method="post" action="{{ form_url }}" id="feedback_form" name="feedback_form">
 {{ hidden_fields }}
 <input type="hidden" name="id" value="{{ id }}"/>
-<table>
-{% if (flags.error) %}<tr><td colspan="2" style="background: red; color: white;">{{ errorText }}</td></tr>{% endif %}
+<table border="0" width="100%">
 {% for entry in entries %}
 {% if entry.type == 'text' %}
-<tr>
- <td>{{ entry.title }}:</td>
- <td><input style="width: 300px;" type="text" name="{{ entry.name }}" value="{{ entry.value }}"/></td>
-</tr>
+	<tr>
+		<td width="30%">{{ entry.title }}</td>
+		<td width="70%"><input type="text" name="{{ entry.name }}" class="input" /></td>
+	</tr>
 {% endif %}
 {% if entry.type == 'email' %}
-<tr>
- <td>{{ entry.title }}:</td>
- <td><input style="width: 300px;" type="text" name="{{ entry.name }}" value="{{ entry.value }}"/></td>
-</tr>
+	<tr>
+		<td width="30%">{{ entry.title }}</td>
+		<td width="70%"><input type="text" name="{{ entry.name }}" class="input" /></td>
+	</tr>
 {% endif %}
 {% if entry.type == 'textarea' %}
-<tr>
- <td>{{ entry.title }}:</td>
- <td><textarea name="{{ entry.name }}" cols="50" rows="5">{{ entry.value }}</textarea></td>
-</tr>
+	<tr>
+		<td width="30%">{{ entry.title }}</td>
+		<td width="70%"><textarea name="{{ entry.name }}" style="width: 380px; height: 160px" class="textarea" />{{ entry.value }}</textarea></td>
+	</tr>
 {% endif %}
 {% if entry.type == 'select' %}
-<tr>
- <td>{{ entry.title }}:</td>
- <td><select name="{{ entry.name }}">{{ entry.options.select }}</select></td>
-</tr>
+	<tr>
+		<td width="30%">{{ entry.title }}</td>
+		<td width="70%"><select name="{{ entry.name }}">{{ entry.options.select }}</select></td>
+	</tr>
 {% endif %}
 {% if entry.type == 'date' %}
-<tr>
- <td>{{ entry.title }}:</td>
- <td><select name="{{ entry.name }}:day">{{ entry.options.day }}</select>.<select name="{{ entry.name }}:month">{{ entry.options.month }}</select>.<select name="{{ entry.name }}:year">{{ entry.options.year }}</select></td>
-</tr>
+	<tr>
+		<td width="30%">{{ entry.title }}</td>
+		<td width="70%"><select name="{{ entry.name }}:day">{{ entry.options.day }}</select>.<select name="{{ entry.name }}:month">{{ entry.options.month }}</select>.<select name="{{ entry.name }}:year">{{ entry.options.year }}</select></td>
+	</tr>
 {% endif %}
 {% endfor %}
 {% if (flags.captcha) %}
-<!-- Captcha check -->
-<tr>
- <td>{{ lang['feedback:sform.captcha'] }}:</td>
- <td><input type="text" name="vcode" /> <img id="img_captcha" onclick="this.src='{{ captcha_url }}&rand='+Math.random();" src="{{ captcha_url }}&rand={{ captcha_rand }}" alt="captcha" /></td>
-</tr>
+	<tr>
+		<td width="30%"><img id="img_captcha" onclick="this.src='{{ captcha_url }}&rand='+Math.random();" src="{{ captcha_url }}&rand={{ captcha_rand }}" alt="captcha" /></td>
+		<td width="70%"><input type="text" name="vcode" style="width:80px" class="input" /></td>
+	</tr>
 {% endif %}
 {% if (flags.recipients) %}
-<tr>
- <td>{{ lang['feedback:sform.elist'] }}:</td>
- <td><select name="recipient">{{ recipients_list }}</select></td>
- </tr>
+	<tr>
+		<td width="30%">{{ lang['feedback:sform.elist'] }}</td>
+		<td width="70%"><select name="recipient">{{ recipients_list }}</select></td>
+	</tr>
 {% endif %}
 </table>
-<input type="submit" {% if (flags.jcheck) %}onclick="return FBF_CHECK();" {% endif %}value="{{ lang['feedback:form.request'] }}"/>
+<div style="height: 10px;"></div>
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<tr align="center">
+		<td width="100%" valign="top">
+			<input {% if (flags.jcheck) %}onclick="return FBF_CHECK();" {% endif %} type="submit" value="{{ lang['feedback:form.request'] }}" class="btn" />
+		</td>
+	</tr>
+</table>
 </form>
 {% endblock %}

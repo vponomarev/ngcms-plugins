@@ -87,10 +87,27 @@ function saveForm() {
 	$flags =	($_REQUEST['jcheck']?'1':'0').
 				($_REQUEST['captcha']?'1':'0').
 				($_REQUEST['html']?'1':'0').
-				(((intval($_REQUEST['link_news']) >= 0) && (intval($_REQUEST['link_news']) <= 2))?intval($_REQUEST['link_news']):0);
+				(((intval($_REQUEST['link_news']) >= 0) && (intval($_REQUEST['link_news']) <= 2))?intval($_REQUEST['link_news']):0).
+				($_REQUEST['isSubj']?'1':'0');
 
+	$params = array(
+		'name'			=> $name,
+		'title'			=> $_REQUEST['title'],
+		'template'		=> $_REQUEST['template'],
+		'emails'		=> $emails,
+		'description'	=> $_REQUEST['description'],
+		'active'		=> $_REQUEST['active'],
+		'flags'			=> $flags,
+		'subj'			=> $_REQUEST['subj'],
+	);
 
-	$mysql->select("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($emails).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active']).", flags=".db_squote($flags)." where id = ".$id);
+	$sqlParams = array();
+	foreach ($params as $k => $v) {
+		$sqlParams []= $k.'='.db_squote($v);
+	}
+	$mysql->select("update ".prefix."_feedback set ".join(", ", $sqlParams)." where id = ".$id);
+	//$mysql->select("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($emails).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active']).", flags=".db_squote($flags)." where id = ".$id);
+
 	showForm(1);
 }
 
@@ -182,6 +199,8 @@ function showForm($edMode){
 	$tVars['name']				= $edMode?$_REQUEST['name']:$frow['name'];
 	$tVars['title']				= $edMode?$_REQUEST['title']:$frow['title'];
 	$tVars['description']		= $edMode?$_REQUEST['description']:$frow['description'];
+	$tVars['subj']				= $frow['subj'];
+	$tVars['isSubj']			= intval(substr($frow['flags'], 4, 1));
 	$tVars['url']				= generateLink('core', 'plugin', array('plugin' => 'feedback'), array('id' => $frow['id']), true, true);
 	$tVars['egroups']			= $tEGroups;
 	$tVars['link_news']			= array(
@@ -324,7 +343,6 @@ function editFormRow(){
             $tVars['content'] = "Необходимо соблюдать правила формирования ID!";
             break;
         }
-
 		$tVars['flags']['haveForm']	= 1;
 		$tVars['formID']			= $frow['id'];
 		$tVars['formName']			= $frow['name'];

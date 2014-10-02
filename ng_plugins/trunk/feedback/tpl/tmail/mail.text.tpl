@@ -15,7 +15,7 @@
 
 ѕользователь заполнил следующие пол€:
 {% for entry in entries %}
-* ({{ entry.id }})[{{ entry.title }}]: {{ entry.value }}
+* [{{ entry.title }}]: {{ entry.value }}
 {% endfor %}
 
 ---

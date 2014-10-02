@@ -337,6 +337,7 @@ function plugin_feedback_post() {
 
 	// Check if user requested HTML message format
 	$flagHTML = substr($frow['flags'], 2, 1) ? true : false;
+	$flagSubj = substr($frow['flags'], 4, 1) ? true : false;
 	$mailTN = 'mail.'.($flagHTML?'html':'text');
 
 	// Scan all fields and fill data. Prepare outgoing email.
@@ -401,7 +402,7 @@ function plugin_feedback_post() {
 
 
 	// Prepare EMAIL content
-	$mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $lang['feedback:mail.subj']);
+	$mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $flagSubj?$frow['subj']:$lang['feedback:mail.subj']);
 
 	// Load template for ADMIN notification
 	$xt = $twig->loadTemplate($tpath[$mailTN].$mailTN.'.tpl');
@@ -415,7 +416,7 @@ function plugin_feedback_post() {
 			continue;
 
 		$mailCount++;
-		zzMail($email, $mailSubject, $mailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+		sendEmailMessage($email, $mailSubject, $mailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
 	}
 
 	// Check if we need to send notification to user
@@ -429,7 +430,7 @@ function plugin_feedback_post() {
 			// Render ADMIN email body
 			$umailBody = $xtu->render($tVars);
 
-			zzMail($fieldValues[$fName], $mailSubject, $umailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+			sendEmailMessage($fieldValues[$fName], $mailSubject, $umailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
 		}
 	}
 
