@@ -33,6 +33,7 @@ function plugin_feedback_install($action) {
 	    array('action' => 'cmodify', 'name' => 'flags', 'type' => 'char(20)'),
 	    array('action' => 'cmodify', 'name' => 'name', 'type' => 'char(40)'),
 	    array('action' => 'cmodify', 'name' => 'title', 'type' => 'char(80)'),
+	    array('action' => 'cmodify', 'name' => 'subj', 'type' => 'char(100)'),
 	    array('action' => 'cmodify', 'name' => 'description', 'type' => 'text'),
 	    array('action' => 'cmodify', 'name' => 'struct', 'type' => 'text'),
 	    array('action' => 'cmodify', 'name' => 'template', 'type' => 'char(50)'),
