@@ -6,12 +6,17 @@ if (!defined('NGCMS')) die ('HAL');
 register_plugin_page('gsmg','','plugin_gsmg_screen',0);
 
 function plugin_gsmg_screen() {
-	global $config, $mysql, $catz, $catmap, $SUPRESS_TEMPLATE_SHOW;
+	global $config, $mysql, $catz, $catmap, $SUPRESS_TEMPLATE_SHOW, $SYSTEM_FLAGS;
 
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	$SUPRESS_MAINBLOCK_SHOW = 1;
 
 	@header('Content-type: text/xml; charset=utf-8');
+    
+    $SYSTEM_FLAGS['http.headers'] = array(
+		'content-type'		=> 'application/xml; charset=charset=utf-8',
+		'cache-control'		=> 'private',
+	);
 
 	if (extra_get_param('gsmg','cache')) {
 		$cacheData = cacheRetrieveFile('gsmg.txt', extra_get_param('gsmg','cacheExpire'), 'gsmg');
