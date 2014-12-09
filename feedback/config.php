@@ -88,7 +88,8 @@ function saveForm() {
 				($_REQUEST['captcha']?'1':'0').
 				($_REQUEST['html']?'1':'0').
 				(((intval($_REQUEST['link_news']) >= 0) && (intval($_REQUEST['link_news']) <= 2))?intval($_REQUEST['link_news']):0).
-				($_REQUEST['isSubj']?'1':'0');
+				($_REQUEST['isSubj']?'1':'0').
+				($_REQUEST['utf8']?'1':'0');
 
 	$params = array(
 		'name'			=> $name,
@@ -200,7 +201,6 @@ function showForm($edMode){
 	$tVars['title']				= $edMode?$_REQUEST['title']:$frow['title'];
 	$tVars['description']		= $edMode?$_REQUEST['description']:$frow['description'];
 	$tVars['subj']				= $frow['subj'];
-	$tVars['isSubj']			= intval(substr($frow['flags'], 4, 1));
 	$tVars['url']				= generateLink('core', 'plugin', array('plugin' => 'feedback'), array('id' => $frow['id']), true, true);
 	$tVars['egroups']			= $tEGroups;
 	$tVars['link_news']			= array(
@@ -212,6 +212,8 @@ function showForm($edMode){
 			'jcheck'			=> intval($edMode?$_REQUEST['jcheck']:intval(substr($frow['flags'],0,1))),
 			'captcha'			=> intval($edMode?$_REQUEST['captcha']:intval(substr($frow['flags'],1,1))),
 			'html'				=> intval($edMode?$_REQUEST['html']:intval(substr($frow['flags'],2,1))),
+			'subj'				=> intval(substr($frow['flags'], 4, 1)),
+			'utf8'				=> intval($edMode?$_REQUEST['utf8']:intval(substr($frow['flags'],5,1))),
 			'haveForm'			=> 1,
 
 	);
@@ -224,6 +226,23 @@ function showForm($edMode){
 
 	$tVars['template_options'] = $lout;
 	$tVars['entries'] = $tEntries;
+
+	// Determine template names/path, that will be used during form generation
+	// ** Site form
+	if ($frow['template'] && file_exists(root.'plugins/feedback/tpl/templates/'.$frow['template'].'.tpl')) {
+		$tP = root.'plugins/feedback/tpl/templates/';
+		$tN = $frow['template'];
+	} else {
+		$tP = $tpath['site.form'];
+		$tN = 'site.form';
+	}
+	$tVars['template']['site'] = $tP.$tN.'.tpl';
+
+	// ** EMail notify form
+	$tpath = locatePluginTemplates(array('site.form', 'site.notify', 'mail.html', 'mail.text'), 'feedback', pluginGetVariable('feedback', 'localsource'));
+	$flagHTML = substr($frow['flags'], 2, 1) ? true : false;
+	$mailTN = 'mail.'.($flagHTML?'html':'text');
+	$tVars['template']['email'] = $tpath[$mailTN].$mailTN.'.tpl';
 
 	$xt = $twig->loadTemplate('plugins/feedback/tpl/conf.form.tpl');
 	echo $xt->render($tVars);
@@ -337,7 +356,7 @@ function editFormRow(){
 			$tVars['content'] = "Указанная форма [".$id."] не существует!";
 			break;
 		}
-          
+
         // Check if row id is not valid
         if ( is_numeric(substr($fRowId, 0, 1)) || (!preg_match("/^[a-zA-Z\d]+$/", $fRowId)) || (strlen($fRowId) < 3) ) {
             $tVars['content'] = "Необходимо соблюдать правила формирования ID!";

@@ -54,6 +54,15 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	$fData = unserialize($frow['struct']);
 	if (!is_array($fData)) $fData = array();
 
+	// Resolve UTF-8 POST issue if data are sent in UTF-8 coding
+	$flagsUTF = substr($frow['flags'], 5, 1) ? true : false;
+	$isUTF = 0;
+	foreach ($_REQUEST as $k => $v) {
+		if (preg_match("#^fld_#", $k, $null) && mb_detect_encoding($v, 'UTF-8', true) == 'UTF-8') {
+			$isUTF = 1;
+			break;
+		}
+	}
 	// Process link with news
 	$link_news = intval(substr($frow['flags'], 3, 1));
 	$nrow = '';
@@ -96,7 +105,6 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		$tP = $tpath['site.form'];
 		$tN = 'site.form';
 	}
-
 	$xt = $twig->loadTemplate($tP.$tN.'.tpl');
 	$tVars = array(
 		'ptpl_url'		=> $ptpl_url,
@@ -139,14 +147,14 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 
 		if ($mode && (!$fInfo['block'])) {
 			// FILLED EARLIER
-			$setValue = secure_html($_REQUEST['fld_'.$fInfo['name']]);
+			$setValue = secure_html(($isUTF && $flagsUTF)?iconv('UTF-8', 'Windows-1251//TRANSLIT', $_REQUEST['fld_'.$fInfo['name']]):$_REQUEST['fld_'.$fInfo['name']]);
 		} else {
 			// INITIAL SHOW
 			$setValue = secure_html($fInfo['default']);
 
 			// If 'by parameter' mode is set, check if this variable was passed in GET
 			if (($fInfo['auto'] == 1) && isset($_REQUEST['v_'.$fInfo['name']])) {
-				$setValue = secure_html($_REQUEST['v_'.$fInfo['name']]);
+				$setValue = secure_html(($isUTF && $flagsUTF)?iconv('UTF-8', 'Windows-1251//TRANSLIT', $_REQUEST['v_'.$fInfo['name']]):$_REQUEST['v_'.$fInfo['name']]);
 			} else if ($fInfo['auto'] == 2) {
 				$setValue = secure_html($xfValues[$fInfo['name']]);
 			} else if ($fInfo['auto'] == 3) {
@@ -172,7 +180,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 						(intval($_REQUEST['fld_'.$fInfo['name'].':month']) >= 1) &&
 						(intval($_REQUEST['fld_'.$fInfo['name'].':month']) <= 12) &&
 						(intval($_REQUEST['fld_'.$fInfo['name'].':year']) >= 1970) &&
-						(intval($_REQUEST['fld_'.$fInfo['name'].':year']) <= 2014)) {
+						(intval($_REQUEST['fld_'.$fInfo['name'].':year']) <= 2020)) {
 						$setValueDay	= intval($_REQUEST['fld_'.$fInfo['name'].':day']);
 						$setValueMonth	= intval($_REQUEST['fld_'.$fInfo['name'].':month']);
 						$setValueYear	= intval($_REQUEST['fld_'.$fInfo['name'].':year']);
@@ -338,6 +346,7 @@ function plugin_feedback_post() {
 	// Check if user requested HTML message format
 	$flagHTML = substr($frow['flags'], 2, 1) ? true : false;
 	$flagSubj = substr($frow['flags'], 4, 1) ? true : false;
+	$flagsUTF = substr($frow['flags'], 5, 1) ? true : false;
 	$mailTN = 'mail.'.($flagHTML?'html':'text');
 
 	// Scan all fields and fill data. Prepare outgoing email.
@@ -364,6 +373,15 @@ function plugin_feedback_post() {
 		);
 	}
 
+	// Resolve UTF-8 POST issue if data are sent in UTF-8 coding
+	$isUTF = 0;
+	foreach ($_REQUEST as $k => $v) {
+		if (preg_match("#^fld_#", $k, $null) && mb_detect_encoding($v, 'UTF-8', true) == 'UTF-8') {
+			$isUTF = 1;
+			break;
+		}
+	}
+
 	$tEntries = array();
 	$fieldValues = array();
 
@@ -371,7 +389,11 @@ function plugin_feedback_post() {
 		switch ($fInfo['type']) {
 			case 'date':	$fieldValue = $_REQUEST['fld_'.$fName.':day'] . '.' . $_REQUEST['fld_'.$fName.':month'] . '.' . $_REQUEST['fld_'.$fName.':year'];
 		  					break;
-			default:		$fieldValue = $_REQUEST['fld_'.$fName];
+			default:		if ($isUTF && $flagsUTF) {
+								$fieldValue = iconv('UTF-8', 'Windows-1251//TRANSLIT', $_REQUEST['fld_'.$fName]);
+							} else {
+								$fieldValue = $_REQUEST['fld_'.$fName];
+							}
 		}
 		$fieldValues[$fName] = str_replace("\n", "<br/>\n", secure_html($fieldValue));
 
