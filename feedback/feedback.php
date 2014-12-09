@@ -58,7 +58,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	$flagsUTF = substr($frow['flags'], 5, 1) ? true : false;
 	$isUTF = 0;
 	foreach ($_REQUEST as $k => $v) {
-		if (preg_match("#^fld_#", $k, $null) && mb_detect_encoding($v, 'UTF-8', true) == 'UTF-8') {
+		if (preg_match("#^fld_#", $k, $null) && detectUTF8($v)) {
 			$isUTF = 1;
 			break;
 		}
@@ -376,7 +376,7 @@ function plugin_feedback_post() {
 	// Resolve UTF-8 POST issue if data are sent in UTF-8 coding
 	$isUTF = 0;
 	foreach ($_REQUEST as $k => $v) {
-		if (preg_match("#^fld_#", $k, $null) && mb_detect_encoding($v, 'UTF-8', true) == 'UTF-8') {
+		if (preg_match("#^fld_#", $k, $null) && detectUTF8($v)) {
 			$isUTF = 1;
 			break;
 		}
