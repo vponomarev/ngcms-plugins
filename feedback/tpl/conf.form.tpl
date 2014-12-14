@@ -39,8 +39,8 @@
 </table>
 <hr/>
 <table width="100%">
-<tr><td>Шаблон для отображения на сайте:</td><td><input type="text" readonly="readonly" value="{{ template.site }}" style="width: 550px;"/></td></tr>
-<tr><td>Шаблон для отправки e-mail сообщения:</td><td><input type="text" readonly="readonly" value="{{ template.email }}" style="width: 550px;"/></td></tr>
+<tr><td width="230">Шаблон на сайте{% if (not tfiles.site.isFound) %} <span style="color: red; font-weight: bold;">[по умолчанию]</span>{% endif %}:</td><td><input type="text" readonly="readonly" value="{{ tfiles.site.file }}" style="width: 550px;"/></td></tr>
+<tr><td>Шаблон в письме{% if (not tfiles.mail.isFound) %} <span style="color: red; font-weight: bold;">[по умолчанию]</span>{% endif %}:</td><td><input type="text" readonly="readonly" value="{{ tfiles.mail.file }}" style="width: 550px;"/></td></tr>
 </table>
 <hr/>
 <table width="100%">

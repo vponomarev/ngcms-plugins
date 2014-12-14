@@ -29,8 +29,8 @@ function clx(mode) {
 <table border="0" cellspacing="1" cellpadding="1" class="content">
 <tr class="contRow1"><td width="5%" style="background-color: #E0FFFF;">{{ lang['feedback:type.email'] }}</td><td width="45%">{{ lang['feedback:email.sendmail'] }}</td><td>
 <select name="email_template">
-{% for x in field.email_template.options %}
-	<option value="{{ x }}" {% if (field.email_template.value == x) %}selected="selected"{% endif %}>{% if (x == '') %}{{ lang['feedback:email.sendmail.0'] }}{% else %}{{ x }}{% endif %}</option>
+{% for x,xv in field.email_template.options %}
+	<option value="{{ x }}" {% if (field.email_template.value == x) %}selected="selected"{% endif %}>{% if (x == '') %}{{ lang['feedback:email.sendmail.0'] }}{% else %}{{ xv }}{% endif %}</option>
 {% endfor %}
 </tr>
 </table>

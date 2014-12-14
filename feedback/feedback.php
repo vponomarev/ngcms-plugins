@@ -8,6 +8,8 @@ register_plugin_page('feedback','post','plugin_feedback_post',0);
 
 loadPluginLang('feedback', 'main', '', '', ':');
 
+// Load library
+include_once(root."/plugins/feedback/lib/common.php");
 
 //
 // Show feedback form
@@ -98,6 +100,8 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 
 
 	// Choose template to use
+	$tFile = feedback_locateTemplateFiles($frow['template']);
+/*
 	if ($frow['template'] && file_exists(root.'plugins/feedback/tpl/templates/'.$frow['template'].'.tpl')) {
 		$tP = root.'plugins/feedback/tpl/templates/';
 		$tN = $frow['template'];
@@ -105,9 +109,10 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		$tP = $tpath['site.form'];
 		$tN = 'site.form';
 	}
-	$xt = $twig->loadTemplate($tP.$tN.'.tpl');
+*/
+	$xt = $twig->loadTemplate($tFile['site']['file']);
 	$tVars = array(
-		'ptpl_url'		=> $ptpl_url,
+		'ptpl_url'		=> $tFile['site']['path'],
 		'title'			=> $frow['title'],
 		'name'			=> $frow['name'],
 		'description'	=> $frow['description'],
@@ -427,7 +432,9 @@ function plugin_feedback_post() {
 	$mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $flagSubj?$frow['subj']:$lang['feedback:mail.subj']);
 
 	// Load template for ADMIN notification
-	$xt = $twig->loadTemplate($tpath[$mailTN].$mailTN.'.tpl');
+	$tfiles = feedback_locateTemplateFiles($frow['template'], $flagHTML);
+	$xt = $twig->loadTemplate($tfiles['mail']['file']);
+
 	// Render ADMIN email body
 	$mailBody = $xt->render($tVars);
 
@@ -445,14 +452,19 @@ function plugin_feedback_post() {
 	// -- list of user's email
 	$eSendList = array();
 	foreach ($fData as $fName => $fInfo) {
-		$tfn = extras_dir.'/feedback/tpl/tmail/'.$fInfo['template'].'.'.($flagHTML?'html':'text').'.tpl';
-		if (($fInfo['type'] == 'email') && ($fInfo['template'] != '') && (filter_var($fieldValues[$fName], FILTER_VALIDATE_EMAIL) !== false) && file_exists($tfn)) {
-			$eSendList []= $fieldValues[$fName];
-			$xtu = $twig->loadTemplate($tfn);
-			// Render ADMIN email body
-			$umailBody = $xtu->render($tVars);
+		// FIELD TYPE == Email + NOTIFICATION REQUEST is SET
+		if (($fInfo['type'] == 'email') && ($fInfo['template'] != '')) {
+			$tfiles = feedback_locateTemplateFiles($fInfo['template'], $flagHTML);
 
-			sendEmailMessage($fieldValues[$fName], $mailSubject, $umailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+			$tfn = $tfiles['mail']['file'];
+			if ((filter_var($fieldValues[$fName], FILTER_VALIDATE_EMAIL) !== false) && file_exists($tfn)) {
+				$eSendList []= $fieldValues[$fName];
+				$xtu = $twig->loadTemplate($tfn);
+				// Render ADMIN email body
+				$umailBody = $xtu->render($tVars);
+
+				sendEmailMessage($fieldValues[$fName], $mailSubject, $umailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+			}
 		}
 	}
 

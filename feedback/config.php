@@ -6,8 +6,11 @@ if (!defined('NGCMS')) die ('HAL');
 // Load langs
 loadPluginLang('feedback', 'config', '', '', ':');
 
-// Switch action
+// Load library
+include_once(root."/plugins/feedback/lib/common.php");
 
+
+// Switch action
 switch ($_REQUEST['action']) {
 	case 'addform'  : addForm();
 					  showList();
@@ -219,30 +222,21 @@ function showForm($edMode){
 	);
 
 	// Generate list of templates
-	$lf = array('') + ListFiles(extras_dir.'/feedback/tpl/templates', 'tpl');
+	$lf = array('' => '<автоматически>');
+	foreach (feedback_listTemplates() as $k) {
+		if (substr($k, 0, 1) == ':')	{		$lf[$k]	= 'сайт: '.$k;				}
+		else 							{		$lf[$k] = 'плагин: '.$k;			}
+	}
+
 	$lout = '';
-	foreach ($lf as $file)
-		$lout .= '<option value="'.$file.'"'.($frow['template'] == $file?' selected="selected"':'').'>'.($file == ''?'<автоматически>':$file).'</option>';
+	foreach ($lf as $k => $v)
+		$lout .= '<option value="'.$k.'"'.($frow['template'] == $k?' selected="selected"':'').'>'.$v.'</option>';
 
 	$tVars['template_options'] = $lout;
 	$tVars['entries'] = $tEntries;
 
-	// Determine template names/path, that will be used during form generation
-	// ** Site form
-	if ($frow['template'] && file_exists(root.'plugins/feedback/tpl/templates/'.$frow['template'].'.tpl')) {
-		$tP = root.'plugins/feedback/tpl/templates/';
-		$tN = $frow['template'];
-	} else {
-		$tP = $tpath['site.form'];
-		$tN = 'site.form';
-	}
-	$tVars['template']['site'] = $tP.$tN.'.tpl';
-
-	// ** EMail notify form
-	$tpath = locatePluginTemplates(array('site.form', 'site.notify', 'mail.html', 'mail.text'), 'feedback', pluginGetVariable('feedback', 'localsource'));
-	$flagHTML = substr($frow['flags'], 2, 1) ? true : false;
-	$mailTN = 'mail.'.($flagHTML?'html':'text');
-	$tVars['template']['email'] = $tpath[$mailTN].$mailTN.'.tpl';
+	// Show template files
+	$tVars['tfiles'] = feedback_locateTemplateFiles($frow['template'], substr($frow['flags'], 2, 1) ? true : false);
 
 	$xt = $twig->loadTemplate('plugins/feedback/tpl/conf.form.tpl');
 	echo $xt->render($tVars);
@@ -322,14 +316,14 @@ function showFormRow() {
 		$tVars['field']['block']['options'] = array (0, 1, 2);
 		$tVars['field']['email_send']['options'] = array (0, 1);
 
-		$tVars['field']['email_template']['options'] = array('') + ListFiles(extras_dir.'/feedback/tpl/tmail', 'html.tpl');
-		$lout = '';
-		foreach ($lf as $file)
-			$lout .= '<option value="'.$file.'"'.($frow['template'] == $file?' selected="selected"':'').'>'.($file == ''?'<автоматически>':$file).'</option>';
+		// prepare email send template list
+		$lf = array('' => '<не отправлять>');
+		foreach (feedback_listTemplates() as $k) {
+			if (substr($k, 0, 1) == ':')	{		$lf[$k]	= 'сайт: '.$k;				}
+			else 							{		$lf[$k] = 'плагин: '.$k;			}
+		}
 
-		$tVars['template_options'] = $lout;
-
-
+		$tVars['field']['email_template']['options'] = $lf;
 		$recordFound = 1;
 	} while (0);
 
