@@ -201,6 +201,7 @@ class XFieldsNewsFilter extends NewsFilter {
 
 		$output = '';
 		$xfEntries = array();
+		$xfList = array();
 
 		if (is_array($xf['news']))
 			foreach ($xf['news'] as $id => $data) {
@@ -210,6 +211,9 @@ class XFieldsNewsFilter extends NewsFilter {
 				$xfEntry = array(
 					'title'		=>	$data['title'],
 					'id'		=>	$id,
+					'value'		=>	$xdata[$id],
+					'secure_value'	=> secure_html($xdata[$id]),
+					'data'		=> $data,					
 					'required'	=>	$lang['xfields_fld_'.($data['required']?'required':'optional')],
 					'flags'		=>	array(
 						'required'	=>	$data['required']?true:false,
@@ -220,12 +224,10 @@ class XFieldsNewsFilter extends NewsFilter {
 				switch ($data['type']) {
 					case 'checkbox'  : 	$val = '<input type="checkbox" id="form_xfields_'.$id.'" name="xfields['.$id.']" title="'.$data['title'].'" value="1" '.($data['default']?'checked="checked"':'').'"/>';
 									$xfEntry['input'] = $val;
-									$xfEntries[intval($data['area'])][] = $xfEntry;
 									break;
 
 					case 'text'  : 	$val = '<input type="text" id="form_xfields_'.$id.'" name="xfields['.$id.']" title="'.$data['title'].'" value="'.secure_html($data['default']).'"/>';
 									$xfEntry['input'] = $val;
-									$xfEntries[intval($data['area'])][] = $xfEntry;
 									break;
 
 					case 'select': 	$val = '<select name="xfields['.$id.']" id="form_xfields_'.$id.'" >';
@@ -235,11 +237,9 @@ class XFieldsNewsFilter extends NewsFilter {
 											$val .= '<option value="'.secure_html(($data['storekeys'])?$k:$v).'"'.((($data['storekeys'] && $data['default'] == $k)||(!$data['storekeys'] && $data['default'] == $v))?' selected':'').'>'.$v.'</option>';
 									$val .= '</select>';
 									$xfEntry['input'] = $val;
-									$xfEntries[intval($data['area'])][] = $xfEntry;
 									break;
 					case 'textarea'  :	$val = '<textarea cols="30" rows="5" name="xfields['.$id.']" id="form_xfields_'.$id.'" >'.$data['default'].'</textarea>';
 									$xfEntry['input'] = $val;
-									$xfEntries[intval($data['area'])][] = $xfEntry;
 									break;
 					case 'images'	:
 						$iCount = 0;
@@ -262,9 +262,13 @@ class XFieldsNewsFilter extends NewsFilter {
 						$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_entry.image.tpl');
 						$val = $xt->render($tVars);
 						$xfEntry['input'] = $val;
-						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
+					default:
+						continue;
 				}
+				$xfEntries[intval($data['area'])][] = $xfEntry;
+				$xfList[$id] = $xfEntry;
+
 			}
 
 		$xfCategories = array();
@@ -346,7 +350,7 @@ class XFieldsNewsFilter extends NewsFilter {
 		// Render general part [with JavaScript]
 		$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
 		$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
-
+		$tvars['plugin']['xfields']['fields'] = $xfList;
 		return 1;
 	}
 	function addNews(&$tvars, &$SQL) {
@@ -1061,6 +1065,7 @@ if (getPluginStatusActive('uprofile')) {
 
 			$output = '';
 			$xfEntries = array();
+			$xfList = array();
 
 			foreach ($xf['users'] as $id => $data) {
 				if ($data['disabled'])
@@ -1070,15 +1075,20 @@ if (getPluginStatusActive('uprofile')) {
 				$xfEntry = array(
 					'title'		=>	$data['title'],
 					'id'		=>	$id,
+					'value'		=>	$xdata[$id],
+					'secure_value'	=>	secure_html($xdata[$id]),
+					'data'		=>	$data,	
 					'required'	=>	$lang['xfields_fld_'.($data['required']?'required':'optional')],
 					'flags'		=>	array(
 						'required'	=>	$data['required']?true:false,
 					),
 				);
 				switch ($data['type']) {
+					case 'checkbox':$val = '<input type="checkbox" id="form_xfields_'.$id.'" name="xfields['.$id.']" title="'.$data['title'].'" value="1" '.($data['default']?'checked="checked"':'').'"/>';
+						$xfEntry['input'] = $val;
+						break;
 					case 'text'  : 	$val = '<input type="text" name="xfields['.$id.']"  id="form_xfields_'.$id.'" title="'.$data['title'].'" value="'.secure_html($xdata[$id]).'" />';
 						$xfEntry['input'] = $val;
-						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
 					case 'select': 	$val = '<select name="xfields['.$id.']" id="form_xfields_'.$id.'" >';
 						if (!$data['required']) $val .= '<option value="">&nbsp;</option>';
@@ -1088,12 +1098,10 @@ if (getPluginStatusActive('uprofile')) {
 							}
 						$val .= '</select>';
 						$xfEntry['input'] = $val;
-						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
 					case 'textarea'	:
 						$val = '<textarea cols="30" rows="4" name="xfields['.$id.']" id="form_xfields_'.$id.'">'.$xdata[$id].'</textarea>';
 						$xfEntry['input'] = $val;
-						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
 					case 'images'	:
 						// First - show already attached images
@@ -1149,10 +1157,14 @@ if (getPluginStatusActive('uprofile')) {
 						$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_entry.image.tpl');
 						$val = $xt->render($tVars);
 						$xfEntry['input'] = $val;
-						$xfEntries[intval($data['area'])][] = $xfEntry;
 						break;
+					default:
+						continue;
 
 				}
+				$xfEntries[intval($data['area'])][] = $xfEntry;
+				$xfList[$id] = $xfEntry;
+
 			}
 
 			// Prepare configuration array
@@ -1181,13 +1193,14 @@ if (getPluginStatusActive('uprofile')) {
 				$tvars['plugin_xfields_'.$k] .= $render;
 				$tvars['p']['xfields'][$k] .= $render;
 			}
+			$tvars['plugin']['xfields']['fields'] = $xfList;
 /*
 			unset($tVars['entries']);
 			unset($tVars['area']);
 
 			// Render general part [with JavaScript]
 			$xt = $twig->loadTemplate('plugins/xfields/tpl/news.general.tpl');
-			$tvars['plugin']['xfields']['general'] = $xt->render($tVars);
+			$tvars['p']['xfields']['general'] = $xt->render($tVars);
 
 
 			$xt = $twig->loadTemplate('plugins/xfields/tpl/ed_uprofile.tpl');
