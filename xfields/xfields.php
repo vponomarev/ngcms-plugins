@@ -213,7 +213,7 @@ class XFieldsNewsFilter extends NewsFilter {
 					'id'		=>	$id,
 					'value'		=>	$xdata[$id],
 					'secure_value'	=> secure_html($xdata[$id]),
-					'data'		=> $data,					
+					'data'		=> $data,
 					'required'	=>	$lang['xfields_fld_'.($data['required']?'required':'optional')],
 					'flags'		=>	array(
 						'required'	=>	$data['required']?true:false,
@@ -1077,7 +1077,7 @@ if (getPluginStatusActive('uprofile')) {
 					'id'		=>	$id,
 					'value'		=>	$xdata[$id],
 					'secure_value'	=>	secure_html($xdata[$id]),
-					'data'		=>	$data,	
+					'data'		=>	$data,
 					'required'	=>	$lang['xfields_fld_'.($data['required']?'required':'optional')],
 					'flags'		=>	array(
 						'required'	=>	$data['required']?true:false,
@@ -1193,7 +1193,7 @@ if (getPluginStatusActive('uprofile')) {
 				$tvars['plugin_xfields_'.$k] .= $render;
 				$tvars['p']['xfields'][$k] .= $render;
 			}
-			$tvars['plugin']['xfields']['fields'] = $xfList;
+			$tvars['p']['xfields']['fields'] = $xfList;
 /*
 			unset($tVars['entries']);
 			unset($tVars['area']);
@@ -1400,7 +1400,8 @@ if (getPluginStatusActive('uprofile')) {
 						if (($v['type'] == 'textarea') && (!$v['noformat'])) {
 							$xfk = (str_replace("\n","<br/>\n",$xfk).(strlen($xfk)?'<br/>':''));
 						}
-						$tvars['vars']['p']['xfields'][$k]['value'] = $xfk;
+						// TWIG based variables
+						$tvars['p']['xfields'][$k]['value'] = $xfk;
 					}
 				}
 		}
