@@ -132,7 +132,7 @@ function uprofile_applyProfile() {
 
 	// Redirect back if we do not have any messages
 	if (!$template['vars']['mainblock']) {
-		@header("Location: ".generateLink('uprofile', 'edit', array()));
+		@header("Location: ".generateLink('uprofile', 'edit', array(), array('editComplete' => 1)));
 		exit;
 	} else {
 		// We have some messages. Don't affect it, print editForm.
@@ -157,6 +157,11 @@ function uprofile_editForm($ajaxMode = false){
 	if (!is_array($userROW)) {
 		msg(array("type" => "error", "text" => $lang['uprofile']['msge_notlogged']));
 		return;
+	}
+
+	// Notify about `EDIT COMPLETE` if editComplete parameter is passed
+	if (isset($_GET['editComplete']) && $_GET['editComplete']) {
+		msg(array("type" => "info", "info" => $lang['uprofile']['msgo_saved']));
 	}
 
 	//
