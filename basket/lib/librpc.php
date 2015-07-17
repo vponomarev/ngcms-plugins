@@ -127,11 +127,16 @@ function basket_rpc_manage($params){
 					$btitle = pluginGetVariable('basket', 'ntable_itemname');
 
 					// Get price
-					if (pluginGetVariable('basket', 'ntable_price') && isset($rec['xfields_'.pluginGetVariable('basket', 'ntable_price')])) {
-						$price = $rec['xfields_'.pluginGetVariable('basket', 'ntable_price')];
-					} else {
-						$price = 0;
-					}
+                    $xc = xf_configLoad();
+                    $xfData = xf_decode($nrec['xfields']);
+                    $xfTData = unserialize($rec['xfields']);
+
+                    // Get price
+                    if (pluginGetVariable('basket', 'ntable_price') && isset($xfTData[pluginGetVariable('basket', 'ntable_price')])) {
+                        $price = $xfTData[pluginGetVariable('basket', 'ntable_price')];
+                    } else {
+                        $price = 0;
+                    }
 
 					$replace = array();
 					$replace[0][]= '{title}';

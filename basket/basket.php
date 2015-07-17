@@ -129,6 +129,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 	class BasketXFieldsFilter extends XFieldsFilter {
 
 		function showTableEntry($newsID, $SQLnews, $rowData, &$rowVars) {
+            global $DSlist;
 			// Определяем - работаем ли мы внутри строк таблиц
 			if (!pluginGetVariable('basket', 'ntable_flag'))
 				return;
