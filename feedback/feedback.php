@@ -391,6 +391,7 @@ function plugin_feedback_post() {
 	$fieldValues = array();
 
 	foreach ($fData as $fName => $fInfo) {
+		$fieldValue = '';
 		switch ($fInfo['type']) {
 			case 'date':	$fieldValue = $_REQUEST['fld_'.$fName.':day'] . '.' . $_REQUEST['fld_'.$fName.':month'] . '.' . $_REQUEST['fld_'.$fName.':year'];
 		  					break;
@@ -400,6 +401,14 @@ function plugin_feedback_post() {
 								$fieldValue = $_REQUEST['fld_'.$fName];
 							}
 		}
+
+		// Check if required field is filled
+		if ($fInfo['required'] && (strlen($fieldValue) < 1)) {
+			// Don't allow to post request
+			plugin_feedback_showScreen(1, str_replace(array('{name}', '{title}'), array($fName, $fInfo['title']), $lang['feedback:sform.reqfld']));
+			return;
+		}
+
 		$fieldValues[$fName] = str_replace("\n", "<br/>\n", secure_html($fieldValue));
 
 		$tEntry = array(
@@ -414,9 +423,11 @@ function plugin_feedback_post() {
 	$tVars['entries'] = $tEntries;
 	$tVars['values'] = $fieldValues;
 
-	// Process filters (if any)
+	// Process filters (if any) [[ basic filter model ]]
 	if (is_array($PFILTERS['feedback']))
-		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onProcess($form_id, $frow, $fData, $flagHTML, $tVars); }
+		foreach ($PFILTERS['feedback'] as $k => $v) {
+			$v->onProcess($form_id, $frow, $fData, $flagHTML, $tVars);
+		}
 
 	// Select recipient group
 	$em = unserialize($frow['emails']);
@@ -446,6 +457,7 @@ function plugin_feedback_post() {
 
 		$mailCount++;
 		sendEmailMessage($email, $mailSubject, $mailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+
 	}
 
 	// Check if we need to send notification to user
