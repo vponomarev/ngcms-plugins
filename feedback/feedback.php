@@ -220,6 +220,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 			'is_textarea'	=> ($fInfo['type'] == 'textarea')?1:0,
 			'is_select'		=> ($fInfo['type'] == 'select')?1:0,
 			'is_date'		=> ($fInfo['type'] == 'date')?1:0,
+			'required'		=> $fInfo['required']?1:0,
 		);
 
 		$tEntries []= $tEntry;
@@ -281,7 +282,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 //
 // Post feedback message
 function plugin_feedback_post() {
-	global $template, $lang, $mysql, $userROW, $SYSTEM_FLAGS, $PFILTERS, $twig;
+	global $template, $lang, $mysql, $userROW, $SYSTEM_FLAGS, $PFILTERS, $twig, $SUPRESS_TEMPLATE_SHOW, $SUPRESS_MAINBLOCK_SHOW;
 
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('site.form', 'site.notify', 'mail.html', 'mail.text'), 'feedback', pluginGetVariable('feedback', 'localsource'));
@@ -424,10 +425,29 @@ function plugin_feedback_post() {
 	$tVars['values'] = $fieldValues;
 
 	// Process filters (if any) [[ basic filter model ]]
-	if (is_array($PFILTERS['feedback']))
+	if (is_array($PFILTERS['feedback'])) {
+		// OLD style
 		foreach ($PFILTERS['feedback'] as $k => $v) {
 			$v->onProcess($form_id, $frow, $fData, $flagHTML, $tVars);
 		}
+
+		// NEW style
+		foreach ($PFILTERS['feedback'] as $k => $v) {
+			if (!$v->onProcessEx($form_id, $frow, $fData, $flagHTML, $tVars, $tResult)) {
+				// BLOCK action
+				$msg = '';
+				if ($tResult['rawmsg']) {
+					$msg = $tResult['rawmsg'];
+				} else {
+					$msg = str_replace(array('{plugin}', '{error}', '{field}'), array($k, $tResult['msg'], $tResult['field']), $lang['feedback:sform.plugin'.($tResult['field']?'.field':'')]);
+				}
+				plugin_feedback_showScreen(1, $msg);
+				return;
+			}
+		}
+	}
+
+	// =====[ Prepare to send message ]=====
 
 	// Select recipient group
 	$em = unserialize($frow['emails']);
@@ -437,7 +457,6 @@ function plugin_feedback_post() {
 
 	$elist = (isset($em[intval($_POST['recipient'])]))?$em[intval($_POST['recipient'])][2]:$em[1][2];
 	$eGroupName = (isset($em[intval($_POST['recipient'])]))?$em[intval($_POST['recipient'])][1]:$em[1][1];
-
 
 	// Prepare EMAIL content
 	$mailSubject = str_replace(array('{name}', '{title}'), array($frow['name'], $frow['title']), $flagSubj?$frow['subj']:$lang['feedback:mail.subj']);
@@ -449,43 +468,100 @@ function plugin_feedback_post() {
 	// Render ADMIN email body
 	$mailBody = $xt->render($tVars);
 
+	// Prepare plugin NOTIFICATION structure
+	$eNotify = array(
+		'recipient'		=> $elist,
+		'subject'		=> $mailSubject,
+		'body'			=> $mailBody,
+		'contentType'	=> 'text/'.($flagHTML?'html':'plain'),
+	);
 
-	$mailCount = 0;
-	foreach ($elist as $email) {
-		if (trim($email) == '')
-			continue;
 
-		$mailCount++;
-		sendEmailMessage($email, $mailSubject, $mailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
-
+	// Try to SEND via PLUGIN
+	$isSentViaPlugin = false;
+	$tResult = array();
+	foreach ($PFILTERS['feedback'] as $k => $v) {
+		if ($v->onSendEx($form_id, $frow, $fData, $eNotify, $tVars, $tResult)) {
+			$isSentViaPlugin = true;
+			break;
+		}
 	}
 
-	// Check if we need to send notification to user
-	// -- list of user's email
-	$eSendList = array();
-	foreach ($fData as $fName => $fInfo) {
-		// FIELD TYPE == Email + NOTIFICATION REQUEST is SET
-		if (($fInfo['type'] == 'email') && ($fInfo['template'] != '')) {
-			$tfiles = feedback_locateTemplateFiles($fInfo['template'], $flagHTML);
+	$mailCount = 0;
+	if (!$isSentViaPlugin) {
+		// PLUGINS DIDN'T SENT MESSAGE, use LEGACY MODE
 
-			$tfn = $tfiles['mail']['file'];
-			if ((filter_var($fieldValues[$fName], FILTER_VALIDATE_EMAIL) !== false) && file_exists($tfn)) {
-				$eSendList []= $fieldValues[$fName];
-				$xtu = $twig->loadTemplate($tfn);
-				// Render ADMIN email body
-				$umailBody = $xtu->render($tVars);
+		foreach ($elist as $email) {
+			if (trim($email) == '')
+				continue;
 
-				sendEmailMessage($fieldValues[$fName], $mailSubject, $umailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+			$mailCount++;
+			sendEmailMessage($email, $mailSubject, $mailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+
+		}
+
+		// Check if we need to send notification to user
+		// -- list of user's email
+		$eSendList = array();
+		foreach ($fData as $fName => $fInfo) {
+			// FIELD TYPE == Email + NOTIFICATION REQUEST is SET
+			if (($fInfo['type'] == 'email') && ($fInfo['template'] != '')) {
+				$tfiles = feedback_locateTemplateFiles($fInfo['template'], $flagHTML);
+
+				$tfn = $tfiles['mail']['file'];
+				if ((filter_var($fieldValues[$fName], FILTER_VALIDATE_EMAIL) !== false) && file_exists($tfn)) {
+					$eSendList []= $fieldValues[$fName];
+					$xtu = $twig->loadTemplate($tfn);
+					// Render USER email body
+					$umailBody = $xtu->render($tVars);
+
+					sendEmailMessage($fieldValues[$fName], $mailSubject, $umailBody, false, false, 'text/'.($flagHTML?'html':'plain'));
+				}
 			}
 		}
 	}
 
+	// Do post processing notification
+	if (is_array($PFILTERS['feedback']))
+		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onProcessNotify($form_id); }
+
+	// Lock used captcha code if captcha is enabled
+	if (substr($frow['flags'],1,1)) {
+		//		$_SESSION['captcha.feedback'] = rand(00000, 99999);
+	}
+
+
+	// USER notification
+	// - DONE via plugin
+	if ($isSentViaPlugin && ($tResult['redirect'] || $tResult['notify.raw'] || $tResult['notify.template'])) {
+		if ($tResult['redirect']) {
+			$SUPRESS_TEMPLATE_SHOW = true;
+			$SUPRESS_MAINBLOCK_SHOW = true;
+			header('Location: '.$tResult['redirect']);
+			return;
+		}
+
+		if ($tResult['notify.raw']) {
+			$SUPRESS_TEMPLATE_SHOW = true;
+			$template['mainblock'] = $tResult['notify.raw'];
+			return;
+		}
+
+		if ($tResult['notify.template']) {
+			$template['mainblock'] = $tResult['notify.template'];
+			return;
+		}
+	}
+
+	$notifyMessage = ($isSentViaPlugin && $tResult['notify.msg'])?$tResult['notify.msg']:str_replace('{ecount}', $mailCount, $lang['feedback:confirm.message']);
+
+	// Prepare user's notification
 	$xt = $twig->loadTemplate($tpath['site.notify'].'site.notify.tpl');
 
 	$tVars = array(
 		'title' => $frow['title'],
 		'ptpl_url' => $ptpl_url,
-		'entries' => str_replace('{ecount}', $mailCount, $lang['feedback:confirm.message']),
+		'entries' => $notifyMessage,
 		'usermail'	=> array(
 			'count'		=> count($eSendList),
 			'list'		=> $eSendList,
@@ -494,14 +570,7 @@ function plugin_feedback_post() {
 
 	$template['vars']['mainblock']      =  $xt->render($tVars);
 
-	// Lock used captcha code if captcha is enabled
-	if (substr($frow['flags'],1,1)) {
-//		$_SESSION['captcha.feedback'] = rand(00000, 99999);
-	}
 
-	// Do post processing notification
-	if (is_array($PFILTERS['feedback']))
-		foreach ($PFILTERS['feedback'] as $k => $v) { $v->onProcessNotify($form_id); }
 
 
 }

@@ -14,6 +14,16 @@ class FeedbackFilter {
 
 	}
 
+	// EXTENDED: Action executed when form is posted, should return TRUE to continue processing
+	function onProcessEx($formID, $formStruct, $formData, $flagHTML, &$tVars, &$tResult) {
+		return true;
+	}
+
+	// EXTENDED: Send processor
+	function onSendEx($formID, $formStruct, $formData, $msgData, $tVars, &$tResult) {
+		return false;
+	}
+
 	// Action executed when post request is completed
 	function onProcessNotify($formID){
 
