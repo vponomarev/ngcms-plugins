@@ -10,7 +10,7 @@ class gsmgFilter {
     
 }
 
-function create_urls()
+function create_gsmg_urls()
 {
     $ULIB = new urlLibrary();
     $ULIB->loadConfig();
@@ -61,7 +61,7 @@ function create_urls()
     $UHANDLER->saveConfig();
 }
 
-function remove_urls()
+function remove_gsmg_urls()
 {
     $ULIB = new urlLibrary();
     $ULIB->loadConfig();

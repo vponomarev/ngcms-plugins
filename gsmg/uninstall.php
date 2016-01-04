@@ -13,7 +13,7 @@ include_once(root."/plugins/gsmg/lib/common.php");
 plugins_load_config();
 
 if ($_REQUEST['action'] == 'commit') {
-    remove_urls();
+    remove_gsmg_urls();
     plugin_mark_deinstalled($plugin);
     $url = home."/engine/admin.php?mod=extras";
     header("HTTP/1.1 301 Moved Permanently");

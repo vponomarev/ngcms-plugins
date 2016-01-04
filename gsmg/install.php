@@ -28,7 +28,7 @@ function plugin_gsmg_install($action) {
             break;
         case 'autoapply':
         case 'apply':
-            create_urls();
+            create_gsmg_urls();
             plugin_mark_installed('gsmg');
             $url = home."/engine/admin.php?mod=extras";
             header("HTTP/1.1 301 Moved Permanently");
