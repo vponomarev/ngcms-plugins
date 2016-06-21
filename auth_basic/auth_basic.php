@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 
 
 //
-// ГЏГ°Г®ГЇГЁГ±Г»ГўГ ГҐГ¬ Г±ГўГ®Г© Г¬Г®Г¤ГіГ«Гј
+// Прописываем свой модуль
 //
 global $AUTH_METHOD;
 global $AUTH_CAPABILITIES;
@@ -13,10 +13,10 @@ global $config;
 
 class auth_basic extends CoreAuthPlugin {
 
-	// ГЋГ±ГіГ№ГҐГ±ГІГўГЁГІГј ГўГµГ®Г¤
-	// $username	= Г«Г®ГЈГЁГ­
-	// $password	= ГЇГ Г°Г®Г«Гј
-	// $auto_scan	= ГҐГ±Г«ГЁ 1, ГІГ® ГґГіГ­ГЄГ¶ГЁГї Г±Г Г¬Г  Г¤Г®Г«Г¦Г­Г  Г­Г Г©ГІГЁ Г­ГіГ¦Г­Г»ГҐ ГЇГ Г°Г Г¬ГҐГІГ°Г» Г±Г°ГҐГ¤ГЁ POST'Г®Гў
+	// Осуществить вход
+	// $username	= логин
+	// $password	= пароль
+	// $auto_scan	= если 1, то функция сама должна найти нужные параметры среди POST'ов
 	function login($auto_scan = 1, $username = '', $password = '') {
 		global $mysql;
 
@@ -55,38 +55,71 @@ class auth_basic extends CoreAuthPlugin {
 	}
 
 	//
-	// Г‘Г®ГµГ°Г Г­ГЁГІГј Гў ГЃГ„ ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГѕ Г® ГІГ®Г¬, Г·ГІГ® ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гј Г ГўГІГ®Г°ГЁГ§Г®ГўГ Г«Г±Гї
-	// $dbrow	= Г±ГІГ°Г®ГЄГ  ГЁГ§ Г­Г ГёГҐГ© ГІГ ГЎГ«ГЁГ¶Г» ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ©
+	// Сохранить в БД информацию о том, что пользователь авторизовался
+	// $dbrow	= строка из нашей таблицы пользователей
 	function save_auth($dbrow) {
 		global $config, $mysql, $ip, $ngCookieDomain;
 
-        	// Г±Г®Г§Г¤Г ВёГ¬ random cookie
-        	$auth_cookie = md5((isset($config['crypto_salt'])?$config['crypto_salt']:'').uniqid(rand(),1));
+        // создаём random cookie
+        $auth_cookie = md5((isset($config['crypto_salt'])?$config['crypto_salt']:'').uniqid(rand(),1));
 
-		$query = "update ".uprefix."_users set last = ".db_squote(time()).", ip=".db_squote($ip).", authcookie = ".db_squote($auth_cookie)." where id=".db_squote($dbrow['id']);
-		$mysql->query($query);
-		
+		// Multilogin is allowed. Session information is stored in separate table
+		if (pluginGetVariable('auth_basic', 'multilogin')) {
+			// Drop old session (if applicable)
+			if (isset($_COOKIE['zz_auth']) && $_COOKIE['zz_auth'])
+				$mysql->query("delete from ".uprefix."_users_sessions where authcookie = ".db_squote($_COOKIE['zz_auth']));
+
+			// Register new session
+			$query = "insert into ".uprefix."_users_sessions (userID, ip, last, authcookie) values (".db_squote($dbrow['id']).", ".db_squote($ip).", ".db_squote(time()).", ".db_squote($auth_cookie).")";
+			$mysql->query($query);
+
+			// Update user's last login time
+			$query = "update ".uprefix."_users set last = ".db_squote(time())." where id = ".db_squote($auth_cookie);
+			$mysql->query($query);
+		} else {
+			// SINGLE LOGIN mode
+			$query = "update ".uprefix."_users set last = ".db_squote(time()).", ip=".db_squote($ip).", authcookie = ".db_squote($auth_cookie)." where id=".db_squote($dbrow['id']);
+			$mysql->query($query);
+		}
+
 		// Fix: http://stackoverflow.com/a/5849409/4331870
 		if($ngCookieDomain == 'localhost') {
 			$ngCookieDomain = null;
 		}
 
-		// Г‚Г±ГІГ ГўГЁГІГј ГѕГ§ГҐГ°Гі ГЄГіГЄГі
+		// Вставить юзеру куку
 		@setcookie('zz_auth', $auth_cookie, ($config['remember']?(time() + 3600 * 24 * 365):0), '/', $ngCookieDomain, 0, 1);
 
 		return 1;
 	}
 
 	//
-	// ГЏГ°Г®ГўГҐГ°ГЁГІГј Г ГўГІГ®Г°ГЁГ§Г Г¶ГЁГѕ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї
+	// Проверить авторизацию пользователя
 	function check_auth() {
 	 	global $config, $mysql, $ip;
 
 	 	$auth_cookie = isset($_COOKIE['zz_auth'])?$_COOKIE['zz_auth']:'';
 	 	if (!$auth_cookie) { return ''; }
 
-	 	$query = "select * from ".uprefix."_users where authcookie = ".db_squote($auth_cookie)." limit 1";
-	 	$row = $mysql->record($query);
+		// Multilogin is allowed. Session information is stored in separate table
+		if (pluginGetVariable('auth_basic', 'multilogin')) {
+			$query = "select * from ".uprefix."_users_sessions where authcookie = ".db_squote($auth_cookie)." limit 1";
+			if (is_array($sRow = $mysql->record($query))) {
+				// Retrieve user row
+				$query = "select * from ".uprefix."_users where id = ".db_squote($sRow['userID']);
+				$row = $mysql->record($query);
+
+				// COMPATIBILITY MODE - replace InMemory authcookie / ip
+				if (is_array($row)) {
+					$row['ip'] = $sRow['ip'];
+					$row['authcookie'] = $sRow['authcookie'];
+				}
+			};
+		} else {
+			$query = "select * from ".uprefix."_users where authcookie = ".db_squote($auth_cookie)." limit 1";
+			$row = $mysql->record($query);
+		}
+
 
 		// Check for "IPLOCK" protection
 		if (pluginGetVariable('auth_basic', 'iplock') && ($ip != $row['ip'])) {
@@ -99,6 +132,12 @@ class auth_basic extends CoreAuthPlugin {
 	 		if ((pluginGetVariable('auth_basic', 'lastupdate') > 0) && ((time() - $row['last']) > pluginGetVariable('auth_basic', 'lastupdate'))) {
 	 			$query = "update ".uprefix."_users set last = ".db_squote(time()).", ip=".db_squote($ip)." where id=".db_squote($row['id']);
 	 			$mysql->query($query);
+
+	 			// Multilogin is allowed. Session information is stored in separate table
+	 			if (pluginGetVariable('auth_basic', 'multilogin')) {
+	 				$query = "update ".uprefix."_users_sessions set last = ".db_squote(time())." where (userID = ".db_squote($row['id']).") and (authcookie=".db_squote($row['authcookie']).")";
+	 				$mysql->query($query);
+	 			}
 	 		}
 
 	 		return $row;
@@ -107,20 +146,26 @@ class auth_basic extends CoreAuthPlugin {
 	}
 
 	//
-	// ГЋГІГ¬ГҐГ­ГЁГІГј Г ГўГІГ®Г°ГЁГ§Г Г¶ГЁГѕ
+	// Отменить авторизацию
 	function drop_auth() {
 	 	global $config, $mysql, $userROW;
 
 	 	$auth_cookie = $_COOKIE['zz_auth'];
 	 	if (!$auth_cookie) { return; }
 
-		$mysql->query("update ".uprefix."_users set authcookie = '' where id=".db_squote($userROW['id']));
+		// Multilogin is allowed. Session information is stored in separate table
+		if (pluginGetVariable('auth_basic', 'multilogin')) {
+			$mysql->query("delete from ".prefix."_users_sessions where authcookie = ".db_squote($userROW['authcookie']));
+		} else {
+			$mysql->query("update ".uprefix."_users set authcookie = '' where id=".db_squote($userROW['id']));
+		}
+
 		@setcookie('zz_auth', '', time() - 3600 * 24 * 365, '/');
 	 	return;
 	}
 
 	//
-	// Г‚ГҐГ°Г­ГіГІГј Г¬Г Г±Г±ГЁГў ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў, Г­ГҐГ®ГЎГµГ®Г¤ГЁГ¬Г»Гµ ГЇГ°ГЁ Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ
+	// Вернуть массив параметров, необходимых при регистрации
 	function get_reg_params() {
 		global $config, $lang;
 		$params = array();
@@ -135,15 +180,15 @@ class auth_basic extends CoreAuthPlugin {
 	}
 
 	//
-	// ГЏГ°Г®ГўГҐГ±ГІГЁ Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГѕ
-	// params = ГЇГ Г°Г Г¬ГҐГІГ°Г» ГЇГ®Г«ГіГ·ГҐГ­Г­Г»ГҐ ГЁГ§ get_reg_params()
-	// values = Г§Г­Г Г·ГҐГ­ГЁГї Г¤Г«Гї ГўГ»ГёГҐГіГЄГ Г§Г Г­Г­Г»Гµ ГЇГ Г°Г Г¬ГҐГІГ°Г Гµ
-	// msg	= Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г®ГЎ Г®ГёГЁГЎГЄГҐ
-	// Г‚Г®Г§ГўГ°Г Г№Г ГҐГ¬Г»ГҐ Г§Г­Г Г·ГҐГ­ГЁГї:
-	// 0 - Г®ГёГЁГЎГЄГ 
-	// 1 - ГўГ±Вё ok
+	// Провести регистрацию
+	// params = параметры полученные из get_reg_params()
+	// values = значения для вышеуказанных параметрах
+	// msg	= сообщение об ошибке
+	// Возвращаемые значения:
+	// 0 - ошибка
+	// 1 - всё ok
 	function register(&$params, $values, &$msg) {
-	 	global $config, $mysql, $lang, $tpl, $UGROUP;
+	 	global $config, $mysql, $lang, $tpl;
 
 		LoadPluginLang('auth_basic', 'auth','','auth');
 
@@ -153,12 +198,12 @@ class auth_basic extends CoreAuthPlugin {
 
 	 	// Preprocess login
 	 	if (strlen($values['login'])<3) {
-	 		// Г‘Г«ГЁГёГЄГ®Г¬ ГЄГ®Г°Г®ГІГЄГЁГ© Г«Г®ГЈГЁГ­
+	 		// Слишком короткий логин
 	 		$msg = $lang['auth_login_short'];
 	 		return 0;
 	 	}
 
-		// ГЏГ°Г®ГўГҐГ°ГїГҐГ¬ Г«Г®ГЈГЁГ­ Г­Г  Г§Г ГЇГ°ГҐГ№ГҐГ­Г­Г»ГҐ Г±ГЁГ¬ГўГ®Г«Г»
+		// Проверяем логин на запрещенные символы
 		$csError = false;
 		switch (pluginGetVariable('auth_basic', 'regcharset')) {
 			case 0:
@@ -167,18 +212,18 @@ class auth_basic extends CoreAuthPlugin {
 				}
 				break;
 			case 1:
-				if (!preg_match('#^[ГЂ-ГџГ -ГїВёВЁ0-9\.\_\-]+$#s', $values['login'])) {
+				if (!preg_match('#^[А-Яа-яёЁ0-9\.\_\-]+$#s', $values['login'])) {
 					$csError = true;
 				}
 				break;
 			case 2:
-				if (!preg_match('#^[ГЂ-ГџГ -ГїВёВЁA-Za-z0-9\.\_\-]+$#s', $values['login'])) {
+				if (!preg_match('#^[А-Яа-яёЁA-Za-z0-9\.\_\-]+$#s', $values['login'])) {
 					print "CASE2-err [".$values['login']."]";
 					$csError = true;
 				}
 				break;
 			case 3:
-				if (!preg_match('#^[\x21-\x7e\xc0-\xffВёВЁ]+$#s', $values['login'])) {
+				if (!preg_match('#^[\x21-\x7e\xc0-\xffёЁ]+$#s', $values['login'])) {
 					$csError = true;
 				}
 				break;
@@ -189,7 +234,7 @@ class auth_basic extends CoreAuthPlugin {
 
 
 	 	if (preg_match('/[&<>\\"'."'".']/', $values['login']) || $csError) {
-	 		// Г‡Г ГЇГ°ГҐГ№ГҐГ­Г­Г»ГҐ HTML Г±ГЁГ¬ГўГ®Г«Г»
+	 		// Запрещенные HTML символы
 	 		$msg = $lang['auth_login_html'];
 	 		return 0;
 	 	}
@@ -197,19 +242,19 @@ class auth_basic extends CoreAuthPlugin {
 
 	 	if ($config['register_type'] >= 3) {
 	 		if (strlen($values['password']) < 3) {
-		 		// Г‘Г«ГЁГёГЄГ®Г¬ ГЄГ®Г°Г®ГІГЄГЁГ© ГЇГ Г°Г®Г«Гј
+		 		// Слишком короткий пароль
 		 		$msg = $lang['auth_pass_short'];
 		 		return 0;
 
 		 	} else if ($values['password'] != $values['password2']) {
-		 		// ГЌГҐГ±Г®ГўГЇГ Г¤ГҐГ­ГЁГҐ ГЇГ Г°Г®Г«ГҐГ©
+		 		// Несовпадение паролей
 		 		$msg = $lang['auth_pass_diff'];
 		 		return 0;
 		 	}
 		}
 
 		if ((strlen($values['email']) > 70) || (!preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $values['email']))) {
-			// ГЌГҐГўГҐГ°Г­Г»Г© email
+			// Неверный email
 			$msg = $lang['auth_email_wrong'];
 			return 0;
 
@@ -217,31 +262,31 @@ class auth_basic extends CoreAuthPlugin {
 
 		$row = $mysql->record("select * from ".uprefix."_users where lower(name)=".db_squote(strtolower($values['login']))." or mail=".db_squote($values['email']));
 		if (is_array($row)) {
-			// Г„ГіГЎГ«ГЁГ°Г®ГўГ Г­ГЁГҐ Г«Г®ГЈГЁГ­Г /email'Г 
+			// Дублирование логина/email'а
 			if (strtolower($row['mail']) == strtolower($values['email'])) {
 				// email dup
 				$msg = $lang['auth_email_dup'];
 				return 0;
 			}
-			// Г…Г±Г«ГЁ Г­ГҐ Г¬Г»Г«Г®, ГІГ® Г«Г®ГЈГЁГ­
+			// Если не мыло, то логин
 			$msg = $lang['auth_login_dup'];
 			return 0;
 		}
 
-		// Г‚Г±Вё Гў ГЇГ®Г°ГїГ¤ГЄГҐ, Г°ГҐГЈГЁГ¬
+		// Всё в порядке, регим
 		$add_time = time() + ($config['date_adjust'] * 60);
 
-		// ГѓГ°ГіГЇГЇГ  ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ
-		$regGroup = intval(pluginGetVariable('auth_basic','regstatus'));
-		if (!isset($UGROUP[$regGroup])) {
-			// If GROUP is not defined - set "4" as default
-			$regGroup = 4; // Commenter
-		}
+		// Статус пользователя по умолчанию
+        $regGroup = intval(pluginGetVariable('auth_basic','regstatus'));
+        if (!isset($UGROUP[$regGroup])) {
+            // If GROUP is not defined - set "4" as default
+            $regGroup = 4; // Commenter
+        }
 
-		// ГЋГЇГ°ГҐГ¤ГҐГ«ГїГҐГ¬ Г¤ГҐГ©Г±ГІГўГЁГї Гў Г§Г ГўГЁГ±ГЁГ¬Г®Г±ГІГЁ Г®ГІ ГІГЁГЇГ  Г°ГҐГЈГЁГ±ГІГ°Г Г¶ГЁГЁ
+		// Определяем действия в зависимости от типа регистрации
 		switch ($config['register_type']) {
 
-			// 0 - ГЊГЈГ­Г®ГўГҐГ­Г­Г Гї [Г ГўГІГ®ГЈГҐГ­ГҐГ°Г Г¶ГЁГї ГЇГ Г°Г®Г«Гї, ГЎГҐГ§ email Г­Г®ГІГЁГґГЁГЄГ Г¶ГЁГЁ]
+			// 0 - Мгновенная [автогенерация пароля, без email нотификации]
 			case 0:
 				$newpassword = MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regGroup.", '".$add_time."', '')");
@@ -252,7 +297,7 @@ class auth_basic extends CoreAuthPlugin {
 				));
 				break;
 
-			// 1 - ГЏГ°Г®Г±ГІГ Гї [Г ГўГІГ®ГЈГҐГ­ГҐГ°Г Г¶ГЁГї ГЇГ Г°Г®Г«Гї, Г± email Г­Г®ГІГЁГґГЁГЄГ Г¶ГЁГҐГ©]
+			// 1 - Простая [автогенерация пароля, с email нотификацией]
 			case 1:
 				$newpassword = MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regGroup.", '".$add_time."', '')");
@@ -283,20 +328,26 @@ class auth_basic extends CoreAuthPlugin {
 			));
 				break;
 
-			// 2 - Г‘ ГЇГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­ГЁГҐГ¬ [Г ГўГІГ®ГЈГҐГ­ГҐГ°Г Г¶ГЁГї ГЇГ Г°Г®Г«Гї, ГЇГ Г°Г®Г«Гј Г®ГІГЇГ°Г ГўГ«ГїГҐГІГ±Гї Г­Г  email Г Г¤Г°ГҐГ± ГЁ Г­ГҐ ГЇГ®ГЄГ Г§Г»ГўГ ГҐГІГ±Гї Гў Г Г¤Г¬ГЁГ­ГЄГҐ]
+			// 2 - С подтверждением [автогенерация пароля, пароль отправляется на email адрес и не показывается в админке]
 			case 2:
+                // New password
 				$newpassword	=	MakeRandomPassword();
-				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regGroup.", '".$add_time."', '')");
+
+                // Random activation code
+                $actcode        =   MakeRandomPassword();
+
+                // Insert into DB
+				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regGroup.", '".$add_time."', '', ".db_squote($actcode).")");
 				$userid			=	$mysql->result('select LAST_INSERT_ID()');
 				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid, 'code' => $actcode), array(), false, true);
 
-				$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
-
 				$tvars['vars'] = array( 'login' => $values['login'],
 										'home' => home,
-										'password' => $newpassword);
+										'password' => $newpassword,
+                                        'activate_url' => $link,
+                );
 				$tvars['regx'] = array(
-					'#\[activation\].+?\[\/activation]#is' => '',
+					'#\[activation\](.+?)\[\/activation]#is' => '$1',
 				);
 
 				$tpl -> template('register', GetPluginLangDir('auth_basic'));
@@ -315,7 +366,7 @@ class auth_basic extends CoreAuthPlugin {
 			));
 				break;
 
-			// 3 - ГђГіГ·Г­Г Гї Г± Г­Г®ГІГЁГґГЁГЄГ Г¶ГЁГҐГ© [Г°ГіГ·Г­Г Гї ГЈГҐГ­ГҐГ°Г Г¶ГЁГї ГЇГ Г°Г®Г«Гї, email Г­Г®ГІГЁГґГЁГЄГ Г¶ГЁГї]
+			// 3 - Ручная с нотификацией [ручная генерация пароля, email нотификация]
 			case 3:
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($values['password'])).", ".db_squote($values['email']).", ".$regGroup.", '".$add_time."', '')");
 				$userid			=	$mysql->result('select LAST_INSERT_ID()');
@@ -344,14 +395,12 @@ class auth_basic extends CoreAuthPlugin {
 
 				break;
 
-			// 4 - ГђГіГ·Г­Г Гї Г± ГЇГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­ГЁГҐГ¬ [Г°ГіГ·Г­Г Гї ГЈГҐГ­ГҐГ°Г Г¶ГЁГї ГЇГ Г°Г®Г«Гї, ГЇГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­ГЁГҐ email Г Г¤Г°ГҐГ±Г ]
+			// 4 - Ручная с подтверждением [ручная генерация пароля, подтверждение email адреса]
 			case 4:
 				$actcode		=	MakeRandomPassword();
 				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($values['password'])).", ".db_squote($values['email']).", ".$regGroup.", '".$add_time."', '', ".db_squote($actcode).")");
 				$userid			=	$mysql->result('select LAST_INSERT_ID()');
 				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid, 'code' => $actcode), array(), false, true);
-
-				$actlink		=	'<a href="'.$link.'">'.$link.'</a>';
 
 				$tvars['vars'] = array( 'login' => $values['login'],
 										'home' => home,
@@ -384,7 +433,7 @@ class auth_basic extends CoreAuthPlugin {
 	}
 
 	//
-	// Г‚ГҐГ°Г­ГіГІГј Г¬Г Г±Г±ГЁГў ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў, Г­ГҐГ®ГЎГµГ®Г¤ГЁГ¬Г»Гµ Г¤Г«Гї ГўГ®Г±Г±ГІГ Г­Г®ГўГ«ГҐГ­ГЁГї ГЇГ Г°Г®Г«Гї
+	// Вернуть массив параметров, необходимых для восстановления пароля
 	function get_restorepw_params() {
 		global $config, $lang;
 		$params = array();
@@ -408,7 +457,7 @@ class auth_basic extends CoreAuthPlugin {
 	}
 
 	//
-	// Г‚Г®Г±Г±ГІГ Г­Г®ГўГЁГІГј ГЇГ Г°Г®Г«Гј
+	// Восстановить пароль
 	function restorepw(&$params, $values, &$msg) {
 	 	global $config, $mysql, $lang, $tpl;
 
@@ -445,7 +494,7 @@ class auth_basic extends CoreAuthPlugin {
 		$query = "select * from ".uprefix."_users where ".implode(' and ',$px);
 		$row = $mysql->record($query);
 		if (is_array($row)) {
-		 	// ГЌГ ГёГ«ГЁ ГѕГ§ГҐГ°Г 
+		 	// Нашли юзера
 			$newpassword = MakeRandomPassword();
 			$mysql->query("UPDATE ".uprefix."_users SET newpw=".db_squote(EncodePassword($newpassword))." WHERE id=".$row['id']);
 
@@ -505,18 +554,18 @@ class auth_basic extends CoreAuthPlugin {
 					}
 					break;
 				case 1:
-					if (!preg_match('#^[ГЂ-ГџГ -ГїВёВЁ0-9\.\_\-]+$#s', $params['login'])) {
+					if (!preg_match('#^[А-Яа-яёЁ0-9\.\_\-]+$#s', $params['login'])) {
 						$csError = true;
 					}
 					break;
 				case 2:
-					if (!preg_match('#^[ГЂ-ГџГ -ГїВёВЁA-Za-z0-9\.\_\-]+$#s', $params['login'])) {
+					if (!preg_match('#^[А-Яа-яёЁA-Za-z0-9\.\_\-]+$#s', $params['login'])) {
 						print "CASE2-err [".$values['login']."]";
 						$csError = true;
 					}
 					break;
 				case 3:
-					if (!preg_match('#^[\x21-\x7e\xc0-\xffВёВЁ]+$#s', $params['login'])) {
+					if (!preg_match('#^[\x21-\x7e\xc0-\xffёЁ]+$#s', $params['login'])) {
 						$csError = true;
 					}
 					break;
@@ -555,7 +604,7 @@ class auth_basic extends CoreAuthPlugin {
 
 			if (!preg_match("/^[\.A-z0-9_\-]+[@][A-z0-9_\-]+([.][A-z0-9_\-]+)+[A-z]{1,4}$/", $params['email'])) {
 				$results['email'] = 3;
-				// ГЌГҐГўГҐГ°Г­Г»Г© email
+				// Неверный email
 				goto endEmailCheck;
 			}
 
@@ -575,7 +624,7 @@ class auth_basic extends CoreAuthPlugin {
 
 
 	//
-	// ГЏГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­ГЁГҐ ГўГ®Г±Г±ГІГ Г­Г®ГўГ«ГҐГ­ГЁГї ГЇГ Г°Г®Г«Гї
+	// Подтверждение восстановления пароля
 	//
 	function confirm_restorepw(&$msg, $reqid = NULL, $reqsecret = NULL) {
 		global $config, $mysql, $lang, $tpl;
