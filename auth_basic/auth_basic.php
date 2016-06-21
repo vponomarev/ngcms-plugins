@@ -337,17 +337,17 @@ class auth_basic extends CoreAuthPlugin {
                 $actcode        =   MakeRandomPassword();
 
                 // Insert into DB
-				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regGroup.", '".$add_time."', '')");
+				$mysql->query("INSERT INTO ".uprefix."_users (name, pass, mail, status, reg, last, activation) VALUES (".db_squote($values['login']).", ".db_squote(EncodePassword($newpassword)).", ".db_squote($values['email']).", ".$regGroup.", '".$add_time."', '', ".db_squote($actcode).")");
 				$userid			=	$mysql->result('select LAST_INSERT_ID()');
 				$link			=	generatePluginLink('core', 'activation', array('userid' => $userid, 'code' => $actcode), array(), false, true);
 
 				$tvars['vars'] = array( 'login' => $values['login'],
 										'home' => home,
 										'password' => $newpassword,
-                                        'activate_url' => $link
+                                        'activate_url' => $link,
                 );
 				$tvars['regx'] = array(
-					'#\[activation\].+?\[\/activation]#is' => '',
+					'#\[activation\](.+?)\[\/activation]#is' => '$1',
 				);
 
 				$tpl -> template('register', GetPluginLangDir('auth_basic'));
