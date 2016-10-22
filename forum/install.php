@@ -279,16 +279,23 @@ function plugin_forum_install($action) {
 	switch ($action){
 		case 'confirm':generate_install_page('forum', 'Ознакомление с лицензией'); break;
 		case 'apply':
-			/* if(!file_exists(files_dir . 'forum')){
-					if(!@mkdir(files_dir . 'forum', 0777)){
-						msg(array("type" => "error", "text" => "Критическая ошибка <br /> не удалось создать папку ".files_dir . 'forum'), 1);
-						$install = false;
+			if(!file_exists(files_dir . 'forum')){
+				print '1';
+				if(!@mkdir(files_dir . 'forum', 0777)){
+					msg(array("type" => "error", "text" => "Критическая ошибка <br /> не удалось создать папку ".files_dir . 'forum'), 1);
+					$install = false;
 				}
-			} */
+			}
+			
+			if(!file_exists(confroot.'extras/forum')){
+				if(!@mkdir(confroot.'extras/forum', 0777)){
+					msg(array("type" => "error", "text" => "Критическая ошибка <br /> не удалось создать папку ".confroot.'extras/forum'), 1);
+					$install = false;
+				}
+			}
 			
 			if($install){
 				if (fixdb_plugin_install('forum', $db_update, 'install', ($action=='autoapply')?true:false)) {
-					
 					if(!$mysql->result('SELECT 1 FROM '.prefix.'_forum_group')){
 						$mysql->query('INSERT INTO '.prefix.'_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'0\', \'Гость\', \'red\', \'1\', \'1\', \'1\', \'1\')');
 						$mysql->query('INSERT INTO '.prefix.'_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'1\', \'Администратор\', \'red\', \'1\', \'1\', \'1\', \'1\')');
@@ -330,7 +337,79 @@ function plugin_forum_install($action) {
 					}
 					
 					plugin_mark_installed('forum');
-					mkdir(files_dir . 'forum', 0777);
+					//mkdir(files_dir . 'forum', 0777);
+					
+					$result = array (
+						0 => 
+						array (
+						'id' => '1',
+						'group_id' => '0',
+						'group_name' => 'Гость',
+						'group_color' => 'red',
+						'group_read' => '1',
+						'group_news' => '1',
+						'group_search' => '1',
+						'group_pm' => '1',
+						),
+						1 => 
+						array (
+						'id' => '2',
+						'group_id' => '1',
+						'group_name' => 'Администратор',
+						'group_color' => 'red',
+						'group_read' => '1',
+						'group_news' => '1',
+						'group_search' => '1',
+						'group_pm' => '1',
+						),
+						2 => 
+						array (
+						'id' => '3',
+						'group_id' => '2',
+						'group_name' => 'Редактор',
+						'group_color' => 'red',
+						'group_read' => '1',
+						'group_news' => '1',
+						'group_search' => '1',
+						'group_pm' => '1',
+						),
+						3 => 
+						array (
+						'id' => '4',
+						'group_id' => '3',
+						'group_name' => 'Журналист',
+						'group_color' => 'blue',
+						'group_read' => '1',
+						'group_news' => '1',
+						'group_search' => '1',
+						'group_pm' => '1',
+						),
+						4 => 
+						array (
+						'id' => '5',
+						'group_id' => '4',
+						'group_name' => 'Комментатор',
+						'group_color' => 'gold',
+						'group_read' => '1',
+						'group_news' => '1',
+						'group_search' => '1',
+						'group_pm' => '1',
+						),
+						5 => 
+						array (
+						'id' => '6',
+						'group_id' => '5',
+						'group_name' => 'Бот',
+						'group_color' => 'red',
+						'group_read' => '1',
+						'group_news' => '1',
+						'group_search' => '1',
+						'group_pm' => '1',
+						),
+					);
+					
+					file_put_contents(get_plugcfg_dir('forum').'/group_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$GROUP_PERM = '.var_export($result, true).';'."\n\n");
+					file_put_contents(get_plugcfg_dir('forum').'/forum_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$FORUM_PERM = '.var_export($result = array(), true).';'."\n\n");
 				} else return false;
 			} else return false;
  			$params = array(

@@ -226,7 +226,7 @@ function header_show()
 }
 
 function show_main_page($a_stat = false, $output = '', $welcome = false, $event = false)
-{global $userROW, $template, $online, $SUPRESS_TEMPLATE_SHOW, $CurrentHandler, $list_news, $lang_forum, $ban, $last_topic, $new_user, $active_user, $SYSTEM_FLAGS, $twig, $show_main, $ipis, $ip, $titles, $timer, $timer_forum, $mysql, $stat, $viewers, $result_last_users, $topic_sum, $post_sum, $result_users, $list_bans;
+{global $userROW, $template, $online, $config, $SUPRESS_TEMPLATE_SHOW, $CurrentHandler, $list_news, $lang_forum, $ban, $last_topic, $new_user, $active_user, $SYSTEM_FLAGS, $twig, $show_main, $ipis, $ip, $titles, $timer, $timer_forum, $mysql, $stat, $viewers, $result_last_users, $topic_sum, $post_sum, $result_users, $list_bans;
 	
 	header_show();
 	
@@ -346,6 +346,7 @@ function show_main_page($a_stat = false, $output = '', $welcome = false, $event 
 		'exectime' => $timer->stop(),
 		'exectime_forum' => $timer_forum->stop_forum(),
 		'memory' => forum_memory_usage(),
+		'debug' => $config['debug']
 	);
 	
 	$template['vars']['mainblock'] = $xt->render($tVars);

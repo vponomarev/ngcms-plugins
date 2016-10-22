@@ -66,6 +66,7 @@ function main($entries){
 	
 	$tpath = locatePluginTemplates(array('main'), $plugin, 1, '', 'config');
 	
+	$_SESSION['forum']['info'] = array();
 	if(!file_exists(files_dir.'forum'))
 		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка '.files_dir . 'forum';
 	
