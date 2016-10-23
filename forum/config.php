@@ -235,7 +235,7 @@ function ban_ip_list()
 			'desc_error' => $tEntry[$key],
 		);
 	}
-	print "<pre>".var_export($entry, true)."</pre>";
+	//print "<pre>".var_export($entry, true)."</pre>";
 	$tVars = array(
 		'entries' => $entries,
 	);
@@ -918,7 +918,7 @@ global $twig, $plugin, $mysql;
 			}
 		}
 		
-		print "<pre>".var_export($user, true)."</pre>";
+		//print "<pre>".var_export($user, true)."</pre>";
 		if(empty($error_text)){
 			$sql = 'SELECT MAX(position) FROM '.prefix.'_forum_forums where parent = '.intval($forum['id']).'';
 			$posit = $mysql-> result( $sql ) + 1;
@@ -1892,7 +1892,7 @@ function moderat()
 				$method = 1;
 			else
 				$method = 0;
-			print $confArray['predefined']['HTTP_REFERER'];
+			//print $confArray['predefined']['HTTP_REFERER'];
 			$mysql->query('UPDATE '.prefix.'_forum_topics SET pinned = '.db_squote($method).' WHERE id = '.db_squote($_REQUEST['tid']).' LIMIT 1');
 			//redirect_forum_config(link_forum($_REQUEST['tid']));
 		break;

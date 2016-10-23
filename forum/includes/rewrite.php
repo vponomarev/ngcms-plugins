@@ -222,6 +222,18 @@ function link_act($s){
 	return $url;
 }
 
+function link_moderate($params){
+	
+	$tid = $params['tid']?$params['tid']:0;
+	$metod = $params['metod']?$params['metod']:'';
+	
+	$url = checkLinkAvailable('forum', 'moderate')?
+		generateLink('forum', 'moderate', array('tid' => $tid, 'metod' => $metod)):
+		generateLink('core', 'plugin', array('plugin' => 'forum', 'handler' => 'moderate'), array('tid' => $tid, 'metod' => $metod));
+	
+	return $url;
+}
+
 function link_inf_subs($id, $metod)
 {
 	$id = intval($id);
@@ -393,3 +405,5 @@ function link_downloads($id){
 	
 	return $url;
 }
+
+twigRegisterFunction('forum', 'link_moderate', link_moderate);

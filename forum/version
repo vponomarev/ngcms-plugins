@@ -1,6 +1,6 @@
 ID: forum
 Name: FORUM_NG_CMS
-Version: alfa
+Version: 0.1
 Actions: ppages; forum.php
 Actions: core; forum_core.php
 Actions: admin:mod:news; forum_news.php
@@ -12,7 +12,7 @@ Config: config.php
 Install: install.php
 Deinstall: uninstall.php
 Type: plugin
-Title: Форум
+Title: ”орум
 Description: 
 Information: 
 Author: Nail' R. Davydov (ROZARD)

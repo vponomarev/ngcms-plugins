@@ -33,6 +33,41 @@ function update_topic($post_date, $post_id,$user_name, $user_id, $topic_id)
 	$mysql->query('UPDATE '.prefix.'_forum_topics SET l_date = '.securemysql($post_date).', l_post = '.securemysql($post_id).', l_author = '.securemysql($user_name).', l_author_id = '.securemysql($user_id).', int_post = int_post + 1 WHERE id = '.securemysql($topic_id).' LIMIT 1');
 }
 
+function moder_perm($id, $perm, $moder)
+{global $userROW, $MODE_PERM;
+	if(array_key_exists(strtolower($userROW['name']), unserialize($moder))){
+		$MODE_PS = $MODE_PERM[$id];
+		//print "<pre>".var_export($moder, true)."</pre>";
+		//print "<pre>".var_export($MODE_PERM, true)."</pre>";
+		switch($perm){
+			case 'topic_send':
+				return $MODE_PS['m_topic_send'];
+			break;
+			case 'topic_modify':
+				return $MODE_PS['m_topic_modify'];
+			break;
+			case 'topic_closed':
+				return $MODE_PS['m_topic_closed'];
+			break;
+			case 'topic_move':
+				return 1;
+			break;
+			case 'topic_remove':
+				return $MODE_PS['m_topic_remove'];
+			break;
+			case 'post_send':
+				return $MODE_PS['m_post_send'];
+			break;
+			case 'post_modify':
+				return $MODE_PS['m_post_modify'];
+			break;
+			case 'post_remove':
+				return $MODE_PS['m_post_remove'];
+			break;
+		}
+	}	
+}
+
 /* Изменить */
 /* function update_post_forum($topic_id, $topic_title, $topic_date, $user_name, $user_id, $forum_id)
 {global $mysql;

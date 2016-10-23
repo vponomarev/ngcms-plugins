@@ -34,11 +34,6 @@
 	else
 		$pid = isset($_REQUEST['pid'])?intval($_REQUEST['pid']):0;
 	
-	if(isset($params['act']))
-		$act = isset($params['act'])?intval($params['act']):'';
-	else
-		$act = isset($_REQUEST['act'])?descript($_REQUEST['act']):'';
-	
 	$url = pluginGetVariable('forum', 'url');
 	
 	if(checkLinkAvailable('forum', 'showtopic')){
@@ -79,13 +74,13 @@
 		$search_p = array('id' => $id);
 	
 	if(is_array($userROW))
-		$result = $mysql->record('SELECT t.id as tid, t.title as Ttitle, t.author_id, t.state, t.int_post, f.id as fid, f.title as Ftitle, f.moderators, f.lock_passwd, f.redirect_url, s.uid 
+		$result = $mysql->record('SELECT t.id as tid, t.title as Ttitle, t.author_id, t.state, t.pinned, t.int_post, f.id as fid, f.title as Ftitle, f.moderators, f.lock_passwd, f.redirect_url, s.uid 
 				FROM '.prefix.'_forum_topics AS t 
 				INNER JOIN '.prefix.'_forum_forums AS f ON f.id = t.fid
 				LEFT JOIN '.prefix.'_forum_subscriptions AS s ON s.tid = t.id AND s.uid = '.securemysql($userROW['id']).'
 				WHERE t.id = '.securemysql($id).' LIMIT 1');
 	else
-		$result = $mysql->record('SELECT t.id as tid, t.title as Ttitle, t.author_id, t.state, t.int_post, f.id as fid, f.title as Ftitle, f.moderators, f.lock_passwd, f.redirect_url 
+		$result = $mysql->record('SELECT t.id as tid, t.title as Ttitle, t.author_id, t.state, t.pinned, t.int_post, f.id as fid, f.title as Ftitle, f.moderators, f.lock_passwd, f.redirect_url 
 				FROM '.prefix.'_forum_topics AS t 
 				INNER JOIN '.prefix.'_forum_forums AS f ON f.id = t.fid 
 				WHERE t.id = '.securemysql($id).' LIMIT 1');
@@ -104,6 +99,10 @@
 	}else
 		$MODE_PS = array();
 	
+	$twig->addGlobal('tid', $result['tid']);
+	$twig->addGlobal('state', $result['state']);
+	$twig->addGlobal('pinned', $result['pinned']);
+	$twig->addGlobal('MODE_PS', ($MODE_PS || $userROW['status'] == 1)?1:0);
 	//print "<pre>".var_export($MODE_PERM[$result['fid']], true)."</pre>";
 	//print "<pre>".var_export($FORUM_PS[$result['fid']], true)."</pre>";
 	
@@ -184,15 +183,11 @@
 	foreach ($result_2 as $row){
 		$i++;
 		
-		if(isset($MODE_PS) && $MODE_PS)
-			$post_send = $MODE_PS['m_post_send'];
-		elseif($FORUM_PS[$result['fid']]['post_send'])
+		if(isset($MODE_PS) && $MODE_PS['m_post_send'] || $FORUM_PS[$result['fid']]['post_send'])
 			$post_send = true;
 		else $post_send = false;
 		
-		if(isset($MODE_PS) && $MODE_PS)
-			$post_modify = $MODE_PS['m_post_modify'];
-		elseif($FORUM_PS[$result['fid']]['post_modify'])
+		if(isset($MODE_PS) && $MODE_PS['m_post_modify'] || $FORUM_PS[$result['fid']]['post_modify'])
 			$post_modify = true;
 		elseif($FORUM_PS[$result['fid']]['post_modify_your']){
 			if($userROW['id'] == $row['author_id'])
@@ -201,9 +196,7 @@
 				$post_modify = false;
 		}else $post_modify = false;
 		
-		if(isset($MODE_PS) && $MODE_PS){
-			$post_remove = $MODE_PS['m_post_remove'];
-		}elseif($FORUM_PS[$result['fid']]['post_remove']){
+		if(isset($MODE_PS) && $MODE_PS['m_post_remove'] || $FORUM_PS[$result['fid']]['post_remove']){
 			$post_remove = true;
 		}elseif($FORUM_PS[$result['fid']]['post_remove_your']){
 			if($userROW['id'] == $row['author_id'])
@@ -315,7 +308,6 @@
 		),
 		'tid'=>$result['tid'],
 		'num_page'=>$pageNo,
-		'search'=>$s,
 		'link_topic_s' => $link_topic_s,
 		'state' => $result['state'],
 		'addpost' => link_new_post($id),
@@ -323,7 +315,7 @@
 		'forum_link' => link_forum($result['fid']),
 		'forum_name' => $result['Ftitle'],
 		'subject' => $result['Ttitle'],
-		'post_send' => (isset($MODE_PS) && $MODE_PS)?$MODE_PS['m_post_send']:$FORUM_PS[$result['fid']]['post_send'],
+		'post_send' => (isset($MODE_PS) && $MODE_PS['m_post_send'] || $FORUM_PS[$result['fid']]['post_send'])?1:0,
 		'local' => array(
 				'num_guest_loc' => $viewers['num_guest_loc'],
 				'num_user_loc' => $viewers['num_user_loc'],

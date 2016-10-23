@@ -29,7 +29,7 @@
 
 				<div id="brdmenu" class="inbox">
 					<ul>
-						<li><a href='http://rozard.ngdemo.ru'>На сайт</a></li>
+						<li><a href='/'>На сайт</a></li>
 						<li><a href='{{ home }}'>Главная страница</a></li>
 						<li><a href='{{ news_feed }}'>Новости</a></li>
 						<li><a href='{{ userslist }}'>Пользователи</a></li>
@@ -274,7 +274,25 @@
 			<h2><span>Board footer</span></h2>
 			<div class="box">
 				<div class="inbox">
-					<p class="conr">Работает на  <a href='http://rozard.net' target='_blank'>NG форум</a> <span style="color:red;">{{ version }}</span></p>
+					{% if(handler.handlerName == 'showtopic' and MODE_PS) %}
+					<div class="conl">
+						<dl id="modcontrols"><dt><strong>Moderator controls</strong></dt>
+							<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'delete'}) }}">Удалить тему</a></dd>
+							<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'move'}) }}">Перенести тему</a></dd>
+							{% if(state == 'open') %}
+							<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'close'}) }}">Закрыть тему</a></dd>
+							{% else %}
+							<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'open'}) }}">Открыть тему</a></dd>
+							{% endif %}
+							{% if(pinned == '0') %}
+							<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'stick'}) }}">Выделить тему</a></dd>
+							{% else %}
+							<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'unstick'}) }}">Не выделять тему</a></dd>
+							{% endif %}
+						</dl>
+					</div>
+					{% endif %}
+					<p class="conr">Работает на  <a href='http://ngcms.ru' target='_blank'>NG форум</a> <span style="color:red;">{{ version }}</span></p>
 					<p class="conr">[ Время генирациии {{ exectime }} сек (только форума: {{ exectime_forum }} сек), {{ queries }} SQL запросов, Потребление памяти: {{ memory }} ]</p>
 					<div class="clearer"></div>
 				</div>
@@ -284,6 +302,7 @@
 </div>
 </body>
 </html>
+
 {% if (global.user['status'] == 1 and debug == true ) %}
 {{ debug_queries }}
 {{ debug_profiler }}

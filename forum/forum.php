@@ -65,6 +65,8 @@ register_plugin_page('forum','downloads','plugin_downloads_forum');
 
 register_plugin_page('forum','lock_passwd','lock_passwd_forum');
 
+register_plugin_page('forum','moderate','plugin_moderate_forum');
+
 executeActionHandler('forum:core');
 
 include_once( dirname(__FILE__) . '/includes/security.php');
@@ -820,6 +822,28 @@ function plugin_downloads_forum($params)
 	if($GROUP_PS['group_read']){
 		if($ban[$ip] < 3)
 			include(FORUM_DIR.'/action/downloads.php');
+		else
+			$output = information('Вы забанены!!!');
+	} else {
+		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$welcome = false;
+		$event = false;
+	}
+	
+	show_main_page(false, $output, $welcome, $event);
+}
+
+function plugin_moderate_forum($params)
+{global $userROW, $mysql, $ip, $SYSTEM_FLAGS, $ban, $CurrentHandler, $twig, $lang_forum, $GROUP_STATUS, $FORUM_PS,  $GROUP_PS, $MODE_PERM;
+	
+	//set_error_handler('my_error_handler');
+	
+	$welcome = false;
+	$event = false;
+	//print "<pre>".var_export($GROUP_PS['group_read'], true)."</pre>";
+	if($GROUP_PS['group_read']){
+		if($ban[$ip] < 3)
+			include(FORUM_DIR.'/action/moderate.php');
 		else
 			$output = information('Вы забанены!!!');
 	} else {
