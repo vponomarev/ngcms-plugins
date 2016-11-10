@@ -67,14 +67,14 @@ class auth_basic extends CoreAuthPlugin {
 		if (pluginGetVariable('auth_basic', 'multilogin')) {
 			// Drop old session (if applicable)
 			if (isset($_COOKIE['zz_auth']) && $_COOKIE['zz_auth'])
-				$mysql->query("delete from ".uprefix."_users_sessions where authcookie = ".db_squote($_COOKIE['zz_auth']));
+				$mysql->query("delete from ".uprefix."_users_sessions where authcookie = ".db_squote($_COOKIE['zz_auth'])." limit 1");
 
 			// Register new session
 			$query = "insert into ".uprefix."_users_sessions (userID, ip, last, authcookie) values (".db_squote($dbrow['id']).", ".db_squote($ip).", ".db_squote(time()).", ".db_squote($auth_cookie).")";
 			$mysql->query($query);
 
 			// Update user's last login time
-			$query = "update ".uprefix."_users set last = ".db_squote(time())." where id = ".db_squote($auth_cookie);
+			$query = "update ".uprefix."_users set last = ".db_squote(time())." where id = ".db_squote($dbrow['id']);
 			$mysql->query($query);
 		} else {
 			// SINGLE LOGIN mode
