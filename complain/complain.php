@@ -133,7 +133,7 @@ function plugin_complain_add() {
  $err = '';
  foreach (explode("\n",pluginGetVariable('complain', 'errlist')) as $erow) {
   if (preg_match('#^(\d+)\|(.+?)$#', trim($erow), $m)) {
-   $err .= '<option value="'.$m[1].'">'.htmlspecialchars($m[2]).'</option>'."\n";
+   $err .= '<option value="'.$m[1].'">'.htmlspecialchars($m[2], ENT_COMPAT | ENT_HTML401, 'cp1251').'</option>'."\n";
   }
  }
 
@@ -409,7 +409,7 @@ class ComplainNewsFilter extends NewsFilter {
 		$err = '';
 		foreach (explode("\n",pluginGetVariable('complain', 'errlist')) as $erow) {
 			if (preg_match('#^(\d+)\|(.+?)$#', trim($erow), $m)) {
-				$err .= '<option value="'.$m[1].'">'.htmlspecialchars($m[2]).'</option>'."\n";
+				$err .= '<option value="'.$m[1].'">'.htmlspecialchars($m[2], ENT_COMPAT | ENT_HTML401, 'cp1251').'</option>'."\n";
 			}
 		}
 

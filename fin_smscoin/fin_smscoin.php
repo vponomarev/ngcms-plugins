@@ -276,7 +276,7 @@ function plugin_finsmscoin() {
 
 		$inputs = '';
 		foreach ($params as $k => $v) {
-			$inputs .= '<input type="hidden" name="'.$k.'" value="'.htmlspecialchars($v).'"/>'."\n";
+			$inputs .= '<input type="hidden" name="'.$k.'" value="'.htmlspecialchars($v, NULL, 'cp1251').'"/>'."\n";
 		}
 		$tvars = array('vars' => array('form_url' => pluginGetVariable('fin_smscoin', 'post_url'), 'inputs' => $inputs));
 
