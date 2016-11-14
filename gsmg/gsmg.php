@@ -17,7 +17,7 @@ function plugin_gsmg_screen() {
     @header('Content-type: text/xml; charset=utf-8');
     
     $SYSTEM_FLAGS['http.headers'] = array(
-        'content-type'      => 'application/xml; charset=charset=utf-8',
+        'content-type'      => 'application/xml; charset=utf-8',
         'cache-control'     => 'private',
     );
 
