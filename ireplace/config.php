@@ -51,7 +51,7 @@ if ($_REQUEST['action'] == 'commit') {
 	if ($query) {
 		// Yeah !!
 		$result = $mysql->select($query);
-		$count  = mysql_affected_rows($mysql->connect);
+		$count  = $mysql->affected_rows($mysql->connect);
 		if ($count) {
 			msg(array("type" => "info", "info" => str_replace('{count}', $count, $lang['ireplace:info.done'])));
 		} else {
