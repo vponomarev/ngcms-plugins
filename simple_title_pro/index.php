@@ -1,7 +1,7 @@
 <?php
 /*
 =====================================================
- Simple Title 0.1 RC4
+ Simple Title 0.1
 -----------------------------------------------------
  Author: Nail' R. Davydov (ROZARD)
 -----------------------------------------------------
@@ -22,16 +22,9 @@ add_act ( 'index_post', 'simple_title_pro' );
 function simple_title_pro()
 {global $template, $SYSTEM_FLAGS, $CurrentHandler, $mysql, $config, $catz, $catmap;
 	
-<<<<<<< HEAD
 	$pageNo = !empty($CurrentHandler['params']['page'])?str_replace('%count%',intval($CurrentHandler['params']['page']), pluginGetVariable('simple_title_pro', 'num_title')):'';
 	
 	$html = !empty($SYSTEM_FLAGS['info']['title']['secure_html'])?str_replace('%html%', $SYSTEM_FLAGS['info']['title']['secure_html'], pluginGetVariable('simple_title_pro', 'html_secure')):'';
-=======
-	$pageNo = isset($CurrentHandler['params']['page'])?str_replace('%count%',intval($CurrentHandler['params']['page']), pluginGetVariable('simple_title_pro', 'num_title')):'';
-    $pageNo = (isset($CurrentHandler['params']['page']) && intval($CurrentHandler['params']['page']) > 0)?str_replace('%count%',intval($CurrentHandler['params']['page']), pluginGetVariable('simple_title_pro', 'num_title')):'';
-
-    $html = !empty($SYSTEM_FLAGS['info']['title']['secure_html'])?str_replace('%html%', $SYSTEM_FLAGS['info']['title']['secure_html'], pluginGetVariable('simple_title_pro', 'html_secure')):'';
->>>>>>> origin/master
 	//$runResult = $UHANDLER->run($systemAccessURL, array('debug' => true));
 	//print "<pre>".var_export($runResult, true)."</pre>";
 	//print "<pre>".var_export($CurrentHandler, true)."</pre>";
@@ -87,8 +80,6 @@ function simple_title_pro()
 					$cat_name[] = $catz[$SYSTEM_FLAGS['news']['currentCategory.alt']]['name'];
 					
 					$id = $catz[$CurrentHandler['params']['category']]['parent'];
-					//print "<pre>".var_export($catz, true)."</pre>";
-					//print "<pre>".var_export($catmap, true)."</pre>";
 					while($id <> 0){
 						$cat_name[] = $catz[$catmap[$id]]['name'];
 						$id = $catz[$catmap[$id]]['parent'];
@@ -111,9 +102,7 @@ function simple_title_pro()
 						return;
 					}
 				}
-				/* print '<pre>';
-				print_r ($SYSTEM_FLAGS['news']);
-				print '</pre>'; */
+				
 				$title = $mysql->result('SELECT title FROM '.prefix.'_simple_title_pro WHERE news_id = '.db_squote($SYSTEM_FLAGS['news']['db.id']).' LIMIT 1');
 				
 				if(empty($title))
@@ -174,7 +163,7 @@ function simple_title_pro()
 		
 		default:
 			$list_plugin = array_map('trim', explode(',',pluginGetVariable('simple_title_pro', 'p_title')));
-			//print "<pre>".var_export($list_plugin, true)."</pre>";
+			
 			if(isset($CurrentHandler['pluginName']) && $CurrentHandler['pluginName']){
 				if(!in_array($CurrentHandler['pluginName'], $list_plugin)){
 					$o_title = preg_replace('/\[([^\[\]]+)\]/' , (isset($pageNo) && $pageNo)?'\\1':'', pluginGetVariable('simple_title_pro', 'o_title'));
