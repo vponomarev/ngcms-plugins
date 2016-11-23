@@ -22,9 +22,16 @@ add_act ( 'index_post', 'simple_title_pro' );
 function simple_title_pro()
 {global $template, $SYSTEM_FLAGS, $CurrentHandler, $mysql, $config, $catz, $catmap;
 	
+<<<<<<< HEAD
 	$pageNo = !empty($CurrentHandler['params']['page'])?str_replace('%count%',intval($CurrentHandler['params']['page']), pluginGetVariable('simple_title_pro', 'num_title')):'';
 	
 	$html = !empty($SYSTEM_FLAGS['info']['title']['secure_html'])?str_replace('%html%', $SYSTEM_FLAGS['info']['title']['secure_html'], pluginGetVariable('simple_title_pro', 'html_secure')):'';
+=======
+	$pageNo = isset($CurrentHandler['params']['page'])?str_replace('%count%',intval($CurrentHandler['params']['page']), pluginGetVariable('simple_title_pro', 'num_title')):'';
+    $pageNo = (isset($CurrentHandler['params']['page']) && intval($CurrentHandler['params']['page']) > 0)?str_replace('%count%',intval($CurrentHandler['params']['page']), pluginGetVariable('simple_title_pro', 'num_title')):'';
+
+    $html = !empty($SYSTEM_FLAGS['info']['title']['secure_html'])?str_replace('%html%', $SYSTEM_FLAGS['info']['title']['secure_html'], pluginGetVariable('simple_title_pro', 'html_secure')):'';
+>>>>>>> origin/master
 	//$runResult = $UHANDLER->run($systemAccessURL, array('debug' => true));
 	//print "<pre>".var_export($runResult, true)."</pre>";
 	//print "<pre>".var_export($CurrentHandler, true)."</pre>";

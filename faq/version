@@ -1,0 +1,14 @@
+ID: faq
+Name: Вопросы и ответы
+Version: 0.1
+Acts: ppages, index
+File: faq.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Title: Вопросы и ответы
+Description: Вопросы и ответы
+Author: Rostunov Sergey
+Author_URI: http://rostunov.com
+preinstall: no
