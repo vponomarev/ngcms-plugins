@@ -211,7 +211,7 @@ function header_show()
 					array ('%name_site%', '%name_forum%'),
 					array ($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
 					'Форум запаролен / %name_forum%');
-		
+		break;
 		case 'moderate':
 			$titles = str_replace(
 					array ('%name_site%', '%name_forum%'),

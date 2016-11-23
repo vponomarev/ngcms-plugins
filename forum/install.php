@@ -320,7 +320,7 @@ function plugin_forum_install($action) {
 					if(!$mysql->record('SHOW INDEX FROM '.prefix.'_forum_topics WHERE Key_name = \'title\''))
 						$mysql->query('alter table '.prefix.'_forum_topics add FULLTEXT (title)');
 					
-					$r =$mysql->query('SELECT * FROM `'.prefix.'_forum_forums` LIMIT 1');
+					$r =$mysql->record('SELECT * FROM `'.prefix.'_forum_forums` LIMIT 1');
 					if($r['l_author_avatar'])
 						$mysql->query('ALTER TABLE `'.prefix.'_forum_forums` DROP `l_author_avatar`');
 					

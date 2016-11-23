@@ -36,14 +36,14 @@ function plugin_pm_install($action) {
 			'action' => 'cmodify',
 			'key' => 'primary key (`id`)',
 			'fields' => array(
-				array('action' => 'cmodify', 'name' => '`id`', 'type' => 'int(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
-				array('action' => 'cmodify', 'name' => '`subject`', 'type' => 'varchar(255)', 'params' => 'NOT NULL'),
-				array('action' => 'cmodify', 'name' => '`message`', 'type' => 'text', 'params' => 'NOT NULL'),
-				array('action' => 'cmodify', 'name' => '`from_id`', 'type' => 'int(10)', 'params' => 'NOT NULL'),
-				array('action' => 'cmodify', 'name' => '`to_id`', 'type' => 'int(10)', 'params' => 'NOT NULL'),
-				array('action' => 'cmodify', 'name' => '`date`', 'type' => 'int(10)', 'params' => 'NOT NULL'),
-				array('action' => 'cmodify', 'name' => '`viewed`', 'type' => 'tinyint(1)', 'params' => 'NOT NULL'),
-				array('action' => 'cmodify', 'name' => '`folder`', 'type' => 'varchar(10)', 'params' => 'NOT NULL')
+				array('action' => 'cmodify', 'name' => 'id', 'type' => 'int(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
+				array('action' => 'cmodify', 'name' => 'subject', 'type' => 'varchar(255)', 'params' => 'NOT NULL'),
+				array('action' => 'cmodify', 'name' => 'message', 'type' => 'text', 'params' => 'NOT NULL'),
+				array('action' => 'cmodify', 'name' => 'from_id', 'type' => 'int(10)', 'params' => 'NOT NULL'),
+				array('action' => 'cmodify', 'name' => 'to_id', 'type' => 'int(10)', 'params' => 'NOT NULL'),
+				array('action' => 'cmodify', 'name' => 'date', 'type' => 'int(10)', 'params' => 'NOT NULL'),
+				array('action' => 'cmodify', 'name' => 'viewed', 'type' => 'tinyint(1)', 'params' => 'NOT NULL'),
+				array('action' => 'cmodify', 'name' => 'folder', 'type' => 'varchar(10)', 'params' => 'NOT NULL')
 			)
 		),
 

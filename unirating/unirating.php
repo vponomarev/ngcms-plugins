@@ -15,7 +15,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Фильтр новостей (для отображения новостей)
 //
-class RatingNewsFilter extends NewsFilter {
+class UNRatingNewsFilter extends NewsFilter {
 	function showNews($newsID, $SQLnews, &$tvars, $mode) {
 		global $tpl, $mysql, $userROW;
 
@@ -48,6 +48,6 @@ class RatingNewsFilter extends NewsFilter {
 	}
 }
 
-register_filter('news','unirating', new RatingNewsFilter);
+register_filter('news','unirating', new UNRatingNewsFilter);
 //register_plugin_page('unirating','','plugin_finance_screen',0);
 
