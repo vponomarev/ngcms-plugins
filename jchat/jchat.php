@@ -75,7 +75,6 @@ function jchat_show($lastEventID, $maxLoadedID, $commands = array()){
 	$mysql->query("set names utf8");
 	foreach (array_reverse($mysql->select($query, 1)) as $row) {
 		$maxID = max($maxID, $row['id']);
-		$row['author'] = $row['author'];
 		$row['text'] = preg_replace('#^\@(.+?)\:#','<i>$1</i>:',$row['text']);
 //		$row['author'] = iconv('Windows-1251', 'UTF-8', $row['author']);
 //		$row['text'] = iconv('Windows-1251', 'UTF-8', preg_replace('#^\@(.+?)\:#','<i>$1</i>:',$row['text']));
