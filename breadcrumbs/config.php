@@ -14,38 +14,27 @@ LoadPluginLang('breadcrumbs', 'config', '', 'bc', ':');
 $cfg = array();
 array_push($cfg, array('descr' => $lang['bc:description']));
 array_push($cfg, array(
-					'name'    => 'separator', 
-					'title'   => $lang['bc:separator_title'], 
-					'type'    => 'input', 
-					'value'   => pluginGetVariable($plugin, 'separator') ? pluginGetVariable($plugin, 'separator') : ' &rarr; '));
-array_push($cfg, array(
-					'name'    => 'block_main', 
-					'title'   => $lang['bc:block_main'], 
-					'type'    => 'select', 
-					'values'  => array(1 => $lang['yesa'], 0 => $lang['noa']), 
-					'value'   => pluginGetVariable($plugin, 'block_main')));
-array_push($cfg, array(
-					'name'    => 'block_full_path', 
-					'title'   => $lang['bc:block_full_path'], 
-					'type'    => 'select', 
-					'values'  => array(1 => $lang['yesa'], 0 => $lang['noa']), 
-					'value'   => pluginGetVariable($plugin, 'block_full_path')));
+                    'name'    => 'block_full_path', 
+                    'title'   => $lang['bc:block_full_path'], 
+                    'type'    => 'select', 
+                    'values'  => array(1 => $lang['yesa'], 0 => $lang['noa']), 
+                    'value'   => pluginGetVariable($plugin, 'block_full_path')));
 
 $cfgX = array();
 array_push($cfgX, array(
-					'name'    => 'template_source', 
-					'title'   => $lang['bc:template_source_title'], 
-					'type'    => 'select', 
-					'values'  => array ( '0' => $lang['bc:template_source_site'], '1' => $lang['bc:template_source_plugin']), 
-					'value'   => intval(pluginGetVariable($plugin, 'template_source'))));
+                    'name'    => 'template_source', 
+                    'title'   => $lang['bc:template_source_title'], 
+                    'type'    => 'select', 
+                    'values'  => array ( '0' => $lang['bc:template_source_site'], '1' => $lang['bc:template_source_plugin']), 
+                    'value'   => intval(pluginGetVariable($plugin, 'template_source'))));
 array_push($cfg, array(
-					'mode'    => 'group', 
-					'title'   => $lang['bc:template_source'], 
-					'entries' => $cfgX));
-						
+                    'mode'    => 'group', 
+                    'title'   => $lang['bc:template_source'], 
+                    'entries' => $cfgX));
+                        
 if ($_REQUEST['action'] == 'commit') {
-	commit_plugin_config_changes($plugin, $cfg);
-	print_commit_complete($plugin);
+    commit_plugin_config_changes($plugin, $cfg);
+    print_commit_complete($plugin);
 } else {
-	generate_config_page($plugin, $cfg);
+    generate_config_page($plugin, $cfg);
 }
