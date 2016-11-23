@@ -1,0 +1,19 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: guestbook
+Name: Гостевая книга
+Version: 2.0
+Acts: index, twig, ppages
+File: guestbook.php
+Config: config.php
+Install: install.php
+Deinstall: deinstall.php
+Type: plugin
+Description: Гостевая книга сайта
+Author: Sergey Kulikov
+Author_URI: https://github.com/web-padawan
+Title: Гостевая книга
+Information: Плагин позволяет организовать на сайте гостевую книгу.
+Preinstall: default_no
