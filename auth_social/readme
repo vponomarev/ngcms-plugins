@@ -1,0 +1,86 @@
+# =========================================================================== #
+# NG CMS // Плагины // auth_social - авторизация через соцсети                #
+# =========================================================================== #
+
+Плагин не является самостоятельным модулем авторизации, а работает лишь, как 
+дополнение к одному из уже работающих плагинов, например auth_basic.
+В данный момент поддерживается авторизация через vk, odnoklassniki, mailru, yandex, google, facebook, twitter, steam
+
+#=====================================#
+Установка
+#=====================================#
+
+1. Зарегистрировать приложения в соц.сетях, по инструкции, https://github.com/stanislas-prime/SocialAuther
+В параметре redirect_uri везде писать, следующие URL'ы:
+http://sitename.ru/plugin/auth_social/?provider=vk
+http://sitename.ru/plugin/auth_social/?provider=odnoklassniki
+http://sitename.ru/plugin/auth_social/?provider=mailru
+http://sitename.ru/plugin/auth_social/?provider=yandex
+http://sitename.ru/plugin/auth_social/?provider=google
+http://sitename.ru/plugin/auth_social/?provider=facebook
+http://sitename.ru/plugin/auth_social/?provider=twitter
+http://sitename.ru/plugin/auth_social/?provider=steam
+http://sitename.ru/plugin/auth_social/?provider=twitch
+
+2. Включить плагин. В настройках плагина, внести данные о приложениях в соц.сетях (client_id, client_secret, public_key)
+
+3. В шаблоне usermenu.tpl прописать ссылки по которым будет осуществляться авторизация, например:
+<a href="{{p.auth_social.vk.authUrl}}" title="{{p.auth_social.vk.title}}"><img src="/engine/plugins/auth_social/social/VK.png" alt="{{p.auth_social.vk.title}}"/></a>
+<a href="{{p.auth_social.odnoklassniki.authUrl}}" title="{{p.auth_social.odnoklassniki.title}}"><img src="/engine/plugins/auth_social/social/Odnoklasniki.png" alt="{{p.auth_social.odnoklassniki.title}}"/></a>
+<a href="{{p.auth_social.mailru.authUrl}}" title="{{p.auth_social.mailru.title}}"><img src="/engine/plugins/auth_social/social/mail.png" alt="{{p.auth_social.mailru.title}}"/></a>
+<a href="{{p.auth_social.yandex.authUrl}}" title="{{p.auth_social.yandex.title}}"><img src="/engine/plugins/auth_social/social/ya.png" alt="{{p.auth_social.yandex.title}}"/></a>
+<a href="{{p.auth_social.google.authUrl}}" title="{{p.auth_social.google.title}}"><img src="/engine/plugins/auth_social/social/G.png" alt="{{p.auth_social.google.title}}"/></a>
+<a href="{{p.auth_social.facebook.authUrl}}" title="{{p.auth_social.facebook.title}}"><img src="/engine/plugins/auth_social/social/FB.png" alt="{{p.auth_social.facebook.title}}"/></a>
+<a href="{{p.auth_social.twitter.authUrl}}" title="{{p.auth_social.twitter.title}}"><img src="/engine/plugins/auth_social/social/Twitter.png" alt="{{p.auth_social.twitter.title}}"/></a>
+<a href="{{p.auth_social.steam.authUrl}}" title="{{p.auth_social.steam.title}}"><img src="/engine/plugins/auth_social/social/Steam.png" alt="{{p.auth_social.steam.title}}"/></a>
+<a href="{{p.auth_social.twitch.authUrl}}" title="{{p.auth_social.twitch.title}}"><img src="/engine/plugins/auth_social/social/Steam.png" alt="{{p.auth_social.twitch.title}}"/></a>
+
+
+#=====================================#
+Интеграция с профилем (плагин uprofile)
+#=====================================#
+
+При установке плагина в таблице users создаются новые поля: provider, social_id, social_page, sex, birthday
+Данные в данных полях слабоструктурированы и могут либо вообще отсутствовать, либо их вид может различаться в зависимости от соц. сети.
+
+1. \templates\ваш_шаблон\plugins\uprofile\users.tpl
+
+{{ userRec.provider }} - тип. соц. сети.
+{{ userRec.social_page }} - ссылка на профиль с социальной сети.
+{{ userRec.sex }} - пол пользователя.
+{{ userRec.birthday }} - дата рождения пользователя.
+
+Пример вывода:
+{% if (userRec.provider) and (userRec.social_page) %}
+    <tr>
+        <td>Профиль соцсети:</td>
+        <td class="second">{{ userRec.social_page }}</td>
+    </tr>
+{% endif %}
+{% if (userRec.provider) and (userRec.sex) %}
+    <tr>
+        <td>Пол:</td>
+        <td class="second">{{ userRec.sex }}</td>
+    </tr>
+{% endif %}
+{% if (userRec.provider) and (userRec.birthday) %}
+    <tr>
+        <td>Дата рождения:</td>
+        <td class="second">{{ userRec.birthday }}</td>
+    </tr>
+{% endif %}
+
+2. \templates\ваш_шаблон\plugins\uprofile\profile.tpl
+
+{{ userRec.sex }} - пол пользователя.
+{{ userRec.birthday }} - дата рождения пользователя.
+
+Пример вывода:
+<div class="label label-table">
+    <label>Пол:</label>
+    <input type="text" name="editsex" value="{{ userRec.sex }}" class="input" />
+</div>
+<div class="label label-table">
+    <label>Дата рождения:</label>
+    <input type="text" name="editbirthday" value="{{ userRec.birthday }}" class="input" />
+</div>
