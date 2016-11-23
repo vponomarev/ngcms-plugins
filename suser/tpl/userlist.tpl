@@ -1,91 +1,122 @@
-<div class="blockform">
-	<h2><span>Поиск пользователей</span></h2>
-	<div class="box">
-	<form id="userlist" method="get" action="">
-		<div class="inform">
-			<fieldset>
-				<legend>Поиск и сортировка пользователей</legend>
-				<div class="infldset">
-					<label class="conl">Имя<br /><input type="text" name="username" value="{{ username }}" size="25" maxlength="25" /><br /></label>
-					<label class="conl">Группа
-					<br /><select name="show_group">
-						<option value="-1" {% if (show_group_) %}selected{% endif %}>Все пользователи</option>
-						<option value="1" {% if (show_group_1) %}selected{% endif %}>Администраторы</option>
-						<option value="2" {% if (show_group_2) %}selected{% endif %}>Редактор</option>
-						<option value="3" {% if (show_group_3) %}selected{% endif %}>Журналист</option>
-						<option value="4" {% if (show_group_4) %}selected{% endif %}>Комментатор</option>
-					</select>
-					<br /></label>
-					<label class="conl">Сортировать по
-					<br /><select name="sort_by">
-						<option value="username" {% if (sort_by_username) %}selected{% endif %}>Имя</option>
-						<option value="registered" {% if (sort_by_registered) %}selected{% endif %}>Зарегистрирован</option>
-						<option value="num_posts" {% if (sort_by_num_posts) %}selected{% endif %}>Кол-во новостей</option>
-						<option value="num_comments" {% if (sort_by_num_comments) %}selected{% endif %}>Кол-во комментариев</option>
-					</select>
-					<br /></label>
-					<label class="conl">Упорядочить по
-					<br /><select name="sort_dir">
-						<option value="ASC" {% if (sort_dir_ASC) %}selected{% endif %}>Возрастанию</option>
-						<option value="DESC" {% if (sort_dir_DESC) %}selected{% endif %}>Убыванию</option>
-					</select>
-					<br /></label>
-					<p class="clearb">Введите имя пользователя для поиска и/или укажите группу. Имя пользователя может быть пустым. Отсортируйте пользователей по имени, дате регистрации или количеству переданных сообщений и упорядочите по возрастанию/убыванию.</p>
-				</div><br/>
-		<p><input type="submit" name="submit" value="Отправить" /> <input type="submit" name="reset" value="Сброс" /></p>
-			</fieldset>
-		</div>
-	</form>
-	</div>
-</div>
-<br/><br/>
-<div class="linkst"> 
-	<div class="inbox"> 
-		<p class="pagelink conl">{% if (pages.true) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages.print }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p> 
-	</div> 
-</div>
-<div id="users1" class="blocktable"> 
-	<h2><span>Пользователи</span></h2> 
-	<div class="box"> 
-		<div class="inbox"> 
-			<table cellspacing="0"> 
-				<thead> 
-					<tr> 
-						<th class="tcl" scope="col">Имя</th> 
-						<th class="tc2" scope="col">Статус</th> 
-						<th class="tc3" scope="col">Новостей</th>
-						<th class="tc4" scope="col">Комментариев</th> 
-						<th class="tc5" scope="col">Зарегистрирован</th> 						
-						<th class="tcr" scope="col">Последний вход</th> 
-					</tr> 
-				</thead> 
-				<tbody>
-				{% for entry in entries %}
-					<tr> 
-						<td class="tcl"><a href='{{ entry.profile_link }}'>{{ entry.profile }}</a></td> 
-						<td class="tc2">{{ entry.status }}</td> 
-						<td class="tc3">{{ entry.news }}</td>
-						<td class="tc4">{{ entry.com }}</td> 
-						<td class="tc5">{{ entry.reg|date("d-m-Y h:i") }}</td>						
-						<td class="tcr">{% if (entry.last != 0) %}{{ entry.last|date("d-m-Y h:i") }} {% else %} не был ни разу {% endif %}</td> 
-					</tr>
-				{% else %}
-					<tr> 
-						<td class="tcl">По вашему запросу ничего не найдено.</td> 
-						<td class="tc2"></td> 
-						<td class="tc3"></td> 
-						<td class="tcr"></td> 
-					</tr>
+<h2>Сортировка пользователей</h2>
+<form id="userlist" method="post" action="">
+  	<table class="table">
+    <tr><th colspan="2">Укажите необходимые параметры сортировки</th></tr>
+	<tr>
+    	<td>Имя:</td>
+		<td><input type="text" name="username" value="{{ username }}" size="25" /></td>
+	</tr>	
+	<tr>
+    	<td>Группа:</td>
+      	<td>
+		<select name="show_group">
+			<option value="-1" {% if (show_group_) %}selected{% endif %}>
+				Все пользователи</option>
+			<option value="1" {% if (show_group_1) %}selected{% endif %}>
+				Администраторы</option>
+			<option value="2" {% if (show_group_2) %}selected{% endif %}>
+				Редакторы</option>
+			<option value="3" {% if (show_group_3) %}selected{% endif %}>
+				Журналисты</option>
+			<option value="4" {% if (show_group_4) %}selected{% endif %}>
+				Комментаторы</option>
+          </select>          
+		</td>
+    </tr>    
+	<tr>
+    	<td>Сортировать по:</td>
+      	<td>
+			<select name="sort_by">
+			<option value="username" {% if (sort_by_username) %}selected{% endif %}>
+				Имя</option>
+			<option value="registered" {% if (sort_by_registered) %}selected{% endif %}>
+				Зарегистрирован</option>
+			<option value="num_posts" {% if (sort_by_num_posts) %}selected{% endif %}>
+				Кол-во новостей</option>
+			<option value="num_comments" {% if (sort_by_num_comments) %}selected{% endif %}>
+				Кол-во комментариев</option>          
+			
+            {% if pluginIsActive('xfields') %}
+            	<!-- список доп. полей -->     
+				{% for xf in xflist %}
+					<option value="{{ xf.id }}"{% if (sort == xf.id) %}selected{% endif %}>
+						{{ xf.title }}                        
+					</option>
 				{% endfor %}
-				</tbody> 
-			</table> 
-		</div> 
-	</div> 
+            {% endif %}
+		</select>                                	
+		</td>
+    </tr>    
+	<tr>
+    	<td>Упорядочить по:</td>
+      	<td>
+		<select name="sort_dir">
+			<option value="ASC" {% if (sort_dir_ASC) %}selected{% endif %}>
+				Возрастанию</option>
+			<option value="DESC" {% if (sort_dir_DESC) %}selected{% endif %}>
+				Убыванию</option>
+		</select>
+		</td>
+    </tr>
+    </table>
+	<input class="btn" type="submit" name="submit" value="Отправить" /> 
+	<input class="btn" type="submit" name="reset" value="Сброс" />	
+</form>  
+
+<div id="users1"> 
+	<h2>Пользователи</h2> 
+	<table class="table"> 
+		<tr> 
+			<th>Имя</th>
+          
+          	{% if pluginIsActive('xfields') %}
+				<!-- заголовки доп. полей -->                          
+				{% for xf in xflist %}
+					<th>{{ xf.title }}</th>
+				{% endfor %}
+          	{% endif %}
+
+			<th>Откуда</th>
+          	<th>Новостей</th> 
+			<th>Комментариев</th> 
+			<th>Зарегистрирован</th> 						
+			<th>Последний вход</th> 
+		</tr>
+	{% for entry in entries %}
+		<tr> 
+			<td><a href='{{ entry.profile_link }}'>{{ entry.profile }}</a></td>
+          
+			{% if pluginIsActive('xfields') %}
+          		<!-- содержимое доп. полей -->                          
+				{% for xf in entry.xfields %}
+					<td>{{ xf }}</td>
+				{% endfor %}             
+			{% endif %}
+          
+			<td>{{ entry.from }}</td>
+          	<td>{{ entry.news }}</td> 
+			<td>{{ entry.com }}</td> 
+			<td>{{ entry.reg|date("d-m-Y h:i") }}</td>				
+			<td>
+			{% if (entry.last != 0) %}
+				{{ entry.last|date("d-m-Y h:i") }} 
+			{% else %} 
+				не был ни разу 
+			{% endif %}
+			</td> 
+		</tr>               
+	{% else %}
+		<tr> 
+			<td colspan="4">По вашему запросу ничего не найдено.</td> 
+		</tr>
+	{% endfor %} 
+	</table> 
 </div>
-<br/>
-<div class="linkst"> 
-	<div class="inbox"> 
-		<p class="pagelink conl">{% if (pages.true) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages.print }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p> 
-		<div class="clearer"></div> 
-	</div> 
-</div>
+
+{% if (pages.true) %}
+<p>
+	{% if (prevlink.true) %} {{ prevlink.link }} {% endif %}
+	{{ pages.print }}
+	{% if (nextlink.true) %} {{ nextlink.link }} {% endif %}
+</p> 
+{% endif %}

@@ -4,14 +4,12 @@
 
 ID: suser
 Name: Sorting Users
-Version: 0.1
+Version: 0.4
 Acts: ppages
 File: suser.php
 Config: config.php
 Type: plugin
-Description: —ортировка пользователей
-Author: Rostunov Sergey
-Author_URI: http://rostunov.com
-Title: —ортировка пользователей
-Information: ѕлагин позвол€ет сортировать пользователей
-Preinstall: no
+Description: ѕоиск и сортировка пользователей
+Author: Rostunov Sergey, Zemlemer
+Title: ѕоиск и сортировка пользователей
+Information: ѕлагин позвол€ет осуществл€ть поиск по пользовател€м и просматривать их список
