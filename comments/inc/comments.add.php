@@ -7,7 +7,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Params for filtering and processing
 //
 function comments_add(){
-	global $mysql, $config, $AUTH_METHOD, $userROW, $ip, $lang, $parse, $HTTP_REFERER, $catmap, $catz, $PFILTERS;
+	global $mysql, $config, $AUTH_METHOD, $userROW, $ip, $lang, $parse, $catmap, $catz, $PFILTERS;
 
 	// Check membership
 	// If login/pass is entered (either logged or not)
@@ -131,7 +131,7 @@ function comments_add(){
 		$allowCom = $news_row['allow_com'];
 		if ($allowCom == 2) {
 			// `Use default` - check master category
-			$masterCat = intval(array_shift(explode(',', $SQLnews['catid'])));
+			$masterCat = intval(array_shift(explode(',', $news_row['catid'])));
 			if ($masterCat && isset($catmap[$masterCat])) {
 				$allowCom = intval($catz[$catmap[$masterCat]]['allow_com']);
 			}
@@ -202,7 +202,6 @@ function comments_add(){
 	// RUN interceptors
 	load_extras('comments:add');
 
-	$pluginNoError = 1;
 	if (is_array($PFILTERS['comments']))
 		foreach ($PFILTERS['comments'] as $k => $v) {
 			$pluginResult = $v->addComments($memberRec, $news_row, $tvars, $SQL);
@@ -224,7 +223,6 @@ function comments_add(){
 
 	// Update comment counter in news
 	$mysql->query("update ".prefix."_news set com=com+1 where id=".db_squote($SQL['post']));
-	$comment_no = $new_row['com']+1;
 
 	// Update counter for user
 	if ($SQL['author_id']) {

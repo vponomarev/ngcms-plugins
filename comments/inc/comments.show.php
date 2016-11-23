@@ -179,7 +179,7 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		}
 
 		if (is_array($userROW) && (($userROW['status'] == 1) || ($userROW['status'] == 2))) {
-			$edit_link		= admin_url."/admin.php?mod=editcomments&amp;newsid=".$newsID."&amp;comid=".$row[id];
+			$edit_link		= admin_url."/admin.php?mod=editcomments&amp;newsid=".$newsID."&amp;comid=".$row['id'];
 			$delete_link	= generateLink('core', 'plugin', array('plugin' => 'comments', 'handler' => 'delete'), array('id' => $row['id'], 'uT' => genUToken($row['id'])), true);
 
 			$tvars['vars']['[edit-com]'] = "<a href=\"".$edit_link."\" target=\"_blank\" title=\"".$lang['addanswer']."\">";

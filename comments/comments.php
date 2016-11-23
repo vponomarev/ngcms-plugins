@@ -21,7 +21,7 @@ class CommentsNewsFilter extends NewsFilter {
 	}
 
 	function editNewsForm($newsID, $SQLnews, &$tvars) {
-		global $lang, $mysql, $config, $parse, $tpl;
+		global $lang, $mysql, $config, $parse, $tpl, $PHP_SELF;
 
 		loadPluginLang('comments', 'config', '', '', ':');
 
@@ -354,7 +354,7 @@ function plugin_comments_show(){
 	// Check if there is a custom mapping
 	if ($fcat && $catmap[$fcat] && ($ctname = $catz[$catmap[$fcat]]['tpl'])) {
 		// Check if directory exists
-		if (is_dir($tpl_site.'ncustom/'.$ctname))
+		if (is_dir(tpl_site.'ncustom/'.$ctname))
 			$callingCommentsParams['overrideTemplatePath'] = tpl_site.'ncustom/'.$ctname;
 			$templatePath = tpl_site.'ncustom/'.$ctname;
 	}
@@ -402,6 +402,8 @@ function plugin_comments_show(){
 	// Enable AJAX in case if we are on last page
 	if ($page == $pageCount)
 		$callingCommentsParams['noajax'] = 0;
+
+    $allowCom = $newsRow['allow_com'];
 
 	// Show form for adding comments
 	if ($newsRow['allow_com'] && (!pluginGetVariable('comments', 'regonly') || is_array($userROW))) {
