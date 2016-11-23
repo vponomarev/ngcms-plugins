@@ -1,0 +1,15 @@
+;
+; Version description file for plugin @@ ngcms
+;
+
+ID: messaging
+Name: Messaging
+Version: 0.3
+Acts: core
+File: messaging.php
+Config: config.php
+Type: plugin
+Description: Массовая рассылка сообщений по email и ЛС
+Author: SwiZZeR
+Author_URI: http://2z-project.ru/
+URI: http://no_url.com/
