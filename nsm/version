@@ -4,10 +4,12 @@
 
 ID: nsm
 Name: News OnSite Manager
-Version: 0.02
+Version: 0.04
 Acts: ppages
 File: nsm.php
 Config: config.php
+Install: install.php
+Deinstall: uninstall.php
 Type: plugin
 Title: Правка новостей без админки
 Description: Позволяет добавлять/редактировать новости со страниц сайта, не заходя в админку
