@@ -13,7 +13,8 @@ function plugin_rss_yandex() {
 }
 
 function plugin_rss_yandex_category($params) {
-	plugin_rss_yandex_generate($params['category']);
+    $category = filter_var($_REQUEST['category'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+	plugin_rss_yandex_generate($category);
 }
 
 function plugin_rss_yandex_generate($catname = ''){
@@ -34,7 +35,7 @@ function plugin_rss_yandex_generate($catname = ''){
 		header('HTTP/1.1 404 Not found');
 		exit;
 	}
-
+    @header('Content-type: text/xml; charset=utf-8');
 	// Generate header
 	$xcat = (($catname != '') && isset($catz[$catname]))?$catz[$catname]:'';
 
@@ -149,20 +150,35 @@ function plugin_rss_yandex_generate($catname = ''){
 		if (count($catList))
 			$masterCategoryName = $catList[0];
 
+        //var_dump($newsTitleFormat);
+        //var_dump($masterCategoryName);
+        //$mCatName = $masterCategoryName;
+        //var_dump("<title><![CDATA[".($twigString->render($newsTitleFormat, array('siteTitle' => $config['home_title'], 'newsTitle' => mb_convert_encoding($row['title'], "Windows-1251"), 'masterCategoryName' => $masterCategoryName)))."]]></title>\n");
 
 		$output .= "  <item>\n";
-		$output .= "   <title><![CDATA[".($twigString->render($newsTitleFormat, array('siteTitle' => $config['home_title'], 'newsTitle' => $row['title'], 'masterCategoryName' => $masterCategoryName)))."]]></title>\n";
+		$output .= "   <title><![CDATA[".iconv("UTF-8", "windows-1251", ($twigString->render($newsTitleFormat, array('siteTitle' => iconv("windows-1251","UTF-8",$config['home_title']), 'newsTitle' => iconv("windows-1251","UTF-8",$row['title']), 'masterCategoryName' => iconv("windows-1251","UTF-8",$masterCategoryName)))))."]]></title>\n";
 		$output .= "   <link><![CDATA[".newsGenerateLink($row, false, 0, true)."]]></link>\n";
 		$output .= "   <pubDate>".gmstrftime('%a, %d %b %Y %H:%M:%S GMT',$row['postdate'])."</pubDate>\n";
-		$output .= "   <yandex:full-text><![CDATA[".(pluginGetVariable('rss_yandex','full_format')?$newsVars['short-story'].' ':'').$newsVars['full-story']."]]></yandex:full-text>\n";
+
+        $output .= "   <yandex:full-text>".strip_tags((pluginGetVariable('rss_yandex','full_format')?$newsVars['short-story'].' ':'').$newsVars['full-story'])."</yandex:full-text>\n";
 
 		$output .= "   <description><![CDATA[".$newsVars['short-story']."]]></description>\n";
 
 		// Generate list of enclosures
 		$output .= join("\n", $enclosureList);
 		if (count($enclosureList)) $output .= "\n";
+        
+        //var_dump(GetCategories($row['catid'], true));
+        if (is_array($xcat)) {
+            $main_cat_name = $xcat['name'];
+        } else {
+            $main_cat_name = explode(',', GetCategories($row['catid'], true));
+            $main_cat_name = $main_cat_name[0];
+        }
+        
 
-		$output .= "   <category>".GetCategories($row['catid'], true)."</category>\n";
+        //$output .= "   <category>".GetCategories($row['catid'], true)."</category>\n";
+		$output .= "   <category>".$main_cat_name."</category>\n";
 		$output .= "   <guid isPermaLink=\"false\">".home."?id=".$row['id']."</guid>\n";
 		$output .= "  </item>\n";
 	}
@@ -170,7 +186,7 @@ function plugin_rss_yandex_generate($catname = ''){
 	$output .= " </channel>\n</rss>\n";
 
 	// Print output
-	print $output;
+	print iconv("windows-1251","UTF-8",$output);
 
 	if (pluginGetVariable('rss_yandex','cache')) {
 		cacheStoreFile($cacheFileName, $output, 'rss_yandex');
@@ -187,12 +203,13 @@ function plugin_rss_yandex_mk_header($xcat) {
 	$feedTitleFormat = pluginGetVariable('rss_yandex', 'feed_title')?pluginGetVariable('rss_yandex', 'feed_title'):'{{siteTitle}}';
 
 	// Generate RSS header
-	$line = '<?xml version="1.0" encoding="windows-1251"?>'."\n";
+	$line = '<?xml version="1.0" encoding="utf-8"?>'."\n";
 	$line.= ' <rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">'."\n";
 	$line.= " <channel>\n";
 
 	// Channel title
-	$line.= "  <title><![CDATA[".($twigString->render($feedTitleFormat, array('siteTitle' => $config['home_title'])))."]]></title>\n";
+    
+	$line.= "  <title><![CDATA[".iconv("UTF-8", "windows-1251", ($twigString->render($feedTitleFormat, array('siteTitle' => iconv("windows-1251","UTF-8",$config['home_title'])))))."]]></title>\n";
 
 	// LINK
 	$line.= "  <link><![CDATA[".$config['home_url']."]]></link>\n";

@@ -5,7 +5,7 @@
 ID: rss_yandex
 Name: Экспорт RSS потока для Яndex
 Name_EN: RSS export for Yandex
-Version: 0.01
+Version: 0.02
 Acts: ppages
 File: rss_yandex.php
 Config: config.php
