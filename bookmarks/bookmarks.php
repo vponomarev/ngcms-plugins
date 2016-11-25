@@ -35,7 +35,9 @@ global $lang;
 
 LoadPluginLang('bookmarks', 'main', '', '', ':');
 
-$bookmarks_script = '<script type="text/javascript">
+$bookmarks_script = '
+<script type="text/javascript">
+
 	<!-- (ñ)habrahabr.ru -->
 	function futu_alert(header, text, close, className) {
 		if (!document.getElementById(\'futu_alerts_holder\')) {
@@ -102,7 +104,7 @@ $bookmarks_script = '<script type="text/javascript">
 			
 		}
 	}
-
+	
 	function bookmarks(url, news, action){
 		var ajaxBookmarks = new sack();
 		ajaxBookmarks.onShow(""); 
@@ -154,21 +156,20 @@ $bookmarksList = array();
 class BookmarksNewsFilter extends NewsFilter {
 
 	function showNews($newsID, $SQLnews, &$tvars) {
-		global $lang, $bookmarksLoaded, $bookmarksList, $userROW, $tpl, $mysql;
+		global $lang, $bookmarksLoaded, $bookmarksList, $userROW, $tpl, $mysql, $twig;
 
 		# determine paths for template files
 		$tpath = locatePluginTemplates(array('add.remove.links.style', 'not.logged.links'), 'bookmarks', pluginGetVariable('bookmarks', 'localsource'));
-			
+		
 		# exit if user is not logged in
 		if (!is_array($userROW)) {
 			# generate counter [if requested]
 			if(pluginGetVariable('bookmarks', 'counter')){
-				$vars['vars']['counter'] = $mysql->result('SELECT COUNT(*) FROM '.prefix.'_bookmarks WHERE news_id='.$newsID);
-				$vars['vars']['counter'] = $vars['vars']['counter'] ? $vars['vars']['counter'] : '';
-				$vars['vars']['text'] = $lang['bookmarks:act_delete'];
-				$tpl -> template('not.logged.links', $tpath['not.logged.links']);
-				$tpl -> vars('not.logged.links', $vars);	
-				$tvars['vars']['plugin_bookmarks_news'] = $tpl -> show('not.logged.links');
+				$tVars['counter'] = $mysql->result('SELECT COUNT(*) FROM '.prefix.'_bookmarks WHERE news_id='.$newsID);
+				$tVars['counter'] = $tVars['counter'] ? $tVars['counter'] : '';
+				//$tVars['text'] = $lang['bookmarks:act_delete'];
+				$xg = $twig->loadTemplate($tpath['not.logged.links'].'not.logged.links.tpl');
+				$tvars['vars']['plugin_bookmarks_news'] = $xg->render($tVars);
 			}
 			else $tvars['vars']['plugin_bookmarks_news'] = '';
 			return;
@@ -191,19 +192,18 @@ class BookmarksNewsFilter extends NewsFilter {
 		$link  = generatePluginLink('bookmarks', 'modify', array(), array('news' => $newsID, 'action' => ($found ? 'delete' : 'add')));
 		$url = generatePluginLink('bookmarks', 'modify');
 				
-		$vars['vars'] = array('news' => $newsID, 'action' => ($found ? 'delete' : 'add'), 'link' => $link, 'text' => ($found ? $lang['bookmarks:act_delete'] : $lang['bookmarks:act_add']), 'url' => $url, 'link_title' => ($found ? $lang['bookmarks:title_delete'] : $lang['bookmarks:title_add']));
+		$tVars = array('news' => $newsID, 'action' => ($found ? 'delete' : 'add'), 'link' => $link, 'found' => $found, 'url' => $url, 'link_title' => ($found ? $lang['bookmarks:title_delete'] : $lang['bookmarks:title_add']));
 		
 		# generate counter [if requested]
 		if(pluginGetVariable('bookmarks', 'counter')){
-			$vars['vars']['counter'] = $mysql->result('SELECT COUNT(*) FROM '.prefix.'_bookmarks WHERE news_id='.$newsID);
-			$vars['vars']['counter'] = $vars['vars']['counter'] ? $vars['vars']['counter'] : '';
+			$tVars['counter'] = $mysql->result('SELECT COUNT(*) FROM '.prefix.'_bookmarks WHERE news_id='.$newsID);
+			$tVars['counter'] = $tVars['counter'] ? $tVars['counter'] : '';
 		}
-		else $vars['vars']['counter'] = '';
+		else $tVars['counter'] = '';
 		
-		$tpl -> template('add.remove.links.style', $tpath['add.remove.links.style']);
-		$tpl -> vars('add.remove.links.style', $vars);
-				
-		$tvars['vars']['plugin_bookmarks_news'] = $tpl -> show('add.remove.links.style');
+		$xg = $twig->loadTemplate($tpath['add.remove.links.style'].'add.remove.links.style.tpl');
+		$tvars['vars']['plugin_bookmarks_news'] = $xg->render($tVars);
+
 	}
 }
 
@@ -222,7 +222,7 @@ function bookmarks_sql(){
 
 # view bookmarks on sidebar
 function bookmarks_view(){
-	global $template, $tpl, $lang, $mysql, $config, $parse, $userROW, $bookmarksLoaded, $bookmarksList;
+	global $template, $tpl, $lang, $mysql, $config, $parse, $userROW, $bookmarksLoaded, $bookmarksList, $twig;
 
 	# view on sidebar?
 	if(!pluginGetVariable('bookmarks', 'sidebar')){
@@ -258,18 +258,15 @@ function bookmarks_view(){
 	foreach ($bookmarksList as $row){
 		$count++;
 		if($count > intval(pluginGetVariable('bookmarks', 'max_sidebar'))) break; 
-		
-		$tvars = array('vars' =>  array('link'	=>	newsGenerateLink($row)));
 
 		if (strlen($row['title']) > $maxlength) {
-			$tvars['vars']['title'] = substr(secure_html($row['title']), 0, $maxlength)."...";
+		
+			$title = substr(secure_html($row['title']), 0, $maxlength)."...";
 		} else {
-			$tvars['vars']['title'] = secure_html($row['title']);
+			$title = secure_html($row['title']);
 		}
-
-		$tpl -> template('entries', $tpath['entries']);
-		$tpl -> vars('entries', $tvars);
-		$result .= $tpl -> show('entries');
+		
+		$result[] = array('link'	=>	newsGenerateLink($row), 'title' => $title);
 	}
 
 	# action on "hide empty"
@@ -281,6 +278,7 @@ function bookmarks_view(){
 		return;
 	}
 	
+	/*
 	unset($tvars);
 
 	if (!$count) {
@@ -292,13 +290,16 @@ function bookmarks_view(){
 		$tvars['regx']['/\[if-bookmarks\](.*?)\[\/if-bookmarks\]/si'] = '$1';
 		$tvars['regx']['/\[if-not-bookmarks\](.*?)\[\/if-not-bookmarks\]/si'] = '';
 	}
+	*/
+	if (!$count) { $result = $lang['bookmarks:noentries']; }
 
-	$tvars['vars'] = array ('tpl_url' => tpl_url, 'entries' => $result, 'bookmarks_page' => generatePluginLink('bookmarks', null));
+	$tVars = array ('tpl_url' => tpl_url, 'entries' => $result, 'bookmarks_page' => generatePluginLink('bookmarks', null));
+	$tVars['count'] = $count;
+	//$tVars['entries'] = $Entries;
+	
+	$xt = $twig->loadTemplate($tpath['bookmarks'].'bookmarks.tpl');
 
-	$tpl -> template('bookmarks', $tpath['bookmarks']);
-	$tpl -> vars('bookmarks', $tvars);
-
-	$template['vars']['plugin_bookmarks'] = $tpl -> show('bookmarks');
+	$template['vars']['plugin_bookmarks'] = $xt->render($tVars);
 
 	# create cache file
 	if (pluginGetVariable('bookmarks','cache')) {
@@ -308,7 +309,7 @@ function bookmarks_view(){
 
 # personal plugin pages for add/remove bookmarks
 function bookmarks_t(){
-	global $mysql, $config, $userROW, $HTTP_REFERER, $SUPRESS_TEMPLATE_SHOW, $tpl, $lang, $bookmarksList, $bookmarksLoaded, $template;
+	global $mysql, $config, $userROW, $HTTP_REFERER, $SUPRESS_TEMPLATE_SHOW, $tpl, $lang, $bookmarksList, $bookmarksLoaded, $template, $twig;
 
 	# news ID
 	$newsID = intval($_GET['news']);
@@ -385,27 +386,26 @@ function bookmarks_t(){
 	# determine paths for template files
 	$tpath = locatePluginTemplates(array('ajax.add.remove.links.style'), 'bookmarks', pluginGetVariable('bookmarks', 'localsource'));
 		
-	$vars['vars'] = array('news' => $newsID, 'action' => $action, 'link' => $link, 'text' => ($action == 'delete' ? $lang['bookmarks:act_delete'] : $lang['bookmarks:act_add']), 'url' => $url, 'link_title' => ($action == 'delete' ? $lang['bookmarks:title_delete'] : $lang['bookmarks:title_add']));
+	$tVars = array('news' => $newsID, 'action' => $action, 'link' => $link, 'text' => ($action == 'delete' ? $lang['bookmarks:act_delete'] : $lang['bookmarks:act_add']), 'url' => $url, 'link_title' => ($action == 'delete' ? $lang['bookmarks:title_delete'] : $lang['bookmarks:title_add']));
 	
 	# generate counter [if requested]
 	if(pluginGetVariable('bookmarks', 'counter')){
-		$vars['vars']['counter'] = $mysql->result('SELECT COUNT(*) FROM '.prefix.'_bookmarks WHERE news_id='.$newsID);
-		$vars['vars']['counter'] = $vars['vars']['counter'] ? $vars['vars']['counter'] : '';
+		$tVars['counter'] = $mysql->result('SELECT COUNT(*) FROM '.prefix.'_bookmarks WHERE news_id='.$newsID);
+		$tVars['counter'] = $tVars['counter'] ? $tVars['counter'] : '';
 	}
-	else $vars['vars']['counter'] = '';
-		
-	$tpl -> template('ajax.add.remove.links.style', $tpath['ajax.add.remove.links.style']);
-	$tpl -> vars('ajax.add.remove.links.style', $vars);
+	else $tVars['counter'] = '';
+	
+	$xt = $twig->loadTemplate($tpath['ajax.add.remove.links.style'].'ajax.add.remove.links.style.tpl');
 	
 	header("Content-Type: text/html; charset=Windows-1251");			
 
 	//echo iconv('WINDOWS-1251', 'UTF-8', $tpl -> show('ajax.add.remove.links.style'));
-	echo $tpl -> show('ajax.add.remove.links.style').($action == 'delete' ? '<!-- add -->' : '<!-- delete -->');
+	echo $xt->render($tVars).($action == 'delete' ? '<!-- add -->' : '<!-- delete -->');
 }
 
 # personal plugin pages for display all user's bookmarks
 function bookmarksPage(){
-	global $SYSTEM_FLAGS, $lang, $userROW, $bookmarksLoaded, $bookmarksList, $template, $config, $template, $tpl;
+	global $SYSTEM_FLAGS, $lang, $userROW, $bookmarksLoaded, $bookmarksList, $template, $config, $template, $tpl, $twig;
 
 	# process bookmarks only for logged in users
 	if (!is_array($userROW)) {
@@ -453,16 +453,11 @@ function bookmarksPage(){
 
 	} # end if have bookmarks
 			
-	if($newslist){
-		$tvars['vars']['all_bookmarks'] = $newslist;
-		$tvars['vars']['no_bookmarks']  = '';
-	} else {
-		$tvars['vars']['all_bookmarks'] = '';
-		$tvars['vars']['no_bookmarks']  = $output_data;
-	}	
+		$tVars['all_bookmarks'] = $newslist;
+		$tVars['count'] = count($bookmarksList);
+
 	
-	$tpl -> template('bookmarks.page', $tpath['bookmarks.page']);
-	$tpl -> vars('bookmarks.page', $tvars);
-		
-	$template['vars']['mainblock'] = $tpl -> show('bookmarks.page');
+	$xt = $twig->loadTemplate($tpath['bookmarks.page'].'bookmarks.page.tpl');
+
+	$template['vars']['mainblock'] = $xt->render($tVars);	
 }
