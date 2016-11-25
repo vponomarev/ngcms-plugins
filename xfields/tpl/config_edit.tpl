@@ -11,6 +11,7 @@ function clx(mode) {
  document.getElementById('type_text').style.display		= (mode == 'text')?		'block':'none';
  document.getElementById('type_textarea').style.display = (mode == 'textarea')?	'block':'none';
  document.getElementById('type_select').style.display	= (mode == 'select')?	'block':'none';
+ document.getElementById('type_multiselect').style.display	= (mode == 'multiselect')?	'block':'none';
  document.getElementById('type_checkbox').style.display	= (mode == 'checkbox')?	'block':'none';
  document.getElementById('type_images').style.display	= (mode == 'images')?	'block':'none';
 }
@@ -126,6 +127,38 @@ function storageMode(mode) {
 </table>
 </div>
 
+<!-- FIELD TYPE: MULTISELECT -->
+<div id="type_multiselect">
+<table border="0" cellspacing="1" cellpadding="1" class="content">
+ <tr class="contRow1">
+  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
+  <td width="45%">{{ lang.xfconfig['tselect_storekeys'] }}</td>
+  <td><select name="select_storekeys_multi">{{ storekeys_opts }}</select></td>
+  </tr>
+ <tr class="contRow1">
+  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
+  <td valign="top">{{ lang.xfconfig['tselect_options'] }}</td>
+  <td>
+   <table id="xfSelectTable_multi" width="100%" cellspacing="0" cellpadding="0" border="0" class="content" style="padding: 0px;">
+   <thead>
+    <tr class="contRow1"><td>Код</td><td>Значение</td><td>&nbsp;</td></tr>
+   </thead>
+   <tbody id="xfSelectRows_multi">
+    {{ m_sOpts }}
+   </tbody>
+   <tfoot>
+    <tr><td colspan="3"><input type="button" id="xfBtnAdd_multi" style="width: 300px;" value=" + Добавить строку"/></td></tr>
+   </tfoot>
+   </table>
+  </td>
+ </tr>
+ <tr class="contRow1">
+  <td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
+  <td>{{ lang.xfconfig['tselect_default'] }}</td><td><input type="text" name="select_default_multi" value="{{ defaults.select }}" size=40></td>
+ </tr>
+</table>
+</div>
+
 <!-- FIELD TYPE: CHECKBOX -->
 <div id="type_checkbox">
 <table border="0" cellspacing="1" cellpadding="1" class="content">
@@ -226,5 +259,35 @@ $("#xfBtnAdd").click(function() {
 		}
 	});
 });
+
+
+var soMaxNum_multi = $('#xfSelectTable_multi >tbody >tr').length+1;
+
+$('#xfSelectTable_multi a').click(function(){
+	if ($('#xfSelectTable_multi >tbody >tr').length > 1) {
+		$(this).parent().parent().remove();
+	} else {
+		$(this).parent().parent().find("input").val('');
+	}
+});
+
+$("#xfBtnAdd_multi").click(function() {
+	var xl = $('#xfSelectTable_multi tbody>tr:last').clone();
+	xl.find("input").val('');
+	xl.find("input").eq(0).attr("name", "mso_data["+soMaxNum_multi+"][0]");
+	xl.find("input").eq(1).attr("name", "mso_data["+soMaxNum_multi+"][1]");
+	soMaxNum_multi++;
+
+	xl.insertAfter('#xfSelectTable_multi tbody>tr:last');
+	$('#xfSelectTable_multi a').click(function(){
+		if ($('#xfSelectTable_multi >tbody >tr').length > 1) {
+			$(this).parent().parent().remove();
+		} else {
+			$(this).parent().parent().find("input").val('');
+		}
+	});
+});
+
+
 
 </script>

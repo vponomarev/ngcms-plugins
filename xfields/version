@@ -4,7 +4,7 @@
 
 ID: xfields
 Name: Custom fields
-Version: 0.24
+Version: 0.25
 Acts: core, admin:mod:news, admin:mod:categories
 File: xfields.php
 Actions: rpc;lib/librpc.php

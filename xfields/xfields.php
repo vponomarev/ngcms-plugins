@@ -238,6 +238,14 @@ class XFieldsNewsFilter extends NewsFilter {
 									$val .= '</select>';
 									$xfEntry['input'] = $val;
 									break;
+					case 'multiselect': 	$val = '<select name="xfields['.$id.'][]" id="form_xfields_'.$id.'" multiple="multiple">';
+									if (!$data['required']) $val .= '<option value=""></option>';
+									if (is_array($data['options']))
+										foreach ($data['options'] as $k => $v)
+											$val .= '<option value="'.secure_html(($data['storekeys'])?$k:$v).'"'.((($data['storekeys'] && $data['default'] == $k)||(!$data['storekeys'] && $data['default'] == $v))?' selected':'').'>'.$v.'</option>';
+									$val .= '</select>';
+									$xfEntry['input'] = $val;
+									break;
 					case 'textarea'  :	$val = '<textarea cols="30" rows="5" name="xfields['.$id.']" id="form_xfields_'.$id.'" >'.$data['default'].'</textarea>';
 									$xfEntry['input'] = $val;
 									break;
@@ -380,6 +388,8 @@ class XFieldsNewsFilter extends NewsFilter {
 			if ($data['storage'] && ($rcall[$id] != ''))
 				$SQL['xfields_'.$id] = $rcall[$id];
 		}
+		
+		//var_dump($xdata);
 
 	    $SQL['xfields']   = xf_encode($xdata);
 		return 1;
@@ -508,6 +518,17 @@ class XFieldsNewsFilter extends NewsFilter {
 								if (is_array($data['options']))
 									foreach ($data['options'] as $k => $v) {
 										$val .= '<option value="'.secure_html(($data['storekeys'])?$k:$v).'"'.((($data['storekeys'] && ($xdata[$id] == $k))||(!$data['storekeys'] && ($xdata[$id] == $v)))?' selected':'').'>'.$v.'</option>';
+									}
+								$val .= '</select>';
+								$xfEntry['input'] = $val;
+								$xfEntries[intval($data['area'])][] = $xfEntry;
+								break;
+				case 'multiselect': 	$val = '<select name="xfields['.$id.'][]" id="form_xfields_'.$id.'" multiple="multiple">';
+								if (!$data['required']) $val .= '<option value="">&nbsp;</option>';
+								if (is_array($data['options']))
+									foreach ($data['options'] as $k => $v) {
+										var_dump();
+										$val .= '<option value="'.secure_html(($data['storekeys'])?$k:$v).'"'.((($data['storekeys'] && (in_array($k, $xdata[$id])))||(!$data['storekeys'] && (in_array($v, $xdata[$id]))))?' selected':'').'>'.$v.'</option>';
 									}
 								$val .= '</select>';
 								$xfEntry['input'] = $val;

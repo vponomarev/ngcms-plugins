@@ -166,14 +166,14 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		);
 
 		$xsel = '';
-		foreach (array('text', 'textarea', 'select', 'checkbox', 'images') as $ts) {
+		foreach (array('text', 'textarea', 'select', 'multiselect', 'checkbox', 'images') as $ts) {
 			$tVars['defaults'][$ts] = ($data['type'] == $ts)?(($ts=="checkbox")?($data['default']?' checked="checked"':''):$data['default']):'';
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == $ts)?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
 
 		$sOpts = array();
 		$fNum = 1;
-		if ($data['type'] == 'select') {
+		if ( $data['type'] == 'select' ) {
 			if (is_array($data['options']))
 				foreach ($data['options'] as $k => $v) {
 					array_push($sOpts, '<tr><td><input size="12" name="so_data['.($fNum).'][0]" type="text" value="'.($data['storekeys']?htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'cp1251'):'').'"/></td><td><input type="text" size="55" name="so_data['.($fNum).'][1]" value="'.htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251').'"/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
@@ -183,9 +183,23 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		if (!count($sOpts)) {
 			array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 		}
+        
+        $m_sOpts = array();
+		$fNum = 1;
+        if ( $data['type'] == 'multiselect' ) {
+			if (is_array($data['options']))
+				foreach ($data['options'] as $k => $v) {
+					array_push($m_sOpts, '<tr><td><input size="12" name="mso_data['.($fNum).'][0]" type="text" value="'.($data['storekeys']?htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'cp1251'):'').'"/></td><td><input type="text" size="55" name="mso_data['.($fNum).'][1]" value="'.htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251').'"/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+					$fNum++;
+				}
+		}
+		if (!count($m_sOpts)) {
+			array_push($m_sOpts, '<tr><td><input size="12" name="mso_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="mso_data[1][1]" value=""/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+		}
 
 		$tVars = $tVars + array(
 			'sOpts'		=> implode("\n", $sOpts),
+            'm_sOpts'		=> implode("\n", $m_sOpts),
 			'type_opts'	=> $xsel,
 			'storekeys_opts'	=> '<option value="0">Сохранять значение</option><option value="1"'.(($data['storekeys'])?' selected':'').'>Сохранять код</option>',
 			'required_opts'		=> '<option value="0">Нет</option><option value="1"'.(($data['required'])?' selected':'').'>Да</option>',
@@ -203,11 +217,15 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 	} else {
 		$sOpts = array();
 		array_push($sOpts, '<tr><td><input size="12" name="so_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="so_data[1][1]" value=""/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+        
+        $m_sOpts = array();
+		array_push($m_sOpts, '<tr><td><input size="12" name="mso_data[1][0]" type="text" value=""/></td><td><input type="text" size="55" name="mso_data[1][1]" value=""/></td><td><a href="#" onclick="return false;"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 
 		$tVars['flags']['editmode'] = 0;
 		$tVars['flags']['disabled'] = false;
 		$tVars = $tVars + array(
 			'sOpts'		=> implode("\n", $sOpts),
+            'm_sOpts'		=> implode("\n", $m_sOpts),
 			'id'		=> '',
 			'title'		=> '',
 			'type'		=> 'text',
@@ -217,7 +235,7 @@ function showAddEditForm($xdata = '', $eMode = NULL, $efield = NULL){
 		);
 
 		$xsel = '';
-		foreach (array('text', 'textarea', 'select', 'checkbox', 'images') as $ts) {
+		foreach (array('text', 'textarea', 'select', 'multiselect', 'checkbox', 'images') as $ts) {
 			$tVars['defaults'][$ts] = '';
 			$xsel .= '<option value="'.$ts.'"'.(($data['type'] == 'text')?' selected':'').'>'.$lang['xfields_type_'.$ts];
 		}
@@ -343,6 +361,60 @@ function doAddEdit() {
 			$data['options'] = $optlist;
 			if (trim($_REQUEST['select_default'])) {
 				$data['default'] = trim($_REQUEST['select_default']);
+				if (
+					(( $data['storekeys']) && (!array_key_exists($data['default'], $optlist))) ||
+					((!$data['storekeys']) && (!in_array($data['default'], $optlist)))
+				   ) {
+					msg(array("type" => "error", "text" => $lang['xfields_msge_errdefault']));
+					$error = 1;
+				}
+			}
+
+			break;
+		case 'multiselect':
+
+			// Check options
+			$optlist = array();
+			$optvals = array();
+
+			if (isset($_REQUEST['mso_data']) && is_array($_REQUEST['mso_data'])) {
+				foreach ($_REQUEST['mso_data'] as $k => $v) {
+					if (is_array($v) && isset($v[0]) && isset($v[1]) && (($v[0] != '') || ($v[1] != ''))) {
+						if ($v[0] != '') {
+							$optlist[$v[0]] = $v[1];
+						} else {
+							$optlist[] = $v[1];
+						}
+						//print "<pre>SO_LINE: ".$v[0].", ".$v[1]."</pre>";
+					}
+				}
+			}
+
+			$opt_vals = array_values($optlist);
+            
+            
+
+			/*
+			$opts = $_REQUEST['select_options'];
+			$optlist = array();
+			$optvals = array();
+			foreach (explode("\n", $opts) as $line) {
+				$line = trim($line);
+				if (preg_match('/^(.+?) *\=\> *(.+?)$/', $line, $match)) {
+					$optlist[$match[1]] = $match[2];
+					$optvals[$match[2]] = 1;
+				} elseif ($line != '') {
+					$optlist[] = $line;
+					$optvals[$line] = 1;
+				}
+			}
+			*/
+
+			$data['storekeys'] = intval($_REQUEST['select_storekeys_multi'])?1:0;
+
+			$data['options'] = $optlist;
+			if (trim($_REQUEST['select_default_multi'])) {
+				$data['default'] = trim($_REQUEST['select_default_multi']);
 				if (
 					(( $data['storekeys']) && (!array_key_exists($data['default'], $optlist))) ||
 					((!$data['storekeys']) && (!in_array($data['default'], $optlist)))
