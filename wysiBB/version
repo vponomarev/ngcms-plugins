@@ -1,0 +1,11 @@
+ID: wysiBB
+Name: Редактор wysiBB
+Version: 0.1
+Actions: core; wysiBB.php
+Type: plugin
+Title: wysiBB
+Description: Визуальны редактор wysiBB
+Information: 
+Author: Nail' R. Davydov (ROZARD)
+Author_URI: http://ngcms.ru/
+preinstall: no
