@@ -1,0 +1,1 @@
+new Jodit('.bb_code');

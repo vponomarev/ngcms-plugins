@@ -1,0 +1,12 @@
+ID: wysiwyg
+Name: Редактор wysiwyg
+Version: 0.1
+Actions: core; wysiwyg.php
+Config: config.php
+Type: plugin
+Title: wysiwyg
+Description: Визуальный редактор wysiwyg
+Information: 
+Author: Nail' R. Davydov (ROZARD)
+Author_URI: http://ngcms.ru/
+preinstall: no
