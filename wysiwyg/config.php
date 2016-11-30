@@ -6,7 +6,8 @@ plugins_load_config();
 
 LoadPluginLang('wysiwyg', 'config');
 
-$bb_list = array_merge(array(pluginGetVariable($plugin, 'bb_editor')), ListFiles(extras_dir.'/wysiwyg/bb_code', ''));
+$bb_list[] = 'Стандартный';
+$bb_list = array_merge($bb_list, ListFiles(extras_dir.'/wysiwyg/bb_code', ''));
 
 //print '<pre>'.var_export($bb_list).'</pre>';
 

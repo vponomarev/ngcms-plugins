@@ -2,13 +2,10 @@
 
 if (!defined('NGCMS')) die ( 'HAL' );
 
-add_act('core', 'plugin_wysiwyg');
-
-function plugin_wysiwyg()
-{global $twig;
-	
+function bb(&$tvars){
 	$name_bb = pluginGetVariable('wysiwyg', 'bb_editor');
 	$includ_bb = array();
+	$isBBCode = false;
 	switch($name_bb){
 		case 'wysibb':
 			$js_array = array();
@@ -48,51 +45,60 @@ function plugin_wysiwyg()
 	}
 	
 	$array_bb = array_merge($js_array, $css_array);
-	//print '<pre>'.var_export($array_bb).'</pre>';
 	
-	$twig->addGlobalRef('includ_bb', implode($array_bb, "\n"));
-	$twig->addFunction('DisplayTextForm', new Twig_Function_Function('EntryField'));
+	if(!is_array($array_bb)) return;
+	
+	$tvars['includ_bb'] = implode($array_bb, "\n");
+	$tvars['attributBB'] = 'bb_code';
+	$tvars['isBBCode'] = true;
 }
 
-function EntryField($params){	
-	//print '<pre>'.var_export($params).'</pre>';
-	
-	//print '<pre>'.var_export(pluginGetVariable('wysiwyg', 'bb_editor')).'</pre>';
-	
-	$name_bb = pluginGetVariable('wysiwyg', 'bb_editor');
-
-	$value = $params['values'];
-	$name = $params['name'];
-	$id = $params['id'];
-	$class = $params['class'];
-	
-	switch($name_bb){
-		case 'wysibb':
-		case 'jodit':
-		case 'tinymce':
-			if(empty($class))
-				$class = 'bb_code';
-			else
-				$class .= ' bb_code';
-		break;
-		default: $id = (isset($params['id']))?$id:'ng_news_content';
+class wysiwygNewsFilter extends NewsFilter {
+	function addNewsForm(&$tvars)
+	{
+		bb($tvars);
+		
+		return true;
 	}
 	
-	$options = '';
-	if(is_array($params['options']) && $params['options'])
-		$options = ' '.implode($params['options'], ' ');
-	else 
-		$options = ' '.$params['options'];
-	
- 	switch($params['type']){
-		case 'textarea':
-			$form = "<textarea{$options}".(isset($name) && $name?' name="'.$name.'"':'').(isset($id) && $id?' id="'.$id.'"':'').(isset($class) && $class?' class="'.$class.'"':'').">{$value}</textarea>";
-		break;
-		case 'input':
-			$form = "<input{$options}".(isset($value) && $value?' value="'.$value.'"':'').(isset($name) && $name?' name="'.$name.'"':'').(isset($id) && $id?' id="'.$id.'"':'').(isset($class) && $class?' class="'.$class.'"':'')." />";
-		break;
-		default: return '';
+	function editNewsForm($newsID, $SQLnews, &$tvars)
+	{ 
+		bb($tvars);
+		
+		return true;
 	}
-	
-	return $form;
 }
+
+class wysiwygStaticFilter extends StaticFilter {
+	function addStaticForm(&$tvars)
+	{ 
+		bb($tvars);
+		
+		return true;
+	}
+	
+	function editStaticForm($staticID, $SQLnews, &$tvars)
+	{
+		bb($tvars);
+		
+		return true; 
+	}
+}
+
+if(getPluginStatusActive('comments')){
+	loadPluginLibrary('comments', 'lib');
+	
+	class wysiwygFilterComments extends FilterComments {
+		function addCommentsForm($newsID, &$tvars)
+		{
+			bb($tvars);
+			
+			return true;
+		}
+	}
+	
+	register_filter('comments', 'wysiwyg', new wysiwygFilterComments);
+}
+
+register_filter('static', 'wysiwyg', new wysiwygStaticFilter);
+register_filter('news', 'wysiwyg', new wysiwygNewsFilter);
