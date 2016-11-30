@@ -1,11 +1,11 @@
 ID: wysiwyg
-Name: Р РµРґР°РєС‚РѕСЂ wysiwyg
+Name: Редактор wysiwyg
 Version: 0.1
 Actions: core; wysiwyg.php
 Config: config.php
 Type: plugin
 Title: wysiwyg
-Description: Р’РёР·СѓР°Р»СЊРЅС‹Р№ СЂРµРґР°РєС‚РѕСЂ wysiwyg
+Description: Визуальный редактор wysiwyg
 Information: 
 Author: Nail' R. Davydov (ROZARD)
 Author_URI: http://ngcms.ru/
