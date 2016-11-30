@@ -23,7 +23,11 @@ class auth_punbb {
 
 		// We need additional connection to DB server
 		if (extra_get_param('auth_punbb','extdb')) {
-			$this->auth_db = new mysql;
+			if(function_exists('DBLoad'))
+				$this->auth_db = DBLoad();
+			else
+				$this->auth_db = new mysql;
+			
 			$this->auth_db->connect(extra_get_param('auth_punbb','dbhost'), extra_get_param('auth_punbb','dblogin'), extra_get_param('auth_punbb','dbpass'), extra_get_param('auth_punbb','dbname'), 1);
 			if ($this->auth_db->error) {
 				print "<br />Can't connect to SQL DB<br />\n";

@@ -4,7 +4,7 @@
 
 ID: auth_punbb
 Name: punBB forum auth
-Version: 0.05
+Version: 0.07
 Acts: auth
 Install: install.php
 File: auth_punbb.php

@@ -23,7 +23,11 @@ class auth_vb {
 
 		// We need additional connection to DB server
 		if (extra_get_param('auth_vb','extdb')) {
-			$this->auth_db = new mysql;
+			if(function_exists('DBLoad'))
+				$this->auth_db = DBLoad();
+			else
+				$this->auth_db = new mysql;
+			
 			$this->auth_db->connect(extra_get_param('auth_vb','dbhost'), extra_get_param('auth_vb','dblogin'), extra_get_param('auth_vb','dbpass'), extra_get_param('auth_vb','dbname'), 1);
 			if ($this->auth_db->error) {
 				print "<br />Can't connect to SQL DB<br />\n";
