@@ -22,68 +22,68 @@ function bb_codes($text){
 	
 	$text = split_text($text, 200);	 
 	
-	$bb_open[] = '#\[b\](.+?)\[/b\]#is';
+	$bb_open[] = '/\[b\](.*?)\[\/b\]/is';
 	$bb_close[] = '<b>\\1</b>';
 	
-	$bb_open[] = '#\[i\](.+?)\[/i\]#is';
+	$bb_open[] = '/\[i\](.*?)\[\/i\]/is';
 	$bb_close[] = '<i>\\1</i>';
 	
-	$bb_open[] = '#\[u\](.+?)\[/u\]#is';
+	$bb_open[] = '/\[u\](.*?)\[\/u\]/is';
 	$bb_close[] = '<u>\\1</u>';
 	
-	$bb_open[] = '#\[s\](.+?)\[/s\]#is';
+	$bb_open[] = '/\[s\](.*?)\[\/s\]/is';
 	$bb_close[] = '<s>\\1</s>';
 	
-	$bb_open[] = '#\[php\](.+?)\[/php\]#ies';
-	$bb_close[] = 'forum_code_tag(\'php\', \'\\1\')';
+	$bb_open_f[] = '#\[php\](.+?)\[/php\]#is';
+	$bb_close_f[] = array('forum_code_tag', 'php', '1');
 	
-	$bb_open[] = '#\[html\](.+?)\[/html\]#ies';
-	$bb_close[] = 'forum_code_tag(\'html\', \'\\1\')';
+	$bb_open_f[] = '#\[html\](.+?)\[/html\]#is';
+	$bb_close_f[] = array('forum_code_tag', 'html', '1');; 
 	
-	$bb_open[] = '#\[code=([^\]]+?)\](.+?)\[/code=php\]#ies';
-	$bb_close[] = 'forum_code_tag(\'\\1\', \'\\2\')';
+	$bb_open_f[] = '#\[code=([^\]]+?)\](.+?)\[/code=php\]#is';
+	$bb_close_f[] = array('forum_code_tag', '1', '2');
 	
-	$bb_open[] = '#\[code=([^\]]+?)\](.+?)\[/code\]#ies';
-	$bb_close[] = 'forum_code_tag(\'\\1\', \'\\2\')';
+	$bb_open_f[] = '#\[code=([^\]]+?)\](.+?)\[/code\]#is';
+	$bb_close_f[] = array('forum_code_tag', '1', '2');
 	
-	$bb_open[] = '#\[quote\]#ie';
-	$bb_close[] = 'forum_open_quote_tag()';
+	$bb_open_f[] = '#\[quote\]#i';
+	$bb_close_f[] = array('forum_open_quote_tag');
 	
-	$bb_open[] = '#\[quote=([^\]]+?)\]#ies';
-	$bb_close[] = 'forum_quote_tag(\'\\1\')';
+	$bb_open_f[] = '#\[quote=([^\]]+?)\]#is';
+	$bb_close_f[] = array('forum_quote_tag', '1');
 	
-	$bb_open[] = '#\[/quote\]#ie';
-	$bb_close[] = 'forum_close_quote_tag()';
+	$bb_open_f[] = '#\[/quote\]#i';
+	$bb_close_f[] = array('forum_close_quote_tag');
 	
-	$bb_open[] = '#\[img\](.+?)\[/img\]#ie';
-	$bb_close[] = 'forum_img_tag(\'\\1\')';
+	$bb_open_f[] = '#\[img\](.+?)\[/img\]#i';
+	$bb_close_f[] = array('forum_img_tag', '1');
 	
-	$bb_open[] = '#\[img title=([^\]]+?)\\](.+?)\[/img\]#ie';
-	$bb_close[] = 'forum_img_tag(\'\\2\',\'\\1\')';
+	$bb_open_f[] = '#\[img title=([^\]]+?)\\](.+?)\[/img\]#i';
+	$bb_close_f[] = array('forum_img_tag', '2', '1');
 	
-	$bb_open[] = '#\[img\s*=\s*\&quot\;\s*(\S+?)\s*\&quot\;\s*\](.*?)\[\/img\]#ie';
-	$bb_close[] = 'forum_img_tag(\'\\2\',\'\\1\')';
+	$bb_open_f[] = '#\[img\s*=\s*\&quot\;\s*(\S+?)\s*\&quot\;\s*\](.*?)\[\/img\]#i';
+	$bb_close_f[] = array('forum_img_tag', '2', '1');
 	
-	$bb_open[] = '#\[img\s*=\s*(\S+?)\s*\](.*?)\[\/img\]#ie';
-	$bb_close[] = 'forum_img_tag(\'\\2\',\'\\1\')';
+	$bb_open_f[] = '#\[img\s*=\s*(\S+?)\s*\](.*?)\[\/img\]#i';
+	$bb_close_f[] = array('forum_img_tag', '2', '1');
 	
-	$bb_open[] = '#\[url\](\S+?)\[/url\]#ie';
-	$bb_close[] = 'forum_url_tag(\'\\1\', \'\\1\')';
+	$bb_open_f[] = '#\[url\](\S+?)\[/url\]#i';
+	$bb_close_f[] = array('forum_url_tag', '1', '1');
 	
-	$bb_open[] = '#\[url\s*=\s*\&quot\;\s*(\S+?)\s*\&quot\;\s*\](.*?)\[\/url\]#ie';
-	$bb_close[] = 'forum_url_tag(\'\\1\', \'\\2\')';
+	$bb_open_f[] = '#\[url\s*=\s*\&quot\;\s*(\S+?)\s*\&quot\;\s*\](.*?)\[\/url\]#i';
+	$bb_close_f[] = array('forum_url_tag', '1', '2');
 	
-	$bb_open[] = '#\[url\s*=\s*(\S+?)\s*\](.*?)\[\/url\]#ie';
-	$bb_close[] = 'forum_url_tag(\'\\1\', \'\\2\')';
+	$bb_open_f[] = '#\[url\s*=\s*(\S+?)\s*\](.*?)\[\/url\]#i';
+	$bb_close_f[] = array('forum_url_tag', '1', '2');
 	
-	$bb_open[] = '#\[size=([0-9]+)\](.+?)\[/size\]#ies';
-	$bb_close[] = 'forum_size_tag(\'\\1\', \'\\2\')';
+	$bb_open_f[] = '#\[size=([0-9]+)\](.+?)\[/size\]#is';
+	$bb_close_f[] = array('forum_size_tag', '1', '2');
 	
-	$bb_open[] = '#\[color=([\#0-9a-zA-Z]+)\](.+?)\[/color\]#ies';
-	$bb_close[] = 'forum_color_tag(\'\\1\', \'\\2\')';
+	$bb_open_f[] = '#\[color=([\#0-9a-zA-Z]+)\](.+?)\[/color\]#is';
+	$bb_close_f[] = array('forum_color_tag', '1', '2');
 	
-	$bb_open[] = '#\[font=([a-zA-Z\s]+)\](.*?)\[/font\]#ies';
-	$bb_close[] = 'forum_font_tag(\'\\1\', \'\\2\')';
+ 	$bb_open_f[] = '#\[font=([a-zA-Z\s]+)\](.*?)\[/font\]#is';
+	$bb_close_f[] = array('forum_font_tag', '1', '2');
 	
 	while( preg_match( '#\n?\[list\](.+?)\[/list\]\n?#ies' , $text ) ){
 		$text = preg_replace( '#\n?\[list\](.+?)\[/list\]\n?#ies', 'forum_list_tag(\'\\1\', \'0\')' , $text );
@@ -94,7 +94,8 @@ function bb_codes($text){
 	}
 	
 	$text=preg_replace($bb_open, $bb_close, $text);
-	unset($bb_open, $bb_close);
+	$text=_preg_replace($bb_open_f, $bb_close_f, $text);
+	unset($bb_open, $bb_close, $bb_open_f, $bb_close_f);
 	
 	$tag = array(
 		':/ '		=>	'<img src="'.$tpath['url::'].'/smiles/12.gif" />',
@@ -113,7 +114,7 @@ function bb_codes($text){
 		';)'		=>	'<img src="'.$tpath['url::'].'/smiles/11.gif" />',
 		':P'		=>	'<img src="'.$tpath['url::'].'/smiles/13.gif" />',
 		':mad:'		=>	'<img src="'.$tpath['url::'].'/smiles/14.gif" />',
-		':sick:'		=>	'<img src="'.$tpath['url::'].'/smiles/14.gif" />',
+		':sick:'	=>	'<img src="'.$tpath['url::'].'/smiles/14.gif" />',
 
 		'[c]'		=>	'&copy;',
 		'[tm]'		=>	'&#153;',
@@ -136,6 +137,22 @@ function bb_codes($text){
 	return trim($text);
 }
 
+function _preg_replace($pattern, $replacement, $subject){
+	if(is_array($pattern)){
+		foreach($pattern as $key => $value){
+			$subject = preg_replace_callback(
+				$value,
+				function ($match) use (&$replacement, &$key) {
+					return call_user_func($replacement[$key][0], $match[$replacement[$key][1]], $match[$replacement[$key][2]]);
+				},
+				$subject
+			);
+		}
+	}
+	
+	return $subject;
+}
+
 function split_text($text, $width = 90, $break = "\n") 
 {
 	return preg_replace('#([^\s]{'. $width .'})#s', '$1'. $break , $text);
@@ -151,7 +168,7 @@ function forum_list_tag($list, $num){
 }
 
 function forum_list_item_tag($list){
-	$bb_open[] = '#\n?\[\*\](.+?)\[/\*\]\n?#ies';
+	$bb_open[] = '#\n?\[\*\](.+?)\[/\*\]\n?#is';
 	$bb_close[] = "'<li>\\1</li>'";
 	
 	$list=preg_replace($bb_open, $bb_close, $list);

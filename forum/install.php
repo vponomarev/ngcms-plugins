@@ -280,13 +280,13 @@ function plugin_forum_install($action) {
 		case 'confirm':generate_install_page('forum', 'Ознакомление с лицензией'); break;
 		case 'apply':
 			if(!file_exists(files_dir . 'forum')){
-				print '1';
 				if(!@mkdir(files_dir . 'forum', 0777)){
 					msg(array("type" => "error", "text" => "Критическая ошибка <br /> не удалось создать папку ".files_dir . 'forum'), 1);
 					$install = false;
 				}
 			}
 			
+			if(!file_exists(confroot.'extras')) @mkdir(confroot.'extras', 0777);
 			if(!file_exists(confroot.'extras/forum')){
 				if(!@mkdir(confroot.'extras/forum', 0777)){
 					msg(array("type" => "error", "text" => "Критическая ошибка <br /> не удалось создать папку ".confroot.'extras/forum'), 1);
