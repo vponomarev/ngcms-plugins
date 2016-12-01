@@ -73,7 +73,10 @@
 			if(strtolower($row['mail']) == strtolower($mail)) {
 				$error_text['mail'] = 'Этот e-mail уже зарегистирован';
 			}
-			$error_text['name'] = 'Этот логин уже зарегистирован';
+			
+			if(strtolower($row['name']) == strtolower($name)){
+				$error_text['name'] = 'Этот логин уже зарегистирован';
+			}
 		}
 		
 		$regstatus = 4;
