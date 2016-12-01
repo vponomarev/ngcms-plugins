@@ -4,9 +4,11 @@
 
 ID: bb_media
 Name: MEDIA bb code
-Version: 0.08
-Acts: news_short, news_full
+Version: 0.09
+Acts: index, news_short, news_full
+Config: config.php
 File: bb_media.php
+Install: install.php
 Type: plugin
 Title: BB код [MEDIA]
 Description: BB код [MEDIA]

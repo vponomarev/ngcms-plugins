@@ -4,6 +4,8 @@
 
 Плагин добавляет поддержку BB кода [MEDIA]
 
+Поддерживает на выбор 2 вида плееров:
+1) JW Player
 Для показа используется Flash плеер JW Player (http://www.jeroenwijering.com/).
 Типы файлов, поддерживаемые плеером:
 #> Видео:
@@ -11,7 +13,7 @@
  * FLV8
  * H.264
  * Youtube
-#> Аудио 
+#> Аудио
  * MP3
  * AAC
 #> Изображения
@@ -23,20 +25,22 @@
 для этого используется HTML конструкция <object type="application/pdf" data="..."></object>
 т.е. для корректного отображения необходимо наличие PDF плагина в браузере пользователя (обычно она есть).
 
+2) video-js
+Для показа используется video-js (http://www.videojs.com/).
+
 
 Формат использования тега:
 1. [media]<URL объекта>[/media]
 2. [media width="<Ширина>" height="<Высота>" preview="<URL картинки preview>"]<URL объекта>[/media]
-Параметры width, height, preview - необязательные, можно использовать любые из них.
+Параметры:
+width, height, preview - необязательные, можно использовать любые из них.
 Ширина (width) и высота (height) может задаваться как в пикселях, так и в процентах (например: "90%")
 URL картинки-превьюшки (preview) должен начинаться на "http://" и ссылаться на файл с разширение png или jpg
-
+autoplay, loop, muted, preload, controls - true/false/auto
 
 Для добавления видео с YouTube в качестве <URL объекта> необходимо
 указать URL страницы с видео YouTube
 
 Примеры использования:
-[media]/my.mp3[/media]
-[media width="400" height="200"]http://my.ru/video.flv[/media]
+[media width="400" height="200"]http://my.ru/video.mp4[/media]
 [media]http://www.youtube.com/watch?v=3pBdrQSsoiI&feature=dir[/media]
-
