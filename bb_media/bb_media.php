@@ -10,9 +10,7 @@ class BBmediaNewsfilter extends NewsFilter
     {
         $player_name = pluginGetVariable('bb_media', 'player_name');
         $player_handler = __DIR__.'/players/'.$player_name.'/bb_media.php';
-        var_dump($player_name);
         if (file_exists($player_handler)) {
-
             include_once($player_handler);
         }
     }
