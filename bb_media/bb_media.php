@@ -21,7 +21,7 @@ class BBmediaNewsfilter extends NewsFilter
             $tvars['vars']['short-story'] = $t;
         }
         if (($t = bbMediaProcess($tvars['vars']['full-story'])) !== false) {
-            $tvars['vars']['short-story'] = $t;
+            $tvars['vars']['full-story'] = $t;
         }
 
         if (($t = bbMediaProcess($tvars['vars']['news']['short'])) !== false) {
