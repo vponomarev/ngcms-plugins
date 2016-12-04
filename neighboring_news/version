@@ -1,0 +1,17 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+ 
+ID: neighboring_news
+Name: Соседние новости
+Version: 0.4
+Acts: news
+File: neighboring_news.php
+Config: config.php
+Type: plugin
+Description: Предыдущая и следующая новости
+Author: Alexey N. Zhukov (Wolverine)
+Author_URI: http://digitalplace.ru/
+Title: Предыдущая и следующая новости
+Information: Добавляет новые переменные управления следующей и предыдущей новостью.
+Preinstall: no
