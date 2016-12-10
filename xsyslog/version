@@ -1,6 +1,6 @@
 ID: xsyslog
 Name: Журнал действий пользователей
-Version: 0.1
+Version: 0.2
 Config: config.php
 Type: plugin
 Title: Журнал действий пользователей

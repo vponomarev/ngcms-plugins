@@ -4,7 +4,7 @@
 
 ID: pm
 Name: Личные сообщения
-Version: 0.5
+Version: 0.6
 Acts: usermenu, ppages 
 Actions: rpc; pm_ajax.php
 File: pm.php

@@ -4,7 +4,7 @@
 
 ID: jchat
 Name: AJAX chat
-Version: 0.08
+Version: 0.09
 Acts: index, ppages
 File: jchat.php
 Config: config.php

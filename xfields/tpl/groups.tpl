@@ -74,8 +74,8 @@ border: #CFCFCF 1px solid;
 }
 
 </style>
-<script type="text/javascript" src="{{ admin_url }}/includes/js/ajax.js"></script>
-<script type="text/javascript" src="{{ admin_url }}/includes/js/admin.js"></script>
+<script type="text/javascript" src="{{ scriptLibrary }}/ajax.js"></script>
+<script type="text/javascript" src="{{ scriptLibrary }}/admin.js"></script>
 
 <div id="loading-layer"><img src="{{ tpl_url }}/images/loading.gif" alt="" /></div>
 

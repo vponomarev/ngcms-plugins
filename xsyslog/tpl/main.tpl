@@ -1,6 +1,6 @@
-<script type="text/javascript" src="{{home}}/engine/includes/js/ajax.js"></script>
-<script type="text/javascript" src="{{home}}/engine/includes/js/admin.js"></script>
-<script type="text/javascript" src="{{home}}/engine/includes/js/libsuggest.js"></script>
+<script type="text/javascript" src="{{ scriptLibrary }}/ajax.js"></script>
+<script type="text/javascript" src="{{ scriptLibrary }}/admin.js"></script>
+<script type="text/javascript" src="{{ scriptLibrary }}/libsuggest.js"></script>
 
 <script language="javascript" type="text/javascript">
 <!--
