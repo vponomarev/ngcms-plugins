@@ -9,7 +9,7 @@ function bb(&$tvars){
 	switch($name_bb){
 		case 'wysibb':
 			$js_array = array();
-			foreach ( array('//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/jquery.wysibb.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/wysibb.js')  as $value) {
+			foreach ( array(admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/jquery.wysibb.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/wysibb.js')  as $value) {
 				$js_array[] = '<script type="text/javascript" src="'.$value.'"></script>';
 				
 			}
@@ -20,7 +20,7 @@ function bb(&$tvars){
 		break;
 		case 'jodit';
 			$js_array = array();
-			foreach ( array('//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/jodit.min.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/jodit.js')  as $value) {
+			foreach ( array(admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/jodit.min.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/jodit.js')  as $value) {
 				$js_array[] = '<script type="text/javascript" src="'.$value.'"></script>';
 				
 			}
@@ -31,7 +31,7 @@ function bb(&$tvars){
 		break;
 		case 'tinymce':
 			$js_array = array();
-			foreach ( array('//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/tinymce.min.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/tinymce.js')  as $value) {
+			foreach ( array(admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/tinymce.min.js', admin_url.'/plugins/wysiwyg/bb_code/'.$name_bb.'/tinymce.js')  as $value) {
 				$js_array[] = '<script type="text/javascript" src="'.$value.'"></script>';
 				
 			}
