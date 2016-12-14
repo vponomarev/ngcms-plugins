@@ -4,7 +4,7 @@
 
 ID: archive
 Name: Show news archive
-Version: 0.06
+Version: 0.07
 Acts: index
 File: archive.php
 Config: config.php
@@ -12,7 +12,7 @@ Type: widget
 Title: јрхив новостей
 Description: ѕоказать архив новостей сайта
 Information: ќтображает список мес€цев, в которые были размещены новости. ѕри клике на конкретный мес€ц будут отображатьс€ новости за этот мес€ц.
-Preinstall: default_yes
+Preinstall: default_no
 Preinstall_vars: maxnum="12"; counter="1"; cache="1"; cacheExpire="3600";
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/

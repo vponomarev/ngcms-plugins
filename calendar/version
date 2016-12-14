@@ -4,7 +4,7 @@
 
 ID: calendar
 Name: Show news calendar
-Version: 0.10
+Version: 0.11
 Acts: index, twig, rpc
 File: calendar.php
 Config: config.php
@@ -14,5 +14,5 @@ Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 Title:  алендарь новостей
 Information: ќтображение данных о новост€х по выбранному мес€цу, при этом дни, когда были новости, выдел€ютс€.
-Preinstall: default_yes
+Preinstall: default_no
 Preinstall_vars: cache="1"; cacheExpire="3600";
