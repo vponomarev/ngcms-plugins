@@ -170,12 +170,12 @@ class auth_basic extends CoreAuthPlugin {
 		global $config, $lang;
 		$params = array();
 		LoadPluginLang('auth_basic', 'auth','','auth');
-		array_push($params, array('name' => 'login', 'id' => 'reg_login', title => $lang['auth_login'], 'descr' => $lang['auth_login_descr'],'type' => 'input'));
+		array_push($params, array('name' => 'login', 'id' => 'reg_login', 'title' => $lang['auth_login'], 'descr' => $lang['auth_login_descr'],'type' => 'input'));
 		if ($config['register_type'] >= 3) {
             array_push($params, array('id' => 'reg_password', 'name' => 'password', title => $lang['auth_pass'], 'descr' => $lang['auth_pass_descr'], 'type' => 'password'));
 			array_push($params, array('id' => 'reg_password2', 'name' => 'password2', title => $lang['auth_pass2'], 'descr' => $lang['auth_pass2_descr'],'type' => 'password'));
 		}
-		array_push($params, array('name' => 'email', id => 'reg_email', title => $lang['auth_email'], 'descr' => $lang['auth_email_descr'],'type' => 'input'));
+		array_push($params, array('name' => 'email', id => 'reg_email', 'title' => $lang['auth_email'], 'descr' => $lang['auth_email_descr'],'type' => 'input'));
 		return $params;
 	}
 
