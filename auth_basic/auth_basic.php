@@ -560,7 +560,7 @@ class auth_basic extends CoreAuthPlugin {
 					break;
 				case 2:
 					if (!preg_match('#^[À-ßà-ÿ¸¨A-Za-z0-9\.\_\-]+$#s', $params['login'])) {
-						print "CASE2-err [".$values['login']."]";
+						print "CASE2-err [".$params['login']."]";
 						$csError = true;
 					}
 					break;
