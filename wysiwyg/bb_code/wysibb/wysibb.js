@@ -3,4 +3,4 @@ $(document).ready(function() {
 		lang : 	 "ru"
 	}
 	$(".bb_code").wysibb(wbbOpt)
-})
+});
