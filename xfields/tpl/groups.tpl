@@ -77,7 +77,7 @@ border: #CFCFCF 1px solid;
 <script type="text/javascript" src="{{ scriptLibrary }}/ajax.js"></script>
 <script type="text/javascript" src="{{ scriptLibrary }}/admin.js"></script>
 
-<div id="loading-layer"><img src="{{ tpl_url }}/images/loading.gif" alt="" /></div>
+<div id="loading-layer"><img src="{{ skins_url }}/images/loading.gif" alt="" /></div>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="content">
 <tbody>
