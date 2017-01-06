@@ -303,14 +303,11 @@ class LinkfeedClient {
         if ($fp) {
             clearstatcache();
             $length = @filesize($filename);
-            $mqr = get_magic_quotes_runtime();
-            set_magic_quotes_runtime(0);
             if ($length) {
                 $data = @fread($fp, $length);
             } else {
                 $data = '';
             }
-            set_magic_quotes_runtime($mqr);
             @flock($fp, LOCK_UN);
             @fclose($fp);
 

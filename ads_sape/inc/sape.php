@@ -258,14 +258,11 @@ class SAPE_base {
         if ($fp) {
             clearstatcache();
             $length = @filesize($filename);
-            $mqr = @get_magic_quotes_runtime();
-            @set_magic_quotes_runtime(0);
             if ($length) {
                 $data = @fread($fp, $length);
             } else {
                 $data = '';
             }
-                @set_magic_quotes_runtime($mqr);
             @flock($fp, LOCK_UN);
             @fclose($fp);
 
@@ -284,10 +281,7 @@ class SAPE_base {
         if ($fp) {
             if (flock($fp, LOCK_EX | LOCK_NB)) {
                 ftruncate($fp, 0);
-                $mqr = @get_magic_quotes_runtime();
-                @set_magic_quotes_runtime(0);
                 @fwrite($fp, $data);
-                @set_magic_quotes_runtime($mqr);
                 @flock($fp, LOCK_UN);
                 @fclose($fp);
 
