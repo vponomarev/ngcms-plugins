@@ -15,7 +15,7 @@
 	<option value="">Выберите тип ошибки..</option>
 	{errorlist}
 	</select>
-	<input type="submit" class="report" value="Отправить" onclick="if (document.getElementById('errorSelect').value==''){alert('Необходимо выбрать тип ошибки!'); return false;}; this.disabled=true;"/>
+	<input type="submit" class="report" value="Отправить" onclick="if (document.getElementById('errorSelect').value==''){alert('Необходимо выбрать тип ошибки!'); return false;}; "/>
 	</form>
 </div>
 </div>

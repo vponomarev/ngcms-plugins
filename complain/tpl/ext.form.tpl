@@ -18,11 +18,11 @@ body { font : normal 12px verdana, sans-serif; }
 <div id="senderror">
 <div class="texth">
 <u>Сообщить об ошибке:</u><br/><br/>
-Тип ошибки: <select name="error" class="error">{errorlist}</select><br/><br/>
+Тип ошибки: <select name="error" class="error" id="errorSelect">{errorlist}</select><br/><br/>
 [email]Ваш e-mail: <input type="text" name="mail"/><br/>[/email]
 [notify]<input type="checkbox" name="notify" value="1"/> информировать о решении проблемы <br/>[/notify]
 [text]Детальное описание проблемы:<br/><textarea cols="80" rows="4" name="error_text"></textarea><br/>[/text]
-<input type="submit" class="report" onclick="this.disabled=true;" value="Отправить"/>
+<input type="submit" class="report" onclick="if (document.getElementById('errorSelect').value==''){alert('Необходимо выбрать тип ошибки!'); return false;};"value="Отправить"/>
 </div>	
 </div>
 </form>
