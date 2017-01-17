@@ -48,7 +48,7 @@
           <div class="person-photo"><img src="{{ avatar }}" width="60" height="60"></div>
           <div class="person-name">{% if entry.author == 'guest' %} {{ entry.fields.firstname.value }} {{ entry.fields.lastname.value }}{% else %}{{ entry.author }}{% endif %}</div>
           <div class="review-date">{{ entry.date }}</div>
-          <div class="review-subject">Ремонтировали - {{ entry.fields.item.value }}</div>
+          <div class="review-subject">{{ entry.fields.item.value }}</div>
         </div>
         <div class="review-caption"><p>{{entry.message}}</p></div>
         {% if(global.user.id) and (global.user.status == '1') %}
@@ -110,19 +110,23 @@
       Ваш комментарий будет опубликован от имени <strong>{{global.user.name}}</strong>
       <input type="hidden" name="author" value="{{global.user.name}}"/>
     {% else %}
+    {% if(fields.firstname) %}
     <div class="col-xs-12 col-sm-4 col-md-3">
       <div class="form-group">
         <label>{{ fields.firstname.name }}</label>
         <input type="text" class="form-control required" placeholder="{{ fields.firstname.placeholder }}" name="{{ fields.firstname.id }}" value="{{ fields.firstname.default_value }}">
       </div>
     </div>
+    {% endif %}
 
+    {% if(fields.lastname) %}
     <div class="col-xs-12 col-sm-4 col-md-3">
       <div class="form-group">
         <label>{{ fields.lastname.name }}</label>
         <input type="text" class="form-control required" placeholder="{{ fields.lastname.placeholder }}" name="{{ fields.lastname.id }}" value="{{ fields.lastname.default_value }}">
       </div>
     </div>
+    {% endif %}
 
     <input type="hidden" name="author" value="guest"/>
 
@@ -133,10 +137,12 @@
     {% else %}
       <div class="col-xs-12 col-sm-4 col-md-3 col-md-offset-3">
     {% endif %}
+      {% if(fields.item) %}
       <div class="form-group">
         <label>{{ fields.item.name }}</label>
         <input type="text" class="form-control required" placeholder="{{ fields.item.placeholder }}" name="{{ fields.item.id }}" value="{{ fields.item.default_value }}">
       </div>
+      {% endif %}
     </div>
 
     <div class="col-xs-12 col-md-12">
