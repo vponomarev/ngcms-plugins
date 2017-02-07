@@ -20,15 +20,17 @@ if (!defined('NGCMS'))
 
 class timer {
 
-function start_forum() {
+	function start_forum() {
+
 		list($msec, $sec) = explode(' ', microtime());
-		$this->script_start = (float) $sec + (float) $msec;
+		$this->script_start = (float)$sec + (float)$msec;
 		$this->last_event = $this->script_start;
 	}
 
 	function stop_forum() {
+
 		list($msec, $sec) = explode(' ', microtime());
-		$script_end = (float) $sec + (float) $msec;
+		$script_end = (float)$sec + (float)$msec;
 		$elapsed_time = round($script_end - $this->script_start, 4);
 
 		return $elapsed_time;

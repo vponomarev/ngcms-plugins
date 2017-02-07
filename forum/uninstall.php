@@ -1,66 +1,62 @@
 <?php
-
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-
 //
 // Configuration file for plugin
 //
-
 plugins_load_config();
-
 $db_update = array(
 	array(
-		'table'		=>	'forum_complaints',
-		'action'	=>	'drop',
+		'table'  => 'forum_complaints',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_attach',
-		'action'	=>	'drop',
+		'table'  => 'forum_attach',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_thank',
-		'action'	=>	'drop',
+		'table'  => 'forum_thank',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_news',
-		'action'	=>	'drop',
+		'table'  => 'forum_news',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_forums',
-		'action'	=>	'drop',
+		'table'  => 'forum_forums',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_topics',
-		'action'	=>	'drop',
+		'table'  => 'forum_topics',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_posts',
-		'action'	=>	'drop',
+		'table'  => 'forum_posts',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_online',
-		'action'	=>	'drop',
+		'table'  => 'forum_online',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_group',
-		'action'	=>	'drop',
+		'table'  => 'forum_group',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_moderators',
-		'action'	=>	'drop',
+		'table'  => 'forum_moderators',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_permission',
-		'action'	=>	'drop',
+		'table'  => 'forum_permission',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_subscriptions',
-		'action'	=>	'drop',
+		'table'  => 'forum_subscriptions',
+		'action' => 'drop',
 	),
 	array(
-		'table'		=>	'forum_reputation',
-		'action'	=>	'drop',
+		'table'  => 'forum_reputation',
+		'action' => 'drop',
 	),
 	array(
 		'table'  => 'news',
@@ -82,7 +78,6 @@ $db_update = array(
 		)
 	),
 );
-
 if ($_REQUEST['action'] == 'commit') {
 	if (fixdb_plugin_install($plugin, $db_update, 'deinstall')) {
 		plugin_mark_deinstalled($plugin);
@@ -90,5 +85,4 @@ if ($_REQUEST['action'] == 'commit') {
 } else {
 	generate_install_page($plugin, 'Тестовое удаление', 'deinstall');
 }
-
 ?>

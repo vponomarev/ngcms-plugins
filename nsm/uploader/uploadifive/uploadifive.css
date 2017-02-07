@@ -23,13 +23,14 @@ Copyright (c) 2012 Reactive Apps, Ronnie Garcia
 	-moz-border-radius: 30px;
 	border-radius: 30px;
 	border: 2px solid #808080;
-	color: #FFF;
+	color: #fff;
 	font: bold 12px Arial, Helvetica, sans-serif;
 	text-align: center;
-	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 	text-transform: uppercase;
 	width: 100%;
 }
+
 .uploadifive-button:hover {
 	background-color: #606060;
 	background-image: linear-gradient(top, #606060 0%, #808080 100%);
@@ -46,9 +47,10 @@ Copyright (c) 2012 Reactive Apps, Ronnie Garcia
 	);
 	background-position: center bottom;
 }
+
 .uploadifive-queue-item {
-	background-color: #F5F5F5;
-	border-bottom: 1px dotted #D5D5D5;
+	background-color: #f5f5f5;
+	border-bottom: 1px dotted #d5d5d5;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -56,6 +58,7 @@ Copyright (c) 2012 Reactive Apps, Ronnie Garcia
 	margin-top: 3px;
 	padding: 15px;
 }
+
 .uploadifive-queue-item .close {
 	background: url('uploadifive-cancel.png') 0 0 no-repeat;
 	display: block;
@@ -64,20 +67,22 @@ Copyright (c) 2012 Reactive Apps, Ronnie Garcia
 	text-indent: -9999px;
 	width: 16px;
 }
+
 .uploadifive-queue-item .progress {
-	border: 1px solid #D0D0D0;
+	border: 1px solid #d0d0d0;
 	height: 3px;
 	margin-top: 5px;
 	width: 100%;
 }
+
 .uploadifive-queue-item .progress-bar {
-	background-color: #0072BC;
+	background-color: #0072bc;
 	height: 3px;
 	width: 0;
 }
 
 #queue {
-	border: 1px solid #E5E5E5;
+	border: 1px solid #e5e5e5;
 	height: 177px;
 	overflow: auto;
 	margin-bottom: 10px;

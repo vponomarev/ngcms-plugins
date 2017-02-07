@@ -1,29 +1,31 @@
 <?php
-
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
 
 class CategoryAccessNewsFilter extends NewsFilter {
+
 	function CategoryAccessNewsFilter() {
-		$this->flag	= false;
+
+		$this->flag = false;
 		$this->flag2 = false;
-		$this->templateName	= '';
+		$this->templateName = '';
 		$this->templatePath = '';
 	}
-	
-	function GetParentCategory($cat, &$categorys){
+
+	function GetParentCategory($cat, &$categorys) {
+
 		global $catz, $catmap;
 		$par_cat = $catz[$catmap[$cat]]['parent'];
-		if ($par_cat && !in_array($par_cat, $categorys)){
+		if ($par_cat && !in_array($par_cat, $categorys)) {
 			$categorys[] = $par_cat;
 			$this->GetParentCategory($par_cat, $categorys);
 		}
 	}
 
-	function showNews($newsID, $SQLnews, &$tvars, &$mode)
-	{ 
-		global $userROW, $catmap, $catz; 
-		if ($this->flag){
+	function showNews($newsID, $SQLnews, &$tvars, &$mode) {
+
+		global $userROW, $catmap, $catz;
+		if ($this->flag) {
 			$mode['overrideTemplateName'] = $this->templateName;
 			$mode['overrideTemplatePath'] = $this->templatePath;
 		}
@@ -34,15 +36,15 @@ class CategoryAccessNewsFilter extends NewsFilter {
 		else if ($userROW['status'] == 3) $acces_type = pluginGetVariable('category_access', 'journ');
 		else if ($userROW['status'] == 4) $acces_type = pluginGetVariable('category_access', 'coment');
 		$if_view = false;
-		switch ($acces_type){
+		switch ($acces_type) {
 			case 1:
 				$cats = pluginGetVariable('category_access', 'categorys');
 				$cur_cats = explode(',', $SQLnews['catid']);
 				$count = count($cur_cats);
-				for ($i = 0; $i < $count; $i ++){
+				for ($i = 0; $i < $count; $i++) {
 					$this->GetParentCategory($cur_cats[$i], $cur_cats);
 				}
-				if (is_array($cats) && is_array($cur_cats) && count(array_intersect($cur_cats, $cats))){
+				if (is_array($cats) && is_array($cur_cats) && count(array_intersect($cur_cats, $cats))) {
 					$if_view = true;
 					break;
 				}
@@ -55,30 +57,34 @@ class CategoryAccessNewsFilter extends NewsFilter {
 				$if_view = true;
 				break;
 		}
-		if (!$if_view){
-			if (!$this->flag){
+		if (!$if_view) {
+			if (!$this->flag) {
 				$this->templateName = $mode['overrideTemplateName'];
 				$this->templatePath = $mode['overrideTemplatePath'];
 				$this->flag = true;
 			}
 			$mode['overrideTemplateName'] = '';
-			$mode['overrideTemplatePath'] = extras_dir.'/category_access/tpl/';
-		}
-		else $this->flag2 = true;
-		return 1; 
+			$mode['overrideTemplatePath'] = extras_dir . '/category_access/tpl/';
+		} else $this->flag2 = true;
+
+		return 1;
 	}
-	
-	function onAfterShow($mode)  { 
+
+	function onAfterShow($mode) {
+
 		global $template;
 		if ($this->flag && !$this->flag2) $template['vars']['mainblock'] = pluginGetVariable('category_access', 'message');
-		return 1; 
+
+		return 1;
 	}
-	
-	function onAfterNewsShow ($newsID, $SQLnews, $mode = array()) { 
+
+	function onAfterNewsShow($newsID, $SQLnews, $mode = array()) {
+
 		global $template;
 		if ($this->flag && !$this->flag2) $template['vars']['mainblock'] = pluginGetVariable('category_access', 'message');
-		return 1; 
+
+		return 1;
 	}
 }
 
-register_filter('news','category_access', new CategoryAccessNewsFilter);
+register_filter('news', 'category_access', new CategoryAccessNewsFilter);

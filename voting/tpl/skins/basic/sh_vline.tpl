@@ -1,1 +1,1 @@
-&raquo;{name}<br /> ({perc}%)<br /><br />
+&raquo;{name}<br/> ({perc}%)<br/><br/>

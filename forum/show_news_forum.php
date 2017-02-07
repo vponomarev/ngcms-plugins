@@ -15,12 +15,13 @@
  ƒанный код защищен авторскими правами
 =====================================================
 */
-
-include_once(dirname(__FILE__).'/includes/rewrite.php');
+include_once(dirname(__FILE__) . '/includes/rewrite.php');
 
 class ShowForumNewsFilter extends NewsFilter {
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()){
-		if(empty($SQLnews['tid'])){
+
+	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+
+		if (empty($SQLnews['tid'])) {
 			$tvars['vars']['topic_forum_url'] = '';
 			$tvars['regx']["'\[topic_show\](.*?)\[/topic_show\]'si"] = '';
 		} else {
@@ -30,4 +31,4 @@ class ShowForumNewsFilter extends NewsFilter {
 	}
 }
 
-register_filter('news','forum', new ShowForumNewsFilter);
+register_filter('news', 'forum', new ShowForumNewsFilter);

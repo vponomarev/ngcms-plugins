@@ -1,4 +1,4 @@
 <div>
-<b>MAIN MENU</b><br/>
-{entries}
+	<b>MAIN MENU</b><br/>
+	{entries}
 </div>

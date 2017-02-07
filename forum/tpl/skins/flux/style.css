@@ -16,9 +16,13 @@
 	LIST-STYLE: none;
 }
 
-.pun IMG {BORDER: none}
+.pun IMG {
+	BORDER: none
+}
 
-.pun INPUT, .pun SELECT, .pun TEXTAREA, .pun OPTGROUP {MARGIN: 0}
+.pun INPUT, .pun SELECT, .pun TEXTAREA, .pun OPTGROUP {
+	MARGIN: 0
+}
 
 /****************************************************************/
 /* 2. STRUCTURAL SETTINGS - VERY IMPORTANT - DO NOT CHANGE */
@@ -33,33 +37,62 @@
 	OVERFLOW: hidden
 }
 
-.pun .clearer, .pun .clearb {CLEAR: both}
-.pun .nosize {POSITION: absolute; LEFT: -10000px}
+.pun .clearer, .pun .clearb {
+	CLEAR: both
+}
+
+.pun .nosize {
+	POSITION: absolute;
+	LEFT: -10000px
+}
 
 /* 2.2 Overflow settings for posts */
 
-DIV.blockpost DIV.box, DIV.postleft, DIV.postsignature, DIV.postmsg {OVERFLOW: hidden}
-.last_post_img img{ height: 30px;width: 30px; float: left;padding: 1px;border: 1px solid #DCE0E2; margin-right: 3px; }
+DIV.blockpost DIV.box, DIV.postleft, DIV.postsignature, DIV.postmsg {
+	OVERFLOW: hidden
+}
+
+.last_post_img img {
+	height: 30px;
+	width: 30px;
+	float: left;
+	padding: 1px;
+	border: 1px solid #dce0e2;
+	margin-right: 3px;
+}
+
 /****************************************************************/
 /* 3. BUG FIXES - VERY IMPORTANT - DO NOT CHANGE */
 /****************************************************************/
 
 /* 3.1 This attempts to eliminate rounding errors in Gecko browsers. */
 
-DIV>DIV>DIV.postfootleft, DIV>DIV>DIV.postfootright {PADDING-TOP: 1px; MARGIN-TOP: -1px}
+DIV > DIV > DIV.postfootleft, DIV > DIV > DIV.postfootright {
+	PADDING-TOP: 1px;
+	MARGIN-TOP: -1px
+}
 
 /* 3.2 This is only visible to IE6 Windows and cures various bugs. Do not alter comments */
 
 /* Begin IE6Win Fix \*/
-* HTML .inbox, * HTML .inform, * HTML .pun, * HTML .intd, * HTML .tclcon {HEIGHT: 1px}
-* HTML .inbox DIV.postmsg {WIDTH: 98%}
+* HTML .inbox, * HTML .inform, * HTML .pun, * HTML .intd, * HTML .tclcon {
+	HEIGHT: 1px
+}
+
+* HTML .inbox DIV.postmsg {
+	WIDTH: 98%
+}
+
 /* End of IE6Win Fix */
 
 /* 3.3 This is the equivelant of 3.2 but for IE7. It is visible to other browsers
 but does no harm */
 
 /*Begin IE7Win Fix */
-.pun, .pun .inbox, .pun .inform, .pun .intd, .pun .tclcon {min-height: 1px}
+.pun, .pun .inbox, .pun .inform, .pun .intd, .pun .tclcon {
+	min-height: 1px
+}
+
 /* End of IE7Win Fix */
 
 /****************************************************************/
@@ -81,7 +114,7 @@ but does no harm */
 /* 5. BOX CONTAINERS AND FLOATS */
 /****************************************************************/
 
-/* 5.1. Setup all left and right content using floats. */  
+/* 5.1. Setup all left and right content using floats. */
 
 .conr {
 	FLOAT: right;
@@ -105,24 +138,36 @@ LABEL.conl {
 
 /* 5.2 Set up page numbering and posts links */
 
-DIV.linkst .conl, DIV.linksb .conl, DIV.postlinksb .conl {WIDTH:18em}
+DIV.linkst .conl, DIV.linksb .conl, DIV.postlinksb .conl {
+	WIDTH: 18em
+}
 
-DIV.linkst .conr, DIV.linksb .conr, DIV.postlinksb .conr {WIDTH:16em}
+DIV.linkst .conr, DIV.linksb .conr, DIV.postlinksb .conr {
+	WIDTH: 16em
+}
 
-FORM DIV.linksb .conr {WIDTH: 32em}
+FORM DIV.linksb .conr {
+	WIDTH: 32em
+}
 
 /* 5.3 Keep breadcrumbs from shifting to the right when wrapping */
 
-.linkst UL, linksb UL, .postlinksb UL {MARGIN-LEFT: 18em}
+.linkst UL, linksb UL, .postlinksb UL {
+	MARGIN-LEFT: 18em
+}
 
 /* 5.4 Settings for Profile and Admin interface.*/
 
-DIV.block2col {PADDING-BOTTOM: 1px}
+DIV.block2col {
+	PADDING-BOTTOM: 1px
+}
 
-DIV.block2col DIV.blockform, DIV.block2col DIV.block, #viewprofile DD {MARGIN-LEFT: 14em}
+DIV.block2col DIV.blockform, DIV.block2col DIV.block, #viewprofile DD {
+	MARGIN-LEFT: 14em
+}
 
 DIV.blockmenu, #viewprofile DT {
-	FLOAT:left;
+	FLOAT: left;
 	WIDTH: 13em
 }
 
@@ -131,7 +176,11 @@ DIV.blockmenu, #viewprofile DT {
 	MARGIN-LEFT: 1em
 }
 
-#viewprofile DL {FLOAT: left; WIDTH: 100%; OVERFLOW: hidden}
+#viewprofile DL {
+	FLOAT: left;
+	WIDTH: 100%;
+	OVERFLOW: hidden
+}
 
 /****************************************************************/
 /* 6. TABLE SETUP */
@@ -139,37 +188,72 @@ DIV.blockmenu, #viewprofile DT {
 
 /* 6.1 Table Basic Setup */
 
-.pun TABLE {WIDTH: 100%}
+.pun TABLE {
+	WIDTH: 100%
+}
 
 /* 6.2 Fixed Table Setup */
 
-#punindex TABLE, #vf TABLE {TABLE-LAYOUT: fixed}
+#punindex TABLE, #vf TABLE {
+	TABLE-LAYOUT: fixed
+}
 
-.tcl {TEXT-ALIGN: left; WIDTH: 50%}
+.tcl {
+	TEXT-ALIGN: left;
+	WIDTH: 50%
+}
 
-.tc2, .tc3, .tcmod {WIDTH: 9%; TEXT-ALIGN: center}
+.tc2, .tc3, .tcmod {
+	WIDTH: 9%;
+	TEXT-ALIGN: center
+}
 
-.tcr {WIDTH: 32%; TEXT-ALIGN: left}
+.tcr {
+	WIDTH: 32%;
+	TEXT-ALIGN: left
+}
 
-#punsearch #vf .tcl, #punmoderate #vf .tcl {WIDTH: 41%}
+#punsearch #vf .tcl, #punmoderate #vf .tcl {
+	WIDTH: 41%
+}
 
-#punsearch #vf .tc2 {WIDTH: 18%; TEXT-ALIGN: left}
+#punsearch #vf .tc2 {
+	WIDTH: 18%;
+	TEXT-ALIGN: left
+}
 
-.tcl, .tcr {OVERFLOW: HIDDEN}
+.tcl, .tcr {
+	OVERFLOW: HIDDEN
+}
 
 /* 6.3 Other Table Setup */
 
-#users1 .tcl {WIDTH: 40%}
+#users1 .tcl {
+	WIDTH: 40%
+}
 
-#users1 .tcr {WIDTH: 25%}
+#users1 .tcr {
+	WIDTH: 25%
+}
 
-#users1 .tc2 {WIDTH: 25%; TEXT-ALIGN: left}
+#users1 .tc2 {
+	WIDTH: 25%;
+	TEXT-ALIGN: left
+}
 
-#users1 .tc3 {WIDTH: 10%; TEXT-ALIGN: center}
+#users1 .tc3 {
+	WIDTH: 10%;
+	TEXT-ALIGN: center
+}
 
-#debug .tcr {WIDTH: 85%; WHITE-SPACE: normal}
+#debug .tcr {
+	WIDTH: 85%;
+	WHITE-SPACE: normal
+}
 
-#punindex TD.tcr SPAN.byuser {DISPLAY: block}
+#punindex TD.tcr SPAN.byuser {
+	DISPLAY: block
+}
 
 /****************************************************************/
 /* 7. VIEWTOPIC SETUP */
@@ -178,35 +262,56 @@ DIV.blockmenu, #viewprofile DT {
 /* 7.1 This is the basic structure. */
 
 DIV.postleft, DIV.postfootleft {
-	FLOAT:left;
+	FLOAT: left;
 	WIDTH: 18em;
 	OVERFLOW: hidden;
 	POSITION: relative;
 }
-	
+
 DIV.postright, DIV.postfootright {
 	BORDER-LEFT-WIDTH: 18em;
 	BORDER-LEFT-STYLE: solid
 }
 
-DIV.postfootright, P.multidelete {TEXT-ALIGN: right}
+DIV.postfootright, P.multidelete {
+	TEXT-ALIGN: right
+}
 
-DIV.blockpost>DIV>DIV.inbox {PADDING-BOTTOM: 1px}
+DIV.blockpost > DIV > DIV.inbox {
+	PADDING-BOTTOM: 1px
+}
 
 /* 7.3 This is the div which actually contains the post and is inside .postright */
 
-DIV.postmsg {WIDTH:100%}
+DIV.postmsg {
+	WIDTH: 100%
+}
 
 /* 7.4 These items control overflow and scrolling within posts. */
 
-DIV.incqbox {WIDTH: 100%; OVERFLOW: hidden}
-DIV.scrollbox {WIDTH: 100%; OVERFLOW: auto}
-IMG.postimg {max-width: 100%}
-A .postimg {max-width: 100%}
+DIV.incqbox {
+	WIDTH: 100%;
+	OVERFLOW: hidden
+}
+
+DIV.scrollbox {
+	WIDTH: 100%;
+	OVERFLOW: auto
+}
+
+IMG.postimg {
+	max-width: 100%
+}
+
+A .postimg {
+	max-width: 100%
+}
 
 /* 7.5 Turn off the poster information column for preview */
 
-#postpreview DIV.postright {BORDER-LEFT: none}
+#postpreview DIV.postright {
+	BORDER-LEFT: none
+}
 
 /* 7.6 Create the horizontal line above signatures */
 
@@ -215,17 +320,24 @@ DIV.postsignature HR {
 	WIDTH: 200px;
 	TEXT-ALIGN: left;
 	HEIGHT: 1px;
-	BORDER:none
+	BORDER: none
 }
 
 /* 7.7 Maximum height for search results as posts. Position go to post link */
 
-DIV.searchposts DIV.postmsg {HEIGHT: 8em}
-DIV.searchposts DD P {PADDING-TOP: 3em}
+DIV.searchposts DIV.postmsg {
+	HEIGHT: 8em
+}
+
+DIV.searchposts DD P {
+	PADDING-TOP: 3em
+}
 
 /* 7.8 Class for bbcode [u] */
 
-SPAN.bbu {TEXT-DECORATION: underline}
+SPAN.bbu {
+	TEXT-DECORATION: underline
+}
 
 /****************************************************************/
 /* 8. LISTS SPECIAL SETTINGS */
@@ -241,11 +353,15 @@ DIV.postfootright LI, UL.bblinks LI {
 
 /* 8.2 Turn on square icon for posterror list */
 
-#posterror UL LI {LIST-STYLE: square inside}
+#posterror UL LI {
+	LIST-STYLE: square inside
+}
 
 /* 8.3 Right alignment of descriptions in ordinary member view of other members profiles */
 
-#viewprofile DT {TEXT-ALIGN: right}
+#viewprofile DT {
+	TEXT-ALIGN: right
+}
 
 /****************************************************************/
 /* 9. FORM SETTINGS */
@@ -253,13 +369,21 @@ DIV.postfootright LI, UL.bblinks LI {
 
 /* 9.1 Makes textareas and long text inputs shrink with page */
 
-DIV.txtarea {WIDTH: 75%}
+DIV.txtarea {
+	WIDTH: 75%
+}
 
-DIV.txtarea TEXTAREA, INPUT.longinput {WIDTH: 100%}
+DIV.txtarea TEXTAREA, INPUT.longinput {
+	WIDTH: 100%
+}
 
-.pun LABEL {DISPLAY: block}
+.pun LABEL {
+	DISPLAY: block
+}
 
-#qjump SELECT {WIDTH: 50%}
+#qjump SELECT {
+	WIDTH: 50%
+}
 
 /****************************************************************/
 /* 10. HELP FILES AND MISC. */
@@ -267,15 +391,21 @@ DIV.txtarea TEXTAREA, INPUT.longinput {WIDTH: 100%}
 
 /* 10.1 Put some space between sections of the help file */
 
-#helpfile H2 {MARGIN-TOP: 12px}
+#helpfile H2 {
+	MARGIN-TOP: 12px
+}
 
 /* 10.2 Internal padding */
 
-#helpfile DIV.box {PADDING: 10px}
+#helpfile DIV.box {
+	PADDING: 10px
+}
 
 /* 10.3 Other templates */
 
-#punredirect DIV.block, #punmaint DIV.block {MARGIN: 50px 20% 12px 20%}
+#punredirect DIV.block, #punmaint DIV.block {
+	MARGIN: 50px 20% 12px 20%
+}
 
 /* Import the colour scheme */
 /****************************************************************/
@@ -284,33 +414,53 @@ DIV.txtarea TEXTAREA, INPUT.longinput {WIDTH: 100%}
 
 /* 1.1 Default background colour and text colour */
 
-BODY {BACKGROUND-COLOR: #FFF}
+BODY {
+	BACKGROUND-COLOR: #fff
+}
 
-.pun {COLOR: #333}
+.pun {
+	COLOR: #333
+}
 
-DIV.box, .pun BLOCKQUOTE, DIV.codebox, #adminconsole FIELDSET TH, .rowodd, .roweven {BACKGROUND-COLOR: #F1F1F1}
-#adminconsole TD, #adminconsole TH {BORDER-COLOR: #F1F1F1}
+DIV.box, .pun BLOCKQUOTE, DIV.codebox, #adminconsole FIELDSET TH, .rowodd, .roweven {
+	BACKGROUND-COLOR: #f1f1f1
+}
+
+#adminconsole TD, #adminconsole TH {
+	BORDER-COLOR: #f1f1f1
+}
 
 /* 1. 2 Darker background colours */
 
 TD.tc2, TD.tc3, TD.tcmod, #postpreview, #viewprofile DD, DIV.forminfo,
-#adminconsole FIELDSET TD, DIV.blockmenu DIV.box, #adstats DD {BACKGROUND-COLOR: #DEDFDF}
+#adminconsole FIELDSET TD, DIV.blockmenu DIV.box, #adstats DD {
+	BACKGROUND-COLOR: #dedfdf
+}
 
 /* 1.3 Main headers and navigation bar background and text colour */
 
-.pun H2, #brdmenu {BACKGROUND-COLOR: #0066B9; COLOR: #FFF}
+.pun H2, #brdmenu {
+	BACKGROUND-COLOR: #0066b9;
+	COLOR: #fff
+}
 
 /* 1.4 Table header rows */
 
-.pun TH {BACKGROUND-COLOR: #D1D1D1}
+.pun TH {
+	BACKGROUND-COLOR: #d1d1d1
+}
 
 /* 1.5 Fieldset legend text colour */
 
-.pun LEGEND {COLOR: #005CB1}
+.pun LEGEND {
+	COLOR: #005cb1
+}
 
 /* 1.6 Highlighted text for various items */
 
-.pun DIV.blockmenu LI.isactive A, #posterror LI STRONG {COLOR: #333}
+.pun DIV.blockmenu LI.isactive A, #posterror LI STRONG {
+	COLOR: #333
+}
 
 /****************************************************************/
 /* 2. POST BACKGROUNDS AND TEXT */
@@ -318,18 +468,34 @@ TD.tc2, TD.tc3, TD.tcmod, #postpreview, #viewprofile DD, DIV.forminfo,
 
 /* 2.1 This is the setup for posts. */
 
-DIV.blockpost DIV.box, DIV.postright, DIV.postfootright {BACKGROUND-COLOR: #DEDFDF}
-DIV.postright, DIV.postfootright {BORDER-LEFT-COLOR: #f1f1f1}
-DIV.postleft, DIV.postfootleft, DIV.blockpost LABEL {BACKGROUND-COLOR: #F1F1F1}
+DIV.blockpost DIV.box, DIV.postright, DIV.postfootright {
+	BACKGROUND-COLOR: #dedfdf
+}
+
+DIV.postright, DIV.postfootright {
+	BORDER-LEFT-COLOR: #f1f1f1
+}
+
+DIV.postleft, DIV.postfootleft, DIV.blockpost LABEL {
+	BACKGROUND-COLOR: #f1f1f1
+}
 
 /* 2.2 Background for post headers and text colour for post numbers in viewtopic */
 
-DIV.blockpost H2 {BACKGROUND-COLOR: #006FC9}
-DIV.blockpost H2 SPAN.conr {COLOR: #AABDCD}
+DIV.blockpost H2 {
+	BACKGROUND-COLOR: #006fc9
+}
+
+DIV.blockpost H2 SPAN.conr {
+	COLOR: #aabdcd
+}
 
 /* 2.3 This is the line above the signature in posts. Colour and background should be the same */
 
-.pun HR {BACKGROUND-COLOR: #333; COLOR: #333}
+.pun HR {
+	BACKGROUND-COLOR: #333;
+	COLOR: #333
+}
 
 /****************************************************************/
 /* 3. BORDER COLOURS */
@@ -337,25 +503,38 @@ DIV.blockpost H2 SPAN.conr {COLOR: #AABDCD}
 
 /* 3.1 All external borders */
 
-DIV.box {BORDER-COLOR: #0066B9}
+DIV.box {
+	BORDER-COLOR: #0066b9
+}
 
 /* 3.2 Makes the top border of posts match the colour used for post headers */
 
-DIV.blockpost DIV.box {BORDER-COLOR: #006fC9 #0066B9 #0066B9}
+DIV.blockpost DIV.box {
+	BORDER-COLOR: #006fc9 #0066b9 #0066b9
+}
 
 /* 3.3 Table internal borders. By default TH is same as background so border is invisible */
 
-.pun TD {BORDER-COLOR: #BBCEDE}
-.pun TH {BORDER-COLOR: #D1D1D1}
+.pun TD {
+	BORDER-COLOR: #bbcede
+}
+
+.pun TH {
+	BORDER-COLOR: #d1d1d1
+}
 
 /* 3.4 Creates the inset border for quote boxes, code boxes and form info boxes */
 
-.pun BLOCKQUOTE, DIV.codebox, DIV.forminfo, DIV.blockpost LABEL {BORDER-COLOR: #ACA899 #FFF #FFF #ACA899}
+.pun BLOCKQUOTE, DIV.codebox, DIV.forminfo, DIV.blockpost LABEL {
+	BORDER-COLOR: #aca899 #fff #fff #aca899
+}
 
 /* 3.5 Gecko's default fieldset borders are really nasty so this gives them a colour
 without interferring with IE's rather nice default */
 
-.pun DIV>FIELDSET {BORDER-COLOR: #ACA899}
+.pun DIV > FIELDSET {
+	BORDER-COLOR: #aca899
+}
 
 /****************************************************************/
 /* 4. LINK COLOURS */
@@ -363,20 +542,41 @@ without interferring with IE's rather nice default */
 
 /* 4.1 This is the default for all links */
 
-.pun A:link, .pun A:visited {COLOR: #005CB1}
-.pun A:hover {COLOR: #B42000}
+.pun A:link, .pun A:visited {
+	COLOR: #005cb1
+}
+
+.pun A:hover {
+	COLOR: #b42000
+}
 
 /* 4.2 This is the colour for links in header rows and the navigation bar */
 
-.pun H2 A:link, .pun H2 A:visited, #brdmenu A:link, #brdmenu A:visited {COLOR: #FFF}
-.pun H2 A:hover, #brdmenu A:hover {COLOR: #FFF}
+.pun H2 A:link, .pun H2 A:visited, #brdmenu A:link, #brdmenu A:visited {
+	COLOR: #fff
+}
+
+.pun H2 A:hover, #brdmenu A:hover {
+	COLOR: #fff
+}
 
 /* 4.3 This is for closed topics and "hot" links */
 
-LI.postreport A:link, LI.postreport A:visited, TR.iclosed TD.tcl A:link, TR.iclosed TD.tcl A:visited {COLOR: #888}
-LI.postreport A:hover, TR.iclosed TD.tcl A:hover {COLOR: #AAA}
-LI.maintenancelink A:link, LI.maintenancelink A:visited {COLOR: #B42000}
-LI.maintenancelink A:hover {COLOR: #B42000}
+LI.postreport A:link, LI.postreport A:visited, TR.iclosed TD.tcl A:link, TR.iclosed TD.tcl A:visited {
+	COLOR: #888
+}
+
+LI.postreport A:hover, TR.iclosed TD.tcl A:hover {
+	COLOR: #aaa
+}
+
+LI.maintenancelink A:link, LI.maintenancelink A:visited {
+	COLOR: #b42000
+}
+
+LI.maintenancelink A:hover {
+	COLOR: #b42000
+}
 
 /****************************************************************/
 /* 5. POST STATUS INDICATORS */
@@ -386,9 +586,17 @@ LI.maintenancelink A:hover {COLOR: #B42000}
 .inew = new posts, .iredirect = redirect forums, .iclosed = closed topics and
 .isticky = sticky topics. The default is "icon". By default only .inew is different.*/
 
-DIV.icon {BORDER-COLOR: #E6E6E6 #DEDEDE #DADADA #E2E2E2}
-TR.iredirect DIV.icon {BORDER-COLOR: #F1F1F1 #F1F1F1 #F1F1F1 #F1F1F1}
-DIV.inew {BORDER-COLOR: #0080D7 #0065C0 #0058B3 #0072CA}
+DIV.icon {
+	BORDER-COLOR: #e6e6e6 #dedede #dadada #e2e2e2
+}
+
+TR.iredirect DIV.icon {
+	BORDER-COLOR: #f1f1f1 #f1f1f1 #f1f1f1 #f1f1f1
+}
+
+DIV.inew {
+	BORDER-COLOR: #0080d7 #0065c0 #0058b3 #0072ca
+}
 
 /****************************************************************/
 /* 2. TEXT SETTINGS */
@@ -400,35 +608,63 @@ DIV.inew {BORDER-COLOR: #0080D7 #0065C0 #0058B3 #0072CA}
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
 }
 
-.pun {FONT-SIZE: 11px; LINE-HEIGHT: normal}
+.pun {
+	FONT-SIZE: 11px;
+	LINE-HEIGHT: normal
+}
 
 /* IEWin Font Size only - to allow IEWin to zoom. Do not remove comments \*/
-* HTML .pun {FONT-SIZE: 68.75%}
+* HTML .pun {
+	FONT-SIZE: 68.75%
+}
+
 /* End IE Win Font Size */
 
 /* Set font size for tables because IE requires it */
-.pun TABLE, .pun INPUT, .pun SELECT, .pun OPTGROUP, .pun TEXTAREA, DIV.postmsg P.postedit {FONT-SIZE: 1em}
+.pun TABLE, .pun INPUT, .pun SELECT, .pun OPTGROUP, .pun TEXTAREA, DIV.postmsg P.postedit {
+	FONT-SIZE: 1em
+}
 
 /* 2.2 Set the font-size for preformatted text i.e in code boxes */
 
-.pun PRE {FONT-FAMILY: monaco, "Bitstream Vera Sans Mono", "Courier New", courier, monospace}
+.pun PRE {
+	FONT-FAMILY: monaco, "Bitstream Vera Sans Mono", "Courier New", courier, monospace
+}
 
 /* 2.3 Font size for headers */
 
-.pun H2, .pun H4 {FONT-SIZE: 1em}
-.pun H3 {FONT-SIZE: 1.1em}
-#brdtitle H1 {FONT-SIZE: 1.4em}
+.pun H2, .pun H4 {
+	FONT-SIZE: 1em
+}
+
+.pun H3 {
+	FONT-SIZE: 1.1em
+}
+
+#brdtitle H1 {
+	FONT-SIZE: 1.4em
+}
 
 /* 2.4 Larger text for particular items */
 
-DIV.postmsg P {LINE-HEIGHT: 1.4}
-DIV.postleft DT {FONT-SIZE: 1.1em}
-.pun PRE {FONT-SIZE: 1.2em}
+DIV.postmsg P {
+	LINE-HEIGHT: 1.4
+}
+
+DIV.postleft DT {
+	FONT-SIZE: 1.1em
+}
+
+.pun PRE {
+	FONT-SIZE: 1.2em
+}
 
 /* 2.5 Bold text */
 
 DIV.postleft DT, DIV.postmsg H4, TD.tcl H3, DIV.forminfo H3, P.postlink, DIV.linkst LI,
-DIV.linksb LI, DIV.postlinksb LI, .blockmenu LI, #brdtitle H1, .pun SPAN.warntext, .pun P.warntext {FONT-WEIGHT: bold}
+DIV.linksb LI, DIV.postlinksb LI, .blockmenu LI, #brdtitle H1, .pun SPAN.warntext, .pun P.warntext {
+	FONT-WEIGHT: bold
+}
 
 /****************************************************************/
 /* 3. LINKS */
@@ -444,7 +680,9 @@ DIV.linksb LI, DIV.postlinksb LI, .blockmenu LI, #brdtitle H1, .pun SPAN.warntex
 
 /* 3.2 Underline on hover for links in headers and main menu */
 
-#brdmenu A:hover, .blockpost H2 A:hover {TEXT-DECORATION: underline}
+#brdmenu A:hover, .blockpost H2 A:hover {
+	TEXT-DECORATION: underline
+}
 
 /****************************************************************/
 /* 4. BORDER WIDTH AND STYLE */
@@ -459,7 +697,9 @@ DIV.box, .pun TD, .pun TH, .pun BLOCKQUOTE, DIV.codebox, DIV.forminfo, DIV.block
 
 /* 4.2 Special settings for the board header. */
 
-#brdheader DIV.box {BORDER-TOP-WIDTH: 1px}
+#brdheader DIV.box {
+	BORDER-TOP-WIDTH: 1px
+}
 
 /* 4.3 Borders for table cells */
 
@@ -468,11 +708,13 @@ DIV.box, .pun TD, .pun TH, .pun BLOCKQUOTE, DIV.codebox, DIV.forminfo, DIV.block
 	BORDER-RIGHT: none
 }
 
-.pun .tcl {BORDER-LEFT: none}
+.pun .tcl {
+	BORDER-LEFT: none
+}
 
 /* 4.4 Special setting for fieldsets to preserve IE defaults */
 
-DIV>FIELDSET {
+DIV > FIELDSET {
 	BORDER-STYLE: solid;
 	BORDER-WIDTH: 1px
 }
@@ -483,24 +725,45 @@ DIV>FIELDSET {
 
 /* 5.1 Page margins */
 
-HTML, BODY {MARGIN: 0; PADDING: 0}
-#punwrap {margin:12px 20px}
+HTML, BODY {
+	MARGIN: 0;
+	PADDING: 0
+}
+
+#punwrap {
+	margin: 12px 20px
+}
 
 /* 5.2 Creates vertical space between main board elements (Margins) */
 
-DIV.blocktable, DIV.block, DIV.blockform, DIV.block2col, #postreview {MARGIN-BOTTOM: 12px}
-#punindex DIV.blocktable, DIV.blockpost {MARGIN-BOTTOM: 6px}
-DIV.block2col DIV.blockform, DIV.block2col DIV.block {MARGIN-BOTTOM: 0px}
+DIV.blocktable, DIV.block, DIV.blockform, DIV.block2col, #postreview {
+	MARGIN-BOTTOM: 12px
+}
+
+#punindex DIV.blocktable, DIV.blockpost {
+	MARGIN-BOTTOM: 6px
+}
+
+DIV.block2col DIV.blockform, DIV.block2col DIV.block {
+	MARGIN-BOTTOM: 0px
+}
 
 /* 5.3 Remove space above breadcrumbs, postlinks and pagelinks with a negative top margin */
 
-DIV.linkst, DIV.linksb {MARGIN-TOP: -12px}
-DIV.postlinksb {MARGIN-TOP: -6px}
+DIV.linkst, DIV.linksb {
+	MARGIN-TOP: -12px
+}
+
+DIV.postlinksb {
+	MARGIN-TOP: -6px
+}
 
 /* 5.4 Put a 12px gap above the board information box in index because the category tables only
 have a 6px space beneath them */
 
-#brdstats {MARGIN-TOP: 12px}
+#brdstats {
+	MARGIN-TOP: 12px
+}
 
 /****************************************************************/
 /* 6. SPACING AROUND CONTENT */
@@ -508,29 +771,62 @@ have a 6px space beneath them */
 
 /* 6.1 Default padding for main items */
 
-DIV.block DIV.inbox, DIV.blockmenu DIV.inbox {PADDING: 3px 6px}
-.pun P, .pun UL, .pun DL, DIV.blockmenu LI, .pun LABEL, #announce DIV.inbox DIV {PADDING: 3px 0}
-.pun H2 {PADDING: 4px 6px}
+DIV.block DIV.inbox, DIV.blockmenu DIV.inbox {
+	PADDING: 3px 6px
+}
+
+.pun P, .pun UL, .pun DL, DIV.blockmenu LI, .pun LABEL, #announce DIV.inbox DIV {
+	PADDING: 3px 0
+}
+
+.pun H2 {
+	PADDING: 4px 6px
+}
 
 /* 6.2 Special spacing for various elements */
 
-.pun H1 {PADDING: 3px 0px 0px 0}
-#brdtitle P {PADDING-TOP: 0px}
-DIV.linkst {PADDING: 8px 6px 3px 6px}
-DIV.linksb, DIV.postlinksb {PADDING: 3px 6px 8px 6px}
-#brdwelcome, #brdfooter DL A, DIV.blockmenu LI, DIV.rbox INPUT  {LINE-HEIGHT: 1.4em}
-#viewprofile DT, #viewprofile DD {PADDING: 0 3px; LINE-HEIGHT: 2em}
+.pun H1 {
+	PADDING: 3px 0px 0px 0
+}
+
+#brdtitle P {
+	PADDING-TOP: 0px
+}
+
+DIV.linkst {
+	PADDING: 8px 6px 3px 6px
+}
+
+DIV.linksb, DIV.postlinksb {
+	PADDING: 3px 6px 8px 6px
+}
+
+#brdwelcome, #brdfooter DL A, DIV.blockmenu LI, DIV.rbox INPUT {
+	LINE-HEIGHT: 1.4em
+}
+
+#viewprofile DT, #viewprofile DD {
+	PADDING: 0 3px;
+	LINE-HEIGHT: 2em
+}
 
 /* 6.4 Create some horizontal spacing for various elements */
 
-#brdmenu LI, DIV.rbox INPUT, DIV.blockform P INPUT  {MARGIN-RIGHT: 12px}
+#brdmenu LI, DIV.rbox INPUT, DIV.blockform P INPUT {
+	MARGIN-RIGHT: 12px
+}
 
 /****************************************************************/
 /* 7. SPACING FOR TABLES */
 /****************************************************************/
 
-.pun TH, .pun TD {PADDING: 4px 6px}
-.pun TD P {PADDING: 5px 0 0 0}
+.pun TH, .pun TD {
+	PADDING: 4px 6px
+}
+
+.pun TD P {
+	PADDING: 5px 0 0 0
+}
 
 /****************************************************************/
 /* 8. SPACING FOR POSTS */
@@ -538,25 +834,42 @@ DIV.linksb, DIV.postlinksb {PADDING: 3px 6px 8px 6px}
 
 /* 8.1 Padding around left and right columns in viewtopic */
 
-DIV.postleft DL, DIV.postright {PADDING: 6px}
+DIV.postleft DL, DIV.postright {
+	PADDING: 6px
+}
 
 /* 8.2 Extra spacing for poster contact details and avatar */
 
-DD.usercontacts, DD.postavatar {MARGIN-TOP: 5px}
-DD.postavatar {MARGIN-BOTTOM: 5px}
+DD.usercontacts, DD.postavatar {
+	MARGIN-TOP: 5px
+}
+
+DD.postavatar {
+	MARGIN-BOTTOM: 5px
+}
 
 /* 8.3 Extra top spacing for signatures and edited by */
 
-DIV.postsignature, DIV.postmsg P.postedit {PADDING-TOP: 15px}
+DIV.postsignature, DIV.postmsg P.postedit {
+	PADDING-TOP: 15px
+}
 
 /* 8.4 Spacing for code and quote boxes */
 
-DIV.postmsg H4 {MARGIN-BOTTOM: 10px}
-.pun BLOCKQUOTE, DIV.codebox {MARGIN: 5px 15px 15px 15px; PADDING: 8px}
+DIV.postmsg H4 {
+	MARGIN-BOTTOM: 10px
+}
+
+.pun BLOCKQUOTE, DIV.codebox {
+	MARGIN: 5px 15px 15px 15px;
+	PADDING: 8px
+}
 
 /* 8.5 Padding for the action links and online indicator in viewtopic */
 
-DIV.postfootleft P, DIV.postfootright UL, DIV.postfootright DIV {PADDING: 10px 6px 5px 6px}
+DIV.postfootleft P, DIV.postfootright UL, DIV.postfootright DIV {
+	PADDING: 10px 6px 5px 6px
+}
 
 /* 8.6 This is the input on moderators multi-delete view */
 
@@ -572,7 +885,9 @@ P.multidelete {
 
 /* 8.7 Make sure paragraphs in posts don't get any padding */
 
-DIV.postmsg P {PADDING: 0}
+DIV.postmsg P {
+	PADDING: 0
+}
 
 /****************************************************************/
 /* 9. SPECIAL SPACING FOR FORMS */
@@ -580,14 +895,27 @@ DIV.postmsg P {PADDING: 0}
 
 /* 9.1 Padding around fieldsets */
 
-DIV.blockform FORM, DIV.fakeform {PADDING: 20px 20px 15px 20px}
-DIV.inform {PADDING-BOTTOM: 12px}
+DIV.blockform FORM, DIV.fakeform {
+	PADDING: 20px 20px 15px 20px
+}
+
+DIV.inform {
+	PADDING-BOTTOM: 12px
+}
 
 /* 9.2 Padding inside fieldsets */
 
-.pun FIELDSET {PADDING: 0px 12px 0px 12px}
-DIV.infldset {PADDING: 9px 0px 12px 0}
-.pun LEGEND {PADDING: 0px 6px}
+.pun FIELDSET {
+	PADDING: 0px 12px 0px 12px
+}
+
+DIV.infldset {
+	PADDING: 9px 0px 12px 0
+}
+
+.pun LEGEND {
+	PADDING: 0px 6px
+}
 
 /* 9.3 The information box at the top of the registration form and elsewhere */
 
@@ -598,13 +926,20 @@ DIV.forminfo {
 
 /* 9.4 BBCode help links in post forms */
 
-UL.bblinks LI {PADDING-RIGHT: 20px}
+UL.bblinks LI {
+	PADDING-RIGHT: 20px
+}
 
-UL.bblinks {PADDING-BOTTOM: 10px; PADDING-LEFT: 4px}
+UL.bblinks {
+	PADDING-BOTTOM: 10px;
+	PADDING-LEFT: 4px
+}
 
 /* 9.5 Horizontal positioning for the submit button on forms */
 
-DIV.blockform P INPUT {MARGIN-LEFT: 12px}
+DIV.blockform P INPUT {
+	MARGIN-LEFT: 12px
+}
 
 /****************************************************************/
 /* 10. POST STATUS INDICATORS */
@@ -623,28 +958,37 @@ DIV.icon {
 	BORDER-STYLE: solid
 }
 
-DIV.searchposts DIV.icon {MARGIN-LEFT: 0}
+DIV.searchposts DIV.icon {
+	MARGIN-LEFT: 0
+}
 
 /* 10.2 Class .tclcon is a div inside the first column of tables with post indicators. The
 margin creates space for the post status indicator */
 
-TD DIV.tclcon {MARGIN-LEFT: 2.3em}
+TD DIV.tclcon {
+	MARGIN-LEFT: 2.3em
+}
 
 .floatedblock {
-	float:left;display:inline;
-	margin:5px;
+	float: left;
+	display: inline;
+	margin: 5px;
 	border: 0px solid #fff;
-	width:33%;
+	width: 33%;
 }
-.centerblock{
-	float:left;display:inline;
-	margin:5px;
+
+.centerblock {
+	float: left;
+	display: inline;
+	margin: 5px;
 	border: 2px solid #fff;
-	width:33%;
+	width: 33%;
 }
 
 .clear {
-	clear:both;display:block;
-	height:0px;font-size:0;
-	overflow:hidden;
+	clear: both;
+	display: block;
+	height: 0px;
+	font-size: 0;
+	overflow: hidden;
 }

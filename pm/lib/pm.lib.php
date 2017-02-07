@@ -20,12 +20,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
- 
-class pm{
-	
-	function __construct(){
+
+class pm {
+
+	function __construct() {
+
 		LoadPluginLang('pm', 'main', '', '', ':');
 	}
+
 	/* params:
 	 *
 	 *		$to_user: ID or NAME
@@ -39,55 +41,43 @@ class pm{
 	 *		-5: if user not found
 	 *		 0: all rigth, message was send
 	 */
-	function sendMsg($to_user, $from_username, $title, $message, $mail_from = false, $saveoutbox = 0){
+	function sendMsg($to_user, $from_username, $title, $message, $mail_from = false, $saveoutbox = 0) {
+
 		global $lang, $mysql, $config;
-		
 		if (strlen($title) > pluginGetVariable('pm', 'title_length'))
 			return -1;
-		
 		if (!$title)
-			return -2;	
-		
+			return -2;
 		if (strlen($message) > pluginGetVariable('pm', 'message_length'))
 			return -3;
-			
-		if(!$message)	
+		if (!$message)
 			return -4;
-			
 		$to_user = trim($to_user);
-		
-		if (!$to_user || (!$torow = $mysql->record("SELECT * FROM ".uprefix."_users WHERE ".(is_numeric($to_user)?"id = ".db_squote($to_user):"name = ".db_squote($to_user)))))
+		if (!$to_user || (!$torow = $mysql->record("SELECT * FROM " . uprefix . "_users WHERE " . (is_numeric($to_user) ? "id = " . db_squote($to_user) : "name = " . db_squote($to_user)))))
 			return -5;
-			
-		$title  	 = secure_html($title);
-		$message	 = secure_html($message);
+		$title = secure_html($title);
+		$message = secure_html($message);
 		$time = time() + ($config['date_adjust'] * 60);
-		
 		# if all right
-		$mysql->query("INSERT INTO ".prefix."_pm (from_id, to_id, date, subject, message, folder) 
-					   VALUES (".db_squote($from_username).", ".db_squote($torow['id']).", ".db_squote($time).", ".db_squote($title).", ".db_squote($message).", 'inbox')");
-		
+		$mysql->query("INSERT INTO " . prefix . "_pm (from_id, to_id, date, subject, message, folder) 
+					   VALUES (" . db_squote($from_username) . ", " . db_squote($torow['id']) . ", " . db_squote($time) . ", " . db_squote($title) . ", " . db_squote($message) . ", 'inbox')");
 		$id = $mysql->result("SELECT LAST_INSERT_ID() as id");
-		
 		# save message in outbox if needed
-		if($saveoutbox)
-		$mysql->query("INSERT INTO ".prefix."_pm (from_id, to_id, date, subject, message, folder) 
-					   VALUES (".db_squote($from_username).", ".db_squote($torow['id']).", ".db_squote($time).", ".db_squote($title).", ".db_squote($message).", 'outbox')");
-		
+		if ($saveoutbox)
+			$mysql->query("INSERT INTO " . prefix . "_pm (from_id, to_id, date, subject, message, folder) 
+					   VALUES (" . db_squote($from_username) . ", " . db_squote($torow['id']) . ", " . db_squote($time) . ", " . db_squote($title) . ", " . db_squote($message) . ", 'outbox')");
 		# update pm counters
-		$mysql->query("UPDATE ".uprefix."_users SET `pm_all` = `pm_all` + 1, `pm_unread` = `pm_unread` + 1 WHERE `id` = ".db_squote($torow['id']));
-		
-		# send email if needed 
-		if($torow['pm_email'] && $torow['mail']){
+		$mysql->query("UPDATE " . uprefix . "_users SET `pm_all` = `pm_all` + 1, `pm_unread` = `pm_unread` + 1 WHERE `id` = " . db_squote($torow['id']));
+		# send email if needed
+		if ($torow['pm_email'] && $torow['mail']) {
 			$msg_link = generatePluginLink('pm', null, array('pmid' => $id, 'action' => 'read'), array(), false, true);
 			$set_link = generatePluginLink('pm', null, array('action' => 'set'), array(), false, true);
-			
-			sendEmailMessage($torow['mail'], 
-							 $lang['pm:email_subject'], 
-							 str_replace(array('{message}', '{url}', '{url-2}'), array($message, $msg_link, $set_link), $lang['pm:email_body']), 
-							 false, $mail_from);
+			sendEmailMessage($torow['mail'],
+				$lang['pm:email_subject'],
+				str_replace(array('{message}', '{url}', '{url-2}'), array($message, $msg_link, $set_link), $lang['pm:email_body']),
+				false, $mail_from);
 		}
-				
+
 		return 0;
 	}
 }

@@ -1,7 +1,7 @@
 {% for entry in news.entries %}
-{{ entry }}
+	{{ entry }}
 {% endfor %}
 
 {% if pages.total > 1 %}
-{{ pages.output }}
+	{{ pages.output }}
 {% endif %}

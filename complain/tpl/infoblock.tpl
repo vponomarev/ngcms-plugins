@@ -3,7 +3,7 @@
 <head><title>Сообщить об ошибке :: информационное сообщение</title></head>
 <body>
 <div style="background: #fff7e1; padding: 3px; margin: 5px; border:1px dashed #e8e8e8; font : normal 12px verdana, sans-serif;">
-{infoblock}
+	{infoblock}
 </div>
 </body>
 </html>

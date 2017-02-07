@@ -1,4 +1,4 @@
-<?php if(!defined('NGCMS')) die('No direct script access allowed');
+<?php if (!defined('NGCMS')) die('No direct script access allowed');
 /*
  * Syntax Highlighter for NGCMS
  * Copyright (C) 2013 Maksym Dogadailo (http://dogadaylo.com)
@@ -18,21 +18,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
+function syntax_highlighter() {
 
-function syntax_highlighter(){
-    global $mod, $skin_header;
-    if($mod!='templates') return;
-
-    $template = '';
-
-    $is_jquery = false;
-    $is_jquery = !!(strpos($skin_header, 'jquery'));
-    if(!$is_jquery) $template .= '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.2.3/jquery.min.js"></script>';
-
-    $template .= file_get_contents(dirname(__FILE__).'/tpl/tags.tpl');
-    $template .= '</head>';
-
-    $skin_header = preg_replace('!</head>!i', $template, $skin_header);
+	global $mod, $skin_header;
+	if ($mod != 'templates') return;
+	$template = '';
+	$is_jquery = false;
+	$is_jquery = !!(strpos($skin_header, 'jquery'));
+	if (!$is_jquery) $template .= '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.2.3/jquery.min.js"></script>';
+	$template .= file_get_contents(dirname(__FILE__) . '/tpl/tags.tpl');
+	$template .= '</head>';
+	$skin_header = preg_replace('!</head>!i', $template, $skin_header);
 }
 
 add_act('admin_header', 'syntax_highlighter');
