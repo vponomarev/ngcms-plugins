@@ -1,0 +1,14 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: echo_test
+Name: echo_test
+Version: 0.01
+Acts: index
+File: echo_test.php
+Type: plugin
+Description: Echo Test
+Author: Rostunov S U
+Author_URI: http://ngcms.ru/
+Title: Echo Test
