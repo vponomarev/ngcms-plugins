@@ -1,8 +1,6 @@
 <?php
-
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-
 //
 // Install script for plugin.
 // $action: possible action modes
@@ -12,11 +10,10 @@ if (!defined('NGCMS')) die ('HAL');
 //
 plugins_load_config();
 function plugin_wpinger_install($action) {
-	global $lang;
 
+	global $lang;
 	if ($action != 'autoapply')
 		loadPluginLang('wpinger', 'config', '', '', ':');
-
 	// Apply requested action
 	switch ($action) {
 		case 'confirm':
@@ -26,18 +23,16 @@ function plugin_wpinger_install($action) {
 		case 'apply':
 			// Now we need to set some default params
 			$params = array(
-				'proxy'		=> 1,
-				'urls'		=> "http://ping.blogs.yandex.ru/RPC2\nhttp://blogsearch.google.ru/ping/RPC2",
+				'proxy' => 1,
+				'urls'  => "http://ping.blogs.yandex.ru/RPC2\nhttp://blogsearch.google.ru/ping/RPC2",
 			);
-
 			foreach ($params as $k => $v) {
 				extra_set_param('wpinger', $k, $v);
 			}
-			
 			plugin_mark_installed('wpinger');
 			extra_commit_changes();
-
 			break;
 	}
+
 	return true;
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Uninstall plugin "Private message" for NextGeneration CMS (http://ngcms.ru/)
  * Copyright (C) 2010 Alexey N. Zhukov (http://digitalplace.ru)
@@ -20,32 +19,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
- 
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('Galaxy in danger');
-
 global $lang;
-
 loadPluginLang('pm', 'config', '', '', ':');
-
 $db_update = array(
 	array(
-		'table'		=>	'pm',
-		'action'	=>	'drop',
+		'table'  => 'pm',
+		'action' => 'drop',
 	),
-	
 	array(
 		'table'  => 'users',
 		'action' => 'modify',
 		'fields' => array(
-					array('action' => 'drop', 'name' => 'pm_unread'),
-					array('action' => 'drop', 'name' => 'pm_all'),
-					array('action' => 'drop', 'name' => 'pm_sync'),
-					array('action' => 'drop', 'name' => 'pm_email'),
+			array('action' => 'drop', 'name' => 'pm_unread'),
+			array('action' => 'drop', 'name' => 'pm_all'),
+			array('action' => 'drop', 'name' => 'pm_sync'),
+			array('action' => 'drop', 'name' => 'pm_email'),
 		)
 	),
 );
-
 if ($_REQUEST['action'] == 'commit') {
 	if (fixdb_plugin_install('pm', $db_update, 'deinstall')) {
 		plugin_mark_deinstalled('pm');

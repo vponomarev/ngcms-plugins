@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Uninstall plugin "auth_loginza" for NextGeneration CMS (http://ngcms.ru/)
  * Copyright (C) 2011 Alexey N. Zhukov (http://digitalplace.ru)
@@ -20,23 +19,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
- 
 # protect against hack attempts
 if (!defined('NGCMS')) die ('Galaxy in danger');
-
 global $lang;
-
-
 $db_update = array(
 	array(
-		'table'		=>	'users',
-		'action'	=>	'modify',
+		'table'  => 'users',
+		'action' => 'modify',
 		'fields' => array(
-		 array('action' => 'drop', 'name' => 'loginza_id',  'type' => 'varchar(255)'),
+			array('action' => 'drop', 'name' => 'loginza_id', 'type' => 'varchar(255)'),
 		)
 	),
 );
-
 if ($_REQUEST['action'] == 'commit') {
 	if (fixdb_plugin_install('auth_loginza', $db_update, 'deinstall')) {
 		plugin_mark_deinstalled('auth_loginza');

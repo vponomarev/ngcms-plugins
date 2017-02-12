@@ -1,1 +1,1 @@
-<img src="/engine/plugins/bookmarks/img/delete.gif" /> {{counter}}
+<img src="/engine/plugins/bookmarks/img/delete.gif"/> {{ counter }}

@@ -15,206 +15,220 @@
  Данный код защищен авторскими правами
 =====================================================
 */
-if(!defined('NGCMS')) exit('HAL');
-
+if (!defined('NGCMS')) exit('HAL');
 plugins_load_config();
-
-include_once(dirname(__FILE__).'/includes/security.php');
-include_once(dirname(__FILE__).'/includes/rewrite.php');
-include_once(dirname(__FILE__).'/includes/constants.php');
-include_once(dirname(__FILE__).'/includes/cache.php');
-include_once(dirname(__FILE__).'/includes/bb_code.php');
-
+include_once(dirname(__FILE__) . '/includes/security.php');
+include_once(dirname(__FILE__) . '/includes/rewrite.php');
+include_once(dirname(__FILE__) . '/includes/constants.php');
+include_once(dirname(__FILE__) . '/includes/cache.php');
+include_once(dirname(__FILE__) . '/includes/bb_code.php');
 switch ($_REQUEST['action']) {
-	case 'send_forum': send_forum(); break;
-	case 'edit_forum': edit_forum(); break;
-	case 'list_forum': list_forum(); break;
-	case 'del_forum':  del_forum(); break;
-	
-	case 'send_section': send_section(); break;
-	case 'edit_section': edit_section(); break;
-	case 'del_section': del_section(); break;
-	
-	case 'ban': ban(); break;
-	case 'ban_ip_list': ban_ip_list(); break;
-	case 'ban_ip_list_del': ban_ip_list_del(); break;
-	case 'ban_ip_range': ban_ip_range(); break;
-	case 'ban_user': ban_user(); break;
-	
-	case 'list_complaints': list_complaints(); break;
-	case 'closed_complaints': closed_complaints(); break;
-	
-	case 'group': group(); break;
-	case 'edit_group': edit_group(); break;
-	
-	case 'list_news': list_news(); break;
-	case 'new_news': new_news(); break;
-	case 'del_news': del_news(); break;
-
-	case 'ads': ads(); break;
-	case 'rules': rules(); break;
-	case 'moderat': moderat(); break;
-	case 'url': url(); break;
-	case 'title': title(); break;
-	
-	case 'about': about(); break;
-	default: general();;
+	case 'send_forum':
+		send_forum();
+		break;
+	case 'edit_forum':
+		edit_forum();
+		break;
+	case 'list_forum':
+		list_forum();
+		break;
+	case 'del_forum':
+		del_forum();
+		break;
+	case 'send_section':
+		send_section();
+		break;
+	case 'edit_section':
+		edit_section();
+		break;
+	case 'del_section':
+		del_section();
+		break;
+	case 'ban':
+		ban();
+		break;
+	case 'ban_ip_list':
+		ban_ip_list();
+		break;
+	case 'ban_ip_list_del':
+		ban_ip_list_del();
+		break;
+	case 'ban_ip_range':
+		ban_ip_range();
+		break;
+	case 'ban_user':
+		ban_user();
+		break;
+	case 'list_complaints':
+		list_complaints();
+		break;
+	case 'closed_complaints':
+		closed_complaints();
+		break;
+	case 'group':
+		group();
+		break;
+	case 'edit_group':
+		edit_group();
+		break;
+	case 'list_news':
+		list_news();
+		break;
+	case 'new_news':
+		new_news();
+		break;
+	case 'del_news':
+		del_news();
+		break;
+	case 'ads':
+		ads();
+		break;
+	case 'rules':
+		rules();
+		break;
+	case 'moderat':
+		moderat();
+		break;
+	case 'url':
+		url();
+		break;
+	case 'title':
+		title();
+		break;
+	case 'about':
+		about();
+		break;
+	default:
+		general();;
 }
+function main($entries) {
 
-function main($entries){
 	global $plugin, $twig;
-	
 	$tpath = locatePluginTemplates(array('main'), $plugin, 1, '', 'config');
-	
 	$_SESSION['forum']['info'] = array();
-	if(!file_exists(files_dir.'forum'))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка '.files_dir . 'forum';
-	
-	if(!is_writable(files_dir . 'forum'))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.files_dir . 'forum';
-	
-	if(!is_writable(FORUM_CACHE))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка '.FORUM_CACHE;
-	
-	if(!is_writable(FORUM_CACHE))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE;
-	
-	if(file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE.'/group_perm.php'))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/group_perm.php';
-	
-	if(file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE.'/forum_perm.php'))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись '.FORUM_CACHE.'/forum_perm.php';
-	
-	if(isset($_SESSION['forum']['info'])){
-		$inf =  $_SESSION['forum']['info'];
-		
-		if(is_array($inf))
+	if (!file_exists(files_dir . 'forum'))
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка ' . files_dir . 'forum';
+	if (!is_writable(files_dir . 'forum'))
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись ' . files_dir . 'forum';
+	if (!is_writable(FORUM_CACHE))
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка ' . FORUM_CACHE;
+	if (!is_writable(FORUM_CACHE))
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись ' . FORUM_CACHE;
+	if (file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE . '/group_perm.php'))
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись ' . FORUM_CACHE . '/group_perm.php';
+	if (file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE . '/forum_perm.php'))
+		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись ' . FORUM_CACHE . '/forum_perm.php';
+	if (isset($_SESSION['forum']['info'])) {
+		$inf = $_SESSION['forum']['info'];
+		if (is_array($inf))
 			$info = implode('<br />', $inf);
 		else
 			$info = $inf;
-		
 		session_destroy();
 	}
-	
-	$xt = $twig->loadTemplate($tpath['main'].'main.tpl');
+	$xt = $twig->loadTemplate($tpath['main'] . 'main.tpl');
 	$tVars = array(
-		'info' => $info,
-		'global' => $entries['mode'],
+		'info'    => $info,
+		'global'  => $entries['mode'],
 		'entries' => $entries['show']
 	);
-	
 	print $xt->render($tVars);
 }
 
-function edit_group(){
+function edit_group() {
+
 	global $plugin, $twig, $mysql;
-	
 	$id = intval($_REQUEST['id']);
-	if(!isset($id) & $id <> '')
+	if (!isset($id) & $id <> '')
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=group');
-	
 	//print "<pre>".var_export($group, true)."</pre>";
 	$tpath = locatePluginTemplates(array('edit_group'), $plugin, 1, '', 'config');
-	$xt = $twig->loadTemplate($tpath['edit_group'].'edit_group.tpl');
-	
-	$group = $mysql->record('SELECT * from '.prefix.'_forum_group WHERE id = '.$id.' LIMIT 1');
+	$xt = $twig->loadTemplate($tpath['edit_group'] . 'edit_group.tpl');
+	$group = $mysql->record('SELECT * from ' . prefix . '_forum_group WHERE id = ' . $id . ' LIMIT 1');
 	//print "<pre>".var_export($_REQUEST, true)."</pre>";
-	
-	$group_name = isset($_REQUEST['group_name'])?secure_html(trim($_REQUEST['group_name'])):secure_html(trim($group['group_name']));
-	$group_color = isset($_REQUEST['group_color'])?secure_html(trim($_REQUEST['group_color'])):secure_html(trim($group['group_color']));
-	$group_read = isset($_REQUEST['group_read'])?intval(trim($_REQUEST['group_read'])):intval(trim($group['group_read']));
-	$group_news = isset($_REQUEST['group_news'])?intval(trim($_REQUEST['group_news'])):intval(trim($group['group_news']));
-	$group_search = isset($_REQUEST['group_search'])?intval(trim($_REQUEST['group_search'])):intval(trim($group['group_search']));
-	$group_pm = isset($_REQUEST['group_pm'])?intval(trim($_REQUEST['group_pm'])):intval(trim($group['group_pm']));
-	
-	if (isset($_REQUEST['submit'])){
-		if(empty($group_name)) $error_text[] = 'Название группы обязательно для заполнения';
-		if(empty($group_color)) $error_text[] = 'Забыли указать цвет';
-		
-		if(empty($error_text)){
-			$test = $mysql->query('UPDATE '.prefix.'_forum_group SET 
-				group_name = '.securemysql($group_name).', 
-				group_color = '.securemysql($group_color).', 
-				group_read = '.securemysql($group_read).', 
-				group_news = '.securemysql($group_news).', 
-				group_search = '.securemysql($group_search).', 
-				group_pm = '.securemysql($group_pm).' 
-				WHERE id = '.securemysql($id)
+	$group_name = isset($_REQUEST['group_name']) ? secure_html(trim($_REQUEST['group_name'])) : secure_html(trim($group['group_name']));
+	$group_color = isset($_REQUEST['group_color']) ? secure_html(trim($_REQUEST['group_color'])) : secure_html(trim($group['group_color']));
+	$group_read = isset($_REQUEST['group_read']) ? intval(trim($_REQUEST['group_read'])) : intval(trim($group['group_read']));
+	$group_news = isset($_REQUEST['group_news']) ? intval(trim($_REQUEST['group_news'])) : intval(trim($group['group_news']));
+	$group_search = isset($_REQUEST['group_search']) ? intval(trim($_REQUEST['group_search'])) : intval(trim($group['group_search']));
+	$group_pm = isset($_REQUEST['group_pm']) ? intval(trim($_REQUEST['group_pm'])) : intval(trim($group['group_pm']));
+	if (isset($_REQUEST['submit'])) {
+		if (empty($group_name)) $error_text[] = 'Название группы обязательно для заполнения';
+		if (empty($group_color)) $error_text[] = 'Забыли указать цвет';
+		if (empty($error_text)) {
+			$test = $mysql->query('UPDATE ' . prefix . '_forum_group SET 
+				group_name = ' . securemysql($group_name) . ', 
+				group_color = ' . securemysql($group_color) . ', 
+				group_read = ' . securemysql($group_read) . ', 
+				group_news = ' . securemysql($group_news) . ', 
+				group_search = ' . securemysql($group_search) . ', 
+				group_pm = ' . securemysql($group_pm) . ' 
+				WHERE id = ' . securemysql($id)
 			);
-			
-			$row = ''; $result = '';
-			foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_group') as $row){
+			$row = '';
+			$result = '';
+			foreach ($mysql->select('SELECT * FROM ' . prefix . '_forum_group') as $row) {
 				$result[$row['group_id']] = $row;
 			}
-			file_put_contents(FORUM_CACHE.'/group_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$GROUP_PERM = '.var_export($result, true).';'."\n\n");
-			
+			file_put_contents(FORUM_CACHE . '/group_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$GROUP_PERM = ' . var_export($result, true) . ';' . "\n\n");
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=group');
 		}
 	}
-	
 	$error_input = array();
-	if(isset($error_text) && is_array($error_text))
-		foreach($error_text as $error)
+	if (isset($error_text) && is_array($error_text))
+		foreach ($error_text as $error)
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
-	
 	$tVars = array(
-		'group_name' => $group_name,
-		'group_color' => $group_color,
-		'group_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_read', $group_read),
-		'group_news' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_news', $group_news),
+		'group_name'   => $group_name,
+		'group_color'  => $group_color,
+		'group_read'   => MakeDropDown(array(false => 'нет', true => 'да'), 'group_read', $group_read),
+		'group_news'   => MakeDropDown(array(false => 'нет', true => 'да'), 'group_news', $group_news),
 		'group_search' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_search', $group_search),
-		'group_pm' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_pm', $group_pm),
-		'list_error' => $error_input,
+		'group_pm'     => MakeDropDown(array(false => 'нет', true => 'да'), 'group_pm', $group_pm),
+		'list_error'   => $error_input,
 	);
-	
 	$entries_main = array(
 		'show' => $xt->render($tVars),
 		'mode' => 'Редактор прав',
 	);
-	
 	main($entries_main);
 }
 
-function ban()
-{global $plugin, $twig;
-	
+function ban() {
+
+	global $plugin, $twig;
 	$tpath = locatePluginTemplates(array('ban'), $plugin, 1, '', 'config');
-	$xt = $twig->loadTemplate($tpath['ban'].'ban.tpl');
-	
+	$xt = $twig->loadTemplate($tpath['ban'] . 'ban.tpl');
 	$tVars = array(
 		'entries' => $tEntry,
 	);
-	
 	$entries_main = array(
 		'show' => $xt->render($tVars),
 		'mode' => 'Забаненые',
 	);
-	
 	main($entries_main);
 }
 
-function ban_ip_list_del()
-{global $plugin, $twig;
+function ban_ip_list_del() {
+
+	global $plugin, $twig;
 	$tpath = locatePluginTemplates(array('ban_ip_list_send'), $plugin, 1, '', 'config');
-	$xt = $twig->loadTemplate($tpath['ban_ip_list_send'].'ban_ip_list_send.tpl');
-	
+	$xt = $twig->loadTemplate($tpath['ban_ip_list_send'] . 'ban_ip_list_send.tpl');
 	$tVars = array(
 		'entries' => $tEntry,
 	);
-	
 	$entries_main = array(
 		'show' => $xt->render($tVars),
 		'mode' => 'Добавить',
 	);
-	
 	main($entries_main);
 }
 
-function ban_ip_list()
-{global $plugin, $twig;
+function ban_ip_list() {
+
+	global $plugin, $twig;
 	$tpath = locatePluginTemplates(array('ban_ip_list'), $plugin, 1, '', 'config');
-	$xt = $twig->loadTemplate($tpath['ban_ip_list'].'ban_ip_list.tpl');
-	
+	$xt = $twig->loadTemplate($tpath['ban_ip_list'] . 'ban_ip_list.tpl');
 	$ban_ip_list = array(
 		'127.0.0.1' => array(
 			array('desc_error' => 'Описание нарушения'),
@@ -225,13 +239,12 @@ function ban_ip_list()
 			array('desc_error' => 'Описание нарушения_2')
 		),
 	);
-	
-	foreach ($ban_ip_list as  $key => $value){
-		foreach ($value as  $value){
-			$tEntry[$key] .= $value['desc_error'].'<br />';
+	foreach ($ban_ip_list as $key => $value) {
+		foreach ($value as $value) {
+			$tEntry[$key] .= $value['desc_error'] . '<br />';
 		}
 		$entries[] = array(
-			'ip' => $key,
+			'ip'         => $key,
 			'desc_error' => $tEntry[$key],
 		);
 	}
@@ -239,374 +252,310 @@ function ban_ip_list()
 	$tVars = array(
 		'entries' => $entries,
 	);
-	
 	$entries_main = array(
 		'show' => $xt->render($tVars),
 		'mode' => 'Забаненые IP',
 	);
-	
 	main($entries_main);
 }
 
-function group()
-{global $plugin, $twig, $mysql;
-	
+function group() {
+
+	global $plugin, $twig, $mysql;
 	$tpath = locatePluginTemplates(array('group'), $plugin, 1, '', 'config');
-	$xt = $twig->loadTemplate($tpath['group'].'group.tpl');
-	
-	foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as  $row){
+	$xt = $twig->loadTemplate($tpath['group'] . 'group.tpl');
+	foreach ($mysql->select('SELECT * from ' . prefix . '_forum_group') as $row) {
 		//print "<pre>".var_export($row, true)."</pre>";
 		$tEntry[] = array(
-			'id' => $row['id'],
-			'group_id' => $row['group_id'],
-			'group_name' => $row['group_name'],
-			'group_color' => $row['group_color'],
-			'group_read' => $row['group_read'],
-			'group_news' => $row['group_news'],
+			'id'           => $row['id'],
+			'group_id'     => $row['group_id'],
+			'group_name'   => $row['group_name'],
+			'group_color'  => $row['group_color'],
+			'group_read'   => $row['group_read'],
+			'group_news'   => $row['group_news'],
 			'group_search' => $row['group_search'],
-			'group_pm' => $row['group_pm'],
+			'group_pm'     => $row['group_pm'],
 		);
 	}
-	
 	$tVars = array(
 		'entries' => $tEntry,
 	);
-	
 	$entries_main = array(
 		'show' => $xt->render($tVars),
 		'mode' => 'Группы',
 	);
-	
 	main($entries_main);
 }
 
-function about()
-{global $plugin, $twig;
+function about() {
+
+	global $plugin, $twig;
 	$tpath = locatePluginTemplates(array('about'), $plugin, 1, '', 'config');
-	
-	$xt = $twig->loadTemplate($tpath['about'].'about.tpl');
-	
+	$xt = $twig->loadTemplate($tpath['about'] . 'about.tpl');
 	$tVars = array();
-	
 	$entries_main = array(
 		'show' => $xt->render($tVars),
 		'mode' => 'О плагине',
 	);
-	
 	main($entries_main);
 }
 
-function closed_complaints(){
-global $twig, $plugin, $mysql, $userROW;
-	
+function closed_complaints() {
+
+	global $twig, $plugin, $mysql, $userROW;
 	$id = intval($_REQUEST['id']);
-	
-	if(isset($id) && $id){
-		if($mysql->result('SELECT 1 FROM '.prefix.'_forum_complaints WHERE id = '.$id.' and viewed = 1 LIMIT 1')) return;
+	if (isset($id) && $id) {
+		if ($mysql->result('SELECT 1 FROM ' . prefix . '_forum_complaints WHERE id = ' . $id . ' and viewed = 1 LIMIT 1')) return;
+		$mysql->query('UPDATE ' . prefix . '_forum_complaints SET 
 		
-		$mysql->query('UPDATE '.prefix.'_forum_complaints SET 
-		
-		who_author_id = '.db_squote($userROW['id']).',
-		who_author = '.db_squote($userROW['name']).',
+		who_author_id = ' . db_squote($userROW['id']) . ',
+		who_author = ' . db_squote($userROW['name']) . ',
 		viewed = \'1\'
 		
-		WHERE id = '.$id.' LIMIT 1');
+		WHERE id = ' . $id . ' LIMIT 1');
 		$_SESSION['forum']['info'] = 'Жалоба закрыта';
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_complaints');
-	
-	}else{
+	} else {
 		$_SESSION['forum']['info'] = 'Ошибка';
 	}
-
 }
 
-function list_complaints(){
-global $twig, $plugin, $config, $mysql;
-	if(isset($_SESSION['forum']['info'])){
-		$info =  $_SESSION['forum']['info'];
+function list_complaints() {
+
+	global $twig, $plugin, $config, $mysql;
+	if (isset($_SESSION['forum']['info'])) {
+		$info = $_SESSION['forum']['info'];
 		session_destroy();
 	}
-	
 	$tpath = locatePluginTemplates(array('complaints'), $plugin, 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['complaints'].'complaints.tpl');
-	
+	$xg = $twig->loadTemplate($tpath['complaints'] . 'complaints.tpl');
 	$news_per_page = 5;
-	
-	if (($news_per_page < 2)||($news_per_page > 2000)) $news_per_page = 2;
-	
-	$pageNo		= intval($_REQUEST['page'])?$_REQUEST['page']:0;
-	if ($pageNo < 1)	$pageNo = 1;
-	if (!$start_from)	$start_from = ($pageNo - 1)* $news_per_page;
-	
-	$count = $mysql->result('SELECT count(id) from '.prefix.'_forum_complaints');
+	if (($news_per_page < 2) || ($news_per_page > 2000)) $news_per_page = 2;
+	$pageNo = intval($_REQUEST['page']) ? $_REQUEST['page'] : 0;
+	if ($pageNo < 1) $pageNo = 1;
+	if (!$start_from) $start_from = ($pageNo - 1) * $news_per_page;
+	$count = $mysql->result('SELECT count(id) from ' . prefix . '_forum_complaints');
 	$countPages = ceil($count / $news_per_page);
-	
-	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_complaints  ORDER BY c_data DESC LIMIT '.$start_from.', '.$news_per_page) as $row){
+	foreach ($mysql->select('SELECT * FROM ' . prefix . '_forum_complaints  ORDER BY c_data DESC LIMIT ' . $start_from . ', ' . $news_per_page) as $row) {
 		$tEntry[] = array(
-			'id' => $row['id'],
-			'author' =>  $row['author'],
-			'author_id' =>  $row['author_id'],
-			'who_author_id' => $row['who_author_id'],
-			'who_author' => $row['who_author'],
-			'author_link' => link_profile($row['author_id'], '', $row['author']),
+			'id'              => $row['id'],
+			'author'          => $row['author'],
+			'author_id'       => $row['author_id'],
+			'who_author_id'   => $row['who_author_id'],
+			'who_author'      => $row['who_author'],
+			'author_link'     => link_profile($row['author_id'], '', $row['author']),
 			'who_author_link' => link_profile($row['who_author_id'], '', $row['who_author']),
-			'message' => $row['message'],
-			'post_link' => link_topic($row['pid'], 'pid'),
-			'post_id' => $row['pid'],
-			'home_url' => $config['home_url'],
-			'viewed' => $row['viewed']
+			'message'         => $row['message'],
+			'post_link'       => link_topic($row['pid'], 'pid'),
+			'post_id'         => $row['pid'],
+			'home_url'        => $config['home_url'],
+			'viewed'          => $row['viewed']
 		);
 	}
-	
 	$tVars = array(
-		'entries' => isset($tEntry)?$tEntry:'',
-		'pagesss' => generateAdminPagelist( array('current' => $pageNo, 'count' => $countPages, 'url' => admin_url.'/admin.php?mod=extra-config&plugin=forum&action=complaints'.($_REQUEST['news_per_page']?'&news_per_page='.$news_per_page:'').($_REQUEST['author']?'&author='.$_REQUEST['author']:'').($_REQUEST['sort']?'&sort='.$_REQUEST['sort']:'').($postdate?'&postdate='.$postdate:'').($author?'&author='.$author:'').($status?'&status='.$status:'').'&page=%page%'))
+		'entries' => isset($tEntry) ? $tEntry : '',
+		'pagesss' => generateAdminPagelist(array('current' => $pageNo, 'count' => $countPages, 'url' => admin_url . '/admin.php?mod=extra-config&plugin=forum&action=complaints' . ($_REQUEST['news_per_page'] ? '&news_per_page=' . $news_per_page : '') . ($_REQUEST['author'] ? '&author=' . $_REQUEST['author'] : '') . ($_REQUEST['sort'] ? '&sort=' . $_REQUEST['sort'] : '') . ($postdate ? '&postdate=' . $postdate : '') . ($author ? '&author=' . $author : '') . ($status ? '&status=' . $status : '') . '&page=%page%'))
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Список жалоб',
 	);
-	
 	main($entries_main);
 }
 
-function del_forum(){
-global $twig, $plugin, $mysql;
-	
+function del_forum() {
+
+	global $twig, $plugin, $mysql;
 	$id = intval($_REQUEST['id']);
-	
-	$c = $mysql->result('SELECT 1 FROM '.prefix.'_forum_topics WHERE fid = '.db_squote($id).' LIMIT 1');
-	
-	if(!$mysql->result('SELECT 1 FROM '.prefix.'_forum_topics WHERE fid = '.db_squote($id).' LIMIT 1')){
-		$mysql->query('DELETE FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
-		$mysql->query('DELETE FROM '.prefix.'_forum_moderators WHERE m_forum_id = '.db_squote($id).' LIMIT 1');
-		$mysql->query('DELETE FROM '.prefix.'_forum_permission WHERE forum_id = '.db_squote($id).' LIMIT 1');
-		
-		foreach ($mysql->select('SELECT * from '.prefix.'_forum_permission') as $row){
+	$c = $mysql->result('SELECT 1 FROM ' . prefix . '_forum_topics WHERE fid = ' . db_squote($id) . ' LIMIT 1');
+	if (!$mysql->result('SELECT 1 FROM ' . prefix . '_forum_topics WHERE fid = ' . db_squote($id) . ' LIMIT 1')) {
+		$mysql->query('DELETE FROM ' . prefix . '_forum_forums WHERE id = ' . db_squote($id) . ' LIMIT 1');
+		$mysql->query('DELETE FROM ' . prefix . '_forum_moderators WHERE m_forum_id = ' . db_squote($id) . ' LIMIT 1');
+		$mysql->query('DELETE FROM ' . prefix . '_forum_permission WHERE forum_id = ' . db_squote($id) . ' LIMIT 1');
+		foreach ($mysql->select('SELECT * from ' . prefix . '_forum_permission') as $row) {
 			$result[$row['group_id']][$row['forum_id']] = $row;
 		}
-		file_put_contents(FORUM_CACHE.'/forum_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$FORUM_PERM = '.var_export($result, true).';'."\n\n");
-		
-		$row = ''; $result = '';
-		foreach ($mysql->select('SELECT * from '.prefix.'_forum_moderators') as $row){
+		file_put_contents(FORUM_CACHE . '/forum_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$FORUM_PERM = ' . var_export($result, true) . ';' . "\n\n");
+		$row = '';
+		$result = '';
+		foreach ($mysql->select('SELECT * from ' . prefix . '_forum_moderators') as $row) {
 			$result[$row['m_forum_id']] = $row;
 		}
-		file_put_contents(FORUM_CACHE.'/mode_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$MODE_PERM = '.var_export($result, true).';'."\n\n");
-		
+		file_put_contents(FORUM_CACHE . '/mode_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$MODE_PERM = ' . var_export($result, true) . ';' . "\n\n");
 		$_SESSION['forum']['info'] = 'Форум удален';
 		generate_index_cache(true);
 	} else {
 		$_SESSION['forum']['info'] = 'Форум не удален';
 	}
-	
 	redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
-
-
 }
 
-function del_section(){
+function del_section() {
+
 	global $plugin, $mysql;
-	
 	$id = intval($_REQUEST['id']);
-	
-	if(!$mysql->result('SELECT 1 FROM '.prefix.'_forum_forums WHERE parent = '.db_squote($id).' LIMIT 1')){
-		$mysql->query('DELETE FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
+	if (!$mysql->result('SELECT 1 FROM ' . prefix . '_forum_forums WHERE parent = ' . db_squote($id) . ' LIMIT 1')) {
+		$mysql->query('DELETE FROM ' . prefix . '_forum_forums WHERE id = ' . db_squote($id) . ' LIMIT 1');
 		$_SESSION['forum']['info'] = 'Раздел удален';
 		generate_index_cache(true);
-	}else
+	} else
 		$_SESSION['forum']['info'] = 'Нельзя удалять раздел с форумом';
-	
 	redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 }
 
-function edit_section(){
+function edit_section() {
+
 	global $twig, $plugin, $mysql;
-	
 	$tpath = locatePluginTemplates(array('edit_section'), $plugin, 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['edit_section'].'edit_section.tpl');
-	
+	$xg = $twig->loadTemplate($tpath['edit_section'] . 'edit_section.tpl');
 	$id = intval($_REQUEST['id']);
-	if(empty($id))
+	if (empty($id))
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
-	
-	$forum = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
-	
-	$name = isset($_REQUEST['name'])?secure_html(trim($_REQUEST['name'])):secure_html(trim($forum['title']));
-	$description = isset($_REQUEST['description'])?secure_html(trim($_REQUEST['description'])):secure_html(trim($forum['description']));
-	$keywords = isset($_REQUEST['keywords'])?secure_html(trim($_REQUEST['keywords'])):secure_html(trim($forum['keywords']));
-	
-	if (isset($_REQUEST['submit'])){
-		if(empty($name)) $error_text[] = 'Название раздела обязательно для заполнения';
-		
-		if(empty($error_text)){
-			if(isset($name) && $name) $SQL['title'] = $name;
-			
-			if(isset($description) && $description) $SQL['description'] = $description;
-			
-			if(isset($keywords) && $keywords) $SQL['keywords'] = $keywords;
-			
+	$forum = $mysql->record('SELECT * FROM ' . prefix . '_forum_forums WHERE id = ' . db_squote($id) . ' LIMIT 1');
+	$name = isset($_REQUEST['name']) ? secure_html(trim($_REQUEST['name'])) : secure_html(trim($forum['title']));
+	$description = isset($_REQUEST['description']) ? secure_html(trim($_REQUEST['description'])) : secure_html(trim($forum['description']));
+	$keywords = isset($_REQUEST['keywords']) ? secure_html(trim($_REQUEST['keywords'])) : secure_html(trim($forum['keywords']));
+	if (isset($_REQUEST['submit'])) {
+		if (empty($name)) $error_text[] = 'Название раздела обязательно для заполнения';
+		if (empty($error_text)) {
+			if (isset($name) && $name) $SQL['title'] = $name;
+			if (isset($description) && $description) $SQL['description'] = $description;
+			if (isset($keywords) && $keywords) $SQL['keywords'] = $keywords;
 			$vnamess = array();
-			foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
-				$mysql->query('update '.prefix.'_forum_forums set '.implode(', ',$vnamess).' where id = \''.intval($id).'\' LIMIT 1');
-			
+			foreach ($SQL as $k => $v) {
+				$vnamess[] = $k . ' = ' . db_squote($v);
+			}
+			$mysql->query('update ' . prefix . '_forum_forums set ' . implode(', ', $vnamess) . ' where id = \'' . intval($id) . '\' LIMIT 1');
 			generate_index_cache(true);
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
-	
 	$error_input = array();
-	if(isset($error_text) && is_array($error_text))
-		foreach($error_text as $error)
+	if (isset($error_text) && is_array($error_text))
+		foreach ($error_text as $error)
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
-	
 	$tVars = array(
-		'name' => $name,
+		'name'        => $name,
 		'description' => $description,
-		'keywords' => $keywords,
-		'list_error' => $error_input,
+		'keywords'    => $keywords,
+		'list_error'  => $error_input,
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Редактирование раздела',
 	);
-	
 	main($entries_main);
 }
 
-function send_section(){
+function send_section() {
+
 	global $twig, $plugin, $mysql;
-	
 	$tpath = locatePluginTemplates(array('send_section'), $plugin, 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['send_section'].'send_section.tpl');
-	
+	$xg = $twig->loadTemplate($tpath['send_section'] . 'send_section.tpl');
 	$name = secure_html(convert($_REQUEST['name']));
 	$description = secure_html(convert($_REQUEST['description']));
 	$keywords = secure_html(convert($_REQUEST['keywords']));
-	
-	if (isset($_REQUEST['submit'])){
-		if(empty($name)) $error_text[] = 'Название раздела обязательно для заполнения';
-		
-		if(empty($error_text)){
-			$sql = 'SELECT MAX(position) FROM '.prefix.'_forum_forums where parent = \'0\'';
-			$posit = $mysql-> result( $sql ) + 1;
-			
-			$mysql->query('INSERT INTO '.prefix.'_forum_forums
+	if (isset($_REQUEST['submit'])) {
+		if (empty($name)) $error_text[] = 'Название раздела обязательно для заполнения';
+		if (empty($error_text)) {
+			$sql = 'SELECT MAX(position) FROM ' . prefix . '_forum_forums where parent = \'0\'';
+			$posit = $mysql->result($sql) + 1;
+			$mysql->query('INSERT INTO ' . prefix . '_forum_forums
 				(title, description, keywords, position)
 				VALUES
-				('.db_squote($name).', '.db_squote($description).', '.db_squote($keywords).', '.intval($posit).')
+				(' . db_squote($name) . ', ' . db_squote($description) . ', ' . db_squote($keywords) . ', ' . intval($posit) . ')
 			');
-			
 			generate_index_cache(true);
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
-	
 	$error_input = array();
-	if(isset($error_text) && is_array($error_text))
-		foreach($error_text as $error)
+	if (isset($error_text) && is_array($error_text))
+		foreach ($error_text as $error)
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
-	
 	$tVars = array(
-		'name' => $name,
+		'name'        => $name,
 		'description' => $description,
-		'keywords' => $keywords,
-		'list_error' => $error_input,
+		'keywords'    => $keywords,
+		'list_error'  => $error_input,
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Добавить раздел',
 	);
-	
 	main($entries_main);
 }
 
-function edit_forum(){
+function edit_forum() {
+
 	global $twig, $plugin, $mysql;
-	
 	$tpath = locatePluginTemplates(array('edit_forum'), $plugin, 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['edit_forum'].'edit_forum.tpl');
-	
+	$xg = $twig->loadTemplate($tpath['edit_forum'] . 'edit_forum.tpl');
 	$id = intval($_REQUEST['id']);
-	if(empty($id))
+	if (empty($id))
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
-	
-	$forum = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
+	$forum = $mysql->record('SELECT * FROM ' . prefix . '_forum_forums WHERE id = ' . db_squote($id) . ' LIMIT 1');
 	$forum_perm = array();
-	foreach ($mysql->select('SELECT * from '.prefix.'_forum_permission WHERE forum_id = '.securemysql($id)) as $row)
+	foreach ($mysql->select('SELECT * from ' . prefix . '_forum_permission WHERE forum_id = ' . securemysql($id)) as $row)
 		$forum_perm[$row['group_id']] = $row;
-	
-	$forum_mode_perm = $mysql->record('SELECT * from '.prefix.'_forum_moderators WHERE m_forum_id = '.securemysql($id).' LIMIT 1');
-	
+	$forum_mode_perm = $mysql->record('SELECT * from ' . prefix . '_forum_moderators WHERE m_forum_id = ' . securemysql($id) . ' LIMIT 1');
 	$forum_moderators = unserialize($forum['moderators']);
 	foreach ($forum_moderators as $key => $value)
 		$forum_mode_list[] = $value['name'];
-	
-	$forum_moderators = implode(', ',$forum_mode_list);
-	
+	$forum_moderators = implode(', ', $forum_mode_list);
 	//print "<pre>".var_export($forum_moderators, true)."</pre>";
-	$forum_name = isset($_REQUEST['forum_name'])?secure_html(trim($_REQUEST['forum_name'])):$forum['title'];
-	$forum_description = isset($_REQUEST['forum_description'])?secure_html(trim($_REQUEST['forum_description'])):$forum['description'];
-	$forum_keywords = isset($_REQUEST['forum_keywords'])?secure_html(trim($_REQUEST['forum_keywords'])):$forum['keywords'];
-	$forum_lock_passwd = isset($_REQUEST['forum_lock_passwd'])?secure_html(trim($_REQUEST['forum_lock_passwd'])):$forum['lock_passwd'];
-	$forum_redirect_url = isset($_REQUEST['forum_redirect_url'])?secure_html(trim($_REQUEST['forum_redirect_url'])):$forum['redirect_url'];
-	$forum_moderators = isset($_REQUEST['forum_moderators'])?secure_html(trim($_REQUEST['forum_moderators'])):$forum_moderators;
-	$forum_parent = isset($_REQUEST['forum_parent'])?secure_html(trim($_REQUEST['forum_parent'])):$forum['parent'];
-	
-	$m_topic_send = isset($_REQUEST['m_topic_send'])?secure_html(trim($_REQUEST['m_topic_send'])):$forum_mode_perm['m_topic_send'];
-	$m_topic_modify = isset($_REQUEST['m_topic_modify'])?secure_html(trim($_REQUEST['m_topic_modify'])):$forum_mode_perm['m_topic_modify'];
-	$m_topic_closed = isset($_REQUEST['m_topic_closed'])?secure_html(trim($_REQUEST['m_topic_closed'])):$forum_mode_perm['m_topic_closed'];
-	$m_topic_remove = isset($_REQUEST['m_topic_remove'])?secure_html(trim($_REQUEST['m_topic_remove'])):$forum_mode_perm['m_topic_remove'];
-	$m_post_send = isset($_REQUEST['m_post_send'])?secure_html(trim($_REQUEST['m_post_send'])):$forum_mode_perm['m_post_send'];
-	$m_post_modify = isset($_REQUEST['m_post_modify'])?secure_html(trim($_REQUEST['m_post_modify'])):$forum_mode_perm['m_post_modify'];
-	$m_post_remove = isset($_REQUEST['m_post_remove'])?secure_html(trim($_REQUEST['m_post_remove'])):$forum_mode_perm['m_post_remove'];
-	
-	$forum_perm = is_array($_REQUEST['forum_perm'])?$_REQUEST['forum_perm']:$forum_perm;
-	
-	if (isset($_REQUEST['submit'])){
-		if(empty($forum_name)) $error_text[] = 'Название форума не заполнено';
-		
-		if(isset($forum_moderators) && $forum_moderators){
-			$moder_array = array_map('trim', explode(',',$forum_moderators));
+	$forum_name = isset($_REQUEST['forum_name']) ? secure_html(trim($_REQUEST['forum_name'])) : $forum['title'];
+	$forum_description = isset($_REQUEST['forum_description']) ? secure_html(trim($_REQUEST['forum_description'])) : $forum['description'];
+	$forum_keywords = isset($_REQUEST['forum_keywords']) ? secure_html(trim($_REQUEST['forum_keywords'])) : $forum['keywords'];
+	$forum_lock_passwd = isset($_REQUEST['forum_lock_passwd']) ? secure_html(trim($_REQUEST['forum_lock_passwd'])) : $forum['lock_passwd'];
+	$forum_redirect_url = isset($_REQUEST['forum_redirect_url']) ? secure_html(trim($_REQUEST['forum_redirect_url'])) : $forum['redirect_url'];
+	$forum_moderators = isset($_REQUEST['forum_moderators']) ? secure_html(trim($_REQUEST['forum_moderators'])) : $forum_moderators;
+	$forum_parent = isset($_REQUEST['forum_parent']) ? secure_html(trim($_REQUEST['forum_parent'])) : $forum['parent'];
+	$m_topic_send = isset($_REQUEST['m_topic_send']) ? secure_html(trim($_REQUEST['m_topic_send'])) : $forum_mode_perm['m_topic_send'];
+	$m_topic_modify = isset($_REQUEST['m_topic_modify']) ? secure_html(trim($_REQUEST['m_topic_modify'])) : $forum_mode_perm['m_topic_modify'];
+	$m_topic_closed = isset($_REQUEST['m_topic_closed']) ? secure_html(trim($_REQUEST['m_topic_closed'])) : $forum_mode_perm['m_topic_closed'];
+	$m_topic_remove = isset($_REQUEST['m_topic_remove']) ? secure_html(trim($_REQUEST['m_topic_remove'])) : $forum_mode_perm['m_topic_remove'];
+	$m_post_send = isset($_REQUEST['m_post_send']) ? secure_html(trim($_REQUEST['m_post_send'])) : $forum_mode_perm['m_post_send'];
+	$m_post_modify = isset($_REQUEST['m_post_modify']) ? secure_html(trim($_REQUEST['m_post_modify'])) : $forum_mode_perm['m_post_modify'];
+	$m_post_remove = isset($_REQUEST['m_post_remove']) ? secure_html(trim($_REQUEST['m_post_remove'])) : $forum_mode_perm['m_post_remove'];
+	$forum_perm = is_array($_REQUEST['forum_perm']) ? $_REQUEST['forum_perm'] : $forum_perm;
+	if (isset($_REQUEST['submit'])) {
+		if (empty($forum_name)) $error_text[] = 'Название форума не заполнено';
+		if (isset($forum_moderators) && $forum_moderators) {
+			$moder_array = array_map('trim', explode(',', $forum_moderators));
 			$moder_array = array_unique($moder_array);
-			foreach ($moder_array as $row){
-				if(!$user[strtolower($row)] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
-					$error_text[] = 'Пользователь '.$row.' не найден';
+			foreach ($moder_array as $row) {
+				if (!$user[strtolower($row)] = $mysql->record('SELECT id, name FROM ' . prefix . '_users where name = LOWER(\'' . $row . '\') LIMIT 1')) {
+					$error_text[] = 'Пользователь ' . $row . ' не найден';
 				}
-				
 			}
 		} else $user = array();
-		
-		if(empty($error_text)){
+		if (empty($error_text)) {
 			$SQL = array();
-			
-			if(isset($forum_name) && $forum_name) $SQL['title'] = $forum_name;
+			if (isset($forum_name) && $forum_name) $SQL['title'] = $forum_name;
 			$SQL['description'] = $forum_description;
 			$SQL['keywords'] = $forum_keywords;
 			$SQL['lock_passwd'] = $forum_lock_passwd;
 			$SQL['redirect_url'] = $forum_redirect_url;
 			$SQL['moderators'] = serialize($user);
-			
-			if(isset($forum_parent) && $forum_parent) $SQL['parent'] = $forum_parent;
-			
+			if (isset($forum_parent) && $forum_parent) $SQL['parent'] = $forum_parent;
 			$vnamess = array();
-			foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
-				$mysql->query('UPDATE '.prefix.'_forum_forums SET '.implode(', ',$vnamess).' WHERE id = \''.intval($id).'\' LIMIT 1');
-			
-			if($mysql->result('SELECT 1 FROM '.prefix.'_forum_moderators WHERE m_forum_id = \''.intval($id).'\' LIMIT 1')){
-				$mysql->query('UPDATE '.prefix.'_forum_moderators SET 
-					m_topic_send = '.securemysql($m_topic_send).',
-					m_topic_modify = '.securemysql($m_topic_modify).',
-					m_topic_closed = '.securemysql($m_topic_closed).',
-					m_topic_remove = '.securemysql($m_topic_remove).',
-					m_post_send = '.securemysql($m_post_send).',
-					m_post_modify = '.securemysql($m_post_modify).',
-					m_post_remove = '.securemysql($m_post_remove).'
-				WHERE m_forum_id = \''.intval($id).'\' LIMIT 1');
+			foreach ($SQL as $k => $v) {
+				$vnamess[] = $k . ' = ' . db_squote($v);
+			}
+			$mysql->query('UPDATE ' . prefix . '_forum_forums SET ' . implode(', ', $vnamess) . ' WHERE id = \'' . intval($id) . '\' LIMIT 1');
+			if ($mysql->result('SELECT 1 FROM ' . prefix . '_forum_moderators WHERE m_forum_id = \'' . intval($id) . '\' LIMIT 1')) {
+				$mysql->query('UPDATE ' . prefix . '_forum_moderators SET 
+					m_topic_send = ' . securemysql($m_topic_send) . ',
+					m_topic_modify = ' . securemysql($m_topic_modify) . ',
+					m_topic_closed = ' . securemysql($m_topic_closed) . ',
+					m_topic_remove = ' . securemysql($m_topic_remove) . ',
+					m_post_send = ' . securemysql($m_post_send) . ',
+					m_post_modify = ' . securemysql($m_post_modify) . ',
+					m_post_remove = ' . securemysql($m_post_remove) . '
+				WHERE m_forum_id = \'' . intval($id) . '\' LIMIT 1');
 			} else {
-				$mysql->query('INSERT INTO '.prefix.'_forum_moderators 
+				$mysql->query('INSERT INTO ' . prefix . '_forum_moderators 
 					(
 						m_forum_id,
 						m_topic_send,
@@ -617,39 +566,38 @@ function edit_forum(){
 						m_post_modify,
 						m_post_remove
 					) VALUES (
-						'.securemysql($id).',
-						'.securemysql($m_topic_send).',
-						'.securemysql($m_topic_modify).',
-						'.securemysql($m_topic_closed).',
-						'.securemysql($m_topic_remove).',
-						'.securemysql($m_post_send).',
-						'.securemysql($m_post_modify).',
-						'.securemysql($m_post_remove).'
+						' . securemysql($id) . ',
+						' . securemysql($m_topic_send) . ',
+						' . securemysql($m_topic_modify) . ',
+						' . securemysql($m_topic_closed) . ',
+						' . securemysql($m_topic_remove) . ',
+						' . securemysql($m_post_send) . ',
+						' . securemysql($m_post_modify) . ',
+						' . securemysql($m_post_remove) . '
 					)
 				');
 			}
-			
-			foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as $row){
-				if($mysql->result('SELECT 1 FROM '.prefix.'_forum_permission WHERE forum_id = \''.intval($id).'\' AND group_id = \''.$row['group_id'].'\' LIMIT 1')){
-					$mysql->query('UPDATE '.prefix.'_forum_permission SET 
-							forum_read = '.securemysql($forum_perm[$row['group_id']]['forum_read']).',
-							topic_read = '.securemysql($forum_perm[$row['group_id']]['topic_read']).',
-							topic_send = '.securemysql($forum_perm[$row['group_id']]['topic_send']).',
-							topic_modify = '.securemysql($forum_perm[$row['group_id']]['topic_modify']).',
-							topic_modify_your = '.securemysql($forum_perm[$row['group_id']]['topic_modify_your']).',
-							topic_closed = '.securemysql($forum_perm[$row['group_id']]['topic_closed']).',
-							topic_closed_your = '.securemysql($forum_perm[$row['group_id']]['topic_closed_your']).',
-							topic_remove = '.securemysql($forum_perm[$row['group_id']]['topic_remove']).',
-							topic_remove_your = '.securemysql($forum_perm[$row['group_id']]['topic_remove_your']).',
-							post_send = '.securemysql($forum_perm[$row['group_id']]['post_send']).',
-							post_modify = '.securemysql($forum_perm[$row['group_id']]['post_modify']).',
-							post_modify_your = '.securemysql($forum_perm[$row['group_id']]['post_modify_your']).',
-							post_remove = '.securemysql($forum_perm[$row['group_id']]['post_remove']).',
-							post_remove_your = '.securemysql($forum_perm[$row['group_id']]['post_remove_your']).'
-							where forum_id = \''.intval($id).'\' and group_id = \''.$row['group_id'].'\' LIMIT 1
+			foreach ($mysql->select('SELECT * from ' . prefix . '_forum_group') as $row) {
+				if ($mysql->result('SELECT 1 FROM ' . prefix . '_forum_permission WHERE forum_id = \'' . intval($id) . '\' AND group_id = \'' . $row['group_id'] . '\' LIMIT 1')) {
+					$mysql->query('UPDATE ' . prefix . '_forum_permission SET 
+							forum_read = ' . securemysql($forum_perm[$row['group_id']]['forum_read']) . ',
+							topic_read = ' . securemysql($forum_perm[$row['group_id']]['topic_read']) . ',
+							topic_send = ' . securemysql($forum_perm[$row['group_id']]['topic_send']) . ',
+							topic_modify = ' . securemysql($forum_perm[$row['group_id']]['topic_modify']) . ',
+							topic_modify_your = ' . securemysql($forum_perm[$row['group_id']]['topic_modify_your']) . ',
+							topic_closed = ' . securemysql($forum_perm[$row['group_id']]['topic_closed']) . ',
+							topic_closed_your = ' . securemysql($forum_perm[$row['group_id']]['topic_closed_your']) . ',
+							topic_remove = ' . securemysql($forum_perm[$row['group_id']]['topic_remove']) . ',
+							topic_remove_your = ' . securemysql($forum_perm[$row['group_id']]['topic_remove_your']) . ',
+							post_send = ' . securemysql($forum_perm[$row['group_id']]['post_send']) . ',
+							post_modify = ' . securemysql($forum_perm[$row['group_id']]['post_modify']) . ',
+							post_modify_your = ' . securemysql($forum_perm[$row['group_id']]['post_modify_your']) . ',
+							post_remove = ' . securemysql($forum_perm[$row['group_id']]['post_remove']) . ',
+							post_remove_your = ' . securemysql($forum_perm[$row['group_id']]['post_remove_your']) . '
+							where forum_id = \'' . intval($id) . '\' and group_id = \'' . $row['group_id'] . '\' LIMIT 1
 					');
 				} else {
-					$mysql->query('INSERT INTO '.prefix.'_forum_permission 
+					$mysql->query('INSERT INTO ' . prefix . '_forum_permission 
 						(
 							group_id,
 							forum_id,
@@ -668,272 +616,251 @@ function edit_forum(){
 							post_remove,
 							post_remove_your
 						) VALUES (
-							'.$row['group_id'].',
-							'.$id.',
-							'.secureinput($forum_perm[$row['group_id']]['forum_read']).',
-							'.secureinput($forum_perm[$row['group_id']]['topic_read']).',
-							'.secureinput($forum_perm[$row['group_id']]['topic_send']).',
-							'.secureinput($forum_perm[$row['group_id']]['topic_modify']).',
-							'.secureinput($forum_perm[$row['group_id']]['topic_modify_your']).',
-							'.secureinput($forum_perm[$row['group_id']]['topic_closed']).',
-							'.secureinput($forum_perm[$row['group_id']]['topic_closed_your']).',
-							'.secureinput($forum_perm[$row['group_id']]['topic_remove']).',
-							'.secureinput($forum_perm[$row['group_id']]['topic_remove_your']).',
-							'.secureinput($forum_perm[$row['group_id']]['post_send']).',
-							'.secureinput($forum_perm[$row['group_id']]['post_modify']).',
-							'.secureinput($forum_perm[$row['group_id']]['post_modify_your']).',
-							'.secureinput($forum_perm[$row['group_id']]['post_remove']).',
-							'.secureinput($forum_perm[$row['group_id']]['post_remove_your']).'
+							' . $row['group_id'] . ',
+							' . $id . ',
+							' . secureinput($forum_perm[$row['group_id']]['forum_read']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['topic_read']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['topic_send']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['topic_modify']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['topic_modify_your']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['topic_closed']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['topic_closed_your']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['topic_remove']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['topic_remove_your']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['post_send']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['post_modify']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['post_modify_your']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['post_remove']) . ',
+							' . secureinput($forum_perm[$row['group_id']]['post_remove_your']) . '
 						)
 					');
 				}
 			}
-			
-			foreach ($mysql->select('SELECT * from '.prefix.'_forum_permission') as $row){
+			foreach ($mysql->select('SELECT * from ' . prefix . '_forum_permission') as $row) {
 				$result[$row['group_id']][$row['forum_id']] = $row;
 			}
-			file_put_contents(FORUM_CACHE.'/forum_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$FORUM_PERM = '.var_export($result, true).';'."\n\n");
-			
-			$row = ''; $result = '';
-			foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_group') as $row){
+			file_put_contents(FORUM_CACHE . '/forum_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$FORUM_PERM = ' . var_export($result, true) . ';' . "\n\n");
+			$row = '';
+			$result = '';
+			foreach ($mysql->select('SELECT * FROM ' . prefix . '_forum_group') as $row) {
 				$result[$row['group_id']] = $row;
 			}
-			file_put_contents(FORUM_CACHE.'/group_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$GROUP_PERM = '.var_export($result, true).';'."\n\n");
-			
-			$row = ''; $result = '';
-			foreach ($mysql->select('SELECT * from '.prefix.'_forum_moderators') as $row){
+			file_put_contents(FORUM_CACHE . '/group_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$GROUP_PERM = ' . var_export($result, true) . ';' . "\n\n");
+			$row = '';
+			$result = '';
+			foreach ($mysql->select('SELECT * from ' . prefix . '_forum_moderators') as $row) {
 				$result[$row['m_forum_id']] = $row;
 			}
-			file_put_contents(FORUM_CACHE.'/mode_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$MODE_PERM = '.var_export($result, true).';'."\n\n");
+			file_put_contents(FORUM_CACHE . '/mode_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$MODE_PERM = ' . var_export($result, true) . ';' . "\n\n");
 			generate_index_cache(true);
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
-	
 	//print "<pre>".var_export($_REQUEST['GROUP_PERM'], true)."</pre>";
-	foreach ($mysql-> select("SELECT id, title FROM ".prefix."_forum_forums WHERE parent = '0' ORDER BY position", 1 ) as $row){
+	foreach ($mysql->select("SELECT id, title FROM " . prefix . "_forum_forums WHERE parent = '0' ORDER BY position", 1) as $row) {
 		$tEntry2[] = array(
-			'id'		=>	$row['id'],
-			'title'		=>	$row['title'],
-			'id_set'	=> intval($forum_parent)
+			'id'     => $row['id'],
+			'title'  => $row['title'],
+			'id_set' => intval($forum_parent)
 		);
 	}
-	
-	foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as $row){
+	foreach ($mysql->select('SELECT * from ' . prefix . '_forum_group') as $row) {
 		//print "<pre>".var_export($row, true)."</pre>";
 		$tEntry[] = array(
-			'group_id' => $row['group_id'],
-			'group_name' => $row['group_name'],
-			
-			'forum_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
-			'topic_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
-			'topic_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
-			'topic_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
-			'topic_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
-			'topic_closed' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
-			'topic_closed_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
-			'topic_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
-			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
-			'post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_send]', $forum_perm[$row['group_id']]['post_send']),
-			'post_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
-			'post_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
-			'post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
-			'post_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
+			'group_id'          => $row['group_id'],
+			'group_name'        => $row['group_name'],
+			'forum_read'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
+			'topic_read'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
+			'topic_send'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
+			'topic_modify'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
+			'topic_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
+			'topic_closed'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
+			'topic_closed_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
+			'topic_remove'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
+			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
+			'post_send'         => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_send]', $forum_perm[$row['group_id']]['post_send']),
+			'post_modify'       => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
+			'post_modify_your'  => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
+			'post_remove'       => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
+			'post_remove_your'  => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
 		);
 	}
-	
 	$error_input = array();
-	if(isset($error_text) && is_array($error_text))
-		foreach($error_text as $error)
+	if (isset($error_text) && is_array($error_text))
+		foreach ($error_text as $error)
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
-	
 	$tVars = array(
-		'forum_name' => $forum_name,
-		'forum_description' => $forum_description,
-		'forum_keywords' => $forum_keywords,
-		'forum_lock_passwd' => $forum_lock_passwd,
+		'forum_name'         => $forum_name,
+		'forum_description'  => $forum_description,
+		'forum_keywords'     => $forum_keywords,
+		'forum_lock_passwd'  => $forum_lock_passwd,
 		'forum_redirect_url' => $forum_redirect_url,
-		'forum_moderators' => $forum_moderators,
-		'forum_title' => $forum['title'],
-		'forum_id' => $forum['id'],
-		'list_group' => $tEntry,
-		'list_forum' => $tEntry2,
-		
-		'm_topic_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_send', $m_topic_send),
-		'm_topic_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_modify', $m_topic_modify),
-		'm_topic_closed' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_closed', $m_topic_closed),
-		'm_topic_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_remove', $m_topic_remove),
-		'm_post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_send', $m_post_send),
-		'm_post_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_modify', $m_post_modify),
-		'm_post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_remove', $m_post_remove),
-		
-		'list_error' => $error_input,
+		'forum_moderators'   => $forum_moderators,
+		'forum_title'        => $forum['title'],
+		'forum_id'           => $forum['id'],
+		'list_group'         => $tEntry,
+		'list_forum'         => $tEntry2,
+		'm_topic_send'       => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_send', $m_topic_send),
+		'm_topic_modify'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_modify', $m_topic_modify),
+		'm_topic_closed'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_closed', $m_topic_closed),
+		'm_topic_remove'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_remove', $m_topic_remove),
+		'm_post_send'        => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_send', $m_post_send),
+		'm_post_modify'      => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_modify', $m_post_modify),
+		'm_post_remove'      => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_remove', $m_post_remove),
+		'list_error'         => $error_input,
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Редактировать форум',
 	);
-	
 	main($entries_main);
 }
 
-function send_forum(){
-global $twig, $plugin, $mysql;
-	
+function send_forum() {
+
+	global $twig, $plugin, $mysql;
 	$tpath = locatePluginTemplates(array('send_forum'), $plugin, 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['send_forum'].'send_forum.tpl');
-	
+	$xg = $twig->loadTemplate($tpath['send_forum'] . 'send_forum.tpl');
 	$id = intval($_REQUEST['id']);
-	if(empty($id))
+	if (empty($id))
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
-	
-	$forum = $mysql->record('SELECT * FROM '.prefix.'_forum_forums WHERE id = '.db_squote($id).' LIMIT 1');
-	
-	$forum_name = isset($_REQUEST['forum_name'])?secure_html(trim($_REQUEST['forum_name'])):'';
-	$forum_description = isset($_REQUEST['forum_description'])?secure_html(trim($_REQUEST['forum_description'])):'';
-	$forum_keywords = isset($_REQUEST['forum_keywords'])?secure_html(trim($_REQUEST['forum_keywords'])):'';
-	$forum_redirect_url = isset($_REQUEST['forum_redirect_url'])?secure_html(trim($_REQUEST['forum_redirect_url'])):'';
-	$forum_lock_passwd = isset($_REQUEST['forum_lock_passwd'])?secure_html(trim($_REQUEST['forum_lock_passwd'])):'';
-	$forum_moderators = isset($_REQUEST['forum_moderators'])?secure_html(trim($_REQUEST['forum_moderators'])):'';
-	
-	$m_topic_send = isset($_REQUEST['m_topic_send'])?secure_html(trim($_REQUEST['m_topic_send'])):'';
-	$m_topic_modify = isset($_REQUEST['m_topic_modify'])?secure_html(trim($_REQUEST['m_topic_modify'])):'';
-	$m_topic_closed = isset($_REQUEST['m_topic_closed'])?secure_html(trim($_REQUEST['m_topic_closed'])):'';
-	$m_topic_remove = isset($_REQUEST['m_topic_remove'])?secure_html(trim($_REQUEST['m_topic_remove'])):'';
-	$m_post_send = isset($_REQUEST['m_post_send'])?secure_html(trim($_REQUEST['m_post_send'])):'';
-	$m_post_modify = isset($_REQUEST['m_post_modify'])?secure_html(trim($_REQUEST['m_post_modify'])):'';
-	$m_post_remove = isset($_REQUEST['m_post_remove'])?secure_html(trim($_REQUEST['m_post_remove'])):'';
-	
-	$forum_perm = is_array($_REQUEST['forum_perm'])?$_REQUEST['forum_perm']:array(
+	$forum = $mysql->record('SELECT * FROM ' . prefix . '_forum_forums WHERE id = ' . db_squote($id) . ' LIMIT 1');
+	$forum_name = isset($_REQUEST['forum_name']) ? secure_html(trim($_REQUEST['forum_name'])) : '';
+	$forum_description = isset($_REQUEST['forum_description']) ? secure_html(trim($_REQUEST['forum_description'])) : '';
+	$forum_keywords = isset($_REQUEST['forum_keywords']) ? secure_html(trim($_REQUEST['forum_keywords'])) : '';
+	$forum_redirect_url = isset($_REQUEST['forum_redirect_url']) ? secure_html(trim($_REQUEST['forum_redirect_url'])) : '';
+	$forum_lock_passwd = isset($_REQUEST['forum_lock_passwd']) ? secure_html(trim($_REQUEST['forum_lock_passwd'])) : '';
+	$forum_moderators = isset($_REQUEST['forum_moderators']) ? secure_html(trim($_REQUEST['forum_moderators'])) : '';
+	$m_topic_send = isset($_REQUEST['m_topic_send']) ? secure_html(trim($_REQUEST['m_topic_send'])) : '';
+	$m_topic_modify = isset($_REQUEST['m_topic_modify']) ? secure_html(trim($_REQUEST['m_topic_modify'])) : '';
+	$m_topic_closed = isset($_REQUEST['m_topic_closed']) ? secure_html(trim($_REQUEST['m_topic_closed'])) : '';
+	$m_topic_remove = isset($_REQUEST['m_topic_remove']) ? secure_html(trim($_REQUEST['m_topic_remove'])) : '';
+	$m_post_send = isset($_REQUEST['m_post_send']) ? secure_html(trim($_REQUEST['m_post_send'])) : '';
+	$m_post_modify = isset($_REQUEST['m_post_modify']) ? secure_html(trim($_REQUEST['m_post_modify'])) : '';
+	$m_post_remove = isset($_REQUEST['m_post_remove']) ? secure_html(trim($_REQUEST['m_post_remove'])) : '';
+	$forum_perm = is_array($_REQUEST['forum_perm']) ? $_REQUEST['forum_perm'] : array(
 		0 => array(
-			'forum_read' => true,
-			'topic_read'=> true,
-			'topic_send'=> false,
-			'topic_modify'=> false,
-			'topic_modify_your'=> false,
-			'topic_closed'=> false,
-			'topic_closed_your'=> false,
-			'topic_remove'=> false,
-			'topic_remove_your'=> false,
-			'post_send'=> false,
-			'post_modify'=> false,
-			'post_modify_your'=> false,
-			'post_remove'=> false,
-			'post_remove_your'=> false
+			'forum_read'        => true,
+			'topic_read'        => true,
+			'topic_send'        => false,
+			'topic_modify'      => false,
+			'topic_modify_your' => false,
+			'topic_closed'      => false,
+			'topic_closed_your' => false,
+			'topic_remove'      => false,
+			'topic_remove_your' => false,
+			'post_send'         => false,
+			'post_modify'       => false,
+			'post_modify_your'  => false,
+			'post_remove'       => false,
+			'post_remove_your'  => false
 		),
 		1 => array(
-			'forum_read' => true,
-			'topic_read'=> true,
-			'topic_send'=> true,
-			'topic_modify'=> true,
-			'topic_modify_your'=> true,
-			'topic_closed'=> true,
-			'topic_closed_your'=> true,
-			'topic_remove'=> true,
-			'topic_remove_your'=> true,
-			'post_send'=> true,
-			'post_modify'=> true,
-			'post_modify_your'=> true,
-			'post_remove'=> true,
-			'post_remove_your'=> true
+			'forum_read'        => true,
+			'topic_read'        => true,
+			'topic_send'        => true,
+			'topic_modify'      => true,
+			'topic_modify_your' => true,
+			'topic_closed'      => true,
+			'topic_closed_your' => true,
+			'topic_remove'      => true,
+			'topic_remove_your' => true,
+			'post_send'         => true,
+			'post_modify'       => true,
+			'post_modify_your'  => true,
+			'post_remove'       => true,
+			'post_remove_your'  => true
 		),
 		2 => array(
-			'forum_read' => true,
-			'topic_read'=> true,
-			'topic_send'=> true,
-			'topic_modify'=> false,
-			'topic_modify_your'=> false,
-			'topic_closed'=> false,
-			'topic_closed_your'=> false,
-			'topic_remove'=> false,
-			'topic_remove_your'=> false,
-			'post_send'=> true,
-			'post_modify'=> false,
-			'post_modify_your'=> true,
-			'post_remove'=> false,
-			'post_remove_your'=> true
+			'forum_read'        => true,
+			'topic_read'        => true,
+			'topic_send'        => true,
+			'topic_modify'      => false,
+			'topic_modify_your' => false,
+			'topic_closed'      => false,
+			'topic_closed_your' => false,
+			'topic_remove'      => false,
+			'topic_remove_your' => false,
+			'post_send'         => true,
+			'post_modify'       => false,
+			'post_modify_your'  => true,
+			'post_remove'       => false,
+			'post_remove_your'  => true
 		),
 		3 => array(
-			'forum_read' => true,
-			'topic_read'=> true,
-			'topic_send'=> true,
-			'topic_modify'=> false,
-			'topic_modify_your'=> false,
-			'topic_closed'=> false,
-			'topic_closed_your'=> false,
-			'topic_remove'=> false,
-			'topic_remove_your'=> false,
-			'post_send'=> true,
-			'post_modify'=> false,
-			'post_modify_your'=> true,
-			'post_remove'=> false,
-			'post_remove_your'=> true
+			'forum_read'        => true,
+			'topic_read'        => true,
+			'topic_send'        => true,
+			'topic_modify'      => false,
+			'topic_modify_your' => false,
+			'topic_closed'      => false,
+			'topic_closed_your' => false,
+			'topic_remove'      => false,
+			'topic_remove_your' => false,
+			'post_send'         => true,
+			'post_modify'       => false,
+			'post_modify_your'  => true,
+			'post_remove'       => false,
+			'post_remove_your'  => true
 		),
 		4 => array(
-			'forum_read' => true,
-			'topic_read'=> true,
-			'topic_send'=> true,
-			'topic_modify'=> false,
-			'topic_modify_your'=> false,
-			'topic_closed'=> false,
-			'topic_closed_your'=> false,
-			'topic_remove'=> false,
-			'topic_remove_your'=> false,
-			'post_send'=> true,
-			'post_modify'=> false,
-			'post_modify_your'=> true,
-			'post_remove'=> false,
-			'post_remove_your'=> true
+			'forum_read'        => true,
+			'topic_read'        => true,
+			'topic_send'        => true,
+			'topic_modify'      => false,
+			'topic_modify_your' => false,
+			'topic_closed'      => false,
+			'topic_closed_your' => false,
+			'topic_remove'      => false,
+			'topic_remove_your' => false,
+			'post_send'         => true,
+			'post_modify'       => false,
+			'post_modify_your'  => true,
+			'post_remove'       => false,
+			'post_remove_your'  => true
 		),
 		5 => array(
-			'forum_read' => true,
-			'topic_read'=> true,
-			'topic_send'=> false,
-			'topic_modify'=> false,
-			'topic_modify_your'=> false,
-			'topic_closed'=> false,
-			'topic_closed_your'=> false,
-			'topic_remove'=> false,
-			'topic_remove_your'=> false,
-			'post_send'=> true,
-			'post_modify'=> false,
-			'post_modify_your'=> false,
-			'post_remove'=> false,
-			'post_remove_your'=> false
+			'forum_read'        => true,
+			'topic_read'        => true,
+			'topic_send'        => false,
+			'topic_modify'      => false,
+			'topic_modify_your' => false,
+			'topic_closed'      => false,
+			'topic_closed_your' => false,
+			'topic_remove'      => false,
+			'topic_remove_your' => false,
+			'post_send'         => true,
+			'post_modify'       => false,
+			'post_modify_your'  => false,
+			'post_remove'       => false,
+			'post_remove_your'  => false
 		),
 	);
 	//print "<pre>".var_export($forum_perm, true)."</pre>";
-	if (isset($_REQUEST['submit'])){
-		if(empty($forum_name)) $error_text[] = 'Название форума не заполнено';
-		
-		if(isset($forum_moderators) && $forum_moderators){
-			$moder_array = array_map('trim', explode(',',$forum_moderators));
+	if (isset($_REQUEST['submit'])) {
+		if (empty($forum_name)) $error_text[] = 'Название форума не заполнено';
+		if (isset($forum_moderators) && $forum_moderators) {
+			$moder_array = array_map('trim', explode(',', $forum_moderators));
 			$moder_array = array_unique($moder_array);
-			foreach ($moder_array as $row){
-				if(!$user[strtolower($row)] = $mysql->record('SELECT id, name FROM '.prefix.'_users where name = LOWER(\''.$row.'\') LIMIT 1')){
-					$error_text[] = 'Пользователь '.$row.' не найден';
+			foreach ($moder_array as $row) {
+				if (!$user[strtolower($row)] = $mysql->record('SELECT id, name FROM ' . prefix . '_users where name = LOWER(\'' . $row . '\') LIMIT 1')) {
+					$error_text[] = 'Пользователь ' . $row . ' не найден';
 				}
-				
 			}
 		}
-		
 		//print "<pre>".var_export($user, true)."</pre>";
-		if(empty($error_text)){
-			$sql = 'SELECT MAX(position) FROM '.prefix.'_forum_forums where parent = '.intval($forum['id']).'';
-			$posit = $mysql-> result( $sql ) + 1;
-			
+		if (empty($error_text)) {
+			$sql = 'SELECT MAX(position) FROM ' . prefix . '_forum_forums where parent = ' . intval($forum['id']) . '';
+			$posit = $mysql->result($sql) + 1;
 			$forum_moderators = serialize($user);
-			
-			$mysql->query('INSERT INTO '.prefix.'_forum_forums
+			$mysql->query('INSERT INTO ' . prefix . '_forum_forums
 				(title, description, keywords, lock_passwd, redirect_url, moderators, parent, position)
 				VALUES
-				('.db_squote($forum_name).', '.db_squote($forum_description).', '.db_squote($forum_keywords).', '.db_squote($forum_lock_passwd).', '.db_squote($forum_redirect_url).','.db_squote($forum_moderators).', '.intval($forum['id']).', '.intval($posit).')
+				(' . db_squote($forum_name) . ', ' . db_squote($forum_description) . ', ' . db_squote($forum_keywords) . ', ' . db_squote($forum_lock_passwd) . ', ' . db_squote($forum_redirect_url) . ',' . db_squote($forum_moderators) . ', ' . intval($forum['id']) . ', ' . intval($posit) . ')
 			');
 			$forum_id = $mysql->lastid('forum_forums');
-			
-			foreach ($user as $row){
-				$mysql->query('INSERT INTO '.prefix.'_forum_moderators 
+			foreach ($user as $row) {
+				$mysql->query('INSERT INTO ' . prefix . '_forum_moderators 
 					(
 						m_forum_id,
 						m_topic_send,
@@ -944,20 +871,19 @@ global $twig, $plugin, $mysql;
 						m_post_modify,
 						m_post_remove
 					) VALUES (
-						'.securemysql($forum_id).',
-						'.securemysql($m_topic_send).',
-						'.securemysql($m_topic_modify).',
-						'.securemysql($m_topic_closed).',
-						'.securemysql($m_topic_remove).',
-						'.securemysql($m_post_send).',
-						'.securemysql($m_post_modify).',
-						'.securemysql($m_post_remove).'
+						' . securemysql($forum_id) . ',
+						' . securemysql($m_topic_send) . ',
+						' . securemysql($m_topic_modify) . ',
+						' . securemysql($m_topic_closed) . ',
+						' . securemysql($m_topic_remove) . ',
+						' . securemysql($m_post_send) . ',
+						' . securemysql($m_post_modify) . ',
+						' . securemysql($m_post_remove) . '
 					)
 				');
 			}
-			
-			foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as $row){
-				$mysql->query('INSERT INTO '.prefix.'_forum_permission 
+			foreach ($mysql->select('SELECT * from ' . prefix . '_forum_group') as $row) {
+				$mysql->query('INSERT INTO ' . prefix . '_forum_permission 
 					(
 						group_id,
 						forum_id,
@@ -976,115 +902,102 @@ global $twig, $plugin, $mysql;
 						post_remove,
 						post_remove_your
 					) VALUES (
-						'.$row['group_id'].',
-						'.$forum_id.',
-						'.secureinput($forum_perm[$row['group_id']]['forum_read']).',
-						'.secureinput($forum_perm[$row['group_id']]['topic_read']).',
-						'.secureinput($forum_perm[$row['group_id']]['topic_send']).',
-						'.secureinput($forum_perm[$row['group_id']]['topic_modify']).',
-						'.secureinput($forum_perm[$row['group_id']]['topic_modify_your']).',
-						'.secureinput($forum_perm[$row['group_id']]['topic_closed']).',
-						'.secureinput($forum_perm[$row['group_id']]['topic_closed_your']).',
-						'.secureinput($forum_perm[$row['group_id']]['topic_remove']).',
-						'.secureinput($forum_perm[$row['group_id']]['topic_remove_your']).',
-						'.secureinput($forum_perm[$row['group_id']]['post_send']).',
-						'.secureinput($forum_perm[$row['group_id']]['post_modify']).',
-						'.secureinput($forum_perm[$row['group_id']]['post_modify_your']).',
-						'.secureinput($forum_perm[$row['group_id']]['post_remove']).',
-						'.secureinput($forum_perm[$row['group_id']]['post_remove_your']).'
+						' . $row['group_id'] . ',
+						' . $forum_id . ',
+						' . secureinput($forum_perm[$row['group_id']]['forum_read']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['topic_read']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['topic_send']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['topic_modify']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['topic_modify_your']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['topic_closed']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['topic_closed_your']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['topic_remove']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['topic_remove_your']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['post_send']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['post_modify']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['post_modify_your']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['post_remove']) . ',
+						' . secureinput($forum_perm[$row['group_id']]['post_remove_your']) . '
 					)
 				');
 			}
-			
-			foreach ($mysql->select('SELECT * from '.prefix.'_forum_permission') as $row){
+			foreach ($mysql->select('SELECT * from ' . prefix . '_forum_permission') as $row) {
 				$result[$row['group_id']][$row['forum_id']] = $row;
 			}
-			file_put_contents(FORUM_CACHE.'/forum_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$FORUM_PERM = '.var_export($result, true).';'."\n\n");
-			
-			$row = ''; $result = '';
-			foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_group') as $row){
+			file_put_contents(FORUM_CACHE . '/forum_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$FORUM_PERM = ' . var_export($result, true) . ';' . "\n\n");
+			$row = '';
+			$result = '';
+			foreach ($mysql->select('SELECT * FROM ' . prefix . '_forum_group') as $row) {
 				$result[$row['group_id']] = $row;
 			}
-			file_put_contents(FORUM_CACHE.'/group_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$GROUP_PERM = '.var_export($result, true).';'."\n\n");
-			
-			$row = ''; $result = '';
-			foreach ($mysql->select('SELECT * from '.prefix.'_forum_moderators') as $row){
+			file_put_contents(FORUM_CACHE . '/group_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$GROUP_PERM = ' . var_export($result, true) . ';' . "\n\n");
+			$row = '';
+			$result = '';
+			foreach ($mysql->select('SELECT * from ' . prefix . '_forum_moderators') as $row) {
 				$result[$row['m_forum_id']] = $row;
 			}
-			file_put_contents(FORUM_CACHE.'/mode_perm.php', '<?php'."\n\n".'if (!defined(\'NGCMS\')) die (\'HAL\');'."\n\n".'$MODE_PERM = '.var_export($result, true).';'."\n\n");
-			
+			file_put_contents(FORUM_CACHE . '/mode_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$MODE_PERM = ' . var_export($result, true) . ';' . "\n\n");
 			generate_index_cache(true);
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 		}
 	}
-	
 	//print "<pre>".var_export($forum_moderators, true)."</pre>";
-	
-	foreach ($mysql->select('SELECT * from '.prefix.'_forum_group') as $row){
+	foreach ($mysql->select('SELECT * from ' . prefix . '_forum_group') as $row) {
 		//print "<pre>".var_export($row, true)."</pre>";
 		$tEntry[] = array(
-			'group_id' => $row['group_id'],
-			'group_name' => $row['group_name'],
-			
-			'forum_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
-			'topic_read' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
-			'topic_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
-			'topic_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
-			'topic_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
-			'topic_closed' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
-			'topic_closed_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
-			'topic_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
-			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
-			'post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_send]', $forum_perm[$row['group_id']]['post_send']),
-			'post_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
-			'post_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
-			'post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
-			'post_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm['.$row['group_id'].'][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
+			'group_id'          => $row['group_id'],
+			'group_name'        => $row['group_name'],
+			'forum_read'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
+			'topic_read'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
+			'topic_send'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
+			'topic_modify'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
+			'topic_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
+			'topic_closed'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
+			'topic_closed_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
+			'topic_remove'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
+			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
+			'post_send'         => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_send]', $forum_perm[$row['group_id']]['post_send']),
+			'post_modify'       => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
+			'post_modify_your'  => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
+			'post_remove'       => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
+			'post_remove_your'  => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
 		);
 	}
-	
 	$error_input = array();
-	if(isset($error_text) && is_array($error_text))
-		foreach($error_text as $error)
+	if (isset($error_text) && is_array($error_text))
+		foreach ($error_text as $error)
 			$error_input[] = msg(array("type" => "error", "text" => $error), 0, 2);
-	
 	$tVars = array(
-		'forum_name' => $forum_name,
-		'forum_description' => $forum_description,
-		'forum_keywords' => $forum_keywords,
-		'forum_lock_passwd' => $forum_lock_passwd,
+		'forum_name'         => $forum_name,
+		'forum_description'  => $forum_description,
+		'forum_keywords'     => $forum_keywords,
+		'forum_lock_passwd'  => $forum_lock_passwd,
 		'forum_redirect_url' => $forum_redirect_url,
-		'forum_moderators' => $forum_moderators,
-		'forum_title' => $forum['title'],
-		'forum_id' => $forum['id'],
-		'list_group' => $tEntry,
-		
-		'm_topic_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_send', $m_topic_send),
-		'm_topic_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_modify', $m_topic_modify),
-		'm_topic_closed' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_closed', $m_topic_closed),
-		'm_topic_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_remove', $m_topic_remove),
-		'm_post_send' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_send', $m_post_send),
-		'm_post_modify' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_modify', $m_post_modify),
-		'm_post_remove' => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_remove', $m_post_remove),
-		
-
-		
-		'list_error' => $error_input,
+		'forum_moderators'   => $forum_moderators,
+		'forum_title'        => $forum['title'],
+		'forum_id'           => $forum['id'],
+		'list_group'         => $tEntry,
+		'm_topic_send'       => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_send', $m_topic_send),
+		'm_topic_modify'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_modify', $m_topic_modify),
+		'm_topic_closed'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_closed', $m_topic_closed),
+		'm_topic_remove'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_remove', $m_topic_remove),
+		'm_post_send'        => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_send', $m_post_send),
+		'm_post_modify'      => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_modify', $m_post_modify),
+		'm_post_remove'      => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_remove', $m_post_remove),
+		'list_error'         => $error_input,
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Добавить форум',
 	);
-	
 	main($entries_main);
 }
 
-function title(){
-global $twig, $plugin;
+function title() {
+
+	global $twig, $plugin;
 	$tpath = locatePluginTemplates(array('title'), 'forum', 1, '', 'config');
-	
-	if (isset($_REQUEST['submit'])){
+	if (isset($_REQUEST['submit'])) {
 		pluginSetVariable($plugin, 'home_title', secure_html(trim($_REQUEST['home_title'])));
 		pluginSetVariable($plugin, 'forums_title', secure_html(trim($_REQUEST['forums_title'])));
 		pluginSetVariable($plugin, 'topic_title', secure_html(trim($_REQUEST['topic_title'])));
@@ -1114,11 +1027,9 @@ global $twig, $plugin;
 		pluginSetVariable($plugin, 'downloads_title', secure_html(trim($_REQUEST['downloads_title'])));
 		pluginSetVariable($plugin, 'erro404_title', secure_html(trim($_REQUEST['erro404_title'])));
 		pluginSetVariable($plugin, 'num_title', secure_html(trim($_REQUEST['num_title'])));
-		
 		pluginsSaveConfig();
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=title');
 	}
-	
 	$home_title = pluginGetVariable($plugin, 'home_title');
 	$forums_title = pluginGetVariable($plugin, 'forums_title');
 	$topic_title = pluginGetVariable($plugin, 'topic_title');
@@ -1148,1033 +1059,967 @@ global $twig, $plugin;
 	$downloads_title = pluginGetVariable($plugin, 'downloads_title');
 	$erro404_title = pluginGetVariable($plugin, 'erro404_title');
 	$num_title = pluginGetVariable($plugin, 'num_title');
-	
-	$xg = $twig->loadTemplate($tpath['title'].'title.tpl');
+	$xg = $twig->loadTemplate($tpath['title'] . 'title.tpl');
 	$tVars = array(
-		'home_title' => array(
+		'home_title'       => array(
 			'print' => $home_title,
-			'error' => empty($home_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_forum%':''
+			'error' => empty($home_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_forum%' : ''
 		),
-		'forums_title' => array(
+		'forums_title'     => array(
 			'print' => $forums_title,
-			'error' => empty($forums_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %4% / %name_forum% [/ %num%]':''
+			'error' => empty($forums_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %4% / %name_forum% [/ %num%]' : ''
 		),
-		'topic_title' => array(
+		'topic_title'      => array(
 			'print' => $topic_title,
-			'error' => empty($topic_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_topic% / %cat_forum% [/ %num%]':''
+			'error' => empty($topic_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_topic% / %cat_forum% [/ %num%]' : ''
 		),
-		'userlist_title' => array(
+		'userlist_title'   => array(
 			'print' => $userlist_title,
-			'error' => empty($userlist_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Список пользователей / %name_forum%':''
+			'error' => empty($userlist_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Список пользователей / %name_forum%' : ''
 		),
-		'search_title' => array(
+		'search_title'     => array(
 			'print' => $search_title,
-			'error' => empty($search_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Поиск / %name_forum%':''
+			'error' => empty($search_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Поиск / %name_forum%' : ''
 		),
-		'register_title' => array(
+		'register_title'   => array(
 			'print' => $register_title,
-			'error' => empty($register_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Регистрация / %name_forum%':''
+			'error' => empty($register_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Регистрация / %name_forum%' : ''
 		),
-		'login_title' => array(
+		'login_title'      => array(
 			'print' => $login_title,
-			'error' => empty($login_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Зайти на сайт / %name_forum%':''
+			'error' => empty($login_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Зайти на сайт / %name_forum%' : ''
 		),
-		'profile_title' => array(
+		'profile_title'    => array(
 			'print' => $profile_title,
-			'error' => empty($profile_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %others% / %name_forum%':''
+			'error' => empty($profile_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %others% / %name_forum%' : ''
 		),
-		'out_title' => array(
+		'out_title'        => array(
 			'print' => $out_title,
-			'error' => empty($out_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Выйти / %name_forum%':''
+			'error' => empty($out_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Выйти / %name_forum%' : ''
 		),
-		'addreply_title' => array(
+		'addreply_title'   => array(
 			'print' => $addreply_title,
-			'error' => empty($addreply_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить сообщение / %name_forum%':''
+			'error' => empty($addreply_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить сообщение / %name_forum%' : ''
 		),
-		'newtopic_title' => array(
+		'newtopic_title'   => array(
 			'print' => $newtopic_title,
-			'error' => empty($newtopic_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить тему / %name_forum%':''
+			'error' => empty($newtopic_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить тему / %name_forum%' : ''
 		),
-		'delpost_title' => array(
+		'delpost_title'    => array(
 			'print' => $delpost_title,
-			'error' => empty($delpost_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Удалить сообщение / %name_forum%':''
+			'error' => empty($delpost_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Удалить сообщение / %name_forum%' : ''
 		),
-		'edit_title' => array(
+		'edit_title'       => array(
 			'print' => $edit_title,
-			'error' => empty($edit_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Редактировать / %name_forum%':''
+			'error' => empty($edit_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Редактировать / %name_forum%' : ''
 		),
-		'rules_title' => array(
+		'rules_title'      => array(
 			'print' => $rules_title,
-			'error' => empty($rules_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Правила / %name_forum%':''
+			'error' => empty($rules_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Правила / %name_forum%' : ''
 		),
-		'show_new_title' => array(
+		'show_new_title'   => array(
 			'print' => $show_new_title,
-			'error' => empty($show_new_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Последние сообщения / %name_forum%':''
+			'error' => empty($show_new_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Последние сообщения / %name_forum%' : ''
 		),
-		'markread_title' => array(
+		'markread_title'   => array(
 			'print' => $markread_title,
-			'error' => empty($markread_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Всё прочитано / %name_forum%':''
+			'error' => empty($markread_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Всё прочитано / %name_forum%' : ''
 		),
-		'rep_title' => array(
+		'rep_title'        => array(
 			'print' => $rep_title,
-			'error' => empty($rep_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Репутация участника %others% / %name_forum%':''
+			'error' => empty($rep_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Репутация участника %others% / %name_forum%' : ''
 		),
-		'addr_title' => array(
+		'addr_title'       => array(
 			'print' => $addr_title,
-			'error' => empty($addr_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить репутацию / %name_forum%':''
+			'error' => empty($addr_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить репутацию / %name_forum%' : ''
 		),
-		'news_title' => array(
+		'news_title'       => array(
 			'print' => $news_title,
-			'error' => empty($news_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_news% / Новости / %name_forum%':''
+			'error' => empty($news_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_news% / Новости / %name_forum%' : ''
 		),
-		'news_feed_title' => array(
+		'news_feed_title'  => array(
 			'print' => $news_feed_title,
-			'error' => empty($news_feed_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Вся лента / %name_forum% [/ %num%]':''
+			'error' => empty($news_feed_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Вся лента / %name_forum% [/ %num%]' : ''
 		),
-		'act_title' => array(
+		'act_title'        => array(
 			'print' => $act_title,
-			'error' => empty($act_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %others% / %name_forum%':''
+			'error' => empty($act_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %others% / %name_forum%' : ''
 		),
-		'thank_title' => array(
+		'thank_title'      => array(
 			'print' => $thank_title,
-			'error' => empty($thank_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> История благодарностей участнику %others% / %name_forum%':''
+			'error' => empty($thank_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> История благодарностей участнику %others% / %name_forum%' : ''
 		),
 		'complaints_title' => array(
 			'print' => $complaints_title,
-			'error' => empty($complaints_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Сообщить модератору / %name_forum%':''
+			'error' => empty($complaints_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Сообщить модератору / %name_forum%' : ''
 		),
-		'send_pm_title' => array(
+		'send_pm_title'    => array(
 			'print' => $send_pm_title,
-			'error' => empty($send_pm_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Новое сообщение / %name_forum%':''
+			'error' => empty($send_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Новое сообщение / %name_forum%' : ''
 		),
-		'list_pm_title' => array(
+		'list_pm_title'    => array(
 			'print' => $list_pm_title,
-			'error' => empty($list_pm_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Личное сообщение / %name_forum%':''
+			'error' => empty($list_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Личное сообщение / %name_forum%' : ''
 		),
-		'del_pm_title' => array(
+		'del_pm_title'     => array(
 			'print' => $del_pm_title,
-			'error' => empty($del_pm_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Удалить сообщение / %name_forum%':''
+			'error' => empty($del_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Удалить сообщение / %name_forum%' : ''
 		),
-		'downloads_title' => array(
+		'downloads_title'  => array(
 			'print' => $downloads_title,
-			'error' => empty($downloads_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Загрузка файла / %name_forum%':''
+			'error' => empty($downloads_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Загрузка файла / %name_forum%' : ''
 		),
-		'erro404_title' => array(
+		'erro404_title'    => array(
 			'print' => $erro404_title,
-			'error' => empty($erro404_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Информация / %name_forum%':''
+			'error' => empty($erro404_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Информация / %name_forum%' : ''
 		),
-		'num_title' => array(
-						'print' => $num_title,
-						'error' => empty($num_title)?'<img src="'.skins_url.'/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> / Страница %count%':''
+		'num_title'        => array(
+			'print' => $num_title,
+			'error' => empty($num_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> / Страница %count%' : ''
 		),
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Заголовки форума',
 	);
-	
 	main($entries_main);
 }
 
-function url()
-{global $twig, $plugin;
+function url() {
+
+	global $twig, $plugin;
 	$tpath = locatePluginTemplates(array('url'), 'forum', 1, '', 'config');
-	
-	if($_REQUEST['id']){
+	if ($_REQUEST['id']) {
 		$ULIB = new urlLibrary();
 		$ULIB->loadConfig();
-		
 		$UHANDLER = new urlHandler();
 		$UHANDLER->loadConfig();
-		
-		switch($_REQUEST['id']){
+		switch ($_REQUEST['id']) {
 			case 'home':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', '',
-						array ('vars' =>
-							array(),
-							'descr'	=> array ('russian' => 'Главная страница форума'),
+						array(
+							'vars'  =>
+								array(),
+							'descr' => array('russian' => 'Главная страница форума'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						array (
-							'pluginName' => 'forum',
-							'handlerName' => '',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => '',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/',
-							  'regex' => '#^/forum/$#',
-							  'regexMap' => 
-							  array (
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/',
+									'regex'    => '#^/forum/$#',
+									'regexMap' =>
+										array(),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/',
+													2 => 0,
+												),
+										),
 								),
-							  ),
-							),
-						  )
+						)
 					);
 				} else {
 					$ULIB->removeCommand('forum', '');
 					$UHANDLER->removePluginHandlers('forum', '');
 				}
-			break;
+				break;
 			case 'register':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', 'register',
-						array ('vars' =>
+						array(
+							'vars'  =>
 								array(),
-								'descr'	=> array ('russian' => 'Страница регистрации на форуме'),
+							'descr' => array('russian' => 'Страница регистрации на форуме'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						array (
-							'pluginName' => 'forum',
-							'handlerName' => 'register',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => 'register',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/register/',
-							  'regex' => '#^/forum/register/$#',
-							  'regexMap' => 
-							  array (
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/register/',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/register/',
+									'regex'    => '#^/forum/register/$#',
+									'regexMap' =>
+										array(),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/register/',
+													2 => 0,
+												),
+										),
 								),
-							  ),
-							),
-						  )
+						)
 					);
 				} else {
 					$ULIB->removeCommand('forum', 'register');
 					$UHANDLER->removePluginHandlers('forum', 'register');
 				}
-			break;
+				break;
 			case 'login':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', 'login',
-						array ('vars' =>
+						array(
+							'vars'  =>
 								array(),
-								'descr'	=> array ('russian' => 'Страница авторизации на форуме'),
+							'descr' => array('russian' => 'Страница авторизации на форуме'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						array (
-							'pluginName' => 'forum',
-							'handlerName' => 'login',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => 'login',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/login/',
-							  'regex' => '#^/forum/login/$#',
-							  'regexMap' => 
-							  array (
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/login/',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/login/',
+									'regex'    => '#^/forum/login/$#',
+									'regexMap' =>
+										array(),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/login/',
+													2 => 0,
+												),
+										),
 								),
-							  ),
-							),
-						  )
+						)
 					);
 				} else {
 					$ULIB->removeCommand('forum', 'login');
 					$UHANDLER->removePluginHandlers('forum', 'login');
 				}
-			break;
+				break;
 			case 'out':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', 'out',
-						array ('vars' =>
+						array(
+							'vars'  =>
 								array(),
-								'descr'	=> array ('russian' => 'Выйти с форума'),
+							'descr' => array('russian' => 'Выйти с форума'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						array (
-							'pluginName' => 'forum',
-							'handlerName' => 'out',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => 'out',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/out/',
-							  'regex' => '#^/forum/out/$#',
-							  'regexMap' => 
-							  array (
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/out/',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/out/',
+									'regex'    => '#^/forum/out/$#',
+									'regexMap' =>
+										array(),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/out/',
+													2 => 0,
+												),
+										),
 								),
-							  ),
-							),
-						  )
+						)
 					);
 				} else {
 					$ULIB->removeCommand('forum', 'out');
 					$UHANDLER->removePluginHandlers('forum', 'out');
 				}
-			break;
+				break;
 			case 'addreply':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', 'addreply',
-						array ('vars' =>
-								array(	'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id темы')),
+						array(
+							'vars'  =>
+								array(
+									'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id темы')),
 								),
-								'descr'	=> array ('russian' => 'Ссылка на новое сообщение'),
+							'descr' => array('russian' => 'Ссылка на новое сообщение'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						 array (
-							'pluginName' => 'forum',
-							'handlerName' => 'addreply',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => 'addreply',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/addreply/{id}/',
-							  'regex' => '#^/forum/addreply/(\\d+)/$#',
-							  'regexMap' => 
-							  array (
-								1 => 'id',
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/addreply/',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/addreply/{id}/',
+									'regex'    => '#^/forum/addreply/(\\d+)/$#',
+									'regexMap' =>
+										array(
+											1 => 'id',
+										),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/addreply/',
+													2 => 0,
+												),
+											1 =>
+												array(
+													0 => 1,
+													1 => 'id',
+													2 => 0,
+												),
+											2 =>
+												array(
+													0 => 0,
+													1 => '/',
+													2 => 0,
+												),
+										),
 								),
-								1 => 
-								array (
-								  0 => 1,
-								  1 => 'id',
-								  2 => 0,
-								),
-								2 => 
-								array (
-								  0 => 0,
-								  1 => '/',
-								  2 => 0,
-								),
-							  ),
-							),
-						  )
+						)
 					);
 				} else {
 					$ULIB->removeCommand('forum', 'addreply');
 					$UHANDLER->removePluginHandlers('forum', 'addreply');
 				}
-			break;
+				break;
 			case 'newtopic':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', 'newtopic',
-						array ('vars' =>
-								array(	'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id раздела')),
+						array(
+							'vars'  =>
+								array(
+									'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id раздела')),
 								),
-								'descr'	=> array ('russian' => 'Ссылка на новую тему'),
+							'descr' => array('russian' => 'Ссылка на новую тему'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						array (
-							'pluginName' => 'forum',
-							'handlerName' => 'newtopic',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => 'newtopic',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/newtopic/{id}/',
-							  'regex' => '#^/forum/newtopic/(\\d+)/$#',
-							  'regexMap' => 
-							  array (
-								1 => 'id',
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/newtopic/',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/newtopic/{id}/',
+									'regex'    => '#^/forum/newtopic/(\\d+)/$#',
+									'regexMap' =>
+										array(
+											1 => 'id',
+										),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/newtopic/',
+													2 => 0,
+												),
+											1 =>
+												array(
+													0 => 1,
+													1 => 'id',
+													2 => 0,
+												),
+											2 =>
+												array(
+													0 => 0,
+													1 => '/',
+													2 => 0,
+												),
+										),
 								),
-								1 => 
-								array (
-								  0 => 1,
-								  1 => 'id',
-								  2 => 0,
-								),
-								2 => 
-								array (
-								  0 => 0,
-								  1 => '/',
-								  2 => 0,
-								),
-							  ),
-							),
-						  )
+						)
 					);
 				} else {
 					$ULIB->removeCommand('forum', 'newtopic');
 					$UHANDLER->removePluginHandlers('forum', 'newtopic');
 				}
-			break;
+				break;
 			case 'profile':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', 'profile',
-						array ('vars' =>
-								array(	'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id пользователя')),
-										'name' => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Логин пользователя')),
-										'act' => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Дополнительное действие')),
+						array(
+							'vars'  =>
+								array(
+									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id пользователя')),
+									'name' => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Логин пользователя')),
+									'act'  => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Дополнительное действие')),
 								),
-								'descr'	=> array ('russian' => 'Ссылка на профиль'),
+							'descr' => array('russian' => 'Ссылка на профиль'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						array (
-							'pluginName' => 'forum',
-							'handlerName' => 'profile',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => 'profile',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/profile/{name}/[{act}/]',
-							  'regex' => '#^/forum/profile/(.+?)/(?:(.+?)/){0,1}$#',
-							  'regexMap' => 
-							  array (
-								1 => 'name',
-								2 => 'act',
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/profile/',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/profile/{name}/[{act}/]',
+									'regex'    => '#^/forum/profile/(.+?)/(?:(.+?)/){0,1}$#',
+									'regexMap' =>
+										array(
+											1 => 'name',
+											2 => 'act',
+										),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/profile/',
+													2 => 0,
+												),
+											1 =>
+												array(
+													0 => 1,
+													1 => 'name',
+													2 => 0,
+												),
+											2 =>
+												array(
+													0 => 0,
+													1 => '/',
+													2 => 0,
+												),
+											3 =>
+												array(
+													0 => 1,
+													1 => 'act',
+													2 => 1,
+												),
+											4 =>
+												array(
+													0 => 0,
+													1 => '/',
+													2 => 1,
+												),
+										),
 								),
-								1 => 
-								array (
-								  0 => 1,
-								  1 => 'name',
-								  2 => 0,
-								),
-								2 => 
-								array (
-								  0 => 0,
-								  1 => '/',
-								  2 => 0,
-								),
-								3 => 
-								array (
-								  0 => 1,
-								  1 => 'act',
-								  2 => 1,
-								),
-								4 => 
-								array (
-								  0 => 0,
-								  1 => '/',
-								  2 => 1,
-								),
-							  ),
-							),
-						  )
+						)
 					);
 				} else {
 					$ULIB->removeCommand('forum', 'profile');
 					$UHANDLER->removePluginHandlers('forum', 'profile');
 				}
-			break;
+				break;
 			case 'showforum':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', 'showforum',
-						array ('vars' =>
-								array(	'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id  категории')),
-										'page' => array('matchRegex' => '\d{1,4}', 'descr' => array('russian' => 'Постраничная навигация')),
+						array(
+							'vars'  =>
+								array(
+									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id  категории')),
+									'page' => array('matchRegex' => '\d{1,4}', 'descr' => array('russian' => 'Постраничная навигация')),
 								),
-								'descr'	=> array ('russian' => 'Ссылка на категорию'),
+							'descr' => array('russian' => 'Ссылка на категорию'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						array (
-							'pluginName' => 'forum',
-							'handlerName' => 'showforum',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => 'showforum',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/forum{id}[p{page}].html',
-							  'regex' => '#^/forum/forum(\\d+)(?:p(\\d{1,4})){0,1}.html$#',
-							  'regexMap' => 
-							  array (
-								1 => 'id',
-								2 => 'page',
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/forum',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/forum{id}[p{page}].html',
+									'regex'    => '#^/forum/forum(\\d+)(?:p(\\d{1,4})){0,1}.html$#',
+									'regexMap' =>
+										array(
+											1 => 'id',
+											2 => 'page',
+										),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/forum',
+													2 => 0,
+												),
+											1 =>
+												array(
+													0 => 1,
+													1 => 'id',
+													2 => 0,
+												),
+											2 =>
+												array(
+													0 => 0,
+													1 => 'p',
+													2 => 1,
+												),
+											3 =>
+												array(
+													0 => 1,
+													1 => 'page',
+													2 => 1,
+												),
+											4 =>
+												array(
+													0 => 0,
+													1 => '.html',
+													2 => 0,
+												),
+										),
 								),
-								1 => 
-								array (
-								  0 => 1,
-								  1 => 'id',
-								  2 => 0,
-								),
-								2 => 
-								array (
-								  0 => 0,
-								  1 => 'p',
-								  2 => 1,
-								),
-								3 => 
-								array (
-								  0 => 1,
-								  1 => 'page',
-								  2 => 1,
-								),
-								4 => 
-								array (
-								  0 => 0,
-								  1 => '.html',
-								  2 => 0,
-								),
-							  ),
-							),
-						  )
+						)
 					);
 				} else {
 					$ULIB->removeCommand('forum', 'showforum');
 					$UHANDLER->removePluginHandlers('forum', 'showforum');
 				}
-			break;
+				break;
 			case 'showtopic':
-				if($_REQUEST['s']){
+				if ($_REQUEST['s']) {
 					$ULIB->registerCommand('forum', 'showtopic',
-						array ('vars' =>
-								array(	'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id темы')),
-										'pid' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id  сообщения')),
-										'page' => array('matchRegex' => '\d{1,4}', 'descr' => array('russian' => 'Постраничная навигация')),
-										's' => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Поиск слов в теме')),
+						array(
+							'vars'  =>
+								array(
+									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id темы')),
+									'pid'  => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id  сообщения')),
+									'page' => array('matchRegex' => '\d{1,4}', 'descr' => array('russian' => 'Постраничная навигация')),
+									's'    => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Поиск слов в теме')),
 								),
-								'descr'	=> array ('russian' => 'Ссылка на тему'),
+							'descr' => array('russian' => 'Ссылка на тему'),
 						)
 					);
-					
 					$UHANDLER->registerHandler(0,
-						array (
-							'pluginName' => 'forum',
-							'handlerName' => 'showtopic',
-							'flagPrimary' => true,
+						array(
+							'pluginName'       => 'forum',
+							'handlerName'      => 'showtopic',
+							'flagPrimary'      => true,
 							'flagFailContinue' => false,
-							'flagDisabled' => false,
-							'rstyle' => 
-							array (
-							  'rcmd' => '/forum/[post{pid}][topic{id}][p{page}][/{s}].html',
-							  'regex' => '#^/forum/(?:post(\\d+)){0,1}(?:topic(\\d+)){0,1}(?:p(\\d{1,4})){0,1}(?:/(.+?)){0,1}.html$#',
-							  'regexMap' => 
-							  array (
-								1 => 'pid',
-								2 => 'id',
-								3 => 'page',
-								4 => 's',
-							  ),
-							  'reqCheck' => 
-							  array (
-							  ),
-							  'setVars' => 
-							  array (
-							  ),
-							  'genrMAP' => 
-							  array (
-								0 => 
-								array (
-								  0 => 0,
-								  1 => '/forum/',
-								  2 => 0,
+							'flagDisabled'     => false,
+							'rstyle'           =>
+								array(
+									'rcmd'     => '/forum/[post{pid}][topic{id}][p{page}][/{s}].html',
+									'regex'    => '#^/forum/(?:post(\\d+)){0,1}(?:topic(\\d+)){0,1}(?:p(\\d{1,4})){0,1}(?:/(.+?)){0,1}.html$#',
+									'regexMap' =>
+										array(
+											1 => 'pid',
+											2 => 'id',
+											3 => 'page',
+											4 => 's',
+										),
+									'reqCheck' =>
+										array(),
+									'setVars'  =>
+										array(),
+									'genrMAP'  =>
+										array(
+											0 =>
+												array(
+													0 => 0,
+													1 => '/forum/',
+													2 => 0,
+												),
+											1 =>
+												array(
+													0 => 0,
+													1 => 'post',
+													2 => 1,
+												),
+											2 =>
+												array(
+													0 => 1,
+													1 => 'pid',
+													2 => 1,
+												),
+											3 =>
+												array(
+													0 => 0,
+													1 => 'topic',
+													2 => 2,
+												),
+											4 =>
+												array(
+													0 => 1,
+													1 => 'id',
+													2 => 2,
+												),
+											5 =>
+												array(
+													0 => 0,
+													1 => 'p',
+													2 => 3,
+												),
+											6 =>
+												array(
+													0 => 1,
+													1 => 'page',
+													2 => 3,
+												),
+											7 =>
+												array(
+													0 => 0,
+													1 => '/',
+													2 => 4,
+												),
+											8 =>
+												array(
+													0 => 1,
+													1 => 's',
+													2 => 4,
+												),
+											9 =>
+												array(
+													0 => 0,
+													1 => '.html',
+													2 => 0,
+												),
+										),
 								),
-								1 => 
-								array (
-								  0 => 0,
-								  1 => 'post',
-								  2 => 1,
-								),
-								2 => 
-								array (
-								  0 => 1,
-								  1 => 'pid',
-								  2 => 1,
-								),
-								3 => 
-								array (
-								  0 => 0,
-								  1 => 'topic',
-								  2 => 2,
-								),
-								4 => 
-								array (
-								  0 => 1,
-								  1 => 'id',
-								  2 => 2,
-								),
-								5 => 
-								array (
-								  0 => 0,
-								  1 => 'p',
-								  2 => 3,
-								),
-								6 => 
-								array (
-								  0 => 1,
-								  1 => 'page',
-								  2 => 3,
-								),
-								7 => 
-								array (
-								  0 => 0,
-								  1 => '/',
-								  2 => 4,
-								),
-								8 => 
-								array (
-								  0 => 1,
-								  1 => 's',
-								  2 => 4,
-								),
-								9 => 
-								array (
-								  0 => 0,
-								  1 => '.html',
-								  2 => 0,
-								),
-							  ),
-							),
-						  )
-					 );
+						)
+					);
 				} else {
 					$ULIB->removeCommand('forum', 'showtopic');
 					$UHANDLER->removePluginHandlers('forum', 'showtopic');
 				}
-			break;
+				break;
 		}
-		
 		$ULIB->saveConfig();
 		$UHANDLER->saveConfig();
-		
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=url');
 	}
-	
-	$xg = $twig->loadTemplate($tpath['url'].'url.tpl');
+	$xg = $twig->loadTemplate($tpath['url'] . 'url.tpl');
 	$tVars = array(
-		'home_forum' => checkLinkAvailable('forum', ''),
-		'register_forum' => checkLinkAvailable('forum', 'register'),
-		'login_forum' => checkLinkAvailable('forum', 'login'),
-		'out_forum' => checkLinkAvailable('forum', 'out'),
-		'addreply_forum' => checkLinkAvailable('forum', 'addreply'),
-		'newtopic_forum' => checkLinkAvailable('forum', 'newtopic'),
-		'profile_forum' => checkLinkAvailable('forum', 'profile'),
+		'home_forum'      => checkLinkAvailable('forum', ''),
+		'register_forum'  => checkLinkAvailable('forum', 'register'),
+		'login_forum'     => checkLinkAvailable('forum', 'login'),
+		'out_forum'       => checkLinkAvailable('forum', 'out'),
+		'addreply_forum'  => checkLinkAvailable('forum', 'addreply'),
+		'newtopic_forum'  => checkLinkAvailable('forum', 'newtopic'),
+		'profile_forum'   => checkLinkAvailable('forum', 'profile'),
 		'showforum_forum' => checkLinkAvailable('forum', 'showforum'),
 		'showtopic_forum' => checkLinkAvailable('forum', 'showtopic'),
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'ЧПУ',
 	);
-	
 	main($entries_main);
 }
 
 //непонятная функция :))
-function moderat()
-{global $mysql;
-	
-	
+function moderat() {
+
+	global $mysql;
 	switch ($_REQUEST['act']) {
-		case 'pinned': 
-			if($_REQUEST['method'] == 0)
+		case 'pinned':
+			if ($_REQUEST['method'] == 0)
 				$method = 0;
-			elseif($_REQUEST['method'] == 1)
+			elseif ($_REQUEST['method'] == 1)
 				$method = 1;
 			else
 				$method = 0;
 			//print $confArray['predefined']['HTTP_REFERER'];
-			$mysql->query('UPDATE '.prefix.'_forum_topics SET pinned = '.db_squote($method).' WHERE id = '.db_squote($_REQUEST['tid']).' LIMIT 1');
+			$mysql->query('UPDATE ' . prefix . '_forum_topics SET pinned = ' . db_squote($method) . ' WHERE id = ' . db_squote($_REQUEST['tid']) . ' LIMIT 1');
 			//redirect_forum_config(link_forum($_REQUEST['tid']));
-		break;
+			break;
 	}
 }
 
-function rules()
-{global $twig, $plugin;
-	if (isset($_REQUEST['submit'])){
+function rules() {
+
+	global $twig, $plugin;
+	if (isset($_REQUEST['submit'])) {
 		pluginSetVariable('forum', 'rules_on_off', (int)$_REQUEST['rules_on_off']);
 		pluginSetVariable('forum', 'rules', secure_html(trim($_REQUEST['rules'])));
 		pluginsSaveConfig();
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=rules');
 	}
-	
 	$tpath = locatePluginTemplates(array('rules', ':'), 'forum', 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['rules'].'rules.tpl');
+	$xg = $twig->loadTemplate($tpath['rules'] . 'rules.tpl');
 	$tVars = array(
-		'rules_on_off' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'rules_on_off', (int)pluginGetVariable($plugin,'rules_on_off')),
-		'rules' => secure_html(trim(pluginGetVariable($plugin,'rules'))),
-		'forum_tpl' => $tpath['url::'],
+		'rules_on_off' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'rules_on_off', (int)pluginGetVariable($plugin, 'rules_on_off')),
+		'rules'        => secure_html(trim(pluginGetVariable($plugin, 'rules'))),
+		'forum_tpl'    => $tpath['url::'],
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Правила',
 	);
-	
 	main($entries_main);
 }
 
-function ads()
-{global $twig, $plugin;
-	if (isset($_REQUEST['submit'])){
+function ads() {
+
+	global $twig, $plugin;
+	if (isset($_REQUEST['submit'])) {
 		pluginSetVariable('forum', 'announcement_on_off', (int)$_REQUEST['announcement_on_off']);
 		pluginSetVariable('forum', 'announcement', secure_html(trim($_REQUEST['announcement'])));
 		pluginsSaveConfig();
 		//redirect_forum_config('?mod=extra-config&plugin=forum&action=ads');
 	}
-	
 	$tpath = locatePluginTemplates(array('ads', ':'), 'forum', 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['ads'].'ads.tpl');
+	$xg = $twig->loadTemplate($tpath['ads'] . 'ads.tpl');
 	$tVars = array(
-		'announcement_on_off' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'announcement_on_off', (int)pluginGetVariable($plugin,'announcement_on_off')),
-		'announcement' => secure_html(trim(pluginGetVariable($plugin,'announcement'))),
-		'forum_tpl' => $tpath['url::'],
+		'announcement_on_off' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'announcement_on_off', (int)pluginGetVariable($plugin, 'announcement_on_off')),
+		'announcement'        => secure_html(trim(pluginGetVariable($plugin, 'announcement'))),
+		'forum_tpl'           => $tpath['url::'],
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Объявления',
 	);
-	
 	main($entries_main);
 }
-function new_news()
-{global $twig, $plugin, $mysql, $SYSTEM_FLAGS;
+
+function new_news() {
+
+	global $twig, $plugin, $mysql, $SYSTEM_FLAGS;
 	$tpath = locatePluginTemplates(array('new_news', 'htmail', ':'), 'forum', 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['new_news'].'new_news.tpl');
-	$xs = $twig->loadTemplate($tpath['htmail'].'htmail.tpl');
+	$xg = $twig->loadTemplate($tpath['new_news'] . 'new_news.tpl');
+	$xs = $twig->loadTemplate($tpath['htmail'] . 'htmail.tpl');
 	$time = time() + ($config['date_adjust'] * 60);
 	$edit_id = intval($_REQUEST['id']);
-	
-	$news_ar = $mysql->record('SELECT * FROM '.prefix.'_forum_news WHERE id = '.db_squote($edit_id).' LIMIT 1');
-	
-	$title = isset($_REQUEST['title'])?secure_html(trim($_REQUEST['title'])):secure_html(trim($news_ar['title']));
-	$content = isset($_REQUEST['content'])?secure_html(trim($_REQUEST['content'])):secure_html(trim($news_ar['content']));
+	$news_ar = $mysql->record('SELECT * FROM ' . prefix . '_forum_news WHERE id = ' . db_squote($edit_id) . ' LIMIT 1');
+	$title = isset($_REQUEST['title']) ? secure_html(trim($_REQUEST['title'])) : secure_html(trim($news_ar['title']));
+	$content = isset($_REQUEST['content']) ? secure_html(trim($_REQUEST['content'])) : secure_html(trim($news_ar['content']));
 	$mail = secure_html(trim($_REQUEST['mail']));
-	
-	if (isset($_REQUEST['submit'])){
-		
-		if(empty($title))
+	if (isset($_REQUEST['submit'])) {
+		if (empty($title))
 			$error_text[] = 'Титле обязательна для заполнения';
-		
-		if(empty($content))
+		if (empty($content))
 			$error_text[] = 'Сообщение обязательно для заполнения';
-		
-		if(empty($error_text)){
-			if(isset($edit_id) && $edit_id){
-				
+		if (empty($error_text)) {
+			if (isset($edit_id) && $edit_id) {
 				$SQL = array();
-				
-				if(isset($title) && $title) $SQL['title'] = $title;
-				
-				if(isset($content) && $content) $SQL['content'] = $content;
-				
+				if (isset($title) && $title) $SQL['title'] = $title;
+				if (isset($content) && $content) $SQL['content'] = $content;
 				$vnamess = array();
-				foreach ($SQL as $k => $v) { $vnamess[] = $k.' = '.db_squote($v); }
-					$mysql->query('update '.prefix.'_forum_news set '.implode(', ',$vnamess).' where id = \''.intval($edit_id).'\'');
+				foreach ($SQL as $k => $v) {
+					$vnamess[] = $k . ' = ' . db_squote($v);
+				}
+				$mysql->query('update ' . prefix . '_forum_news set ' . implode(', ', $vnamess) . ' where id = \'' . intval($edit_id) . '\'');
 			} else {
-				$mysql->query('INSERT INTO '.prefix.'_forum_news(
+				$mysql->query('INSERT INTO ' . prefix . '_forum_news(
 						title,
 						content,
 						c_data
 					) VALUES (
-						'.db_squote($title).',
-						'.db_squote($content).',
-						'.db_squote($time).'
+						' . db_squote($title) . ',
+						' . db_squote($content) . ',
+						' . db_squote($time) . '
 					)
 				');
 			}
-			
-			if(isset($mail) && $mail){
+			if (isset($mail) && $mail) {
 				$news_id = $mysql->lastid('forum_news');
-				foreach ($mysql->select('SELECT * FROM '.prefix.'_users') as $row){
-					
+				foreach ($mysql->select('SELECT * FROM ' . prefix . '_users') as $row) {
 					$tVars = array(
 						'profile_link' => link_profile($row['id']),
-						'profile' => $row['name'],
-						'news_link' => link_news($news_id),
-						'news_name' => $title,
-						'mydomains' => $SYSTEM_FLAGS['mydomains'][0],
+						'profile'      => $row['name'],
+						'news_link'    => link_news($news_id),
+						'news_name'    => $title,
+						'mydomains'    => $SYSTEM_FLAGS['mydomains'][0],
 					);
-					
 					zzMail($row['mail'], 'Новая новость', $xs->render($tVars), '', 'rozard@mail.ru', 'text/html');
 				}
 			}
-			
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_news');
 		}
 	}
-	
-	if(is_array($error_text)){
-		foreach($error_text as $error)
+	if (is_array($error_text)) {
+		foreach ($error_text as $error)
 			$error_input .= msg(array("type" => "error", "text" => $error), 0, 2);
-	} else $error_input ='';
-	
+	} else $error_input = '';
 	$tVars = array(
-		'title' => $title,
-		'content' => $content,
+		'title'     => $title,
+		'content'   => $content,
 		'forum_tpl' => $tpath['url::'],
-		'preview' => array(
-			'true' => isset($_REQUEST['preview'])?1:0,
+		'preview'   => array(
+			'true'  => isset($_REQUEST['preview']) ? 1 : 0,
 			'print' => bb_codes($content)
 		),
-		'checked' => ($mail)?'checked="checked"':'',
-		'error' => $error_input,
+		'checked'   => ($mail) ? 'checked="checked"' : '',
+		'error'     => $error_input,
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Список новостей',
 	);
-	
 	main($entries_main);
 }
 
-function del_news(){
+function del_news() {
+
 	global $mysql;
-	
 	$id = intval($_REQUEST['id']);
-	
-	$mysql->query('DELETE FROM '.prefix.'_forum_news WHERE id = '.db_squote($id).' LIMIT 1');
-	
+	$mysql->query('DELETE FROM ' . prefix . '_forum_news WHERE id = ' . db_squote($id) . ' LIMIT 1');
 	$_SESSION['forum']['info'] = 'Новость удалена';
-	
 	redirect_forum_config('?mod=extra-config&plugin=forum&action=list_news');
 }
 
-function list_news()
-{global $twig, $plugin, $mysql;
-	if(isset($_SESSION['forum']['info'])){
-		$info =  $_SESSION['forum']['info'];
+function list_news() {
+
+	global $twig, $plugin, $mysql;
+	if (isset($_SESSION['forum']['info'])) {
+		$info = $_SESSION['forum']['info'];
 		session_destroy();
 	}
-	
 	$tpath = locatePluginTemplates(array('news'), 'forum', 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['news'].'news.tpl');
-	
+	$xg = $twig->loadTemplate($tpath['news'] . 'news.tpl');
 	$news_per_page = 5;
-	
-	if (($news_per_page < 2)||($news_per_page > 2000)) $news_per_page = 2;
-	
-	$pageNo		= intval($_REQUEST['page'])?$_REQUEST['page']:0;
-	if ($pageNo < 1)	$pageNo = 1;
-	if (!$start_from)	$start_from = ($pageNo - 1)* $news_per_page;
-	
-	$count = $mysql->result('SELECT count(id) from '.prefix.'_forum_news');
+	if (($news_per_page < 2) || ($news_per_page > 2000)) $news_per_page = 2;
+	$pageNo = intval($_REQUEST['page']) ? $_REQUEST['page'] : 0;
+	if ($pageNo < 1) $pageNo = 1;
+	if (!$start_from) $start_from = ($pageNo - 1) * $news_per_page;
+	$count = $mysql->result('SELECT count(id) from ' . prefix . '_forum_news');
 	$countPages = ceil($count / $news_per_page);
-	
-	foreach ($mysql->select('SELECT * FROM '.prefix.'_forum_news ORDER BY c_data DESC LIMIT '.$start_from.', '.$news_per_page) as $row){
+	foreach ($mysql->select('SELECT * FROM ' . prefix . '_forum_news ORDER BY c_data DESC LIMIT ' . $start_from . ', ' . $news_per_page) as $row) {
 		$tEntry[] = array(
 			'news_id' => $row['id'],
-			'title' => $row['title'],
+			'title'   => $row['title'],
 			'content' => $row['content'],
-			'edit' => '<a href="?mod=extra-config&plugin=forum&action=new_news&id='.$row['id'].'";><img src="'.skins_url.'/images/configuration.gif" alt="edit" width="12" height="12" /></a>',
-			'del' => '<a href="?mod=extra-config&plugin=forum&action=del_news&id='.$row['id'].'"><img src="'.skins_url.'/images/delete.gif" alt="DEL" width="12" height="12" /></a>',
+			'edit'    => '<a href="?mod=extra-config&plugin=forum&action=new_news&id=' . $row['id'] . '";><img src="' . skins_url . '/images/configuration.gif" alt="edit" width="12" height="12" /></a>',
+			'del'     => '<a href="?mod=extra-config&plugin=forum&action=del_news&id=' . $row['id'] . '"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a>',
 		);
 	}
-	
 	$tVars = array(
-		'entries' => isset($tEntry)?$tEntry:'',
-		'pagesss' => generateAdminPagelist( array('current' => $pageNo, 'count' => $countPages, 'url' => admin_url.'/admin.php?mod=extra-config&plugin=forum&action=list_news'.($_REQUEST['news_per_page']?'&news_per_page='.$news_per_page:'').($_REQUEST['author']?'&author='.$_REQUEST['author']:'').($_REQUEST['sort']?'&sort='.$_REQUEST['sort']:'').($postdate?'&postdate='.$postdate:'').($author?'&author='.$author:'').($status?'&status='.$status:'').'&page=%page%'))
+		'entries' => isset($tEntry) ? $tEntry : '',
+		'pagesss' => generateAdminPagelist(array('current' => $pageNo, 'count' => $countPages, 'url' => admin_url . '/admin.php?mod=extra-config&plugin=forum&action=list_news' . ($_REQUEST['news_per_page'] ? '&news_per_page=' . $news_per_page : '') . ($_REQUEST['author'] ? '&author=' . $_REQUEST['author'] : '') . ($_REQUEST['sort'] ? '&sort=' . $_REQUEST['sort'] : '') . ($postdate ? '&postdate=' . $postdate : '') . ($author ? '&author=' . $author : '') . ($status ? '&status=' . $status : '') . '&page=%page%'))
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Список новостей',
 	);
-	
 	main($entries_main);
 }
 
-function list_forum()
-{global $twig, $plugin, $mysql, $config;
-	
+function list_forum() {
+
+	global $twig, $plugin, $mysql, $config;
 	$tpath = locatePluginTemplates(array('list_forum', 'list_forum_entries', 'list_forum_main'), 'forum', 1, '', 'config');
-	
-	if(isset($_SESSION['forum']['info'])){
-		$info =  $_SESSION['forum']['info'];
+	if (isset($_SESSION['forum']['info'])) {
+		$info = $_SESSION['forum']['info'];
 		session_destroy();
 	}
-	
-	if($_POST['submit']){
-		if (is_array($_POST['position'])){
+	if ($_POST['submit']) {
+		if (is_array($_POST['position'])) {
 			foreach ($_POST["position"] as $catid => $position) {
-				if(strlen($position)) {
+				if (strlen($position)) {
 					$position = intval($position);
 					$catid = intval($catid);
-					$mysql->query("update ".prefix."_forum_forums set position = '".$position."' WHERE id = '".intval($catid)."'");
+					$mysql->query("update " . prefix . "_forum_forums set position = '" . $position . "' WHERE id = '" . intval($catid) . "'");
 				}
 			}
 		}
 	}
-	
-	$xs = $twig->loadTemplate($tpath['list_forum_entries'].'list_forum_entries.tpl');
-	$xg = $twig->loadTemplate($tpath['list_forum'].'list_forum.tpl');
-	$result = $mysql->select('SELECT * FROM '.prefix.'_forum_forums ORDER BY position ASC');
+	$xs = $twig->loadTemplate($tpath['list_forum_entries'] . 'list_forum_entries.tpl');
+	$xg = $twig->loadTemplate($tpath['list_forum'] . 'list_forum.tpl');
+	$result = $mysql->select('SELECT * FROM ' . prefix . '_forum_forums ORDER BY position ASC');
 	$entries = array();
-	foreach ( $result as $row_2 ){
-		if($row_2['parent'] != 0){
+	foreach ($result as $row_2) {
+		if ($row_2['parent'] != 0) {
 			$tVarss = array(
-				'forum_id' => $row_2['id'],
-				'home_url' => $config['home_url'],
+				'forum_id'   => $row_2['id'],
+				'home_url'   => $config['home_url'],
 				'forum_link' => link_forum($row_2['id']),
 				'forum_name' => $row_2['title'],
 				'forum_desc' => $row_2['description'],
-				'num_topic' => $row_2['int_topic'],
-				'num_post' => $row_2['int_post'],
-				'pos' => $row_2['position']
+				'num_topic'  => $row_2['int_topic'],
+				'num_post'   => $row_2['int_post'],
+				'pos'        => $row_2['position']
 			);
 			$entries[$row_2['parent']] .= $xs->render($tVarss);
 		}
 	}
-	
 	$output = '';
-	foreach ( $result as $row ){
-		
-		if($row['parent'] == '0'){
-			
+	foreach ($result as $row) {
+		if ($row['parent'] == '0') {
 			$tVars = array(
-				'forum_id' => $row['id'], 
+				'forum_id'   => $row['id'],
 				'forum_name' => $row['title'],
-				'pos' => $row['position'],
-				'entries' => array(
-					'true' => isset($entries[$row['id']])?1:0,
-					'print' => isset($entries[$row['id']])?$entries[$row['id']]:''
+				'pos'        => $row['position'],
+				'entries'    => array(
+					'true'  => isset($entries[$row['id']]) ? 1 : 0,
+					'print' => isset($entries[$row['id']]) ? $entries[$row['id']] : ''
 				),
 			);
-			
 			$output .= $xg->render($tVars);
 			//print "<pre>".var_export($output, true)."</pre>";
 		}
 	}
 	//print "<pre>".var_export($row, true)."</pre>";
-	$xe = $twig->loadTemplate($tpath['list_forum_main'].'list_forum_main.tpl');
+	$xe = $twig->loadTemplate($tpath['list_forum_main'] . 'list_forum_main.tpl');
 	$tVars = array(
 		'entries' => $output
 	);
-	
 	$entries_main = array(
 		'show' => $xe->render($tVars),
 		'mode' => 'Список форумов',
 	);
-	
 	main($entries_main);
 }
 
-function general()
-{global $twig, $plugin;
-	
-	if (isset($_REQUEST['submit'])){
+function general() {
+
+	global $twig, $plugin;
+	if (isset($_REQUEST['submit'])) {
 		pluginSetVariable('forum', 'localsource', (int)$_REQUEST['localsource']);
 		pluginSetVariable('forum', 'redirect_time', (int)$_REQUEST['redirect_time']);
 		pluginSetVariable('forum', 'online_time', (int)$_REQUEST['online_time']);
@@ -2184,7 +2029,6 @@ function general()
 		pluginSetVariable('forum', 'forum_keywords', secure_html(trim($_REQUEST['forum_keywords'])));
 		pluginSetVariable('forum', 'edit_del_time', (int)($_REQUEST['edit_del_time']));
 		pluginSetVariable('forum', 'localskin', secure_html(trim($_REQUEST['localskin'])));
-		
 		pluginSetVariable('forum', 'topic_per_page', (int)($_REQUEST['topic_per_page']));
 		pluginSetVariable('forum', 'search_per_page', (int)($_REQUEST['search_per_page']));
 		pluginSetVariable('forum', 'user_per_page', (int)($_REQUEST['user_per_page']));
@@ -2197,60 +2041,54 @@ function general()
 		pluginSetVariable('forum', 'rss_per_page', (int)($_REQUEST['rss_per_page']));
 		pluginSetVariable('forum', 'list_pm_per_page', (int)($_REQUEST['list_pm_per_page']));
 		pluginSetVariable('forum', 'display_main', (int)($_REQUEST['display_main']));
-		
 		pluginsSaveConfig();
 		redirect_forum_config('?mod=extra-config&plugin=forum');
 	}
-	
 	$tpath = locatePluginTemplates(array('general'), 'forum', 1, '', 'config');
-	$xg = $twig->loadTemplate($tpath['general'].'general.tpl');
-	
-	if(pluginGetVariable($plugin,'localsource'))
-		$localskin = extras_dir.'/'.$plugin.'/tpl/skins/';
+	$xg = $twig->loadTemplate($tpath['general'] . 'general.tpl');
+	if (pluginGetVariable($plugin, 'localsource'))
+		$localskin = extras_dir . '/' . $plugin . '/tpl/skins/';
 	else {
-		if(file_exists(tpl_site.'plugins/'.$plugin.'/skins/'))
-			$localskin = tpl_site.'plugins/'.$plugin.'/skins/';
+		if (file_exists(tpl_site . 'plugins/' . $plugin . '/skins/'))
+			$localskin = tpl_site . 'plugins/' . $plugin . '/skins/';
 		else {
-			$localskin = extras_dir.'/'.$plugin.'/tpl/skins/';
-			$_SESSION['forum']['info'][] = 'Ошибка с выбором шаблона. Выбран шаблон: '.extras_dir.'/'.$plugin.'/tpl/skins/';
+			$localskin = extras_dir . '/' . $plugin . '/tpl/skins/';
+			$_SESSION['forum']['info'][] = 'Ошибка с выбором шаблона. Выбран шаблон: ' . extras_dir . '/' . $plugin . '/tpl/skins/';
 		}
 	}
-	
 	$tVars = array(
-		'localsource' => MakeDropDown(array(0 => 'Шаблон сайта', 1 => 'Плагина'), 'localsource', (int)pluginGetVariable($plugin,'localsource')),
-		'online' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'online', (int)pluginGetVariable($plugin,'online')),
-		'redirect_time' => (int)pluginGetVariable($plugin,'redirect_time'),
-		'online_time' => (int)pluginGetVariable($plugin,'online_time'),
-		'forum_title' => secure_html(trim(pluginGetVariable($plugin,'forum_title'))),
-		'forum_description' => secure_html(trim(pluginGetVariable($plugin,'forum_description'))),
-		'forum_keywords' => secure_html(trim(pluginGetVariable($plugin,'forum_keywords'))),
-		'localskin' => MakeDropDown(ListFiles($localskin, ''), 'localskin', pluginGetVariable($plugin,'localskin')),
-		'edit_del_time' => (int)pluginGetVariable($plugin,'edit_del_time'),
-		'display_main' =>  MakeDropDown(array(0 => 'Основной шаблон', 1 => 'Отдельная страница'), 'display_main', (int)pluginGetVariable($plugin,'display_main')),
-		
-		'topic_per_page' => (int)pluginGetVariable($plugin,'topic_per_page'),
-		'search_per_page' => (int)pluginGetVariable($plugin,'search_per_page'),
-		'user_per_page' => (int)pluginGetVariable($plugin,'user_per_page'),
-		'forum_per_page' => (int)pluginGetVariable($plugin,'forum_per_page'),
-		'reput_per_page' => (int)pluginGetVariable($plugin,'reput_per_page'),
-		'act_per_page' => (int)pluginGetVariable($plugin,'act_per_page'),
-		'thank_per_page' => (int)pluginGetVariable($plugin,'thank_per_page'),
-		'newpost_per_page' => (int)pluginGetVariable($plugin,'newpost_per_page'),
-		'news_per_page' => (int)pluginGetVariable($plugin,'news_per_page'),
-		'rss_per_page' => (int)pluginGetVariable($plugin,'rss_per_page'),
-		'list_pm_per_page' => (int)pluginGetVariable($plugin,'list_pm_per_page'),
+		'localsource'       => MakeDropDown(array(0 => 'Шаблон сайта', 1 => 'Плагина'), 'localsource', (int)pluginGetVariable($plugin, 'localsource')),
+		'online'            => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'online', (int)pluginGetVariable($plugin, 'online')),
+		'redirect_time'     => (int)pluginGetVariable($plugin, 'redirect_time'),
+		'online_time'       => (int)pluginGetVariable($plugin, 'online_time'),
+		'forum_title'       => secure_html(trim(pluginGetVariable($plugin, 'forum_title'))),
+		'forum_description' => secure_html(trim(pluginGetVariable($plugin, 'forum_description'))),
+		'forum_keywords'    => secure_html(trim(pluginGetVariable($plugin, 'forum_keywords'))),
+		'localskin'         => MakeDropDown(ListFiles($localskin, ''), 'localskin', pluginGetVariable($plugin, 'localskin')),
+		'edit_del_time'     => (int)pluginGetVariable($plugin, 'edit_del_time'),
+		'display_main'      => MakeDropDown(array(0 => 'Основной шаблон', 1 => 'Отдельная страница'), 'display_main', (int)pluginGetVariable($plugin, 'display_main')),
+		'topic_per_page'    => (int)pluginGetVariable($plugin, 'topic_per_page'),
+		'search_per_page'   => (int)pluginGetVariable($plugin, 'search_per_page'),
+		'user_per_page'     => (int)pluginGetVariable($plugin, 'user_per_page'),
+		'forum_per_page'    => (int)pluginGetVariable($plugin, 'forum_per_page'),
+		'reput_per_page'    => (int)pluginGetVariable($plugin, 'reput_per_page'),
+		'act_per_page'      => (int)pluginGetVariable($plugin, 'act_per_page'),
+		'thank_per_page'    => (int)pluginGetVariable($plugin, 'thank_per_page'),
+		'newpost_per_page'  => (int)pluginGetVariable($plugin, 'newpost_per_page'),
+		'news_per_page'     => (int)pluginGetVariable($plugin, 'news_per_page'),
+		'rss_per_page'      => (int)pluginGetVariable($plugin, 'rss_per_page'),
+		'list_pm_per_page'  => (int)pluginGetVariable($plugin, 'list_pm_per_page'),
 	);
-	
 	$entries_main = array(
 		'show' => $xg->render($tVars),
 		'mode' => 'Общие'
 	);
-	
 	main($entries_main);
 }
 
-function redirect_forum_config($url){
-	if (headers_sent()){
+function redirect_forum_config($url) {
+
+	if (headers_sent()) {
 		echo "<script>document.location.href='{$url}';</script>\n";
 		exit;
 	} else {

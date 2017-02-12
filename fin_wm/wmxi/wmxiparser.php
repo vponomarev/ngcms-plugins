@@ -18,8 +18,6 @@
 # - changed parser mechanism to more flexible one                              #
 #                                                                              #
 ################################################################################
-
-
 # WMXIParser class
 class WMXIParser {
 
@@ -32,34 +30,35 @@ class WMXIParser {
 	var $datas = array();
 	var $data = array();
 
-
 	function _tagOpen($parser, $tag, $attribs) {
+
 		$node = array(
 			'name' => strtolower($tag),
 			'data' => '',
 		);
-		if (count($attribs) > 0) { $node["@"] = $attribs; }
+		if (count($attribs) > 0) {
+			$node["@"] = $attribs;
+		}
 		$this->data['node'][] = $node;
 		$this->datas[] =& $this->data;
-		$this->data =& $this->data['node'][count($this->data['node'])-1];
+		$this->data =& $this->data['node'][count($this->data['node']) - 1];
 	}
 
-
 	function _tagClose($parser, $tag) {
-		$this->data =& $this->datas[count($this->datas)-1];
+
+		$this->data =& $this->datas[count($this->datas) - 1];
 		array_pop($this->datas);
 	}
 
-
 	function _tagData($parser, $cdata) {
+
 		$this->data['data'] .= $cdata;
 	}
 
-
 	function _change_encoding($data, $encoding) {
-		$result = array();
 
-		foreach($data as $k => $v) {
+		$result = array();
+		foreach ($data as $k => $v) {
 			$value = is_array($v) ? $this->_change_encoding($v, $encoding) : mb_convert_encoding($v, $encoding, $this->parser_encoding);
 			$result[$k] = $value;
 		}
@@ -67,8 +66,8 @@ class WMXIParser {
 		return $result;
 	}
 
-
 	function Parse($data, $encoding = "UTF-8") {
+
 		if (!$this->parser = @xml_parser_create($this->parser_encoding)) {
 			$this->parser = xml_parser_create();
 		}
@@ -87,28 +86,28 @@ class WMXIParser {
 		}
 		xml_parser_free($this->parser);
 		$this->data = $this->_change_encoding($this->data, $encoding);
+
 		return $this->data;
 	}
 
-
 	function Reindex($data, $skip_attr = false) {
-		$result = array();
 
-		foreach($data as $k => $v) {
+		$result = array();
+		foreach ($data as $k => $v) {
 			$name = $v["name"];
 			if ($skip_attr) {
 				$result[$name] = isset($v["node"]) ? $this->Reindex($v["node"], $skip_attr) : $v["data"];
 			} else {
-				if (isset($v["@"]) && !$skip_attr) { $result[$name]["@"] = $v["@"]; }
+				if (isset($v["@"]) && !$skip_attr) {
+					$result[$name]["@"] = $v["@"];
+				}
 				$result[$name]["data"] = isset($v["node"]) ? $this->Reindex($v["node"], $skip_attr) : $v["data"];
 			}
 		}
 
 		return $result;
 	}
-
-
 }
-# WMXIParser class
 
+# WMXIParser class
 ?>

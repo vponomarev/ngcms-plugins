@@ -1,5 +1,5 @@
 {% if (count > 0) %}
-{{all_bookmarks}}
+	{{ all_bookmarks }}
 {% else %}
-Нет закладок.
+	Нет закладок.
 {% endif %}

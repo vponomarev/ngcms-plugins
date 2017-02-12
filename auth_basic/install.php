@@ -1,13 +1,10 @@
 <?php
-
 if (!defined('NGCMS')) die ('HAL');
-
 function plugin_auth_basic_install($action) {
+
 	global $lang;
-	
 	if ($action != 'autoapply')
 		loadPluginLang('auth_basic', 'config', '', '', ':');
-	
 	$db_update = array(
 		array(
 			'table'  => 'users_sessions',
@@ -21,7 +18,6 @@ function plugin_auth_basic_install($action) {
 			)
 		),
 	);
-
 	// Apply requested action
 	switch ($action) {
 		case 'confirm':
@@ -29,12 +25,13 @@ function plugin_auth_basic_install($action) {
 			break;
 		case 'autoapply':
 		case 'apply':
-			if (fixdb_plugin_install('auth_basic', $db_update, 'install', ($action=='autoapply')?true:false)) {
+			if (fixdb_plugin_install('auth_basic', $db_update, 'install', ($action == 'autoapply') ? true : false)) {
 				plugin_mark_installed('auth_basic');
 			} else {
 				return false;
 			}
 			break;
 	}
+
 	return true;
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Install plugin "Private message" for NextGeneration CMS (http://ngcms.ru/)
  * Copyright (C) 2010 Alexey N. Zhukov (http://digitalplace.ru)
@@ -20,21 +19,18 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
  */
- 
 // Protect against hack attempts
-if (!defined('NGCMS'))die ('Galaxy in danger');
-
+if (!defined('NGCMS')) die ('Galaxy in danger');
 function plugin_pm_install($action) {
+
 	global $lang;
-	
 	if ($action != 'autoapply')
 		loadPluginLang('pm', 'config', '', '', ':');
-		
 	$db_create = array(
 		array(
-			'table' => 'pm',
+			'table'  => 'pm',
 			'action' => 'cmodify',
-			'key' => 'primary key (`id`)',
+			'key'    => 'primary key (`id`)',
 			'fields' => array(
 				array('action' => 'cmodify', 'name' => 'id', 'type' => 'int(10)', 'params' => 'UNSIGNED NOT NULL AUTO_INCREMENT'),
 				array('action' => 'cmodify', 'name' => 'subject', 'type' => 'varchar(255)', 'params' => 'NOT NULL'),
@@ -46,11 +42,10 @@ function plugin_pm_install($action) {
 				array('action' => 'cmodify', 'name' => 'folder', 'type' => 'varchar(10)', 'params' => 'NOT NULL')
 			)
 		),
-
 		array(
-			 'table'  => 'users',
-			 'action' => 'cmodify',
-			 'fields' => array(
+			'table'  => 'users',
+			'action' => 'cmodify',
+			'fields' => array(
 				array('action' => 'cmodify', 'name' => 'pm_all', 'type' => 'smallint(5)', 'params' => "default '0'"),
 				array('action' => 'cmodify', 'name' => 'pm_unread', 'type' => 'smallint(5)', 'params' => "default '0'"),
 				array('action' => 'cmodify', 'name' => 'pm_sync', 'type' => 'tinyint(1)', 'params' => "default '0'"),
@@ -58,19 +53,19 @@ function plugin_pm_install($action) {
 			)
 		),
 	);
-
 	switch ($action) {
-		case 'confirm': 
-			 generate_install_page('pm', $lang['pm:install']);
-			 break;
+		case 'confirm':
+			generate_install_page('pm', $lang['pm:install']);
+			break;
 		case 'autoapply':
 		case 'apply':
-			if (fixdb_plugin_install('pm', $db_create, 'install', ($action=='autoapply')?true:false)) {
+			if (fixdb_plugin_install('pm', $db_create, 'install', ($action == 'autoapply') ? true : false)) {
 				plugin_mark_installed('pm');
 			} else {
 				return false;
 			}
 			break;
 	}
+
 	return true;
 }

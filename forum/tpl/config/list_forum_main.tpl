@@ -8,17 +8,17 @@
 			<td>Сообщений</td>
 			<td width="160">Действие</td>
 		</tr>
-		
+
 		{{ entries }}
-		
+
 		<tr>
 			<td width="100%" colspan="6" align="right">
-				<input class="button" onmousedown="javascript:window.location.href='{{admin_url}}/admin.php?mod=extra-config&plugin=forum&action=send_section'" value="Добавить раздел" />
+				<input class="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=send_section'" value="Добавить раздел"/>
 			</td>
 		</tr>
 		<tr>
 			<td width="100%" colspan="6" class="contentEdit" align="center">
-				<input type="submit" name="submit" value="Отсортировать форум" class="navbutton" />
+				<input type="submit" name="submit" value="Отсортировать форум" class="navbutton"/>
 			</td>
 		</tr>
 		<tr>

@@ -6,16 +6,16 @@
 				<fieldset>
 					<legend>Выберите форум</legend>
 					<div class="infldset">
-						<label>Куда перенести<br />
+						<label>Куда перенести<br/>
 							<select name="move_to_forum">
 								{{ entries }}
 							</select>
-							<br />
+							<br/>
 						</label>
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="submit" value="Перенести" /><a href="javascript:history.go(-1)">Назад</a></p>
+			<p><input type="submit" name="submit" value="Перенести"/><a href="javascript:history.go(-1)">Назад</a></p>
 		</form>
 	</div>
 </div>

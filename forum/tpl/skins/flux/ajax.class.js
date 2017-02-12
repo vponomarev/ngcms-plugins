@@ -1,7 +1,9 @@
 function AjaxRequest(url, execute) {
 	var HttpRequest;
-	var _OnLoad = function () { }
-	var _OnComplete = function () { }
+	var _OnLoad = function () {
+	}
+	var _OnComplete = function () {
+	}
 	var _OnError = function () {
 	}
 	var Execute = function (responseText) {
@@ -9,7 +11,7 @@ function AjaxRequest(url, execute) {
 		obj.innerHTML = responseText;
 		var elts = obj.getElementsByTagName('script');
 
-		for(var i = 0; i < elts.length; i++) {
+		for (var i = 0; i < elts.length; i++) {
 			eval(elts[i].text);
 			elts[i].parentNode.removeChild(elts[i]);
 		}
@@ -28,7 +30,7 @@ function AjaxRequest(url, execute) {
 	}
 
 	this.Post = function (params) {
-		if(this.RequestPrepare()) {
+		if (this.RequestPrepare()) {
 			params = this.StrPrepare(params);
 			HttpRequest.open('POST', url, true);
 			HttpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=windows-1251');
@@ -39,7 +41,7 @@ function AjaxRequest(url, execute) {
 	}
 
 	this.Get = function (params) {
-		if(this.RequestPrepare()) {
+		if (this.RequestPrepare()) {
 			url += this.StrPrepare(params);
 			HttpRequest.open('GET', url, true);
 			HttpRequest.send(null);
@@ -59,7 +61,7 @@ function AjaxRequest(url, execute) {
 				try {
 					HttpRequest = new ActiveXObject('Microsoft.XMLHTTP');
 				} catch (e) {
-				
+
 				}
 			}
 		}
@@ -69,14 +71,14 @@ function AjaxRequest(url, execute) {
 			return false;
 		}
 
-		HttpRequest.onreadystatechange = function(e) {
+		HttpRequest.onreadystatechange = function (e) {
 			if (HttpRequest.readyState == 1) {
 				_OnLoad();
 			}
 
 			if (HttpRequest.readyState == 4) {
-				if(HttpRequest.status == 200) {
-					if(execute === true) {
+				if (HttpRequest.status == 200) {
+					if (execute === true) {
 						Execute(HttpRequest.responseText);
 					}
 					_OnComplete(HttpRequest.responseText);
@@ -89,7 +91,7 @@ function AjaxRequest(url, execute) {
 	}
 
 	this.StrPrepare = function (obj) {
-		if(obj instanceof Object) {
+		if (obj instanceof Object) {
 			var i = 0;
 			var arr = [];
 			for (var key in obj) {
