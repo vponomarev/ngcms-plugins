@@ -1,0 +1,17 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+ 
+ID: comments_akismet
+Name: Антиспам на основе Akismet
+Version: 0.02
+Acts: comments:add
+File: antispam.php
+Config: config.php
+Type: plugin
+Description: Фильтрует спам в комментариях
+Author: wget
+Author_URI: http://ngcms.ru/forum/profile.php?id=2348
+Title: Antispam
+Information: Фильтрует спам в комментариях
+Preinstall: no
