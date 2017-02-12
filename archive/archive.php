@@ -40,7 +40,7 @@ function plug_arch($maxnum, $counter, $tcounter, $overrideTemplateName, $cacheEx
 	$tpath = locatePluginTemplates(array($templateName, 'entries'), 'archive', pluginGetVariable('archive', 'localsource'));
 	// Load list
 	$caseList = explode(',', $lang['archive:counter.case']);
-	foreach ($mysql->select("SELECT month(from_unixtime(postdate)) as month, year(from_unixtime(postdate)) as year, COUNT(id) AS cnt, postdate FROM " . prefix . "_news WHERE approve = '1' GROUP BY year(from_unixtime(postdate)), month(from_unixtime(postdate)) ORDER BY postdate DESC limit $maxnum") as $row) {
+	foreach ($mysql->select("SELECT month(from_unixtime(postdate)) as month, year(from_unixtime(postdate)) as year, COUNT(id) AS cnt FROM " . prefix . "_news WHERE approve = '1' GROUP BY year, month ORDER BY year DESC, month DESC limit $maxnum") as $row) {
 		$month_link = checkLinkAvailable('news', 'by.month') ?
 			generateLink('news', 'by.month', array('year' => $row['year'], 'month' => sprintf('%02u', $row['month']))) :
 			generateLink('core', 'plugin', array('plugin' => 'news', 'handler' => 'by.month'), array('year' => $row['year'], 'month' => sprintf('%02u', $row['month'])));
