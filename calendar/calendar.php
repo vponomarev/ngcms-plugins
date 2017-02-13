@@ -51,14 +51,14 @@ function plug_calgen($month, $year, $overrideTemplateName = false, $categoryList
 		$categoryList = intval($categoryList) ? array(intval($categoryList)) : array();
 	}
 	if (!count($categoryList)) {
-		$sql = "SELECT day(from_unixtime(postdate)) as day, count(id) as count FROM " . prefix . "_news WHERE approve = '1' AND postdate >= unix_timestamp('" . $year . "-" . $month . "-01 00:00:00') AND postdate < unix_timestamp(date_add('" . $year . "-" . $month . "-01 00:00:00', interval 1 month)) group by to_days(from_unixtime(postdate))";
+		$sql = "SELECT day(from_unixtime(postdate)) as day, to_days(from_unixtime(postdate)) as to_days, count(id) as count FROM " . prefix . "_news WHERE approve = '1' AND postdate >= unix_timestamp('" . $year . "-" . $month . "-01 00:00:00') AND postdate < unix_timestamp(date_add('" . $year . "-" . $month . "-01 00:00:00', interval 1 month)) group by to_days, day";
 	} else {
 		$sqlList = array();
 		foreach ($categoryList as $c) {
 			if (intval($c) > 0)
 				$sqlList [] = intval($c);
 		}
-		$sql = "SELECT day(dt) as day, count(newsID) as count FROM " . prefix . "_news_map WHERE categoryID in (" . join(",", $sqlList) . ") AND (dt >= '" . $year . "-" . $month . "-01 00:00:00') AND dt < (date_add('" . $year . "-" . $month . "-01 00:00:00', interval 1 month)) group by to_days(dt)";
+		$sql = "SELECT day(dt) as day, to_days(dt) as to_days, count(newsID) as count FROM " . prefix . "_news_map WHERE categoryID in (" . join(",", $sqlList) . ") AND (dt >= '" . $year . "-" . $month . "-01 00:00:00') AND dt < (date_add('" . $year . "-" . $month . "-01 00:00:00', interval 1 month)) group by to_days, day";
 	}
 	foreach ($mysql->select($sql) as $row) {
 		$counters[$row['day']] = $row['count'];
@@ -235,7 +235,12 @@ function plugin_calendar_showTwig($params) {
 		$year--;
 	}
 
-	return plug_calgen($month, $year, isset($params['template']) ? $params['template'] : false, array(), 0, $params['flagAJAX']);
+	$categoryList = array();
+	if (!empty($params['category'])) {
+		$categoryList = explode(',', $params['category']);
+	}
+
+	return plug_calgen($month, $year, isset($params['template']) ? $params['template'] : false, $categoryList, 0, $params['flagAJAX']);
 }
 
 twigRegisterFunction('calendar', 'show', plugin_calendar_showTwig);
