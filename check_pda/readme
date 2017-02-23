@@ -1,0 +1,12 @@
+# =========================================================================== #
+# NG CMS // Плагины // check_pda					                          #
+# =========================================================================== #
+
+Плагин позволяет делать проверку на mobile/tablet внутри TWIG шаблонов:
+
+Примеры использования:
+{% extends is_mobile() ? "layout_mobile.html.twig" : "layout.html.twig" %}
+{% if is_mobile() %} ... {% endif %}
+{% if is_tablet() %} ... {% endif %}
+{% if is_mobile() and is_samsung() %} ... {% endif %}
+{{ get_available_devices()|join("<br />")|raw }}
