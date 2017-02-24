@@ -1,0 +1,14 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: content_generator
+Name: Создание тестовых данных
+Version: 0.02
+Acts: index, ppages
+File: content_generator.php
+Config: config.php
+Type: plugin
+Description: Создание тестовых данных
+Author: Rostunov S U
+Author_URI: http://rostunov.com
