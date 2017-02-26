@@ -5,17 +5,7 @@ register_plugin_page('guestbook', '', 'guestbook_list');
 register_plugin_page('guestbook', 'edit', 'guestbook_edit');
 register_plugin_page('guestbook', 'social', 'guestbook_social');
 LoadPluginLang('guestbook', 'main', '', '', '#');
-switch ($_REQUEST['action']) {
-	case 'add'      :
-		msg_add_submit();
-		break;
-	case 'edit'     :
-		msg_edit_submit();
-		break;
-	case 'delete'   :
-		msg_delete_submit();
-		break;
-}
+
 /*
  * Add message submit callback
  */
@@ -222,7 +212,21 @@ function msg_delete_submit() {
 function guestbook_list($params = array()) {
 
 	global $template, $tpl, $twig, $userROW, $ip, $config, $mysql, $SYSTEM_FLAGS, $TemplateCache, $CurrentHandler, $lang;
+
 	$SYSTEM_FLAGS['info']['title']['group'] = $lang['guestbook']['title'];
+
+	switch ($_REQUEST['action']) {
+		case 'add'      :
+			msg_add_submit();
+			break;
+		case 'edit'     :
+			msg_edit_submit();
+			break;
+		case 'delete'   :
+			msg_delete_submit();
+			break;
+	}
+
 	require_once(root . "/plugins/guestbook/lib/recaptchalib.php");
 	$publickey = pluginGetVariable('guestbook', 'public_key');
 	$privatekey = pluginGetVariable('guestbook', 'private_key');
