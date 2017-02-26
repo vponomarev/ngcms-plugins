@@ -40,8 +40,7 @@
 				news_list
 			}
 				break;
-				[ / support_news
-			]
+				[/support_news]
 			case '6':
 				subel = createNamedElement('select', 'location[' + iteration + '][id]');
 			{
