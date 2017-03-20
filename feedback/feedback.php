@@ -175,7 +175,8 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 				}
 				$tEntry['options']['month'] = $opts;
 				$opts = $fInfo['required'] ? '' : '<option value="">--</option>';
-				for ($di = 1970; $di <= 2012; $di++) {
+				$yearLimit = date('Y');
+				for ($di = 1970; $di <= $yearLimit; $di++) {
 					$opts .= '<option value="' . $di . '"' . ($di == $setValueYear ? ' selected="selected"' : '') . '>' . $di . '</option>';
 				}
 				$tEntry['options']['year'] = $opts;
