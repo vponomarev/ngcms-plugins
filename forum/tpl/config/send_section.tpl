@@ -4,20 +4,20 @@
 			{{ entry }}
 		{% endfor %}
 		<tr>
-			<td width="50%" class="contentEntry1">Название форума:<br/>
+			<td width="50%" class="contentEntry1">РќР°Р·РІР°РЅРёРµ С„РѕСЂСѓРјР°:<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2"><input type="text" size="80" name="name" value="{{ name }}"/></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Описание форума<br/>
+			<td width="50%" class="contentEntry1">РћРїРёСЃР°РЅРёРµ С„РѕСЂСѓРјР°<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<textarea name="description" cols="77" rows="4"/>{{ description }}</textarea></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Ключевые слова<br/>
+			<td width="50%" class="contentEntry1">РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
@@ -30,7 +30,7 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input type="submit" name="submit" value="Сохранить форум" class="button"/></td>
+				<input type="submit" name="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ С„РѕСЂСѓРј" class="button"/></td>
 		</tr>
 	</table>
 </form>

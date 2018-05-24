@@ -9,8 +9,8 @@ Acts: index_post
 File: ads_linkfeed.php
 Config: config.php
 Type: plugin
-Title: Ссылочная реклама LINKFEED.RU
-Description: Реклама с площадки LINKFEED.RU на сайте
+Title: РЎСЃС‹Р»РѕС‡РЅР°СЏ СЂРµРєР»Р°РјР° LINKFEED.RU
+Description: Р РµРєР»Р°РјР° СЃ РїР»РѕС‰Р°РґРєРё LINKFEED.RU РЅР° СЃР°Р№С‚Рµ
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 preinstall: no

@@ -3,17 +3,17 @@
 <form method="post" action="" name="form">
 
 	<fieldset class="admGroup">
-		<legend class="title"><b>Правила форума</b></legend>
+		<legend class="title"><b>РџСЂР°РІРёР»Р° С„РѕСЂСѓРјР°</b></legend>
 		<table border="0" width="100%" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="contentEntry1">Правила на главной<br/>
-					<small>Допускается всё без ограничения</small>
+				<td class="contentEntry1">РџСЂР°РІРёР»Р° РЅР° РіР»Р°РІРЅРѕР№<br/>
+					<small>Р”РѕРїСѓСЃРєР°РµС‚СЃСЏ РІСЃС‘ Р±РµР· РѕРіСЂР°РЅРёС‡РµРЅРёСЏ</small>
 				</td>
 				<td class="contentEntry2">
 					<textarea type="text" name="rules" id="content" cols="60" rows="8">{{ rules }}</textarea></td>
 			</tr>
 			<tr>
-				<td class="contentEntry1" valign=top>Включить объявление?<br/>
+				<td class="contentEntry1" valign=top>Р’РєР»СЋС‡РёС‚СЊ РѕР±СЉСЏРІР»РµРЅРёРµ?<br/>
 					<small></small>
 				</td>
 				<td class="contentEntry2" valign=top>{{ rules_on_off }}</td>
@@ -27,7 +27,7 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input type="submit" name="submit" value="Сохранить" class="button"/>
+				<input type="submit" name="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ" class="button"/>
 			</td>
 		</tr>
 	</table>
@@ -37,19 +37,19 @@
 		buttons: 'bold,italic,underline,strike|,-|,link,myimg,|,smilebox,|,bullist,numlist,quotes, |,codephp, ,|,quote_name',
 		allButtons: {
 			myimg: {
-				title: 'Изображение',
+				title: 'РР·РѕР±СЂР°Р¶РµРЅРёРµ',
 				buttonHTML: '<span class="ve-tlb-img"></span>',
 				modal: {
-					title: 'Вставить изображение',
+					title: 'Р’СЃС‚Р°РІРёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ',
 					width: '600px',
 					tabs: [{
 						input: [
 							{
 								param: "SRC",
-								title: "Введите адрес изображения",
+								title: "Р’РІРµРґРёС‚Рµ Р°РґСЂРµСЃ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ",
 								validation: '^http(s)?://.*?\.(jpg|png|gif|jpeg)$'
 							},
-							{param: "TITLE", title: "Введите заголовок изображения"}
+							{param: "TITLE", title: "Р’РІРµРґРёС‚Рµ Р·Р°РіРѕР»РѕРІРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёСЏ"}
 						]
 					}],
 					onLoad: function () {
@@ -64,14 +64,14 @@
 				title: CURLANG.code,
 				buttonText: "[code]",
 				transform: {
-					'<div class="codewrap"><div class="codetop">Код: PHP</div><div class="codemain">{SELTEXT}</div></div>': "[code=PHP]{SELTEXT}[/code]"
+					'<div class="codewrap"><div class="codetop">РљРѕРґ: PHP</div><div class="codemain">{SELTEXT}</div></div>': "[code=PHP]{SELTEXT}[/code]"
 				}
 			}, quotes: {
 				title: CURLANG.quote,
 				buttonHTML: '<span class="ve-tlb-quote"></span>',
 				transform: {
 					'<div class="quote">{SELTEXT}</div>': '[quote]{SELTEXT}[/quote]',
-					'<div class="quote"><cite>{AUTHOR} написал:</cite>{SELTEXT}</div>': '[quote={AUTHOR}]{SELTEXT}[/quote]'
+					'<div class="quote"><cite>{AUTHOR} РЅР°РїРёСЃР°Р»:</cite>{SELTEXT}</div>': '[quote={AUTHOR}]{SELTEXT}[/quote]'
 				}
 			}
 		},

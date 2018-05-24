@@ -1,8 +1,8 @@
 <div>
 	<fieldset>
-		<legend>Опрос: <b>{votename}</b></legend>
+		<legend>РћРїСЂРѕСЃ: <b>{votename}</b></legend>
 		[votedescr]
-		<small>Описание: {votedescr}</small>
+		<small>РћРїРёСЃР°РЅРёРµ: {votedescr}</small>
 		<br/>[/votedescr]
 		{votelines}
 	</fieldset>

@@ -1,7 +1,7 @@
 {% if (entries) %}
 	<section class="questions">
 		<h2 class="title">
-			<span>Вопрос / Ответ</span>
+			<span>Р’РѕРїСЂРѕСЃ / РћС‚РІРµС‚</span>
 		</h2>
 		{% for entry in entries %}
 			<div class="question_item">
@@ -10,7 +10,7 @@
 			</div>
 			<div class="line"></div>
 		{% endfor %}
-		<a href="{{ home }}/plugin/faq/" class="main_btn">Все вопросы</a>
+		<a href="{{ home }}/plugin/faq/" class="main_btn">Р’СЃРµ РІРѕРїСЂРѕСЃС‹</a>
 	</section>
 {% endif %}
 

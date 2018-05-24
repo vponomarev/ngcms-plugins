@@ -9,10 +9,10 @@ Acts: index
 File: lastnews.php
 Config: config.php
 Type: widget
-Description: Отображение последних новостей
+Description: РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РїРѕСЃР»РµРґРЅРёС… РЅРѕРІРѕСЃС‚РµР№
 Author: Vitaly A. Ponomarev
 Author_URI: http://2lib.ru/
-Title: Последние новости
-Information: Отображение последних новостей сайта
+Title: РџРѕСЃР»РµРґРЅРёРµ РЅРѕРІРѕСЃС‚Рё
+Information: РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РїРѕСЃР»РµРґРЅРёС… РЅРѕРІРѕСЃС‚РµР№ СЃР°Р№С‚Р°
 Preinstall: default_no
 Preinstall_vars: cache="1"; cacheExpire="3600";

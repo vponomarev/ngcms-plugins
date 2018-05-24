@@ -1,10 +1,10 @@
 ID: clear_config
-Name: Отчистка файлов конфигурации
+Name: РћС‚С‡РёСЃС‚РєР° С„Р°Р№Р»РѕРІ РєРѕРЅС„РёРіСѓСЂР°С†РёРё
 Version: 0.02
 Config: config.php
 Type: plugin
-Title: Отчистка файла конфигурации
-Description: Удаляет настройки плагинов из файлов конфигураций
+Title: РћС‚С‡РёСЃС‚РєР° С„Р°Р№Р»Р° РєРѕРЅС„РёРіСѓСЂР°С†РёРё
+Description: РЈРґР°Р»СЏРµС‚ РЅР°СЃС‚СЂРѕР№РєРё РїР»Р°РіРёРЅРѕРІ РёР· С„Р°Р№Р»РѕРІ РєРѕРЅС„РёРіСѓСЂР°С†РёР№
 Author: Ivan Litvinenko (Amarelius)
 Author_URI: http://arnit.com.ua/
 preinstall: no

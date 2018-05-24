@@ -5,15 +5,15 @@
 			<a href="?mod=extras" title="{{ lang.extras }}">{{ lang.extras }}</a>
 			&#8594; <a href="?mod=extra-config&plugin=feedback">feedback</a>
 			{% if (flags.haveForm) %}
-				&#8594;    <a href="?mod=extra-config&plugin=feedback&action=form&id={{ formID }}">Форма "{{ formName }}
+				&#8594;    <a href="?mod=extra-config&plugin=feedback&action=form&id={{ formID }}">Р¤РѕСЂРјР° "{{ formName }}
 				"</a>
 				{% if (flags.haveField) %}
 					&#8594;
-					<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}&row={{ fieldName }}">Поле
+					<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}&row={{ fieldName }}">РџРѕР»Рµ
 						"{{ fieldName }}"</a>
 				{% endif %}
 				{% if (flags.addField) %}
-					&#8594;    Добавление нового поля
+					&#8594;    Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕРіРѕ РїРѕР»СЏ
 				{% endif %}
 			{% endif %}
 		</td>

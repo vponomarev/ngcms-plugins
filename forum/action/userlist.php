@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -75,7 +75,7 @@ if (($limitCount < 2) || ($limitCount > 2000)) $limitCount = 1;
 $count = $mysql->result('SELECT COUNT(*) FROM `' . prefix . '_users` ' . $where . '');
 $countPages = ceil($count / $limitCount);
 if ($countPages < $pageNo)
-	return $output = information('Подстраницы не существует', $title = 'Информация');
+	return $output = information('РџРѕРґСЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($pageNo < 1) $pageNo = 1;
 if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 if ($countPages > 1 && $countPages >= $pageNo) {
@@ -86,10 +86,10 @@ if ($countPages > 1 && $countPages >= $pageNo) {
 	$pages = generatePagination($pageNo, 1, $countPages, 10, $paginationParams, $navigations);
 }
 $status = array(
-	'4' => 'Пользователь',
-	'3' => 'Модератор',
-	'2' => 'Глоб. Модератор',
-	'1' => 'Администратор'
+	'4' => 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ',
+	'3' => 'РњРѕРґРµСЂР°С‚РѕСЂ',
+	'2' => 'Р“Р»РѕР±. РњРѕРґРµСЂР°С‚РѕСЂ',
+	'1' => 'РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ'
 );
 foreach ($mysql->select('SELECT id, name, mail, status, last, reg, site, icq, info, avatar, photo, activation, ip, newpw, authcookie, timezone, signature, int_post, l_post
 				FROM ' . prefix . '_users 

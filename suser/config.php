@@ -22,13 +22,13 @@ function url() {
 				array(
 					'vars'  =>
 						array(),
-					'descr' => array('russian' => 'Список пользователей'),
+					'descr' => array('russian' => 'РЎРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№'),
 				)
 			);
 			$ULIB->registerCommand('suser', 'search',
 				array(
 					'vars'  => array(),
-					'descr' => array('russian' => 'Поиск пользователей'),
+					'descr' => array('russian' => 'РџРѕРёСЃРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№'),
 				)
 			);
 			$ULIB->saveConfig();
@@ -44,13 +44,13 @@ function url() {
 		redirect_suser('?mod=extra-config&plugin=suser&url');
 	}
 	$url = pluginGetVariable('suser', 'url');
-	$url = '<option value="0" ' . (empty($url) ? 'selected' : '') . '>Нет</option><option value="1" ' . (!empty($url) ? 'selected' : '') . '>Да</option>';
+	$url = '<option value="0" ' . (empty($url) ? 'selected' : '') . '>РќРµС‚</option><option value="1" ' . (!empty($url) ? 'selected' : '') . '>Р”Р°</option>';
 	$pvars['vars']['info'] = $url;
 	$tpl->template('url', $tpath['config/url'] . 'config');
 	$tpl->vars('url', $pvars);
 	$tvars['vars'] = array(
 		'entries' => $tpl->show('url'),
-		'global'  => 'Настройка ЧПУ'
+		'global'  => 'РќР°СЃС‚СЂРѕР№РєР° Р§РџРЈ'
 	);
 	$tpl->template('main', $tpath['config/main'] . 'config');
 	$tpl->vars('main', $tvars);
@@ -75,9 +75,9 @@ function main() {
 	$description = pluginGetVariable('suser', 'description');
 	$keywords = pluginGetVariable('suser', 'keywords');
 	$localsource = pluginGetVariable('suser', 'localsource');
-	$localsource = '<option value="0" ' . (empty($localsource) ? 'selected' : '') . '>Шаблон сайта</option><option value="1" ' . (!empty($localsource) ? 'selected' : '') . '>Плагин</option>';
+	$localsource = '<option value="0" ' . (empty($localsource) ? 'selected' : '') . '>РЁР°Р±Р»РѕРЅ СЃР°Р№С‚Р°</option><option value="1" ' . (!empty($localsource) ? 'selected' : '') . '>РџР»Р°РіРёРЅ</option>';
 	if (empty($user_per_page))
-		msg(array("type" => "error", "text" => "Критическая ошибка. <br /> Не задано количество пользователей на странице"), 1);
+		msg(array("type" => "error", "text" => "РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°. <br /> РќРµ Р·Р°РґР°РЅРѕ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РЅР° СЃС‚СЂР°РЅРёС†Рµ"), 1);
 	$pvars['vars'] = array(
 		'user_per_page' => $user_per_page,
 		'title_plg'     => $title_plg,
@@ -89,7 +89,7 @@ function main() {
 	$tpl->vars('general.from', $pvars);
 	$tvars['vars'] = array(
 		'entries' => $tpl->show('general.from'),
-		'global'  => 'Общие'
+		'global'  => 'РћР±С‰РёРµ'
 	);
 	$tpl->template('main', $tpath['config/main'] . 'config');
 	$tpl->vars('main', $tvars);

@@ -2,11 +2,11 @@
 	<div class="row">
 
 		<article class="content-text col-xs-12">
-			<h1>Отзывы</h1>
-			<h2>Мы дорожим мнением наших клиентов</h2>
-			<p>Гарантия от 100 дней на установленные комплектующие и исправленный дефект. В случае повторного
-				поступления iPhone с дефектом, который устранялся ранее нашим сервисом, проводится диагностика, по
-				результатам которой устанавливается причина дефекта/неисправности.</p>
+			<h1>РћС‚Р·С‹РІС‹</h1>
+			<h2>РњС‹ РґРѕСЂРѕР¶РёРј РјРЅРµРЅРёРµРј РЅР°С€РёС… РєР»РёРµРЅС‚РѕРІ</h2>
+			<p>Р“Р°СЂР°РЅС‚РёСЏ РѕС‚ 100 РґРЅРµР№ РЅР° СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Рµ РєРѕРјРїР»РµРєС‚СѓСЋС‰РёРµ Рё РёСЃРїСЂР°РІР»РµРЅРЅС‹Р№ РґРµС„РµРєС‚. Р’ СЃР»СѓС‡Р°Рµ РїРѕРІС‚РѕСЂРЅРѕРіРѕ
+				РїРѕСЃС‚СѓРїР»РµРЅРёСЏ iPhone СЃ РґРµС„РµРєС‚РѕРј, РєРѕС‚РѕСЂС‹Р№ СѓСЃС‚СЂР°РЅСЏР»СЃСЏ СЂР°РЅРµРµ РЅР°С€РёРј СЃРµСЂРІРёСЃРѕРј, РїСЂРѕРІРѕРґРёС‚СЃСЏ РґРёР°РіРЅРѕСЃС‚РёРєР°, РїРѕ
+				СЂРµР·СѓР»СЊС‚Р°С‚Р°Рј РєРѕС‚РѕСЂРѕР№ СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚СЃСЏ РїСЂРёС‡РёРЅР° РґРµС„РµРєС‚Р°/РЅРµРёСЃРїСЂР°РІРЅРѕСЃС‚Рё.</p>
 		</article><!-- /.content-text -->
 
 	</div>
@@ -57,9 +57,9 @@
 							<div class="review-caption">
 								<p>
 									{{ entry.ip }} /
-									<a href="{{ home }}/engine/admin.php?mod=extra-config&plugin=guestbook&action=edit_message&id={{ entry.id }}">Редактировать</a>
+									<a href="{{ home }}/engine/admin.php?mod=extra-config&plugin=guestbook&action=edit_message&id={{ entry.id }}">Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ</a>
 									/
-									<a href="{{ entry.del }}">Удалить</a>
+									<a href="{{ entry.del }}">РЈРґР°Р»РёС‚СЊ</a>
 								</p>
 							</div>
 						{% endif %}
@@ -136,13 +136,13 @@
 
 {% if(use_guests) %}
 <div class="container">
-	<div class="msgi alert alert-success">Гостям нельзя оставлять отзывы. Зарегистрируйтесь.</siv>
+	<div class="msgi alert alert-success">Р“РѕСЃС‚СЏРј РЅРµР»СЊР·СЏ РѕСЃС‚Р°РІР»СЏС‚СЊ РѕС‚Р·С‹РІС‹. Р—Р°СЂРµРіРёСЃС‚СЂРёСЂСѓР№С‚РµСЃСЊ.</siv>
 	</div>
 	{% else %}
 		<form name="form" method="post" action="{{ php_self }}?action=add" class="review-form verifiable-form container">
 			<fieldset class="row">
 				{% if(global.user.name) %}
-					Ваш комментарий будет опубликован от имени <strong>{{ global.user.name }}</strong>
+					Р’Р°С€ РєРѕРјРјРµРЅС‚Р°СЂРёР№ Р±СѓРґРµС‚ РѕРїСѓР±Р»РёРєРѕРІР°РЅ РѕС‚ РёРјРµРЅРё <strong>{{ global.user.name }}</strong>
 					<input type="hidden" name="author" value="{{ global.user.name }}"/>
 				{% else %}
 					{% if(fields.firstname) %}
@@ -182,14 +182,14 @@
 
 					<div class="col-xs-12 col-md-12">
 						<div class="form-group">
-							<label>Ваш отзыв</label>
+							<label>Р’Р°С€ РѕС‚Р·С‹РІ</label>
 							<textarea name="content" id="content" class="form-control required" placeholder="{{ placeholder.message }}">{{ field.message }}</textarea>
 						</div>
 					</div>
 
 					<div class="col-xs-12 col-sm-3 col-md-2">
 						<div class="form-group">
-							<button name="submit" type="submit" class="btn btn-danger">Отправить отзыв</button>
+							<button name="submit" type="submit" class="btn btn-danger">РћС‚РїСЂР°РІРёС‚СЊ РѕС‚Р·С‹РІ</button>
 							<input type="hidden" name="ip" value="{{ ip }}"/>
 						</div>
 					</div>
@@ -220,8 +220,8 @@
 					</div>
 
 					<div class="form-caption col-xs-12 col-md-7">
-						<p>Прикрепите свой профиль в социальной сети, сделайте отзыв более убедительным!<br>
-							<span class="text-muted">Просто нажмите на иконку соцсети которую хотите прикрепить</span>
+						<p>РџСЂРёРєСЂРµРїРёС‚Рµ СЃРІРѕР№ РїСЂРѕС„РёР»СЊ РІ СЃРѕС†РёР°Р»СЊРЅРѕР№ СЃРµС‚Рё, СЃРґРµР»Р°Р№С‚Рµ РѕС‚Р·С‹РІ Р±РѕР»РµРµ СѓР±РµРґРёС‚РµР»СЊРЅС‹Рј!<br>
+							<span class="text-muted">РџСЂРѕСЃС‚Рѕ РЅР°Р¶РјРёС‚Рµ РЅР° РёРєРѕРЅРєСѓ СЃРѕС†СЃРµС‚Рё РєРѕС‚РѕСЂСѓСЋ С…РѕС‚РёС‚Рµ РїСЂРёРєСЂРµРїРёС‚СЊ</span>
 						</p>
 					</div>
 

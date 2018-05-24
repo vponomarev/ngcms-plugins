@@ -31,16 +31,16 @@
 	}
 </style>
 <div id="senderror">
-	<div class="texth">Сообщить об ошибке:</div>
+	<div class="texth">РЎРѕРѕР±С‰РёС‚СЊ РѕР± РѕС€РёР±РєРµ:</div>
 	<div class="formh">
 		<form method="post" target="_blank" action="{form_url}">
 			<input type="hidden" name="ds_id" value="{ds_id}"/>
 			<input type="hidden" name="entry_id" value="{entry_id}"/>
 			<select name="error" class="error" id="errorSelect">
-				<option value="">Выберите тип ошибки..</option>
+				<option value="">Р’С‹Р±РµСЂРёС‚Рµ С‚РёРї РѕС€РёР±РєРё..</option>
 				{errorlist}
 			</select>
-			<input type="submit" class="report" value="Отправить" onclick="if (document.getElementById('errorSelect').value==''){alert('Необходимо выбрать тип ошибки!'); return false;}; "/>
+			<input type="submit" class="report" value="РћС‚РїСЂР°РІРёС‚СЊ" onclick="if (document.getElementById('errorSelect').value==''){alert('РќРµРѕР±С…РѕРґРёРјРѕ РІС‹Р±СЂР°С‚СЊ С‚РёРї РѕС€РёР±РєРё!'); return false;}; "/>
 		</form>
 	</div>
 </div>

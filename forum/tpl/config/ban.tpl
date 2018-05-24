@@ -1,10 +1,10 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
 	<tr align="center">
 		<td width="100%" class="contentNav" align="center" style="background-repeat: no-repeat; background-position: left;">
-			<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban'" value="Общие" class="navbutton"/>
-			<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban_ip_list'" value="Забаненые IP" class="navbutton"/>
-			<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban_ip_range'" value="Забаненый диапазон IP" class="navbutton"/>
-			<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban_user'" value="Забаненые пользователи" class="navbutton"/>
+			<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban'" value="РћР±С‰РёРµ" class="navbutton"/>
+			<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban_ip_list'" value="Р—Р°Р±Р°РЅРµРЅС‹Рµ IP" class="navbutton"/>
+			<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban_ip_range'" value="Р—Р°Р±Р°РЅРµРЅС‹Р№ РґРёР°РїР°Р·РѕРЅ IP" class="navbutton"/>
+			<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban_user'" value="Р—Р°Р±Р°РЅРµРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»Рё" class="navbutton"/>
 		</td>
 	</tr>
 </table><br/>
@@ -12,72 +12,72 @@
 	<tr>
 		<td colspan=2>
 			<fieldset class="admGroup">
-				<legend class="title"><b>Настройки форума</b></legend>
+				<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё С„РѕСЂСѓРјР°</b></legend>
 				<table width="100%" border="0" class="content">
 					<tr>
-						<td class="contentEntry1" valign=top>Выберите каталог из которого плагин будет брать шаблоны для
-							отображения<br/></td>
+						<td class="contentEntry1" valign=top>Р’С‹Р±РµСЂРёС‚Рµ РєР°С‚Р°Р»РѕРі РёР· РєРѕС‚РѕСЂРѕРіРѕ РїР»Р°РіРёРЅ Р±СѓРґРµС‚ Р±СЂР°С‚СЊ С€Р°Р±Р»РѕРЅС‹ РґР»СЏ
+							РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ<br/></td>
 						<td class="contentEntry2" valign=top>{{ localsource }}</td>
 
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Выберите вид отображения форума<br/></td>
+						<td class="contentEntry1" valign=top>Р’С‹Р±РµСЂРёС‚Рµ РІРёРґ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ С„РѕСЂСѓРјР°<br/></td>
 						<td class="contentEntry2" valign=top>{{ display_main }}</td>
 
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Время для редиректа<br/>
-							<small>Устанавливать в секундах...</small>
+						<td class="contentEntry1" valign=top>Р’СЂРµРјСЏ РґР»СЏ СЂРµРґРёСЂРµРєС‚Р°<br/>
+							<small>РЈСЃС‚Р°РЅР°РІР»РёРІР°С‚СЊ РІ СЃРµРєСѓРЅРґР°С…...</small>
 						</td>
 						<td class="contentEntry2" valign=top>
-							<input name="redirect_time" type="text" title="Время для редиректа" size="4" value="{{ redirect_time }}"/>
+							<input name="redirect_time" type="text" title="Р’СЂРµРјСЏ РґР»СЏ СЂРµРґРёСЂРµРєС‚Р°" size="4" value="{{ redirect_time }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Время в течении которого пользователь считается в сети<br/>
-							<small>Указывать в секундах</small>
+						<td class="contentEntry1" valign=top>Р’СЂРµРјСЏ РІ С‚РµС‡РµРЅРёРё РєРѕС‚РѕСЂРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃС‡РёС‚Р°РµС‚СЃСЏ РІ СЃРµС‚Рё<br/>
+							<small>РЈРєР°Р·С‹РІР°С‚СЊ РІ СЃРµРєСѓРЅРґР°С…</small>
 						</td>
 						<td class="contentEntry2" valign=top>
-							<input name="online_time" type="text" title="Время в течении которого пользователь считается в сети" size="10" value="{{ online_time }}"/>
+							<input name="online_time" type="text" title="Р’СЂРµРјСЏ РІ С‚РµС‡РµРЅРёРё РєРѕС‚РѕСЂРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ СЃС‡РёС‚Р°РµС‚СЃСЏ РІ СЃРµС‚Рё" size="10" value="{{ online_time }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Включить кто оналайн<br/></td>
+						<td class="contentEntry1" valign=top>Р’РєР»СЋС‡РёС‚СЊ РєС‚Рѕ РѕРЅР°Р»Р°Р№РЅ<br/></td>
 
 						<td class="contentEntry2" valign=top>{{ online }}</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Титл форума<br/></td>
+						<td class="contentEntry1" valign=top>РўРёС‚Р» С„РѕСЂСѓРјР°<br/></td>
 						<td class="contentEntry2" valign=top>
-							<input name="forum_title" type="text" title="Титл форума" value="{{ forum_title }}"/></td>
+							<input name="forum_title" type="text" title="РўРёС‚Р» С„РѕСЂСѓРјР°" value="{{ forum_title }}"/></td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Описание форума<br/></td>
+						<td class="contentEntry1" valign=top>РћРїРёСЃР°РЅРёРµ С„РѕСЂСѓРјР°<br/></td>
 						<td class="contentEntry2" valign=top>
-							<input name="forum_description" type="text" title="Описание форума" value="{{ forum_description }}"/>
+							<input name="forum_description" type="text" title="РћРїРёСЃР°РЅРёРµ С„РѕСЂСѓРјР°" value="{{ forum_description }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Ключевые слова<br/></td>
+						<td class="contentEntry1" valign=top>РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°<br/></td>
 
 						<td class="contentEntry2" valign=top>
-							<input name="forum_keywords" type="text" title="Ключевые слова" value="{{ forum_keywords }}"/>
+							<input name="forum_keywords" type="text" title="РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°" value="{{ forum_keywords }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Выберите активный шаблон<br/>
-							<small>Выбранный скин будет использоваться при установке <b>Плагин</b> в предыдущем поле
+						<td class="contentEntry1" valign=top>Р’С‹Р±РµСЂРёС‚Рµ Р°РєС‚РёРІРЅС‹Р№ С€Р°Р±Р»РѕРЅ<br/>
+							<small>Р’С‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РїСЂРё СѓСЃС‚Р°РЅРѕРІРєРµ <b>РџР»Р°РіРёРЅ</b> РІ РїСЂРµРґС‹РґСѓС‰РµРј РїРѕР»Рµ
 							</small>
 							<br/></td>
 						<td class="contentEntry2" valign=top>{{ localskin }}</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Укажите время в течении которого можно редактировать и
-							удалять сообщения<br/>
+						<td class="contentEntry1" valign=top>РЈРєР°Р¶РёС‚Рµ РІСЂРµРјСЏ РІ С‚РµС‡РµРЅРёРё РєРѕС‚РѕСЂРѕРіРѕ РјРѕР¶РЅРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Рё
+							СѓРґР°Р»СЏС‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ<br/>
 							<small></small>
 							<br/></td>
 						<td class="contentEntry2" valign=top>
-							<input name="edit_del_time" type="text" title="Укажите время в течении которого можно редактировать и удалять сообщения" value="{{ edit_del_time }}"/>
+							<input name="edit_del_time" type="text" title="РЈРєР°Р¶РёС‚Рµ РІСЂРµРјСЏ РІ С‚РµС‡РµРЅРёРё РєРѕС‚РѕСЂРѕРіРѕ РјРѕР¶РЅРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ Рё СѓРґР°Р»СЏС‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ" value="{{ edit_del_time }}"/>
 						</td>
 					</tr>
 				</table>
@@ -90,7 +90,7 @@
 		</tr>
 		<tr align="center">
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input name="submit" type="submit" value="Сохранить" class="button"/>
+				<input name="submit" type="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ" class="button"/>
 			</td>
 		</tr>
 	</table>

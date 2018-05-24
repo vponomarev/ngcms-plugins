@@ -2,11 +2,11 @@
 
 <table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 <tr>
-<td width="100%" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" /><a href="admin.php?mod=extras">Управление плагинами</a></td>
+<td width="100%" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" /><a href="admin.php?mod=extras">РЈРїСЂР°РІР»РµРЅРёРµ РїР»Р°РіРёРЅР°РјРё</a></td>
 </tr>
 <tr><td>&nbsp;</td></tr>
 <tr>
-<td width="100%" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" />Настройка плагина: re_stat</td>
+<td width="100%" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" />РќР°СЃС‚СЂРѕР№РєР° РїР»Р°РіРёРЅР°: re_stat</td>
 </tr>
 <tr><td>&nbsp;</td></tr>
 </table>
@@ -17,8 +17,8 @@
 <form action="admin.php?mod=extra-config&amp;plugin=re_stat" method="post" name="options_bar">
 <input type="hidden" name="action" value="" />
 <input type="hidden" name="id" value="-1" />
-<input type="submit" value="Список" class="navbutton" onClick="document.forms['options_bar'].action.value = '';" />
-<input type="submit" value="Добавить" class="navbutton" onClick="document.forms['options_bar'].action.value = 'add';" />
+<input type="submit" value="РЎРїРёСЃРѕРє" class="navbutton" onClick="document.forms['options_bar'].action.value = '';" />
+<input type="submit" value="Р”РѕР±Р°РІРёС‚СЊ" class="navbutton" onClick="document.forms['options_bar'].action.value = 'add';" />
 </form>
 </td>
 </tr>
@@ -27,10 +27,10 @@
 
 <table width="97%" class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 <tr align="center" class="contHead">
-<td>№п.п.</td>
-<td>Код</td>
-<td>Статическая страница</td>
-<td width="160">Действие</td>
+<td>в„–Рї.Рї.</td>
+<td>РљРѕРґ</td>
+<td>РЎС‚Р°С‚РёС‡РµСЃРєР°СЏ СЃС‚СЂР°РЅРёС†Р°</td>
+<td width="160">Р”РµР№СЃС‚РІРёРµ</td>
 </tr>
 {entries}
 <tr><td width="100%" colspan="4">&nbsp;</td></tr>
@@ -38,7 +38,7 @@
 <td width="100%" colspan="4" class="contentEdit" align="center">
 <form action="admin.php?mod=extra-config&amp;plugin=re_stat" method="post" name="options_bar_bottom">
 <input type="hidden" name="action" value="re_map" />
-<input type="submit" value="Перестроить карту ссылок" class="navbutton" />
+<input type="submit" value="РџРµСЂРµСЃС‚СЂРѕРёС‚СЊ РєР°СЂС‚Сѓ СЃСЃС‹Р»РѕРє" class="navbutton" />
 </form>
 </td>
 </tr>

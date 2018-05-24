@@ -14,5 +14,5 @@ if ($_REQUEST['action'] == 'commit') {
 	header("HTTP/1.1 301 Moved Permanently");
 	header("Location: {$url}");
 } else {
-	generate_install_page($plugin, 'Удаление плагина', 'deinstall');
+	generate_install_page($plugin, 'РЈРґР°Р»РµРЅРёРµ РїР»Р°РіРёРЅР°', 'deinstall');
 }

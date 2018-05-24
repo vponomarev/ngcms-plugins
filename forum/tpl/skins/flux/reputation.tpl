@@ -5,19 +5,19 @@
 	</div>
 </div>
 <div class="blockform">
-	<h2><span>Рейтинг пользователя {{ to_author }}&nbsp;&nbsp;<strong>[+{{ plus }} / -{{ min }}] &nbsp;</strong></span>
+	<h2><span>Р РµР№С‚РёРЅРі РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ {{ to_author }}&nbsp;&nbsp;<strong>[+{{ plus }} / -{{ min }}] &nbsp;</strong></span>
 	</h2>
 	<div class="box">
 		<div class="inbox">
 			<table cellspacing="0">
 				<thead>
 				<tr>
-					<th class="tc3" style="width:15%">От кого</th>
-					<th class="tc3" style="width:15%">За топик</th>
-					<th class="tc3" style="width:35%">Причина</th>
-					<th class="tc3" style="width:10%; text-align:center;">Оценка</th>
-					<th class="tc3" style="width:15%">Дата</th>
-					<!-- <th class="tc3" style="width:10%">Удалить</th> -->                </tr>
+					<th class="tc3" style="width:15%">РћС‚ РєРѕРіРѕ</th>
+					<th class="tc3" style="width:15%">Р—Р° С‚РѕРїРёРє</th>
+					<th class="tc3" style="width:35%">РџСЂРёС‡РёРЅР°</th>
+					<th class="tc3" style="width:10%; text-align:center;">РћС†РµРЅРєР°</th>
+					<th class="tc3" style="width:15%">Р”Р°С‚Р°</th>
+					<!-- <th class="tc3" style="width:10%">РЈРґР°Р»РёС‚СЊ</th> -->                </tr>
 				<tbody>
 				{% for entry in entries %}
 					<tr>
@@ -30,7 +30,7 @@
 					</tr>
 				{% else %}
 					<tr>
-						<td>Пусто</td>
+						<td>РџСѓСЃС‚Рѕ</td>
 
 						<!-- <td style="text-align:center;"><input type="checkbox" name="delete_rep_id[]" value="641"></td> -->
 					</tr>

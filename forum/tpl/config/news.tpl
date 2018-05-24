@@ -1,8 +1,8 @@
 <table border="0" cellspacing="0" cellpadding="0" class="content" align="center">
 	<tr align="left" class="contHead">
 		<td width="10%" nowrap>#</td>
-		<td width="60%">Заголовок</td>
-		<td width="30%">Действие</td>
+		<td width="60%">Р—Р°РіРѕР»РѕРІРѕРє</td>
+		<td width="30%">Р”РµР№СЃС‚РІРёРµ</td>
 	</tr>
 	{% for entry in entries %}
 		<tr align="left">
@@ -12,7 +12,7 @@
 		</tr>
 	{% else %}
 		<tr align="left">
-			<td width="10%" class="contentEntry1">Пусто</td>
+			<td width="10%" class="contentEntry1">РџСѓСЃС‚Рѕ</td>
 			<td width="60%" class="contentEntry1"></a></td>
 			<td width="30%" class="contentEntry1"></td>
 		</tr>
@@ -23,7 +23,7 @@
 	<tfoot>
 	<tr>
 		<td colspan="8" class="contentEdit" align="right">
-			<input class="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=new_news'" value="Добавить новость"/>
+			<input class="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=new_news'" value="Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІРѕСЃС‚СЊ"/>
 		</td>
 	</tr>
 	</tfoot>

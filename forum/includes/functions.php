@@ -8,17 +8,17 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит 
- комментариев. То, что писалось с трудом, должно 
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚ 
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ 
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
 lang_forum('forum');
 #############################
-## ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ##
+## Р’РЎРџРћРњРћР“РђРўР•Р›Р¬РќР«Р• Р¤РЈРќРљР¦РР ##
 #############################
 function update_forum($topic_id, $topic_title, $int_topic, $post_date, $post_id, $user_name, $user_id, $forum_id) {
 
@@ -68,7 +68,7 @@ function moder_perm($id, $perm, $moder) {
 	}
 }
 
-/* Изменить */
+/* РР·РјРµРЅРёС‚СЊ */
 /* function update_post_forum($topic_id, $topic_title, $topic_date, $user_name, $user_id, $forum_id)
 {global $mysql;
 	
@@ -76,7 +76,7 @@ function moder_perm($id, $perm, $moder) {
 	
 	$mysql->query('UPDATE '.prefix.'_forum_forums SET int_post = '.securemysql($post_sum).', int_topic = '.securemysql($topic_sum).',l_topic_id = '.securemysql($topic_id).', l_topic_title = '.securemysql($topic_title).', l_date ='.securemysql($topic_date).', l_author = '.securemysql($user_name).', l_author_id = '.securemysql($user_id).' WHERE fid = '.securemysql($forum_id).' LIMIT 1');
 } */
-/* И этот тоже */
+/* Р СЌС‚РѕС‚ С‚РѕР¶Рµ */
 /* function update_topic($post_date, $user_name, $user_id, $topic_id)
 {global $mysql;
 	
@@ -84,7 +84,7 @@ function moder_perm($id, $perm, $moder) {
 	
 	$mysql->query('UPDATE '.prefix.'_forum_topics SET last_post = '.securemysql($post_date).', last_poster = '.securemysql($user_name).', last_poster_id = '.securemysql($user_id).', num_replies = '.securemysql($count).' WHERE topic_id = '.securemysql($topic_id).' LIMIT 1');
 } */
-/*К удалению function update_deltopic_forum($topic_id)
+/*Рљ СѓРґР°Р»РµРЅРёСЋ function update_deltopic_forum($topic_id)
 {global $mysql;
 	$mysql->query("UPDATE ".prefix."_topics SET num_replies = num_replies - 1 WHERE topic_id = '".intval($topic_id)."'");
 } */
@@ -165,7 +165,7 @@ function delete_attach($rows) {
 	}
 }
 
-//Под удаление
+//РџРѕРґ СѓРґР°Р»РµРЅРёРµ
 function update_users_mes() {
 
 	global $mysql, $config, $userROW;
@@ -207,7 +207,7 @@ function send_subscribe($topic_id, $last_post_id, $name_topic, $message) {
 			'message'   => bb_codes($message),
 		);
 		if (filter_var($row['mail'], FILTER_VALIDATE_EMAIL))
-			zzMail($row['mail'], 'Новое сообщение на форуме', $xt->render($tVars), '', false, 'text/html');
+			zzMail($row['mail'], 'РќРѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РЅР° С„РѕСЂСѓРјРµ', $xt->render($tVars), '', false, 'text/html');
 	}
 }
 
@@ -294,7 +294,7 @@ function rss_export_generate_forum($tid = '') {
 	if (empty($select)) {
 		$show_main = true;
 
-		return $output = information('RSS этой темы не доступна', $title = 'Информация');
+		return $output = information('RSS СЌС‚РѕР№ С‚РµРјС‹ РЅРµ РґРѕСЃС‚СѓРїРЅР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	}
 	foreach ($select as $row) {
 		$tEntry[] = array(
@@ -386,28 +386,28 @@ function forum_upload_files() {
 function forum_translit($string) {
 
 	$converter = array(
-		'а' => 'a', 'б' => 'b', 'в' => 'v',
-		'г' => 'g', 'д' => 'd', 'е' => 'e',
-		'ё' => 'e', 'ж' => 'zh', 'з' => 'z',
-		'и' => 'i', 'й' => 'y', 'к' => 'k',
-		'л' => 'l', 'м' => 'm', 'н' => 'n',
-		'о' => 'o', 'п' => 'p', 'р' => 'r',
-		'с' => 's', 'т' => 't', 'у' => 'u',
-		'ф' => 'f', 'х' => 'h', 'ц' => 'c',
-		'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch',
-		'ь' => "'", 'ы' => 'y', 'ъ' => "'",
-		'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
-		'А' => 'A', 'Б' => 'B', 'В' => 'V',
-		'Г' => 'G', 'Д' => 'D', 'Е' => 'E',
-		'Ё' => 'E', 'Ж' => 'Zh', 'З' => 'Z',
-		'И' => 'I', 'Й' => 'Y', 'К' => 'K',
-		'Л' => 'L', 'М' => 'M', 'Н' => 'N',
-		'О' => 'O', 'П' => 'P', 'Р' => 'R',
-		'С' => 'S', 'Т' => 'T', 'У' => 'U',
-		'Ф' => 'F', 'Х' => 'H', 'Ц' => 'C',
-		'Ч' => 'Ch', 'Ш' => 'Sh', 'Щ' => 'Sch',
-		'Ь' => "'", 'Ы' => 'Y', 'Ъ' => "'",
-		'Э' => 'E', 'Ю' => 'Yu', 'Я' => 'Ya',
+		'Р°' => 'a', 'Р±' => 'b', 'РІ' => 'v',
+		'Рі' => 'g', 'Рґ' => 'd', 'Рµ' => 'e',
+		'С‘' => 'e', 'Р¶' => 'zh', 'Р·' => 'z',
+		'Рё' => 'i', 'Р№' => 'y', 'Рє' => 'k',
+		'Р»' => 'l', 'Рј' => 'm', 'РЅ' => 'n',
+		'Рѕ' => 'o', 'Рї' => 'p', 'СЂ' => 'r',
+		'СЃ' => 's', 'С‚' => 't', 'Сѓ' => 'u',
+		'С„' => 'f', 'С…' => 'h', 'С†' => 'c',
+		'С‡' => 'ch', 'С€' => 'sh', 'С‰' => 'sch',
+		'СЊ' => "'", 'С‹' => 'y', 'СЉ' => "'",
+		'СЌ' => 'e', 'СЋ' => 'yu', 'СЏ' => 'ya',
+		'Рђ' => 'A', 'Р‘' => 'B', 'Р’' => 'V',
+		'Р“' => 'G', 'Р”' => 'D', 'Р•' => 'E',
+		'РЃ' => 'E', 'Р–' => 'Zh', 'Р—' => 'Z',
+		'Р' => 'I', 'Р™' => 'Y', 'Рљ' => 'K',
+		'Р›' => 'L', 'Рњ' => 'M', 'Рќ' => 'N',
+		'Рћ' => 'O', 'Рџ' => 'P', 'Р ' => 'R',
+		'РЎ' => 'S', 'Рў' => 'T', 'РЈ' => 'U',
+		'Р¤' => 'F', 'РҐ' => 'H', 'Р¦' => 'C',
+		'Р§' => 'Ch', 'РЁ' => 'Sh', 'Р©' => 'Sch',
+		'Р¬' => "'", 'Р«' => 'Y', 'РЄ' => "'",
+		'Р­' => 'E', 'Р®' => 'Yu', 'РЇ' => 'Ya',
 		' ' => '_',
 	);
 
@@ -419,7 +419,7 @@ function forum_memory_usage() {
 	if (function_exists('memory_get_usage'))
 		return round(memory_get_usage() / 1024 / 1024, 2) . 'MB';
 	else
-		return '<b>Неизвестно</b>';
+		return '<b>РќРµРёР·РІРµСЃС‚РЅРѕ</b>';
 }
 
 function redirect_forum($url) {
@@ -450,7 +450,7 @@ function my_error_handler($in_errno, $in_errstr, $in_errfile, $in_errline, $in_e
 	}
 	echo <<<EOTABLE
 	<div style='font: 12px verdana; background-color: #EEEEEE; border: #ABCDEF 1px solid; margin: 1px; padding: 3px;'>
-		<span style='color: red;'>Произошла ошибка!</span><br />
+		<span style='color: red;'>РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР°!</span><br />
 		<span style=\"font: 9px arial;\"><b>{$err_type}:</b>({$in_errfile}, line {$in_errline})</span><br />
 		<span style=\"font: 9px arial;\">{$in_errstr}</span>
 	</div>

@@ -1,25 +1,25 @@
 #
-# Автоматическая генерация "ключевых слов" для новостей
+# РђРІС‚РѕРјР°С‚РёС‡РµСЃРєР°СЏ РіРµРЅРµСЂР°С†РёСЏ "РєР»СЋС‡РµРІС‹С… СЃР»РѕРІ" РґР»СЏ РЅРѕРІРѕСЃС‚РµР№
 #
 
-Установка.
-1.1. Открыть шаблон engine/skins/default/tpl/news/add.tpl
-1.2. Найти строки:
+РЈСЃС‚Р°РЅРѕРІРєР°.
+1.1. РћС‚РєСЂС‹С‚СЊ С€Р°Р±Р»РѕРЅ engine/skins/default/tpl/news/add.tpl
+1.2. РќР°Р№С‚Рё СЃС‚СЂРѕРєРё:
 {% if (pluginIsActive('xfields')) %}
 <!-- XFields -->
 {{ plugin.xfields[1] }}
 <!-- /XFields -->
 {% endif %}
-1.3. После них добавить:
+1.3. РџРѕСЃР»Рµ РЅРёС… РґРѕР±Р°РІРёС‚СЊ:
 {{ plugin.autokeys }}
 
-2.1. Открыть шаблон engine/skins/default/tpl/news/edit.tpl
-2.2. Найти строки:
+2.1. РћС‚РєСЂС‹С‚СЊ С€Р°Р±Р»РѕРЅ engine/skins/default/tpl/news/edit.tpl
+2.2. РќР°Р№С‚Рё СЃС‚СЂРѕРєРё:
 {% if (pluginIsActive('xfields')) %}
 <!-- XFields -->
 {{ plugin.xfields[1] }}
 <!-- /XFields -->
 {% endif %}
-2.3. После них добавить:
+2.3. РџРѕСЃР»Рµ РЅРёС… РґРѕР±Р°РІРёС‚СЊ:
 {{ plugin.autokeys }}
 

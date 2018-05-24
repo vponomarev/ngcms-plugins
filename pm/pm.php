@@ -29,9 +29,9 @@ define('INBOX_LINK', generatePluginLink('pm', null, ($_GET['location'] ? array('
 
 /* 
   fill variables in usermenu.tpl
-  + {{ p.pm.pm_unread }} - кол-во новых входящих сообщений
-  + {{ p.pm.pm_all }} - общее кол-во входящих сообщений
-  + {{ p.pm.link }} - URL на страницу со входящими сообщениями
+  + {{ p.pm.pm_unread }} - РєРѕР»-РІРѕ РЅРѕРІС‹С… РІС…РѕРґСЏС‰РёС… СЃРѕРѕР±С‰РµРЅРёР№
+  + {{ p.pm.pm_all }} - РѕР±С‰РµРµ РєРѕР»-РІРѕ РІС…РѕРґСЏС‰РёС… СЃРѕРѕР±С‰РµРЅРёР№
+  + {{ p.pm.link }} - URL РЅР° СЃС‚СЂР°РЅРёС†Сѓ СЃРѕ РІС…РѕРґСЏС‰РёРјРё СЃРѕРѕР±С‰РµРЅРёСЏРјРё
 */
 
 class PMCoreFilter extends CoreFilter {

@@ -3,16 +3,16 @@
 ;
 
 ID: rating
-Name: Рейтинг новостей
+Name: Р РµР№С‚РёРЅРі РЅРѕРІРѕСЃС‚РµР№
 Name_EN: News rating
 Version: 0.06
 Acts: ppages, news_full, news_short, news_search
 File: rating.php
 Config: config.php
 Type: plugin
-Description: Ведение рейтинга новостей
+Description: Р’РµРґРµРЅРёРµ СЂРµР№С‚РёРЅРіР° РЅРѕРІРѕСЃС‚РµР№
 Description_EN: Manage news rating
 Author: SwiZZeR &amp; Vitaly A. Ponomarev
-Title: Рейтинг новостей
+Title: Р РµР№С‚РёРЅРі РЅРѕРІРѕСЃС‚РµР№
 Preinstall: default_no
-Information: Ведение и отображение пользовательского рейтинга новостей (выставляется рейтинг от 1 до 5)
+Information: Р’РµРґРµРЅРёРµ Рё РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ СЂРµР№С‚РёРЅРіР° РЅРѕРІРѕСЃС‚РµР№ (РІС‹СЃС‚Р°РІР»СЏРµС‚СЃСЏ СЂРµР№С‚РёРЅРі РѕС‚ 1 РґРѕ 5)

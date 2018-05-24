@@ -10,12 +10,12 @@ File: auth_basic.php
 Config: config.php
 Install: install.php
 Type: auth
-Description: базовая авторизация
+Description: Р±Р°Р·РѕРІР°СЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 URI: http://no_url.com/
 Permanent: yes
 Preinstall_vars: restorepw="1"; 
-Title: Базовый модуль авторизации
-Information: Обеспечивает авторизацию пользователей в системе, обязателен к использованию.
+Title: Р‘Р°Р·РѕРІС‹Р№ РјРѕРґСѓР»СЊ Р°РІС‚РѕСЂРёР·Р°С†РёРё
+Information: РћР±РµСЃРїРµС‡РёРІР°РµС‚ Р°РІС‚РѕСЂРёР·Р°С†РёСЋ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РІ СЃРёСЃС‚РµРјРµ, РѕР±СЏР·Р°С‚РµР»РµРЅ Рє РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЋ.
 preinstall: yes

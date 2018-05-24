@@ -15,6 +15,6 @@ if ($_REQUEST['action'] == 'commit') {
 	$ULIB->saveConfig();
 	plugin_mark_deinstalled($plugin);
 } else {
-	generate_install_page($plugin, "Óäàëåíèå NSM", 'deinstall');
+	generate_install_page($plugin, "Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ NSM", 'deinstall');
 }
 ?>

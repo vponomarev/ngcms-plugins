@@ -11,10 +11,10 @@ Config: config.php
 Install: install.php
 Deinstall: deinstall.php
 Type: plugin
-Description: BitTorrent треккер
+Description: BitTorrent С‚СЂРµРєРєРµСЂ
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 URI: http://no_url.com/
-Title: BitTorrent трекер
-Information: Позволяет превратить ваш сайт в BitTorrent трекер
+Title: BitTorrent С‚СЂРµРєРµСЂ
+Information: РџРѕР·РІРѕР»СЏРµС‚ РїСЂРµРІСЂР°С‚РёС‚СЊ РІР°С€ СЃР°Р№С‚ РІ BitTorrent С‚СЂРµРєРµСЂ
 Preinstall: no

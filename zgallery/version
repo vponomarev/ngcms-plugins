@@ -8,8 +8,8 @@ Version: 0.01
 Acts: index, news_short, news_full
 File: zgallery.php
 Type: plugin
-Description: Управление галереями
+Description: РЈРїСЂР°РІР»РµРЅРёРµ РіР°Р»РµСЂРµСЏРјРё
 Author: Rostunov Sergey
 Author_URI: http://ngcms.ru/
-Title: Управление галереями
-Information: Добавляет возможность выводить галереи в шаблонах
+Title: РЈРїСЂР°РІР»РµРЅРёРµ РіР°Р»РµСЂРµСЏРјРё
+Information: Р”РѕР±Р°РІР»СЏРµС‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РІС‹РІРѕРґРёС‚СЊ РіР°Р»РµСЂРµРё РІ С€Р°Р±Р»РѕРЅР°С…

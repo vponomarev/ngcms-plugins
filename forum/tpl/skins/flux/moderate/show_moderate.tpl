@@ -1,12 +1,12 @@
 <div class="blockform">
-	<h2><span>Перенести тему</span></h2>
+	<h2><span>РџРµСЂРµРЅРµСЃС‚Рё С‚РµРјСѓ</span></h2>
 	<div class="box">
 		<form method="post" action="">
 			<div class="inform">
 				<fieldset>
-					<legend>Выберите форум</legend>
+					<legend>Р’С‹Р±РµСЂРёС‚Рµ С„РѕСЂСѓРј</legend>
 					<div class="infldset">
-						<label>Куда перенести<br/>
+						<label>РљСѓРґР° РїРµСЂРµРЅРµСЃС‚Рё<br/>
 							<select name="move_to_forum">
 								{{ entries }}
 							</select>
@@ -15,7 +15,7 @@
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="submit" value="Перенести"/><a href="javascript:history.go(-1)">Назад</a></p>
+			<p><input type="submit" name="submit" value="РџРµСЂРµРЅРµСЃС‚Рё"/><a href="javascript:history.go(-1)">РќР°Р·Р°Рґ</a></p>
 		</form>
 	</div>
 </div>

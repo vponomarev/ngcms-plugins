@@ -2,8 +2,8 @@
 	<tbody>
 	<tr>
 		<td colspan="5" class="contentHead" width="100%">
-			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="Управление плагинами">Управление
-				плагинами</a> &#8594; <a href="?mod=extra-config&plugin=xfields&section={{ sectionID }}" class="bold">xfields</a>
+			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="РЈРїСЂР°РІР»РµРЅРёРµ РїР»Р°РіРёРЅР°РјРё">РЈРїСЂР°РІР»РµРЅРёРµ
+				РїР»Р°РіРёРЅР°РјРё</a> &#8594; <a href="?mod=extra-config&plugin=xfields&section={{ sectionID }}" class="bold">xfields</a>
 			&#8594; {{ lang.xfconfig['editfield'] }}
 			<a href="?mod=extra-config&plugin=xfields&action=edit&section={{ sectionID }}&field={{ id }}">{{ id }}</a>
 		</td>

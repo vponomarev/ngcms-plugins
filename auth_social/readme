@@ -1,17 +1,17 @@
 # =========================================================================== #
-# NG CMS // Плагины // auth_social - авторизация через соцсети                #
+# NG CMS // РџР»Р°РіРёРЅС‹ // auth_social - Р°РІС‚РѕСЂРёР·Р°С†РёСЏ С‡РµСЂРµР· СЃРѕС†СЃРµС‚Рё                #
 # =========================================================================== #
 
-Плагин не является самостоятельным модулем авторизации, а работает лишь, как 
-дополнение к одному из уже работающих плагинов, например auth_basic.
-В данный момент поддерживается авторизация через vk, odnoklassniki, mailru, yandex, google, facebook, twitter, steam
+РџР»Р°РіРёРЅ РЅРµ СЏРІР»СЏРµС‚СЃСЏ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅС‹Рј РјРѕРґСѓР»РµРј Р°РІС‚РѕСЂРёР·Р°С†РёРё, Р° СЂР°Р±РѕС‚Р°РµС‚ Р»РёС€СЊ, РєР°Рє 
+РґРѕРїРѕР»РЅРµРЅРёРµ Рє РѕРґРЅРѕРјСѓ РёР· СѓР¶Рµ СЂР°Р±РѕС‚Р°СЋС‰РёС… РїР»Р°РіРёРЅРѕРІ, РЅР°РїСЂРёРјРµСЂ auth_basic.
+Р’ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ С‡РµСЂРµР· vk, odnoklassniki, mailru, yandex, google, facebook, twitter, steam
 
 #=====================================#
-Установка
+РЈСЃС‚Р°РЅРѕРІРєР°
 #=====================================#
 
-1. Зарегистрировать приложения в соц.сетях, по инструкции, https://github.com/stanislas-prime/SocialAuther
-В параметре redirect_uri везде писать, следующие URL'ы:
+1. Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊ РїСЂРёР»РѕР¶РµРЅРёСЏ РІ СЃРѕС†.СЃРµС‚СЏС…, РїРѕ РёРЅСЃС‚СЂСѓРєС†РёРё, https://github.com/stanislas-prime/SocialAuther
+Р’ РїР°СЂР°РјРµС‚СЂРµ redirect_uri РІРµР·РґРµ РїРёСЃР°С‚СЊ, СЃР»РµРґСѓСЋС‰РёРµ URL'С‹:
 http://sitename.ru/plugin/auth_social/?provider=vk
 http://sitename.ru/plugin/auth_social/?provider=odnoklassniki
 http://sitename.ru/plugin/auth_social/?provider=mailru
@@ -22,9 +22,9 @@ http://sitename.ru/plugin/auth_social/?provider=twitter
 http://sitename.ru/plugin/auth_social/?provider=steam
 http://sitename.ru/plugin/auth_social/?provider=twitch
 
-2. Включить плагин. В настройках плагина, внести данные о приложениях в соц.сетях (client_id, client_secret, public_key)
+2. Р’РєР»СЋС‡РёС‚СЊ РїР»Р°РіРёРЅ. Р’ РЅР°СЃС‚СЂРѕР№РєР°С… РїР»Р°РіРёРЅР°, РІРЅРµСЃС‚Рё РґР°РЅРЅС‹Рµ Рѕ РїСЂРёР»РѕР¶РµРЅРёСЏС… РІ СЃРѕС†.СЃРµС‚СЏС… (client_id, client_secret, public_key)
 
-3. В шаблоне usermenu.tpl прописать ссылки по которым будет осуществляться авторизация, например:
+3. Р’ С€Р°Р±Р»РѕРЅРµ usermenu.tpl РїСЂРѕРїРёСЃР°С‚СЊ СЃСЃС‹Р»РєРё РїРѕ РєРѕС‚РѕСЂС‹Рј Р±СѓРґРµС‚ РѕСЃСѓС‰РµСЃС‚РІР»СЏС‚СЊСЃСЏ Р°РІС‚РѕСЂРёР·Р°С†РёСЏ, РЅР°РїСЂРёРјРµСЂ:
 <a href="{{p.auth_social.vk.authUrl}}" title="{{p.auth_social.vk.title}}"><img src="/engine/plugins/auth_social/social/VK.png" alt="{{p.auth_social.vk.title}}"/></a>
 <a href="{{p.auth_social.odnoklassniki.authUrl}}" title="{{p.auth_social.odnoklassniki.title}}"><img src="/engine/plugins/auth_social/social/Odnoklasniki.png" alt="{{p.auth_social.odnoklassniki.title}}"/></a>
 <a href="{{p.auth_social.mailru.authUrl}}" title="{{p.auth_social.mailru.title}}"><img src="/engine/plugins/auth_social/social/mail.png" alt="{{p.auth_social.mailru.title}}"/></a>
@@ -37,50 +37,50 @@ http://sitename.ru/plugin/auth_social/?provider=twitch
 
 
 #=====================================#
-Интеграция с профилем (плагин uprofile)
+РРЅС‚РµРіСЂР°С†РёСЏ СЃ РїСЂРѕС„РёР»РµРј (РїР»Р°РіРёРЅ uprofile)
 #=====================================#
 
-При установке плагина в таблице users создаются новые поля: provider, social_id, social_page, sex, birthday
-Данные в данных полях слабоструктурированы и могут либо вообще отсутствовать, либо их вид может различаться в зависимости от соц. сети.
+РџСЂРё СѓСЃС‚Р°РЅРѕРІРєРµ РїР»Р°РіРёРЅР° РІ С‚Р°Р±Р»РёС†Рµ users СЃРѕР·РґР°СЋС‚СЃСЏ РЅРѕРІС‹Рµ РїРѕР»СЏ: provider, social_id, social_page, sex, birthday
+Р”Р°РЅРЅС‹Рµ РІ РґР°РЅРЅС‹С… РїРѕР»СЏС… СЃР»Р°Р±РѕСЃС‚СЂСѓРєС‚СѓСЂРёСЂРѕРІР°РЅС‹ Рё РјРѕРіСѓС‚ Р»РёР±Рѕ РІРѕРѕР±С‰Рµ РѕС‚СЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ, Р»РёР±Рѕ РёС… РІРёРґ РјРѕР¶РµС‚ СЂР°Р·Р»РёС‡Р°С‚СЊСЃСЏ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ СЃРѕС†. СЃРµС‚Рё.
 
-1. \templates\ваш_шаблон\plugins\uprofile\users.tpl
+1. \templates\РІР°С€_С€Р°Р±Р»РѕРЅ\plugins\uprofile\users.tpl
 
-{{ userRec.provider }} - тип. соц. сети.
-{{ userRec.social_page }} - ссылка на профиль с социальной сети.
-{{ userRec.sex }} - пол пользователя.
-{{ userRec.birthday }} - дата рождения пользователя.
+{{ userRec.provider }} - С‚РёРї. СЃРѕС†. СЃРµС‚Рё.
+{{ userRec.social_page }} - СЃСЃС‹Р»РєР° РЅР° РїСЂРѕС„РёР»СЊ СЃ СЃРѕС†РёР°Р»СЊРЅРѕР№ СЃРµС‚Рё.
+{{ userRec.sex }} - РїРѕР» РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.
+{{ userRec.birthday }} - РґР°С‚Р° СЂРѕР¶РґРµРЅРёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.
 
-Пример вывода:
+РџСЂРёРјРµСЂ РІС‹РІРѕРґР°:
 {% if (userRec.provider) and (userRec.social_page) %}
     <tr>
-        <td>Профиль соцсети:</td>
+        <td>РџСЂРѕС„РёР»СЊ СЃРѕС†СЃРµС‚Рё:</td>
         <td class="second">{{ userRec.social_page }}</td>
     </tr>
 {% endif %}
 {% if (userRec.provider) and (userRec.sex) %}
     <tr>
-        <td>Пол:</td>
+        <td>РџРѕР»:</td>
         <td class="second">{{ userRec.sex }}</td>
     </tr>
 {% endif %}
 {% if (userRec.provider) and (userRec.birthday) %}
     <tr>
-        <td>Дата рождения:</td>
+        <td>Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ:</td>
         <td class="second">{{ userRec.birthday }}</td>
     </tr>
 {% endif %}
 
-2. \templates\ваш_шаблон\plugins\uprofile\profile.tpl
+2. \templates\РІР°С€_С€Р°Р±Р»РѕРЅ\plugins\uprofile\profile.tpl
 
-{{ userRec.sex }} - пол пользователя.
-{{ userRec.birthday }} - дата рождения пользователя.
+{{ userRec.sex }} - РїРѕР» РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.
+{{ userRec.birthday }} - РґР°С‚Р° СЂРѕР¶РґРµРЅРёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ.
 
-Пример вывода:
+РџСЂРёРјРµСЂ РІС‹РІРѕРґР°:
 <div class="label label-table">
-    <label>Пол:</label>
+    <label>РџРѕР»:</label>
     <input type="text" name="editsex" value="{{ userRec.sex }}" class="input" />
 </div>
 <div class="label label-table">
-    <label>Дата рождения:</label>
+    <label>Р”Р°С‚Р° СЂРѕР¶РґРµРЅРёСЏ:</label>
     <input type="text" name="editbirthday" value="{{ userRec.birthday }}" class="input" />
 </div>

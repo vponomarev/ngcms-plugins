@@ -34,7 +34,7 @@
 					progressLabel.text( progressbar.progressbar( "value" ) + "%" );
 				},
 				complete: function() {
-					progressLabel.text( "Готово!" );
+					progressLabel.text( "Р“РѕС‚РѕРІРѕ!" );
 				}
 			});
 
@@ -96,13 +96,13 @@
 				<table border="0" cellspacing="0" cellpadding="0" class="content" align="center">
 					<tbody>
 					<tr>
-						<td class="contentHead"><img src="{{ admin_url }}/skins/default/images/nav.gif" hspace="8" alt="">Новости</td>
+						<td class="contentHead"><img src="{{ admin_url }}/skins/default/images/nav.gif" hspace="8" alt="">РќРѕРІРѕСЃС‚Рё</td>
 					</tr>
 					<tr>
 						<td>
 
 							<div class="list">
-								Количество: <input type="text" value="10000" name="count">
+								РљРѕР»РёС‡РµСЃС‚РІРѕ: <input type="text" value="10000" name="count">
 							</div>
 
 							<div class="list">
@@ -113,7 +113,7 @@
 					</tr>
 					<tr align="center">
 						<td width="100%" class="contentEdit" align="center" valign="top">
-							<input type="submit" value="Начать!" class="button">
+							<input type="submit" value="РќР°С‡Р°С‚СЊ!" class="button">
 						</td>
 					</tr>
 					</tbody>
@@ -129,13 +129,13 @@
 				<table border="0" cellspacing="0" cellpadding="0" class="content" align="center">
 					<tbody>
 					<tr>
-						<td class="contentHead"><img src="{{ admin_url }}/skins/default/images/nav.gif" hspace="8" alt="">Статьи</td>
+						<td class="contentHead"><img src="{{ admin_url }}/skins/default/images/nav.gif" hspace="8" alt="">РЎС‚Р°С‚СЊРё</td>
 					</tr>
 					<tr>
 						<td>
 
 							<div class="list">
-								Количество: <input type="text" value="10000" name="count">
+								РљРѕР»РёС‡РµСЃС‚РІРѕ: <input type="text" value="10000" name="count">
 							</div>
 
 							<div class="list">
@@ -146,7 +146,7 @@
 					</tr>
 					<tr align="center">
 						<td width="100%" class="contentEdit" align="center" valign="top">
-							<input type="submit" value="Начать!" class="button">
+							<input type="submit" value="РќР°С‡Р°С‚СЊ!" class="button">
 						</td>
 					</tr>
 					</tbody>

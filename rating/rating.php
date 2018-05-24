@@ -84,7 +84,7 @@ function plugin_rating_screen() {
 }
 
 //
-// Фильтр новостей (для показа рейтинга)
+// ╨д╨╕╨╗╤М╤В╤А ╨╜╨╛╨▓╨╛╤Б╤В╨╡╨╣ (╨┤╨╗╤П ╨┐╨╛╨║╨░╨╖╨░ ╤А╨╡╨╣╤В╨╕╨╜╨│╨░)
 //
 class RatingNewsFilter extends NewsFilter {
 

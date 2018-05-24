@@ -1,12 +1,12 @@
 <html>
 <body>
 <div style="font: normal 11px verdana, sans-serif;">
-	<h3>Уважаемый <a href='http://{{ mydomains }}{{ profile_link }}'>{{ profile }}</a>!</h3>
-	На форуме только что было оставлена новая новость.<br/>
+	<h3>РЈРІР°Р¶Р°РµРјС‹Р№ <a href='http://{{ mydomains }}{{ profile_link }}'>{{ profile }}</a>!</h3>
+	РќР° С„РѕСЂСѓРјРµ С‚РѕР»СЊРєРѕ С‡С‚Рѕ Р±С‹Р»Рѕ РѕСЃС‚Р°РІР»РµРЅР° РЅРѕРІР°СЏ РЅРѕРІРѕСЃС‚СЊ.<br/>
 	<a href='http://{{ mydomains }}{{ news_link }}'>{{ news_name }}</a>
 	<hr/>
-	С уважением,<br/>
-	почтовый робот (работает на базе <b><font color="#90b500">N</font><font color="#5a5047">ext</font>
+	РЎ СѓРІР°Р¶РµРЅРёРµРј,<br/>
+	РїРѕС‡С‚РѕРІС‹Р№ СЂРѕР±РѕС‚ (СЂР°Р±РѕС‚Р°РµС‚ РЅР° Р±Р°Р·Рµ <b><font color="#90b500">N</font><font color="#5a5047">ext</font>
 		<font color="#90b500">G</font><font color="#5a5047">eneration</font> Forum</b> -
 	http://rozard.ngdemo.ru/mod:forum/)
 </div>

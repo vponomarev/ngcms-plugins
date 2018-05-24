@@ -1,26 +1,26 @@
 <?php
 require_once("_header.php");
-# Получение и обработка данных формы
+# РџРѕР»СѓС‡РµРЅРёРµ Рё РѕР±СЂР°Р±РѕС‚РєР° РґР°РЅРЅС‹С… С„РѕСЂРјС‹
 if (count($_POST) > 0) {
 	$response = $wmxi->X1(
-		intval($_POST["orderid"]),    # номер счета в системе учета магазина; любое целое число без знака
-		$_POST["customerwmid"],       # WMId покупателя
-		$_POST["storepurse"],         # номер кошелька, на который необходимо оплатить счет
-		floatval($_POST["amount"]),   # число с плавающей точкой без незначащих символов
-		trim($_POST["desc"]),         # произвольная строка от 0 до 255 символов; пробелы в начале или конце не допускаются
-		trim($_POST["address"]),      # произвольная строка от 0 до 255 символов; пробелы в начале или конце не допускаются
-		intval($_POST["period"]),     # целое число от 0 до 255; если 0 - протекция сделки при оплате счета не разрешена
-		intval($_POST["expiration"])  # целое число от 0 до 255; если 0 - срок оплаты не определен
+		intval($_POST["orderid"]),    # РЅРѕРјРµСЂ СЃС‡РµС‚Р° РІ СЃРёСЃС‚РµРјРµ СѓС‡РµС‚Р° РјР°РіР°Р·РёРЅР°; Р»СЋР±РѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ Р±РµР· Р·РЅР°РєР°
+		$_POST["customerwmid"],       # WMId РїРѕРєСѓРїР°С‚РµР»СЏ
+		$_POST["storepurse"],         # РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР°, РЅР° РєРѕС‚РѕСЂС‹Р№ РЅРµРѕР±С…РѕРґРёРјРѕ РѕРїР»Р°С‚РёС‚СЊ СЃС‡РµС‚
+		floatval($_POST["amount"]),   # С‡РёСЃР»Рѕ СЃ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ Р±РµР· РЅРµР·РЅР°С‡Р°С‰РёС… СЃРёРјРІРѕР»РѕРІ
+		trim($_POST["desc"]),         # РїСЂРѕРёР·РІРѕР»СЊРЅР°СЏ СЃС‚СЂРѕРєР° РѕС‚ 0 РґРѕ 255 СЃРёРјРІРѕР»РѕРІ; РїСЂРѕР±РµР»С‹ РІ РЅР°С‡Р°Р»Рµ РёР»Рё РєРѕРЅС†Рµ РЅРµ РґРѕРїСѓСЃРєР°СЋС‚СЃСЏ
+		trim($_POST["address"]),      # РїСЂРѕРёР·РІРѕР»СЊРЅР°СЏ СЃС‚СЂРѕРєР° РѕС‚ 0 РґРѕ 255 СЃРёРјРІРѕР»РѕРІ; РїСЂРѕР±РµР»С‹ РІ РЅР°С‡Р°Р»Рµ РёР»Рё РєРѕРЅС†Рµ РЅРµ РґРѕРїСѓСЃРєР°СЋС‚СЃСЏ
+		intval($_POST["period"]),     # С†РµР»РѕРµ С‡РёСЃР»Рѕ РѕС‚ 0 РґРѕ 255; РµСЃР»Рё 0 - РїСЂРѕС‚РµРєС†РёСЏ СЃРґРµР»РєРё РїСЂРё РѕРїР»Р°С‚Рµ СЃС‡РµС‚Р° РЅРµ СЂР°Р·СЂРµС€РµРЅР°
+		intval($_POST["expiration"])  # С†РµР»РѕРµ С‡РёСЃР»Рѕ РѕС‚ 0 РґРѕ 255; РµСЃР»Рё 0 - СЃСЂРѕРє РѕРїР»Р°С‚С‹ РЅРµ РѕРїСЂРµРґРµР»РµРЅ
 	);
-	# Преобразовываем ответ сервера в структуру. Входные параметры:
-	# - XML-ответ сервера
-	# - кодировка, используемая на сайте. По умолчанию используется UTF-8
+	# РџСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµРј РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР° РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ. Р’С…РѕРґРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
+	# - XML-РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР°
+	# - РєРѕРґРёСЂРѕРІРєР°, РёСЃРїРѕР»СЊР·СѓРµРјР°СЏ РЅР° СЃР°Р№С‚Рµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ UTF-8
 	$structure = $parser->Parse($response, DOC_ENCODING);
-	# преобразуем индексы структуры к более удобным для доступа.
-	# Не рекомендуется проводить такое преобразование с с результатом, если он содержит
-	# множество однотипных строк (например, список транзакций)
-	# если надобности в аттрибутах XML-тегов ответа нет, то второй параметр можно
-	# установить в false - в таком случае структура выйдет более компактной
+	# РїСЂРµРѕР±СЂР°Р·СѓРµРј РёРЅРґРµРєСЃС‹ СЃС‚СЂСѓРєС‚СѓСЂС‹ Рє Р±РѕР»РµРµ СѓРґРѕР±РЅС‹Рј РґР»СЏ РґРѕСЃС‚СѓРїР°.
+	# РќРµ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ РїСЂРѕРІРѕРґРёС‚СЊ С‚Р°РєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј, РµСЃР»Рё РѕРЅ СЃРѕРґРµСЂР¶РёС‚
+	# РјРЅРѕР¶РµСЃС‚РІРѕ РѕРґРЅРѕС‚РёРїРЅС‹С… СЃС‚СЂРѕРє (РЅР°РїСЂРёРјРµСЂ, СЃРїРёСЃРѕРє С‚СЂР°РЅР·Р°РєС†РёР№)
+	# РµСЃР»Рё РЅР°РґРѕР±РЅРѕСЃС‚Рё РІ Р°С‚С‚СЂРёР±СѓС‚Р°С… XML-С‚РµРіРѕРІ РѕС‚РІРµС‚Р° РЅРµС‚, С‚Рѕ РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ
+	# СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІ false - РІ С‚Р°РєРѕРј СЃР»СѓС‡Р°Рµ СЃС‚СЂСѓРєС‚СѓСЂР° РІС‹Р№РґРµС‚ Р±РѕР»РµРµ РєРѕРјРїР°РєС‚РЅРѕР№
 	$transformed = $parser->Reindex($structure, true);
 }
 ?>
@@ -34,45 +34,45 @@ if (count($_POST) > 0) {
 	<link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-Детальное описание параметров:
+Р”РµС‚Р°Р»СЊРЅРѕРµ РѕРїРёСЃР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ:
 <a href="http://webmoney.ru/rus/developers/interfaces/xml/issueinvoice/index.shtml">http://webmoney.ru/rus/developers/interfaces/xml/issueinvoice/index.shtml</a>
 <br/>
 
 <form action="" method="post">
 
-	<label>номер счета в системе учета магазина; любое целое число без знака:</label>
+	<label>РЅРѕРјРµСЂ СЃС‡РµС‚Р° РІ СЃРёСЃС‚РµРјРµ СѓС‡РµС‚Р° РјР°РіР°Р·РёРЅР°; Р»СЋР±РѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ Р±РµР· Р·РЅР°РєР°:</label>
 	<input type="text" name="orderid" value="1"/>
 	<br/>
 
-	<label>WMId покупателя:</label>
+	<label>WMId РїРѕРєСѓРїР°С‚РµР»СЏ:</label>
 	<input type="text" name="customerwmid" value=""/>
 	<br/>
 
-	<label>номер кошелька, на который необходимо оплатить счет:</label>
+	<label>РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР°, РЅР° РєРѕС‚РѕСЂС‹Р№ РЅРµРѕР±С…РѕРґРёРјРѕ РѕРїР»Р°С‚РёС‚СЊ СЃС‡РµС‚:</label>
 	<input type="text" name="storepurse" value=""/>
 	<br/>
 
-	<label>сумма счета, выставленная для оплаты покупателю:</label>
+	<label>СЃСѓРјРјР° СЃС‡РµС‚Р°, РІС‹СЃС‚Р°РІР»РµРЅРЅР°СЏ РґР»СЏ РѕРїР»Р°С‚С‹ РїРѕРєСѓРїР°С‚РµР»СЋ:</label>
 	<input type="text" name="amount" value="0.01"/>
 	<br/>
 
-	<label>описание товара или услуги, на который выписывается счет:</label>
-	<input type="text" name="desc" value="тестирование X1 wmxi"/>
+	<label>РѕРїРёСЃР°РЅРёРµ С‚РѕРІР°СЂР° РёР»Рё СѓСЃР»СѓРіРё, РЅР° РєРѕС‚РѕСЂС‹Р№ РІС‹РїРёСЃС‹РІР°РµС‚СЃСЏ СЃС‡РµС‚:</label>
+	<input type="text" name="desc" value="С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ X1 wmxi"/>
 	<br/>
 
-	<label>адрес доставки товара:</label>
-	<input type="text" name="address" value="мой адрес не дом и не улица"/>
+	<label>Р°РґСЂРµСЃ РґРѕСЃС‚Р°РІРєРё С‚РѕРІР°СЂР°:</label>
+	<input type="text" name="address" value="РјРѕР№ Р°РґСЂРµСЃ РЅРµ РґРѕРј Рё РЅРµ СѓР»РёС†Р°"/>
 	<br/>
 
-	<label>максимально допустимый срок протекции сделки в днях при оплате счета:</label>
+	<label>РјР°РєСЃРёРјР°Р»СЊРЅРѕ РґРѕРїСѓСЃС‚РёРјС‹Р№ СЃСЂРѕРє РїСЂРѕС‚РµРєС†РёРё СЃРґРµР»РєРё РІ РґРЅСЏС… РїСЂРё РѕРїР»Р°С‚Рµ СЃС‡РµС‚Р°:</label>
 	<input type="text" name="period" value="1"/>
 	<br/>
 
-	<label>максимально допустимый срок оплаты счета в днях:</label>
+	<label>РјР°РєСЃРёРјР°Р»СЊРЅРѕ РґРѕРїСѓСЃС‚РёРјС‹Р№ СЃСЂРѕРє РѕРїР»Р°С‚С‹ СЃС‡РµС‚Р° РІ РґРЅСЏС…:</label>
 	<input type="text" name="expiration" value="1"/>
 	<br/>
 
-	<input type="submit" value="выписать счёт"/>
+	<input type="submit" value="РІС‹РїРёСЃР°С‚СЊ СЃС‡С‘С‚"/>
 	<br/>
 
 </form>
@@ -81,20 +81,20 @@ if (count($_POST) > 0) {
 <pre><?= htmlspecialchars(print_r(@$structure, true), ENT_QUOTES); ?></pre>
 <!--pre><?= htmlspecialchars(print_r(@$transformed, true), ENT_QUOTES); ?></pre-->
 
-<pre><!-- Читаем и отображаем элементы обработанного массива после получения ответа с сервера -->
-		Номер счёта: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["orderid"], ENT_QUOTES); ?></b>
-		Покупатель: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["customerwmid"], ENT_QUOTES); ?></b>
-		Кошелёк: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["storepurse"], ENT_QUOTES); ?></b>
-		Сумма: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["amount"], ENT_QUOTES); ?></b>
-		Описание: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["desc"], ENT_QUOTES); ?></b>
-		Адрес: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["address"], ENT_QUOTES); ?></b>
-		Срок протекции: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["period"], ENT_QUOTES); ?></b>
-		Срок оплаты: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["expiration"], ENT_QUOTES); ?></b>
-		Состояние: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["state"], ENT_QUOTES); ?></b>
-		Создан: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["datecrt"], ENT_QUOTES); ?></b>
-		Изменён: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["dateupd"], ENT_QUOTES); ?></b>
-		Код ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
-		Описание ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
+<pre><!-- Р§РёС‚Р°РµРј Рё РѕС‚РѕР±СЂР°Р¶Р°РµРј СЌР»РµРјРµРЅС‚С‹ РѕР±СЂР°Р±РѕС‚Р°РЅРЅРѕРіРѕ РјР°СЃСЃРёРІР° РїРѕСЃР»Рµ РїРѕР»СѓС‡РµРЅРёСЏ РѕС‚РІРµС‚Р° СЃ СЃРµСЂРІРµСЂР° -->
+		РќРѕРјРµСЂ СЃС‡С‘С‚Р°: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["orderid"], ENT_QUOTES); ?></b>
+		РџРѕРєСѓРїР°С‚РµР»СЊ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["customerwmid"], ENT_QUOTES); ?></b>
+		РљРѕС€РµР»С‘Рє: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["storepurse"], ENT_QUOTES); ?></b>
+		РЎСѓРјРјР°: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["amount"], ENT_QUOTES); ?></b>
+		РћРїРёСЃР°РЅРёРµ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["desc"], ENT_QUOTES); ?></b>
+		РђРґСЂРµСЃ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["address"], ENT_QUOTES); ?></b>
+		РЎСЂРѕРє РїСЂРѕС‚РµРєС†РёРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["period"], ENT_QUOTES); ?></b>
+		РЎСЂРѕРє РѕРїР»Р°С‚С‹: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["expiration"], ENT_QUOTES); ?></b>
+		РЎРѕСЃС‚РѕСЏРЅРёРµ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["state"], ENT_QUOTES); ?></b>
+		РЎРѕР·РґР°РЅ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["datecrt"], ENT_QUOTES); ?></b>
+		РР·РјРµРЅС‘РЅ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["invoice"]["dateupd"], ENT_QUOTES); ?></b>
+		РљРѕРґ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
+		РћРїРёСЃР°РЅРёРµ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
 	</pre>
 
 </body>

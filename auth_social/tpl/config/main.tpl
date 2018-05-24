@@ -2,8 +2,8 @@
 	<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr>
 			<td width="100%" colspan="2" class="contentHead">
-				<img src="{{ skins_url }}/images/nav.gif" hspace="8" alt=""/><a href="admin.php?mod=extras" title="Управление плагинами">Управление
-					плагинами</a> &#8594; <a href="{{ admin_url }}/admin.php?mod=extra-config&plugin=auth_social">social
+				<img src="{{ skins_url }}/images/nav.gif" hspace="8" alt=""/><a href="admin.php?mod=extras" title="РЈРїСЂР°РІР»РµРЅРёРµ РїР»Р°РіРёРЅР°РјРё">РЈРїСЂР°РІР»РµРЅРёРµ
+					РїР»Р°РіРёРЅР°РјРё</a> &#8594; <a href="{{ admin_url }}/admin.php?mod=extra-config&plugin=auth_social">social
 					networks auth</a></td>
 		</tr>
 

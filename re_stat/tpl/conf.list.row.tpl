@@ -3,5 +3,5 @@
 <td>{code} {error}</td>
 <td>{title}</td>
 
-<td><a href="admin.php?mod=extra-config&amp;plugin=re_stat&amp;action=edit&amp;id={id}"><img src="{admin_url}/plugins/re_stat/tpl/images/edit.png" title="Ðåäàêòèðîâàòü" alt="Ðåäàêòèðîâàòü" border="0" /></a> <a href="admin.php?mod=extra-config&amp;plugin=re_stat&amp;action=delete&amp;id={id}"><img src="{admin_url}/plugins/re_stat/tpl/images/dell.png" title="Óäàëèòü" alt="Óäàëèòü" border="0" /></a></td>
+<td><a href="admin.php?mod=extra-config&amp;plugin=re_stat&amp;action=edit&amp;id={id}"><img src="{admin_url}/plugins/re_stat/tpl/images/edit.png" title="Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ" alt="Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ" border="0" /></a> <a href="admin.php?mod=extra-config&amp;plugin=re_stat&amp;action=delete&amp;id={id}"><img src="{admin_url}/plugins/re_stat/tpl/images/dell.png" title="Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ" alt="Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ" border="0" /></a></td>
 </tr>

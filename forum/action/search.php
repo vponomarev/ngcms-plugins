@@ -8,18 +8,18 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
 $tpath = locatePluginTemplates(array('search'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum', 'localskin'));
 $xt = $twig->loadTemplate($tpath['search'] . 'search.tpl');
 if (empty($GROUP_PS['group_search']))
-	return $output = permissions_forum('Пользование поиском для вас запрещено');
+	return $output = permissions_forum('РџРѕР»СЊР·РѕРІР°РЅРёРµ РїРѕРёСЃРєРѕРј РґР»СЏ РІР°СЃ Р·Р°РїСЂРµС‰РµРЅРѕ');
 if (isset($_REQUEST['submit']) && $_REQUEST['submit']) {
 	$keywords = secure_search_forum($_REQUEST['keywords']);
 	$forum_id = securenum($_REQUEST['forum_id']);
@@ -30,7 +30,7 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']) {
 		$search_in = 'all';
 	$search = substr($keywords, 0, 64);
 	if (strlen($search) < 3)
-		return $output = information('Слишком короткое слово', $title = 'Информация');
+		return $output = information('РЎР»РёС€РєРѕРј РєРѕСЂРѕС‚РєРѕРµ СЃР»РѕРІРѕ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	$keywords = array();
 	$get_url = $search;
 	$search = str_replace(" +", " ", $search);
@@ -70,7 +70,7 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']) {
 	$count = $mysql->result($sql_count);
 	$countPages = ceil($count / $limitCount);
 	if ($countPages < $pageNo)
-		return $output = information('Подстраницы не существует', $title = 'Информация');
+		return $output = information('РџРѕРґСЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	if ($pageNo < 1) $pageNo = 1;
 	if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 	if ($countPages > 1 && $countPages >= $pageNo) {
@@ -78,8 +78,8 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']) {
 		//	array('pluginName' => 'forum', 'pluginHandler' => 'search', 'params' => array(), 'xparams' => array(), 'paginator' => array('page', 0, false)):
 		//	array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'search'), 'xparams' => array(), 'paginator' => array('page', 1, false));
 		$paginationParams = checkLinkAvailable('forum', 'search') ?
-			array('pluginName' => 'forum', 'pluginHandler' => 'search', 'params' => array('keywords' => $get_url, 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'Отправить'), 'xparams' => array(), 'paginator' => array('page', 0, false)) :
-			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'search'), 'xparams' => array('keywords' => $get_url, 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'Отправить'), 'paginator' => array('page', 1, false));
+			array('pluginName' => 'forum', 'pluginHandler' => 'search', 'params' => array('keywords' => $get_url, 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'РћС‚РїСЂР°РІРёС‚СЊ'), 'xparams' => array(), 'paginator' => array('page', 0, false)) :
+			array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'search'), 'xparams' => array('keywords' => $get_url, 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'РћС‚РїСЂР°РІРёС‚СЊ'), 'paginator' => array('page', 1, false));
 		$navigations = LoadVariables();
 		$pages = generatePagination($pageNo, 1, $countPages, 10, $paginationParams, $navigations);
 	}
@@ -120,7 +120,7 @@ if (isset($_REQUEST['submit']) && $_REQUEST['submit']) {
 		);
 	}
 	if (empty($row_two))
-		return $output = information('По вашему запросу <b>' . $get_url . '</b> ничего не найдено', $title = 'Информация');
+		return $output = information('РџРѕ РІР°С€РµРјСѓ Р·Р°РїСЂРѕСЃСѓ <b>' . $get_url . '</b> РЅРёС‡РµРіРѕ РЅРµ РЅР°Р№РґРµРЅРѕ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 } else {
 	foreach ($mysql->select('SELECT `id`, `title` FROM `' . prefix . '_forum_forums` ORDER BY `position`') as $row) {
 		$tEntry[] = array(
@@ -142,8 +142,8 @@ $tVars = array(
 			"$1",
 			str_replace('%link%',
 				checkLinkAvailable('forum', 'search') ?
-					generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'search', 'params' => array('keywords' => $get_url ? $get_url : '', 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'Отправить'), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev = floor($limitStart / $limitCount)) :
-					generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'search'), 'xparams' => array('keywords' => isset($get_url) ? $get_url : '', 'forum_id' => isset($forum_id) ? $forum_id : '', 'search_in' => isset($search_in) ? $search_in : '', 'submit' => 'Отправить'), 'paginator' => array('page', 1, false)),
+					generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'search', 'params' => array('keywords' => $get_url ? $get_url : '', 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'РћС‚РїСЂР°РІРёС‚СЊ'), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev = floor($limitStart / $limitCount)) :
+					generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'search'), 'xparams' => array('keywords' => isset($get_url) ? $get_url : '', 'forum_id' => isset($forum_id) ? $forum_id : '', 'search_in' => isset($search_in) ? $search_in : '', 'submit' => 'РћС‚РїСЂР°РІРёС‚СЊ'), 'paginator' => array('page', 1, false)),
 						$prev = floor((isset($limitStart) && $limitStart) ? $limitStart : 10 / (isset($limitCount) && $limitCount) ? $limitCount : '5')),
 				isset($navigations['prevlink']) ? $navigations['prevlink'] : ''
 			)
@@ -155,8 +155,8 @@ $tVars = array(
 			"$1",
 			str_replace('%link%',
 				checkLinkAvailable('forum', 'search') ?
-					generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'search', 'params' => array('keywords' => $get_url, 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'Отправить'), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev + 2) :
-					generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'search'), 'xparams' => array('keywords' => $get_url, 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'Отправить'), 'paginator' => array('page', 1, false)), $prev + 2),
+					generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'search', 'params' => array('keywords' => $get_url, 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'РћС‚РїСЂР°РІРёС‚СЊ'), 'xparams' => array(), 'paginator' => array('page', 0, false)), $prev + 2) :
+					generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'search'), 'xparams' => array('keywords' => $get_url, 'forum_id' => $forum_id, 'search_in' => $search_in, 'submit' => 'РћС‚РїСЂР°РІРёС‚СЊ'), 'paginator' => array('page', 1, false)), $prev + 2),
 				isset($navigations['nextlink']) ? $navigations['nextlink'] : ''
 			)
 		),

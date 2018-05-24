@@ -9,10 +9,10 @@ Acts: index
 File: popular.php
 Config: config.php
 Type: widget
-Description: Отображение популярных новостей
+Description: РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РїРѕРїСѓР»СЏСЂРЅС‹С… РЅРѕРІРѕСЃС‚РµР№
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
-Title: Популярные новости
-Information: Отображение информационного блока с наиболее часто посещаемыми новостями.
+Title: РџРѕРїСѓР»СЏСЂРЅС‹Рµ РЅРѕРІРѕСЃС‚Рё
+Information: РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅРѕРіРѕ Р±Р»РѕРєР° СЃ РЅР°РёР±РѕР»РµРµ С‡Р°СЃС‚Рѕ РїРѕСЃРµС‰Р°РµРјС‹РјРё РЅРѕРІРѕСЃС‚СЏРјРё.
 Preinstall: default_no
 Preinstall_vars: cache="1"; cacheExpire="3600";

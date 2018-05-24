@@ -3,7 +3,7 @@
 ;
 
 ID: pm
-Name: Личные сообщения
+Name: Р›РёС‡РЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ
 Version: 0.6
 Acts: usermenu, ppages 
 Actions: rpc; pm_ajax.php
@@ -12,10 +12,10 @@ Install: install.php
 Deinstall: uninstall.php
 Config: config.php
 Type: plugin
-Description: Обмен приватными сообщениями между пользователями
+Description: РћР±РјРµРЅ РїСЂРёРІР°С‚РЅС‹РјРё СЃРѕРѕР±С‰РµРЅРёСЏРјРё РјРµР¶РґСѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРјРё
 Author:  Alexey N. Zhukov (Wolverine)
 Author_URI: http://digitalplace.ru/
-Title: Личные сообщения
-Information: Плагин организует возможность обмена приватными сообщениями между зарегистрированными пользователями сайта
+Title: Р›РёС‡РЅС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ
+Information: РџР»Р°РіРёРЅ РѕСЂРіР°РЅРёР·СѓРµС‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РѕР±РјРµРЅР° РїСЂРёРІР°С‚РЅС‹РјРё СЃРѕРѕР±С‰РµРЅРёСЏРјРё РјРµР¶РґСѓ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹РјРё РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРјРё СЃР°Р№С‚Р°
 Preinstall: default_no
 Library: lib; lib/pm.lib.php

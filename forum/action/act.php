@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -26,18 +26,18 @@ $time = time() + ($config['date_adjust'] * 60) - 86400;
 switch ($s) {
 	case 'show_new':
 		if (!is_array($userROW))
-			return $output = information('У вас нет прав доступа', $title = 'Информация');
-		$SYSTEM_FLAGS['info']['title']['others'] = 'Новые сообщения';
+			return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
+		$SYSTEM_FLAGS['info']['title']['others'] = 'РќРѕРІС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ';
 		$where_1 = '`l_date` >= ' . securemysql($userROW['last']) . '';
 		$where_2 = 't.l_date >= ' . securemysql($userROW['last']) . ' ORDER BY t.`l_date` DESC';
 		break;
 	case 'show_24';
-		$SYSTEM_FLAGS['info']['title']['others'] = 'Последние сообщения';
+		$SYSTEM_FLAGS['info']['title']['others'] = 'РџРѕСЃР»РµРґРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ';
 		$where_1 = '`l_date` >= ' . securemysql($time) . '';
 		$where_2 = 't.l_date >= ' . securemysql($time) . ' ORDER BY t.`l_date` DESC';
 		break;
 	default:
-		return $output = information('Доступ запрещен', $title = 'Информация', true);
+		return $output = information('Р”РѕСЃС‚СѓРї Р·Р°РїСЂРµС‰РµРЅ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ', true);
 }
 $limitCount = intval(pluginGetVariable('forum', 'act_per_page'));
 if (($limitCount < 2) || ($limitCount > 2000)) $limitCount = 2;
@@ -48,7 +48,7 @@ else
 $count = $mysql->result('SELECT COUNT(*) FROM `' . prefix . '_forum_topics` WHERE ' . $where_1 . '');
 $countPages = ceil($count / $limitCount);
 if ($countPages < $pageNo)
-	return $output = information('Подстраницы не существует', $title = 'Информация');
+	return $output = information('РџРѕРґСЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($pageNo < 1) $pageNo = 1;
 if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 if ($countPages > 1 && $countPages >= $pageNo) {

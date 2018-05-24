@@ -4,35 +4,35 @@
 			{{ entry }}
 		{% endfor %}
 		<tr>
-			<td width="50%" class="contentEntry1">Наименование группы:<br/>
+			<td width="50%" class="contentEntry1">РќР°РёРјРµРЅРѕРІР°РЅРёРµ РіСЂСѓРїРїС‹:<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<input type="text" size="80" name="group_name" value="{{ group_name }}"/></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Цвет</td>
+			<td width="50%" class="contentEntry1">Р¦РІРµС‚</td>
 			<td width="50%" class="contentEntry2">
 				<input type="text" size="80" name="group_color" value="{{ group_color }}"/></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Чтение форума<br/>
+			<td width="50%" class="contentEntry1">Р§С‚РµРЅРёРµ С„РѕСЂСѓРјР°<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">{{ group_read }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Чтение новостей<br/>
+			<td width="50%" class="contentEntry1">Р§С‚РµРЅРёРµ РЅРѕРІРѕСЃС‚РµР№<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">{{ group_news }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Поиск</td>
+			<td width="50%" class="contentEntry1">РџРѕРёСЃРє</td>
 			<td width="50%" class="contentEntry2">{{ group_search }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Сообщения</td>
+			<td width="50%" class="contentEntry1">РЎРѕРѕР±С‰РµРЅРёСЏ</td>
 			<td width="50%" class="contentEntry2">{{ group_pm }}</td>
 		</tr>
 	</table>
@@ -42,7 +42,7 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input type="submit" name="submit" value="Сохранить группу" class="button"/></td>
+				<input type="submit" name="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ РіСЂСѓРїРїСѓ" class="button"/></td>
 		</tr>
 	</table>
 </form>

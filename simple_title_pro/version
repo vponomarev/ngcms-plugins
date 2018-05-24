@@ -7,7 +7,7 @@ Config: config.php
 Install: install.php
 Deinstall: uninstall.php
 Type: plugin
-Description: Управление заголовками страниц
+Description: РЈРїСЂР°РІР»РµРЅРёРµ Р·Р°РіРѕР»РѕРІРєР°РјРё СЃС‚СЂР°РЅРёС†
 Author: Nail' R. Davydov (ROZARD)
 Author_URI: http://rozard.ngdemo.ru/
 preinstall: no

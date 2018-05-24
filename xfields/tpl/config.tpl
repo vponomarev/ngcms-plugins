@@ -86,8 +86,8 @@
 	<tbody>
 	<tr>
 		<td colspan="5" class="contentHead" width="100%">
-			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="Управление плагинами">Управление
-				плагинами</a> &#8594; <a href="?mod=extra-config&plugin=xfields">xfields</a></td>
+			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="РЈРїСЂР°РІР»РµРЅРёРµ РїР»Р°РіРёРЅР°РјРё">РЈРїСЂР°РІР»РµРЅРёРµ
+				РїР»Р°РіРёРЅР°РјРё</a> &#8594; <a href="?mod=extra-config&plugin=xfields">xfields</a></td>
 	</tr>
 	</tbody>
 </table>
@@ -99,14 +99,14 @@
 			<img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang.xfconfig['list'] }}: {{ section_name }}</td>
 	</tr>
 	<tr align="left">
-		<td class="contentHead"><b>ID поля</b></td>
-		<td class="contentHead"><b>Название поля</b></td>
-		<td class="contentHead"><b>Тип поля</b></td>
-		<td class="contentHead"><b>Возможные значения</b></td>
-		<td class="contentHead"><b>По умолчанию</b></td>
-		<td class="contentHead"><b>Обязательно</b></td>
+		<td class="contentHead"><b>ID РїРѕР»СЏ</b></td>
+		<td class="contentHead"><b>РќР°Р·РІР°РЅРёРµ РїРѕР»СЏ</b></td>
+		<td class="contentHead"><b>РўРёРї РїРѕР»СЏ</b></td>
+		<td class="contentHead"><b>Р’РѕР·РјРѕР¶РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ</b></td>
+		<td class="contentHead"><b>РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</b></td>
+		<td class="contentHead"><b>РћР±СЏР·Р°С‚РµР»СЊРЅРѕ</b></td>
 		{% if (sectionID != 'tdata') %}
-			<td class="contentHead"><b>Блок</b></td>{% endif %}
+			<td class="contentHead"><b>Р‘Р»РѕРє</b></td>{% endif %}
 		<td class="contentHead">&nbsp;</td>
 	</tr>
 	{% for entry in entries %}
@@ -119,9 +119,9 @@
 			<td>{{ entry.title }}</td>
 			<td>{{ entry.type }}</td>
 			<td>{{ entry.options }}</td>
-			<td>{% if (entry.flags.default) %}{{ entry.default }}{% else %}<font color="red">не задано</font>{% endif %}
+			<td>{% if (entry.flags.default) %}{{ entry.default }}{% else %}<font color="red">РЅРµ Р·Р°РґР°РЅРѕ</font>{% endif %}
 			</td>
-			<td>{% if (entry.flags.required) %}<font color="red"><b>Да</b></font>{% else %}Нет{% endif %}</td>
+			<td>{% if (entry.flags.required) %}<font color="red"><b>Р”Р°</b></font>{% else %}РќРµС‚{% endif %}</td>
 			{% if (sectionID != 'tdata') %}
 				<td>{{ entry.area }}</td>{% endif %}
 			<td nowrap>

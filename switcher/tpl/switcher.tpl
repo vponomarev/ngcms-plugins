@@ -7,5 +7,5 @@
 		}
 	</script>
 	{l_switcher_select}:
-	<select id="switcher_selector">{list}</select><input type=button onclick="sw_update();" value="Âûáðàòü">
+	<select id="switcher_selector">{list}</select><input type=button onclick="sw_update();" value="Ð’Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ">
 </div>

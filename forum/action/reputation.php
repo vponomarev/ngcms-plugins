@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -27,9 +27,9 @@ if (isset($params['send']))
 else
 	$send = isset($_REQUEST['send']) ? intval($_REQUEST['send']) : 0;
 if (empty($id))
-	return $output = information('Этой темы не существует', $title = 'Информация');
+	return $output = information('Р­С‚РѕР№ С‚РµРјС‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 //if(!is_array($userROW))
-//	return $output = information('У вас нет прав доступа', $title = 'Информация');
+//	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $limitCount = intval(pluginGetVariable('forum', 'reput_per_page'));
 if (($limitCount < 2) || ($limitCount > 2000)) $limitCount = 2;
 if (isset($params['page']))
@@ -39,7 +39,7 @@ else
 $count = $mysql->result('SELECT COUNT(*) FROM `' . prefix . '_forum_reputation` WHERE to_author_id= ' . securemysql($id));
 $countPages = ceil($count / $limitCount);
 if ($countPages < $pageNo)
-	return $output = information('Подстраницы не существует', $title = 'Информация');
+	return $output = information('РџРѕРґСЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($pageNo < 1) $pageNo = 1;
 if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 if ($countPages > 1 && $countPages >= $pageNo) {
@@ -51,7 +51,7 @@ if ($countPages > 1 && $countPages >= $pageNo) {
 }
 $name = $mysql->result('SELECT name FROM ' . prefix . '_users WHERE id = ' . securemysql($id) . ' LIMIT 1');
 if (empty($name))
-	return $output = information('Такого пользователя нет', $title = 'Информация');
+	return $output = information('РўР°РєРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $SYSTEM_FLAGS['info']['title']['others'] = $name;
 foreach ($mysql->select('SELECT r.tid, r.pid, r.author, r.author_id, r.c_data, r.message, r.to_author_id, r.plus, r.minus, t.title FROM ' . prefix . '_forum_reputation AS r 
 		LEFT JOIN ' . prefix . '_forum_topics AS t ON t.id = r.tid

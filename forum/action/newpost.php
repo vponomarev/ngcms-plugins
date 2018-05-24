@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -35,12 +35,12 @@ if (checkLinkAvailable('forum', 'addreply')) {
 	}
 }
 if (empty($id))
-	return $output = information('id темы не указан не передан', $title = 'Информация');
+	return $output = information('id С‚РµРјС‹ РЅРµ СѓРєР°Р·Р°РЅ РЅРµ РїРµСЂРµРґР°РЅ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if (!$mysql->record('SELECT 1 FROM ' . prefix . '_forum_posts WHERE tid = ' . securemysql($id) . ' LIMIT 1'))
-	return $output = information('Этой темы не существует', $title = 'Информация');
+	return $output = information('Р­С‚РѕР№ С‚РµРјС‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $rowse = $mysql->record('SELECT * FROM ' . prefix . '_forum_topics WHERE id = ' . securemysql($id) . ' LIMIT 1');
 if ($rowse['state'] == 'closed') {
-	return $output = information('Тема закрыта', $title = 'Информация');
+	return $output = information('РўРµРјР° Р·Р°РєСЂС‹С‚Р°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 }
 $rows = $mysql->record('SELECT id as fid, moderators FROM ' . prefix . '_forum_forums WHERE id = ' . securemysql($rowse['fid']) . ' LIMIT 1');
 if ($FORUM_PS[$rows['fid']]['post_send'] || moder_perm($rows['fid'], 'post_send', $rows['moderators'])) {
@@ -51,17 +51,17 @@ if ($FORUM_PS[$rows['fid']]['post_send'] || moder_perm($rows['fid'], 'post_send'
 			if (isset($rows) && $rows)
 				$message = '[quote=' . $rows['author'] . ']' . $rows['message'] . '[/quote]' . "\n";
 			else
-				return $output = information('Цитаты не существует', $title = 'Информация');
+				return $output = information('Р¦РёС‚Р°С‚С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 		}
 	}
 	$time = time() + ($config['date_adjust'] * 60);
 	if (isset($_REQUEST['submit'])) {
-		if (empty($message)) $error_text[] = 'Сообщение пусто';
+		if (empty($message)) $error_text[] = 'РЎРѕРѕР±С‰РµРЅРёРµ РїСѓСЃС‚Рѕ';
 		if (empty($error_text)) {
 			$row = $mysql->record('SELECT * FROM ' . prefix . '_forum_posts WHERE tid = ' . securemysql($id) . ' ORDER BY id DESC LIMIT 1');
 			if ($row['author_id'] == $userROW['id']) {
 				$mysql->query('UPDATE ' . prefix . '_forum_posts SET 
-						message = ' . securemysql($row['message'] . "\n" . '[color=red]Добавлено ' . date("j-m-Y, H:i", $time) . "[/color]\n" . $message) . '
+						message = ' . securemysql($row['message'] . "\n" . '[color=red]Р”РѕР±Р°РІР»РµРЅРѕ ' . date("j-m-Y, H:i", $time) . "[/color]\n" . $message) . '
 						WHERE id = ' . securemysql($row['id']) . ' LIMIT 1
 					');
 				$post_id = $row['id'];
@@ -114,7 +114,7 @@ if ($FORUM_PS[$rows['fid']]['post_send'] || moder_perm($rows['fid'], 'post_send'
 					');
 			send_subscribe($id, $post_id, $result['title'], $message, $userROW['name']);
 
-			return $output = announcement_forum('Данные внесены', link_topic($post_id, 'pid') . '#' . $post_id, 2);
+			return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_topic($post_id, 'pid') . '#' . $post_id, 2);
 		}
 	}
 	$limitCount = intval(pluginGetVariable('forum', 'newpost_per_page'));
@@ -151,7 +151,7 @@ if ($FORUM_PS[$rows['fid']]['post_send'] || moder_perm($rows['fid'], 'post_send'
 	);
 	$output = $xt->render($tVars);
 } else {
-	return $output = information('У вас нет прав доступа', $title = 'Информация');
+	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 }
 	
 	

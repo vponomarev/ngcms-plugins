@@ -9,21 +9,21 @@ plugins_load_config();
 include_once root . "includes/inc/httpget.inc.php";
 include_once root . "includes/inc/xml2dom.php";
 // Generate balance list
-$blist = array('0' => 'основной баланс');
+$blist = array('0' => 'РѕСЃРЅРѕРІРЅРѕР№ Р±Р°Р»Р°РЅСЃ');
 foreach ($mysql->select("select * from " . prefix . "_balance_manager where monetary=1 order by id") as $brow) {
 	$blist[$brow['id']] = $brow['id'] . ($brow['type'] ? ' (' . $brow['type'] . ')' : '');
 }
 // Fill configuration parameters
 $cfg = array();
-array_push($cfg, array('descr' => 'Плагин позволяет получать платежи абонентов операторов сотовой связи, совершаемые посредством SMS сообщений (при помощи сервиса <a href="http://russianbilling.com/" target="_blank">RussianBilling.com</a>).<br />Данный плагин является дополнением к плагину <b>finance</b>.<br /><br />'));
+array_push($cfg, array('descr' => 'РџР»Р°РіРёРЅ РїРѕР·РІРѕР»СЏРµС‚ РїРѕР»СѓС‡Р°С‚СЊ РїР»Р°С‚РµР¶Рё Р°Р±РѕРЅРµРЅС‚РѕРІ РѕРїРµСЂР°С‚РѕСЂРѕРІ СЃРѕС‚РѕРІРѕР№ СЃРІСЏР·Рё, СЃРѕРІРµСЂС€Р°РµРјС‹Рµ РїРѕСЃСЂРµРґСЃС‚РІРѕРј SMS СЃРѕРѕР±С‰РµРЅРёР№ (РїСЂРё РїРѕРјРѕС‰Рё СЃРµСЂРІРёСЃР° <a href="http://russianbilling.com/" target="_blank">RussianBilling.com</a>).<br />Р”Р°РЅРЅС‹Р№ РїР»Р°РіРёРЅ СЏРІР»СЏРµС‚СЃСЏ РґРѕРїРѕР»РЅРµРЅРёРµРј Рє РїР»Р°РіРёРЅСѓ <b>finance</b>.<br /><br />'));
 $cfgX = array();
-array_push($cfgX, array('name' => 'passkey', 'title' => 'Ключ-пароль сервиса', 'descr' => '<font color="red">Этот параметр необходимо заполнять для обеспечения безопасности!</font><br/>Параметр соответствует аналогичному параметру в настройках сервиса RussianBilling', 'type' => 'input', value => extra_get_param('fin_sms_rb', 'passkey')));
-array_push($cfgX, array('name' => 'prefix', 'title' => 'SMS-префикс', 'descr' => 'Здесь необходимо указать префикс, на который абоненты должны отправлять свои SMS', 'type' => 'input', value => extra_get_param('fin_sms_rb', 'passkey')));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Настройки интеграции</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'passkey', 'title' => 'РљР»СЋС‡-РїР°СЂРѕР»СЊ СЃРµСЂРІРёСЃР°', 'descr' => '<font color="red">Р­С‚РѕС‚ РїР°СЂР°РјРµС‚СЂ РЅРµРѕР±С…РѕРґРёРјРѕ Р·Р°РїРѕР»РЅСЏС‚СЊ РґР»СЏ РѕР±РµСЃРїРµС‡РµРЅРёСЏ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё!</font><br/>РџР°СЂР°РјРµС‚СЂ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р°РЅР°Р»РѕРіРёС‡РЅРѕРјСѓ РїР°СЂР°РјРµС‚СЂСѓ РІ РЅР°СЃС‚СЂРѕР№РєР°С… СЃРµСЂРІРёСЃР° RussianBilling', 'type' => 'input', value => extra_get_param('fin_sms_rb', 'passkey')));
+array_push($cfgX, array('name' => 'prefix', 'title' => 'SMS-РїСЂРµС„РёРєСЃ', 'descr' => 'Р—РґРµСЃСЊ РЅРµРѕР±С…РѕРґРёРјРѕ СѓРєР°Р·Р°С‚СЊ РїСЂРµС„РёРєСЃ, РЅР° РєРѕС‚РѕСЂС‹Р№ Р°Р±РѕРЅРµРЅС‚С‹ РґРѕР»Р¶РЅС‹ РѕС‚РїСЂР°РІР»СЏС‚СЊ СЃРІРѕРё SMS', 'type' => 'input', value => extra_get_param('fin_sms_rb', 'passkey')));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>РќР°СЃС‚СЂРѕР№РєРё РёРЅС‚РµРіСЂР°С†РёРё</b>', 'entries' => $cfgX));
 $cfgX = array();
-array_push($cfgX, array('name' => 'bonus_mode', 'title' => 'Объём начисления бонуса пользователям', 'descr' => '<b>Ваша прибыль</b>', 'type' => 'select', 'values' => array('1' => 'Ваша прибыль'), value => extra_get_param('fin_sms_rb', 'bonus_mode')));
-array_push($cfgX, array('name' => 'balance_no', 'title' => 'Номер баланса на который начисляются бонусы', 'descr' => '<b>Общая сумма</b> - начисляется общая сумма, списанная с его счёта<br /><b>Ваша прибыль</b> - начисляется сумма, которую получите вы<br /><font color=red>В списке указываются <u>только</u> монетарные балансы!</font>', 'type' => 'select', 'values' => $blist, value => extra_get_param('fin_sms_rb', 'balance_no')));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Финансовые настройки</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'bonus_mode', 'title' => 'РћР±СЉС‘Рј РЅР°С‡РёСЃР»РµРЅРёСЏ Р±РѕРЅСѓСЃР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРј', 'descr' => '<b>Р’Р°С€Р° РїСЂРёР±С‹Р»СЊ</b>', 'type' => 'select', 'values' => array('1' => 'Р’Р°С€Р° РїСЂРёР±С‹Р»СЊ'), value => extra_get_param('fin_sms_rb', 'bonus_mode')));
+array_push($cfgX, array('name' => 'balance_no', 'title' => 'РќРѕРјРµСЂ Р±Р°Р»Р°РЅСЃР° РЅР° РєРѕС‚РѕСЂС‹Р№ РЅР°С‡РёСЃР»СЏСЋС‚СЃСЏ Р±РѕРЅСѓСЃС‹', 'descr' => '<b>РћР±С‰Р°СЏ СЃСѓРјРјР°</b> - РЅР°С‡РёСЃР»СЏРµС‚СЃСЏ РѕР±С‰Р°СЏ СЃСѓРјРјР°, СЃРїРёСЃР°РЅРЅР°СЏ СЃ РµРіРѕ СЃС‡С‘С‚Р°<br /><b>Р’Р°С€Р° РїСЂРёР±С‹Р»СЊ</b> - РЅР°С‡РёСЃР»СЏРµС‚СЃСЏ СЃСѓРјРјР°, РєРѕС‚РѕСЂСѓСЋ РїРѕР»СѓС‡РёС‚Рµ РІС‹<br /><font color=red>Р’ СЃРїРёСЃРєРµ СѓРєР°Р·С‹РІР°СЋС‚СЃСЏ <u>С‚РѕР»СЊРєРѕ</u> РјРѕРЅРµС‚Р°СЂРЅС‹Рµ Р±Р°Р»Р°РЅСЃС‹!</font>', 'type' => 'select', 'values' => $blist, value => extra_get_param('fin_sms_rb', 'balance_no')));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>Р¤РёРЅР°РЅСЃРѕРІС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё</b>', 'entries' => $cfgX));
 // RUN
 if (($_REQUEST['action'] == 'commit')) {
 	// If submit requested, do config save

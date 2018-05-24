@@ -8,16 +8,16 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
 if (empty($GROUP_PS['group_pm']))
-	return $output = permissions_forum('У вас нет доступа к сообщениям');
+	return $output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° Рє СЃРѕРѕР±С‰РµРЅРёСЏРј');
 if (isset($params['id']))
 	$id = isset($params['id']) ? intval($params['id']) : 0;
 else
@@ -37,8 +37,8 @@ switch ($folder) {
 		$io = 'inbox';
 }
 if (empty($id))
-	return $output = information('id сообщения не передан', $title = 'Информация');
+	return $output = information('id СЃРѕРѕР±С‰РµРЅРёСЏ РЅРµ РїРµСЂРµРґР°РЅ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if (!is_array($userROW))
-	return $output = information('У вас нет прав доступа', $title = 'Информация');
+	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $mysql->query('DELETE FROM ' . prefix . '_pm WHERE ((`from_id`=' . securemysql($userROW['id']) . ' AND `folder`=\'outbox\') OR (`to_id`=' . securemysql($userROW['id']) . ') AND `folder`=\'inbox\') AND id = \'' . intval($id) . '\' LIMIT 1');
-return $output = announcement_forum('Сообщение удалено', link_list_pm(0, 0, $folder), 2);
+return $output = announcement_forum('РЎРѕРѕР±С‰РµРЅРёРµ СѓРґР°Р»РµРЅРѕ', link_list_pm(0, 0, $folder), 2);

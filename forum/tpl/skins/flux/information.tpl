@@ -3,7 +3,7 @@
 	<div class="box">
 		<div class="inbox">
 			<p>{{ info }}</p>
-			<p><a href='javascript:history.go(-1)'>Вернуться назад</a></p>
+			<p><a href='javascript:history.go(-1)'>Р’РµСЂРЅСѓС‚СЊСЃСЏ РЅР°Р·Р°Рґ</a></p>
 		</div>
 	</div>
 </div> 

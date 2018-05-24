@@ -3,7 +3,7 @@
 ;
 
 ID: similar
-Name: Похожие новости
+Name: РџРѕС…РѕР¶РёРµ РЅРѕРІРѕСЃС‚Рё
 Version: 0.07
 Acts: index,ppages,news
 File: similar.php
@@ -11,8 +11,8 @@ Config: config.php
 Install: install.php
 Deinstall: deinstall.php
 Type: plugin
-Description: Перелинковка новостей по критериям похожести
+Description: РџРµСЂРµР»РёРЅРєРѕРІРєР° РЅРѕРІРѕСЃС‚РµР№ РїРѕ РєСЂРёС‚РµСЂРёСЏРј РїРѕС…РѕР¶РµСЃС‚Рё
 Author: Vitaly A. Ponomarev
 Author_URI: http://2lib.ru
-Title: Похожие новости
-Information: Позволяет проводить перелинковку новостей на базе плагина <b>tags</b> (Облако тегов)
+Title: РџРѕС…РѕР¶РёРµ РЅРѕРІРѕСЃС‚Рё
+Information: РџРѕР·РІРѕР»СЏРµС‚ РїСЂРѕРІРѕРґРёС‚СЊ РїРµСЂРµР»РёРЅРєРѕРІРєСѓ РЅРѕРІРѕСЃС‚РµР№ РЅР° Р±Р°Р·Рµ РїР»Р°РіРёРЅР° <b>tags</b> (РћР±Р»Р°РєРѕ С‚РµРіРѕРІ)

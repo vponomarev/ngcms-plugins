@@ -1,19 +1,19 @@
 <?php
 require_once("_header.php");
-# Получение и обработка данных формы
+# РџРѕР»СѓС‡РµРЅРёРµ Рё РѕР±СЂР°Р±РѕС‚РєР° РґР°РЅРЅС‹С… С„РѕСЂРјС‹
 if (count($_POST) > 0) {
 	$response = $wmxi->X9(
-		trim($_POST["wmid"])     # 12 цифр
+		trim($_POST["wmid"])     # 12 С†РёС„СЂ
 	);
-	# Преобразовываем ответ сервера в структуру. Входные параметры:
-	# - XML-ответ сервера
-	# - кодировка, используемая на сайте. По умолчанию используется UTF-8
+	# РџСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµРј РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР° РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ. Р’С…РѕРґРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
+	# - XML-РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР°
+	# - РєРѕРґРёСЂРѕРІРєР°, РёСЃРїРѕР»СЊР·СѓРµРјР°СЏ РЅР° СЃР°Р№С‚Рµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ UTF-8
 	$structure = $parser->Parse($response, DOC_ENCODING);
-	# преобразуем индексы структуры к более удобным для доступа.
-	# Не рекомендуется проводить такое преобразование с с результатом, если он содержит
-	# множество однотипных строк (например, список транзакций)
-	# если надобности в аттрибутах XML-тегов ответа нет, то второй параметр можно
-	# установить в false - в таком случае структура выйдет более компактной
+	# РїСЂРµРѕР±СЂР°Р·СѓРµРј РёРЅРґРµРєСЃС‹ СЃС‚СЂСѓРєС‚СѓСЂС‹ Рє Р±РѕР»РµРµ СѓРґРѕР±РЅС‹Рј РґР»СЏ РґРѕСЃС‚СѓРїР°.
+	# РќРµ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ РїСЂРѕРІРѕРґРёС‚СЊ С‚Р°РєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј, РµСЃР»Рё РѕРЅ СЃРѕРґРµСЂР¶РёС‚
+	# РјРЅРѕР¶РµСЃС‚РІРѕ РѕРґРЅРѕС‚РёРїРЅС‹С… СЃС‚СЂРѕРє (РЅР°РїСЂРёРјРµСЂ, СЃРїРёСЃРѕРє С‚СЂР°РЅР·Р°РєС†РёР№)
+	# РµСЃР»Рё РЅР°РґРѕР±РЅРѕСЃС‚Рё РІ Р°С‚С‚СЂРёР±СѓС‚Р°С… XML-С‚РµРіРѕРІ РѕС‚РІРµС‚Р° РЅРµС‚, С‚Рѕ РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ
+	# СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІ false - РІ С‚Р°РєРѕРј СЃР»СѓС‡Р°Рµ СЃС‚СЂСѓРєС‚СѓСЂР° РІС‹Р№РґРµС‚ Р±РѕР»РµРµ РєРѕРјРїР°РєС‚РЅРѕР№
 	$transformed = $parser->Reindex($structure, true);
 }
 ?>
@@ -27,17 +27,17 @@ if (count($_POST) > 0) {
 	<link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-Детальное описание параметров:
+Р”РµС‚Р°Р»СЊРЅРѕРµ РѕРїРёСЃР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ:
 <a href="http://webmoney.ru/rus/developers/interfaces/xml/balance/index.shtml">http://webmoney.ru/rus/developers/interfaces/xml/balance/index.shtml</a>
 <br/>
 
 <form action="" method="post">
 
-	<label>WM-идентификатор:</label>
+	<label>WM-РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ:</label>
 	<input type="text" name="wmid" value=""/>
 	<br/>
 
-	<input type="submit" value="получить баланс"/>
+	<input type="submit" value="РїРѕР»СѓС‡РёС‚СЊ Р±Р°Р»Р°РЅСЃ"/>
 	<br/>
 
 </form>
@@ -46,7 +46,7 @@ if (count($_POST) > 0) {
 <!--pre><?= htmlspecialchars(print_r(@$structure, true), ENT_QUOTES); ?></pre-->
 <!--pre><?= htmlspecialchars(print_r(@$transformed, true), ENT_QUOTES); ?></pre-->
 
-<pre><!-- Читаем и отображаем элементы обработанного массива после получения ответа с сервера -->
+<pre><!-- Р§РёС‚Р°РµРј Рё РѕС‚РѕР±СЂР°Р¶Р°РµРј СЌР»РµРјРµРЅС‚С‹ РѕР±СЂР°Р±РѕС‚Р°РЅРЅРѕРіРѕ РјР°СЃСЃРёРІР° РїРѕСЃР»Рµ РїРѕР»СѓС‡РµРЅРёСЏ РѕС‚РІРµС‚Р° СЃ СЃРµСЂРІРµСЂР° -->
 	<?
 	$items = @$structure["0"]["node"]["1"]["node"];
 	$items = is_array($items) ? $items : array();
@@ -54,15 +54,15 @@ if (count($_POST) > 0) {
 		$vv = $parser->Reindex($v["node"], true);
 		?>
 
-		<b>№ <?= $k; ?></b>
-			Кошелёк: <b><?= htmlspecialchars(@$vv["pursename"], ENT_QUOTES); ?></b>
-			Баланс: <b><?= htmlspecialchars(@$vv["amount"], ENT_QUOTES); ?></b>
-			Описание: <b><?= htmlspecialchars(@$vv["desc"], ENT_QUOTES); ?></b>
-			Открыт: <b><?= htmlspecialchars(@$vv["outsideopen"], ENT_QUOTES); ?></b>
+		<b>в„– <?= $k; ?></b>
+			РљРѕС€РµР»С‘Рє: <b><?= htmlspecialchars(@$vv["pursename"], ENT_QUOTES); ?></b>
+			Р‘Р°Р»Р°РЅСЃ: <b><?= htmlspecialchars(@$vv["amount"], ENT_QUOTES); ?></b>
+			РћРїРёСЃР°РЅРёРµ: <b><?= htmlspecialchars(@$vv["desc"], ENT_QUOTES); ?></b>
+			РћС‚РєСЂС‹С‚: <b><?= htmlspecialchars(@$vv["outsideopen"], ENT_QUOTES); ?></b>
 	<? } ?>
 
-	Код ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
-		Описание ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
+	РљРѕРґ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
+		РћРїРёСЃР°РЅРёРµ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
 	</pre>
 
 </body>

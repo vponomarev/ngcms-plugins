@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -29,7 +29,7 @@ if (isset($params['act']))
 else
 	$action = isset($_REQUEST['act']) ? secureinput($_REQUEST['act']) : '';
 if (empty($id) && empty($name))
-	return $output = information('id пользователя не передан', $title = 'Информация');
+	return $output = information('id РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµ РїРµСЂРµРґР°РЅ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 switch ($action) {
 	case 'edit':
 		if (checkLinkAvailable('forum', 'profile')) {
@@ -37,7 +37,7 @@ switch ($action) {
 				return redirect_forum(link_profile($userROW['id'], 'edit', $userROW['name']));
 		}
 		if ($id != $userROW['id'] && $name != $userROW['name'])
-			return $output = information('Нечего тебе здесь делать :)', $title = 'Информация');
+			return $output = information('РќРµС‡РµРіРѕ С‚РµР±Рµ Р·РґРµСЃСЊ РґРµР»Р°С‚СЊ :)', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 		$edit = 1;
 		$mail = isset($_REQUEST['mail']) ? secureinput($_REQUEST['mail']) : $userROW['mail'];
 		$site = isset($_REQUEST['site']) ? secureinput($_REQUEST['site']) : $userROW['site'];
@@ -51,50 +51,50 @@ switch ($action) {
 		$info = $userROW['info'];
 		$avatar = $userROW['avatar'];
 		$user_status = $userROW['status'];
-		$SYSTEM_FLAGS['info']['title']['item'] = 'Редактирование пользователя: ' . $name;
+		$SYSTEM_FLAGS['info']['title']['item'] = 'Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ: ' . $name;
 		if (isset($_REQUEST['submit'])) {
 			if (empty($site)) {
 			} else {
 				if (substr($site, 0, 7) != 'http://')
 					$site = 'http://' . $site;
 				if (!filter_var($site, FILTER_VALIDATE_URL, FILTER_FLAG_SCHEME_REQUIRED))
-					$error_text['url'] = 'Не корректный адрес';
+					$error_text['url'] = 'РќРµ РєРѕСЂСЂРµРєС‚РЅС‹Р№ Р°РґСЂРµСЃ';
 			}
 			if (empty($mail))
-				$error_text['mail'] = 'e-mail не указан';
+				$error_text['mail'] = 'e-mail РЅРµ СѓРєР°Р·Р°РЅ';
 			else {
 				if (!filter_var($mail, FILTER_VALIDATE_EMAIL))
-					$error_text['mail'] = 'Неверный e-mail';
+					$error_text['mail'] = 'РќРµРІРµСЂРЅС‹Р№ e-mail';
 			}
 			if (empty($error_text)) {
 				$mysql->query('UPDATE ' . prefix . '_users SET mail = ' . securemysql($mail) . ', site = ' . securemysql($site) . ', signature = ' . securemysql($signature) . ' WHERE id = ' . intval($userROW['id']) . ' LIMIT 1');
 
-				return $output = announcement_forum('Профиль обновлен', link_profile($userROW['id'], '', $userROW['name']), 2);
+				return $output = announcement_forum('РџСЂРѕС„РёР»СЊ РѕР±РЅРѕРІР»РµРЅ', link_profile($userROW['id'], '', $userROW['name']), 2);
 			}
 		}
 		$status = array(
-			'4' => 'Пользователь',
-			'3' => 'Модератор',
-			'2' => 'Глоб. Модератор',
-			'1' => 'Администратор'
+			'4' => 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ',
+			'3' => 'РњРѕРґРµСЂР°С‚РѕСЂ',
+			'2' => 'Р“Р»РѕР±. РњРѕРґРµСЂР°С‚РѕСЂ',
+			'1' => 'РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ'
 		);
 		break;
 	case '':
 		$profile = 1;
 		//if(!is_array($userROW))
-		//	return  $output = announcement_forum('Сначала вы должны авторизироваться чтобы смотреть профиль', link_login(), 2);
+		//	return  $output = announcement_forum('РЎРЅР°С‡Р°Р»Р° РІС‹ РґРѕР»Р¶РЅС‹ Р°РІС‚РѕСЂРёР·РёСЂРѕРІР°С‚СЊСЃСЏ С‡С‚РѕР±С‹ СЃРјРѕС‚СЂРµС‚СЊ РїСЂРѕС„РёР»СЊ', link_login(), 2);
 		$status = array(
-			'4' => 'Пользователь',
-			'3' => 'Модератор',
-			'2' => 'Глоб. Модератор',
-			'1' => 'Администратор'
+			'4' => 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ',
+			'3' => 'РњРѕРґРµСЂР°С‚РѕСЂ',
+			'2' => 'Р“Р»РѕР±. РњРѕРґРµСЂР°С‚РѕСЂ',
+			'1' => 'РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ'
 		);
 		$sql = 'SELECT id, name, mail, status, last, reg, site, icq, info, avatar, photo, activation, ip, newpw, authcookie, timezone, signature, int_post, l_post
 					FROM ' . prefix . '_users 
 					WHERE ' . (empty($name) ? 'id = ' . securemysql($id) . '' : 'name = ' . securemysql($name) . '') . ' LIMIT 1';
 		$row = $mysql->record($sql);
 		if (empty($row))
-			return $output = information('Такого пользователя не существует', $title = 'Информация');
+			return $output = information('РўР°РєРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 		if (checkLinkAvailable('forum', 'profile')) {
 			if ($CurrentHandler['handlerParams']['value']['pluginName'] == 'core')
 				return redirect_forum(link_profile($row['id'], '', $row['name']));
@@ -111,7 +111,7 @@ switch ($action) {
 		$info = $row['info'];
 		$info = $row['avatar'];
 		$user_status = $row['status'];
-		$SYSTEM_FLAGS['info']['title']['item'] = 'Профиль пользователя: ' . $name;
+		$SYSTEM_FLAGS['info']['title']['item'] = 'РџСЂРѕС„РёР»СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ: ' . $name;
 		break;
 }
 //print $userROW['last'].'<br />';
