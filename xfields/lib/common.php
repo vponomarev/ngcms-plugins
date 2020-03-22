@@ -5,85 +5,132 @@ global $XF_loaded;
 $XF = array();        // $XF - array with configuration
 $XF_loaded = 0;        // $XF_loaded - flag if config is loaded
 // Load fields definition
-function xf_configLoad() {
+function xf_configLoad()
+{
+    global $lang, $XF, $XF_loaded;
+    if ($XF_loaded) {
+        return $XF;
+    }
+    if (!($confdir = get_plugcfg_dir('xfields'))) {
+        return false;
+    }
+    if (!file_exists($confdir . '/config.php')) {
+        $XF_loaded = 1;
 
-	global $lang, $XF, $XF_loaded;
-	if ($XF_loaded) return $XF;
-	if (!($confdir = get_plugcfg_dir('xfields'))) return false;
-	if (!file_exists($confdir . '/config.php')) {
-		$XF_loaded = 1;
+        return array('news' => array());
+    }
+    include $confdir . '/config.php';
+    $XF_loaded = 1;
+    $XF = is_array($xarray) ? $xarray : array('news' => array());
 
-		return array('news' => array());
-	}
-	include $confdir . '/config.php';
-	$XF_loaded = 1;
-	$XF = is_array($xarray) ? $xarray : array('news' => array());
-
-	return $XF;
+    return $XF;
 }
 
 // Save fields definition
-function xf_configSave($xf = null) {
+function xf_configSave($xf = null)
+{
+    global $lang, $XF, $XF_loaded;
+    if (!$XF_loaded) {
+        return false;
+    }
+    if (!($confdir = get_plugcfg_dir('xfields'))) {
+        return false;
+    }
+    // Open config
+    if (!($fn = fopen($confdir . '/config.php', 'w'))) {
+        return false;
+    }
+    // Write config
+    fwrite($fn, "<?php\n\$xarray = " . var_export(is_array($xf) ? $xf : $XF, true) . ";\n");
+    fclose($fn);
 
-	global $lang, $XF, $XF_loaded;
-	if (!$XF_loaded) return false;
-	if (!($confdir = get_plugcfg_dir('xfields'))) return false;
-	// Open config
-	if (!($fn = fopen($confdir . '/config.php', 'w'))) return false;
-	// Write config
-	fwrite($fn, "<?php\n\$xarray = " . var_export(is_array($xf) ? $xf : $XF, true) . ";\n");
-	fclose($fn);
-
-	return true;
+    return true;
 }
 
 // Decode fields from text
-function xf_decode($text) {
+function xf_decode(string $text)
+{
+	// Если строка пустая, то и массив возвращаем пустым.
+    if (empty($text)) {
+        return [];
+    }
 
-	if ($text == '') return array();
-	// MODERN METHOD
-	if (substr($text, 0, 4) == "SER|") return unserialize(substr($text, 4));
-	// OLD METHOD. OBSOLETE but supported for reading
-	$xfieldsdata = explode("||", $text);
-	foreach ($xfieldsdata as $xfielddata) {
-		list($xfielddataname, $xfielddatavalue) = explode("|", $xfielddata);
-		$xfielddataname = str_replace("&#124;", "|", $xfielddataname);
-		$xfielddataname = str_replace("__NEWL__", "\r\n", $xfielddataname);
-		$xfielddatavalue = str_replace("&#124;", "|", $xfielddatavalue);
-		$xfielddatavalue = str_replace("__NEWL__", "\r\n", $xfielddatavalue);
-		$data[$xfielddataname] = $xfielddatavalue;
+	// Если предоставлена строка является псевдо-серилизованной строкой.
+	if (mb_substr($text, 0, 4) == "SER|") {
+		// Обрезаем маркер серилизованной строки.
+		$serialized = mb_substr($text, 4);
+
+		// Пытаемся десериализовать строку.
+		$xfields = unserialize($serialized);
+
+		// Если успешно десериализовали, то возвращаем.
+		if (is_array($xfields)) {
+			return $xfields;
+		}
+
+		// Если не получилось конвертировать, то пытаемся изменить кодировку.
+		$converted = mb_convert_encoding($serialized, 'CP1251');
+
+		// Пытаемся десериализовать строку.
+		$xfields = unserialize($converted);
+
+		// Если успешно десериализовали, то проблема была в кодировке.
+		if (is_array($xfields)) {
+			return array_map(function ($xfield) {
+				// Обратно конвертируем и возвращаем каждое поле.
+				return mb_convert_encoding($xfield, 'UTF-8', 'CP1251');
+			}, $xfields);
+		}
+
+		// Если ничего не помогло, возвращаем пустой массив.
+		return [];
 	}
+    
+    // OLD METHOD. OBSOLETE but supported for reading
+    $xfieldsdata = explode("||", $text);
+    foreach ($xfieldsdata as $xfielddata) {
+        list($xfielddataname, $xfielddatavalue) = explode("|", $xfielddata);
+        $xfielddataname = str_replace("&#124;", "|", $xfielddataname);
+        $xfielddataname = str_replace("__NEWL__", "\r\n", $xfielddataname);
+        $xfielddatavalue = str_replace("&#124;", "|", $xfielddatavalue);
+        $xfielddatavalue = str_replace("__NEWL__", "\r\n", $xfielddatavalue);
+        $data[$xfielddataname] = $xfielddatavalue;
+    }
 
-	return $data;
+    return $data;
 }
 
 // Encode fields into text
-function xf_encode($fields) {
+function xf_encode($fields)
+{
+    if (!is_array($fields)) {
+        return '';
+    }
 
-	if (!is_array($fields)) return '';
-
-	return 'SER|' . serialize($fields);
+    return 'SER|' . serialize($fields);
 }
 
-function xf_getTableBySectionID($sectionID) {
+function xf_getTableBySectionID($sectionID)
+{
+    switch ($sectionID) {
+        case 'news':
+            return prefix . '_news';
+        case 'users':
+            return prefix . '_users';
+        case 'tdata':
+            return prefix . '_xfields';
+    }
 
-	switch ($sectionID) {
-		case 'news':
-			return prefix . '_news';
-		case 'users':
-			return prefix . '_users';
-		case 'tdata':
-			return prefix . '_xfields';
-	}
-
-	return false;
+    return false;
 }
 
 //
 // Class for managing xfields data processing
-class XFieldsFilter {
+class XFieldsFilter
+{
 
-	//
-	function showTableEntry($newsID, $SQLnews, $rowData, &$rowVars) {
-	}
+    //
+    public function showTableEntry($newsID, $SQLnews, $rowData, &$rowVars)
+    {
+    }
 }
