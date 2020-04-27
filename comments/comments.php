@@ -257,7 +257,7 @@ function plugin_comments_add() {
 		$output = array(
 			'status' => 1,
 			'rev'    => intval(pluginGetVariable('comments', 'backorder')),
-			'data'   => iconv('Windows-1251', 'UTF-8', comments_show($SQLnews['id'], $commentId, $SQLnews['com'] + 1, $callingCommentsParams))
+			'data'   => comments_show($SQLnews['id'], $commentId, $SQLnews['com'] + 1, $callingCommentsParams)
 		);
 		print json_encode($output);
 		$template['vars']['mainblock'] = '';
@@ -273,7 +273,7 @@ function plugin_comments_add() {
 			$tpl->vars('comments.error', array('vars' => array('content' => $template['vars']['mainblock'])));
 			$output = array(
 				'status' => 0,
-				'data'   => iconv('Windows-1251', 'UTF-8', $tpl->show('comments.error'))
+				'data'   => $tpl->show('comments.error')
 			);
 			print json_encode($output);
 			$template['vars']['mainblock'] = '';
@@ -406,7 +406,7 @@ function plugin_comments_delete() {
 	$SUPRESS_TEMPLATE_SHOW = 1;
 	// Check if we run AJAX request
 	if ($_REQUEST['ajax']) {
-		$output['data'] = iconv('Windows-1251', 'UTF-8', $output['data']);
+		$output['data'] = $output['data'];
 		$template['vars']['mainblock'] = json_encode($output);
 	} else {
 		// NON-AJAX mode

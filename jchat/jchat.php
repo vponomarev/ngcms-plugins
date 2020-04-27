@@ -78,7 +78,7 @@ function jchat_show($lastEventID, $maxLoadedID, $commands = array()) {
 		$row['id'] = intval($row['id']);
 		$data [] = $row;
 	}
-	$mysql->query("set names cp1251");
+	$mysql->query("set names utf8");
 	// Attach messages to bundle
 	$bundle[1] = $data;
 	// 1. Check if we need to reconfigure refresh rate
@@ -205,7 +205,7 @@ function plugin_jchat_add() {
 	foreach (preg_split('#(\s|^)(http\:\/\/[A-Za-z\-\.0-9]+\/\S*)(\s|$)#', $postText, -1, PREG_SPLIT_DELIM_CAPTURE) as $cx) {
 		if (preg_match('#http\:\/\/[A-Za-z\-\.0-9]+\/\S*#', $cx, $m)) {
 			// LINK
-			$cx = '<a href="' . htmlspecialchars($cx, ENT_COMPAT | ENT_HTML401, 'cp1251') . '">' . ((strlen($cx) > $maxwlen) ? (substr($cx, 0, $maxwlen - 2) . '..') : $cx) . '</a>';
+			$cx = '<a href="' . htmlspecialchars($cx, ENT_COMPAT | ENT_HTML401, 'UTF-8') . '">' . ((strlen($cx) > $maxwlen) ? (substr($cx, 0, $maxwlen - 2) . '..') : $cx) . '</a>';
 		} else {
 			$cx = preg_replace('/(\S{' . $maxwlen . '})(?!\s)/', '$1 ', $cx);
 		}
@@ -225,7 +225,7 @@ function plugin_jchat_add() {
 	// Add new message to chat
 	$mysql->query("set names utf8");
 	$mysql->query("insert into " . prefix . "_jchat (" . implode(",", $vnames) . ") values (" . implode(",", $vparams) . ")");
-	$mysql->query("set names cp1251");
+	$mysql->query("set names utf8");
 	// Update LastEventNotification
 	$mysql->query("insert into " . prefix . "_jchat_events (chatid, postdate, type) values (" . $SQL['chatid'] . ", " . db_squote($SQL['postdate']) . ", 1)");
 	$lid = $mysql->result("select LAST_INSERT_ID()");

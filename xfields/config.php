@@ -59,14 +59,14 @@ function showSectionList() {
 	$grpNews = array();
 	foreach ($xf['grp.news'] as $k => $v) {
 		$grpNews[$k] = array(
-			'title'   => iconv('Windows-1251', 'UTF-8', $v['title']),
+			'title'   => $v['title'],
 			'entries' => $v['entries'],
 		);
 	}
 	foreach (array('news', 'grp.news', 'users', 'grp.users', 'tdata') as $cID)
 		$tVars['bclass'][$cID] = ($cID == $sectionID) ? 'btnActive' : 'btnInactive';
 	$tVars['json']['groups.config'] = json_encode($grpNews);
-	$tVars['json']['fields.config'] = json_encode(arrayCharsetConvert(0, $xf['news']));
+	$tVars['json']['fields.config'] = json_encode($xf['news']);
 	$xt = $twig->loadTemplate('plugins/xfields/tpl/groups.tpl');
 	echo $xt->render($tVars);
 }
@@ -160,7 +160,7 @@ function showAddEditForm($xdata = '', $eMode = null, $efield = null) {
 		if ($data['type'] == 'select') {
 			if (is_array($data['options']))
 				foreach ($data['options'] as $k => $v) {
-					array_push($sOpts, '<tr><td><input size="12" name="so_data[' . ($fNum) . '][0]" type="text" value="' . ($data['storekeys'] ? htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'cp1251') : '') . '"/></td><td><input type="text" size="55" name="so_data[' . ($fNum) . '][1]" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251') . '"/></td><td><a href="#" onclick="return false;"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+					array_push($sOpts, '<tr><td><input size="12" name="so_data[' . ($fNum) . '][0]" type="text" value="' . ($data['storekeys'] ? htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'UTF-8') : '') . '"/></td><td><input type="text" size="55" name="so_data[' . ($fNum) . '][1]" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8') . '"/></td><td><a href="#" onclick="return false;"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 					$fNum++;
 				}
 		}
@@ -172,7 +172,7 @@ function showAddEditForm($xdata = '', $eMode = null, $efield = null) {
 		if ($data['type'] == 'multiselect') {
 			if (is_array($data['options']))
 				foreach ($data['options'] as $k => $v) {
-					array_push($m_sOpts, '<tr><td><input size="12" name="mso_data[' . ($fNum) . '][0]" type="text" value="' . ($data['storekeys'] ? htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'cp1251') : '') . '"/></td><td><input type="text" size="55" name="mso_data[' . ($fNum) . '][1]" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251') . '"/></td><td><a href="#" onclick="return false;"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+					array_push($m_sOpts, '<tr><td><input size="12" name="mso_data[' . ($fNum) . '][0]" type="text" value="' . ($data['storekeys'] ? htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'UTF-8') : '') . '"/></td><td><input type="text" size="55" name="mso_data[' . ($fNum) . '][1]" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8') . '"/></td><td><a href="#" onclick="return false;"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 					$fNum++;
 				}
 		}

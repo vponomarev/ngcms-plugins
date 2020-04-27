@@ -45,10 +45,10 @@ function rss_import_block() {
 		$j = 1;
 		foreach ($rss->xpath('//item') as $item) {
 			$title = $item->title;       //выводим заголовок статьи
-			if (strlen($title) > $maxlength) $tvars['vars']['title'] = iconv('utf-8', 'windows-1251', substr(secure_html($title), 0, $maxlength) . "");
-			else $tvars['vars']['title'] = iconv('utf-8', 'windows-1251', secure_html($title));
+			if (strlen($title) > $maxlength) $tvars['vars']['title'] = substr(secure_html($title), 0, $maxlength) . "";
+			else $tvars['vars']['title'] = secure_html($title);
 			if (extra_get_param('rss_import', $vv . '_content')) {
-				$short_news = strip_tags(iconv('utf-8', 'windows-1251', $item->description));        //выводим текст статьи	
+				$short_news = strip_tags($item->description);        //выводим текст статьи
 				if ($config['blocks_for_reg']) $short_news = $parse->userblocks($short_news);
 				//if ($config['use_htmlformatter']) $short_news = $parse -> htmlformatter($short_news);
 				if ($config['use_bbcodes']) $short_news = $parse->bbcodes($short_news);

@@ -33,7 +33,7 @@ function basket_add_item($linked_ds, $linked_id, $title, $price, $count, $xfld =
 	// Выводим шаблон с общим итогом
 	$xt = $twig->loadTemplate('plugins/basket/total.tpl');
 
-	return array('status' => 1, 'errorCode' => 0, 'data' => 'Item added into basket', 'update' => arrayCharsetConvert(0, $xt->render($tVars)));
+	return array('status' => 1, 'errorCode' => 0, 'data' => 'Item added into basket', 'update' => $xt->render($tVars));
 }
 
 function basket_rpc_manage($params) {
@@ -42,7 +42,6 @@ function basket_rpc_manage($params) {
 	LoadPluginLibrary('xfields', 'common');
 	if (!is_array($params) || !isset($params['action']))
 		return array('status' => 0, 'errorCode' => 1, 'errorText' => 'Activity mode is not set');
-	$params = arrayCharsetConvert(1, $params);
 	switch ($params['action']) {
 		// **** ADD NEW ITEM INTO BASKET ****
 		case 'add':

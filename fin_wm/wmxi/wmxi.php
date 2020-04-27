@@ -118,7 +118,7 @@ class WMXI {
 	# external sign function
 	function _sign($data) {
 
-		$text = $this->_change_encoding($data, "windows-1251");
+		$text = $this->_change_encoding($data, "UTF-8");
 
 		return Sign($text, $this->wmid, $this->pass, $this->kwm);
 	}

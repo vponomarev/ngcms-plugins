@@ -2,6 +2,18 @@
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
 include_once(root . "/plugins/finance/inc/finance.php");
+//
+// Add json_decode() support for PHP < 5.2.0
+//
+if (!function_exists('json_decode')) {
+	function json_decode($json, $assoc = false) {
+
+		include_once root . 'includes/classes/json.php';
+		$jclass = new Services_JSON($assoc ? SERVICES_JSON_LOOSE_TYPE : 0);
+
+		return $jclass->decode($json);
+	}
+}
 
 class Finance_Acceptor_SMSCOIN extends Finance_Acceptor {
 
@@ -241,7 +253,7 @@ function plugin_finsmscoin() {
 		$params['s_sign'] = md5($params['s_purse'] . '::' . $params['s_order_id'] . '::' . $params['s_amount'] . '::' . $params['s_clear_amount'] . '::' . $params['s_description'] . '::' . pluginGetVariable('fin_smscoin', 'secret_key'));
 		$inputs = '';
 		foreach ($params as $k => $v) {
-			$inputs .= '<input type="hidden" name="' . $k . '" value="' . htmlspecialchars($v, null, 'cp1251') . '"/>' . "\n";
+			$inputs .= '<input type="hidden" name="' . $k . '" value="' . htmlspecialchars($v, null, 'UTF-8') . '"/>' . "\n";
 		}
 		$tvars = array('vars' => array('form_url' => pluginGetVariable('fin_smscoin', 'post_url'), 'inputs' => $inputs));
 		$tpl->template('redirect', extras_dir . '/fin_smscoin/tpl');

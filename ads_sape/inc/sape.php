@@ -114,7 +114,7 @@ class SAPE_base {
 		if (isset($options['charset']) && strlen($options['charset'])) {
 			$this->_charset = $options['charset'];
 		} else {
-			$this->_charset = 'windows-1251';
+			$this->_charset = 'UTF-8';
 		}
 		if (isset($options['fetch_remote_type']) && strlen($options['fetch_remote_type'])) {
 			$this->_fetch_remote_type = $options['fetch_remote_type'];
@@ -548,7 +548,7 @@ class SAPE_client extends SAPE_base {
 				$header_rest = mb_substr($link_item[3], 1, mb_strlen($link_item[3], $this->_sape_charset) - 1, $this->_sape_charset);
 				$header_first_letter = mb_strtoupper(mb_substr($link_item[3], 0, 1, $this->_sape_charset), $this->_sape_charset);
 				$link_item[3] = $header_first_letter . $header_rest;
-			} elseif (function_exists('ucfirst') && (strlen($this->_sape_charset) == 0 || strpos($this->_sape_charset, '1251') !== false)) {
+			} elseif (function_exists('ucfirst') && (strlen($this->_sape_charset) == 0 || strpos($this->_sape_charset, 'utf-8') !== false)) {
 				$link_item[3][0] = ucfirst($link_item[3][0]);
 			}
 			// Если есть раскодированный URL, то заменить его при выводе

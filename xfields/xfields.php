@@ -288,11 +288,11 @@ class XFieldsNewsFilter extends NewsFilter {
 		}
 		$tVars = array(
 			//	'entries'	=>	$xfEntries,
-			'xfGC'       => json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
-			'xfCat'      => json_encode(arrayCharsetConvert(0, $xfCategories)),
-			'xfList'     => json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
-			'xtableConf' => json_encode(arrayCharsetConvert(0, $tclist)),
-			'xtableVal'  => isset($_POST['xftable']) ? $_POST['xftable'] : json_encode(arrayCharsetConvert(0, $tlist)),
+			'xfGC'       => json_encode($xf['grp.news']),
+			'xfCat'      => json_encode($xfCategories),
+			'xfList'     => json_encode(array_keys($xf['news'])),
+			'xtableConf' => json_encode($tclist),
+			'xtableVal'  => isset($_POST['xftable']) ? $_POST['xftable'] : json_encode($tlist),
 			'xtableHdr'  => $thlist,
 			'xtablecnt'  => count($thlist),
 			'flags'      => array(
@@ -394,8 +394,7 @@ class XFieldsNewsFilter extends NewsFilter {
 			$mysql->query("update " . prefix . "_news set xfields = " . db_squote(xf_encode($xdata)) . " where id = " . db_squote($newsID));
 		}
 		// Prepare table data [if needed]
-		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode(iconv('Windows-1251', 'UTF-8', $_POST['xftable']), true))) {
-			$xft = arrayCharsetConvert(1, $xft);
+		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode($_POST['xftable'], true))) {
 			//print "<pre>[".(is_array($xft)?'ARR':'NOARR')."]INCOMING ARRAY: ".var_export($xft, true)."</pre>";
 			$recList = array();
 			$queryList = array();
@@ -597,11 +596,11 @@ class XFieldsNewsFilter extends NewsFilter {
 		// Prepare personal [group] variables
 		$tVars = array(
 			//	'entries'		=>	$xfEntries[0],
-			'xfGC'       => json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
-			'xfCat'      => json_encode(arrayCharsetConvert(0, $xfCategories)),
-			'xfList'     => json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
-			'xtableConf' => json_encode(arrayCharsetConvert(0, $tclist)),
-			'xtableVal'  => json_encode(arrayCharsetConvert(0, $tlist)),
+			'xfGC'       => json_encode($xf['grp.news']),
+			'xfCat'      => json_encode($xfCategories),
+			'xfList'     => json_encode(array_keys($xf['news'])),
+			'xtableConf' => json_encode($tclist),
+			'xtableVal'  => json_encode($tlist),
 			'xtableHdr'  => $thlist,
 			'xtablecnt'  => count($thlist),
 			'flags'      => array(
@@ -693,8 +692,7 @@ class XFieldsNewsFilter extends NewsFilter {
 		}
 		// Prepare table data [if needed]
 		$haveTable = false;
-		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode(iconv('Windows-1251', 'UTF-8', $_POST['xftable']), true))) {
-			$xft = arrayCharsetConvert(1, $xft);
+		if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode($_POST['xftable'], true))) {
 			//print "<pre>[".(is_array($xft)?'ARR':'NOARR')."]INCOMING ARRAY: ".var_export($xft, true)."</pre>";
 			$recList = array();
 			$queryList = array();
@@ -1284,7 +1282,7 @@ class XFieldsFilterAdminCategories extends FilterAdminCategories {
 		// Get config
 		$xf = xf_configLoad();
 		// Prepare select
-		$ms = '<select name="xf_group"><option value="">** все поля **</option>';
+		$ms = '<select name="xf_group"><option value="">** РІСЃРµ РїРѕР»СЏ **</option>';
 		if (isset($xf['grp.news'])) {
 			foreach ($xf['grp.news'] as $k => $v) {
 				$ms .= '<option value="' . $k . '">' . $k . ' (' . $v['title'] . ')</option>';
@@ -1302,7 +1300,7 @@ class XFieldsFilterAdminCategories extends FilterAdminCategories {
 		// Get config
 		$xf = xf_configLoad();
 		// Prepare select
-		$ms = '<select name="xf_group"><option value="">** все поля **</option>';
+		$ms = '<select name="xf_group"><option value="">** РІСЃРµ РїРѕР»СЏ **</option>';
 		foreach ($xf['grp.news'] as $k => $v) {
 			$ms .= '<option value="' . $k . '"' . (($SQL['xf_group'] == $k) ? ' selected="selected"' : '') . '>' . $k . ' (' . $v['title'] . ')</option>';
 		}

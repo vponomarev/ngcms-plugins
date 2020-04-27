@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 <head>
 	<title>{{ titles }}</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name='keywords' content='{{ keywords }}'/>
 	<meta name='description' content='{{ description }}'/>
 	<link rel="stylesheet" href="{{ forum_tpl }}/style.css" type="text/css"/>

@@ -8,7 +8,7 @@
 							<img border="0" src="{tpl_url}/images/2z_40.gif" width="7" height="36"></td>
 						<td background="{tpl_url}/images/2z_41.gif" width="100%">&nbsp;<b><font color="#FFFFFF">{l_uprofile:profile_of}
 									{user}</font></b>{% if (user.flags.isOwnProfile) %} <b>
-							[<a href="#" onclick="ng_uprofile_editCall(); return false;">Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ</a></b> ] {% endif %}
+							[<a href="#" onclick="ng_uprofile_editCall(); return false;">Редактировать</a></b> ] {% endif %}
 						</td>
 						<td>
 							<img border="0" src="{tpl_url}/images/2z_44.gif" width="7" height="36"></td>

@@ -495,7 +495,7 @@ class auth_basic extends CoreAuthPlugin {
 		$results = array();
 		// Check for login
 		if (isset($params['login'])) {
-			$params['login'] = iconv('UTF-8', 'Windows-1251', trim($params['login']));
+			$params['login'] = trim($params['login']);
 			// Check for incorrect chars
 			if (strlen($params['login']) < 3) {
 				// Login is too short

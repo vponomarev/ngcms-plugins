@@ -103,7 +103,7 @@ function forum_online() {
 	} else {
 		$id = session_id();
 		$ips = $ip;
-		$users = 'Гость';
+		$users = 'Р“РѕСЃС‚СЊ';
 		$users_id = 0;
 		$users_status = 0;
 		$location = $CurrentHandler['handlerName'];

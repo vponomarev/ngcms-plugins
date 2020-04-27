@@ -482,7 +482,7 @@ function plugin_tags_generatecloud($ppage = 0, $catlist = '', $age = 0) {
 		$link = checkLinkAvailable('tags', 'tag') ?
 			generateLink('tags', 'tag', array('tag' => $row['tag'])) :
 			generateLink('core', 'plugin', array('plugin' => 'tags', 'handler' => 'tag'), array('tag' => $row['tag']));
-		$cloud3d[] = '<a href="' . $link . '" style="font-size: ' . (round(($row['posts'] - $min) / $cloudStep) + $cloudMin) . 'pt">' . iconv('Windows-1251', 'UTF-8', $row['tag']) . '</a>';
+		$cloud3d[] = '<a href="' . $link . '" style="font-size: ' . (round(($row['posts'] - $min) / $cloudStep) + $cloudMin) . 'pt">' . $row['tag'] . '</a>';
 		if ($manualstyle) {
 			$mmatch = 0;
 			foreach ($wlist as $wrow) {

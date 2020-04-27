@@ -7,7 +7,7 @@
 	<td>{{ num_topic }}</td>
 	<td>{{ num_post }}</td>
 	<td>
-		<a href="admin.php?mod=extra-config&plugin=forum&action=edit_forum&id={{ forum_id }}"><img src="{{ admin_url }}/plugins/forum/tpl/config/images/edit.png" title="Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ" alt="Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ" border="0"/></a>
-		<a href="admin.php?mod=extra-config&plugin=forum&action=del_forum&id={{ forum_id }}"><img src="{{ admin_url }}/plugins/forum/tpl/config/images/dell.png" title="Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ" alt="Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ" border="0"/></a>
+		<a href="admin.php?mod=extra-config&plugin=forum&action=edit_forum&id={{ forum_id }}"><img src="{{ admin_url }}/plugins/forum/tpl/config/images/edit.png" title="Ðåäàêòèðîâàòü" alt="Ðåäàêòèðîâàòü" border="0"/></a>
+		<a href="admin.php?mod=extra-config&plugin=forum&action=del_forum&id={{ forum_id }}"><img src="{{ admin_url }}/plugins/forum/tpl/config/images/dell.png" title="Óäàëèòü" alt="Óäàëèòü" border="0"/></a>
 	</td>
 </tr>

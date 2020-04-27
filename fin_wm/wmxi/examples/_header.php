@@ -1,6 +1,6 @@
 <?php
 # кодировка сайта
-define("DOC_ENCODING", "windows-1251");
+define("DOC_ENCODING", "UTF-8");
 # Подключаем библиотеку, отвечающую за выполнение
 # запросов на сервер и приём ответов
 include_once("../wmxi.php");
