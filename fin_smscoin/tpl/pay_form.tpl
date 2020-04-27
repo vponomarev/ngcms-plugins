@@ -1,29 +1,29 @@
 <br><br>
 <div class="not_logged">
 	<form method="POST" action="{form_url}">
-		<u>Пополнение внутреннего счёта путём отправки SMS сообщений с мобильного телефона.<br><br>
+		<u>РџРѕРїРѕР»РЅРµРЅРёРµ РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ СЃС‡С‘С‚Р° РїСѓС‚С‘Рј РѕС‚РїСЂР°РІРєРё SMS СЃРѕРѕР±С‰РµРЅРёР№ СЃ РјРѕР±РёР»СЊРЅРѕРіРѕ С‚РµР»РµС„РѕРЅР°.<br><br>
 			<table>
 				<tr>
-					<td width=120>Внутренняя валюта:</td>
+					<td width=120>Р’РЅСѓС‚СЂРµРЅРЅСЏСЏ РІР°Р»СЋС‚Р°:</td>
 					<td><b>{syscurrency}</b></td>
 				</tr>
 				<tr>
-					<td width=120>Ваша страна:</td>
+					<td width=120>Р’Р°С€Р° СЃС‚СЂР°РЅР°:</td>
 					<td><select name="s_country" id="s_country" onchange="updateOplist(this.value)"></select></td>
 				</tr>
 				<tr>
-					<td width=120>Ваш оператор:</td>
+					<td width=120>Р’Р°С€ РѕРїРµСЂР°С‚РѕСЂ:</td>
 					<td>
 						<select name="s_provider" id="s_provider" onchange="updatePrlist(document.getElementById('s_country').value, this.value)"></select>
 					</td>
 				</tr>
 				<tr>
-					<td width=120>Ваш платеж:</td>
+					<td width=120>Р’Р°С€ РїР»Р°С‚РµР¶:</td>
 					<td><select name="s_payment" id="s_payment" size="6" style="width: 300px; height: 150px;"></select>
 					</td>
 				</tr>
 				<tr>
-					<td colspan=2><input type=submit value="Перейти на страницу пополнения"></td>
+					<td colspan=2><input type=submit value="РџРµСЂРµР№С‚Рё РЅР° СЃС‚СЂР°РЅРёС†Сѓ РїРѕРїРѕР»РЅРµРЅРёСЏ"></td>
 				</tr>
 			</table>
 	</form>
@@ -41,7 +41,7 @@
 				var pRec = priceList[country]['providers'][provider];
 				var sO = document.createElement('OPTION');
 				sO.value = provider;
-				sO.innerHTML = (provider == '') ? '-- все операторы --' : pRec['name'];
+				sO.innerHTML = (provider == '') ? '-- РІСЃРµ РѕРїРµСЂР°С‚РѕСЂС‹ --' : pRec['name'];
 				sP.options.add(sO);
 			}
 

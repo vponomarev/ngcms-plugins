@@ -1,46 +1,46 @@
 <div class="blockform">
-	<h2><span>Поиск пользователей</span></h2>
+	<h2><span>РџРѕРёСЃРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№</span></h2>
 	<div class="box">
 		<form id="userlist" method="get" action="">
 			<div class="inform">
 				<fieldset>
-					<legend>Поиск и сортировка пользователей</legend>
+					<legend>РџРѕРёСЃРє Рё СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№</legend>
 					<div class="infldset">
-						<label class="conl">Имя<br/><input type="text" name="username" value="{{ username }}" size="25" maxlength="25"/><br/></label>
-						<label class="conl">Группа
+						<label class="conl">РРјСЏ<br/><input type="text" name="username" value="{{ username }}" size="25" maxlength="25"/><br/></label>
+						<label class="conl">Р“СЂСѓРїРїР°
 							<br/><select name="show_group">
-								<option value="-1" {% if (show_group_) %}selected{% endif %}>Все пользователи</option>
-								<option value="1" {% if (show_group_1) %}selected{% endif %}>Администраторы</option>
-								<option value="2" {% if (show_group_2) %}selected{% endif %}>Глоб. Модератор</option>
-								<option value="3" {% if (show_group_3) %}selected{% endif %}>Модератор</option>
-								<option value="4" {% if (show_group_4) %}selected{% endif %}>Пользователь</option>
+								<option value="-1" {% if (show_group_) %}selected{% endif %}>Р’СЃРµ РїРѕР»СЊР·РѕРІР°С‚РµР»Рё</option>
+								<option value="1" {% if (show_group_1) %}selected{% endif %}>РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂС‹</option>
+								<option value="2" {% if (show_group_2) %}selected{% endif %}>Р“Р»РѕР±. РњРѕРґРµСЂР°С‚РѕСЂ</option>
+								<option value="3" {% if (show_group_3) %}selected{% endif %}>РњРѕРґРµСЂР°С‚РѕСЂ</option>
+								<option value="4" {% if (show_group_4) %}selected{% endif %}>РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ</option>
 							</select>
 							<br/></label>
-						<label class="conl">Сортировать по
+						<label class="conl">РЎРѕСЂС‚РёСЂРѕРІР°С‚СЊ РїРѕ
 							<br/><select name="sort_by">
-								<option value="username" {% if (sort_by_username) %}selected{% endif %}>Имя</option>
+								<option value="username" {% if (sort_by_username) %}selected{% endif %}>РРјСЏ</option>
 								<option value="registered" {% if (sort_by_registered) %}selected{% endif %}>
-									Зарегистрирован
+									Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ
 								</option>
-								<option value="num_posts" {% if (sort_by_num_posts) %}selected{% endif %}>Кол-во
-									сообщений
+								<option value="num_posts" {% if (sort_by_num_posts) %}selected{% endif %}>РљРѕР»-РІРѕ
+									СЃРѕРѕР±С‰РµРЅРёР№
 								</option>
 							</select>
 							<br/></label>
-						<label class="conl">Упорядочить по
+						<label class="conl">РЈРїРѕСЂСЏРґРѕС‡РёС‚СЊ РїРѕ
 							<br/><select name="sort_dir">
-								<option value="ASC" {% if (sort_dir_ASC) %}selected{% endif %}>Возрастанию</option>
-								<option value="DESC" {% if (sort_dir_DESC) %}selected{% endif %}>Убыванию</option>
+								<option value="ASC" {% if (sort_dir_ASC) %}selected{% endif %}>Р’РѕР·СЂР°СЃС‚Р°РЅРёСЋ</option>
+								<option value="DESC" {% if (sort_dir_DESC) %}selected{% endif %}>РЈР±С‹РІР°РЅРёСЋ</option>
 							</select>
 							<br/></label>
-						<p class="clearb">Введите имя пользователя для поиска и/или укажите группу. Имя пользователя
-							может быть пустым. Используйте * в качестве шаблона для частичного совпадения. Отсортируйте
-							пользователей по имени, дате регистрации или количеству переданных сообщений и упорядочите
-							по возрастанию/убыванию.</p>
+						<p class="clearb">Р’РІРµРґРёС‚Рµ РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РґР»СЏ РїРѕРёСЃРєР° Рё/РёР»Рё СѓРєР°Р¶РёС‚Рµ РіСЂСѓРїРїСѓ. РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+							РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј. РСЃРїРѕР»СЊР·СѓР№С‚Рµ * РІ РєР°С‡РµСЃС‚РІРµ С€Р°Р±Р»РѕРЅР° РґР»СЏ С‡Р°СЃС‚РёС‡РЅРѕРіРѕ СЃРѕРІРїР°РґРµРЅРёСЏ. РћС‚СЃРѕСЂС‚РёСЂСѓР№С‚Рµ
+							РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ РїРѕ РёРјРµРЅРё, РґР°С‚Рµ СЂРµРіРёСЃС‚СЂР°С†РёРё РёР»Рё РєРѕР»РёС‡РµСЃС‚РІСѓ РїРµСЂРµРґР°РЅРЅС‹С… СЃРѕРѕР±С‰РµРЅРёР№ Рё СѓРїРѕСЂСЏРґРѕС‡РёС‚Рµ
+							РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ/СѓР±С‹РІР°РЅРёСЋ.</p>
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="submit" value="Отправить"/></p>
+			<p><input type="submit" name="submit" value="РћС‚РїСЂР°РІРёС‚СЊ"/></p>
 		</form>
 	</div>
 </div>
@@ -51,16 +51,16 @@
 	</div>
 </div>
 <div id="users1" class="blocktable">
-	<h2><span>Пользователи</span></h2>
+	<h2><span>РџРѕР»СЊР·РѕРІР°С‚РµР»Рё</span></h2>
 	<div class="box">
 		<div class="inbox">
 			<table cellspacing="0">
 				<thead>
 				<tr>
-					<th class="tcl" scope="col">Имя</th>
-					<th class="tc2" scope="col">Статус</th>
-					<th class="tc3" scope="col">Сообщений</th>
-					<th class="tcr" scope="col">Зарегистрирован</th>
+					<th class="tcl" scope="col">РРјСЏ</th>
+					<th class="tc2" scope="col">РЎС‚Р°С‚СѓСЃ</th>
+					<th class="tc3" scope="col">РЎРѕРѕР±С‰РµРЅРёР№</th>
+					<th class="tcr" scope="col">Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -73,7 +73,7 @@
 					</tr>
 				{% else %}
 					<tr>
-						<td class="tcl">По вашему запросу ничего не найдено.</td>
+						<td class="tcl">РџРѕ РІР°С€РµРјСѓ Р·Р°РїСЂРѕСЃСѓ РЅРёС‡РµРіРѕ РЅРµ РЅР°Р№РґРµРЅРѕ.</td>
 						<td class="tc2"></td>
 						<td class="tc3"></td>
 						<td class="tcr"></td>

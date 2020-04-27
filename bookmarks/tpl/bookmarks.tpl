@@ -5,7 +5,7 @@
 				<tr>
 					<td><img border="0" src="{{ tpl_url }}/images/2z_35.gif" width="7" height="36"/></td>
 					<td style="background-image:url('{{ tpl_url }}/images/2z_36.gif');" width="100%"><b>
-							<font color="#FFFFFF">Ваши закладки</font></b></td>
+							<font color="#FFFFFF">Р’Р°С€Рё Р·Р°РєР»Р°РґРєРё</font></b></td>
 					<td><img border="0" src="{{ tpl_url }}/images/2z_38.gif" width="7" height="36"/></td>
 				</tr>
 			</table>
@@ -24,7 +24,7 @@
 						</ul>
 						<br/>
 						{% if (count) %}
-							<center><a href="{{ bookmarks_page }}">Все закладки</a></center>{% endif %}
+							<center><a href="{{ bookmarks_page }}">Р’СЃРµ Р·Р°РєР»Р°РґРєРё</a></center>{% endif %}
 					</td>
 					<td style="background-image:url('{{ tpl_url }}/images/2z_58.gif');" width="7">&nbsp;</td>
 				</tr>
@@ -43,4 +43,4 @@
 		</td>
 	</tr>
 </table>
-{% if not (count) %}Если закладок нет :){% endif %}
+{% if not (count) %}Р•СЃР»Рё Р·Р°РєР»Р°РґРѕРє РЅРµС‚ :){% endif %}

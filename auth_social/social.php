@@ -79,7 +79,7 @@ function socialAuth() {
 					EncodePassword(MakeRandomPassword()),
 					$auther->getProvider(),
 					$auther->getSocialId(),
-					iconv('UTF-8', 'Windows-1251', $auther->getName()),
+                    $auther->getName(),
 					$auther->getEmail(),
 					$auther->getSocialPage(),
 					$auther->getSex(),
@@ -94,7 +94,7 @@ function socialAuth() {
 				$user_doreg = $mysql->record("SELECT * FROM " . uprefix . "_users WHERE social_page = " . db_squote($auther->getSocialPage()));
 				$userid = $user_doreg['id'];
 				$get_avatar = $auther->getAvatar();
-				// åñëè åñòü àâàòàð, ïðîáóåì ñêà÷àòü
+				// ÐµÑÐ»Ð¸ ÐµÑÑ‚ÑŒ Ð°Ð²Ð°Ñ‚Ð°Ñ€, Ð¿Ñ€Ð¾Ð±ÑƒÐµÐ¼ ÑÐºÐ°Ñ‡Ð°Ñ‚ÑŒ
 				if (!empty($get_avatar)) {
 					addToFiles('newavatar', $get_avatar);
 					// Load required library
@@ -107,7 +107,7 @@ function socialAuth() {
 						$imanage = new image_managment();
 						$fname = $userid . '_' . strtolower($_FILES['newavatar']['name']);
 						$ftmp = $_FILES['newavatar']['tmp_name'];
-						$mysql->query("insert into " . prefix . "_images (name, orig_name, folder, date, user, owner_id, category) values (" . db_squote($fname) . ", " . db_squote($fname) . ", '', unix_timestamp(now()), " . db_squote(iconv('UTF-8', 'Windows-1251', $auther->getName())) . ", " . db_squote($userid) . ", '1')");
+						$mysql->query("insert into " . prefix . "_images (name, orig_name, folder, date, user, owner_id, category) values (" . db_squote($fname) . ", " . db_squote($fname) . ", '', unix_timestamp(now()), " . db_squote($auther->getName()) . ", " . db_squote($userid) . ", '1')");
 						$rowID = $mysql->record("select LAST_INSERT_ID() as id");
 						if (copy($ftmp, $config['avatars_dir'] . $fname)) {
 							$sz = $imanage->get_size($config['avatars_dir'] . $fname);
@@ -131,7 +131,7 @@ function socialAuth() {
 			$user = new stdClass();
 			$user->provider = $auther->getProvider();
 			$user->socialId = $auther->getSocialId();
-			$user->name = iconv('UTF-8', 'Windows-1251', $auther->getName());
+			$user->name = $auther->getName();
 			$user->email = $auther->getEmail();
 			$user->socialPage = $auther->getSocialPage();
 			$user->sex = $auther->getSex();
@@ -141,7 +141,7 @@ function socialAuth() {
 				$idToUpdate = $record['id'];
 				$birthday = date('Y-m-d', strtotime($user->birthday));
 				$get_avatar = $auther->getAvatar();
-				// åñëè åñòü àâàòàð, ïðîáóåì ñêà÷àòü
+				// ÐµÑÐ»Ð¸ ÐµÑÑ‚ÑŒ Ð°Ð²Ð°Ñ‚Ð°Ñ€, Ð¿Ñ€Ð¾Ð±ÑƒÐµÐ¼ ÑÐºÐ°Ñ‡Ð°Ñ‚ÑŒ
 				if (!empty($get_avatar)) {
 					addToFiles('newavatar', $get_avatar);
 					// Load required library
@@ -154,7 +154,7 @@ function socialAuth() {
 						$imanage = new image_managment();
 						$fname = $userid . '_' . strtolower($_FILES['newavatar']['name']);
 						$ftmp = $_FILES['newavatar']['tmp_name'];
-						$mysql->query("insert into " . prefix . "_images (name, orig_name, folder, date, user, owner_id, category) values (" . db_squote($fname) . ", " . db_squote($fname) . ", '', unix_timestamp(now()), " . db_squote(iconv('UTF-8', 'Windows-1251', $auther->getName())) . ", " . db_squote($idToUpdate) . ", '1')");
+						$mysql->query("insert into " . prefix . "_images (name, orig_name, folder, date, user, owner_id, category) values (" . db_squote($fname) . ", " . db_squote($fname) . ", '', unix_timestamp(now()), " . db_squote($auther->getName()) . ", " . db_squote($idToUpdate) . ", '1')");
 						$rowID = $mysql->record("select LAST_INSERT_ID() as id");
 						if (copy($ftmp, $config['avatars_dir'] . $fname)) {
 							$sz = $imanage->get_size($config['avatars_dir'] . $fname);

@@ -118,7 +118,7 @@ class Finance_Acceptor_SMSCOIN extends Finance_Acceptor {
 		$this->active = 1;
 		$this->id = 'smscoin';
 		$this->type = 'SMSCOIN';
-		$this->name = 'SMS (через сервис SMSCOIN.com)';
+		$this->name = 'SMS (С‡РµСЂРµР· СЃРµСЂРІРёСЃ SMSCOIN.com)';
 	}
 
 	function paymentAcceptForm($sum = 0) {
@@ -137,10 +137,10 @@ class Finance_Acceptor_SMSCOIN extends Finance_Acceptor {
 			return $tpl->show('result_fail');
 		}
 		if (!$this->priceFetch()) {
-			return 'Не удаётся получить таблицу цен из сервиса SMSCOIN';
+			return 'РќРµ СѓРґР°С‘С‚СЃСЏ РїРѕР»СѓС‡РёС‚СЊ С‚Р°Р±Р»РёС†Сѓ С†РµРЅ РёР· СЃРµСЂРІРёСЃР° SMSCOIN';
 		}
 		if (!is_array($userROW)) {
-			return 'Для пополнения счёта вам необходимо предварительно авторизоваться';
+			return 'Р”Р»СЏ РїРѕРїРѕР»РЅРµРЅРёСЏ СЃС‡С‘С‚Р° РІР°Рј РЅРµРѕР±С…РѕРґРёРјРѕ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕ Р°РІС‚РѕСЂРёР·РѕРІР°С‚СЊСЃСЏ';
 		}
 		$tpl->template('pay_form', extras_dir . '/fin_smscoin/tpl');
 		$tvars['vars']['syscurrency'] = pluginGetVariable('finance', 'syscurrency');
@@ -151,7 +151,7 @@ class Finance_Acceptor_SMSCOIN extends Finance_Acceptor {
 		$tvars['vars']['userid'] = $userROW['id'];
 		$tvars['vars']['login'] = $userROW['name'];
 		$tvars['vars']['home'] = home;
-		$tvars['vars']['descr'] = 'Пополнение пользовательского счёта (ID:' . $userROW['id'] . '|' . $userROW['name'] . '|' . home . ')';
+		$tvars['vars']['descr'] = 'РџРѕРїРѕР»РЅРµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ СЃС‡С‘С‚Р° (ID:' . $userROW['id'] . '|' . $userROW['name'] . '|' . home . ')';
 		$tpl->vars('pay_form', $tvars);
 
 		return $tpl->show('pay_form');
@@ -161,20 +161,20 @@ class Finance_Acceptor_SMSCOIN extends Finance_Acceptor {
 
 		global $tpl, $ip, $mysql, $userROW, $SUPRESS_TEMPLATE_SHOW;
 		//
-		// Сюда приходит запрос от сервиса SMSCOIN
+		// РЎСЋРґР° РїСЂРёС…РѕРґРёС‚ Р·Р°РїСЂРѕСЃ РѕС‚ СЃРµСЂРІРёСЃР° SMSCOIN
 		//
 		$SCOIN = array();
 		foreach (array('purse', 'order_id', 'amount', 'clear_amount', 'inv', 'phone', 'sign_v2') as $k) {
 			$SCOIN[$k] = $_REQUEST['s_' . $k];
 		}
-		// Проверяем наличие передаваемых данных
+		// РџСЂРѕРІРµСЂСЏРµРј РЅР°Р»РёС‡РёРµ РїРµСЂРµРґР°РІР°РµРјС‹С… РґР°РЅРЅС‹С…
 		if (!isset($_REQUEST['s_purse']) || !isset($_REQUEST['s_amount']) || !isset($_REQUEST['s_phone']) || !isset($_REQUEST['s_sign_v2'])) {
-			return 'Неверный запрос';
+			return 'РќРµРІРµСЂРЅС‹Р№ Р·Р°РїСЂРѕСЃ';
 		}
-		// Сначала проверяем корректность данных (sign_v2)
+		// РЎРЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂСЏРµРј РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ РґР°РЅРЅС‹С… (sign_v2)
 		$checkline = pluginGetVariable('fin_smscoin', 'secret_key') . '::' . $SCOIN['purse'] . '::' . $SCOIN['order_id'] . '::' . $SCOIN['amount'] . '::' . $SCOIN['clear_amount'] . '::' . $SCOIN['inv'] . '::' . $SCOIN['phone'];
 		$checksym = md5($checkline);
-		// Готовим данные для истории транзакций
+		// Р“РѕС‚РѕРІРёРј РґР°РЅРЅС‹Рµ РґР»СЏ РёСЃС‚РѕСЂРёРё С‚СЂР°РЅР·Р°РєС†РёР№
 		$SCOUT = array();
 		foreach ($SCOIN as $k => $v) {
 			$SCOUT[$k] = db_squote($v);
@@ -182,13 +182,13 @@ class Finance_Acceptor_SMSCOIN extends Finance_Acceptor {
 		$SCOUT['success'] = 0;
 		$SCOUT['ip'] = db_squote($ip);
 		$SCOUT['dt'] = 'now()';
-		// Ошибка MD5 - попытка взлома!
+		// РћС€РёР±РєР° MD5 - РїРѕРїС‹С‚РєР° РІР·Р»РѕРјР°!
 		if (strtolower($SCOIN['sign_v2']) != strtolower($checksym)) {
 			$mysql->query('insert into ' . prefix . '_fin_smscoin_history (' . join(", ", array_keys($SCOUT)) . ') values(' . join(', ', array_values($SCOUT)) . ')');
 
-			return 'Ошибка контрольной суммы';
+			return 'РћС€РёР±РєР° РєРѕРЅС‚СЂРѕР»СЊРЅРѕР№ СЃСѓРјРјС‹';
 		}
-		// Запрос прошел успешно. Определяем получателя, сумму и начисляем деньги
+		// Р—Р°РїСЂРѕСЃ РїСЂРѕС€РµР» СѓСЃРїРµС€РЅРѕ. РћРїСЂРµРґРµР»СЏРµРј РїРѕР»СѓС‡Р°С‚РµР»СЏ, СЃСѓРјРјСѓ Рё РЅР°С‡РёСЃР»СЏРµРј РґРµРЅСЊРіРё
 		$userID = 0;
 		$userName = '';
 		$sum = 0;
@@ -197,19 +197,19 @@ class Finance_Acceptor_SMSCOIN extends Finance_Acceptor {
 			$userName = $rec['username'];
 			$sum = $rec['profit'];
 		}
-		// Логгируем поступление транзакции
+		// Р›РѕРіРіРёСЂСѓРµРј РїРѕСЃС‚СѓРїР»РµРЅРёРµ С‚СЂР°РЅР·Р°РєС†РёРё
 		$SCOUT['userid'] = db_squote($userID);
 		$SCOUT['sum'] = db_squote($sum);
 		$SCOUT['trid'] = db_squote($SCOIN['order_id']);
-		// Проверяем на наличие дублирующих записей (RETRY)
+		// РџСЂРѕРІРµСЂСЏРµРј РЅР° РЅР°Р»РёС‡РёРµ РґСѓР±Р»РёСЂСѓСЋС‰РёС… Р·Р°РїРёСЃРµР№ (RETRY)
 		if (is_array($mysql->record("select * from " . prefix . "_fin_smscoin_history where inv = " . db_squote($SCOIN['inv'])))) {
 			$SCOUT['success'] = 0;
 		} else {
 			$SCOUT['success'] = 1;
-			// Выполняем пополнение счета пользователя
-			finance_add_money($userName, pluginGetVariable('fin_smscoin', 'balance_no'), $sum, 'Пополнение счета через SMSCOIN (' . $sum . ')');
+			// Р’С‹РїРѕР»РЅСЏРµРј РїРѕРїРѕР»РЅРµРЅРёРµ СЃС‡РµС‚Р° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+			finance_add_money($userName, pluginGetVariable('fin_smscoin', 'balance_no'), $sum, 'РџРѕРїРѕР»РЅРµРЅРёРµ СЃС‡РµС‚Р° С‡РµСЂРµР· SMSCOIN (' . $sum . ')');
 		}
-		// Записываем лог транзакции
+		// Р—Р°РїРёСЃС‹РІР°РµРј Р»РѕРі С‚СЂР°РЅР·Р°РєС†РёРё
 		$mysql->query('insert into ' . prefix . '_fin_smscoin_history (' . join(", ", array_keys($SCOUT)) . ') values(' . join(', ', array_values($SCOUT)) . ')');
 	}
 }
@@ -220,24 +220,24 @@ function plugin_finsmscoin() {
 
 	global $userROW, $tpl, $template, $SUPRESS_TEMPLATE_SHOW, $smscoin_acceptor, $mysql;
 	if (!$smscoin_acceptor->priceFetch()) {
-		$template['vars']['mainblock'] = 'Не удаётся получить таблицу цен из сервиса SMSCOIN';
+		$template['vars']['mainblock'] = 'РќРµ СѓРґР°С‘С‚СЃСЏ РїРѕР»СѓС‡РёС‚СЊ С‚Р°Р±Р»РёС†Сѓ С†РµРЅ РёР· СЃРµСЂРІРёСЃР° SMSCOIN';
 
 		return;
 	}
 	if (!is_array($userROW)) {
-		$template['vars']['mainblock'] = 'Для пополнения счёта вам необходимо предварительно авторизоваться';
+		$template['vars']['mainblock'] = 'Р”Р»СЏ РїРѕРїРѕР»РЅРµРЅРёСЏ СЃС‡С‘С‚Р° РІР°Рј РЅРµРѕР±С…РѕРґРёРјРѕ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕ Р°РІС‚РѕСЂРёР·РѕРІР°С‚СЊСЃСЏ';
 
 		return;
 	}
 	if ($_REQUEST['mode'] == 'wrap_payment') {
-		// Определяем цену, передаваемую сервису SMSCOIN
+		// РћРїСЂРµРґРµР»СЏРµРј С†РµРЅСѓ, РїРµСЂРµРґР°РІР°РµРјСѓСЋ СЃРµСЂРІРёСЃСѓ SMSCOIN
 		if (!is_array($smscoin_acceptor->priceindex[$_REQUEST['s_payment']])) {
-			$template['vars']['mainblock'] = 'Неверный индекс идентификатора прайс-листа';
+			$template['vars']['mainblock'] = 'РќРµРІРµСЂРЅС‹Р№ РёРЅРґРµРєСЃ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂР° РїСЂР°Р№СЃ-Р»РёСЃС‚Р°';
 
 			return;
 		}
 		$priceRec = $smscoin_acceptor->priceindex[$_REQUEST['s_payment']];
-		// Создаём запись в таблице транзакций
+		// РЎРѕР·РґР°С‘Рј Р·Р°РїРёСЃСЊ РІ С‚Р°Р±Р»РёС†Рµ С‚СЂР°РЅР·Р°РєС†РёР№
 		$mysql->query("insert into " . prefix . "_fin_smscoin_transactions (dt, userid, username, amount, profit) values (now(), " . db_squote($userROW['id']) . ', ' . db_squote($userROW['name']) . ', ' . db_squote($priceRec['price']) . ', ' . db_squote($priceRec['profit']) . ')');
 		$transactionID = $mysql->record("select LAST_INSERT_ID() as id");
 		$params = array(
@@ -253,7 +253,7 @@ function plugin_finsmscoin() {
 		$params['s_sign'] = md5($params['s_purse'] . '::' . $params['s_order_id'] . '::' . $params['s_amount'] . '::' . $params['s_clear_amount'] . '::' . $params['s_description'] . '::' . pluginGetVariable('fin_smscoin', 'secret_key'));
 		$inputs = '';
 		foreach ($params as $k => $v) {
-			$inputs .= '<input type="hidden" name="' . $k . '" value="' . htmlspecialchars($v, null, 'cp1251') . '"/>' . "\n";
+			$inputs .= '<input type="hidden" name="' . $k . '" value="' . htmlspecialchars($v, null, 'UTF-8') . '"/>' . "\n";
 		}
 		$tvars = array('vars' => array('form_url' => pluginGetVariable('fin_smscoin', 'post_url'), 'inputs' => $inputs));
 		$tpl->template('redirect', extras_dir . '/fin_smscoin/tpl');
@@ -261,7 +261,7 @@ function plugin_finsmscoin() {
 		$template['vars']['mainblock'] = $tpl->show('redirect');
 		$SUPRESS_TEMPLATE_SHOW = 1;
 	} else {
-		$template['vars']['mainblock'] = 'Неверный тип запроса';
+		$template['vars']['mainblock'] = 'РќРµРІРµСЂРЅС‹Р№ С‚РёРї Р·Р°РїСЂРѕСЃР°';
 	}
 }
 

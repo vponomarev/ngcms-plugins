@@ -147,7 +147,7 @@ function plugin_nsm_add($tpl_name) {
 		}
 		$o = addNews(array('no.meta' => true, 'no.files' => true, 'no.editurl' => true));
 		if (!$o) {
-			plugin_nsm_addForm($tpl_name, json_encode(arrayCharsetConvert(0, $_POST)));
+			plugin_nsm_addForm($tpl_name, json_encode($_POST));
 		} else {
 			// Show list of current news
 			plugin_nsm();
@@ -225,7 +225,7 @@ function plugin_nsm_edit($tpl_name) {
 		} else {
 			$o = editNews(array('no.meta' => true, 'no.files' => true));
 			if (!$o) {
-				plugin_nsm_editForm($tpl_name, json_encode(arrayCharsetConvert(0, $_POST)));
+				plugin_nsm_editForm($tpl_name, json_encode($_POST));
 			}
 		}
 	}
@@ -666,11 +666,11 @@ function plugin_nsm_editForm($tpl_name = 'news.edit', $retry = '') {
 		// Prepare personal [group] variables
 		$tfVars = array(
 			//  'entries'       =>  $xfEntries[0],
-			'xfGC'       => json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
-			'xfCat'      => json_encode(arrayCharsetConvert(0, $xfCategories)),
-			'xfList'     => json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
-			'xtableConf' => json_encode(arrayCharsetConvert(0, $tclist)),
-			'xtableVal'  => json_encode(arrayCharsetConvert(0, $tlist)),
+			'xfGC'       => json_encode($xf['grp.news']),
+			'xfCat'      => json_encode($xfCategories),
+			'xfList'     => json_encode(array_keys($xf['news'])),
+			'xtableConf' => json_encode($tclist),
+			'xtableVal'  => json_encode($tlist),
 			'xtableHdr'  => $thlist,
 			'xtablecnt'  => count($thlist),
 			'flags'      => array(

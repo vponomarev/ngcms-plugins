@@ -15,10 +15,10 @@ function tagsSuggest($params) {
 	// Check if tag is specified
 	if ($params == '')
 		return array('status' => 1, 'errorCode' => 0, 'data' => array($params, array()));
-	$searchTag = iconv('UTF-8', 'Windows-1251', $params);
+	$searchTag = $params;
 	$output = array();
 	foreach ($mysql->select("select * from " . prefix . "_tags where tag like " . db_squote($searchTag . '%') . " order by posts desc limit 20") as $row) {
-		$output[] = array(iconv('Windows-1251', 'UTF-8', $row['tag']), iconv('Windows-1251', 'UTF-8', $row['posts'] . ' ïîñòîâ'));
+		$output[] = array($row['tag'], $row['posts'] . ' Ğ¿Ğ¾ÑÑ‚Ğ¾Ğ²');
 	}
 
 	return array('status' => 1, 'errorCode' => 0, 'data' => array($params, $output));

@@ -4,9 +4,9 @@ Version: 0.02
 Actions: index_pre; multi_main.php
 Config: config.php
 Type: plugin
-Title: Использование разных main.tpl
-Description: Плагин позволяет Вам настраивать выбор между размыми main.tpl
-Information: Плагин позволяет Вам настраивать выбор между размыми main.tpl
+Title: РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ СЂР°Р·РЅС‹С… main.tpl
+Description: РџР»Р°РіРёРЅ РїРѕР·РІРѕР»СЏРµС‚ Р’Р°Рј РЅР°СЃС‚СЂР°РёРІР°С‚СЊ РІС‹Р±РѕСЂ РјРµР¶РґСѓ СЂР°Р·РјС‹РјРё main.tpl
+Information: РџР»Р°РіРёРЅ РїРѕР·РІРѕР»СЏРµС‚ Р’Р°Рј РЅР°СЃС‚СЂР°РёРІР°С‚СЊ РІС‹Р±РѕСЂ РјРµР¶РґСѓ СЂР°Р·РјС‹РјРё main.tpl
 Author: Ivan Litvinenko (Amarelius)
 Author_URI: http://arnit.com.ua/
 preinstall: no

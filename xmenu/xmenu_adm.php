@@ -10,7 +10,7 @@ class xmenu_adm_categories extends FilterAdminCategories {
 		for ($i = 1; $i <= 9; $i++) {
 			$line .= '<label><input type=checkbox value="1" name="xmenu[' . $i . ']"> <b>' . $i . '</b></label> &nbsp; ';
 		}
-		$tvars['vars']['extend'] .= '<tr><td class="contentEntry1">Номера блоков меню</td><td class="contentEntry2">' . $line . '</td></tr>';
+		$tvars['vars']['extend'] .= '<tr><td class="contentEntry1">РќРѕРјРµСЂР° Р±Р»РѕРєРѕРІ РјРµРЅСЋ</td><td class="contentEntry2">' . $line . '</td></tr>';
 
 		return 1;
 	}
@@ -33,7 +33,7 @@ class xmenu_adm_categories extends FilterAdminCategories {
 		for ($i = 1; $i <= 9; $i++) {
 			$line .= '<label><input type=checkbox value="1" name="xmenu[' . $i . ']"' . (($xmenu{$i - 1} == '#') ? ' checked' : '') . '> <b>' . $i . '</b></label> &nbsp; ';
 		}
-		$tvars['vars']['extend'] .= '<tr><td class="contentEntry1">Номера блоков меню</td><td class="contentEntry2">' . $line . '</td></tr>';
+		$tvars['vars']['extend'] .= '<tr><td class="contentEntry1">РќРѕРјРµСЂР° Р±Р»РѕРєРѕРІ РјРµРЅСЋ</td><td class="contentEntry2">' . $line . '</td></tr>';
 
 		return 1;
 	}

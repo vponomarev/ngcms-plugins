@@ -8,7 +8,7 @@ include_once root . 'plugins/xfields/xfields.php';
 if (!is_array($xf = xf_configLoad()))
 	$xf = array();
 //
-// Управление необходимыми действиями
+// РЈРїСЂР°РІР»РµРЅРёРµ РЅРµРѕР±С…РѕРґРёРјС‹РјРё РґРµР№СЃС‚РІРёСЏРјРё
 $sectionID = $_REQUEST['section'];
 if (!in_array($sectionID, array('news', 'grp.news', 'users', 'grp.users', 'tdata'))) {
 	$sectionID = 'news';
@@ -34,7 +34,7 @@ switch ($_REQUEST['action']) {
 		showList();
 }
 //
-// Показать список полей
+// РџРѕРєР°Р·Р°С‚СЊ СЃРїРёСЃРѕРє РїРѕР»РµР№
 function showList() {
 
 	global $sectionID;
@@ -59,20 +59,20 @@ function showSectionList() {
 	$grpNews = array();
 	foreach ($xf['grp.news'] as $k => $v) {
 		$grpNews[$k] = array(
-			'title'   => iconv('Windows-1251', 'UTF-8', $v['title']),
+			'title'   => $v['title'],
 			'entries' => $v['entries'],
 		);
 	}
 	foreach (array('news', 'grp.news', 'users', 'grp.users', 'tdata') as $cID)
 		$tVars['bclass'][$cID] = ($cID == $sectionID) ? 'btnActive' : 'btnInactive';
 	$tVars['json']['groups.config'] = json_encode($grpNews);
-	$tVars['json']['fields.config'] = json_encode(arrayCharsetConvert(0, $xf['news']));
+	$tVars['json']['fields.config'] = json_encode($xf['news']);
 	$xt = $twig->loadTemplate('plugins/xfields/tpl/groups.tpl');
 	echo $xt->render($tVars);
 }
 
 //
-// Показать список доп. полей
+// РџРѕРєР°Р·Р°С‚СЊ СЃРїРёСЃРѕРє РґРѕРї. РїРѕР»РµР№
 function showFieldList() {
 
 	global $xf, $lang, $twig, $sectionID;
@@ -160,7 +160,7 @@ function showAddEditForm($xdata = '', $eMode = null, $efield = null) {
 		if ($data['type'] == 'select') {
 			if (is_array($data['options']))
 				foreach ($data['options'] as $k => $v) {
-					array_push($sOpts, '<tr><td><input size="12" name="so_data[' . ($fNum) . '][0]" type="text" value="' . ($data['storekeys'] ? htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'cp1251') : '') . '"/></td><td><input type="text" size="55" name="so_data[' . ($fNum) . '][1]" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251') . '"/></td><td><a href="#" onclick="return false;"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+					array_push($sOpts, '<tr><td><input size="12" name="so_data[' . ($fNum) . '][0]" type="text" value="' . ($data['storekeys'] ? htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'UTF-8') : '') . '"/></td><td><input type="text" size="55" name="so_data[' . ($fNum) . '][1]" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8') . '"/></td><td><a href="#" onclick="return false;"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 					$fNum++;
 				}
 		}
@@ -172,7 +172,7 @@ function showAddEditForm($xdata = '', $eMode = null, $efield = null) {
 		if ($data['type'] == 'multiselect') {
 			if (is_array($data['options']))
 				foreach ($data['options'] as $k => $v) {
-					array_push($m_sOpts, '<tr><td><input size="12" name="mso_data[' . ($fNum) . '][0]" type="text" value="' . ($data['storekeys'] ? htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'cp1251') : '') . '"/></td><td><input type="text" size="55" name="mso_data[' . ($fNum) . '][1]" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251') . '"/></td><td><a href="#" onclick="return false;"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
+					array_push($m_sOpts, '<tr><td><input size="12" name="mso_data[' . ($fNum) . '][0]" type="text" value="' . ($data['storekeys'] ? htmlspecialchars($k, ENT_COMPAT | ENT_HTML401, 'UTF-8') : '') . '"/></td><td><input type="text" size="55" name="mso_data[' . ($fNum) . '][1]" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8') . '"/></td><td><a href="#" onclick="return false;"><img src="' . skins_url . '/images/delete.gif" alt="DEL" width="12" height="12" /></a></td></tr>');
 					$fNum++;
 				}
 		}
@@ -183,8 +183,8 @@ function showAddEditForm($xdata = '', $eMode = null, $efield = null) {
 				'sOpts'          => implode("\n", $sOpts),
 				'm_sOpts'        => implode("\n", $m_sOpts),
 				'type_opts'      => $xsel,
-				'storekeys_opts' => '<option value="0">Сохранять значение</option><option value="1"' . (($data['storekeys']) ? ' selected' : '') . '>Сохранять код</option>',
-				'required_opts'  => '<option value="0">Нет</option><option value="1"' . (($data['required']) ? ' selected' : '') . '>Да</option>',
+				'storekeys_opts' => '<option value="0">РЎРѕС…СЂР°РЅСЏС‚СЊ Р·РЅР°С‡РµРЅРёРµ</option><option value="1"' . (($data['storekeys']) ? ' selected' : '') . '>РЎРѕС…СЂР°РЅСЏС‚СЊ РєРѕРґ</option>',
+				'required_opts'  => '<option value="0">РќРµС‚</option><option value="1"' . (($data['required']) ? ' selected' : '') . '>Р”Р°</option>',
 				'images'         => array(
 					'maxCount'    => intval($data['maxCount']),
 					'thumbWidth'  => intval($data['thumbWidth']),
@@ -219,8 +219,8 @@ function showAddEditForm($xdata = '', $eMode = null, $efield = null) {
 		}
 		$tVars = $tVars + array(
 				'type_opts'      => $xsel,
-				'storekeys_opts' => '<option value="0">Сохранять значение</option><option value="1">Сохранять код</option>',
-				'required_opts'  => '<option value="0">Нет</option><option value="1">Да</option>',
+				'storekeys_opts' => '<option value="0">РЎРѕС…СЂР°РЅСЏС‚СЊ Р·РЅР°С‡РµРЅРёРµ</option><option value="1">РЎРѕС…СЂР°РЅСЏС‚СЊ РєРѕРґ</option>',
+				'required_opts'  => '<option value="0">РќРµС‚</option><option value="1">Р”Р°</option>',
 				'select_options' => '',
 				'images' => array(
 					'maxCount'    => '1',
@@ -435,7 +435,7 @@ function doAddEdit() {
 	}
 	// Now we should update table `_news` structure and content
 	if (!($tableName = xf_getTableBySectionID($sectionID))) {
-		print 'Ошибка: неизвестная секция/блок (' . $sectionID . ')';
+		print 'РћС€РёР±РєР°: РЅРµРёР·РІРµСЃС‚РЅР°СЏ СЃРµРєС†РёСЏ/Р±Р»РѕРє (' . $sectionID . ')';
 
 		return;
 	}

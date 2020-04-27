@@ -4,7 +4,7 @@
 			{{ entry }}
 		{% endfor %}
 		<tr>
-			<td width="50%" class="contentEntry1">Отображение<br/>
+			<td width="50%" class="contentEntry1">РћС‚РѕР±СЂР°Р¶РµРЅРёРµ<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
@@ -17,73 +17,73 @@
 
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Название форума:<br/>
+			<td width="50%" class="contentEntry1">РќР°Р·РІР°РЅРёРµ С„РѕСЂСѓРјР°:<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<input type="text" size="80" name="forum_name" value="{{ forum_name }}"/></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Описание форума<br/>
+			<td width="50%" class="contentEntry1">РћРїРёСЃР°РЅРёРµ С„РѕСЂСѓРјР°<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<textarea name="forum_description" cols="77" rows="4"/>{{ forum_description }}</textarea></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Ключевые слова<br/>
+			<td width="50%" class="contentEntry1">РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<textarea name="forum_keywords" cols="77" rows="4"/>{{ forum_keywords }}</textarea></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Закрыть на пароль<br/>
+			<td width="50%" class="contentEntry1">Р—Р°РєСЂС‹С‚СЊ РЅР° РїР°СЂРѕР»СЊ<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<input type="password" size="80" name="forum_lock_passwd" value="{{ forum_lock_passwd }}"/></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Редирект<br/>
+			<td width="50%" class="contentEntry1">Р РµРґРёСЂРµРєС‚<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<input type="password" size="80" name="forum_redirect_url" value="{{ forum_redirect_url }}"/></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Модераторы<br/>
-				<small>Укажите логины пользователей через запятую</small>
+			<td width="50%" class="contentEntry1">РњРѕРґРµСЂР°С‚РѕСЂС‹<br/>
+				<small>РЈРєР°Р¶РёС‚Рµ Р»РѕРіРёРЅС‹ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ С‡РµСЂРµР· Р·Р°РїСЏС‚СѓСЋ</small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<input type="text" size="80" name="forum_moderators" value="{{ forum_moderators }}"/></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Создавать темы</td>
+			<td width="50%" class="contentEntry1">РЎРѕР·РґР°РІР°С‚СЊ С‚РµРјС‹</td>
 			<td width="50%" class="contentEntry2">{{ m_topic_send }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Редактировать тему</td>
+			<td width="50%" class="contentEntry1">Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ С‚РµРјСѓ</td>
 			<td width="50%" class="contentEntry2">{{ m_topic_modify }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Закрывать тему</td>
+			<td width="50%" class="contentEntry1">Р—Р°РєСЂС‹РІР°С‚СЊ С‚РµРјСѓ</td>
 			<td width="50%" class="contentEntry2">{{ m_topic_closed }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Удалять тему</td>
+			<td width="50%" class="contentEntry1">РЈРґР°Р»СЏС‚СЊ С‚РµРјСѓ</td>
 			<td width="50%" class="contentEntry2">{{ m_topic_remove }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Отвечать в темах</td>
+			<td width="50%" class="contentEntry1">РћС‚РІРµС‡Р°С‚СЊ РІ С‚РµРјР°С…</td>
 			<td width="50%" class="contentEntry2">{{ m_post_send }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Редактировать сообщения</td>
+			<td width="50%" class="contentEntry1">Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ</td>
 			<td width="50%" class="contentEntry2">{{ m_post_modify }}</td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Удалять сообщения</td>
+			<td width="50%" class="contentEntry1">РЈРґР°Р»СЏС‚СЊ СЃРѕРѕР±С‰РµРЅРёСЏ</td>
 			<td width="50%" class="contentEntry2">{{ m_post_remove }}</td>
 		</tr>
 	</table>
@@ -95,114 +95,114 @@
 		</ul>
 		{% for entry in list_group %}
 			<div id="userTabs-{{ entry.group_id }}">
-				<div><i>Управление правами группы пользователей: <b>{{ entry.group_name }}</b></i></div>
+				<div><i>РЈРїСЂР°РІР»РµРЅРёРµ РїСЂР°РІР°РјРё РіСЂСѓРїРїС‹ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№: <b>{{ entry.group_name }}</b></i></div>
 				<br/>
 				<div class="pconf">
 					<h1></h1>
 
-					<h2>Настройка прав</h2>
+					<h2>РќР°СЃС‚СЂРѕР№РєР° РїСЂР°РІ</h2>
 
 					<table width="100%" class="content">
 						<thead>
 						<tr class="contHead">
-							<td><b>Действие</b></td>
-							<td><b>Описание</b></td>
-							<td width="90"><b>Доступ</b></td>
+							<td><b>Р”РµР№СЃС‚РІРёРµ</b></td>
+							<td><b>РћРїРёСЃР°РЅРёРµ</b></td>
+							<td width="90"><b>Р”РѕСЃС‚СѓРї</b></td>
 							</td>
 						</thead>
 						<tr class="contentEntry1">
-							<td><strong>Просматривать форумы</strong></td>
+							<td><strong>РџСЂРѕСЃРјР°С‚СЂРёРІР°С‚СЊ С„РѕСЂСѓРјС‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.forum_read }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Просматривать темы</strong></td>
+							<td><strong>РџСЂРѕСЃРјР°С‚СЂРёРІР°С‚СЊ С‚РµРјС‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.topic_read }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Добавлять темы</strong></td>
+							<td><strong>Р”РѕР±Р°РІР»СЏС‚СЊ С‚РµРјС‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.topic_send }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Редактирова темы</strong></td>
+							<td><strong>Р РµРґР°РєС‚РёСЂРѕРІР° С‚РµРјС‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.topic_modify }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Редактировать свои темы</strong></td>
+							<td><strong>Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ СЃРІРѕРё С‚РµРјС‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.topic_modify_your }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Закрывать тему</strong></td>
+							<td><strong>Р—Р°РєСЂС‹РІР°С‚СЊ С‚РµРјСѓ</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.topic_closed }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Закрывать свою тему</strong></td>
+							<td><strong>Р—Р°РєСЂС‹РІР°С‚СЊ СЃРІРѕСЋ С‚РµРјСѓ</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.topic_closed_your }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Удалять темы</strong></td>
+							<td><strong>РЈРґР°Р»СЏС‚СЊ С‚РµРјС‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.topic_remove }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Удалять свои темы</strong></td>
+							<td><strong>РЈРґР°Р»СЏС‚СЊ СЃРІРѕРё С‚РµРјС‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.topic_remove_your }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Добавлять посты</strong></td>
+							<td><strong>Р”РѕР±Р°РІР»СЏС‚СЊ РїРѕСЃС‚С‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.post_send }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Редактировать посты</strong></td>
+							<td><strong>Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РїРѕСЃС‚С‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.post_modify }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Редактировать свои посты</strong></td>
+							<td><strong>Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ СЃРІРѕРё РїРѕСЃС‚С‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.post_modify_your }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Удалять посты</strong></td>
+							<td><strong>РЈРґР°Р»СЏС‚СЊ РїРѕСЃС‚С‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.post_remove }}
 							</td>
 						</tr>
 						<tr class="contentEntry1">
-							<td><strong>Удалять свои посты</strong></td>
+							<td><strong>РЈРґР°Р»СЏС‚СЊ СЃРІРѕРё РїРѕСЃС‚С‹</strong></td>
 							<td>-</td>
 							<td>
 								{{ entry.post_remove_your }}
@@ -225,7 +225,7 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input type="submit" name="submit" value="Сохранить форум" class="button"/></td>
+				<input type="submit" name="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ С„РѕСЂСѓРј" class="button"/></td>
 		</tr>
 	</table>
 </form>

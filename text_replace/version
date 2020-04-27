@@ -1,10 +1,10 @@
 ID: text_replace
-Name: Подмена слов на ссылки
+Name: РџРѕРґРјРµРЅР° СЃР»РѕРІ РЅР° СЃСЃС‹Р»РєРё
 Version: 0.01
 Actions: news; text_replace.php
 Config: config.php
 Type: plugin
-Title: Подмена слов на ссылки
+Title: РџРѕРґРјРµРЅР° СЃР»РѕРІ РЅР° СЃСЃС‹Р»РєРё
 Description: -
 Information: -
 Author: Nail' R. Davydov (ROZARD)

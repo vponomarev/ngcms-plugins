@@ -17,23 +17,23 @@ function plugin_nsm_install($action) {
 	// Apply requested action
 	switch ($action) {
 		case 'confirm':
-			generate_install_page('nsm', "Óñòàíîâêà NSM");
+			generate_install_page('nsm', "Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° NSM");
 			break;
 		case 'autoapply':
 		case 'apply':
 			$ULIB = new urlLibrary();
 			$ULIB->loadConfig();
 			$ULIB->registerCommand('nsm', '',
-				array('descr' => array('russian' => 'Ñïèñîê'))
+				array('descr' => array('russian' => 'Ð¡Ð¿Ð¸ÑÐ¾Ðº'))
 			);
 			$ULIB->registerCommand('nsm', 'add',
-				array('descr' => array('russian' => 'Äîáàâëåíèå'))
+				array('descr' => array('russian' => 'Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ'))
 			);
 			$ULIB->registerCommand('nsm', 'edit',
-				array('descr' => array('russian' => 'Ðåäàêòèðîâàíèå'))
+				array('descr' => array('russian' => 'Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ'))
 			);
 			$ULIB->registerCommand('nsm', 'del',
-				array('descr' => array('russian' => 'Óäàëåíèå'))
+				array('descr' => array('russian' => 'Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ'))
 			);
 			$ULIB->saveConfig();
 			plugin_mark_installed('nsm');

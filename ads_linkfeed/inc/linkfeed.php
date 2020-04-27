@@ -2,7 +2,7 @@
 
 /* LinkFeed script version 0.4.1
  * + SMALL FIX (c) Vitaly Ponomarev
- *   Äîáàâëåíà ïåðåìåííàÿ db_dir - ïóòü õðàíåíèÿ ôàéëà äàííûõ
+ *   Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð° Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ð°Ñ db_dir - Ð¿ÑƒÑ‚ÑŒ Ñ…Ñ€Ð°Ð½ÐµÐ½Ð¸Ñ Ñ„Ð°Ð¹Ð»Ð° Ð´Ð°Ð½Ð½Ñ‹Ñ…
 */
 
 class LinkfeedClient {
@@ -89,7 +89,7 @@ class LinkfeedClient {
 		) {
 			$this->lc_force_show_code = true;
 		}
-		// Êóäà êëàñòü äàííûå
+		// ÐšÑƒÐ´Ð° ÐºÐ»Ð°ÑÑ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ
 		if (isset($options['db_dir']) && is_dir($options['db_dir'])) {
 			$this->lc_db_dir = $options['db_dir'];
 		} else {

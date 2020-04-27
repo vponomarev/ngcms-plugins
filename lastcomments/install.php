@@ -10,14 +10,14 @@ function plugin_lastcomments_install($action) {
 		array(
 			'vars'  =>
 				array(),
-			'descr' => array('russian' => 'Страница с последними комментариями'),
+			'descr' => array('russian' => 'РЎС‚СЂР°РЅРёС†Р° СЃ РїРѕСЃР»РµРґРЅРёРјРё РєРѕРјРјРµРЅС‚Р°СЂРёСЏРјРё'),
 		)
 	);
 	$ULIB->registerCommand('lastcomments', 'rss',
 		array(
 			'vars'  =>
 				array(),
-			'descr' => array('russian' => 'Rss лента последних комментариев'),
+			'descr' => array('russian' => 'Rss Р»РµРЅС‚Р° РїРѕСЃР»РµРґРЅРёС… РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ'),
 		)
 	);
 	// Apply requested action

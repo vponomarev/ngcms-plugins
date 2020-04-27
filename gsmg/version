@@ -11,9 +11,9 @@ Config: config.php
 Install: install.php
 Deinstall: uninstall.php
 Type: plugin
-Description: Генерация карты сайта для Google
+Description: Р“РµРЅРµСЂР°С†РёСЏ РєР°СЂС‚С‹ СЃР°Р№С‚Р° РґР»СЏ Google
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
-Title: Генератор Google SiteMap
-Information: Позволяет создавать SiteMap для вашего сайта
+Title: Р“РµРЅРµСЂР°С‚РѕСЂ Google SiteMap
+Information: РџРѕР·РІРѕР»СЏРµС‚ СЃРѕР·РґР°РІР°С‚СЊ SiteMap РґР»СЏ РІР°С€РµРіРѕ СЃР°Р№С‚Р°
 Library: common; lib/common.php

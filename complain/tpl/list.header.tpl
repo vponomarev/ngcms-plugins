@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title>Управление инцидентами</title>
+	<title>РЈРїСЂР°РІР»РµРЅРёРµ РёРЅС†РёРґРµРЅС‚Р°РјРё</title>
 	<style type="text/css">
 		body {
 			font-family: verdana, arial;
@@ -60,19 +60,19 @@
 	}
 </script>
 
-<h1>Список активных инцидентов</h1>
+<h1>РЎРїРёСЃРѕРє Р°РєС‚РёРІРЅС‹С… РёРЅС†РёРґРµРЅС‚РѕРІ</h1>
 
 <form action="{form_url}" name="myform" id="myform" method="post">
 	<table id="mt" width="100%" cellspacing=1 cellpadding=1>
 		<thead>
 		<tr>
-			<td>Дата</td>
-			<td>Новость</td>
-			<td>Ошибка</td>
-			<td>Автор новости</td>
-			<td>Автор инцидента</td>
-			<td>Назначена на</td>
-			<td>Статус</td>
+			<td>Р”Р°С‚Р°</td>
+			<td>РќРѕРІРѕСЃС‚СЊ</td>
+			<td>РћС€РёР±РєР°</td>
+			<td>РђРІС‚РѕСЂ РЅРѕРІРѕСЃС‚Рё</td>
+			<td>РђРІС‚РѕСЂ РёРЅС†РёРґРµРЅС‚Р°</td>
+			<td>РќР°Р·РЅР°С‡РµРЅР° РЅР°</td>
+			<td>РЎС‚Р°С‚СѓСЃ</td>
 			<td><input type="checkbox" name="checkall" id="btnCheckAll" onclick="toggleList();"/></td>
 		</tr>
 		</thead>
@@ -81,20 +81,20 @@
 		</tbody>
 	</table>
 	<br/>
-	<b><u>Действия с выделенными инцидентами:</u></b><br/>
+	<b><u>Р”РµР№СЃС‚РІРёСЏ СЃ РІС‹РґРµР»РµРЅРЅС‹РјРё РёРЅС†РёРґРµРЅС‚Р°РјРё:</u></b><br/>
 	<table id="st" cellspacing="0" cellpadding="0">
 		<tr>
-			<td><label><input type="checkbox" name="setowner" value="1"/> Назначить на меня</label></td>
+			<td><label><input type="checkbox" name="setowner" value="1"/> РќР°Р·РЅР°С‡РёС‚СЊ РЅР° РјРµРЅСЏ</label></td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td><label><input type="checkbox" name="setstatus" value="1"/> Изменить статус на</label></td>
+			<td><label><input type="checkbox" name="setstatus" value="1"/> РР·РјРµРЅРёС‚СЊ СЃС‚Р°С‚СѓСЃ РЅР°</label></td>
 			<td>&nbsp; &nbsp; <select name="newstatus">
 					{status_options}
 				</select></td>
 		</tr>
 	</table>
-	<input type="submit" value="Выполнить изменения"/>
+	<input type="submit" value="Р’С‹РїРѕР»РЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ"/>
 </form>
 <br/>
 </body>

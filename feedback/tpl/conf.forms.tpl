@@ -2,11 +2,11 @@
 
 <table width="100%">
 	<tr align="left">
-		<td class="contentHead"><b>Код</b></td>
-		<td class="contentHead"><b>ID формы</b></td>
-		<td class="contentHead"><b>Название формы</b></td>
-		<td class="contentHead"><b>Привязка к новостям</b></td>
-		<td class="contentHead"><b>Активна</b></td>
+		<td class="contentHead"><b>РљРѕРґ</b></td>
+		<td class="contentHead"><b>ID С„РѕСЂРјС‹</b></td>
+		<td class="contentHead"><b>РќР°Р·РІР°РЅРёРµ С„РѕСЂРјС‹</b></td>
+		<td class="contentHead"><b>РџСЂРёРІСЏР·РєР° Рє РЅРѕРІРѕСЃС‚СЏРј</b></td>
+		<td class="contentHead"><b>РђРєС‚РёРІРЅР°</b></td>
 		<td class="contentHead">&nbsp;</td>
 	</tr>
 	{% for entry in entries %}
@@ -25,7 +25,7 @@
 	<tr>
 		<td></td>
 		<td colspan="5" style="text-align: left; padding: 10px 10px 0 0;">
-			<a href="?mod=extra-config&plugin=feedback&action=addform">Создать новую форму</a>
+			<a href="?mod=extra-config&plugin=feedback&action=addform">РЎРѕР·РґР°С‚СЊ РЅРѕРІСѓСЋ С„РѕСЂРјСѓ</a>
 		</td>
 	</tr>
 </table>

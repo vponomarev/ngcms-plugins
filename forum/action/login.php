@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -27,7 +27,7 @@ $username = isset($_REQUEST['username']) ? secureinput($_REQUEST['username']) : 
 $password = isset($_REQUEST['password']) ? secureinput($_REQUEST['password']) : '';
 $password = EncodePassword($password);
 if (is_array($userROW))
-	return $output = information('Вы и так уже авторизованы', $title = 'Информация');
+	return $output = information('Р’С‹ Рё С‚Р°Рє СѓР¶Рµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅС‹', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if (isset($_REQUEST['submit'])) {
 	if (!empty($_REQUEST['forum_captcha_sess'])) {
 		$sql = 'select * from ' . prefix . '_users WHERE name = ' . securemysql($username) . ' and pass=' . securemysql($password) . ' limit 1';
@@ -35,25 +35,25 @@ if (isset($_REQUEST['submit'])) {
 		if (isset($row) && $row) {
 			$auth_db->save_auth($row);
 
-			return $output = announcement_forum('Вы зашли на форум', link_home(), 2, true);
+			return $output = announcement_forum('Р’С‹ Р·Р°С€Р»Рё РЅР° С„РѕСЂСѓРј', link_home(), 2, true);
 		} else {
-			$error_text[] = 'Неправельный логин или пароль';
+			$error_text[] = 'РќРµРїСЂР°РІРµР»СЊРЅС‹Р№ Р»РѕРіРёРЅ РёР»Рё РїР°СЂРѕР»СЊ';
 			add_banned_users();
 			if ($ban[$ip] == '1')
-				$error_text[] = 'Ошибки наказумы))<br /> осталось 2 попытки!!!';
+				$error_text[] = 'РћС€РёР±РєРё РЅР°РєР°Р·СѓРјС‹))<br /> РѕСЃС‚Р°Р»РѕСЃСЊ 2 РїРѕРїС‹С‚РєРё!!!';
 			elseif ($ban[$ip] == '2')
-				$error_text[] = 'Ошибки наказумы))<br /> Кажется вы редиска!!!';
+				$error_text[] = 'РћС€РёР±РєРё РЅР°РєР°Р·СѓРјС‹))<br /> РљР°Р¶РµС‚СЃСЏ РІС‹ СЂРµРґРёСЃРєР°!!!';
 			elseif ($ban[$ip] == '3')
-				$error_text[] = 'К чему шел то и получил!!! <br />Бан нах)))';
+				$error_text[] = 'Рљ С‡РµРјСѓ С€РµР» С‚Рѕ Рё РїРѕР»СѓС‡РёР»!!! <br />Р‘Р°РЅ РЅР°С…)))';
 		}
 	} else {
 		add_banned_users();
 		if ($ban[$ip] == '1')
-			return $output = information('Уходи отсюда, по хорошему)))<br /> У вас осталась 2 попытки!!!');
+			return $output = information('РЈС…РѕРґРё РѕС‚СЃСЋРґР°, РїРѕ С…РѕСЂРѕС€РµРјСѓ)))<br /> РЈ РІР°СЃ РѕСЃС‚Р°Р»Р°СЃСЊ 2 РїРѕРїС‹С‚РєРё!!!');
 		elseif ($ban[$ip] == '2')
-			return $output = information('Тырдец тебе будет)))<br /> У вас осталась 1 попытка!!!');
+			return $output = information('РўС‹СЂРґРµС† С‚РµР±Рµ Р±СѓРґРµС‚)))<br /> РЈ РІР°СЃ РѕСЃС‚Р°Р»Р°СЃСЊ 1 РїРѕРїС‹С‚РєР°!!!');
 		elseif ($ban[$ip] == '3')
-			return $output = information('А вы были настойчивы)))<br /> Вы заработали бан!!!');
+			return $output = information('Рђ РІС‹ Р±С‹Р»Рё РЅР°СЃС‚РѕР№С‡РёРІС‹)))<br /> Р’С‹ Р·Р°СЂР°Р±РѕС‚Р°Р»Рё Р±Р°РЅ!!!');
 	}
 }
 if (isset($error_text) && is_array($error_text))

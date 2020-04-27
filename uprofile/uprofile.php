@@ -405,7 +405,7 @@ function uprofile_rpc_manage($params) {
 
 	$uprofileOutput = uprofile_editForm(true);
 
-	return array('status' => 1, 'errorCode' => 0, 'data' => arrayCharsetConvert(0, $uprofileOutput));
+	return array('status' => 1, 'errorCode' => 0, 'data' => $uprofileOutput);
 }
 
 rpcRegisterFunction('plugin.uprofile.editForm', 'uprofile_rpc_manage');

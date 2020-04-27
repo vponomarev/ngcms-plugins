@@ -42,7 +42,7 @@
 <tr>
 	<td width="100%">
 		<div class="xmenu">
-			<span id="go_0" class="active" onclick="xmenu_click(0);">Категории</span>
+			<span id="go_0" class="active" onclick="xmenu_click(0);">РљР°С‚РµРіРѕСЂРёРё</span>
 			<span id="go_1" onclick="xmenu_click(1);">1</span>
 			<span id="go_2" onclick="xmenu_click(2);">2</span>
 			<span id="go_3" onclick="xmenu_click(3);">3</span>

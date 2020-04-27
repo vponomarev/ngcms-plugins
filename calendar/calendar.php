@@ -46,7 +46,7 @@ function plug_calgen($month, $year, $overrideTemplateName = false, $categoryList
 		}
 	}
 	LoadPluginLang('calendar', 'main');
-	// Ðàçíûå çàïðîñû â çàâèñèìîñòè îò óêàçàíèÿ êàòåãîðèé
+	// Ð Ð°Ð·Ð½Ñ‹Ðµ Ð·Ð°Ð¿Ñ€Ð¾ÑÑ‹ Ð² Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚Ð¸ Ð¾Ñ‚ ÑƒÐºÐ°Ð·Ð°Ð½Ð¸Ñ ÐºÐ°Ñ‚ÐµÐ³Ð¾Ñ€Ð¸Ð¹
 	if (!is_array($categoryList)) {
 		$categoryList = intval($categoryList) ? array(intval($categoryList)) : array();
 	}
@@ -170,7 +170,7 @@ function plug_calgen($month, $year, $overrideTemplateName = false, $categoryList
 	$twigLoader->setConversion($tpath['entries'] . 'entries.tpl', $conversionConfigE);
 	// AJAX flag
 	$tVars['flags']['ajax'] = $flagAJAX ? 1 : 0;
-	// Ïðåäçàãðóçêà øàáëîíà entries [ ÷òîáû îòðàáîòàë setConversion ] ïðè åãî íàëè÷èè
+	// ÐŸÑ€ÐµÐ´Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° ÑˆÐ°Ð±Ð»Ð¾Ð½Ð° entries [ Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¾Ñ‚Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ð» setConversion ] Ð¿Ñ€Ð¸ ÐµÐ³Ð¾ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ð¸
 	if (isset($tpath['entries']))
 		$twig->loadTemplate($tpath['entries'] . 'entries.tpl');
 	$xt = $twig->loadTemplate($tpath['calendar'] . 'calendar.tpl');
@@ -249,7 +249,7 @@ function calendar_rpc_manage($params) {
 	$params['flagAJAX'] = true;
 	$calendarOutput = plugin_calendar_showTwig($params);
 
-	return array('status' => 1, 'errorCode' => 0, 'data' => arrayCharsetConvert(0, $calendarOutput));
+	return array('status' => 1, 'errorCode' => 0, 'data' => $calendarOutput);
 }
 
 rpcRegisterFunction('plugin.calendar.show', 'calendar_rpc_manage');

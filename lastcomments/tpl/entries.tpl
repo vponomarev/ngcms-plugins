@@ -7,10 +7,10 @@
 		<small>({date})</small>
 		<br/>
 		[answer]
-		<div>Ответ от <b>{name}</b><br/>{answer}</div>
+		<div>РћС‚РІРµС‚ РѕС‚ <b>{name}</b><br/>{answer}</div>
 		[/answer]<br/>
 		<small>// <a href="{link}" title="{title}">{title}</a></small>
 		<br/>
-		Автор [profile]<a target="_blank" href="{author_link}">[/profile]{author}[profile]</a>[/profile]
+		РђРІС‚РѕСЂ [profile]<a target="_blank" href="{author_link}">[/profile]{author}[profile]</a>[/profile]
 	</div>
 </div><br/>

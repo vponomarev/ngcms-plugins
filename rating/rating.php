@@ -74,7 +74,7 @@ function rating_show($newsID, $rating, $votes) {
 function plugin_rating_screen() {
 
 	global $SUPRESS_TEMPLATE_SHOW, $template;
-	@header('Content-type: text/html; charset="windows-1251"');
+	@header('Content-type: text/html; charset="UTF-8"');
 	if ($_REQUEST['post_id']) {
 		$template['vars']['mainblock'] = plugin_rating_update();
 		$SUPRESS_TEMPLATE_SHOW = 1;
@@ -84,7 +84,7 @@ function plugin_rating_screen() {
 }
 
 //
-// î®´Ï‚‡ ≠Æ¢Æ·‚•© (§´Ô ØÆ™†ß† ‡•©‚®≠£†)
+// –§–∏–ª—å—Ç—Ä –Ω–æ–≤–æ—Å—Ç–µ–π (–¥–ª—è –ø–æ–∫–∞–∑–∞ —Ä–µ–π—Ç–∏–Ω–≥–∞)
 //
 class RatingNewsFilter extends NewsFilter {
 

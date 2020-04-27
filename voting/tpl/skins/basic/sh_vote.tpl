@@ -2,9 +2,9 @@
 	<center><b>{votename}</b></center>
 	<br/>
 	[votedescr]
-	<small>Описание: {votedescr}</small>
+	<small>РћРїРёСЃР°РЅРёРµ: {votedescr}</small>
 	<br/>[/votedescr]
 	{votelines}
 	<br/>
-	Всего проголосовало: {vcount}
+	Р’СЃРµРіРѕ РїСЂРѕРіРѕР»РѕСЃРѕРІР°Р»Рѕ: {vcount}
 </div>

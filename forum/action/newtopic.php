@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -27,16 +27,16 @@ if (checkLinkAvailable('forum', 'newtopic')) {
 		return redirect_forum(link_add_topic($id));
 }
 if (empty($id))
-	return $output = information('id раздела не указан не передан', $title = 'Информация');
+	return $output = information('id СЂР°Р·РґРµР»Р° РЅРµ СѓРєР°Р·Р°РЅ РЅРµ РїРµСЂРµРґР°РЅ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if (!$rows = $mysql->record('SELECT id as fid, moderators FROM ' . prefix . '_forum_forums WHERE id = ' . securemysql($id) . ' LIMIT 1'))
-	return $output = information('Этого раздела не существует', $title = 'Информация');
+	return $output = information('Р­С‚РѕРіРѕ СЂР°Р·РґРµР»Р° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($FORUM_PS[$rows['fid']]['topic_send'] || moder_perm($rows['fid'], 'topic_send', $rows['moderators'])) {
 	$subject = isset($_REQUEST['subject']) ? secureinput($_REQUEST['subject']) : '';
 	$message = isset($_REQUEST['message']) ? secureinput($_REQUEST['message']) : '';
 	$time = time() + ($config['date_adjust'] * 60);
 	if (isset($_REQUEST['submit'])) {
-		if (empty($subject)) $error_text[] = 'Тема пуста';
-		if (empty($message)) $error_text[] = 'Сообщение пусто';
+		if (empty($subject)) $error_text[] = 'РўРµРјР° РїСѓСЃС‚Р°';
+		if (empty($message)) $error_text[] = 'РЎРѕРѕР±С‰РµРЅРёРµ РїСѓСЃС‚Рѕ';
 		if (empty($error_text)) {
 			$mysql->query('insert into ' . prefix . '_forum_topics (
 						author,
@@ -78,7 +78,7 @@ if ($FORUM_PS[$rows['fid']]['topic_send'] || moder_perm($rows['fid'], 'topic_sen
 			$post_id = $mysql->lastid('forum_posts');
 			update_forum($topic_id, $subject, 1, $time, $post_id, $userROW['name'], $userROW['id'], $id);
 			$mysql->query('UPDATE ' . prefix . '_forum_topics SET l_post = ' . securemysql($post_id) . ' WHERE id = ' . securemysql($topic_id) . ' LIMIT 1');
-			//Под удаление
+			//РџРѕРґ СѓРґР°Р»РµРЅРёРµ
 			update_users_mes();
 			if (isset($_REQUEST['subscribe']))
 				subscribe($userROW['id'], $id);
@@ -106,7 +106,7 @@ if ($FORUM_PS[$rows['fid']]['topic_send'] || moder_perm($rows['fid'], 'topic_sen
 					');
 			generate_index_cache(true);
 
-			return $output = announcement_forum('Данные внесены', link_forum($id), 2);
+			return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_forum($id), 2);
 		}
 	}
 	$error_input = '';
@@ -131,7 +131,7 @@ if ($FORUM_PS[$rows['fid']]['topic_send'] || moder_perm($rows['fid'], 'topic_sen
 	);
 	$output = $xt->render($tVars);
 } else {
-	return $output = information('У вас нет прав доступа', $title = 'Информация');
+	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 }
 	
 	

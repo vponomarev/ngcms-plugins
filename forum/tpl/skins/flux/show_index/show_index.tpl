@@ -5,10 +5,10 @@
 			<table cellspacing="0">
 				<thead>
 				<tr>
-					<th class="tcl" scope="col">Форум</th>
-					<th class="tc2" scope="col">Темы</th>
-					<th class="tc3" scope="col">Сообщений</th>
-					<th class="tcr" scope="col">Последнее сообщение</th>
+					<th class="tcl" scope="col">Р¤РѕСЂСѓРј</th>
+					<th class="tc2" scope="col">РўРµРјС‹</th>
+					<th class="tc3" scope="col">РЎРѕРѕР±С‰РµРЅРёР№</th>
+					<th class="tcr" scope="col">РџРѕСЃР»РµРґРЅРµРµ СЃРѕРѕР±С‰РµРЅРёРµ</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -18,12 +18,12 @@
 					<tr>
 						<td class="tcl">
 							<div class="intd">
-								Нет форума
+								РќРµС‚ С„РѕСЂСѓРјР°
 							</div>
 						</td>
 						<td class='tc2'>0</td>
 						<td class='tc3'>0</td>
-						<td class='tcr'>Нет сообщений</td>
+						<td class='tcr'>РќРµС‚ СЃРѕРѕР±С‰РµРЅРёР№</td>
 					</tr>
 				{% endif %}
 				</tbody>

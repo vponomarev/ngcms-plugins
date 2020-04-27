@@ -3,14 +3,14 @@
 ;
 
 ID: subscribe_comments
-Name: Подписка на комментарии
+Name: РџРѕРґРїРёСЃРєР° РЅР° РєРѕРјРјРµРЅС‚Р°СЂРёРё
 Version: 0.1
 Acts: ppages, comments, news_short, news_full
 File: subscribe_comments.php
 Config: config.php
 Type: plugin
-Title: Подписка на комментарии
-Description: Позволяет подписываться на комментарии
+Title: РџРѕРґРїРёСЃРєР° РЅР° РєРѕРјРјРµРЅС‚Р°СЂРёРё
+Description: РџРѕР·РІРѕР»СЏРµС‚ РїРѕРґРїРёСЃС‹РІР°С‚СЊСЃСЏ РЅР° РєРѕРјРјРµРЅС‚Р°СЂРёРё
 Author: Rostunov Sergey
 Author_URI: http://rostunov.com
 Install: install.php

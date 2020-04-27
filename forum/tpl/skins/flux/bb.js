@@ -17,18 +17,18 @@ var is_win = ((clientPC.indexOf("win") != -1) || (clientPC.indexOf("16bit") != -
 var is_mac = (clientPC.indexOf("mac") != -1);
 
 // Helpline messages
-h_help = "Подсказка: Можно быстро применить стили к выделенному тексту"
-b_help = "Жирный текст: [b]текст[/b]";
-i_help = "Наклонный текст: [i]текст[/i]";
-u_help = "Подчёркнутый текст: [u]текст[/u]";
-ss_help = "Зачеркнутый текст: [s]текст[/s]";
-q_help = "Цитата: [quote]текст[/quote]";
-p_help = "Код PHP: [code=php]код[/code=php]";
-m_help = "Вставить картинку: [img]http://image_url[/img]";
-w_help = "Вставить ссылку: [url]http://url[/url] или [url=http://url]текст ссылки[/url]";
-a_help = "Закрыть все открытые теги bbCode";
-s_help = "Цвет шрифта: [color=red]текст[/color]";
-si_help = "Размер текста: [size=15]текст[/size]";
+h_help = "РџРѕРґСЃРєР°Р·РєР°: РњРѕР¶РЅРѕ Р±С‹СЃС‚СЂРѕ РїСЂРёРјРµРЅРёС‚СЊ СЃС‚РёР»Рё Рє РІС‹РґРµР»РµРЅРЅРѕРјСѓ С‚РµРєСЃС‚Сѓ"
+b_help = "Р–РёСЂРЅС‹Р№ С‚РµРєСЃС‚: [b]С‚РµРєСЃС‚[/b]";
+i_help = "РќР°РєР»РѕРЅРЅС‹Р№ С‚РµРєСЃС‚: [i]С‚РµРєСЃС‚[/i]";
+u_help = "РџРѕРґС‡С‘СЂРєРЅСѓС‚С‹Р№ С‚РµРєСЃС‚: [u]С‚РµРєСЃС‚[/u]";
+ss_help = "Р—Р°С‡РµСЂРєРЅСѓС‚С‹Р№ С‚РµРєСЃС‚: [s]С‚РµРєСЃС‚[/s]";
+q_help = "Р¦РёС‚Р°С‚Р°: [quote]С‚РµРєСЃС‚[/quote]";
+p_help = "РљРѕРґ PHP: [code=php]РєРѕРґ[/code=php]";
+m_help = "Р’СЃС‚Р°РІРёС‚СЊ РєР°СЂС‚РёРЅРєСѓ: [img]http://image_url[/img]";
+w_help = "Р’СЃС‚Р°РІРёС‚СЊ СЃСЃС‹Р»РєСѓ: [url]http://url[/url] РёР»Рё [url=http://url]С‚РµРєСЃС‚ СЃСЃС‹Р»РєРё[/url]";
+a_help = "Р—Р°РєСЂС‹С‚СЊ РІСЃРµ РѕС‚РєСЂС‹С‚С‹Рµ С‚РµРіРё bbCode";
+s_help = "Р¦РІРµС‚ С€СЂРёС„С‚Р°: [color=red]С‚РµРєСЃС‚[/color]";
+si_help = "Р Р°Р·РјРµСЂ С‚РµРєСЃС‚Р°: [size=15]С‚РµРєСЃС‚[/size]";
 
 // Define the bbCode tags
 bbcode = new Array();
@@ -87,7 +87,7 @@ function checkForm() {
 	formErrors = false;
 
 	if (document.getElementById("sendForm").message.value.length < 2) {
-		formErrors = "Вы должны ввести текст сообщения";
+		formErrors = "Р’С‹ РґРѕР»Р¶РЅС‹ РІРІРµСЃС‚Рё С‚РµРєСЃС‚ СЃРѕРѕР±С‰РµРЅРёСЏ";
 	}
 
 	if (formErrors) {
@@ -326,7 +326,7 @@ function getFile(n) {
 		}
 		if (ok == 1) {
 			var code = '{IMAGE' + n + '}';
-			document.getElementById('attachMeta' + n).innerHTML = '&nbsp;<input type="text" readonly value="' + code + '" title="Вставьте этот код в любое место сообщения" size="' + (code.length) + '" style="font-family:monospace;color:#ff8e00;" />';
+			document.getElementById('attachMeta' + n).innerHTML = '&nbsp;<input type="text" readonly value="' + code + '" title="Р’СЃС‚Р°РІСЊС‚Рµ СЌС‚РѕС‚ РєРѕРґ РІ Р»СЋР±РѕРµ РјРµСЃС‚Рѕ СЃРѕРѕР±С‰РµРЅРёСЏ" size="' + (code.length) + '" style="font-family:monospace;color:#ff8e00;" />';
 		} else {
 			document.getElementById('attach' + n).innerHTML = '';
 		}

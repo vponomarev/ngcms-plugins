@@ -198,7 +198,7 @@ function plugin_voting_screen($flagPanel = false) {
 	$is_ajax = (($_GET['style'] == 'ajax') || ($_POST['style'] == 'ajax')) ? 1 : 0;
 	// Add own header for AJAX calls
 	if ($is_ajax) {
-		@header('Content-type: text/html; charset="windows-1251"');
+		@header('Content-type: text/html; charset="UTF-8"');
 	}
 	$votedList = explode(",", $_COOKIE['ngcms_voting']);
 	// Get current skin

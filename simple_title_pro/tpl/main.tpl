@@ -2,7 +2,7 @@
 	<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr>
 			<td width="100%" colspan="2" class="contentHead">
-				<img src="{{ skins_url }}/images/nav.gif" hspace="8" alt=""/>Настройка плагина: Simple Title Pro
+				<img src="{{ skins_url }}/images/nav.gif" hspace="8" alt=""/>РќР°СЃС‚СЂРѕР№РєР° РїР»Р°РіРёРЅР°: Simple Title Pro
 				=> {{ global }} </td>
 		</tr>
 		<tr>
@@ -13,12 +13,12 @@
 	<table border="0" cellspacing="0" cellpadding="0" width="100%">
 		<tr align="center">
 			<td width="100%" class="contentNav" align="center" style="background-repeat: no-repeat; background-position: left;">
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro'" value="Общие" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=list_static'" value="Список статиков" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=list_cat'" value="Список категорий" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=list_news'" value="Список новостей" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=clear_cache'" value="Очистить кэш" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=about'" value="О плагине" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro'" value="РћР±С‰РёРµ" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=list_static'" value="РЎРїРёСЃРѕРє СЃС‚Р°С‚РёРєРѕРІ" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=list_cat'" value="РЎРїРёСЃРѕРє РєР°С‚РµРіРѕСЂРёР№" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=list_news'" value="РЎРїРёСЃРѕРє РЅРѕРІРѕСЃС‚РµР№" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=clear_cache'" value="РћС‡РёСЃС‚РёС‚СЊ РєСЌС€" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=simple_title_pro&action=about'" value="Рћ РїР»Р°РіРёРЅРµ" class="navbutton"/>
 			</td>
 		</tr>
 	</table>

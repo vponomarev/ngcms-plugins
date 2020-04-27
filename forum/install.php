@@ -272,31 +272,31 @@ function plugin_forum_install($action) {
 	);
 	switch ($action) {
 		case 'confirm':
-			generate_install_page('forum', 'Ознакомление с лицензией');
+			generate_install_page('forum', 'РћР·РЅР°РєРѕРјР»РµРЅРёРµ СЃ Р»РёС†РµРЅР·РёРµР№');
 			break;
 		case 'apply':
 			if (!file_exists(files_dir . 'forum')) {
 				if (!@mkdir(files_dir . 'forum', 0777)) {
-					msg(array("type" => "error", "text" => "Критическая ошибка <br /> не удалось создать папку " . files_dir . 'forum'), 1);
+					msg(array("type" => "error", "text" => "РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР° <br /> РЅРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ РїР°РїРєСѓ " . files_dir . 'forum'), 1);
 					$install = false;
 				}
 			}
 			if (!file_exists(confroot . 'extras')) @mkdir(confroot . 'extras', 0777);
 			if (!file_exists(confroot . 'extras/forum')) {
 				if (!@mkdir(confroot . 'extras/forum', 0777)) {
-					msg(array("type" => "error", "text" => "Критическая ошибка <br /> не удалось создать папку " . confroot . 'extras/forum'), 1);
+					msg(array("type" => "error", "text" => "РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР° <br /> РЅРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ РїР°РїРєСѓ " . confroot . 'extras/forum'), 1);
 					$install = false;
 				}
 			}
 			if ($install) {
 				if (fixdb_plugin_install('forum', $db_update, 'install', ($action == 'autoapply') ? true : false)) {
 					if (!$mysql->result('SELECT 1 FROM ' . prefix . '_forum_group')) {
-						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'0\', \'Гость\', \'red\', \'1\', \'1\', \'1\', \'1\')');
-						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'1\', \'Администратор\', \'red\', \'1\', \'1\', \'1\', \'1\')');
-						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'2\', \'Редактор\', \'red\', \'1\', \'1\', \'1\', \'1\')');
-						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'3\', \'Журналист\', \'blue\', \'1\', \'1\', \'1\', \'1\')');
-						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'4\', \'Комментатор\', \'gold\', \'1\', \'1\', \'1\', \'1\')');
-						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'5\', \'Бот\', \'red\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'0\', \'Р“РѕСЃС‚СЊ\', \'red\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'1\', \'РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ\', \'red\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'2\', \'Р РµРґР°РєС‚РѕСЂ\', \'red\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'3\', \'Р–СѓСЂРЅР°Р»РёСЃС‚\', \'blue\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'4\', \'РљРѕРјРјРµРЅС‚Р°С‚РѕСЂ\', \'gold\', \'1\', \'1\', \'1\', \'1\')');
+						$mysql->query('INSERT INTO ' . prefix . '_forum_group (group_id, group_name, group_color, group_read, group_news, group_search, group_pm) VALUES (\'5\', \'Р‘РѕС‚\', \'red\', \'1\', \'1\', \'1\', \'1\')');
 					}
 					if (!$mysql->record('SHOW INDEX FROM ' . prefix . '_pm WHERE Key_name = \'count_pm\''))
 						$mysql->query('alter table ' . prefix . '_pm add index count_pm (`to_id`, `viewed`, `folder`)');
@@ -327,7 +327,7 @@ function plugin_forum_install($action) {
 							array(
 								'id'           => '1',
 								'group_id'     => '0',
-								'group_name'   => 'Гость',
+								'group_name'   => 'Р“РѕСЃС‚СЊ',
 								'group_color'  => 'red',
 								'group_read'   => '1',
 								'group_news'   => '1',
@@ -338,7 +338,7 @@ function plugin_forum_install($action) {
 							array(
 								'id'           => '2',
 								'group_id'     => '1',
-								'group_name'   => 'Администратор',
+								'group_name'   => 'РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ',
 								'group_color'  => 'red',
 								'group_read'   => '1',
 								'group_news'   => '1',
@@ -349,7 +349,7 @@ function plugin_forum_install($action) {
 							array(
 								'id'           => '3',
 								'group_id'     => '2',
-								'group_name'   => 'Редактор',
+								'group_name'   => 'Р РµРґР°РєС‚РѕСЂ',
 								'group_color'  => 'red',
 								'group_read'   => '1',
 								'group_news'   => '1',
@@ -360,7 +360,7 @@ function plugin_forum_install($action) {
 							array(
 								'id'           => '4',
 								'group_id'     => '3',
-								'group_name'   => 'Журналист',
+								'group_name'   => 'Р–СѓСЂРЅР°Р»РёСЃС‚',
 								'group_color'  => 'blue',
 								'group_read'   => '1',
 								'group_news'   => '1',
@@ -371,7 +371,7 @@ function plugin_forum_install($action) {
 							array(
 								'id'           => '5',
 								'group_id'     => '4',
-								'group_name'   => 'Комментатор',
+								'group_name'   => 'РљРѕРјРјРµРЅС‚Р°С‚РѕСЂ',
 								'group_color'  => 'gold',
 								'group_read'   => '1',
 								'group_news'   => '1',
@@ -382,7 +382,7 @@ function plugin_forum_install($action) {
 							array(
 								'id'           => '6',
 								'group_id'     => '5',
-								'group_name'   => 'Бот',
+								'group_name'   => 'Р‘РѕС‚',
 								'group_color'  => 'red',
 								'group_read'   => '1',
 								'group_news'   => '1',
@@ -399,9 +399,9 @@ function plugin_forum_install($action) {
 				'online'            => 1,
 				'online_time'       => 900,
 				'redirect_time'     => 5,
-				'forum_title'       => 'Название форума',
-				'forum_description' => 'Описание форума',
-				'forum_keywords'    => 'Ключевые слова',
+				'forum_title'       => 'РќР°Р·РІР°РЅРёРµ С„РѕСЂСѓРјР°',
+				'forum_description' => 'РћРїРёСЃР°РЅРёРµ С„РѕСЂСѓРјР°',
+				'forum_keywords'    => 'РљР»СЋС‡РµРІС‹Рµ СЃР»РѕРІР°',
 				'localskin'         => 'flux',
 				'edit_del_time'     => 5,
 				'display_main'      => 1,
@@ -419,32 +419,32 @@ function plugin_forum_install($action) {
 				'home_title'        => '%name_forum%',
 				'forums_title'      => '%cat_forum% / %name_forum% [/ %num%]',
 				'topic_title'       => '%name_topic% / %cat_forum% [/ %num%]',
-				'userlist_title'    => 'Список пользователей / %name_forum%',
-				'search_title'      => 'Поиск / %name_forum%',
-				'register_title'    => 'Регистрация / %name_forum%',
-				'login_title'       => 'Зайти на сайт / %name_forum%',
+				'userlist_title'    => 'РЎРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ / %name_forum%',
+				'search_title'      => 'РџРѕРёСЃРє / %name_forum%',
+				'register_title'    => 'Р РµРіРёСЃС‚СЂР°С†РёСЏ / %name_forum%',
+				'login_title'       => 'Р—Р°Р№С‚Рё РЅР° СЃР°Р№С‚ / %name_forum%',
 				'profile_title'     => '%others% / %name_forum%',
-				'out_title'         => 'Выйти / %name_forum%',
-				'addreply_title'    => 'Добавить сообщение / %name_forum%',
-				'newtopic_title'    => 'Добавить тему / %name_forum%',
-				'delpost_title'     => 'Удалить сообщение / %name_forum%',
-				'edit_title'        => 'Редактировать / %name_forum%',
-				'rules_title'       => 'Правила / %name_forum%',
-				'show_new_title'    => 'Последние сообщения / %name_forum%',
-				'markread_title'    => 'Всё прочитано / %name_forum%',
-				'rep_title'         => 'Репутация участника %others% / %name_forum%',
-				'addr_title'        => 'Добавить репутацию / %name_forum%',
-				'news_title'        => '%name_news% / Новости / %name_forum%',
-				'news_feed_title'   => 'Вся лента / %name_forum% [/ %num%]',
+				'out_title'         => 'Р’С‹Р№С‚Рё / %name_forum%',
+				'addreply_title'    => 'Р”РѕР±Р°РІРёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%',
+				'newtopic_title'    => 'Р”РѕР±Р°РІРёС‚СЊ С‚РµРјСѓ / %name_forum%',
+				'delpost_title'     => 'РЈРґР°Р»РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%',
+				'edit_title'        => 'Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ / %name_forum%',
+				'rules_title'       => 'РџСЂР°РІРёР»Р° / %name_forum%',
+				'show_new_title'    => 'РџРѕСЃР»РµРґРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ / %name_forum%',
+				'markread_title'    => 'Р’СЃС‘ РїСЂРѕС‡РёС‚Р°РЅРѕ / %name_forum%',
+				'rep_title'         => 'Р РµРїСѓС‚Р°С†РёСЏ СѓС‡Р°СЃС‚РЅРёРєР° %others% / %name_forum%',
+				'addr_title'        => 'Р”РѕР±Р°РІРёС‚СЊ СЂРµРїСѓС‚Р°С†РёСЋ / %name_forum%',
+				'news_title'        => '%name_news% / РќРѕРІРѕСЃС‚Рё / %name_forum%',
+				'news_feed_title'   => 'Р’СЃСЏ Р»РµРЅС‚Р° / %name_forum% [/ %num%]',
 				'act_title'         => '%others% / %name_forum%',
-				'thank_title'       => 'История благодарностей участнику %others% / %name_forum%',
-				'complaints_title'  => 'Сообщить модератору / %name_forum%',
-				'send_pm_title'     => 'Новое сообщение / %name_forum%',
-				'list_pm_title'     => 'Личное сообщение / %name_forum%',
-				'del_pm_title'      => 'Удалить сообщение / %name_forum%',
-				'downloads_title'   => 'Загрузка файла / %name_forum%',
-				'erro404_title'     => 'Информация / %name_forum%',
-				'num_title'         => 'Страница %count%',
+				'thank_title'       => 'РСЃС‚РѕСЂРёСЏ Р±Р»Р°РіРѕРґР°СЂРЅРѕСЃС‚РµР№ СѓС‡Р°СЃС‚РЅРёРєСѓ %others% / %name_forum%',
+				'complaints_title'  => 'РЎРѕРѕР±С‰РёС‚СЊ РјРѕРґРµСЂР°С‚РѕСЂСѓ / %name_forum%',
+				'send_pm_title'     => 'РќРѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%',
+				'list_pm_title'     => 'Р›РёС‡РЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%',
+				'del_pm_title'      => 'РЈРґР°Р»РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%',
+				'downloads_title'   => 'Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р° / %name_forum%',
+				'erro404_title'     => 'РРЅС„РѕСЂРјР°С†РёСЏ / %name_forum%',
+				'num_title'         => 'РЎС‚СЂР°РЅРёС†Р° %count%',
 			);
 			foreach ($params as $k => $v) {
 				extra_set_param('forum', $k, $v);

@@ -5,7 +5,7 @@ register_plugin_page('faq', '', 'plugin_faq');
 function plugin_faq() {
 
 	global $catz, $twig, $catmap, $mysql, $config, $userROW, $tpl, $parse, $template, $lang, $PFILTERS, $SYSTEM_FLAGS, $CurrentHandler;
-	$title_plg = 'Вопросы и ответы';
+	$title_plg = 'Р’РѕРїСЂРѕСЃС‹ Рё РѕС‚РІРµС‚С‹';
 	$SYSTEM_FLAGS['info']['title']['group'] = isset($title_plg) ? $title_plg : $SYSTEM_FLAGS['info']['title']['group'];
 	$tpath = locatePluginTemplates(array('faq_page'), 'faq', 1);
 	$xt = $twig->loadTemplate($tpath['faq_page'] . 'faq_page.tpl');

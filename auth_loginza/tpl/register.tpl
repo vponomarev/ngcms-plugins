@@ -1,8 +1,8 @@
 <table border="0" width="100%" id="table2" cellspacing="0" cellpadding="0">
 	<tr>
 		<td><img border="0" src="http://ngcms/templates/default/images/2z_40.gif" width="7" height="36"></td>
-		<td background="http://ngcms/templates/default/images/2z_41.gif" width="100%">&nbsp;<b><font color="#FFFFFF">Осталось
-					уточнить некоторые данные</font></b></td>
+		<td background="http://ngcms/templates/default/images/2z_41.gif" width="100%">&nbsp;<b><font color="#FFFFFF">РћСЃС‚Р°Р»РѕСЃСЊ
+					СѓС‚РѕС‡РЅРёС‚СЊ РЅРµРєРѕС‚РѕСЂС‹Рµ РґР°РЅРЅС‹Рµ</font></b></td>
 		<td><img border="0" src="http://ngcms/templates/default/images/2z_44.gif" width="7" height="36"></td>
 	</tr>
 </table>
@@ -16,31 +16,31 @@
 					<form name="register" action="/plugin/auth_loginza/register/" method="post">
 						<input type="hidden" name="type" value="doregister"/>
 				<tr>
-					<td width="50%" style="padding: 5px;" class="contentEntry1">Имя пользователя<br/>
-						<small>Вы можете заходить на сайт через логин/пароль</small>
+					<td width="50%" style="padding: 5px;" class="contentEntry1">РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ<br/>
+						<small>Р’С‹ РјРѕР¶РµС‚Рµ Р·Р°С…РѕРґРёС‚СЊ РЅР° СЃР°Р№С‚ С‡РµСЂРµР· Р»РѕРіРёРЅ/РїР°СЂРѕР»СЊ</small>
 					</td>
 					<td width="50%" style="padding: 5px;" class="contentEntry2">
-						<input name="login" type="text" title="Имя пользователя" value="{login}"/></td>
+						<input name="login" type="text" title="РРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ" value="{login}"/></td>
 				</tr>
 				<tr>
-					<td width="50%" style="padding: 5px;" class="contentEntry1">Пароль<br/>
-						<small>Обязателен для захода через логин/пароль</small>
+					<td width="50%" style="padding: 5px;" class="contentEntry1">РџР°СЂРѕР»СЊ<br/>
+						<small>РћР±СЏР·Р°С‚РµР»РµРЅ РґР»СЏ Р·Р°С…РѕРґР° С‡РµСЂРµР· Р»РѕРіРёРЅ/РїР°СЂРѕР»СЊ</small>
 					</td>
 					<td width="50%" style="padding: 5px;" class="contentEntry2">
-						<input name="password" type="text" title="Пароль" value="{password}"/></td>
+						<input name="password" type="text" title="РџР°СЂРѕР»СЊ" value="{password}"/></td>
 				</tr>
-				<td width="50%" style="padding: 5px;" class="contentEntry1">E-mail адрес<br/>
-					<small>при восстановлении пароля новый пароль будет высылаться на этот адрес (не обязательно для
-						заполнения)
+				<td width="50%" style="padding: 5px;" class="contentEntry1">E-mail Р°РґСЂРµСЃ<br/>
+					<small>РїСЂРё РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРё РїР°СЂРѕР»СЏ РЅРѕРІС‹Р№ РїР°СЂРѕР»СЊ Р±СѓРґРµС‚ РІС‹СЃС‹Р»Р°С‚СЊСЃСЏ РЅР° СЌС‚РѕС‚ Р°РґСЂРµСЃ (РЅРµ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ
+						Р·Р°РїРѕР»РЅРµРЅРёСЏ)
 					</small>
 				</td>
 				<td width="50%" style="padding: 5px;" class="contentEntry2">
-					<input name="email" type="text" title="E-mail адрес" value="{email}"/></td>
+					<input name="email" type="text" title="E-mail Р°РґСЂРµСЃ" value="{email}"/></td>
 				</tr>
 
 				<tr>
 					<td style="padding: 5px;" colspan="2">
-						<input type="submit" class="button" value="Зарегистрироваться!"/></td>
+						<input type="submit" class="button" value="Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ!"/></td>
 					</form>
 				</tr>
 			</table>

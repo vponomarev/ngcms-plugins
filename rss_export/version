@@ -3,18 +3,18 @@
 ;
 
 ID: rss_export
-Name: RSS экспорт
+Name: RSS СЌРєСЃРїРѕСЂС‚
 Name_EN: RSS news exporter
 Version: 0.17
 Acts: ppages
 File: rss_export.php
 Config: config.php
 Type: plugin
-Description: Экспорт новостей в формате RSS
+Description: Р­РєСЃРїРѕСЂС‚ РЅРѕРІРѕСЃС‚РµР№ РІ С„РѕСЂРјР°С‚Рµ RSS
 Description_EN: News export in RSS format
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 Preinstall_vars: feed_title_format="site_title"; news_title="1"; news_count="30"; use_hide="1"
-Title: RSS экспорт новостей
+Title: RSS СЌРєСЃРїРѕСЂС‚ РЅРѕРІРѕСЃС‚РµР№
 Preinstall: default_no
-Information: Генератор RSS новостной ленты
+Information: Р“РµРЅРµСЂР°С‚РѕСЂ RSS РЅРѕРІРѕСЃС‚РЅРѕР№ Р»РµРЅС‚С‹

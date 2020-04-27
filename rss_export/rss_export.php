@@ -146,7 +146,7 @@ function plugin_rss_export_generate($catname = '') {
 function plugin_rss_export_mk_header($xcat) {
 
 	global $config;
-	$line = '<?xml version="1.0" encoding="windows-1251"?>' . "\n";
+	$line = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 	$line .= ' <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/">' . "\n";
 	$line .= " <channel>\n";
 	if (pluginGetVariable('rss_export', 'feed_title_format') == 'handy') {

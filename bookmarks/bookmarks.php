@@ -31,7 +31,7 @@ LoadPluginLang('bookmarks', 'main', '', '', ':');
 $bookmarks_script = '
 <script type="text/javascript">
 
-	<!-- (�)habrahabr.ru -->
+	<!-- (ÃƒÆ’Ã‚Â±)habrahabr.ru -->
 	function futu_alert(header, text, close, className) {
 		if (!document.getElementById(\'futu_alerts_holder\')) {
 			var futuAlertOuter = document.createElement(\'div\');
@@ -351,7 +351,7 @@ function bookmarks_t() {
 		$tVars['counter'] = $tVars['counter'] ? $tVars['counter'] : '';
 	} else $tVars['counter'] = '';
 	$xt = $twig->loadTemplate($tpath['ajax.add.remove.links.style'] . 'ajax.add.remove.links.style.tpl');
-	header("Content-Type: text/html; charset=Windows-1251");
+	header("Content-Type: text/html; charset=UTF-8");
 	//echo iconv('WINDOWS-1251', 'UTF-8', $tpl -> show('ajax.add.remove.links.style'));
 	echo $xt->render($tVars) . ($action == 'delete' ? '<!-- add -->' : '<!-- delete -->');
 }

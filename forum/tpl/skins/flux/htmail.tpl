@@ -1,10 +1,10 @@
 <html>
 <body>
 <div style="font: normal 11px verdana, sans-serif;">
-	<h3>Уважаемый {{ global.user.name }}!</h3>
-	Только что было оставлено новое сообщение в теме на которую вы подписаны.<br/>
+	<h3>РЈРІР°Р¶Р°РµРјС‹Р№ {{ global.user.name }}!</h3>
+	РўРѕР»СЊРєРѕ С‡С‚Рѕ Р±С‹Р»Рѕ РѕСЃС‚Р°РІР»РµРЅРѕ РЅРѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ РІ С‚РµРјРµ РЅР° РєРѕС‚РѕСЂСѓСЋ РІС‹ РїРѕРґРїРёСЃР°РЅС‹.<br/>
 	<br/>
-	{{ from_user }} написал ответ в теме {{ url }}
+	{{ from_user }} РЅР°РїРёСЃР°Р» РѕС‚РІРµС‚ РІ С‚РµРјРµ {{ url }}
 	<table width="100%" cellspacing="1" cellpadding="1">
 		{{ message }}
 	</table>
@@ -12,8 +12,8 @@
 
 	<br/>
 	---<br/>
-	С уважением,<br/>
-	почтовый робот (работает на базе <b><font color="#90b500">N</font><font color="#5a5047">ext</font>
+	РЎ СѓРІР°Р¶РµРЅРёРµРј,<br/>
+	РїРѕС‡С‚РѕРІС‹Р№ СЂРѕР±РѕС‚ (СЂР°Р±РѕС‚Р°РµС‚ РЅР° Р±Р°Р·Рµ <b><font color="#90b500">N</font><font color="#5a5047">ext</font>
 		<font color="#90b500">G</font><font color="#5a5047">eneration</font> Forum</b> -
 	http://rozard.ngdemo.ru/mod:forum/)
 </div>

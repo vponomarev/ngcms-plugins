@@ -6,12 +6,12 @@ function forum_ban() {
 	global $twig, $template, $SUPRESS_TEMPLATE_SHOW, $ip, $ban, $mainblock;
 	$ban_ip_list = array(
 		'127.0.0.1' => array(
-			array('desc_error' => 'Описание нарушения'),
-			array('desc_error' => 'Описание нарушения'),
-			array('desc_error' => 'Описание нарушения'),
+			array('desc_error' => 'РћРїРёСЃР°РЅРёРµ РЅР°СЂСѓС€РµРЅРёСЏ'),
+			array('desc_error' => 'РћРїРёСЃР°РЅРёРµ РЅР°СЂСѓС€РµРЅРёСЏ'),
+			array('desc_error' => 'РћРїРёСЃР°РЅРёРµ РЅР°СЂСѓС€РµРЅРёСЏ'),
 		),
 		'127.0.0.2' => array(
-			array('desc_error' => 'Описание нарушения_2')
+			array('desc_error' => 'РћРїРёСЃР°РЅРёРµ РЅР°СЂСѓС€РµРЅРёСЏ_2')
 		),
 	);
 	$ban_ip_range = array(

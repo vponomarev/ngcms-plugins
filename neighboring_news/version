@@ -3,15 +3,15 @@
 ;
  
 ID: neighboring_news
-Name: Соседние новости
+Name: РЎРѕСЃРµРґРЅРёРµ РЅРѕРІРѕСЃС‚Рё
 Version: 0.4
 Acts: news
 File: neighboring_news.php
 Config: config.php
 Type: plugin
-Description: Предыдущая и следующая новости
+Description: РџСЂРµРґС‹РґСѓС‰Р°СЏ Рё СЃР»РµРґСѓСЋС‰Р°СЏ РЅРѕРІРѕСЃС‚Рё
 Author: Alexey N. Zhukov (Wolverine)
 Author_URI: http://digitalplace.ru/
-Title: Предыдущая и следующая новости
-Information: Добавляет новые переменные управления следующей и предыдущей новостью.
+Title: РџСЂРµРґС‹РґСѓС‰Р°СЏ Рё СЃР»РµРґСѓСЋС‰Р°СЏ РЅРѕРІРѕСЃС‚Рё
+Information: Р”РѕР±Р°РІР»СЏРµС‚ РЅРѕРІС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ СѓРїСЂР°РІР»РµРЅРёСЏ СЃР»РµРґСѓСЋС‰РµР№ Рё РїСЂРµРґС‹РґСѓС‰РµР№ РЅРѕРІРѕСЃС‚СЊСЋ.
 Preinstall: no

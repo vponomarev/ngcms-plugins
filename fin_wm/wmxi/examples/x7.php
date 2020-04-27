@@ -1,23 +1,23 @@
 <?php
-# запускаем сессию, в которой будем запоминать пользователя
+# Р·Р°РїСѓСЃРєР°РµРј СЃРµСЃСЃРёСЋ, РІ РєРѕС‚РѕСЂРѕР№ Р±СѓРґРµРј Р·Р°РїРѕРјРёРЅР°С‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 session_start();
 require_once("_header.php");
-# Получение и обработка данных формы
+# РџРѕР»СѓС‡РµРЅРёРµ Рё РѕР±СЂР°Р±РѕС‚РєР° РґР°РЅРЅС‹С… С„РѕСЂРјС‹
 if (count($_POST) > 0) {
 	$response = $wmxi->X7(
-		$_POST["wmid"],          # 12 цифр
-		$_SESSION["plan"],       # произвольная строка от 1 до 255 символов; пробелы в начале или конце и переводы строк не допускаются
-		$_POST["sign"]           # произвольная строка от 1 до 1024 символов; пробелы в начале или конце не допускаются
+		$_POST["wmid"],          # 12 С†РёС„СЂ
+		$_SESSION["plan"],       # РїСЂРѕРёР·РІРѕР»СЊРЅР°СЏ СЃС‚СЂРѕРєР° РѕС‚ 1 РґРѕ 255 СЃРёРјРІРѕР»РѕРІ; РїСЂРѕР±РµР»С‹ РІ РЅР°С‡Р°Р»Рµ РёР»Рё РєРѕРЅС†Рµ Рё РїРµСЂРµРІРѕРґС‹ СЃС‚СЂРѕРє РЅРµ РґРѕРїСѓСЃРєР°СЋС‚СЃСЏ
+		$_POST["sign"]           # РїСЂРѕРёР·РІРѕР»СЊРЅР°СЏ СЃС‚СЂРѕРєР° РѕС‚ 1 РґРѕ 1024 СЃРёРјРІРѕР»РѕРІ; РїСЂРѕР±РµР»С‹ РІ РЅР°С‡Р°Р»Рµ РёР»Рё РєРѕРЅС†Рµ РЅРµ РґРѕРїСѓСЃРєР°СЋС‚СЃСЏ
 	);
-	# Преобразовываем ответ сервера в структуру. Входные параметры:
-	# - XML-ответ сервера
-	# - кодировка, используемая на сайте. По умолчанию используется UTF-8
+	# РџСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµРј РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР° РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ. Р’С…РѕРґРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
+	# - XML-РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР°
+	# - РєРѕРґРёСЂРѕРІРєР°, РёСЃРїРѕР»СЊР·СѓРµРјР°СЏ РЅР° СЃР°Р№С‚Рµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ UTF-8
 	$structure = $parser->Parse($response, DOC_ENCODING);
-	# преобразуем индексы структуры к более удобным для доступа.
-	# Не рекомендуется проводить такое преобразование с с результатом, если он содержит
-	# множество однотипных строк (например, список транзакций)
-	# если надобности в аттрибутах XML-тегов ответа нет, то второй параметр можно
-	# установить в false - в таком случае структура выйдет более компактной
+	# РїСЂРµРѕР±СЂР°Р·СѓРµРј РёРЅРґРµРєСЃС‹ СЃС‚СЂСѓРєС‚СѓСЂС‹ Рє Р±РѕР»РµРµ СѓРґРѕР±РЅС‹Рј РґР»СЏ РґРѕСЃС‚СѓРїР°.
+	# РќРµ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ РїСЂРѕРІРѕРґРёС‚СЊ С‚Р°РєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј, РµСЃР»Рё РѕРЅ СЃРѕРґРµСЂР¶РёС‚
+	# РјРЅРѕР¶РµСЃС‚РІРѕ РѕРґРЅРѕС‚РёРїРЅС‹С… СЃС‚СЂРѕРє (РЅР°РїСЂРёРјРµСЂ, СЃРїРёСЃРѕРє С‚СЂР°РЅР·Р°РєС†РёР№)
+	# РµСЃР»Рё РЅР°РґРѕР±РЅРѕСЃС‚Рё РІ Р°С‚С‚СЂРёР±СѓС‚Р°С… XML-С‚РµРіРѕРІ РѕС‚РІРµС‚Р° РЅРµС‚, С‚Рѕ РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ
+	# СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІ false - РІ С‚Р°РєРѕРј СЃР»СѓС‡Р°Рµ СЃС‚СЂСѓРєС‚СѓСЂР° РІС‹Р№РґРµС‚ Р±РѕР»РµРµ РєРѕРјРїР°РєС‚РЅРѕР№
 	$transformed = $parser->Reindex($structure, true);
 	if (@$transformed["w3s.response"]["testsign"]["res"] == "yes") {
 		$_SESSION["WMID"] = $_POST["wmid"];
@@ -32,7 +32,7 @@ function microtime_float() {
 	return ((float)$usec + (float)$sec);
 }
 
-# генерируем новую строку для подписи
+# РіРµРЅРµСЂРёСЂСѓРµРј РЅРѕРІСѓСЋ СЃС‚СЂРѕРєСѓ РґР»СЏ РїРѕРґРїРёСЃРё
 $_SESSION["plan"] = "<access><url>dkameleon.com</url><datetime>" . date("Y-m-d H:i:s") . "</datetime><marker>" . sha1(microtime_float()) . "</marker></access>";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -45,7 +45,7 @@ $_SESSION["plan"] = "<access><url>dkameleon.com</url><datetime>" . date("Y-m-d H
 	<link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-Детальное описание параметров:
+Р”РµС‚Р°Р»СЊРЅРѕРµ РѕРїРёСЃР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ:
 <a href="http://webmoney.ru/rus/developers/interfaces/xml/identify/index.shtml">http://webmoney.ru/rus/developers/interfaces/xml/identify/index.shtml</a>
 <br/>
 
@@ -78,8 +78,8 @@ $_SESSION["plan"] = "<access><url>dkameleon.com</url><datetime>" . date("Y-m-d H
 
 <form action="" method="post">
 
-	<label>WM-идентификатор:</label>
-	<b><?= isset($_SESSION["WMID"]) ? $_SESSION["WMID"] : "не авторизован"; ?></b>
+	<label>WM-РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ:</label>
+	<b><?= isset($_SESSION["WMID"]) ? $_SESSION["WMID"] : "РЅРµ Р°РІС‚РѕСЂРёР·РѕРІР°РЅ"; ?></b>
 	<br/>
 
 	<input type="hidden" id="plan" name="plan" value="<?= htmlspecialchars($_SESSION["plan"], ENT_QUOTES); ?>"/>
@@ -87,7 +87,7 @@ $_SESSION["plan"] = "<access><url>dkameleon.com</url><datetime>" . date("Y-m-d H
 	<input type="hidden" id="sign" name="sign" value=""/>
 	<br/>
 
-	<input type="submit" id="submit" value="авторизация" onclick="return wm_auth();"/>
+	<input type="submit" id="submit" value="Р°РІС‚РѕСЂРёР·Р°С†РёСЏ" onclick="return wm_auth();"/>
 	<br/>
 
 </form>
@@ -96,10 +96,10 @@ $_SESSION["plan"] = "<access><url>dkameleon.com</url><datetime>" . date("Y-m-d H
 <!--pre><?= htmlspecialchars(print_r(@$structure, true), ENT_QUOTES); ?></pre-->
 <!--pre><?= htmlspecialchars(print_r(@$transformed, true), ENT_QUOTES); ?></pre-->
 
-<pre><!-- Читаем и отображаем элементы обработанного массива после получения ответа с сервера -->
-		Результат: <b><?= htmlspecialchars(@$transformed["w3s.response"]["testsign"]["res"], ENT_QUOTES); ?></b>
-		Код ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
-		Описание ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
+<pre><!-- Р§РёС‚Р°РµРј Рё РѕС‚РѕР±СЂР°Р¶Р°РµРј СЌР»РµРјРµРЅС‚С‹ РѕР±СЂР°Р±РѕС‚Р°РЅРЅРѕРіРѕ РјР°СЃСЃРёРІР° РїРѕСЃР»Рµ РїРѕР»СѓС‡РµРЅРёСЏ РѕС‚РІРµС‚Р° СЃ СЃРµСЂРІРµСЂР° -->
+		Р РµР·СѓР»СЊС‚Р°С‚: <b><?= htmlspecialchars(@$transformed["w3s.response"]["testsign"]["res"], ENT_QUOTES); ?></b>
+		РљРѕРґ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
+		РћРїРёСЃР°РЅРёРµ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
 	</pre>
 
 </body>

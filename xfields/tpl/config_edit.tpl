@@ -2,8 +2,8 @@
 	<tbody>
 	<tr>
 		<td colspan="2" class="contentHead" width="100%">
-			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="Управление плагинами">Управление
-				плагинами</a> &#8594;
+			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="РЈРїСЂР°РІР»РµРЅРёРµ РїР»Р°РіРёРЅР°РјРё">РЈРїСЂР°РІР»РµРЅРёРµ
+				РїР»Р°РіРёРЅР°РјРё</a> &#8594;
 			<a href="?mod=extra-config&plugin=xfields&section={{ sectionID }}">{{ lang.xfconfig['config_text'] }}
 				xfields</a>
 			&#8594; {% if (not flags.editMode) %}{{ lang.xfconfig['title_add'] }}{% else %}{{ lang.xfconfig['title_edit'] }} ({{ id }}){% endif %}
@@ -141,8 +141,8 @@
 					<table id="xfSelectTable" width="100%" cellspacing="0" cellpadding="0" border="0" class="content" style="padding: 0px;">
 						<thead>
 						<tr class="contRow1">
-							<td>Код</td>
-							<td>Значение</td>
+							<td>РљРѕРґ</td>
+							<td>Р—РЅР°С‡РµРЅРёРµ</td>
 							<td>&nbsp;</td>
 						</tr>
 						</thead>
@@ -152,7 +152,7 @@
 						<tfoot>
 						<tr>
 							<td colspan="3">
-								<input type="button" id="xfBtnAdd" style="width: 300px;" value=" + Добавить строку"/>
+								<input type="button" id="xfBtnAdd" style="width: 300px;" value=" + Р”РѕР±Р°РІРёС‚СЊ СЃС‚СЂРѕРєСѓ"/>
 							</td>
 						</tr>
 						</tfoot>
@@ -182,8 +182,8 @@
 					<table id="xfSelectTable_multi" width="100%" cellspacing="0" cellpadding="0" border="0" class="content" style="padding: 0px;">
 						<thead>
 						<tr class="contRow1">
-							<td>Код</td>
-							<td>Значение</td>
+							<td>РљРѕРґ</td>
+							<td>Р—РЅР°С‡РµРЅРёРµ</td>
 							<td>&nbsp;</td>
 						</tr>
 						</thead>
@@ -193,7 +193,7 @@
 						<tfoot>
 						<tr>
 							<td colspan="3">
-								<input type="button" id="xfBtnAdd_multi" style="width: 300px;" value=" + Добавить строку"/>
+								<input type="button" id="xfBtnAdd_multi" style="width: 300px;" value=" + Р”РѕР±Р°РІРёС‚СЊ СЃС‚СЂРѕРєСѓ"/>
 							</td>
 						</tr>
 						</tfoot>
@@ -223,45 +223,45 @@
 	<div id="type_images">
 		<table border="0" cellspacing="1" cellpadding="1" class="content">
 			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="45%" colspan="2">Максимальное кол-во изображений для загрузки:</td>
+				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">РёР·РѕР±СЂР°Р¶РµРЅРёСЏ</td>
+				<td width="45%" colspan="2">РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ РєРѕР»-РІРѕ РёР·РѕР±СЂР°Р¶РµРЅРёР№ РґР»СЏ Р·Р°РіСЂСѓР·РєРё:</td>
 				<td colspan=2"><input type="text" size="3" name="images_maxCount" value="{{ images.maxCount }}"/></td>
 			</tr>
 			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="45%" colspan="2">Добавлять штамп:</td>
+				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">РёР·РѕР±СЂР°Р¶РµРЅРёСЏ</td>
+				<td width="45%" colspan="2">Р”РѕР±Р°РІР»СЏС‚СЊ С€С‚Р°РјРї:</td>
 				<td colspan=2"><input type="checkbox" name="images_imgStamp" value="1" {{ images.imgStamp }} /></td>
 			</tr>
 			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="45%" colspan="2">Добавлять тень:</td>
+				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">РёР·РѕР±СЂР°Р¶РµРЅРёСЏ</td>
+				<td width="45%" colspan="2">Р”РѕР±Р°РІР»СЏС‚СЊ С‚РµРЅСЊ:</td>
 				<td colspan=2"><input type="checkbox"/ name="images_imgShadow" value="1" {{ images.imgShadow }} /></td>
 			</tr>
 			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="45%" colspan="2">Уменьшенная копия:</td>
+				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">РёР·РѕР±СЂР°Р¶РµРЅРёСЏ</td>
+				<td width="45%" colspan="2">РЈРјРµРЅСЊС€РµРЅРЅР°СЏ РєРѕРїРёСЏ:</td>
 				<td colspan=2"><input type="checkbox" name="images_imgThumb" value="1" {{ images.imgThumb }} /></td>
 			</tr>
 			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
+				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">РёР·РѕР±СЂР°Р¶РµРЅРёСЏ</td>
 				<td width="5%">&nbsp;</td>
-				<td width="40%">Не более:</td>
+				<td width="40%">РќРµ Р±РѕР»РµРµ:</td>
 				<td>&nbsp;</td>
 				<td><input type="text" size="4" name="images_thumbWidth" value="{{ images.thumbWidth }}"/> x
-					<input type="text" size="4" name="images_thumbHeight" value="{{ images.thumbHeight }}"/> пикселов
+					<input type="text" size="4" name="images_thumbHeight" value="{{ images.thumbHeight }}"/> РїРёРєСЃРµР»РѕРІ
 				</td>
 			</tr>
 			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
+				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">РёР·РѕР±СЂР°Р¶РµРЅРёСЏ</td>
 				<td width="5%">&nbsp;</td>
-				<td width="40%">Добавлять штамп:</td>
+				<td width="40%">Р”РѕР±Р°РІР»СЏС‚СЊ С€С‚Р°РјРї:</td>
 				<td>&nbsp;</td>
 				<td><input type="checkbox" name="images_thumbStamp" value="1" {{ images.thumbStamp }}/></td>
 			</tr>
 			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
+				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">РёР·РѕР±СЂР°Р¶РµРЅРёСЏ</td>
 				<td width="5%">&nbsp;</td>
-				<td width="40%">Добавлять тень:</td>
+				<td width="40%">Р”РѕР±Р°РІР»СЏС‚СЊ С‚РµРЅСЊ:</td>
 				<td>&nbsp;</td>
 				<td><input type="checkbox" name="images_thumbShadow" value="1" {{ images.thumbShadow }}/></td>
 			</tr>
@@ -271,22 +271,22 @@
 
 	<table border="0" cellspacing="1" cellpadding="1" style="width:100%;" class="contRow3">
 		<tr class="contRow1">
-			<td width="50%">Режим сохранения данных:</td>
+			<td width="50%">Р РµР¶РёРј СЃРѕС…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С…:</td>
 			<td>
 				<select name="storage" id="storage" value="{{ storage }}" onclick="storageMode(this.value);" onchange="storageMode(this.value);"/>
-				<option value="0">Единое хранилище</option>
-				<option value="1">Персональное поле в БД</option>
+				<option value="0">Р•РґРёРЅРѕРµ С…СЂР°РЅРёР»РёС‰Рµ</option>
+				<option value="1">РџРµСЂСЃРѕРЅР°Р»СЊРЅРѕРµ РїРѕР»Рµ РІ Р‘Р”</option>
 				</select></td>
 		</tr>
 		<tr class="contRow4" id="storageRow">
-			<td width="50%">Тип поля в БД:</td>
+			<td width="50%">РўРёРї РїРѕР»СЏ РІ Р‘Р”:</td>
 			<td>
 				<select name="db_type" value="{{ db_type }}" id="db.type"/>
-				<option value="int">int - только цифры</option>
-				<option value="decimal">decimal - число с фиксированной точкой</option>
-				<option value="char">char - текст с ограничением длины (255)</option>
-				<option value="text">text - текст с ограничением длины (65535)</option>
-				<option value="datetime">datetime - дата-время</option>
+				<option value="int">int - С‚РѕР»СЊРєРѕ С†РёС„СЂС‹</option>
+				<option value="decimal">decimal - С‡РёСЃР»Рѕ СЃ С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕР№ С‚РѕС‡РєРѕР№</option>
+				<option value="char">char - С‚РµРєСЃС‚ СЃ РѕРіСЂР°РЅРёС‡РµРЅРёРµРј РґР»РёРЅС‹ (255)</option>
+				<option value="text">text - С‚РµРєСЃС‚ СЃ РѕРіСЂР°РЅРёС‡РµРЅРёРµРј РґР»РёРЅС‹ (65535)</option>
+				<option value="datetime">datetime - РґР°С‚Р°-РІСЂРµРјСЏ</option>
 				</select>
 				<input maxlength="5" size="5" type="text" name="db_len" value="{{ db_len }}" id="db.len"/>
 			</td>
@@ -299,11 +299,11 @@
 		</tr>
 		{% if (sectionID != 'tdata') %}
 			<tr class="contRow1">
-			<td width="50%">Блок:<br/>
-				<small>Этот параметр позволяет указать в каком именно месте интерфейса добавления/редактирования новости
-					появится данная переменная.<br/><b>По умолчанию</b> - блок `дополнительно`<br/><b>1</b> - блок
-					`основное содержание`<br/><b>другие (цифровые) значения</b> - для блоков, добавленных в ручном
-					режиме в админ панель
+			<td width="50%">Р‘Р»РѕРє:<br/>
+				<small>Р­С‚РѕС‚ РїР°СЂР°РјРµС‚СЂ РїРѕР·РІРѕР»СЏРµС‚ СѓРєР°Р·Р°С‚СЊ РІ РєР°РєРѕРј РёРјРµРЅРЅРѕ РјРµСЃС‚Рµ РёРЅС‚РµСЂС„РµР№СЃР° РґРѕР±Р°РІР»РµРЅРёСЏ/СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РЅРѕРІРѕСЃС‚Рё
+					РїРѕСЏРІРёС‚СЃСЏ РґР°РЅРЅР°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ.<br/><b>РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</b> - Р±Р»РѕРє `РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕ`<br/><b>1</b> - Р±Р»РѕРє
+					`РѕСЃРЅРѕРІРЅРѕРµ СЃРѕРґРµСЂР¶Р°РЅРёРµ`<br/><b>РґСЂСѓРіРёРµ (С†РёС„СЂРѕРІС‹Рµ) Р·РЅР°С‡РµРЅРёСЏ</b> - РґР»СЏ Р±Р»РѕРєРѕРІ, РґРѕР±Р°РІР»РµРЅРЅС‹С… РІ СЂСѓС‡РЅРѕРј
+					СЂРµР¶РёРјРµ РІ Р°РґРјРёРЅ РїР°РЅРµР»СЊ
 				</small>
 			</td>
 			<td width="47%"><input type="text" name="area" value="{{ area }}"/></td></tr>{% endif %}

@@ -12,10 +12,10 @@ Config: config.php
 Install: install.php
 Deinstall: uninstall.php
 Type: plugin
-Description: Дополнительные поля
+Description: Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїРѕР»СЏ
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru
-Title: Дополнительные поля
-Information: Позволяет создавать пользовательские дополнительные поля в новостях.
+Title: Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїРѕР»СЏ
+Information: РџРѕР·РІРѕР»СЏРµС‚ СЃРѕР·РґР°РІР°С‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ РїРѕР»СЏ РІ РЅРѕРІРѕСЃС‚СЏС….
 Preinstall: no
 Library: common; lib/common.php

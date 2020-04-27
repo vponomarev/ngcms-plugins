@@ -15,7 +15,7 @@ function plugin_ads_pro_install($action) {
 	);
 	switch ($action) {
 		case 'confirm':
-			generate_install_page('ads_pro', 'Cейчас плагин будет установлен');
+			generate_install_page('ads_pro', 'CРµР№С‡Р°СЃ РїР»Р°РіРёРЅ Р±СѓРґРµС‚ СѓСЃС‚Р°РЅРѕРІР»РµРЅ');
 			break;
 		case 'autoapply':
 		case 'apply':

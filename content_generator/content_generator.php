@@ -13,8 +13,8 @@ function newsGenerator($count) {
 	$faker = Faker\Factory::create('ru_RU');
 
 	for ($i = 0; $i < $count; $i++) {
-		$_REQUEST['title'] = iconv("utf-8", "windows-1251", $faker->realText(30, 1));
-		$_REQUEST['ng_news_content'] = iconv("utf-8", "windows-1251", $faker->realText());
+		$_REQUEST['title'] = $faker->realText(30, 1);
+		$_REQUEST['ng_news_content'] = $faker->realText();
 		$_REQUEST['approve'] = 1;
 		$_REQUEST['mainpage'] = 1;
 		addNews(['no.token' => true]);
@@ -30,8 +30,8 @@ function staticGenerator($count) {
 	$faker = Faker\Factory::create('ru_RU');
 
 	for ($i = 0; $i < $count; $i++) {
-		$_REQUEST['title'] = iconv("utf-8", "windows-1251", $faker->realText(30, 1));
-		$_REQUEST['content'] = iconv("utf-8", "windows-1251", $faker->realText());
+		$_REQUEST['title'] = $faker->realText(30, 1);
+		$_REQUEST['content'] = $faker->realText();
 		$_REQUEST['flag_published'] = 1;
 		$_REQUEST['token'] = genUToken('admin.static');
 		addStatic();

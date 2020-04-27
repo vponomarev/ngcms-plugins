@@ -51,19 +51,19 @@ function plugin_finance_install($action) {
 			'action' => 'cmodify',
 			'key'    => 'primary key(id)',
 			'fields' => array(
-				// ID ñòðîêè
+				// ID ÑÑ‚Ñ€Ð¾ÐºÐ¸
 				array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
-				// user_id = êîä ïîëüçîâàòåëÿ äëÿ êîãî ñîçäàíà ïîäïèñêà
+				// user_id = ÐºÐ¾Ð´ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ Ð´Ð»Ñ ÐºÐ¾Ð³Ð¾ ÑÐ¾Ð·Ð´Ð°Ð½Ð° Ð¿Ð¾Ð´Ð¿Ð¸ÑÐºÐ°
 				array('action' => 'cmodify', 'name' => 'user_id', 'type' => 'int'),
-				// special_access_type = ïðèçíàê, ÷òî äîñòóï èä¸ò íå ïî ÁÄ à ïî ñïåöèàëüíûì òèïàì (ñêàæåì, SMS èëè êàêèå-òî íîòèôèêàöèè)
+				// special_access_type = Ð¿Ñ€Ð¸Ð·Ð½Ð°Ðº, Ñ‡Ñ‚Ð¾ Ð´Ð¾ÑÑ‚ÑƒÐ¿ Ð¸Ð´Ñ‘Ñ‚ Ð½Ðµ Ð¿Ð¾ Ð‘Ð” Ð° Ð¿Ð¾ ÑÐ¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ñ‹Ð¼ Ñ‚Ð¸Ð¿Ð°Ð¼ (ÑÐºÐ°Ð¶ÐµÐ¼, SMS Ð¸Ð»Ð¸ ÐºÐ°ÐºÐ¸Ðµ-Ñ‚Ð¾ Ð½Ð¾Ñ‚Ð¸Ñ„Ð¸ÐºÐ°Ñ†Ð¸Ð¸)
 				array('action' => 'cmodify', 'name' => 'special_access_type', 'type' => 'int'),
-				// ID ãðóïïû ïî êîòîðîé èä¸ò äîñòóï. åñëè 0 - íå èñïîëüçóåòñÿ
+				// ID Ð³Ñ€ÑƒÐ¿Ð¿Ñ‹ Ð¿Ð¾ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¹ Ð¸Ð´Ñ‘Ñ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿. ÐµÑÐ»Ð¸ 0 - Ð½Ðµ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ
 				array('action' => 'cmodify', 'name' => 'access_group_id', 'type' => 'int'),
-				// ID ýëåìåíòà ïî êîòîðîìó èä¸ò äîñòóï. åñëè 0 - íå èñïîëüçóåòñÿ.
+				// ID ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð¿Ð¾ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¼Ñƒ Ð¸Ð´Ñ‘Ñ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿. ÐµÑÐ»Ð¸ 0 - Ð½Ðµ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ.
 				array('action' => 'cmodify', 'name' => 'access_element_id', 'type' => 'int'),
-				// äàòà àêòèâàöèè ïîäïèñêè
+				// Ð´Ð°Ñ‚Ð° Ð°ÐºÑ‚Ð¸Ð²Ð°Ñ†Ð¸Ð¸ Ð¿Ð¾Ð´Ð¿Ð¸ÑÐºÐ¸
 				array('action' => 'cmodify', 'name' => 'subscription_date', 'type' => 'datetime'),
-				// ñðîê äåéñòâèÿ ïîäïèñêè
+				// ÑÑ€Ð¾Ðº Ð´ÐµÐ¹ÑÑ‚Ð²Ð¸Ñ Ð¿Ð¾Ð´Ð¿Ð¸ÑÐºÐ¸
 				array('action' => 'cmodify', 'name' => 'expiration_date', 'type' => 'datetime'),
 			)
 		),
@@ -75,16 +75,16 @@ function plugin_finance_install($action) {
 				array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
 				array('action' => 'cmodify', 'name' => 'user_id', 'type' => 'int'),
 				array('action' => 'cmodify', 'name' => 'dt', 'type' => 'datetime'),
-				// Òèï îïåðàöèè: 1 - ïðèõîä, 2 - ðàñõîä
+				// Ð¢Ð¸Ð¿ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¸: 1 - Ð¿Ñ€Ð¸Ñ…Ð¾Ð´, 2 - Ñ€Ð°ÑÑ…Ð¾Ð´
 				array('action' => 'cmodify', 'name' => 'operation_type', 'type' => 'int'),
-				// Îïèñûâàåì èçìåíåíèÿ áàëàíñîâ
+				// ÐžÐ¿Ð¸ÑÑ‹Ð²Ð°ÐµÐ¼ Ð¸Ð·Ð¼ÐµÐ½ÐµÐ½Ð¸Ñ Ð±Ð°Ð»Ð°Ð½ÑÐ¾Ð²
 				array('action' => 'cmodify', 'name' => 'balance', 'type' => 'int', 'params' => 'default 0'),
 				array('action' => 'cmodify', 'name' => 'balance1', 'type' => 'int', 'params' => 'default 0'),
 				array('action' => 'cmodify', 'name' => 'balance2', 'type' => 'int', 'params' => 'default 0'),
 				array('action' => 'cmodify', 'name' => 'balance3', 'type' => 'int', 'params' => 'default 0'),
 				array('action' => 'cmodify', 'name' => 'balance4', 'type' => 'int', 'params' => 'default 0'),
-				// Â ñëó÷àå ñïèñàíèÿ - ïàðàìåòðû "êóäà"
-				// subscribe_ref - ññûëêà íà ñòðî÷êó òàáëèöû subscribe_manager
+				// Ð’ ÑÐ»ÑƒÑ‡Ð°Ðµ ÑÐ¿Ð¸ÑÐ°Ð½Ð¸Ñ - Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ‹ "ÐºÑƒÐ´Ð°"
+				// subscribe_ref - ÑÑÑ‹Ð»ÐºÐ° Ð½Ð° ÑÑ‚Ñ€Ð¾Ñ‡ÐºÑƒ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñ‹ subscribe_manager
 				array('action' => 'cmodify', 'name' => 'subscribe_ref', 'type' => 'int'),
 				array('action' => 'cmodify', 'name' => 'special_access_type', 'type' => 'int'),
 				array('action' => 'cmodify', 'name' => 'access_group_id', 'type' => 'int'),
@@ -98,19 +98,19 @@ function plugin_finance_install($action) {
 		//  'action' => 'cmodify',
 		//  'key'    => 'primary key(id)',
 		//  'fields' => array(
-		//    // ID ñòðîêè
+		//    // ID ÑÑ‚Ñ€Ð¾ÐºÐ¸
 		//    array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
-		//    // ID ãðóïïû ïî êîòîðîé èä¸ò äîñòóï. åñëè 0 - íå èñïîëüçóåòñÿ
+		//    // ID Ð³Ñ€ÑƒÐ¿Ð¿Ñ‹ Ð¿Ð¾ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¹ Ð¸Ð´Ñ‘Ñ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿. ÐµÑÐ»Ð¸ 0 - Ð½Ðµ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ
 		//    array('action' => 'cmodify', 'name' => 'access_group_id', 'type' => 'int'),
-		//    // ID ýëåìåíòà ïî êîòîðîìó èä¸ò äîñòóï. åñëè 0 - íå èñïîëüçóåòñÿ.
+		//    // ID ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð¿Ð¾ ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ð¼Ñƒ Ð¸Ð´Ñ‘Ñ‚ Ð´Ð¾ÑÑ‚ÑƒÐ¿. ÐµÑÐ»Ð¸ 0 - Ð½Ðµ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ÑÑ.
 		//    array('action' => 'cmodify', 'name' => 'access_element_id', 'type' => 'int'),
-		//    // Òèï ñïåöèàëüíîãî ýëåìåíòà. Ñïåðâà ñíèìàþòñÿ ïîèíòû ñ äîï. áàëàíñîâ ýòîãî òèïà à òîëüêî ïîòîì - äåíüãè
+		//    // Ð¢Ð¸Ð¿ ÑÐ¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ð¾Ð³Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°. Ð¡Ð¿ÐµÑ€Ð²Ð° ÑÐ½Ð¸Ð¼Ð°ÑŽÑ‚ÑÑ Ð¿Ð¾Ð¸Ð½Ñ‚Ñ‹ Ñ Ð´Ð¾Ð¿. Ð±Ð°Ð»Ð°Ð½ÑÐ¾Ð² ÑÑ‚Ð¾Ð³Ð¾ Ñ‚Ð¸Ð¿Ð° Ð° Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð¿Ð¾Ñ‚Ð¾Ð¼ - Ð´ÐµÐ½ÑŒÐ³Ð¸
 		//    array('action' => 'cmodify', 'name' => 'type', 'type' => 'char(30)'),
-		//    // Öåíà â ïîèíòàõ äàííîãî òèïà (ïðè ñíÿòèè ñ áàëàíñà)
+		//    // Ð¦ÐµÐ½Ð° Ð² Ð¿Ð¾Ð¸Ð½Ñ‚Ð°Ñ… Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ Ñ‚Ð¸Ð¿Ð° (Ð¿Ñ€Ð¸ ÑÐ½ÑÑ‚Ð¸Ð¸ Ñ Ð±Ð°Ð»Ð°Ð½ÑÐ°)
 		//    array('action' => 'cmodify', 'name' => 'tprice', 'type' => 'int'),
-		//    // Öåíà â âàëþòå äëÿ äàííîãî ýëåìåíòà
+		//    // Ð¦ÐµÐ½Ð° Ð² Ð²Ð°Ð»ÑŽÑ‚Ðµ Ð´Ð»Ñ Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°
 		//    array('action' => 'cmodify', 'name' => 'price', 'type' => 'int'),
-		//    // Îïèñàíèå
+		//    // ÐžÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ
 		//    array('action' => 'cmodify', 'name' => 'description', 'type' => 'text'),
 		//   )
 		//  )

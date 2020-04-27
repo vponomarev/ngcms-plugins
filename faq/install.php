@@ -19,7 +19,7 @@ function plugin_faq_install($action) {
 	);
 	switch ($action) {
 		case 'confirm':
-			generate_install_page('faq', 'Всё готово к установке.');
+			generate_install_page('faq', 'Р’СЃС‘ РіРѕС‚РѕРІРѕ Рє СѓСЃС‚Р°РЅРѕРІРєРµ.');
 			break;
 		case 'apply':
 			if ($install) {

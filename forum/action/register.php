@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -21,7 +21,7 @@ if (checkLinkAvailable('forum', 'register')) {
 		return redirect_forum(link_register());
 }
 if (is_array($userROW))
-	return $output = information('Авторизированные не могут регистрироваться', $title = 'Информация');
+	return $output = information('РђРІС‚РѕСЂРёР·РёСЂРѕРІР°РЅРЅС‹Рµ РЅРµ РјРѕРіСѓС‚ СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $tpath = locatePluginTemplates(array('register', 'captcha'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum', 'localskin'));
 $xt = $twig->loadTemplate($tpath['register'] . 'register.tpl');
 $time = time() + ($config['date_adjust'] * 60);
@@ -33,36 +33,36 @@ $captcha = isset ($_REQUEST['captcha']) ? intval($_REQUEST['captcha']) : '';
 $forum_captcha_sess = isset ($_REQUEST['forum_captcha_sess']) ? intval($_REQUEST['forum_captcha_sess']) : '';
 if (isset($_REQUEST['submit'])) {
 	if (preg_match("/[^(\w)|(\x7F-\xFF)]/", $name))
-		$error_text['name'] = 'Вы используете запрещеные символы';
+		$error_text['name'] = 'Р’С‹ РёСЃРїРѕР»СЊР·СѓРµС‚Рµ Р·Р°РїСЂРµС‰РµРЅС‹Рµ СЃРёРјРІРѕР»С‹';
 	if (strlen($name) < 3)
-		$error_text['name'] = 'Слишком короткий логин';
+		$error_text['name'] = 'РЎР»РёС€РєРѕРј РєРѕСЂРѕС‚РєРёР№ Р»РѕРіРёРЅ';
 	if (strlen($name) > 30)
-		$error_text['name'] = 'Логин не должен превышать 30 буквы';
+		$error_text['name'] = 'Р›РѕРіРёРЅ РЅРµ РґРѕР»Р¶РµРЅ РїСЂРµРІС‹С€Р°С‚СЊ 30 Р±СѓРєРІС‹';
 	if (strlen($password) < 3)
-		$error_text['password'] = 'Слишком кароткий пароль';
+		$error_text['password'] = 'РЎР»РёС€РєРѕРј РєР°СЂРѕС‚РєРёР№ РїР°СЂРѕР»СЊ';
 	elseif ($password != $confirm)
-		$error_text['password'] = 'Пароли не совпадают';
+		$error_text['password'] = 'РџР°СЂРѕР»Рё РЅРµ СЃРѕРІРїР°РґР°СЋС‚';
 	if (empty($mail))
-		$error_text['mail'] = 'e-mail не указан';
+		$error_text['mail'] = 'e-mail РЅРµ СѓРєР°Р·Р°РЅ';
 	else {
 		if (!filter_var($mail, FILTER_VALIDATE_EMAIL))
-			$error_text['mail'] = 'Неверный e-mail';
+			$error_text['mail'] = 'РќРµРІРµСЂРЅС‹Р№ e-mail';
 	}
 	if ($captcha == $_SESSION['captcha'])
 		unset($_SESSION['captcha']);
 	else
-		$error_text['captcha'] = 'Проверочный код введен неправильно.';
+		$error_text['captcha'] = 'РџСЂРѕРІРµСЂРѕС‡РЅС‹Р№ РєРѕРґ РІРІРµРґРµРЅ РЅРµРїСЂР°РІРёР»СЊРЅРѕ.';
 	if ($forum_captcha_sess != '1') {
 		add_banned_users();
-		$error_text['bot'] = 'Ботам регистрация запрещена';
+		$error_text['bot'] = 'Р‘РѕС‚Р°Рј СЂРµРіРёСЃС‚СЂР°С†РёСЏ Р·Р°РїСЂРµС‰РµРЅР°';
 	}
 	$row = $mysql->record('SELECT * from ' . prefix . '_users WHERE lower(name) = ' . securemysql(strtolower($name)) . ' or mail= ' . securemysql($mail));
 	if (is_array($row)) {
 		if (strtolower($row['mail']) == strtolower($mail)) {
-			$error_text['mail'] = 'Этот e-mail уже зарегистирован';
+			$error_text['mail'] = 'Р­С‚РѕС‚ e-mail СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚РёСЂРѕРІР°РЅ';
 		}
 		if (strtolower($row['name']) == strtolower($name)) {
-			$error_text['name'] = 'Этот логин уже зарегистирован';
+			$error_text['name'] = 'Р­С‚РѕС‚ Р»РѕРіРёРЅ СѓР¶Рµ Р·Р°СЂРµРіРёСЃС‚РёСЂРѕРІР°РЅ';
 		}
 	}
 	$regstatus = 4;
@@ -82,7 +82,7 @@ if (isset($_REQUEST['submit'])) {
 				\'\')
 			');
 
-		return $output = announcement_forum('Вы заренистированы и можите зайти на форум', link_login(), 2);
+		return $output = announcement_forum('Р’С‹ Р·Р°СЂРµРЅРёСЃС‚РёСЂРѕРІР°РЅС‹ Рё РјРѕР¶РёС‚Рµ Р·Р°Р№С‚Рё РЅР° С„РѕСЂСѓРј', link_login(), 2);
 	}
 }
 if (isset($error_text) && is_array($error_text)) {

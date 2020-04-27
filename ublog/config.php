@@ -12,14 +12,14 @@ if (($personalCount < 2) || ($personalCount > 100))
 // Fill configuration parameters
 $cfg = array();
 $cfgX = array();
-array_push($cfg, array('descr' => 'Плагин показывает новости конкретного пользователя'));
+array_push($cfg, array('descr' => 'РџР»Р°РіРёРЅ РїРѕРєР°Р·С‹РІР°РµС‚ РЅРѕРІРѕСЃС‚Рё РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ'));
 $cfgX = array();
-array_push($cfgX, array('name' => 'replaceCount', 'title' => "Заменять значение переменной {news} на активную ссылку на блог пользователя?<br /><small><b>Да</b> - Будет заменяться значение переменной<br /><b>Нет</b> - значение переменной заменяться не будет</small>", 'type' => 'select', 'values' => array('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => intval(pluginGetVariable($plugin, 'replaceCount'))));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Страница просмотра профиля пользователя</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'replaceCount', 'title' => "Р—Р°РјРµРЅСЏС‚СЊ Р·РЅР°С‡РµРЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№ {news} РЅР° Р°РєС‚РёРІРЅСѓСЋ СЃСЃС‹Р»РєСѓ РЅР° Р±Р»РѕРі РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ?<br /><small><b>Р”Р°</b> - Р‘СѓРґРµС‚ Р·Р°РјРµРЅСЏС‚СЊСЃСЏ Р·РЅР°С‡РµРЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№<br /><b>РќРµС‚</b> - Р·РЅР°С‡РµРЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№ Р·Р°РјРµРЅСЏС‚СЊСЃСЏ РЅРµ Р±СѓРґРµС‚</small>", 'type' => 'select', 'values' => array('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => intval(pluginGetVariable($plugin, 'replaceCount'))));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>РЎС‚СЂР°РЅРёС†Р° РїСЂРѕСЃРјРѕС‚СЂР° РїСЂРѕС„РёР»СЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ</b>', 'entries' => $cfgX));
 $cfgX = array();
-array_push($cfgX, array('name' => 'personalPages', 'title' => "Включить персональную ленту для новостей пользователей<br /><small><b>Да</b> - По адресу /plugin/ublog/?id=<b>ID_пользователя</b> будет доступен список его новостей<br /><b>Нет</b> - список новостей пользователя выводиться не будет</small>", 'type' => 'select', 'values' => array('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => intval(pluginGetVariable($plugin, 'personalPages'))));
-array_push($cfgX, array('name' => 'personalCount', 'title' => "Кол-во новостей, отображаемых на странице<br/><small>Значение по умолчанию: <b>10</b></small>", 'type' => 'input', 'value' => $personalCount));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Собственная страница с лентой новостей пользователя</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'personalPages', 'title' => "Р’РєР»СЋС‡РёС‚СЊ РїРµСЂСЃРѕРЅР°Р»СЊРЅСѓСЋ Р»РµРЅС‚Сѓ РґР»СЏ РЅРѕРІРѕСЃС‚РµР№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№<br /><small><b>Р”Р°</b> - РџРѕ Р°РґСЂРµСЃСѓ /plugin/ublog/?id=<b>ID_РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ</b> Р±СѓРґРµС‚ РґРѕСЃС‚СѓРїРµРЅ СЃРїРёСЃРѕРє РµРіРѕ РЅРѕРІРѕСЃС‚РµР№<br /><b>РќРµС‚</b> - СЃРїРёСЃРѕРє РЅРѕРІРѕСЃС‚РµР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РІС‹РІРѕРґРёС‚СЊСЃСЏ РЅРµ Р±СѓРґРµС‚</small>", 'type' => 'select', 'values' => array('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => intval(pluginGetVariable($plugin, 'personalPages'))));
+array_push($cfgX, array('name' => 'personalCount', 'title' => "РљРѕР»-РІРѕ РЅРѕРІРѕСЃС‚РµР№, РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹С… РЅР° СЃС‚СЂР°РЅРёС†Рµ<br/><small>Р—РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ: <b>10</b></small>", 'type' => 'input', 'value' => $personalCount));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>РЎРѕР±СЃС‚РІРµРЅРЅР°СЏ СЃС‚СЂР°РЅРёС†Р° СЃ Р»РµРЅС‚РѕР№ РЅРѕРІРѕСЃС‚РµР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ</b>', 'entries' => $cfgX));
 // RUN
 if ($_REQUEST['action'] == 'commit') {
 	// If submit requested, do config save

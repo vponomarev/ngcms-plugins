@@ -1,29 +1,29 @@
 <?php
 // #====================================================================================#
-// # Наименование плагина: finance [ Finance manager ]                                  #
-// # Разрешено к использованию с: Next Generation CMS                                   #
-// # Автор: Vitaly A Ponomarev, vp7@mail.ru                                             #
+// # РќР°РёРјРµРЅРѕРІР°РЅРёРµ РїР»Р°РіРёРЅР°: finance [ Finance manager ]                                  #
+// # Р Р°Р·СЂРµС€РµРЅРѕ Рє РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЋ СЃ: Next Generation CMS                                   #
+// # РђРІС‚РѕСЂ: Vitaly A Ponomarev, vp7@mail.ru                                             #
 // #====================================================================================#
 // #====================================================================================#
-// # Ядро плагина                                                                       #
+// # РЇРґСЂРѕ РїР»Р°РіРёРЅР°                                                                       #
 // #====================================================================================#
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-// Загрузка библиотеки
+// Р—Р°РіСЂСѓР·РєР° Р±РёР±Р»РёРѕС‚РµРєРё
 include_once(root . "/plugins/finance/inc/finance.php");
-// Инициализируем кеш
+// РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РєРµС€
 financeInitCache();
-// Подгружаем языковой файл
+// РџРѕРґРіСЂСѓР¶Р°РµРј СЏР·С‹РєРѕРІРѕР№ С„Р°Р№Р»
 loadPluginLang('finance', 'main', '', '', ':');
 //
-// Фильтр новостей (для управления ценой)
+// Р¤РёР»СЊС‚СЂ РЅРѕРІРѕСЃС‚РµР№ (РґР»СЏ СѓРїСЂР°РІР»РµРЅРёСЏ С†РµРЅРѕР№)
 //
 class FinanceNewsFilter extends NewsFilter {
 
 	function addNewsForm(&$tvars) {
 
-		$tvars['plugin']['finance'] = '<tr><td width="100%" class="contentHead"><img src="' . admin_url . '/skins/default/images/nav.gif" hspace="8" alt="" />Платный доступ к новости</td></tr>';
-		$tvars['plugin']['finance'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>Стоимость доступа:</td><td><input name="fin_price" /> <small>( в формате <b>xxx.xx</b>, если не указано, то доступ к новости бесплатен)</small></td></tr></table></td></tr>';
+		$tvars['plugin']['finance'] = '<tr><td width="100%" class="contentHead"><img src="' . admin_url . '/skins/default/images/nav.gif" hspace="8" alt="" />РџР»Р°С‚РЅС‹Р№ РґРѕСЃС‚СѓРї Рє РЅРѕРІРѕСЃС‚Рё</td></tr>';
+		$tvars['plugin']['finance'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>РЎС‚РѕРёРјРѕСЃС‚СЊ РґРѕСЃС‚СѓРїР°:</td><td><input name="fin_price" /> <small>( РІ С„РѕСЂРјР°С‚Рµ <b>xxx.xx</b>, РµСЃР»Рё РЅРµ СѓРєР°Р·Р°РЅРѕ, С‚Рѕ РґРѕСЃС‚СѓРї Рє РЅРѕРІРѕСЃС‚Рё Р±РµСЃРїР»Р°С‚РµРЅ)</small></td></tr></table></td></tr>';
 
 		return 1;
 	}
@@ -37,8 +37,8 @@ class FinanceNewsFilter extends NewsFilter {
 
 	function editNewsForm($newsID, $SQLold, &$tvars) {
 
-		$tvars['plugin']['finance'] = '<tr><td width="100%" class="contentHead"><img src="' . admin_url . '/skins/default/images/nav.gif" hspace="8" alt="" />Платный доступ к новости</td></tr>';
-		$tvars['plugin']['finance'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>Стоимость доступа:</td><td><input name="fin_price" value="' . $SQLold['fin_price'] . '" /> <small>( в формате <b>xxx.xx</b>, если не указано, то доступ к новости бесплатен)</small></td></tr></table></td></tr>';
+		$tvars['plugin']['finance'] = '<tr><td width="100%" class="contentHead"><img src="' . admin_url . '/skins/default/images/nav.gif" hspace="8" alt="" />РџР»Р°С‚РЅС‹Р№ РґРѕСЃС‚СѓРї Рє РЅРѕРІРѕСЃС‚Рё</td></tr>';
+		$tvars['plugin']['finance'] .= '<tr><td width="100%" class="contentEntry1"><table><tr><td>РЎС‚РѕРёРјРѕСЃС‚СЊ РґРѕСЃС‚СѓРїР°:</td><td><input name="fin_price" value="' . $SQLold['fin_price'] . '" /> <small>( РІ С„РѕСЂРјР°С‚Рµ <b>xxx.xx</b>, РµСЃР»Рё РЅРµ СѓРєР°Р·Р°РЅРѕ, С‚Рѕ РґРѕСЃС‚СѓРї Рє РЅРѕРІРѕСЃС‚Рё Р±РµСЃРїР»Р°С‚РµРЅ)</small></td></tr></table></td></tr>';
 
 		return 1;
 	}
@@ -53,16 +53,16 @@ class FinanceNewsFilter extends NewsFilter {
 	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
 
 		global $tpl, $mysql, $userROW, $FINANCE_MONEY_ACCEPTORS;
-		// Если цена не выставлена - пропускаем
+		// Р•СЃР»Рё С†РµРЅР° РЅРµ РІС‹СЃС‚Р°РІР»РµРЅР° - РїСЂРѕРїСѓСЃРєР°РµРј
 		$tvars['regx']["#\[finance\](.*?)\[/finance\]#s"] = $SQLnews['fin_price'] ? "$1" : '';
 		if (!$SQLnews['fin_price']) {
 			return;
 		}
-		// Выставляем поле "цена"
+		// Р’С‹СЃС‚Р°РІР»СЏРµРј РїРѕР»Рµ "С†РµРЅР°"
 		$tvars['vars']['fin_price'] = $SQLnews['fin_price'];
-		// Нашли платную ссылку. Проверяем нет ли у пользователя уже к ней доступа
+		// РќР°С€Р»Рё РїР»Р°С‚РЅСѓСЋ СЃСЃС‹Р»РєСѓ. РџСЂРѕРІРµСЂСЏРµРј РЅРµС‚ Р»Рё Сѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ СѓР¶Рµ Рє РЅРµР№ РґРѕСЃС‚СѓРїР°
 		if ($userROW['id'] && ($srow = $mysql->record("select * from " . prefix . "_subscribe_manager where user_id = " . db_squote($userROW['id']) . " and access_element_id = " . db_squote($SQLnews['id'])))) {
-			// Доступ есть. Открываем контент
+			// Р”РѕСЃС‚СѓРї РµСЃС‚СЊ. РћС‚РєСЂС‹РІР°РµРј РєРѕРЅС‚РµРЅС‚
 			foreach (array('story', 'short-story', 'full-story') as $item) {
 				if (isset($tvars['vars'][$item])) {
 					$tvars['vars'][$item] = preg_replace('#\[fin_lock\](.+?)\[\/fin_lock\]#', '$1', $tvars['vars'][$item]);
@@ -75,7 +75,7 @@ class FinanceNewsFilter extends NewsFilter {
 		}
 		$tvars['regx']["#\[fin_on\](.*?)\[/fin_on\]#s"] = '';
 		$tvars['regx']["#\[fin_off\](.*?)\[/fin_off\]#s"] = '$1';
-		// Определяем стоимость (приводим её к центам/копейкам)
+		// РћРїСЂРµРґРµР»СЏРµРј СЃС‚РѕРёРјРѕСЃС‚СЊ (РїСЂРёРІРѕРґРёРј РµС‘ Рє С†РµРЅС‚Р°Рј/РєРѕРїРµР№РєР°Рј)
 		$price = $SQLnews['fin_price'];
 		if (is_array($userROW)) {
 			$ubalance = sprintf('%5.2f', finance_check_money($userROW['name']) / 100);
@@ -85,7 +85,7 @@ class FinanceNewsFilter extends NewsFilter {
 			$enough = 0;
 		}
 		if (is_array($userROW)) {
-			// Юзер залогинен
+			// Р®Р·РµСЂ Р·Р°Р»РѕРіРёРЅРµРЅ
 			load_extras('fin_acceptors');
 			if ($enough) {
 				$tpl->template('enough', extras_dir . '/finance/tpl');
@@ -161,7 +161,7 @@ function plugin_finance_screen() {
 }
 
 //
-// Провести оплату доступа [доступ к новости]
+// РџСЂРѕРІРµСЃС‚Рё РѕРїР»Р°С‚Сѓ РґРѕСЃС‚СѓРїР° [РґРѕСЃС‚СѓРї Рє РЅРѕРІРѕСЃС‚Рё]
 //
 function plugin_finance_pay() {
 
@@ -171,31 +171,31 @@ function plugin_finance_pay() {
 	if (!$username) {
 		return false;
 	}
-	// Получаем данные по новости
+	// РџРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ РїРѕ РЅРѕРІРѕСЃС‚Рё
 	if ($row = $mysql->record("select * from " . prefix . "_news where id = " . $access_element_id)) {
-		// Новость найдена. Проверяем, не оплачивали ли мы уже к ней доступ?
+		// РќРѕРІРѕСЃС‚СЊ РЅР°Р№РґРµРЅР°. РџСЂРѕРІРµСЂСЏРµРј, РЅРµ РѕРїР»Р°С‡РёРІР°Р»Рё Р»Рё РјС‹ СѓР¶Рµ Рє РЅРµР№ РґРѕСЃС‚СѓРї?
 		if ($prow = $mysql->record("select * from " . prefix . "_subscribe_manager where user_id = " . $userROW['id'] . ' and access_element_id = ' . $access_element_id)) {
-			// Уже проплачено!
-			$template['vars']['mainblock'] = 'Вы уже оплатили данный доступ.';
+			// РЈР¶Рµ РїСЂРѕРїР»Р°С‡РµРЅРѕ!
+			$template['vars']['mainblock'] = 'Р’С‹ СѓР¶Рµ РѕРїР»Р°С‚РёР»Рё РґР°РЅРЅС‹Р№ РґРѕСЃС‚СѓРї.';
 
 			return;
 		}
 		if (!$row['fin_price']) {
-			$template['vars']['mainblock'] = 'Доступ к данной новости бесплатен.';
+			$template['vars']['mainblock'] = 'Р”РѕСЃС‚СѓРї Рє РґР°РЅРЅРѕР№ РЅРѕРІРѕСЃС‚Рё Р±РµСЃРїР»Р°С‚РµРЅ.';
 
 			return;
 		}
-		// Пытаемся оплатить
+		// РџС‹С‚Р°РµРјСЃСЏ РѕРїР»Р°С‚РёС‚СЊ
 		if (finance_pay(array('id' => $userROW['id']), array('type' => 'money', 'value' => array('money' => $row['fin_price'] * 100), 'description' => 'Payment for access'))) {
-			// Платёж прошел успешно. Предоставляем доступ
+			// РџР»Р°С‚С‘Р¶ РїСЂРѕС€РµР» СѓСЃРїРµС€РЅРѕ. РџСЂРµРґРѕСЃС‚Р°РІР»СЏРµРј РґРѕСЃС‚СѓРї
 			$mysql->query("insert into " . prefix . "_subscribe_manager(user_id, special_access_type, access_element_id) values(" . db_squote($userROW['id']) . ", $access_type, $access_element_id)");
-			$template['vars']['mainblock'] = 'Платеж успешно проведён, доступ открыт.' . ($_REQUEST['back'] ? '<br /><a href="' . $_REQUEST['back'] . '">Вернуться назад</a>' : '');
+			$template['vars']['mainblock'] = 'РџР»Р°С‚РµР¶ СѓСЃРїРµС€РЅРѕ РїСЂРѕРІРµРґС‘РЅ, РґРѕСЃС‚СѓРї РѕС‚РєСЂС‹С‚.' . ($_REQUEST['back'] ? '<br /><a href="' . $_REQUEST['back'] . '">Р’РµСЂРЅСѓС‚СЊСЃСЏ РЅР°Р·Р°Рґ</a>' : '');
 		} else {
-			// Платёж не прошел
-			$template['vars']['mainblock'] = 'У вас на счету недостаточно денег для проведения платежа.';
+			// РџР»Р°С‚С‘Р¶ РЅРµ РїСЂРѕС€РµР»
+			$template['vars']['mainblock'] = 'РЈ РІР°СЃ РЅР° СЃС‡РµС‚Сѓ РЅРµРґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґРµРЅРµРі РґР»СЏ РїСЂРѕРІРµРґРµРЅРёСЏ РїР»Р°С‚РµР¶Р°.';
 		}
 	} else {
-		$template['vars']['mainblock'] = 'Новость, доступ к которой вы хотите оплатить, не найдена.';
+		$template['vars']['mainblock'] = 'РќРѕРІРѕСЃС‚СЊ, РґРѕСЃС‚СѓРї Рє РєРѕС‚РѕСЂРѕР№ РІС‹ С…РѕС‚РёС‚Рµ РѕРїР»Р°С‚РёС‚СЊ, РЅРµ РЅР°Р№РґРµРЅР°.';
 	}
 }
 
@@ -206,7 +206,7 @@ function plugin_finance_report() {
 
 	global $template, $tpl, $userROW, $username, $FINANCE_MONEY_ACCEPTORS;
 	if (!is_array($userROW)) {
-		$template['vars']['mainblock'] = 'Финансовая информация доступна только зарегистрированным пользователям!';
+		$template['vars']['mainblock'] = 'Р¤РёРЅР°РЅСЃРѕРІР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РґРѕСЃС‚СѓРїРЅР° С‚РѕР»СЊРєРѕ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹Рј РїРѕР»СЊР·РѕРІР°С‚РµР»СЏРј!';
 	}
 	// Determine paths for all template files
 	$tpath = locatePluginTemplates(array('screen', 'screen.entries'), 'finance', extra_get_param('finance', 'localsource'));
@@ -235,17 +235,17 @@ function plugin_finance_pay_accept($need_form = 0) {
 	$acceptor_id = $_REQUEST['acceptor'];
 	foreach ($FINANCE_MONEY_ACCEPTORS as $acceptor) {
 		if ($acceptor->active && ($acceptor->id == $acceptor_id)) {
-			// Определяем что надо сделать
+			// РћРїСЂРµРґРµР»СЏРµРј С‡С‚Рѕ РЅР°РґРѕ СЃРґРµР»Р°С‚СЊ
 			if ($need_form) {
-				// Выводим форму от аксептора
+				// Р’С‹РІРѕРґРёРј С„РѕСЂРјСѓ РѕС‚ Р°РєСЃРµРїС‚РѕСЂР°
 				$template['vars']['mainblock'] = $acceptor->paymentAcceptForm(isset($_REQUEST['needsum']) ? secure_html($_REQUEST['needsum']) : '');
 			} else {
-				// Автоматизированное проведение платежа
+				// РђРІС‚РѕРјР°С‚РёР·РёСЂРѕРІР°РЅРЅРѕРµ РїСЂРѕРІРµРґРµРЅРёРµ РїР»Р°С‚РµР¶Р°
 				$template['vars']['mainblock'] = $acceptor->paymentAccept();
 			}
 
 			return;
 		}
 	}
-	$template['vars']['mainblock'] = 'Ошибка: указанный finance acceptor (' . $acceptor_id . ') не найден';
+	$template['vars']['mainblock'] = 'РћС€РёР±РєР°: СѓРєР°Р·Р°РЅРЅС‹Р№ finance acceptor (' . $acceptor_id . ') РЅРµ РЅР°Р№РґРµРЅ';
 }

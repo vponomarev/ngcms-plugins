@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title>Сообщить об ошибке</title>
+	<title>РЎРѕРѕР±С‰РёС‚СЊ РѕР± РѕС€РёР±РєРµ</title>
 	<style type="text/css">
 		body {
 			font: normal 12px verdana, sans-serif;
@@ -38,12 +38,12 @@
 
 	<div id="senderror">
 		<div class="texth">
-			<u>Сообщить об ошибке:</u><br/><br/>
-			Тип ошибки: <select name="error" class="error" id="errorSelect">{errorlist}</select><br/><br/>
-			[email]Ваш e-mail: <input type="text" name="mail"/><br/>[/email]
-			[notify]<input type="checkbox" name="notify" value="1"/> информировать о решении проблемы <br/>[/notify]
-			[text]Детальное описание проблемы:<br/><textarea cols="80" rows="4" name="error_text"></textarea><br/>[/text]
-			<input type="submit" class="report" onclick="if (document.getElementById('errorSelect').value==''){alert('Необходимо выбрать тип ошибки!'); return false;};" value="Отправить"/>
+			<u>РЎРѕРѕР±С‰РёС‚СЊ РѕР± РѕС€РёР±РєРµ:</u><br/><br/>
+			РўРёРї РѕС€РёР±РєРё: <select name="error" class="error" id="errorSelect">{errorlist}</select><br/><br/>
+			[email]Р’Р°С€ e-mail: <input type="text" name="mail"/><br/>[/email]
+			[notify]<input type="checkbox" name="notify" value="1"/> РёРЅС„РѕСЂРјРёСЂРѕРІР°С‚СЊ Рѕ СЂРµС€РµРЅРёРё РїСЂРѕР±Р»РµРјС‹ <br/>[/notify]
+			[text]Р”РµС‚Р°Р»СЊРЅРѕРµ РѕРїРёСЃР°РЅРёРµ РїСЂРѕР±Р»РµРјС‹:<br/><textarea cols="80" rows="4" name="error_text"></textarea><br/>[/text]
+			<input type="submit" class="report" onclick="if (document.getElementById('errorSelect').value==''){alert('РќРµРѕР±С…РѕРґРёРјРѕ РІС‹Р±СЂР°С‚СЊ С‚РёРї РѕС€РёР±РєРё!'); return false;};" value="РћС‚РїСЂР°РІРёС‚СЊ"/>
 		</div>
 	</div>
 </form>

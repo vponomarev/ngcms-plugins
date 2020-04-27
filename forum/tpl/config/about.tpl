@@ -6,13 +6,13 @@
 		document.getElementById('support').style.display = (selectedOption == 'support') ? "block" : "none";
 	}
 </script>
-<input type="button" onmousedown="javascript:ChangeOption('about')" value="О плагине" class="button"/>
-<input type="button" onmousedown="javascript:ChangeOption('author')" value="Авторы" class="button"/>
-<input type="button" onmousedown="javascript:ChangeOption('acknowledgments')" value="Благодарности" class="button"/>
-<input type="button" onmousedown="javascript:ChangeOption('support')" value="Поддержка" class="button"/>
+<input type="button" onmousedown="javascript:ChangeOption('about')" value="Рћ РїР»Р°РіРёРЅРµ" class="button"/>
+<input type="button" onmousedown="javascript:ChangeOption('author')" value="РђРІС‚РѕСЂС‹" class="button"/>
+<input type="button" onmousedown="javascript:ChangeOption('acknowledgments')" value="Р‘Р»Р°РіРѕРґР°СЂРЅРѕСЃС‚Рё" class="button"/>
+<input type="button" onmousedown="javascript:ChangeOption('support')" value="РџРѕРґРґРµСЂР¶РєР°" class="button"/>
 
 <fieldset id="author" style="display: none;" class="admGroup">
-	<legend class="title">Авторы</legend>
+	<legend class="title">РђРІС‚РѕСЂС‹</legend>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<dl>
 			<dt>
@@ -26,7 +26,7 @@
 			</center>
 			</dt><br/>
 			<dt>
-			<center>© 2009-2014 Nail' Davydov</center>
+			<center>В© 2009-2014 Nail' Davydov</center>
 			</dt>
 		</dl>
 	</table>
@@ -34,7 +34,7 @@
 
 
 <fieldset id="about" class="admGroup">
-	<legend class="title">О плагине</legend>
+	<legend class="title">Рћ РїР»Р°РіРёРЅРµ</legend>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<dl>
 			<dt>
@@ -44,34 +44,34 @@
 			<center></center>
 			</dt><br/>
 			<dt>
-			<center>© 2009-2014 Nail' Davydov</center>
+			<center>В© 2009-2014 Nail' Davydov</center>
 			</dt>
 		</dl>
 	</table>
 </fieldset>
 
 <fieldset id="acknowledgments" style="display: none;" class="admGroup">
-	<legend class="title">Благодарности</legend>
+	<legend class="title">Р‘Р»Р°РіРѕРґР°СЂРЅРѕСЃС‚Рё</legend>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<dl>
-			<dt><strong>Закрытое тестирование и аудит:</strong></dt>
+			<dt><strong>Р—Р°РєСЂС‹С‚РѕРµ С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ Рё Р°СѓРґРёС‚:</strong></dt>
 			<dd>Sergey Rostunov -(<a href="http://ngcms.ru/forum/profile.php?id=62">infinity237</a>)</dd>
 			<dt>
-			<center>© 2009-2014 Nail' Davydov</center>
+			<center>В© 2009-2014 Nail' Davydov</center>
 			</dt>
 		</dl>
 	</table>
 </fieldset>
 <fieldset id="support" style="display: none;" class="admGroup">
-	<legend class="title">Поддержка</legend>
+	<legend class="title">РџРѕРґРґРµСЂР¶РєР°</legend>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<dl>
-			<dt><strong>По всем проблема и предложениям обращаться на:
-					<a href="http://ngcms.ru/forum/viewtopic.php?id=592" target="_blank"><b>Тестирование и обсуждения
-							плагина форум</b></a></strong></dt>
+			<dt><strong>РџРѕ РІСЃРµРј РїСЂРѕР±Р»РµРјР° Рё РїСЂРµРґР»РѕР¶РµРЅРёСЏРј РѕР±СЂР°С‰Р°С‚СЊСЃСЏ РЅР°:
+					<a href="http://ngcms.ru/forum/viewtopic.php?id=592" target="_blank"><b>РўРµСЃС‚РёСЂРѕРІР°РЅРёРµ Рё РѕР±СЃСѓР¶РґРµРЅРёСЏ
+							РїР»Р°РіРёРЅР° С„РѕСЂСѓРј</b></a></strong></dt>
 			<br/>
 			<dt>
-			<center>© 2009-2014 Nail' Davydov</center>
+			<center>В© 2009-2014 Nail' Davydov</center>
 			</dt>
 		</dl>
 	</table>

@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит 
- комментариев. То, что писалось с трудом, должно 
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚ 
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ 
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) exit('HAL');
@@ -107,17 +107,17 @@ function main($entries) {
 	$tpath = locatePluginTemplates(array('main'), $plugin, 1, '', 'config');
 	$_SESSION['forum']['info'] = array();
 	if (!file_exists(files_dir . 'forum'))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка ' . files_dir . 'forum';
+		$_SESSION['forum']['info'][] = 'РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: РЅРµ РЅР°Р№РґРµРЅР° РїР°РїРєР° ' . files_dir . 'forum';
 	if (!is_writable(files_dir . 'forum'))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись ' . files_dir . 'forum';
+		$_SESSION['forum']['info'][] = 'РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: РЅРµС‚ РїСЂР°РІ РЅР° Р·Р°РїРёСЃСЊ ' . files_dir . 'forum';
 	if (!is_writable(FORUM_CACHE))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: не найдена папка ' . FORUM_CACHE;
+		$_SESSION['forum']['info'][] = 'РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: РЅРµ РЅР°Р№РґРµРЅР° РїР°РїРєР° ' . FORUM_CACHE;
 	if (!is_writable(FORUM_CACHE))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись ' . FORUM_CACHE;
+		$_SESSION['forum']['info'][] = 'РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: РЅРµС‚ РїСЂР°РІ РЅР° Р·Р°РїРёСЃСЊ ' . FORUM_CACHE;
 	if (file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE . '/group_perm.php'))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись ' . FORUM_CACHE . '/group_perm.php';
+		$_SESSION['forum']['info'][] = 'РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: РЅРµС‚ РїСЂР°РІ РЅР° Р·Р°РїРёСЃСЊ ' . FORUM_CACHE . '/group_perm.php';
 	if (file_exists(FORUM_CACHE) && !is_writable(FORUM_CACHE . '/forum_perm.php'))
-		$_SESSION['forum']['info'][] = 'Критическая ошибка: нет прав на запись ' . FORUM_CACHE . '/forum_perm.php';
+		$_SESSION['forum']['info'][] = 'РљСЂРёС‚РёС‡РµСЃРєР°СЏ РѕС€РёР±РєР°: РЅРµС‚ РїСЂР°РІ РЅР° Р·Р°РїРёСЃСЊ ' . FORUM_CACHE . '/forum_perm.php';
 	if (isset($_SESSION['forum']['info'])) {
 		$inf = $_SESSION['forum']['info'];
 		if (is_array($inf))
@@ -153,8 +153,8 @@ function edit_group() {
 	$group_search = isset($_REQUEST['group_search']) ? intval(trim($_REQUEST['group_search'])) : intval(trim($group['group_search']));
 	$group_pm = isset($_REQUEST['group_pm']) ? intval(trim($_REQUEST['group_pm'])) : intval(trim($group['group_pm']));
 	if (isset($_REQUEST['submit'])) {
-		if (empty($group_name)) $error_text[] = 'Название группы обязательно для заполнения';
-		if (empty($group_color)) $error_text[] = 'Забыли указать цвет';
+		if (empty($group_name)) $error_text[] = 'РќР°Р·РІР°РЅРёРµ РіСЂСѓРїРїС‹ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ';
+		if (empty($group_color)) $error_text[] = 'Р—Р°Р±С‹Р»Рё СѓРєР°Р·Р°С‚СЊ С†РІРµС‚';
 		if (empty($error_text)) {
 			$test = $mysql->query('UPDATE ' . prefix . '_forum_group SET 
 				group_name = ' . securemysql($group_name) . ', 
@@ -181,15 +181,15 @@ function edit_group() {
 	$tVars = array(
 		'group_name'   => $group_name,
 		'group_color'  => $group_color,
-		'group_read'   => MakeDropDown(array(false => 'нет', true => 'да'), 'group_read', $group_read),
-		'group_news'   => MakeDropDown(array(false => 'нет', true => 'да'), 'group_news', $group_news),
-		'group_search' => MakeDropDown(array(false => 'нет', true => 'да'), 'group_search', $group_search),
-		'group_pm'     => MakeDropDown(array(false => 'нет', true => 'да'), 'group_pm', $group_pm),
+		'group_read'   => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'group_read', $group_read),
+		'group_news'   => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'group_news', $group_news),
+		'group_search' => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'group_search', $group_search),
+		'group_pm'     => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'group_pm', $group_pm),
 		'list_error'   => $error_input,
 	);
 	$entries_main = array(
 		'show' => $xt->render($tVars),
-		'mode' => 'Редактор прав',
+		'mode' => 'Р РµРґР°РєС‚РѕСЂ РїСЂР°РІ',
 	);
 	main($entries_main);
 }
@@ -204,7 +204,7 @@ function ban() {
 	);
 	$entries_main = array(
 		'show' => $xt->render($tVars),
-		'mode' => 'Забаненые',
+		'mode' => 'Р—Р°Р±Р°РЅРµРЅС‹Рµ',
 	);
 	main($entries_main);
 }
@@ -219,7 +219,7 @@ function ban_ip_list_del() {
 	);
 	$entries_main = array(
 		'show' => $xt->render($tVars),
-		'mode' => 'Добавить',
+		'mode' => 'Р”РѕР±Р°РІРёС‚СЊ',
 	);
 	main($entries_main);
 }
@@ -231,12 +231,12 @@ function ban_ip_list() {
 	$xt = $twig->loadTemplate($tpath['ban_ip_list'] . 'ban_ip_list.tpl');
 	$ban_ip_list = array(
 		'127.0.0.1' => array(
-			array('desc_error' => 'Описание нарушения'),
-			array('desc_error' => 'Описание нарушения'),
-			array('desc_error' => 'Описание нарушения'),
+			array('desc_error' => 'РћРїРёСЃР°РЅРёРµ РЅР°СЂСѓС€РµРЅРёСЏ'),
+			array('desc_error' => 'РћРїРёСЃР°РЅРёРµ РЅР°СЂСѓС€РµРЅРёСЏ'),
+			array('desc_error' => 'РћРїРёСЃР°РЅРёРµ РЅР°СЂСѓС€РµРЅРёСЏ'),
 		),
 		'127.0.0.2' => array(
-			array('desc_error' => 'Описание нарушения_2')
+			array('desc_error' => 'РћРїРёСЃР°РЅРёРµ РЅР°СЂСѓС€РµРЅРёСЏ_2')
 		),
 	);
 	foreach ($ban_ip_list as $key => $value) {
@@ -254,7 +254,7 @@ function ban_ip_list() {
 	);
 	$entries_main = array(
 		'show' => $xt->render($tVars),
-		'mode' => 'Забаненые IP',
+		'mode' => 'Р—Р°Р±Р°РЅРµРЅС‹Рµ IP',
 	);
 	main($entries_main);
 }
@@ -282,7 +282,7 @@ function group() {
 	);
 	$entries_main = array(
 		'show' => $xt->render($tVars),
-		'mode' => 'Группы',
+		'mode' => 'Р“СЂСѓРїРїС‹',
 	);
 	main($entries_main);
 }
@@ -295,7 +295,7 @@ function about() {
 	$tVars = array();
 	$entries_main = array(
 		'show' => $xt->render($tVars),
-		'mode' => 'О плагине',
+		'mode' => 'Рћ РїР»Р°РіРёРЅРµ',
 	);
 	main($entries_main);
 }
@@ -313,10 +313,10 @@ function closed_complaints() {
 		viewed = \'1\'
 		
 		WHERE id = ' . $id . ' LIMIT 1');
-		$_SESSION['forum']['info'] = 'Жалоба закрыта';
+		$_SESSION['forum']['info'] = 'Р–Р°Р»РѕР±Р° Р·Р°РєСЂС‹С‚Р°';
 		redirect_forum_config('?mod=extra-config&plugin=forum&action=list_complaints');
 	} else {
-		$_SESSION['forum']['info'] = 'Ошибка';
+		$_SESSION['forum']['info'] = 'РћС€РёР±РєР°';
 	}
 }
 
@@ -358,7 +358,7 @@ function list_complaints() {
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Список жалоб',
+		'mode' => 'РЎРїРёСЃРѕРє Р¶Р°Р»РѕР±',
 	);
 	main($entries_main);
 }
@@ -382,10 +382,10 @@ function del_forum() {
 			$result[$row['m_forum_id']] = $row;
 		}
 		file_put_contents(FORUM_CACHE . '/mode_perm.php', '<?php' . "\n\n" . 'if (!defined(\'NGCMS\')) die (\'HAL\');' . "\n\n" . '$MODE_PERM = ' . var_export($result, true) . ';' . "\n\n");
-		$_SESSION['forum']['info'] = 'Форум удален';
+		$_SESSION['forum']['info'] = 'Р¤РѕСЂСѓРј СѓРґР°Р»РµРЅ';
 		generate_index_cache(true);
 	} else {
-		$_SESSION['forum']['info'] = 'Форум не удален';
+		$_SESSION['forum']['info'] = 'Р¤РѕСЂСѓРј РЅРµ СѓРґР°Р»РµРЅ';
 	}
 	redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 }
@@ -396,10 +396,10 @@ function del_section() {
 	$id = intval($_REQUEST['id']);
 	if (!$mysql->result('SELECT 1 FROM ' . prefix . '_forum_forums WHERE parent = ' . db_squote($id) . ' LIMIT 1')) {
 		$mysql->query('DELETE FROM ' . prefix . '_forum_forums WHERE id = ' . db_squote($id) . ' LIMIT 1');
-		$_SESSION['forum']['info'] = 'Раздел удален';
+		$_SESSION['forum']['info'] = 'Р Р°Р·РґРµР» СѓРґР°Р»РµРЅ';
 		generate_index_cache(true);
 	} else
-		$_SESSION['forum']['info'] = 'Нельзя удалять раздел с форумом';
+		$_SESSION['forum']['info'] = 'РќРµР»СЊР·СЏ СѓРґР°Р»СЏС‚СЊ СЂР°Р·РґРµР» СЃ С„РѕСЂСѓРјРѕРј';
 	redirect_forum_config('?mod=extra-config&plugin=forum&action=list_forum');
 }
 
@@ -416,7 +416,7 @@ function edit_section() {
 	$description = isset($_REQUEST['description']) ? secure_html(trim($_REQUEST['description'])) : secure_html(trim($forum['description']));
 	$keywords = isset($_REQUEST['keywords']) ? secure_html(trim($_REQUEST['keywords'])) : secure_html(trim($forum['keywords']));
 	if (isset($_REQUEST['submit'])) {
-		if (empty($name)) $error_text[] = 'Название раздела обязательно для заполнения';
+		if (empty($name)) $error_text[] = 'РќР°Р·РІР°РЅРёРµ СЂР°Р·РґРµР»Р° РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ';
 		if (empty($error_text)) {
 			if (isset($name) && $name) $SQL['title'] = $name;
 			if (isset($description) && $description) $SQL['description'] = $description;
@@ -442,7 +442,7 @@ function edit_section() {
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Редактирование раздела',
+		'mode' => 'Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЂР°Р·РґРµР»Р°',
 	);
 	main($entries_main);
 }
@@ -456,7 +456,7 @@ function send_section() {
 	$description = secure_html(convert($_REQUEST['description']));
 	$keywords = secure_html(convert($_REQUEST['keywords']));
 	if (isset($_REQUEST['submit'])) {
-		if (empty($name)) $error_text[] = 'Название раздела обязательно для заполнения';
+		if (empty($name)) $error_text[] = 'РќР°Р·РІР°РЅРёРµ СЂР°Р·РґРµР»Р° РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ';
 		if (empty($error_text)) {
 			$sql = 'SELECT MAX(position) FROM ' . prefix . '_forum_forums where parent = \'0\'';
 			$posit = $mysql->result($sql) + 1;
@@ -481,7 +481,7 @@ function send_section() {
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Добавить раздел',
+		'mode' => 'Р”РѕР±Р°РІРёС‚СЊ СЂР°Р·РґРµР»',
 	);
 	main($entries_main);
 }
@@ -520,13 +520,13 @@ function edit_forum() {
 	$m_post_remove = isset($_REQUEST['m_post_remove']) ? secure_html(trim($_REQUEST['m_post_remove'])) : $forum_mode_perm['m_post_remove'];
 	$forum_perm = is_array($_REQUEST['forum_perm']) ? $_REQUEST['forum_perm'] : $forum_perm;
 	if (isset($_REQUEST['submit'])) {
-		if (empty($forum_name)) $error_text[] = 'Название форума не заполнено';
+		if (empty($forum_name)) $error_text[] = 'РќР°Р·РІР°РЅРёРµ С„РѕСЂСѓРјР° РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ';
 		if (isset($forum_moderators) && $forum_moderators) {
 			$moder_array = array_map('trim', explode(',', $forum_moderators));
 			$moder_array = array_unique($moder_array);
 			foreach ($moder_array as $row) {
 				if (!$user[strtolower($row)] = $mysql->record('SELECT id, name FROM ' . prefix . '_users where name = LOWER(\'' . $row . '\') LIMIT 1')) {
-					$error_text[] = 'Пользователь ' . $row . ' не найден';
+					$error_text[] = 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ ' . $row . ' РЅРµ РЅР°Р№РґРµРЅ';
 				}
 			}
 		} else $user = array();
@@ -669,20 +669,20 @@ function edit_forum() {
 		$tEntry[] = array(
 			'group_id'          => $row['group_id'],
 			'group_name'        => $row['group_name'],
-			'forum_read'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
-			'topic_read'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
-			'topic_send'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
-			'topic_modify'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
-			'topic_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
-			'topic_closed'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
-			'topic_closed_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
-			'topic_remove'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
-			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
-			'post_send'         => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_send]', $forum_perm[$row['group_id']]['post_send']),
-			'post_modify'       => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
-			'post_modify_your'  => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
-			'post_remove'       => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
-			'post_remove_your'  => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
+			'forum_read'        => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
+			'topic_read'        => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
+			'topic_send'        => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
+			'topic_modify'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
+			'topic_modify_your' => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
+			'topic_closed'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
+			'topic_closed_your' => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
+			'topic_remove'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
+			'topic_remove_your' => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
+			'post_send'         => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_send]', $forum_perm[$row['group_id']]['post_send']),
+			'post_modify'       => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
+			'post_modify_your'  => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
+			'post_remove'       => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
+			'post_remove_your'  => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
 		);
 	}
 	$error_input = array();
@@ -700,18 +700,18 @@ function edit_forum() {
 		'forum_id'           => $forum['id'],
 		'list_group'         => $tEntry,
 		'list_forum'         => $tEntry2,
-		'm_topic_send'       => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_send', $m_topic_send),
-		'm_topic_modify'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_modify', $m_topic_modify),
-		'm_topic_closed'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_closed', $m_topic_closed),
-		'm_topic_remove'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_remove', $m_topic_remove),
-		'm_post_send'        => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_send', $m_post_send),
-		'm_post_modify'      => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_modify', $m_post_modify),
-		'm_post_remove'      => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_remove', $m_post_remove),
+		'm_topic_send'       => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_topic_send', $m_topic_send),
+		'm_topic_modify'     => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_topic_modify', $m_topic_modify),
+		'm_topic_closed'     => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_topic_closed', $m_topic_closed),
+		'm_topic_remove'     => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_topic_remove', $m_topic_remove),
+		'm_post_send'        => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_post_send', $m_post_send),
+		'm_post_modify'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_post_modify', $m_post_modify),
+		'm_post_remove'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_post_remove', $m_post_remove),
 		'list_error'         => $error_input,
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Редактировать форум',
+		'mode' => 'Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ С„РѕСЂСѓРј',
 	);
 	main($entries_main);
 }
@@ -838,13 +838,13 @@ function send_forum() {
 	);
 	//print "<pre>".var_export($forum_perm, true)."</pre>";
 	if (isset($_REQUEST['submit'])) {
-		if (empty($forum_name)) $error_text[] = 'Название форума не заполнено';
+		if (empty($forum_name)) $error_text[] = 'РќР°Р·РІР°РЅРёРµ С„РѕСЂСѓРјР° РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ';
 		if (isset($forum_moderators) && $forum_moderators) {
 			$moder_array = array_map('trim', explode(',', $forum_moderators));
 			$moder_array = array_unique($moder_array);
 			foreach ($moder_array as $row) {
 				if (!$user[strtolower($row)] = $mysql->record('SELECT id, name FROM ' . prefix . '_users where name = LOWER(\'' . $row . '\') LIMIT 1')) {
-					$error_text[] = 'Пользователь ' . $row . ' не найден';
+					$error_text[] = 'РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ ' . $row . ' РЅРµ РЅР°Р№РґРµРЅ';
 				}
 			}
 		}
@@ -947,20 +947,20 @@ function send_forum() {
 		$tEntry[] = array(
 			'group_id'          => $row['group_id'],
 			'group_name'        => $row['group_name'],
-			'forum_read'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
-			'topic_read'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
-			'topic_send'        => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
-			'topic_modify'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
-			'topic_modify_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
-			'topic_closed'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
-			'topic_closed_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
-			'topic_remove'      => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
-			'topic_remove_your' => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
-			'post_send'         => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_send]', $forum_perm[$row['group_id']]['post_send']),
-			'post_modify'       => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
-			'post_modify_your'  => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
-			'post_remove'       => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
-			'post_remove_your'  => MakeDropDown(array(false => 'нет', true => 'да'), 'forum_perm[' . $row['group_id'] . '][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
+			'forum_read'        => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][forum_read]', $forum_perm[$row['group_id']]['forum_read']),
+			'topic_read'        => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_read]', $forum_perm[$row['group_id']]['topic_read']),
+			'topic_send'        => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_send]', $forum_perm[$row['group_id']]['topic_send']),
+			'topic_modify'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_modify]', $forum_perm[$row['group_id']]['topic_modify']),
+			'topic_modify_your' => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_modify_your]', $forum_perm[$row['group_id']]['topic_modify_your']),
+			'topic_closed'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_closed]', $forum_perm[$row['group_id']]['topic_closed']),
+			'topic_closed_your' => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_closed_your]', $forum_perm[$row['group_id']]['topic_closed_your']),
+			'topic_remove'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_remove]', $forum_perm[$row['group_id']]['topic_remove']),
+			'topic_remove_your' => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][topic_remove_your]', $forum_perm[$row['group_id']]['topic_remove_your']),
+			'post_send'         => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_send]', $forum_perm[$row['group_id']]['post_send']),
+			'post_modify'       => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_modify]', $forum_perm[$row['group_id']]['post_modify']),
+			'post_modify_your'  => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_modify_your]', $forum_perm[$row['group_id']]['post_modify_your']),
+			'post_remove'       => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_remove]', $forum_perm[$row['group_id']]['post_remove']),
+			'post_remove_your'  => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'forum_perm[' . $row['group_id'] . '][post_remove_your]', $forum_perm[$row['group_id']]['post_remove_your']),
 		);
 	}
 	$error_input = array();
@@ -977,18 +977,18 @@ function send_forum() {
 		'forum_title'        => $forum['title'],
 		'forum_id'           => $forum['id'],
 		'list_group'         => $tEntry,
-		'm_topic_send'       => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_send', $m_topic_send),
-		'm_topic_modify'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_modify', $m_topic_modify),
-		'm_topic_closed'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_closed', $m_topic_closed),
-		'm_topic_remove'     => MakeDropDown(array(false => 'нет', true => 'да'), 'm_topic_remove', $m_topic_remove),
-		'm_post_send'        => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_send', $m_post_send),
-		'm_post_modify'      => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_modify', $m_post_modify),
-		'm_post_remove'      => MakeDropDown(array(false => 'нет', true => 'да'), 'm_post_remove', $m_post_remove),
+		'm_topic_send'       => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_topic_send', $m_topic_send),
+		'm_topic_modify'     => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_topic_modify', $m_topic_modify),
+		'm_topic_closed'     => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_topic_closed', $m_topic_closed),
+		'm_topic_remove'     => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_topic_remove', $m_topic_remove),
+		'm_post_send'        => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_post_send', $m_post_send),
+		'm_post_modify'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_post_modify', $m_post_modify),
+		'm_post_remove'      => MakeDropDown(array(false => 'РЅРµС‚', true => 'РґР°'), 'm_post_remove', $m_post_remove),
 		'list_error'         => $error_input,
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Добавить форум',
+		'mode' => 'Р”РѕР±Р°РІРёС‚СЊ С„РѕСЂСѓРј',
 	);
 	main($entries_main);
 }
@@ -1063,124 +1063,124 @@ function title() {
 	$tVars = array(
 		'home_title'       => array(
 			'print' => $home_title,
-			'error' => empty($home_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_forum%' : ''
+			'error' => empty($home_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> %name_forum%' : ''
 		),
 		'forums_title'     => array(
 			'print' => $forums_title,
-			'error' => empty($forums_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %4% / %name_forum% [/ %num%]' : ''
+			'error' => empty($forums_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> %4% / %name_forum% [/ %num%]' : ''
 		),
 		'topic_title'      => array(
 			'print' => $topic_title,
-			'error' => empty($topic_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_topic% / %cat_forum% [/ %num%]' : ''
+			'error' => empty($topic_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> %name_topic% / %cat_forum% [/ %num%]' : ''
 		),
 		'userlist_title'   => array(
 			'print' => $userlist_title,
-			'error' => empty($userlist_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Список пользователей / %name_forum%' : ''
+			'error' => empty($userlist_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РЎРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ / %name_forum%' : ''
 		),
 		'search_title'     => array(
 			'print' => $search_title,
-			'error' => empty($search_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Поиск / %name_forum%' : ''
+			'error' => empty($search_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РџРѕРёСЃРє / %name_forum%' : ''
 		),
 		'register_title'   => array(
 			'print' => $register_title,
-			'error' => empty($register_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Регистрация / %name_forum%' : ''
+			'error' => empty($register_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р РµРіРёСЃС‚СЂР°С†РёСЏ / %name_forum%' : ''
 		),
 		'login_title'      => array(
 			'print' => $login_title,
-			'error' => empty($login_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Зайти на сайт / %name_forum%' : ''
+			'error' => empty($login_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р—Р°Р№С‚Рё РЅР° СЃР°Р№С‚ / %name_forum%' : ''
 		),
 		'profile_title'    => array(
 			'print' => $profile_title,
-			'error' => empty($profile_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %others% / %name_forum%' : ''
+			'error' => empty($profile_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> %others% / %name_forum%' : ''
 		),
 		'out_title'        => array(
 			'print' => $out_title,
-			'error' => empty($out_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Выйти / %name_forum%' : ''
+			'error' => empty($out_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р’С‹Р№С‚Рё / %name_forum%' : ''
 		),
 		'addreply_title'   => array(
 			'print' => $addreply_title,
-			'error' => empty($addreply_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить сообщение / %name_forum%' : ''
+			'error' => empty($addreply_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р”РѕР±Р°РІРёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%' : ''
 		),
 		'newtopic_title'   => array(
 			'print' => $newtopic_title,
-			'error' => empty($newtopic_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить тему / %name_forum%' : ''
+			'error' => empty($newtopic_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р”РѕР±Р°РІРёС‚СЊ С‚РµРјСѓ / %name_forum%' : ''
 		),
 		'delpost_title'    => array(
 			'print' => $delpost_title,
-			'error' => empty($delpost_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Удалить сообщение / %name_forum%' : ''
+			'error' => empty($delpost_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РЈРґР°Р»РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%' : ''
 		),
 		'edit_title'       => array(
 			'print' => $edit_title,
-			'error' => empty($edit_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Редактировать / %name_forum%' : ''
+			'error' => empty($edit_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ / %name_forum%' : ''
 		),
 		'rules_title'      => array(
 			'print' => $rules_title,
-			'error' => empty($rules_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Правила / %name_forum%' : ''
+			'error' => empty($rules_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РџСЂР°РІРёР»Р° / %name_forum%' : ''
 		),
 		'show_new_title'   => array(
 			'print' => $show_new_title,
-			'error' => empty($show_new_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Последние сообщения / %name_forum%' : ''
+			'error' => empty($show_new_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РџРѕСЃР»РµРґРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ / %name_forum%' : ''
 		),
 		'markread_title'   => array(
 			'print' => $markread_title,
-			'error' => empty($markread_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Всё прочитано / %name_forum%' : ''
+			'error' => empty($markread_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р’СЃС‘ РїСЂРѕС‡РёС‚Р°РЅРѕ / %name_forum%' : ''
 		),
 		'rep_title'        => array(
 			'print' => $rep_title,
-			'error' => empty($rep_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Репутация участника %others% / %name_forum%' : ''
+			'error' => empty($rep_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р РµРїСѓС‚Р°С†РёСЏ СѓС‡Р°СЃС‚РЅРёРєР° %others% / %name_forum%' : ''
 		),
 		'addr_title'       => array(
 			'print' => $addr_title,
-			'error' => empty($addr_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Добавить репутацию / %name_forum%' : ''
+			'error' => empty($addr_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р”РѕР±Р°РІРёС‚СЊ СЂРµРїСѓС‚Р°С†РёСЋ / %name_forum%' : ''
 		),
 		'news_title'       => array(
 			'print' => $news_title,
-			'error' => empty($news_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %name_news% / Новости / %name_forum%' : ''
+			'error' => empty($news_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> %name_news% / РќРѕРІРѕСЃС‚Рё / %name_forum%' : ''
 		),
 		'news_feed_title'  => array(
 			'print' => $news_feed_title,
-			'error' => empty($news_feed_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Вся лента / %name_forum% [/ %num%]' : ''
+			'error' => empty($news_feed_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р’СЃСЏ Р»РµРЅС‚Р° / %name_forum% [/ %num%]' : ''
 		),
 		'act_title'        => array(
 			'print' => $act_title,
-			'error' => empty($act_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> %others% / %name_forum%' : ''
+			'error' => empty($act_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> %others% / %name_forum%' : ''
 		),
 		'thank_title'      => array(
 			'print' => $thank_title,
-			'error' => empty($thank_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> История благодарностей участнику %others% / %name_forum%' : ''
+			'error' => empty($thank_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РСЃС‚РѕСЂРёСЏ Р±Р»Р°РіРѕРґР°СЂРЅРѕСЃС‚РµР№ СѓС‡Р°СЃС‚РЅРёРєСѓ %others% / %name_forum%' : ''
 		),
 		'complaints_title' => array(
 			'print' => $complaints_title,
-			'error' => empty($complaints_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Сообщить модератору / %name_forum%' : ''
+			'error' => empty($complaints_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РЎРѕРѕР±С‰РёС‚СЊ РјРѕРґРµСЂР°С‚РѕСЂСѓ / %name_forum%' : ''
 		),
 		'send_pm_title'    => array(
 			'print' => $send_pm_title,
-			'error' => empty($send_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Новое сообщение / %name_forum%' : ''
+			'error' => empty($send_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РќРѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%' : ''
 		),
 		'list_pm_title'    => array(
 			'print' => $list_pm_title,
-			'error' => empty($list_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Личное сообщение / %name_forum%' : ''
+			'error' => empty($list_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р›РёС‡РЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%' : ''
 		),
 		'del_pm_title'     => array(
 			'print' => $del_pm_title,
-			'error' => empty($del_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Удалить сообщение / %name_forum%' : ''
+			'error' => empty($del_pm_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РЈРґР°Р»РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%' : ''
 		),
 		'downloads_title'  => array(
 			'print' => $downloads_title,
-			'error' => empty($downloads_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Загрузка файла / %name_forum%' : ''
+			'error' => empty($downloads_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р° / %name_forum%' : ''
 		),
 		'erro404_title'    => array(
 			'print' => $erro404_title,
-			'error' => empty($erro404_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> Информация / %name_forum%' : ''
+			'error' => empty($erro404_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> РРЅС„РѕСЂРјР°С†РёСЏ / %name_forum%' : ''
 		),
 		'num_title'        => array(
 			'print' => $num_title,
-			'error' => empty($num_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />Поле не заполнено!<br /><b>Ремомендованно:</b> / Страница %count%' : ''
+			'error' => empty($num_title) ? '<img src="' . skins_url . '/images/error.gif" hspace="5" alt="" />РџРѕР»Рµ РЅРµ Р·Р°РїРѕР»РЅРµРЅРѕ!<br /><b>Р РµРјРѕРјРµРЅРґРѕРІР°РЅРЅРѕ:</b> / РЎС‚СЂР°РЅРёС†Р° %count%' : ''
 		),
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Заголовки форума',
+		'mode' => 'Р—Р°РіРѕР»РѕРІРєРё С„РѕСЂСѓРјР°',
 	);
 	main($entries_main);
 }
@@ -1201,7 +1201,7 @@ function url() {
 						array(
 							'vars'  =>
 								array(),
-							'descr' => array('russian' => 'Главная страница форума'),
+							'descr' => array('russian' => 'Р“Р»Р°РІРЅР°СЏ СЃС‚СЂР°РЅРёС†Р° С„РѕСЂСѓРјР°'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1244,7 +1244,7 @@ function url() {
 						array(
 							'vars'  =>
 								array(),
-							'descr' => array('russian' => 'Страница регистрации на форуме'),
+							'descr' => array('russian' => 'РЎС‚СЂР°РЅРёС†Р° СЂРµРіРёСЃС‚СЂР°С†РёРё РЅР° С„РѕСЂСѓРјРµ'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1287,7 +1287,7 @@ function url() {
 						array(
 							'vars'  =>
 								array(),
-							'descr' => array('russian' => 'Страница авторизации на форуме'),
+							'descr' => array('russian' => 'РЎС‚СЂР°РЅРёС†Р° Р°РІС‚РѕСЂРёР·Р°С†РёРё РЅР° С„РѕСЂСѓРјРµ'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1330,7 +1330,7 @@ function url() {
 						array(
 							'vars'  =>
 								array(),
-							'descr' => array('russian' => 'Выйти с форума'),
+							'descr' => array('russian' => 'Р’С‹Р№С‚Рё СЃ С„РѕСЂСѓРјР°'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1373,9 +1373,9 @@ function url() {
 						array(
 							'vars'  =>
 								array(
-									'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id темы')),
+									'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id С‚РµРјС‹')),
 								),
-							'descr' => array('russian' => 'Ссылка на новое сообщение'),
+							'descr' => array('russian' => 'РЎСЃС‹Р»РєР° РЅР° РЅРѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1432,9 +1432,9 @@ function url() {
 						array(
 							'vars'  =>
 								array(
-									'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id раздела')),
+									'id' => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id СЂР°Р·РґРµР»Р°')),
 								),
-							'descr' => array('russian' => 'Ссылка на новую тему'),
+							'descr' => array('russian' => 'РЎСЃС‹Р»РєР° РЅР° РЅРѕРІСѓСЋ С‚РµРјСѓ'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1491,11 +1491,11 @@ function url() {
 						array(
 							'vars'  =>
 								array(
-									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id пользователя')),
-									'name' => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Логин пользователя')),
-									'act'  => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Дополнительное действие')),
+									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ')),
+									'name' => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Р›РѕРіРёРЅ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ')),
+									'act'  => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРµ РґРµР№СЃС‚РІРёРµ')),
 								),
-							'descr' => array('russian' => 'Ссылка на профиль'),
+							'descr' => array('russian' => 'РЎСЃС‹Р»РєР° РЅР° РїСЂРѕС„РёР»СЊ'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1565,10 +1565,10 @@ function url() {
 						array(
 							'vars'  =>
 								array(
-									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id  категории')),
-									'page' => array('matchRegex' => '\d{1,4}', 'descr' => array('russian' => 'Постраничная навигация')),
+									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id  РєР°С‚РµРіРѕСЂРёРё')),
+									'page' => array('matchRegex' => '\d{1,4}', 'descr' => array('russian' => 'РџРѕСЃС‚СЂР°РЅРёС‡РЅР°СЏ РЅР°РІРёРіР°С†РёСЏ')),
 								),
-							'descr' => array('russian' => 'Ссылка на категорию'),
+							'descr' => array('russian' => 'РЎСЃС‹Р»РєР° РЅР° РєР°С‚РµРіРѕСЂРёСЋ'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1638,12 +1638,12 @@ function url() {
 						array(
 							'vars'  =>
 								array(
-									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id темы')),
-									'pid'  => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id  сообщения')),
-									'page' => array('matchRegex' => '\d{1,4}', 'descr' => array('russian' => 'Постраничная навигация')),
-									's'    => array('matchRegex' => '.+?', 'descr' => array('russian' => 'Поиск слов в теме')),
+									'id'   => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id С‚РµРјС‹')),
+									'pid'  => array('matchRegex' => '\d+', 'descr' => array('russian' => 'id  СЃРѕРѕР±С‰РµРЅРёСЏ')),
+									'page' => array('matchRegex' => '\d{1,4}', 'descr' => array('russian' => 'РџРѕСЃС‚СЂР°РЅРёС‡РЅР°СЏ РЅР°РІРёРіР°С†РёСЏ')),
+									's'    => array('matchRegex' => '.+?', 'descr' => array('russian' => 'РџРѕРёСЃРє СЃР»РѕРІ РІ С‚РµРјРµ')),
 								),
-							'descr' => array('russian' => 'Ссылка на тему'),
+							'descr' => array('russian' => 'РЎСЃС‹Р»РєР° РЅР° С‚РµРјСѓ'),
 						)
 					);
 					$UHANDLER->registerHandler(0,
@@ -1758,12 +1758,12 @@ function url() {
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'ЧПУ',
+		'mode' => 'Р§РџРЈ',
 	);
 	main($entries_main);
 }
 
-//непонятная функция :))
+//РЅРµРїРѕРЅСЏС‚РЅР°СЏ С„СѓРЅРєС†РёСЏ :))
 function moderat() {
 
 	global $mysql;
@@ -1794,13 +1794,13 @@ function rules() {
 	$tpath = locatePluginTemplates(array('rules', ':'), 'forum', 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['rules'] . 'rules.tpl');
 	$tVars = array(
-		'rules_on_off' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'rules_on_off', (int)pluginGetVariable($plugin, 'rules_on_off')),
+		'rules_on_off' => MakeDropDown(array(0 => 'РќРµС‚', 1 => 'Р”Р°'), 'rules_on_off', (int)pluginGetVariable($plugin, 'rules_on_off')),
 		'rules'        => secure_html(trim(pluginGetVariable($plugin, 'rules'))),
 		'forum_tpl'    => $tpath['url::'],
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Правила',
+		'mode' => 'РџСЂР°РІРёР»Р°',
 	);
 	main($entries_main);
 }
@@ -1817,13 +1817,13 @@ function ads() {
 	$tpath = locatePluginTemplates(array('ads', ':'), 'forum', 1, '', 'config');
 	$xg = $twig->loadTemplate($tpath['ads'] . 'ads.tpl');
 	$tVars = array(
-		'announcement_on_off' => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'announcement_on_off', (int)pluginGetVariable($plugin, 'announcement_on_off')),
+		'announcement_on_off' => MakeDropDown(array(0 => 'РќРµС‚', 1 => 'Р”Р°'), 'announcement_on_off', (int)pluginGetVariable($plugin, 'announcement_on_off')),
 		'announcement'        => secure_html(trim(pluginGetVariable($plugin, 'announcement'))),
 		'forum_tpl'           => $tpath['url::'],
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Объявления',
+		'mode' => 'РћР±СЉСЏРІР»РµРЅРёСЏ',
 	);
 	main($entries_main);
 }
@@ -1842,9 +1842,9 @@ function new_news() {
 	$mail = secure_html(trim($_REQUEST['mail']));
 	if (isset($_REQUEST['submit'])) {
 		if (empty($title))
-			$error_text[] = 'Титле обязательна для заполнения';
+			$error_text[] = 'РўРёС‚Р»Рµ РѕР±СЏР·Р°С‚РµР»СЊРЅР° РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ';
 		if (empty($content))
-			$error_text[] = 'Сообщение обязательно для заполнения';
+			$error_text[] = 'РЎРѕРѕР±С‰РµРЅРёРµ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ Р·Р°РїРѕР»РЅРµРЅРёСЏ';
 		if (empty($error_text)) {
 			if (isset($edit_id) && $edit_id) {
 				$SQL = array();
@@ -1877,7 +1877,7 @@ function new_news() {
 						'news_name'    => $title,
 						'mydomains'    => $SYSTEM_FLAGS['mydomains'][0],
 					);
-					zzMail($row['mail'], 'Новая новость', $xs->render($tVars), '', 'rozard@mail.ru', 'text/html');
+					zzMail($row['mail'], 'РќРѕРІР°СЏ РЅРѕРІРѕСЃС‚СЊ', $xs->render($tVars), '', 'rozard@mail.ru', 'text/html');
 				}
 			}
 			redirect_forum_config('?mod=extra-config&plugin=forum&action=list_news');
@@ -1900,7 +1900,7 @@ function new_news() {
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Список новостей',
+		'mode' => 'РЎРїРёСЃРѕРє РЅРѕРІРѕСЃС‚РµР№',
 	);
 	main($entries_main);
 }
@@ -1910,7 +1910,7 @@ function del_news() {
 	global $mysql;
 	$id = intval($_REQUEST['id']);
 	$mysql->query('DELETE FROM ' . prefix . '_forum_news WHERE id = ' . db_squote($id) . ' LIMIT 1');
-	$_SESSION['forum']['info'] = 'Новость удалена';
+	$_SESSION['forum']['info'] = 'РќРѕРІРѕСЃС‚СЊ СѓРґР°Р»РµРЅР°';
 	redirect_forum_config('?mod=extra-config&plugin=forum&action=list_news');
 }
 
@@ -1945,7 +1945,7 @@ function list_news() {
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Список новостей',
+		'mode' => 'РЎРїРёСЃРѕРє РЅРѕРІРѕСЃС‚РµР№',
 	);
 	main($entries_main);
 }
@@ -2011,7 +2011,7 @@ function list_forum() {
 	);
 	$entries_main = array(
 		'show' => $xe->render($tVars),
-		'mode' => 'Список форумов',
+		'mode' => 'РЎРїРёСЃРѕРє С„РѕСЂСѓРјРѕРІ',
 	);
 	main($entries_main);
 }
@@ -2053,12 +2053,12 @@ function general() {
 			$localskin = tpl_site . 'plugins/' . $plugin . '/skins/';
 		else {
 			$localskin = extras_dir . '/' . $plugin . '/tpl/skins/';
-			$_SESSION['forum']['info'][] = 'Ошибка с выбором шаблона. Выбран шаблон: ' . extras_dir . '/' . $plugin . '/tpl/skins/';
+			$_SESSION['forum']['info'][] = 'РћС€РёР±РєР° СЃ РІС‹Р±РѕСЂРѕРј С€Р°Р±Р»РѕРЅР°. Р’С‹Р±СЂР°РЅ С€Р°Р±Р»РѕРЅ: ' . extras_dir . '/' . $plugin . '/tpl/skins/';
 		}
 	}
 	$tVars = array(
-		'localsource'       => MakeDropDown(array(0 => 'Шаблон сайта', 1 => 'Плагина'), 'localsource', (int)pluginGetVariable($plugin, 'localsource')),
-		'online'            => MakeDropDown(array(0 => 'Нет', 1 => 'Да'), 'online', (int)pluginGetVariable($plugin, 'online')),
+		'localsource'       => MakeDropDown(array(0 => 'РЁР°Р±Р»РѕРЅ СЃР°Р№С‚Р°', 1 => 'РџР»Р°РіРёРЅР°'), 'localsource', (int)pluginGetVariable($plugin, 'localsource')),
+		'online'            => MakeDropDown(array(0 => 'РќРµС‚', 1 => 'Р”Р°'), 'online', (int)pluginGetVariable($plugin, 'online')),
 		'redirect_time'     => (int)pluginGetVariable($plugin, 'redirect_time'),
 		'online_time'       => (int)pluginGetVariable($plugin, 'online_time'),
 		'forum_title'       => secure_html(trim(pluginGetVariable($plugin, 'forum_title'))),
@@ -2066,7 +2066,7 @@ function general() {
 		'forum_keywords'    => secure_html(trim(pluginGetVariable($plugin, 'forum_keywords'))),
 		'localskin'         => MakeDropDown(ListFiles($localskin, ''), 'localskin', pluginGetVariable($plugin, 'localskin')),
 		'edit_del_time'     => (int)pluginGetVariable($plugin, 'edit_del_time'),
-		'display_main'      => MakeDropDown(array(0 => 'Основной шаблон', 1 => 'Отдельная страница'), 'display_main', (int)pluginGetVariable($plugin, 'display_main')),
+		'display_main'      => MakeDropDown(array(0 => 'РћСЃРЅРѕРІРЅРѕР№ С€Р°Р±Р»РѕРЅ', 1 => 'РћС‚РґРµР»СЊРЅР°СЏ СЃС‚СЂР°РЅРёС†Р°'), 'display_main', (int)pluginGetVariable($plugin, 'display_main')),
 		'topic_per_page'    => (int)pluginGetVariable($plugin, 'topic_per_page'),
 		'search_per_page'   => (int)pluginGetVariable($plugin, 'search_per_page'),
 		'user_per_page'     => (int)pluginGetVariable($plugin, 'user_per_page'),
@@ -2081,7 +2081,7 @@ function general() {
 	);
 	$entries_main = array(
 		'show' => $xg->render($tVars),
-		'mode' => 'Общие'
+		'mode' => 'РћР±С‰РёРµ'
 	);
 	main($entries_main);
 }

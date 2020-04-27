@@ -3,13 +3,13 @@
 ;
 
 ID: breadcrumbs
-Name: «Хлебные крошки»
+Name: В«РҐР»РµР±РЅС‹Рµ РєСЂРѕС€РєРёВ»
 Version: 1.2
 Acts: index
 File: breadcrumbs.php
 Config: config.php
 Type: plugin
-Description: Показывает посетителю его местонахождение на сайте
+Description: РџРѕРєР°Р·С‹РІР°РµС‚ РїРѕСЃРµС‚РёС‚РµР»СЋ РµРіРѕ РјРµСЃС‚РѕРЅР°С…РѕР¶РґРµРЅРёРµ РЅР° СЃР°Р№С‚Рµ
 Author: Alexey N. Zhukov (Wolverine)
 Author_URI: http://digitalplace.ru/
 Preinstall: no

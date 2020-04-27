@@ -96,7 +96,7 @@ function plug_arch($maxnum, $counter, $tcounter, $overrideTemplateName, $cacheEx
 	);
 	$twigLoader->setConversion($tpath['archive'] . 'archive.tpl', $conversionConfig);
 	$twigLoader->setConversion($tpath['entries'] . 'entries.tpl', $conversionConfigE, $conversionConfigRegex);
-	// Ïðåäçàãðóçêà øàáëîíà entries [ ÷òîáû îòðàáîòàë setConversion ] ïðè åãî íàëè÷èè
+	// ÐŸÑ€ÐµÐ´Ð·Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° ÑˆÐ°Ð±Ð»Ð¾Ð½Ð° entries [ Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¾Ñ‚Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ð» setConversion ] Ð¿Ñ€Ð¸ ÐµÐ³Ð¾ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ð¸
 	if (isset($tpath['entries']))
 		$twig->loadTemplate($tpath['entries'] . 'entries.tpl');
 	$xt = $twig->loadTemplate($tpath[$templateName] . $templateName . '.tpl');

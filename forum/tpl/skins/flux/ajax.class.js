@@ -33,7 +33,7 @@ function AjaxRequest(url, execute) {
 		if (this.RequestPrepare()) {
 			params = this.StrPrepare(params);
 			HttpRequest.open('POST', url, true);
-			HttpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=windows-1251');
+			HttpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=UTF-8');
 			HttpRequest.setRequestHeader('Content-length', params.length);
 			HttpRequest.setRequestHeader('Connection', 'close');
 			HttpRequest.send(params);

@@ -1,25 +1,25 @@
 <?php
 require_once("_header.php");
-# Получение и обработка данных формы
+# РџРѕР»СѓС‡РµРЅРёРµ Рё РѕР±СЂР°Р±РѕС‚РєР° РґР°РЅРЅС‹С… С„РѕСЂРјС‹
 if (count($_POST) > 0) {
 	$response = $wmxi->X3(
-		$_POST["purse"],               # номер кошелька для которого запрашивается операция
-		intval($_POST["wmtranid"]),    # целое число > 0
-		intval($_POST["tranid"]),      # номер перевода в системе учета отправителя; любое целое число без знака
-		intval($_POST["wminvid"]),     # целое число > 0
-		intval($_POST["orderid"]),     # номер счета в системе учета магазина; любое целое число без знака
-		trim($_POST["datestart"]),     # ГГГГММДД ЧЧ:ММ:СС
-		trim($_POST["datefinish"])     # ГГГГММДД ЧЧ:ММ:СС
+		$_POST["purse"],               # РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР° РґР»СЏ РєРѕС‚РѕСЂРѕРіРѕ Р·Р°РїСЂР°С€РёРІР°РµС‚СЃСЏ РѕРїРµСЂР°С†РёСЏ
+		intval($_POST["wmtranid"]),    # С†РµР»РѕРµ С‡РёСЃР»Рѕ > 0
+		intval($_POST["tranid"]),      # РЅРѕРјРµСЂ РїРµСЂРµРІРѕРґР° РІ СЃРёСЃС‚РµРјРµ СѓС‡РµС‚Р° РѕС‚РїСЂР°РІРёС‚РµР»СЏ; Р»СЋР±РѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ Р±РµР· Р·РЅР°РєР°
+		intval($_POST["wminvid"]),     # С†РµР»РѕРµ С‡РёСЃР»Рѕ > 0
+		intval($_POST["orderid"]),     # РЅРѕРјРµСЂ СЃС‡РµС‚Р° РІ СЃРёСЃС‚РµРјРµ СѓС‡РµС‚Р° РјР°РіР°Р·РёРЅР°; Р»СЋР±РѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ Р±РµР· Р·РЅР°РєР°
+		trim($_POST["datestart"]),     # Р“Р“Р“Р“РњРњР”Р” Р§Р§:РњРњ:РЎРЎ
+		trim($_POST["datefinish"])     # Р“Р“Р“Р“РњРњР”Р” Р§Р§:РњРњ:РЎРЎ
 	);
-	# Преобразовываем ответ сервера в структуру. Входные параметры:
-	# - XML-ответ сервера
-	# - кодировка, используемая на сайте. По умолчанию используется UTF-8
+	# РџСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµРј РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР° РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ. Р’С…РѕРґРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
+	# - XML-РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР°
+	# - РєРѕРґРёСЂРѕРІРєР°, РёСЃРїРѕР»СЊР·СѓРµРјР°СЏ РЅР° СЃР°Р№С‚Рµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ UTF-8
 	$structure = $parser->Parse($response, DOC_ENCODING);
-	# преобразуем индексы структуры к более удобным для доступа.
-	# Не рекомендуется проводить такое преобразование с с результатом, если он содержит
-	# множество однотипных строк (например, список транзакций)
-	# если надобности в аттрибутах XML-тегов ответа нет, то второй параметр можно
-	# установить в false - в таком случае структура выйдет более компактной
+	# РїСЂРµРѕР±СЂР°Р·СѓРµРј РёРЅРґРµРєСЃС‹ СЃС‚СЂСѓРєС‚СѓСЂС‹ Рє Р±РѕР»РµРµ СѓРґРѕР±РЅС‹Рј РґР»СЏ РґРѕСЃС‚СѓРїР°.
+	# РќРµ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ РїСЂРѕРІРѕРґРёС‚СЊ С‚Р°РєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј, РµСЃР»Рё РѕРЅ СЃРѕРґРµСЂР¶РёС‚
+	# РјРЅРѕР¶РµСЃС‚РІРѕ РѕРґРЅРѕС‚РёРїРЅС‹С… СЃС‚СЂРѕРє (РЅР°РїСЂРёРјРµСЂ, СЃРїРёСЃРѕРє С‚СЂР°РЅР·Р°РєС†РёР№)
+	# РµСЃР»Рё РЅР°РґРѕР±РЅРѕСЃС‚Рё РІ Р°С‚С‚СЂРёР±СѓС‚Р°С… XML-С‚РµРіРѕРІ РѕС‚РІРµС‚Р° РЅРµС‚, С‚Рѕ РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ
+	# СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІ false - РІ С‚Р°РєРѕРј СЃР»СѓС‡Р°Рµ СЃС‚СЂСѓРєС‚СѓСЂР° РІС‹Р№РґРµС‚ Р±РѕР»РµРµ РєРѕРјРїР°РєС‚РЅРѕР№
 	$transformed = $parser->Reindex($structure, false);
 }
 ?>
@@ -33,41 +33,41 @@ if (count($_POST) > 0) {
 	<link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-Детальное описание параметров:
+Р”РµС‚Р°Р»СЊРЅРѕРµ РѕРїРёСЃР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ:
 <a href="http://webmoney.ru/rus/developers/interfaces/xml/ophistory/index.shtml">http://webmoney.ru/rus/developers/interfaces/xml/ophistory/index.shtml</a>
 <br/>
 
 <form action="" method="post">
 
-	<label>номер кошелька для которого запрашивается операция:</label>
+	<label>РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР° РґР»СЏ РєРѕС‚РѕСЂРѕРіРѕ Р·Р°РїСЂР°С€РёРІР°РµС‚СЃСЏ РѕРїРµСЂР°С†РёСЏ:</label>
 	<input type="text" name="purse" value=""/>
 	<br/>
 
-	<label>номер операции (в системе WebMoney):</label>
+	<label>РЅРѕРјРµСЂ РѕРїРµСЂР°С†РёРё (РІ СЃРёСЃС‚РµРјРµ WebMoney):</label>
 	<input type="text" name="wmtranid" value="0"/>
 	<br/>
 
-	<label>номер перевода:</label>
+	<label>РЅРѕРјРµСЂ РїРµСЂРµРІРѕРґР°:</label>
 	<input type="text" name="tranid" value="0"/>
 	<br/>
 
-	<label>номер счета (в системе WebMoney) по которому выполнялась операция:</label>
+	<label>РЅРѕРјРµСЂ СЃС‡РµС‚Р° (РІ СЃРёСЃС‚РµРјРµ WebMoney) РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РІС‹РїРѕР»РЅСЏР»Р°СЃСЊ РѕРїРµСЂР°С†РёСЏ:</label>
 	<input type="text" name="wminvid" value="0"/>
 	<br/>
 
-	<label>номер счета:</label>
+	<label>РЅРѕРјРµСЂ СЃС‡РµС‚Р°:</label>
 	<input type="text" name="orderid" value="0"/>
 	<br/>
 
-	<label>минимальное время и дата выполнения операции:</label>
+	<label>РјРёРЅРёРјР°Р»СЊРЅРѕРµ РІСЂРµРјСЏ Рё РґР°С‚Р° РІС‹РїРѕР»РЅРµРЅРёСЏ РѕРїРµСЂР°С†РёРё:</label>
 	<input type="text" name="datestart" value="20070418 18:00:00"/>
 	<br/>
 
-	<label>максимальное время и дата выполнения операции:</label>
+	<label>РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ РІСЂРµРјСЏ Рё РґР°С‚Р° РІС‹РїРѕР»РЅРµРЅРёСЏ РѕРїРµСЂР°С†РёРё:</label>
 	<input type="text" name="datefinish" value="20070420 18:00:00"/>
 	<br/>
 
-	<input type="submit" value="получить список"/>
+	<input type="submit" value="РїРѕР»СѓС‡РёС‚СЊ СЃРїРёСЃРѕРє"/>
 	<br/>
 
 </form>
@@ -76,7 +76,7 @@ if (count($_POST) > 0) {
 <!--pre><?= htmlspecialchars(print_r(@$structure, true), ENT_QUOTES); ?></pre-->
 <!--pre><?= htmlspecialchars(print_r(@$transformed, true), ENT_QUOTES); ?></pre-->
 
-<pre><!-- Читаем и отображаем элементы обработанного массива после получения ответа с сервера -->
+<pre><!-- Р§РёС‚Р°РµРј Рё РѕС‚РѕР±СЂР°Р¶Р°РµРј СЌР»РµРјРµРЅС‚С‹ РѕР±СЂР°Р±РѕС‚Р°РЅРЅРѕРіРѕ РјР°СЃСЃРёРІР° РїРѕСЃР»Рµ РїРѕР»СѓС‡РµРЅРёСЏ РѕС‚РІРµС‚Р° СЃ СЃРµСЂРІРµСЂР° -->
 	<?
 	$items = @$structure["0"]["node"]["1"]["node"];
 	$items = is_array($items) ? $items : array();
@@ -84,18 +84,18 @@ if (count($_POST) > 0) {
 		$vv = $parser->Reindex($v["node"], true);
 		?>
 
-		<b>№ <?= $k; ?></b>
-			Отправитель: <b><?= htmlspecialchars(@$vv["pursesrc"], ENT_QUOTES); ?></b>
-			Получатель: <b><?= htmlspecialchars(@$vv["pursedest"], ENT_QUOTES); ?></b>
-			Сумма: <b><?= htmlspecialchars(@$vv["amount"], ENT_QUOTES); ?></b>
-			Коммиссия: <b><?= htmlspecialchars(@$vv["comiss"], ENT_QUOTES); ?></b>
-			Описание: <b><?= htmlspecialchars(@$vv["desc"], ENT_QUOTES); ?></b>
-			Создан: <b><?= htmlspecialchars(@$vv["datecrt"], ENT_QUOTES); ?></b>
-			Изменён: <b><?= htmlspecialchars(@$vv["dateupd"], ENT_QUOTES); ?></b>
+		<b>в„– <?= $k; ?></b>
+			РћС‚РїСЂР°РІРёС‚РµР»СЊ: <b><?= htmlspecialchars(@$vv["pursesrc"], ENT_QUOTES); ?></b>
+			РџРѕР»СѓС‡Р°С‚РµР»СЊ: <b><?= htmlspecialchars(@$vv["pursedest"], ENT_QUOTES); ?></b>
+			РЎСѓРјРјР°: <b><?= htmlspecialchars(@$vv["amount"], ENT_QUOTES); ?></b>
+			РљРѕРјРјРёСЃСЃРёСЏ: <b><?= htmlspecialchars(@$vv["comiss"], ENT_QUOTES); ?></b>
+			РћРїРёСЃР°РЅРёРµ: <b><?= htmlspecialchars(@$vv["desc"], ENT_QUOTES); ?></b>
+			РЎРѕР·РґР°РЅ: <b><?= htmlspecialchars(@$vv["datecrt"], ENT_QUOTES); ?></b>
+			РР·РјРµРЅС‘РЅ: <b><?= htmlspecialchars(@$vv["dateupd"], ENT_QUOTES); ?></b>
 	<? } ?>
 
-	Код ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
-		Описание ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
+	РљРѕРґ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
+		РћРїРёСЃР°РЅРёРµ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
 	</pre>
 
 </body>

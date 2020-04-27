@@ -6,7 +6,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>Вконтакте</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>Р’РєРѕРЅС‚Р°РєС‚Рµ</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- VK -->
@@ -33,7 +33,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>Одноклассиники</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>РћРґРЅРѕРєР»Р°СЃСЃРёРЅРёРєРё</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- OK -->
@@ -67,7 +67,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>MailRu</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>MailRu</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- MAIL -->
@@ -95,7 +95,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>Yandex</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>Yandex</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- YANDEX -->
@@ -123,7 +123,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>Google</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>Google</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- GOOGLE -->
@@ -151,7 +151,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>Facebook</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>Facebook</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- FACKEBOOK -->
@@ -178,7 +178,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>Twitter</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>Twitter</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- TWITTER -->
@@ -206,7 +206,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>Steam</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>Steam</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- Steam -->
@@ -228,7 +228,7 @@
 		<tr>
 			<td colspan="2">
 				<fieldset class="admGroup">
-					<legend class="title"><b>Настройки авторизации </b>Twitch</legend>
+					<legend class="title"><b>РќР°СЃС‚СЂРѕР№РєРё Р°РІС‚РѕСЂРёР·Р°С†РёРё </b>Twitch</legend>
 					<table width="100%" border="0" class="content">
 						<tbody>
 						<!-- TWITCH -->
@@ -318,7 +318,7 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input name="submit" type="submit" value="Сохранить" class="button"/>
+				<input name="submit" type="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ" class="button"/>
 			</td>
 		</tr>
 	</table>

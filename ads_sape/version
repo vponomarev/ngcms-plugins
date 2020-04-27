@@ -9,8 +9,8 @@ Acts: index_post
 File: ads_sape.php
 Config: config.php
 Type: plugin
-Title: Ссылочная реклама SAPE.RU
-Description: Реклама с площадки SAPE.RU на сайте
+Title: РЎСЃС‹Р»РѕС‡РЅР°СЏ СЂРµРєР»Р°РјР° SAPE.RU
+Description: Р РµРєР»Р°РјР° СЃ РїР»РѕС‰Р°РґРєРё SAPE.RU РЅР° СЃР°Р№С‚Рµ
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 preinstall: no

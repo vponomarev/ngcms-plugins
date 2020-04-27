@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -25,21 +25,21 @@ if (isset($params['metod']))
 else
 	$method = isset($_REQUEST['metod']) ? intval($_REQUEST['metod']) : 0;
 if (!is_array($userROW))
-	return $output = information('У вас нет прав доступа', $title = 'Информация');
+	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 switch ($method) {
 	case 1:
 		subscribe($userROW['id'], $id);
 
-		return $output = announcement_forum('Вы подписались', link_topic($id), 0);
+		return $output = announcement_forum('Р’С‹ РїРѕРґРїРёСЃР°Р»РёСЃСЊ', link_topic($id), 0);
 		break;
 	case 2:
 		$result = $mysql->result('SELECT 1 FROM ' . prefix . '_forum_subscriptions WHERE tid = ' . securemysql($id) . ' AND uid = ' . securemysql($userROW['id']) . ' LIMIT 1');
 		if (isset($result) && $result) {
 			$mysql->query('DELETE FROM ' . prefix . '_forum_subscriptions WHERE tid = ' . securemysql($id) . ' AND uid = ' . securemysql($userROW['id']) . '');
 
-			return $output = announcement_forum('Вы отписались', link_topic($id), 0);
-		} else return $output = announcement_forum('Вы и так не подписаны', link_topic($id), 0);
+			return $output = announcement_forum('Р’С‹ РѕС‚РїРёСЃР°Р»РёСЃСЊ', link_topic($id), 0);
+		} else return $output = announcement_forum('Р’С‹ Рё С‚Р°Рє РЅРµ РїРѕРґРїРёСЃР°РЅС‹', link_topic($id), 0);
 		break;
 	default:
-		return $output = information('Ошибка', $title = 'Информация');
+		return $output = information('РћС€РёР±РєР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 }

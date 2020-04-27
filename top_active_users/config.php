@@ -14,7 +14,7 @@ $cfgX = array();
 //array_push($cfg, array('descr' => $lang['topusers_descr']));
 array_push($cfg, array('descr' => $lang['top_active_users:description']));
 $cfgX = array();
-array_push($cfgX, array('name' => 'localsource', 'title' => $lang['top_active_users:localsource'], 'descr' => $lang['top_active_users:localsource#desc'], 'type' => 'select', 'values' => array('0' => 'Øàáëîí ñàéòà', '1' => 'Ïëàãèí'), 'value' => intval(pluginGetVariable($plugin, 'localsource'))));
+array_push($cfgX, array('name' => 'localsource', 'title' => $lang['top_active_users:localsource'], 'descr' => $lang['top_active_users:localsource#desc'], 'type' => 'select', 'values' => array('0' => 'Ð¨Ð°Ð±Ð»Ð¾Ð½ ÑÐ°Ð¹Ñ‚Ð°', '1' => 'ÐŸÐ»Ð°Ð³Ð¸Ð½'), 'value' => intval(pluginGetVariable($plugin, 'localsource'))));
 array_push($cfg, array('mode' => 'group', 'title' => $lang['top_active_users:group.source'], 'entries' => $cfgX));
 // RUN
 if ($_REQUEST['action'] == 'commit') {

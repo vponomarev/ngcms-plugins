@@ -1,10 +1,10 @@
 ID: xsyslog
-Name: Журнал действий пользователей
+Name: Р–СѓСЂРЅР°Р» РґРµР№СЃС‚РІРёР№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 Version: 0.2
 Config: config.php
 Type: plugin
-Title: Журнал действий пользователей
-Description: Просмотр журнала действий пользователей
+Title: Р–СѓСЂРЅР°Р» РґРµР№СЃС‚РІРёР№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
+Description: РџСЂРѕСЃРјРѕС‚СЂ Р¶СѓСЂРЅР°Р»Р° РґРµР№СЃС‚РІРёР№ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 Author: Rostunov Sergey
 Author_URI: http://rostunov.com
 preinstall: no

@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Íàñòîÿùèé ïðîãðàììèñò íèêîãäà íå ñòàâèò
- êîììåíòàðèåâ. Òî, ÷òî ïèñàëîñü ñ òðóäîì, äîëæíî
- ïîíèìàòüñÿ ñ òðóäîì. :))
+ Â© ÐÐ°ÑÑ‚Ð¾ÑÑ‰Ð¸Ð¹ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð¸ÑÑ‚ Ð½Ð¸ÐºÐ¾Ð³Ð´Ð° Ð½Ðµ ÑÑ‚Ð°Ð²Ð¸Ñ‚
+ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸ÐµÐ². Ð¢Ð¾, Ñ‡Ñ‚Ð¾ Ð¿Ð¸ÑÐ°Ð»Ð¾ÑÑŒ Ñ Ñ‚Ñ€ÑƒÐ´Ð¾Ð¼, Ð´Ð¾Ð»Ð¶Ð½Ð¾
+ Ð¿Ð¾Ð½Ð¸Ð¼Ð°Ñ‚ÑŒÑÑ Ñ Ñ‚Ñ€ÑƒÐ´Ð¾Ð¼. :))
 -----------------------------------------------------
- Äàííûé êîä çàùèùåí àâòîðñêèìè ïðàâàìè
+ Ð”Ð°Ð½Ð½Ñ‹Ð¹ ÐºÐ¾Ð´ Ð·Ð°Ñ‰Ð¸Ñ‰ÐµÐ½ Ð°Ð²Ñ‚Ð¾Ñ€ÑÐºÐ¸Ð¼Ð¸ Ð¿Ñ€Ð°Ð²Ð°Ð¼Ð¸
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -33,7 +33,7 @@ $tpath = locatePluginTemplates(array('show_forum', ':'), 'forum', pluginGetVaria
 $xt = $twig->loadTemplate($tpath['show_forum'] . 'show_forum.tpl');
 $forum = $mysql->record('SELECT `title`, `description`, `keywords`, `int_topic`, `moderators`, `lock_passwd`, `redirect_url` FROM `' . prefix . '_forum_forums` WHERE `id` = ' . securemysql($id) . ' LIMIT 1');
 if (empty($forum))
-	return $output = information('Ýòîãî ðàçäåëà íå ñóùåñòâóåò', $title = 'Èíôîðìàöèÿ');
+	return $output = information('Ð­Ñ‚Ð¾Ð³Ð¾ Ñ€Ð°Ð·Ð´ÐµÐ»Ð° Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚', $title = 'Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ');
 if ((isset($forum['lock_passwd']) && $forum['lock_passwd']) && empty($_SESSION['lock_passwd_' . $id]))
 	return redirect_forum(link_lock_passwd($id));
 if ((isset($forum['redirect_url']) && $forum['redirect_url']))
@@ -44,7 +44,7 @@ if (array_key_exists(strtolower($userROW['name']), $moderators)) {
 } else
 	$MODE_PS = array();
 if (empty($FORUM_PS[$id]['forum_read']))
-	return $output = permissions_forum('Äîñòóï â ôîðóì çàïðåùåí');
+	return $output = permissions_forum('Ð”Ð¾ÑÑ‚ÑƒÐ¿ Ð² Ñ„Ð¾Ñ€ÑƒÐ¼ Ð·Ð°Ð¿Ñ€ÐµÑ‰ÐµÐ½');
 $SYSTEM_FLAGS['info']['title']['item'] = $forum['title'];
 $SYSTEM_FLAGS['meta']['description'] = $forum['description'];
 $SYSTEM_FLAGS['meta']['keywords'] = $forum['keywords'];
@@ -54,7 +54,7 @@ $count = $forum['int_topic'];
 //$count = $mysql->result('SELECT COUNT(*) FROM `'.prefix.'_forum_topics` WHERE `fid` = '.securemysql($id));
 $countPages = ceil($count / $limitCount);
 if ($countPages < $pageNo)
-	return $output = information('Ïîäñòðàíèöû íå ñóùåñòâóåò', $title = 'Èíôîðìàöèÿ');
+	return $output = information('ÐŸÐ¾Ð´ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñ‹ Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚', $title = 'Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ');
 if ($pageNo < 1) $pageNo = 1;
 if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 $navigations = LoadVariables();

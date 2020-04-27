@@ -8,20 +8,20 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
 if (empty($GROUP_PS['group_pm']))
-	return $output = permissions_forum('У вас нет доступа к сообщениям');
+	return $output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° Рє СЃРѕРѕР±С‰РµРЅРёСЏРј');
 $tpath = locatePluginTemplates(array('send_pm'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum', 'localskin'));
 $xt = $twig->loadTemplate($tpath['send_pm'] . 'send_pm.tpl');
 if (!is_array($userROW))
-	return $output = information('У вас нет прав доступа', $title = 'Информация');
+	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $title = isset($_REQUEST['title']) ? secureinput($_REQUEST['title']) : '';
 $sendto = isset($_REQUEST['sendto']) ? trim($_REQUEST['sendto']) : '';
 $message = isset($_REQUEST['message']) ? secureinput($_REQUEST['message']) : '';
@@ -42,23 +42,23 @@ else
 if ($reply or $quote) {
 	$row = $mysql->record('select * from ' . prefix . '_pm WHERE id = ' . ($quote ? securemysql($quote) : securemysql($reply)) . ' AND from_id = ' . securemysql($id) . ' AND to_id = ' . securemysql($userROW['id']) . ' LIMIT 1');
 	if (empty($row))
-		return $output = information('Ошибка в сообщении', $title = 'Информация');
+		return $output = information('РћС€РёР±РєР° РІ СЃРѕРѕР±С‰РµРЅРёРё', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	$title = 'Re:' . $row['subject'];
 	if ($quote && empty($message))
 		$message = '[quote]' . $row['message'] . '[/quote]';
 }
 if (isset($_REQUEST['submit'])) {
-	if (empty($message)) $error_text[] = 'Сообщение пусто';
-	if (empty($title)) $error_text[] = 'Заголовок пустой';
-	if (empty($sendto)) $error_text[] = 'Отправитель не указан';
+	if (empty($message)) $error_text[] = 'РЎРѕРѕР±С‰РµРЅРёРµ РїСѓСЃС‚Рѕ';
+	if (empty($title)) $error_text[] = 'Р—Р°РіРѕР»РѕРІРѕРє РїСѓСЃС‚РѕР№';
+	if (empty($sendto)) $error_text[] = 'РћС‚РїСЂР°РІРёС‚РµР»СЊ РЅРµ СѓРєР°Р·Р°РЅ';
 	if (!$torow = $mysql->record('select * from ' . prefix . '_users WHERE ' . (is_numeric($sendto) ? 'id = ' . securemysql($sendto) : 'name = ' . securemysql($sendto)) . ' LIMIT 1'))
-		$error_text[] = 'Отправитель не найден';
+		$error_text[] = 'РћС‚РїСЂР°РІРёС‚РµР»СЊ РЅРµ РЅР°Р№РґРµРЅ';
 	if (is_numeric($sendto)) {
 		if ($sendto == $userROW['id'])
-			return $output = information('Самому себе отправлять не нужно', $title = 'Информация');
+			return $output = information('РЎР°РјРѕРјСѓ СЃРµР±Рµ РѕС‚РїСЂР°РІР»СЏС‚СЊ РЅРµ РЅСѓР¶РЅРѕ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	} else {
 		if ($sendto == $userROW['name'])
-			return $output = information('Самому себе отправлять не нужно', $title = 'Информация');
+			return $output = information('РЎР°РјРѕРјСѓ СЃРµР±Рµ РѕС‚РїСЂР°РІР»СЏС‚СЊ РЅРµ РЅСѓР¶РЅРѕ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	}
 	if (empty($error_text)) {
 		$mysql->query('insert into ' . uprefix . '_pm (
@@ -97,7 +97,7 @@ if (isset($_REQUEST['submit'])) {
 				)
 			');
 
-		return $output = announcement_forum('Данные внесены', link_list_pm(0, 0, 'inbox'), 2);
+		return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_list_pm(0, 0, 'inbox'), 2);
 	}
 }
 if ($id) {

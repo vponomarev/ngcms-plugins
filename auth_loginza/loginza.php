@@ -48,7 +48,7 @@ function loginzaAuth() {
 	} else {
 		$responce = file_get_contents($url);
 	}
-	$responce_array = arrayCharsetConvert(1, json_decode($responce, true));
+	$responce_array = json_decode($responce, true);
 	# if loginza returned some error
 	if ($responce_array['error_type']) {
 		msg(array("type" => "error", "text" => $responce_array['error_type'] . ' ' . $responce_array['error_message']));

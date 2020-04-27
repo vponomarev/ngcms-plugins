@@ -3,7 +3,7 @@
 ;
 
 ID: guestbook
-Name: Гостевая книга
+Name: Р“РѕСЃС‚РµРІР°СЏ РєРЅРёРіР°
 Version: 2.1
 Acts: index, twig, ppages
 File: guestbook.php
@@ -11,9 +11,9 @@ Config: config.php
 Install: install.php
 Deinstall: deinstall.php
 Type: plugin
-Description: Гостевая книга сайта
+Description: Р“РѕСЃС‚РµРІР°СЏ РєРЅРёРіР° СЃР°Р№С‚Р°
 Author: Sergey Kulikov
 Author_URI: https://github.com/web-padawan
-Title: Гостевая книга
-Information: Плагин позволяет организовать на сайте гостевую книгу.
+Title: Р“РѕСЃС‚РµРІР°СЏ РєРЅРёРіР°
+Information: РџР»Р°РіРёРЅ РїРѕР·РІРѕР»СЏРµС‚ РѕСЂРіР°РЅРёР·РѕРІР°С‚СЊ РЅР° СЃР°Р№С‚Рµ РіРѕСЃС‚РµРІСѓСЋ РєРЅРёРіСѓ.
 Preinstall: default_no

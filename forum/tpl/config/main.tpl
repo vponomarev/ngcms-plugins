@@ -2,7 +2,7 @@
 	<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr>
 			<td width="100%" colspan="2" class="contentHead">
-				<img src="{{ skins_url }}/images/nav.gif" hspace="8" alt=""/>Íàñòðîéêà êîìïîíåòà: ôîðóìà => {{ global }}
+				<img src="{{ skins_url }}/images/nav.gif" hspace="8" alt=""/>ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ° ÐºÐ¾Ð¼Ð¿Ð¾Ð½ÐµÑ‚Ð°: Ñ„Ð¾Ñ€ÑƒÐ¼Ð° => {{ global }}
 			</td>
 		</tr>
 		<tr>
@@ -12,17 +12,17 @@
 	<table border="0" cellspacing="0" cellpadding="0" width="100%">
 		<tr align="center">
 			<td width="100%" class="contentNav" align="center" style="background-repeat: no-repeat; background-position: left;">
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum'" value="Îáùèå" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=group'" value="Ãðóïïû" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ads'" value="Îáúÿâëåíèÿ" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=rules'" value="Ïðàâèëà" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_forum'" value="Ñïèñîê ôîðóìîâ" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_news'" value="Ñïèñîê íîâîñòåé" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_complaints'" value="Ñïèñîê æàëîá" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban'" value="Çàáàíåíûå" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=url'" value="×ÏÓ" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=title'" value="Óïðàâëåíèå çàãîëîâêàìè" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=about'" value="Î ïëàãèíå" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum'" value="ÐžÐ±Ñ‰Ð¸Ðµ" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=group'" value="Ð“Ñ€ÑƒÐ¿Ð¿Ñ‹" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ads'" value="ÐžÐ±ÑŠÑÐ²Ð»ÐµÐ½Ð¸Ñ" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=rules'" value="ÐŸÑ€Ð°Ð²Ð¸Ð»Ð°" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_forum'" value="Ð¡Ð¿Ð¸ÑÐ¾Ðº Ñ„Ð¾Ñ€ÑƒÐ¼Ð¾Ð²" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_news'" value="Ð¡Ð¿Ð¸ÑÐ¾Ðº Ð½Ð¾Ð²Ð¾ÑÑ‚ÐµÐ¹" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=list_complaints'" value="Ð¡Ð¿Ð¸ÑÐ¾Ðº Ð¶Ð°Ð»Ð¾Ð±" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=ban'" value="Ð—Ð°Ð±Ð°Ð½ÐµÐ½Ñ‹Ðµ" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=url'" value="Ð§ÐŸÐ£" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=title'" value="Ð£Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²ÐºÐ°Ð¼Ð¸" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=about'" value="Ðž Ð¿Ð»Ð°Ð³Ð¸Ð½Ðµ" class="navbutton"/>
 			</td>
 		</tr>
 	</table>

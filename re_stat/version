@@ -1,11 +1,11 @@
 ID: re_stat
-Name: Перенаправление статики
+Name: РџРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёРµ СЃС‚Р°С‚РёРєРё
 Version: 0.02
 Actions: ppages; re_stat.php
 Config: config.php
 Type: plugin
-Title: Перенаправление статических страниц
-Description: Управление перенаправлением статических страниц
+Title: РџРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёРµ СЃС‚Р°С‚РёС‡РµСЃРєРёС… СЃС‚СЂР°РЅРёС†
+Description: РЈРїСЂР°РІР»РµРЅРёРµ РїРµСЂРµРЅР°РїСЂР°РІР»РµРЅРёРµРј СЃС‚Р°С‚РёС‡РµСЃРєРёС… СЃС‚СЂР°РЅРёС†
 Author: Ivan Litvinenko (Amarelius)
 Author_URI: http://arnit.com.ua/
 preinstall: no

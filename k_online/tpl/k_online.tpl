@@ -8,7 +8,7 @@
 							<td>
 								<img border="0" src="{tpl_url}/images/2z_35.gif" width="7" height="36"/></td>
 							<td style="background-image:url('{tpl_url}/images/2z_36.gif');" width="100%">
-								&nbsp;<font color="#FFFFFF"><b>Кто онлайн</b></font></td>
+								&nbsp;<font color="#FFFFFF"><b>РљС‚Рѕ РѕРЅР»Р°Р№РЅ</b></font></td>
 							<td>
 								<img border="0" src="{tpl_url}/images/2z_38.gif" width="7" height="36"/></td>
 						</tr>
@@ -21,12 +21,12 @@
 						<tr>
 							<td style="background-image:url('{tpl_url}/images/2z_56.gif');" width="7">&nbsp;</td>
 							<td bgcolor="#FFFFFF">
-								<b>Всего на сайте: {{ all }} </b><br/>
-								- Анонимов: {{ num_guest }}<br/>
-								- Авторизированных: {{ num_auth }}<br/>
-								<i>-- Команда сайта:</i> {{ num_team }}<br/>
-								<i>-- Пользователи:</i> {{ num_users }}<br/>
-								- Поисковых роботов: {{ num_bot }}
+								<b>Р’СЃРµРіРѕ РЅР° СЃР°Р№С‚Рµ: {{ all }} </b><br/>
+								- РђРЅРѕРЅРёРјРѕРІ: {{ num_guest }}<br/>
+								- РђРІС‚РѕСЂРёР·РёСЂРѕРІР°РЅРЅС‹С…: {{ num_auth }}<br/>
+								<i>-- РљРѕРјР°РЅРґР° СЃР°Р№С‚Р°:</i> {{ num_team }}<br/>
+								<i>-- РџРѕР»СЊР·РѕРІР°С‚РµР»Рё:</i> {{ num_users }}<br/>
+								- РџРѕРёСЃРєРѕРІС‹С… СЂРѕР±РѕС‚РѕРІ: {{ num_bot }}
 								{% if (entries_team.true) %}
 									<br/><br/>
 									{{ entries_team.print }}

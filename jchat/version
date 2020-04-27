@@ -12,7 +12,7 @@ Install: install.php
 Deinstall: deinstall.php
 Type: plugin
 Title: AJAX chat
-Description: AJAX based чат для сайта
+Description: AJAX based С‡Р°С‚ РґР»СЏ СЃР°Р№С‚Р°
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
-Information: Благодаря этому плагину вы сможете добавить на ваш сайт ЧАТ (на базе технологии AJAX)
+Information: Р‘Р»Р°РіРѕРґР°СЂСЏ СЌС‚РѕРјСѓ РїР»Р°РіРёРЅСѓ РІС‹ СЃРјРѕР¶РµС‚Рµ РґРѕР±Р°РІРёС‚СЊ РЅР° РІР°С€ СЃР°Р№С‚ Р§РђРў (РЅР° Р±Р°Р·Рµ С‚РµС…РЅРѕР»РѕРіРёРё AJAX)

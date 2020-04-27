@@ -106,8 +106,8 @@
 	<tbody>
 	<tr>
 		<td colspan="5" class="contentHead" width="100%">
-			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="Управление плагинами">Управление
-				плагинами</a> &#8594; <a href="?mod=extra-config&plugin=xfields">xfields</a></td>
+			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="РЈРїСЂР°РІР»РµРЅРёРµ РїР»Р°РіРёРЅР°РјРё">РЈРїСЂР°РІР»РµРЅРёРµ
+				РїР»Р°РіРёРЅР°РјРё</a> &#8594; <a href="?mod=extra-config&plugin=xfields">xfields</a></td>
 	</tr>
 	</tbody>
 </table>
@@ -120,8 +120,8 @@
 			<img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang.xfconfig['list'] }}: {{ section_name }}</td>
 	</tr>
 	<tr align="left">
-		<td class="contentHead" width="200" colspan="2"><b>Группы</b></td>
-		<td class="contentHead" colspan="3"><b>Поля, находящиеся в группе (<span id="grpName">n/a</span>)</b></td>
+		<td class="contentHead" width="200" colspan="2"><b>Р“СЂСѓРїРїС‹</b></td>
+		<td class="contentHead" colspan="3"><b>РџРѕР»СЏ, РЅР°С…РѕРґСЏС‰РёРµСЃСЏ РІ РіСЂСѓРїРїРµ (<span id="grpName">n/a</span>)</b></td>
 	</tr>
 	<tr>
 		<td width="200" colspan="2">
@@ -132,12 +132,12 @@
 				<table width="100%" class="fldList" id="fList">
 					<tr>
 						<td width="50">date</td>
-						<td>Дата добавления новости</td>
+						<td>Р”Р°С‚Р° РґРѕР±Р°РІР»РµРЅРёСЏ РЅРѕРІРѕСЃС‚Рё</td>
 						<td width="90" align="right" nowrap>(up) (down) (del)</td>
 					</tr>
 					<tr>
 						<td width="50">&nbsp;date</td>
-						<td>Дата добавления новости</td>
+						<td>Р”Р°С‚Р° РґРѕР±Р°РІР»РµРЅРёСЏ РЅРѕРІРѕСЃС‚Рё</td>
 						<td width="90" align="right" nowrap>(up) (down) (del)</td>
 					</tr>
 				</table>
@@ -145,15 +145,15 @@
 		</td>
 	</tr>
 	<tr class="contRow1">
-		<td width="70" nowrap="nowrap">ID группы:</td>
+		<td width="70" nowrap="nowrap">ID РіСЂСѓРїРїС‹:</td>
 		<td><input id="edGrpId" style="width: 200px; height: 15px;">
-			<input type="button" id="btnDelGroup" class="button" value="Удалить"/></td>
-		<td width="90">Добавить поле:</td>
+			<input type="button" id="btnDelGroup" class="button" value="РЈРґР°Р»РёС‚СЊ"/></td>
+		<td width="90">Р”РѕР±Р°РІРёС‚СЊ РїРѕР»Рµ:</td>
 		<td><select style="width: 200px;  height: 19px; border: #BFBFBF 1px solid;" id="selectFList"></select>
-			<input type="button" id="btnAddField" class="button" value="Добавить"/></td>
+			<input type="button" id="btnAddField" class="button" value="Р”РѕР±Р°РІРёС‚СЊ"/></td>
 	</tr>
 	<tr class="contRow1">
-		<td width="70" nowrap="nowrap">Имя группы:</td>
+		<td width="70" nowrap="nowrap">РРјСЏ РіСЂСѓРїРїС‹:</td>
 		<td><input id="edGrpName" style="width: 200px; height: 15px;"></td>
 	</tr>
 </table>
@@ -162,7 +162,7 @@
 	<tr>&nbsp;</tr>
 	<tr align="center">
 		<td class="contentEdit" valign="top" width="100%">
-			<input type="button" id="btnModGroup" class="button" value="Добавить"/>
+			<input type="button" id="btnModGroup" class="button" value="Р”РѕР±Р°РІРёС‚СЊ"/>
 		</td>
 	</tr>
 </table>
@@ -224,11 +224,11 @@
 			if (gListValue == '') {
 				document.getElementById('edGrpId').readOnly = false;
 				document.getElementById('edGrpId').style.backgroundColor = '#FFFFFF';
-				document.getElementById('btnModGroup').value = "Добавить";
+				document.getElementById('btnModGroup').value = "Р”РѕР±Р°РІРёС‚СЊ";
 			} else {
 				document.getElementById('edGrpId').readOnly = true;
 				document.getElementById('edGrpId').style.backgroundColor = '#EAF0F7';
-				document.getElementById('btnModGroup').value = "Сохранить";
+				document.getElementById('btnModGroup').value = "РЎРѕС…СЂР°РЅРёС‚СЊ";
 			}
 		}
 
@@ -268,7 +268,7 @@
 		}
 		var o = document.createElement('option');
 		o.value = '';
-		o.text = '** новая группа **';
+		o.text = '** РЅРѕРІР°СЏ РіСЂСѓРїРїР° **';
 		grpList.options[grpList.options.length] = o;
 		grpList.value = gID;
 	}

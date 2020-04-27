@@ -122,18 +122,18 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 			'title' => $fInfo['title'],
 			'type'  => $fInfo['type'],
 		);
-		$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']), iconv('Windows-1251', 'UTF-8', $fInfo['title']));
+		$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']), $fInfo['title']);
 		// Fill value
 		$setValue = '';
 		if ($mode && (!$fInfo['block'])) {
 			// FILLED EARLIER
-			$setValue = secure_html(($isUTF && $flagsUTF) ? iconv('UTF-8', 'Windows-1251//TRANSLIT', $_REQUEST['fld_' . $fInfo['name']]) : $_REQUEST['fld_' . $fInfo['name']]);
+			$setValue = secure_html($_REQUEST['fld_' . $fInfo['name']]);
 		} else {
 			// INITIAL SHOW
 			$setValue = secure_html($fInfo['default']);
 			// If 'by parameter' mode is set, check if this variable was passed in GET
 			if (($fInfo['auto'] == 1) && isset($_REQUEST['v_' . $fInfo['name']])) {
-				$setValue = secure_html(($isUTF && $flagsUTF) ? iconv('UTF-8', 'Windows-1251//TRANSLIT', $_REQUEST['v_' . $fInfo['name']]) : $_REQUEST['v_' . $fInfo['name']]);
+				$setValue = secure_html($_REQUEST['v_' . $fInfo['name']]);
 			} else if ($fInfo['auto'] == 2) {
 				$setValue = secure_html($xfValues[$fInfo['name']]);
 			} else if ($fInfo['auto'] == 3) {
@@ -228,7 +228,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	// Prepare hidden fields
 	$hF = '';
 	foreach ($hiddenFields as $k => $v) {
-		$hF .= '<input type="hidden" name="' . $k . '" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251') . '"/>' . "\n";
+		$hF .= '<input type="hidden" name="' . $k . '" value="' . htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'UTF-8') . '"/>' . "\n";
 	}
 	$tVars['hidden_fields'] = $hF;
 	// Process filters (if any)
@@ -343,7 +343,7 @@ function plugin_feedback_post() {
 				break;
 			default:
 				if ($isUTF && $flagsUTF) {
-					$fieldValue = iconv('UTF-8', 'Windows-1251//TRANSLIT', $_REQUEST['fld_' . $fName]);
+					$fieldValue = $_REQUEST['fld_' . $fName];
 				} else {
 					$fieldValue = $_REQUEST['fld_' . $fName];
 				}

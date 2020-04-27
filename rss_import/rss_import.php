@@ -37,18 +37,18 @@ function rss_import_block() {
 		if (!$newslength) {
 			$newslength = 100;
 		}
-		$url = extra_get_param('rss_import', $vv . '_url');       //àäðåñ RSS ëåíòû
-		$rss = simplexml_load_file($url);       //Èíòåðïðåòèðóåò XML-ôàéë â îáúåêò
+		$url = extra_get_param('rss_import', $vv . '_url');       //Ð°Ð´Ñ€ÐµÑ RSS Ð»ÐµÐ½Ñ‚Ñ‹
+		$rss = simplexml_load_file($url);       //Ð˜Ð½Ñ‚ÐµÑ€Ð¿Ñ€ÐµÑ‚Ð¸Ñ€ÑƒÐµÑ‚ XML-Ñ„Ð°Ð¹Ð» Ð² Ð¾Ð±ÑŠÐµÐºÑ‚
 		if (empty($rss))
-			return $template['vars'][$vv] = 'RSS íå äîñòóïåí';
-		//öèêë äëÿ îáõîäà âñåé RSS ëåíòû
+			return $template['vars'][$vv] = 'RSS Ð½Ðµ Ð´Ð¾ÑÑ‚ÑƒÐ¿ÐµÐ½';
+		//Ñ†Ð¸ÐºÐ» Ð´Ð»Ñ Ð¾Ð±Ñ…Ð¾Ð´Ð° Ð²ÑÐµÐ¹ RSS Ð»ÐµÐ½Ñ‚Ñ‹
 		$j = 1;
 		foreach ($rss->xpath('//item') as $item) {
-			$title = $item->title;       //âûâîäèì çàãîëîâîê ñòàòüè
-			if (strlen($title) > $maxlength) $tvars['vars']['title'] = iconv('utf-8', 'windows-1251', substr(secure_html($title), 0, $maxlength) . "");
-			else $tvars['vars']['title'] = iconv('utf-8', 'windows-1251', secure_html($title));
+			$title = $item->title;       //Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ð¼ Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº ÑÑ‚Ð°Ñ‚ÑŒÐ¸
+			if (strlen($title) > $maxlength) $tvars['vars']['title'] = substr(secure_html($title), 0, $maxlength) . "";
+			else $tvars['vars']['title'] = secure_html($title);
 			if (extra_get_param('rss_import', $vv . '_content')) {
-				$short_news = strip_tags(iconv('utf-8', 'windows-1251', $item->description));        //âûâîäèì òåêñò ñòàòüè	
+				$short_news = strip_tags($item->description);        //Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ð¼ Ñ‚ÐµÐºÑÑ‚ ÑÑ‚Ð°Ñ‚ÑŒÐ¸
 				if ($config['blocks_for_reg']) $short_news = $parse->userblocks($short_news);
 				//if ($config['use_htmlformatter']) $short_news = $parse -> htmlformatter($short_news);
 				if ($config['use_bbcodes']) $short_news = $parse->bbcodes($short_news);

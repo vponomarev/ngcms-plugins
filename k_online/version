@@ -1,13 +1,13 @@
 ID: k_online
-Name: Кто сейчас в онлайн
+Name: РљС‚Рѕ СЃРµР№С‡Р°СЃ РІ РѕРЅР»Р°Р№РЅ
 Version: 0.1
 Acts: index 
 File: k_online.php
 Type: plugin
 Install: install.php
-Description: Показвыает кто сейчас на сайте
+Description: РџРѕРєР°Р·РІС‹Р°РµС‚ РєС‚Рѕ СЃРµР№С‡Р°СЃ РЅР° СЃР°Р№С‚Рµ
 Author: Nail' R. Davydov (ROZARD)
 Author_URI: http://rozard.ngdemo.ru
-Title: Кто сейчас в онлайн
-Information: Показвыает кто сейчас на сайте
+Title: РљС‚Рѕ СЃРµР№С‡Р°СЃ РІ РѕРЅР»Р°Р№РЅ
+Information: РџРѕРєР°Р·РІС‹Р°РµС‚ РєС‚Рѕ СЃРµР№С‡Р°СЃ РЅР° СЃР°Р№С‚Рµ
 Preinstall: default_no

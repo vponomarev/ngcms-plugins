@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 <head>
 	<title>{{ titles }}</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name='keywords' content='{{ keywords }}'/>
 	<meta name='description' content='{{ description }}'/>
 	<link rel="stylesheet" href="{{ forum_tpl }}/style.css" type="text/css"/>
@@ -31,55 +31,55 @@
 
 				<div id="brdmenu" class="inbox">
 					<ul>
-						<li><a href='/'>На сайт</a></li>
-						<li><a href='{{ home }}'>Главная страница</a></li>
-						<li><a href='{{ news_feed }}'>Новости</a></li>
-						<li><a href='{{ userslist }}'>Пользователи</a></li>
+						<li><a href='/'>РќР° СЃР°Р№С‚</a></li>
+						<li><a href='{{ home }}'>Р“Р»Р°РІРЅР°СЏ СЃС‚СЂР°РЅРёС†Р°</a></li>
+						<li><a href='{{ news_feed }}'>РќРѕРІРѕСЃС‚Рё</a></li>
+						<li><a href='{{ userslist }}'>РџРѕР»СЊР·РѕРІР°С‚РµР»Рё</a></li>
 						{% if (rules.true) %}
-							<li><a href='{{ rules.print }}'>Правила</a></li>{% endif %}
-						<li><a href='{{ search }}'>Поиск</a></li>
+							<li><a href='{{ rules.print }}'>РџСЂР°РІРёР»Р°</a></li>{% endif %}
+						<li><a href='{{ search }}'>РџРѕРёСЃРє</a></li>
 						{% if (global.user) %}
-							<li><a href='{{ profile }}'>Профиль</a></li>{% else %}
-							<li><a href='{{ register }}'>Регистрация</a></li>{% endif %}
+							<li><a href='{{ profile }}'>РџСЂРѕС„РёР»СЊ</a></li>{% else %}
+							<li><a href='{{ register }}'>Р РµРіРёСЃС‚СЂР°С†РёСЏ</a></li>{% endif %}
 						{% if (global.user['status'] == 1) %}
-							<li><a href='{{ administration }}'>Администрирование</a></li>{% endif %}
+							<li><a href='{{ administration }}'>РђРґРјРёРЅРёСЃС‚СЂРёСЂРѕРІР°РЅРёРµ</a></li>{% endif %}
 						{% if (global.user) %}
 							<li>
-							<a href='{{ pm }}'>Сообщения{% if (num_pm) %}[<span style="color:red">{{ num_pm }}</span>]{% endif %}
+							<a href='{{ pm }}'>РЎРѕРѕР±С‰РµРЅРёСЏ{% if (num_pm) %}[<span style="color:red">{{ num_pm }}</span>]{% endif %}
 							</a></li>{% endif %}
 						{% if (global.user) %}
-							<li><a href='{{ out }}'>Выйти</a></li>{% else %}
-							<li><a href='{{ login }}'>Зайти</a></li>{% endif %}
+							<li><a href='{{ out }}'>Р’С‹Р№С‚Рё</a></li>{% else %}
+							<li><a href='{{ login }}'>Р—Р°Р№С‚Рё</a></li>{% endif %}
 					</ul>
 				</div>
 
 				<div id="brdwelcome" class="inbox">
 					<ul class="conl">
 						{% if (global.user) %}
-							<li>Вы вошли как: <strong>{{ global.user['name'] }}</strong></li>{% else %}
-							<li>Вы вошли как: <strong>Гость</strong></li>{% endif %}
+							<li>Р’С‹ РІРѕС€Р»Рё РєР°Рє: <strong>{{ global.user['name'] }}</strong></li>{% else %}
+							<li>Р’С‹ РІРѕС€Р»Рё РєР°Рє: <strong>Р“РѕСЃС‚СЊ</strong></li>{% endif %}
 						{% if (global.user) %}
-							<li>Ваш последний визит: {% if (last_visit_u) %}
+							<li>Р’Р°С€ РїРѕСЃР»РµРґРЅРёР№ РІРёР·РёС‚: {% if (last_visit_u) %}
 							{% if last_visit_u|date('d-m-Y') == "now"|date('d-m-Y') %}
-								Сегодня {{ last_visit_u|date('H:i') }}
+								РЎРµРіРѕРґРЅСЏ {{ last_visit_u|date('H:i') }}
 							{% elseif last_visit_u|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-								Вчера {{ last_post_forum.date|date('H:i') }}
+								Р’С‡РµСЂР° {{ last_post_forum.date|date('H:i') }}
 							{% else %}
 								{{ last_post_forum.date|date('d-m-Y H:i') }}
 							{% endif %}
 						{% else %}
 							0
 						{% endif %}</li>{% else %}
-							<li>Ваш последний визит: {% if (last_visit_g) %}
+							<li>Р’Р°С€ РїРѕСЃР»РµРґРЅРёР№ РІРёР·РёС‚: {% if (last_visit_g) %}
 								{% if last_visit_g|date('d-m-Y') == "now"|date('d-m-Y') %}
-									Сегодня {{ last_visit_g|date('H:i') }}
+									РЎРµРіРѕРґРЅСЏ {{ last_visit_g|date('H:i') }}
 								{% elseif last_visit_g|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-									Вчера {{ last_post_forum.date|date('H:i') }}
+									Р’С‡РµСЂР° {{ last_post_forum.date|date('H:i') }}
 								{% else %}
 									{{ last_post_forum.date|date('d-m-Y H:i') }}
 								{% endif %}
 							{% else %}
-								Только вошли
+								РўРѕР»СЊРєРѕ РІРѕС€Р»Рё
 							{% endif %}</li>{% endif %}
 					</ul>
 
@@ -89,7 +89,7 @@
 		</div>
 		{% if (announc_on_off) %}
 			<div id="announce" class="block">
-				<h2><span>Объявление</span></h2>
+				<h2><span>РћР±СЉСЏРІР»РµРЅРёРµ</span></h2>
 				<div class="box">
 					<div class="inbox">
 						<div>{{ announce }}</div>
@@ -99,7 +99,7 @@
 		{% endif %}
 		{% if (welcome) %}{% if (global.user) %}
 			<div class="blocktable" style="MARGIN-BOTTOM: 12px">
-				<h2><span>Добро пожаловать <strong>{{ global.user['name'] }}</strong></span></h2>
+				<h2><span>Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ <strong>{{ global.user['name'] }}</strong></span></h2>
 				<div class="box">
 					<div class="inbox">
 						<table cellspacing="0">
@@ -111,7 +111,7 @@
 								<td class="addcc" valign="top">
 									<table cellpadding="0" cellspacing="0" width="100%" align="left">
 										<tr>
-											<td width="50%" class="desc" style="padding: 3px;  border:0px"><strong>Новости:</strong>
+											<td width="50%" class="desc" style="padding: 3px;  border:0px"><strong>РќРѕРІРѕСЃС‚Рё:</strong>
 											</td>
 										</tr>
 										{% for entry in entries_list_news %}
@@ -123,7 +123,7 @@
 										<tr>
 											{% else %}
 										<tr>
-											<td class="desc" style="padding: 3px;  border:0px ">НЕТУ</td>
+											<td class="desc" style="padding: 3px;  border:0px ">РќР•РўРЈ</td>
 										<tr>
 											{% endfor %}
 									</table>
@@ -133,18 +133,18 @@
 										<tr>
 											{% if (global.user) %}
 												<td class="desc" style="padding: 3px;  border:0px ">
-												<a href='{{ show_new }}'>Показать новые сообщения, с момента Вашего
-													последнего визита</a></td>{% endif %}
+												<a href='{{ show_new }}'>РџРѕРєР°Р·Р°С‚СЊ РЅРѕРІС‹Рµ СЃРѕРѕР±С‰РµРЅРёСЏ, СЃ РјРѕРјРµРЅС‚Р° Р’Р°С€РµРіРѕ
+													РїРѕСЃР»РµРґРЅРµРіРѕ РІРёР·РёС‚Р°</a></td>{% endif %}
 										</tr>
 										<tr>
 											{% if (global.user) %}
 												<td class="desc" style="padding: 3px;  border:0px ">
-												<a href='{{ show_24 }}'>Показать последние сообщения</a></td>{% endif %}
+												<a href='{{ show_24 }}'>РџРѕРєР°Р·Р°С‚СЊ РїРѕСЃР»РµРґРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ</a></td>{% endif %}
 										</tr>
 										<tr>
 											{% if (global.user) %}
 												<td class="desc" style="padding: 3px;  border:0px ">
-												<a href='{{ markread }}'>Пометить все форумы как прочитанные</a>
+												<a href='{{ markread }}'>РџРѕРјРµС‚РёС‚СЊ РІСЃРµ С„РѕСЂСѓРјС‹ РєР°Рє РїСЂРѕС‡РёС‚Р°РЅРЅС‹Рµ</a>
 												</td>{% endif %}
 										</tr>
 									</table>
@@ -168,7 +168,7 @@
 				}
 			</script>
 			<div class="blocktable" style="MARGIN-BOTTOM: 12px">
-				<h2><span> Добро пожаловать на наш форум</span></h2>
+				<h2><span> Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РЅР° РЅР°С€ С„РѕСЂСѓРј</span></h2>
 				<div class="box">
 					<div class="inbox">
 						<table cellspacing="0">
@@ -178,25 +178,25 @@
 									<img width="100" height="100" src="{% if (avatar.true) %}{{ avatar.print }}{% else %}{{ avatar.print }}/noavatar.gif{% endif %}"/>
 								</td>
 								<td class="addcc" valign="top">
-									Здравствуйте, уважаемый посетитель! К сожалению вы не были распознаны форумом как
-									зарегистрированный пользователь. Для полноценного использования возможностей нашего
-									форума вам необходимо <a href='{{ register }}'>зарегистрироваться</a>. Если вы уже
-									зарегистрированы на форуме, то вам необходимо пройти авторизацию, используя Ваш
-									логин и пароль. Зарегистрированные пользователи получают возможность просматривать
-									закрытые разделы форума, а также возможность общения на нашем форуме.
+									Р—РґСЂР°РІСЃС‚РІСѓР№С‚Рµ, СѓРІР°Р¶Р°РµРјС‹Р№ РїРѕСЃРµС‚РёС‚РµР»СЊ! Рљ СЃРѕР¶Р°Р»РµРЅРёСЋ РІС‹ РЅРµ Р±С‹Р»Рё СЂР°СЃРїРѕР·РЅР°РЅС‹ С„РѕСЂСѓРјРѕРј РєР°Рє
+									Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ. Р”Р»СЏ РїРѕР»РЅРѕС†РµРЅРЅРѕРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РІРѕР·РјРѕР¶РЅРѕСЃС‚РµР№ РЅР°С€РµРіРѕ
+									С„РѕСЂСѓРјР° РІР°Рј РЅРµРѕР±С…РѕРґРёРјРѕ <a href='{{ register }}'>Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°С‚СЊСЃСЏ</a>. Р•СЃР»Рё РІС‹ СѓР¶Рµ
+									Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅС‹ РЅР° С„РѕСЂСѓРјРµ, С‚Рѕ РІР°Рј РЅРµРѕР±С…РѕРґРёРјРѕ РїСЂРѕР№С‚Рё Р°РІС‚РѕСЂРёР·Р°С†РёСЋ, РёСЃРїРѕР»СЊР·СѓСЏ Р’Р°С€
+									Р»РѕРіРёРЅ Рё РїР°СЂРѕР»СЊ. Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»Рё РїРѕР»СѓС‡Р°СЋС‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РїСЂРѕСЃРјР°С‚СЂРёРІР°С‚СЊ
+									Р·Р°РєСЂС‹С‚С‹Рµ СЂР°Р·РґРµР»С‹ С„РѕСЂСѓРјР°, Р° С‚Р°РєР¶Рµ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РѕР±С‰РµРЅРёСЏ РЅР° РЅР°С€РµРј С„РѕСЂСѓРјРµ.
 								</td>
 								<td width="25%" class="addc">
 									<form id="login" method="post" action="{{ login }}">
-										<legend>Введите ваше имя и пароль ниже</legend>
+										<legend>Р’РІРµРґРёС‚Рµ РІР°С€Рµ РёРјСЏ Рё РїР°СЂРѕР»СЊ РЅРёР¶Рµ</legend>
 										<div class="infldset">
-											<label class="conl"><strong>Имя</strong><br/><input type="text" name="username" value="{{ username }}" size="25" maxlength="25" tabindex="1"/><br/></label>
-											<label class="conl"><strong>Пароль</strong><br/><input type="text" name="password" size="16" maxlength="16" tabindex="2"/><br/></label>
-											<p class="clearb">Поставь галочку если человек:
+											<label class="conl"><strong>РРјСЏ</strong><br/><input type="text" name="username" value="{{ username }}" size="25" maxlength="25" tabindex="1"/><br/></label>
+											<label class="conl"><strong>РџР°СЂРѕР»СЊ</strong><br/><input type="text" name="password" size="16" maxlength="16" tabindex="2"/><br/></label>
+											<p class="clearb">РџРѕСЃС‚Р°РІСЊ РіР°Р»РѕС‡РєСѓ РµСЃР»Рё С‡РµР»РѕРІРµРє:
 												<input type="checkbox" id="forum_captcha" onclick="forum_change();" value="1">
 											</p>
 											<input type="hidden" name="forum_captcha_sess" id="forum_captcha_sess" value="0">
 										</div>
-										<p><input type="submit" name="submit" value="Зайти" tabindex="3"/></p>
+										<p><input type="submit" name="submit" value="Р—Р°Р№С‚Рё" tabindex="3"/></p>
 									</form>
 								</td>
 							</tr>
@@ -208,21 +208,21 @@
 		{% endif %}{% endif %}
 		{% if (event) %}
 			<div class="blocktable" style="MARGIN-BOTTOM: 12px">
-				<h2><span>Последние события</span></h2>
+				<h2><span>РџРѕСЃР»РµРґРЅРёРµ СЃРѕР±С‹С‚РёСЏ</span></h2>
 				<div class="box">
 					<table class='ipbtable' cellspacing="0">
 						<tr>
-							<th width="22%" valign="middle" align="left">Активные пользователи:</th>
-							<th width="18%" valign="middle" align="left">Новоприбывшие:</th>
-							<th width="60%" valign="middle" align="left">Последние ответы:</th>
+							<th width="22%" valign="middle" align="left">РђРєС‚РёРІРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»Рё:</th>
+							<th width="18%" valign="middle" align="left">РќРѕРІРѕРїСЂРёР±С‹РІС€РёРµ:</th>
+							<th width="60%" valign="middle" align="left">РџРѕСЃР»РµРґРЅРёРµ РѕС‚РІРµС‚С‹:</th>
 						</tr>
 						<tr>
 							<td class="row1" valign="top">
 								<table cellpadding="0" cellspacing="0" width="100%" align="left">
 									<tr>
 										<td width="50%" class="desc" style="padding: 3px;  border:0px">
-											<strong>Юзер:</strong></td>
-										<td width="50%" class="desc" style="padding: 3px;  border:0px"><strong>Сообщений:</strong>
+											<strong>Р®Р·РµСЂ:</strong></td>
+										<td width="50%" class="desc" style="padding: 3px;  border:0px"><strong>РЎРѕРѕР±С‰РµРЅРёР№:</strong>
 										</td>
 									</tr>
 									{% for entry in entries_active_user %}
@@ -239,8 +239,8 @@
 								<table cellpadding="0" cellspacing="0" width="100%" align="left">
 									<tr>
 										<td width="50%" class="desc" style="padding: 3px;  border:0px">
-											<strong>Юзер:</strong></td>
-										<td width="50%" class="desc" style="padding: 3px;  border:0px"><strong>Сообщений:</strong>
+											<strong>Р®Р·РµСЂ:</strong></td>
+										<td width="50%" class="desc" style="padding: 3px;  border:0px"><strong>РЎРѕРѕР±С‰РµРЅРёР№:</strong>
 										</td>
 									</tr>
 									{% for entry in entries_new_user %}
@@ -257,13 +257,13 @@
 								<table cellpadding="0" cellspacing="0" width="100%" align="left">
 									<tr>
 										<td width="60%" class="desc" style="padding: 3px; border:0px">
-											<strong>Тема:</strong></td>
+											<strong>РўРµРјР°:</strong></td>
 										<td width="15%" class="desc" style="padding: 3px; border:0px">
-											<strong>Последний:</strong></td>
-										<td width="15%" class="desc" style="padding: 3px; border:0px"><strong>Просмотров:</strong>
+											<strong>РџРѕСЃР»РµРґРЅРёР№:</strong></td>
+										<td width="15%" class="desc" style="padding: 3px; border:0px"><strong>РџСЂРѕСЃРјРѕС‚СЂРѕРІ:</strong>
 										</td>
 										<td width="10%" class="desc" style="padding: 3px; border:0px">
-											<strong>Ответов:</strong></td>
+											<strong>РћС‚РІРµС‚РѕРІ:</strong></td>
 									</tr>
 									{% for entry in entries_last_topic %}
 										<tr>
@@ -285,35 +285,35 @@
 		{{ content }}
 		{% if (stat) %}
 			<div id="brdstats" class="block">
-				<h2><span>Информация о форуме</span></h2>
+				<h2><span>РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С„РѕСЂСѓРјРµ</span></h2>
 				<div class="box">
 					<div class="inbox">
 						<dl class="conr">
-							<dt><strong>Статистика форума</strong></dt>
-							<dd>Всего зарегистрированных пользователей: <strong>{{ total_users }}</strong></dd>
-							<dd>Всего тем: <strong>{{ total_topics }}</strong></dd>
-							<dd>Всего сообщений: <strong>{{ total_posts }}</strong></dd>
+							<dt><strong>РЎС‚Р°С‚РёСЃС‚РёРєР° С„РѕСЂСѓРјР°</strong></dt>
+							<dd>Р’СЃРµРіРѕ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№: <strong>{{ total_users }}</strong></dd>
+							<dd>Р’СЃРµРіРѕ С‚РµРј: <strong>{{ total_topics }}</strong></dd>
+							<dd>Р’СЃРµРіРѕ СЃРѕРѕР±С‰РµРЅРёР№: <strong>{{ total_posts }}</strong></dd>
 						</dl>
 						<dl class="conl">
-							<dt><strong>Информация о пользователе</strong></dt>
-							<dd>Последний зарегистрированный пользователь:
+							<dt><strong>РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РїРѕР»СЊР·РѕРІР°С‚РµР»Рµ</strong></dt>
+							<dd>РџРѕСЃР»РµРґРЅРёР№ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹Р№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ:
 								<a href='{{ last_user.url }}'>{{ last_user.name }}</a></dd>
-							<dd>Сейчас посетителей: <strong>{{ num_users }}</strong></dd>
-							<dd>Сейчас Гостей: <strong>{{ num_guest }}</strong></dd>
+							<dd>РЎРµР№С‡Р°СЃ РїРѕСЃРµС‚РёС‚РµР»РµР№: <strong>{{ num_users }}</strong></dd>
+							<dd>РЎРµР№С‡Р°СЃ Р“РѕСЃС‚РµР№: <strong>{{ num_guest }}</strong></dd>
 						</dl>{% if (online.true) %}
 						<dl id="onlinelist" class="clearb">
-						<b>Активны:</b> {{ online.print }}
+						<b>РђРєС‚РёРІРЅС‹:</b> {{ online.print }}
 						</dl>{% endif %}
 						<dl id="todaylist" class="clearb">
-							<dt><strong>Сегодня нас посетили
-									({% if (num_today.true) %}Пользователей: {{ num_today.print }}{% endif %}{% if (num_guest_today.true) %} Гостей: {{ num_guest_today.print }}{% endif %}
+							<dt><strong>РЎРµРіРѕРґРЅСЏ РЅР°СЃ РїРѕСЃРµС‚РёР»Рё
+									({% if (num_today.true) %}РџРѕР»СЊР·РѕРІР°С‚РµР»РµР№: {{ num_today.print }}{% endif %}{% if (num_guest_today.true) %} Р“РѕСЃС‚РµР№: {{ num_guest_today.print }}{% endif %}
 									):&nbsp;</strong>
 								{% if (users_today.true) %}{{ users_today.print }}{% endif %}
 							</dt>
 						</dl>
 						{% if (list_bans) %}
 							<dl id="todaylist" class="clearb">
-							<dt><strong>Cписок забаненых IP:</strong>
+							<dt><strong>CРїРёСЃРѕРє Р·Р°Р±Р°РЅРµРЅС‹С… IP:</strong>
 								{{ list_bans }}
 							</dt>
 							</dl>{% endif %}
@@ -329,35 +329,35 @@
 						<div class="conl">
 							<dl id="modcontrols">
 								<dt><strong>Moderator controls</strong></dt>
-								<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'delete'}) }}">Удалить
-										тему</a></dd>
-								<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'move'}) }}">Перенести
-										тему</a></dd>
+								<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'delete'}) }}">РЈРґР°Р»РёС‚СЊ
+										С‚РµРјСѓ</a></dd>
+								<dd><a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'move'}) }}">РџРµСЂРµРЅРµСЃС‚Рё
+										С‚РµРјСѓ</a></dd>
 								{% if(state == 'open') %}
 									<dd>
-										<a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'close'}) }}">Закрыть
-											тему</a></dd>
+										<a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'close'}) }}">Р—Р°РєСЂС‹С‚СЊ
+											С‚РµРјСѓ</a></dd>
 								{% else %}
 									<dd>
-										<a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'open'}) }}">Открыть
-											тему</a></dd>
+										<a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'open'}) }}">РћС‚РєСЂС‹С‚СЊ
+											С‚РµРјСѓ</a></dd>
 								{% endif %}
 								{% if(pinned == '0') %}
 									<dd>
-										<a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'stick'}) }}">Выделить
-											тему</a></dd>
+										<a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'stick'}) }}">Р’С‹РґРµР»РёС‚СЊ
+											С‚РµРјСѓ</a></dd>
 								{% else %}
 									<dd>
-										<a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'unstick'}) }}">Не
-											выделять тему</a></dd>
+										<a href="{{ callPlugin('forum.link_moderate', {'tid': tid, 'metod' : 'unstick'}) }}">РќРµ
+											РІС‹РґРµР»СЏС‚СЊ С‚РµРјСѓ</a></dd>
 								{% endif %}
 							</dl>
 						</div>
 					{% endif %}
-					<p class="conr">Работает на <a href='http://ngcms.ru' target='_blank'>NG форум</a>
+					<p class="conr">Р Р°Р±РѕС‚Р°РµС‚ РЅР° <a href='http://ngcms.ru' target='_blank'>NG С„РѕСЂСѓРј</a>
 						<span style="color:red;">{{ version }}</span></p>
-					<p class="conr">[ Время генирациии {{ exectime }} сек (только форума: {{ exectime_forum }}
-						сек), {{ queries }} SQL запросов, Потребление памяти: {{ memory }} ]</p>
+					<p class="conr">[ Р’СЂРµРјСЏ РіРµРЅРёСЂР°С†РёРёРё {{ exectime }} СЃРµРє (С‚РѕР»СЊРєРѕ С„РѕСЂСѓРјР°: {{ exectime_forum }}
+						СЃРµРє), {{ queries }} SQL Р·Р°РїСЂРѕСЃРѕРІ, РџРѕС‚СЂРµР±Р»РµРЅРёРµ РїР°РјСЏС‚Рё: {{ memory }} ]</p>
 					<div class="clearer"></div>
 				</div>
 			</div>

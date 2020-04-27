@@ -18,10 +18,10 @@ function akeysGenerate($params) {
 	if ($params == '')
 		return array('status' => 1, 'errorCode' => 0, 'data' => array($params, array()));
 	// Generate keywords
-	$words = akeysGetKeys(array('title' => iconv('UTF-8', 'windows-1251', $params['title']), 'content' => iconv('UTF-8', 'windows-1251', $params['content'])));
+	$words = akeysGetKeys(array('title' => $params['title'], 'content' => $params['content']));
 
 	// Return output
-	return array('status' => 1, 'errorCode' => 0, 'data' => iconv('Windows-1251', 'UTF-8', $words));
+	return array('status' => 1, 'errorCode' => 0, 'data' => $words);
 }
 
 rpcRegisterFunction('plugin.autokeys.generate', 'akeysGenerate');

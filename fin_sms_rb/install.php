@@ -10,7 +10,7 @@ $db_update = array(
 		'action' => 'cmodify',
 		'key'    => 'primary key(id)',
 		'fields' => array(
-			// ID строки
+			// ID СЃС‚СЂРѕРєРё
 			array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
 			array('action' => 'cmodify', 'name' => 'country', 'type' => 'char(60)'),
 			array('action' => 'cmodify', 'name' => 'operator', 'type' => 'char(60)'),
@@ -24,7 +24,7 @@ $db_update = array(
 		'action' => 'cmodify',
 		'key'    => 'primary key(id)',
 		'fields' => array(
-			// ID строки
+			// ID СЃС‚СЂРѕРєРё
 			array('action' => 'cmodify', 'name' => 'id', 'type' => 'int', 'params' => 'not null auto_increment'),
 			array('action' => 'cmodify', 'name' => 'smsid', 'type' => 'char(25)'),
 			array('action' => 'cmodify', 'name' => 'operator', 'type' => 'char(60)'),
@@ -34,11 +34,11 @@ $db_update = array(
 			array('action' => 'cmodify', 'name' => 'dt', 'type' => 'datetime'),
 			array('action' => 'cmodify', 'name' => 'user_id', 'type' => 'int'),
 			array('action' => 'cmodify', 'name' => 'actdt', 'type' => 'datetime'),
-			// Тип сервиса:
-			// 0 - запрос пароля
+			// РўРёРї СЃРµСЂРІРёСЃР°:
+			// 0 - Р·Р°РїСЂРѕСЃ РїР°СЂРѕР»СЏ
 			array('action' => 'cmodify', 'name' => 'service_type', 'type' => 'int', 'params' => 'default 0'),
 			array('action' => 'cmodify', 'name' => 'scode', 'type' => 'char(30)'),
-			// Ответное сообщение
+			// РћС‚РІРµС‚РЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ
 			array('action' => 'cmodify', 'name' => 'answer', 'type' => 'char(255)'),
 		)
 	),
@@ -63,7 +63,7 @@ if ($_REQUEST['action'] == 'commit') {
 		plugin_mark_installed('fin_sms_rb');
 	}
 } else {
-	$text = "Плагин <b>fin_sms_rb</b> позволяет вводить на ваш сайт средства, полученные от компании-SMS партнёра <a href='http://russianbilling.com/' target='_blank'>RussianBilling.com</a><br/><br/>При установке Вам следует учесть что:<br/><b>1.</b> Перед установкой плагина Вам необходимо установить плагин <b>finance</b> - без него ничего работать не будет.<br/><b>2.</b> Плагин при установке вносит изменения в БД.";
+	$text = "РџР»Р°РіРёРЅ <b>fin_sms_rb</b> РїРѕР·РІРѕР»СЏРµС‚ РІРІРѕРґРёС‚СЊ РЅР° РІР°С€ СЃР°Р№С‚ СЃСЂРµРґСЃС‚РІР°, РїРѕР»СѓС‡РµРЅРЅС‹Рµ РѕС‚ РєРѕРјРїР°РЅРёРё-SMS РїР°СЂС‚РЅС‘СЂР° <a href='http://russianbilling.com/' target='_blank'>RussianBilling.com</a><br/><br/>РџСЂРё СѓСЃС‚Р°РЅРѕРІРєРµ Р’Р°Рј СЃР»РµРґСѓРµС‚ СѓС‡РµСЃС‚СЊ С‡С‚Рѕ:<br/><b>1.</b> РџРµСЂРµРґ СѓСЃС‚Р°РЅРѕРІРєРѕР№ РїР»Р°РіРёРЅР° Р’Р°Рј РЅРµРѕР±С…РѕРґРёРјРѕ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїР»Р°РіРёРЅ <b>finance</b> - Р±РµР· РЅРµРіРѕ РЅРёС‡РµРіРѕ СЂР°Р±РѕС‚Р°С‚СЊ РЅРµ Р±СѓРґРµС‚.<br/><b>2.</b> РџР»Р°РіРёРЅ РїСЂРё СѓСЃС‚Р°РЅРѕРІРєРµ РІРЅРѕСЃРёС‚ РёР·РјРµРЅРµРЅРёСЏ РІ Р‘Р”.";
 	generate_install_page('fin_sms_rb', $text);
 }
 ?>

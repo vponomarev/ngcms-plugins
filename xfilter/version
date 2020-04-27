@@ -9,11 +9,11 @@ Acts: core, admin:mod:news, admin:mod:categories
 File: xfilter.php
 Config: config.php
 Type: plugin
-Description: Фильтр новостей по категориям и дополнительным полям
+Description: Р¤РёР»СЊС‚СЂ РЅРѕРІРѕСЃС‚РµР№ РїРѕ РєР°С‚РµРіРѕСЂРёСЏРј Рё РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рј РїРѕР»СЏРј
 Author: nevermind, Zemlemer
 Author_URI: 
 Title: xfilter
-Information: Фильтр новостей по категориям и дополнительным полям
+Information: Р¤РёР»СЊС‚СЂ РЅРѕРІРѕСЃС‚РµР№ РїРѕ РєР°С‚РµРіРѕСЂРёСЏРј Рё РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рј РїРѕР»СЏРј
 Preinstall: no
 
 
