@@ -1,0 +1,26 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: x_filter
+Version: 0.1.0
+File: x_filter.php
+Config: config.php
+Install: install.php
+Deinstall: deinstall.php
+Acts: index, x_filter, action.ppages.x_filter
+Library: lib; lib/XFilter.php
+Library: helpers; lib/helpers.php
+Preinstall: no
+Type: plugin
+Title: x_filter
+Name: Фильтр новостей
+Description: Фильтр новостей по категориям и дополнительным полям.
+Information: Фильтр новостей по категориям и дополнительным полям.
+Author: rusiq
+Author_URI: https://github.com/russsiq
+
+
+
+
+

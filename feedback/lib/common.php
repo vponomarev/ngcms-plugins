@@ -53,7 +53,7 @@ function feedback_listTemplates() {
 }
 
 // Find location of template files for specific template
-function feedback_locateTemplateFiles($tName, $flagHTML) {
+function feedback_locateTemplateFiles($tName, $flagHTML = null) {
 
 	// Determine template names/path, that will be used during form generation
 	$tpath = locatePluginTemplates(array('site.form', 'site.notify', 'mail.html', 'mail.text'), 'feedback', pluginGetVariable('feedback', 'localsource'));
@@ -66,16 +66,16 @@ function feedback_locateTemplateFiles($tName, $flagHTML) {
 	$tpMailFound = 0;
 	if ($tName) {
 		// --- Site template
-		if ((substr($tName, 0, 1) == ':')) {
+		if ((mb_substr($tName, 0, 1) == ':')) {
 			// -- Display template
-			if (file_exists(tpl_site . 'plugins/feedback/custom/' . substr($tName, 1) . '/site.form.tpl')) {
-				$tpDisplayPath = tpl_site . 'plugins/feedback/custom/' . substr($tName, 1) . '/';
+			if (file_exists(tpl_site . 'plugins/feedback/custom/' . mb_substr($tName, 1) . '/site.form.tpl')) {
+				$tpDisplayPath = tpl_site . 'plugins/feedback/custom/' . mb_substr($tName, 1) . '/';
 				$tpDisplay = $tpDisplayPath . 'site.form.tpl';
 				$tpDisplayFound = 1;
 			}
 			// -- Mail template
-			if (file_exists(tpl_site . 'plugins/feedback/custom/' . substr($tName, 1) . '/mail.' . ($flagHTML ? 'html' : 'text') . '.tpl')) {
-				$tpMailPath = tpl_site . 'plugins/feedback/custom/' . substr($tName, 1) . '/';
+			if (file_exists(tpl_site . 'plugins/feedback/custom/' . mb_substr($tName, 1) . '/mail.' . ($flagHTML ? 'html' : 'text') . '.tpl')) {
+				$tpMailPath = tpl_site . 'plugins/feedback/custom/' . mb_substr($tName, 1) . '/';
 				$tpMail = $tpMailPath . 'mail.' . ($flagHTML ? 'html' : 'text') . '.tpl';
 				$tpMailFound = 1;
 			}

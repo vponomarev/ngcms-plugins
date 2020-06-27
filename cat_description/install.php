@@ -17,7 +17,7 @@ function plugin_cat_description_install($action) {
 	);
 	switch ($action) {
 		case 'confirm':
-			generate_install_page('cat_description', 'Cейчас плагин будет установлен');
+			generate_install_page('cat_description', 'CРµР№С‡Р°СЃ РїР»Р°РіРёРЅ Р±СѓРґРµС‚ СѓСЃС‚Р°РЅРѕРІР»РµРЅ');
 			break;
 		case 'autoapply':
 		case 'apply':

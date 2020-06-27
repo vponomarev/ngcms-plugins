@@ -143,9 +143,9 @@ Jodit.Confirm("Are you shure?", function (yes) {
 First step for Mobile friendly [sizeLG,sizeMD,sizeSM](http://xdsoft.net/jodit/doc/Jodit.defaultOptions.html#sizeLG) and sets of buttons for different sizes editors.
 > `Note`. this is not the width of the device, the width of the editor
 
-* buttons The list of buttons that appear in the editor's toolbar on large places (≥ options.sizeLG).
-* buttonsMD The list of buttons that appear in the editor's toolbar on medium places (≥ options.sizeMD).
-* buttonsSM The list of buttons that appear in the editor's toolbar on small places (≥ options.sizeSM).
+* buttons The list of buttons that appear in the editor's toolbar on large places (в‰Ґ options.sizeLG).
+* buttonsMD The list of buttons that appear in the editor's toolbar on medium places (в‰Ґ options.sizeMD).
+* buttonsSM The list of buttons that appear in the editor's toolbar on small places (в‰Ґ options.sizeSM).
 * buttonsXS The list of buttons that appear in the editor's toolbar on extra small places (< options.sizeSM).
 
 ```javascript
@@ -528,9 +528,9 @@ console.log(editor.val()); //''
 Added [direction](http://xdsoft.net/jodit/doc/Jodit.defaultOptions.html#direction) option.
 The writing direction of the language which is used to create editor content.
 Allowed values are: 
-* '' (an empty string) – Indicates that content direction will be the same as either the editor UI direction or the page element direction. 
-* 'ltr' – Indicates a Left-To-Right text direction (like in English).
-* 'rtl' – Indicates a Right-To-Left text direction (like in Arabic).
+* '' (an empty string) вЂ“ Indicates that content direction will be the same as either the editor UI direction or the page element direction. 
+* 'ltr' вЂ“ Indicates a Left-To-Right text direction (like in English).
+* 'rtl' вЂ“ Indicates a Right-To-Left text direction (like in Arabic).
 
 ### 2.3.43
 Fixed styles bugs
@@ -678,16 +678,16 @@ Update [Jodit.i18n](http://xdsoft.net/jodit/doc/module-Jodit.html#.i18n) method.
 var editor = new Jodit("#redactor", {
      langusage: 'ru' 
 });
-console.log(editor.i18n('Cancel')) //Отмена;
+console.log(editor.i18n('Cancel')) //РћС‚РјРµРЅР°;
 
 Jodit.defaultOptions.language = 'ru';
-console.log(Jodit.prototype.i18n('Cancel')) //Отмена 
+console.log(Jodit.prototype.i18n('Cancel')) //РћС‚РјРµРЅР° 
 
 Jodit.lang.cs = {
-   Cancel: 'Zrušit'
+   Cancel: 'ZruЕЎit'
 };
 Jodit.defaultOptions.language = 'cs';
-console.log(Jodit.prototype.i18n('Cancel')) //Zrušit 
+console.log(Jodit.prototype.i18n('Cancel')) //ZruЕЎit 
 
 Jodit.lang.cs = {
    'Hello world': 'Hello 1$ Good 2$'

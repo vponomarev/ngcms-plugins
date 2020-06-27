@@ -23,7 +23,7 @@ switch ($_REQUEST['action']) {
 }
 function showlist() {
 
-	global $mysql, $tpl, $lang;
+	global $mysql, $tpl, $lang, $main_admin;
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.button', 'conf.list', 'conf.list.row', 'conf.add_edit.form'), 'cat_description', 1);
 	$is_null = false;
 	foreach ($mysql->select('select ' . prefix . '_cat_description.id, ' . prefix . '_cat_description.catid, ' . prefix . '_cat_description.is_on, ' . prefix . '_category.name from ' . prefix . '_cat_description left join ' . prefix . '_category on ' . prefix . '_cat_description.catid=' . prefix . '_category.id order by `catid`') as $row) {
@@ -59,7 +59,7 @@ function showlist() {
 	$tvars['vars']['button'] = $tpl->show('conf.button');
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function editform() {
@@ -88,7 +88,7 @@ function editform() {
 	$tvars['vars']['list'] = '';
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function confirm() {

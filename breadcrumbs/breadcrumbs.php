@@ -85,13 +85,17 @@ function breadcrumbs() {
 			if ($catz[$params['category']]['parent'] != 0 && !pluginGetVariable('breadcrumbs', 'block_full_path')) {
 				$id = $catz[$params['category']]['parent'];
 				do {
-					$location_tmp[] = array(
-						'url'   => generateLink('news', 'by.category', array('category' => $catz[$params['category']]['alt'], 'catid' => $catz[$params['category']]['id'])),
-						'title' => $catz[$params['category']]['name'],
-						'link'  => GetCategories($id, false),
-					);
-					$id = $catz[$catmap[$id]]['parent'];
-				} while ($id != 0);
+                                     $row = $catz[$catmap[$id]];
+                                     $location_tmp[] = [
+                                      'url' => generateLink('news', 'by.category', [
+                                      'category' => $row['alt'],
+                                      'catid' => $row['id'],
+                                    ]),
+                                    'title' => $row['name'],
+                                    'link' => GetCategories($id),
+                                    ];
+                                    $id = $row['parent'];
+                                   } while ($id != 0);
 				$location = array_merge($location, array_reverse($location_tmp));
 			}
 		} # news by date
@@ -176,25 +180,9 @@ function breadcrumbs() {
 							'link'  => $link,
 						);
 					}
-					# last item becomes plain text
-					$location_last = $SYSTEM_FLAGS['info']['breadcrumbs'][$i]['text'];
-				} else {
-					$link = str_replace(
-						array(
-							'{plugin_url}',
-							'{plugin}'
-						),
-						array(
-							generatePluginLink($params['plugin'], '', array(), array(), false, true),
-							$SYSTEM_FLAGS['info']['title']['group'] != $lang['loc_plugin'] ? $SYSTEM_FLAGS['info']['title']['group'] : $params['plugin']
-						),
-						$lang['bc:plugin']
-					);
-					$location[] = array(
-						'url'   => generatePluginLink($params['plugin'], '', array(), array(), false, true),
-						'title' => $SYSTEM_FLAGS['info']['title']['group'] != $lang['loc_plugin'] ? $SYSTEM_FLAGS['info']['title']['group'] : $params['plugin'],
-						'link'  => $link,
-					);
+					$location_last = $SYSTEM_FLAGS['info']['title']['group'] != $lang['loc_plugin']
+                                          ? $SYSTEM_FLAGS['info']['title']['group']
+                                          : $params['plugin'];
 					if ($SYSTEM_FLAGS['info']['title']['group'] != $lang['loc_plugin'])
 						$location_last = $SYSTEM_FLAGS['info']['title']['group'];
 					else

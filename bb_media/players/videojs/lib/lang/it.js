@@ -18,9 +18,9 @@ videojs.addLanguage("it",{
  "Captions": "Sottotitoli non udenti",
  "captions off": "Senza sottotitoli non udenti",
  "Chapters": "Capitolo",
- "You aborted the media playback": "La riproduzione del filmato è stata interrotta.",
- "A network error caused the media download to fail part-way.": "Il download del filmato è stato interrotto a causa di un problema rete.",
- "The media could not be loaded, either because the server or network failed or because the format is not supported.": "Il filmato non può essere caricato a causa di un errore nel server o nella rete o perché il formato non viene supportato.",
- "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "La riproduzione del filmato è stata interrotta a causa di un file danneggiato o per l’utilizzo di impostazioni non supportate dal browser.",
+ "You aborted the media playback": "La riproduzione del filmato ГЁ stata interrotta.",
+ "A network error caused the media download to fail part-way.": "Il download del filmato ГЁ stato interrotto a causa di un problema rete.",
+ "The media could not be loaded, either because the server or network failed or because the format is not supported.": "Il filmato non puГІ essere caricato a causa di un errore nel server o nella rete o perchГ© il formato non viene supportato.",
+ "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "La riproduzione del filmato ГЁ stata interrotta a causa di un file danneggiato o per lвЂ™utilizzo di impostazioni non supportate dal browser.",
  "No compatible source was found for this media.": "Non ci sono fonti compatibili per questo filmato."
 });

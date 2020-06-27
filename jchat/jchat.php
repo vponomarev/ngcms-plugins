@@ -169,7 +169,7 @@ function plugin_jchat_add() {
 			coreNormalTerminate(2);
 			exit;
 		}
-		$SQL['author'] = secure_html(substr(trim($_REQUEST['name']), 0, 30));
+		$SQL['author'] = secure_html(mb_substr(trim($_REQUEST['name']), 0, 30));
 		$SQL['author_id'] = 0;
 	}
 	if (!trim($_REQUEST['text'])) {
@@ -199,13 +199,13 @@ function plugin_jchat_add() {
 	$maxwlen = intval(pluginGetVariable('jchat', 'maxwlen'));
 	if (($maxwlen < 1) || ($maxlen > 5000)) $maxwlen = 500;
 	// Load text & strip it to maxlen
-	$postText = substr(secure_html(trim($_REQUEST['text'])), 0, $maxlen);
-	//$postText = substr(mb_convert_encoding(trim($_REQUEST['text']), 'UTF-8', 'Windows-1251'), 0, $maxlen);
+	$postText = mb_substr(secure_html(trim($_REQUEST['text'])), 0, $maxlen);
+	//$postText = mb_substr(mb_convert_encoding(trim($_REQUEST['text']), 'UTF-8', 'Windows-1251'), 0, $maxlen);
 	$ptb = array();
 	foreach (preg_split('#(\s|^)(http\:\/\/[A-Za-z\-\.0-9]+\/\S*)(\s|$)#', $postText, -1, PREG_SPLIT_DELIM_CAPTURE) as $cx) {
 		if (preg_match('#http\:\/\/[A-Za-z\-\.0-9]+\/\S*#', $cx, $m)) {
 			// LINK
-			$cx = '<a href="' . htmlspecialchars($cx, ENT_COMPAT | ENT_HTML401, 'cp1251') . '">' . ((strlen($cx) > $maxwlen) ? (substr($cx, 0, $maxwlen - 2) . '..') : $cx) . '</a>';
+			$cx = '<a href="' . htmlspecialchars($cx, ENT_COMPAT | ENT_HTML401, 'cp1251') . '">' . ((strlen($cx) > $maxwlen) ? (mb_substr($cx, 0, $maxwlen - 2) . '..') : $cx) . '</a>';
 		} else {
 			$cx = preg_replace('/(\S{' . $maxwlen . '})(?!\s)/', '$1 ', $cx);
 		}

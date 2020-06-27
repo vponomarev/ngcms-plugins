@@ -1,0 +1,1 @@
+<td align="center" border="0" valign="center">[not_empty]<a href="{url_entry}">{name}</a><br /><img src="{url_image_thumb}" alt="{name}" border="0" width="100%" /><br />{description}<br/>[/not_empty][empty]&nbsp[/empty]Просмотров: {views}<br/>Комментариев: {com}</td>

@@ -4,7 +4,7 @@ plugins_load_config();
 LoadPluginLang('ads_pro', 'config', '', '', ':');
 //pluginSetVariable('ads_pro', 'data', array());
 //pluginsSaveConfig();
-switch ($_REQUEST['action']) {
+switch ($_REQUEST['+action']) {
 	case 'list':
 		showlist();
 		break;
@@ -39,7 +39,7 @@ switch ($_REQUEST['action']) {
 }
 function main() {
 
-	global $tpl, $lang;
+	global $tpl, $lang, $main_admin;
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.general'), 'ads_pro', 1);
 	$s_news = pluginGetVariable('ads_pro', 'support_news');
 	$s_news_sort = pluginGetVariable('ads_pro', 'news_cfg_sort');
@@ -61,7 +61,7 @@ function main() {
 	$tvars['vars']['action'] = $lang['ads_pro:button_general'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function main_submit() {
@@ -91,7 +91,7 @@ function main_submit() {
 
 function showlist() {
 
-	global $tpl, $lang;
+	global $tpl, $lang,$main_admin;
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.list', 'conf.list.row'), 'ads_pro', 1);
 	$var = pluginGetVariable('ads_pro', 'data');
 	$output = '';
@@ -123,12 +123,12 @@ function showlist() {
 	$tvars['vars']['action'] = $lang['ads_pro:button_list'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function add() {
 
-	global $mysql, $tpl, $lang;
+	global $mysql, $tpl, $lang, $main_admin;
 	$PluginsList = getPluginsActiveList();
 	// Load config
 	$pConfig = pluginGetVariable('ads_pro', 'data');
@@ -235,7 +235,7 @@ function add() {
 	$tvars['vars']['action'] = $id ? $lang['ads_pro:button_edit'] : $lang['ads_pro:button_add'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function add_submit() {

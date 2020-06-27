@@ -113,7 +113,7 @@ function saveForm() {
 
 function showList() {
 
-	global $mysql, $lang, $twig;
+	global $mysql, $lang, $twig, $main_admin;
 	$tVars = array();
 	$tForms = array();
 	foreach ($mysql->select("select * from " . prefix . "_feedback order by name") as $frow) {
@@ -121,7 +121,7 @@ function showList() {
 			'id'        => $frow['id'],
 			'name'      => $frow['name'],
 			'title'     => $frow['title'],
-			'link_news' => intval(substr($frow['flags'], 3, 1)),
+			'link_news' => intval(mb_substr($frow['flags'], 3, 1)),
 			'flags'     => array(
 				'active' => $frow['active'],
 			),
@@ -133,12 +133,12 @@ function showList() {
 	$tVars['entries'] = $tForms;
 	$templateName = 'plugins/feedback/tpl/conf.forms.tpl';
 	$xt = $twig->loadTemplate($templateName);
-	echo $xt->render($tVars);
+	$main_admin = $xt->render($tVars);
 }
 
 function showForm($edMode) {
 
-	global $mysql, $lang, $twig;
+	global $mysql, $lang, $twig, $main_admin;
 	$tVars = array();
 	// Load form
 	$id = intval($_REQUEST['id']);
@@ -146,7 +146,7 @@ function showForm($edMode) {
 	if (!is_array($frow = $mysql->record("select * from " . prefix . "_feedback where id = " . $id))) {
 		$tVars['content'] = "Указанная форма [" . $id . "] не существует!";
 		$xt = $twig->loadTemplate('plugins/feedback/tpl/conf.notify.tpl');
-		echo $xt->render($tVars);
+		$main_admin = $xt->render($tVars);
 
 		return false;
 	}
@@ -191,21 +191,21 @@ function showForm($edMode) {
 	$tVars['egroups'] = $tEGroups;
 	$tVars['link_news'] = array(
 		'options' => array(0, 1, 2),
-		'value'   => intval(substr($frow['flags'], 3, 1)),
+		'value'   => intval(mb_substr($frow['flags'], 3, 1)),
 	);
 	$tVars['flags'] = array(
 		'active'   => intval($edMode ? $_REQUEST['active'] : $frow['active']),
-		'jcheck'   => intval($edMode ? $_REQUEST['jcheck'] : intval(substr($frow['flags'], 0, 1))),
-		'captcha'  => intval($edMode ? $_REQUEST['captcha'] : intval(substr($frow['flags'], 1, 1))),
-		'html'     => intval($edMode ? $_REQUEST['html'] : intval(substr($frow['flags'], 2, 1))),
-		'subj'     => intval(substr($frow['flags'], 4, 1)),
-		'utf8'     => intval($edMode ? $_REQUEST['utf8'] : intval(substr($frow['flags'], 5, 1))),
+		'jcheck'   => intval($edMode ? $_REQUEST['jcheck'] : intval(mb_substr($frow['flags'], 0, 1))),
+		'captcha'  => intval($edMode ? $_REQUEST['captcha'] : intval(mb_substr($frow['flags'], 1, 1))),
+		'html'     => intval($edMode ? $_REQUEST['html'] : intval(mb_substr($frow['flags'], 2, 1))),
+		'subj'     => intval(mb_substr($frow['flags'], 4, 1)),
+		'utf8'     => intval($edMode ? $_REQUEST['utf8'] : intval(mb_substr($frow['flags'], 5, 1))),
 		'haveForm' => 1,
 	);
 	// Generate list of templates
 	$lf = array('' => '<автоматически>');
 	foreach (feedback_listTemplates() as $k) {
-		if (substr($k, 0, 1) == ':') {
+		if (mb_substr($k, 0, 1) == ':') {
 			$lf[$k] = 'сайт: ' . $k;
 		} else {
 			$lf[$k] = 'плагин: ' . $k;
@@ -217,14 +217,14 @@ function showForm($edMode) {
 	$tVars['template_options'] = $lout;
 	$tVars['entries'] = $tEntries;
 	// Show template files
-	$tVars['tfiles'] = feedback_locateTemplateFiles($frow['template'], substr($frow['flags'], 2, 1) ? true : false);
+	$tVars['tfiles'] = feedback_locateTemplateFiles($frow['template'], mb_substr($frow['flags'], 2, 1) ? true : false);
 	$xt = $twig->loadTemplate('plugins/feedback/tpl/conf.form.tpl');
-	echo $xt->render($tVars);
+	$main_admin = $xt->render($tVars);
 }
 
 function showFormRow() {
 
-	global $mysql, $lang, $twig;
+	global $mysql, $lang, $twig, $main_admin;
 	$tVars = array();
 	// Load form
 	$id = intval($_REQUEST['form_id']);
@@ -284,7 +284,7 @@ function showFormRow() {
 		// prepare email send template list
 		$lf = array('' => '<не отправлять>');
 		foreach (feedback_listTemplates() as $k) {
-			if (substr($k, 0, 1) == ':') {
+			if (mb_substr($k, 0, 1) == ':') {
 				$lf[$k] = 'сайт: ' . $k;
 			} else {
 				$lf[$k] = 'плагин: ' . $k;
@@ -295,12 +295,12 @@ function showFormRow() {
 	} while (0);
 	$templateName = 'plugins/feedback/tpl/' . ($recordFound ? 'conf.form.editrow' : 'conf.notify') . '.tpl';
 	$xt = $twig->loadTemplate($templateName);
-	echo $xt->render($tVars);
+	$main_admin = $xt->render($tVars);
 }
 
 function editFormRow() {
 
-	global $mysql, $lang, $twig;
+	global $mysql, $lang, $twig, $main_admin;
 	// Check params
 	$id = intval($_REQUEST['form_id']);
 	$fRowId = $_REQUEST['name'];
@@ -314,7 +314,7 @@ function editFormRow() {
 			break;
 		}
 		// Check if row id is not valid
-		if (is_numeric(substr($fRowId, 0, 1)) || (!preg_match("/^[a-zA-Z\d]+$/", $fRowId)) || (strlen($fRowId) < 3)) {
+		if (is_numeric(mb_substr($fRowId, 0, 1)) || (!preg_match("/^[a-zA-Z\d]+$/", $fRowId)) || (strlen($fRowId) < 3)) {
 			$tVars['content'] = "Необходимо соблюдать правила формирования ID!";
 			break;
 		}
@@ -398,14 +398,14 @@ function editFormRow() {
 	} while (0);
 	// Show template
 	$xt = $twig->loadTemplate('plugins/feedback/tpl/conf.notify.tpl');
-	echo $xt->render($tVars);
+	$main_admin = $xt->render($tVars);
 }
 
 //
 //
 function doUpdate() {
 
-	global $mysql, $twig;
+	global $mysql, $twig ,$main_admin;
 	// Check params
 	$id = intval($_REQUEST['id']);
 	$fRowId = $_REQUEST['name'];
@@ -433,7 +433,7 @@ function doUpdate() {
 	if (!$enabled) {
 		// Show template
 		$xt = $twig->loadTemplate('plugins/feedback/tpl/conf.notify.tpl');
-		echo $xt->render($tVars);
+		$main_admin = $xt->render($tVars);
 
 		return false;
 	}

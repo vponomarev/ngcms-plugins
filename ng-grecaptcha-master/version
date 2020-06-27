@@ -1,0 +1,23 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: ng-grecaptcha
+Type: plugin
+Version: 0.7.2
+
+File: ng-grecaptcha.php
+Config: config.php
+; Install: install.php
+; Deinstall: deinstall.php
+Preinstall: default_no
+Acts: core, comments, comments:add, action.ppages.feedback, feedback, feedback:post
+Library: autoload; vendor/autoload.php
+
+Title: Google reCAPTCHA v3
+Name: Google reCAPTCHA v3
+Description: Защита форм сайта от интернет-ботов с Google reCAPTCHA v3. Предназначен для плагинов comments, feedback и регистрационной формы.
+Information: Защита форм сайта от интернет-ботов с Google reCAPTCHA v3. Предназначен для плагинов comments, feedback и регистрационной формы.
+
+Author: rusiq
+Author_URI: https://github.com/russsiq

@@ -2,8 +2,8 @@
 	<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr>
 			<td width="100%" colspan="2" class="contentHead">
-				<img src="{skins_url}/images/nav.gif" hspace="8" alt=""/><a href="admin.php?mod=extras" title="{l_extras}">{l_extras}</a>
-				&#8594; <a href="?mod=extra-config&plugin=ads_pro">ads_pro</a> &#8594; {action}
+				<a href="admin.php?mod=extras" title="{l_extras}">{l_extras}</a>
+				/ <a href="?mod=extra-config&plugin=ads_pro">ads_pro</a> / {action}
 			</td>
 		</tr>
 		<tr>

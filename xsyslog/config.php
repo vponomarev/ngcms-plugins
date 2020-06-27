@@ -13,7 +13,7 @@ switch ($_REQUEST['action']) {
 }
 function show_xsyslog() {
 
-	global $tpl, $mysql, $lang, $twig, $confArray;
+	global $tpl, $mysql, $lang, $twig, $confArray, $main_admin;
 	$tpath = locatePluginTemplates(array('main', 'list_xsyslog', 'list_entries'), 'xsyslog', 1);
 	$tVars = array();
 	//include_once 'file';
@@ -116,7 +116,7 @@ function show_xsyslog() {
 		'fDateEnd'   => $fDateEnd ? $fDateEnd : '',
 	);
 	//var_export($tVars['fstatus']);
-	print $xg->render($tVars);
+	$main_admin = $xg->render($tVars);
 }
 
 // makePluginsList - make <SELECT> list of Plugins

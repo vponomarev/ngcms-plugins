@@ -235,8 +235,8 @@ class bt_decode {
 	protected function decode_string() {
 
 		// Check for bad leading zero
-		if (substr($this->source, $this->position, 1) == '0' and
-			substr($this->source, $this->position + 1, 1) != ':'
+		if (mb_substr($this->source, $this->position, 1) == '0' and
+			mb_substr($this->source, $this->position + 1, 1) != ':'
 		) {
 			throw new Exception('Leading zero in string length.', 1);
 		}
@@ -246,7 +246,7 @@ class bt_decode {
 			throw new Exception('Colon not found.', 1);
 		}
 		// Get length of string
-		$str_length = intval(substr($this->source, $this->position, $pos_colon));
+		$str_length = intval(mb_substr($this->source, $this->position, $pos_colon));
 		if ($str_length + $pos_colon + 1 > $this->source_length) {
 			throw new Exception('Input too short for string length.', 1);
 		}
@@ -254,7 +254,7 @@ class bt_decode {
 		if ($str_length === 0) {
 			$return = '';
 		} else {
-			$return = substr($this->source, $pos_colon + 1, $str_length);
+			$return = mb_substr($this->source, $pos_colon + 1, $str_length);
 		}
 		// Move Pointer after string
 		$this->position = $pos_colon + $str_length + 1;
@@ -279,21 +279,21 @@ class bt_decode {
 		if ($p === $pos_e) {
 			throw new Exception('Empty integer.', 1);
 		}
-		if (substr($this->source, $this->position, 1) == '-') $p++;
-		if (substr($this->source, $p, 1) == '0' and
+		if (mb_substr($this->source, $this->position, 1) == '-') $p++;
+		if (mb_substr($this->source, $p, 1) == '0' and
 			($p != $this->position or $pos_e > $p + 1)
 		) {
 			throw new Exception('Leading zero in integer.', 1);
 		}
 		for ($i = $p; $i < $pos_e - 1; $i++) {
-			if (!ctype_digit(substr($this->source, $i, 1))) {
+			if (!ctype_digit(mb_substr($this->source, $i, 1))) {
 				throw new Exception('Non-digit characters in integer.', 1);
 			}
 		}
 		// The return value showld be automatically casted to float if the intval would
 		// overflow. The "+ 0" accomplishes exactly that, using the internal casting
 		// logic of PHP
-		$return = substr($this->source, $this->position, $pos_e - $this->position) + 0;
+		$return = mb_substr($this->source, $this->position, $pos_e - $this->position) + 0;
 		$this->position = $pos_e + 1;
 
 		return $return;
@@ -319,7 +319,7 @@ class bt_decode {
 		if ($char === false) {
 			throw new Exception('Unterminated list.', 1);
 		}
-		while ($char !== false && substr($this->source, $this->position, 1) != 'e') {
+		while ($char !== false && mb_substr($this->source, $this->position, 1) != 'e') {
 			$p1 = $this->position;
 			$val = $this->bdecode();
 			$p2 = $this->position;
@@ -344,7 +344,7 @@ class bt_decode {
 		if (empty($this->source)) return false;
 		if ($this->position >= $this->source_length) return false;
 
-		return substr($this->source, $this->position, 1);
+		return mb_substr($this->source, $this->position, 1);
 	}
 
 	/**

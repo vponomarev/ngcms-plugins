@@ -235,7 +235,7 @@ function suser_show($params) {
 	$count = $mysql->result('SELECT COUNT(*) FROM `' . prefix . '_users` ' . $where . '');
 	$countPages = ceil($count / $limitCount);
 	if ($countPages < $pageNo)
-		return $output = information_suser('Подстраницы не существует', $title = 'Информация');
+		return $output = information_suser('Подстраницы не существует', $title = '�?нформация');
 	if ($pageNo < 1) $pageNo = 1;
 	if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 	if ($countPages > 1 && $countPages >= $pageNo) {
@@ -361,7 +361,7 @@ function redirect_link_suser($url) {
 	}
 }
 
-function information_suser($info, $title = 'Информация', $error_404 = false) {
+function information_suser($info, $title = '�?нформация', $error_404 = false) {
 
 	global $twig, $SYSTEM_FLAGS, $CurrentHandler, $template;
 	$CurrentHandler['handlerName'] = 'erro404';

@@ -1920,7 +1920,7 @@ defineProperties(StringPrototype, {
 }, hasTrimWhitespaceBug);
 var trim = call.bind(String.prototype.trim);
 
-var hasLastIndexBug = StringPrototype.lastIndexOf && 'abcあい'.lastIndexOf('あい', 2) !== -1;
+var hasLastIndexBug = StringPrototype.lastIndexOf && 'abcгЃ‚гЃ„'.lastIndexOf('гЃ‚гЃ„', 2) !== -1;
 defineProperties(StringPrototype, {
     lastIndexOf: function lastIndexOf(searchString) {
         if (typeof this === 'undefined' || this === null) {

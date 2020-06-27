@@ -64,7 +64,7 @@ class Text_ReplaceNewsFilter extends NewsFilter {
 					$pos = strpos($text, $search, $pos_s);
 			}
 			if ($pos === false) continue;
-			$pos1 = strrpos(substr($text, 0, $pos), '<a ');
+			$pos1 = strrpos(mb_substr($text, 0, $pos), '<a ');
 			if ($pos1 !== false) {
 				$pos2 = strpos($text, '</a>', $pos1);
 				if ($pos2 !== false && $pos2 > $pos) return $this->text_replace($text, $search, $replace, $p_count, $pos + 1, $i - 1);
@@ -76,7 +76,7 @@ class Text_ReplaceNewsFilter extends NewsFilter {
 				) {
 				} else return $this->text_replace($text, $search, $replace, $p_count, $pos + 1, $i - 1);
 			}
-			$text = substr_replace($text, $replace, $pos, strlen($search));
+			$text = mb_substr_replace($text, $replace, $pos, strlen($search));
 		}
 
 		return $text;
@@ -84,17 +84,17 @@ class Text_ReplaceNewsFilter extends NewsFilter {
 	/* function replace(&$text, &$word, $start = 0){
 		$pos = strpos($text, ' '.$word, $start);
 		if ($pos === false) return false;
-		$pos1 = strrpos(substr($text, 0, $pos), '<img ');
+		$pos1 = strrpos(mb_substr($text, 0, $pos), '<img ');
 		if ($pos1 !== false){
 			$pos2 = strpos($text, '>', $pos1);
-			if ($pos2 !== false && $pos2 > $pos) return $this->replace($text, $word, $pos + 1);			
+			if ($pos2 !== false && $pos2 > $pos) return $this->replace($text, $word, $pos + 1);
 		}
-		$pos1 = strrpos(substr($text, 0, $pos), '<a ');
+		$pos1 = strrpos(mb_substr($text, 0, $pos), '<a ');
 		if ($pos1 !== false){
 			$pos2 = strpos($text, '</a>', $pos1);
-			if ($pos2 !== false && $pos2 > $pos) return $this->replace($text, $word, $pos + 1);			
+			if ($pos2 !== false && $pos2 > $pos) return $this->replace($text, $word, $pos + 1);
 		}
-		$text = substr_replace($text, ' <a href="'.home.'">'.$word.'</a>', $pos, strlen(' '.$word));
+		$text = mb_substr_replace($text, ' <a href="'.home.'">'.$word.'</a>', $pos, strlen(' '.$word));
 		return true;
 	} */
 }

@@ -315,7 +315,7 @@ class ClassLoader
     {
         // work around for PHP 5.3.0 - 5.3.2 https://bugs.php.net/50731
         if ('\\' == $class[0]) {
-            $class = substr($class, 1);
+            $class = mb_substr($class, 1);
         }
 
         // class map lookup
@@ -351,7 +351,7 @@ class ClassLoader
             foreach ($this->prefixLengthsPsr4[$first] as $prefix => $length) {
                 if (0 === strpos($class, $prefix)) {
                     foreach ($this->prefixDirsPsr4[$prefix] as $dir) {
-                        if (file_exists($file = $dir . DIRECTORY_SEPARATOR . substr($logicalPathPsr4, $length))) {
+                        if (file_exists($file = $dir . DIRECTORY_SEPARATOR . mb_substr($logicalPathPsr4, $length))) {
                             return $file;
                         }
                     }
@@ -369,8 +369,8 @@ class ClassLoader
         // PSR-0 lookup
         if (false !== $pos = strrpos($class, '\\')) {
             // namespaced class name
-            $logicalPathPsr0 = substr($logicalPathPsr4, 0, $pos + 1)
-                . strtr(substr($logicalPathPsr4, $pos + 1), '_', DIRECTORY_SEPARATOR);
+            $logicalPathPsr0 = mb_substr($logicalPathPsr4, 0, $pos + 1)
+                . strtr(mb_substr($logicalPathPsr4, $pos + 1), '_', DIRECTORY_SEPARATOR);
         } else {
             // PEAR-like class name
             $logicalPathPsr0 = strtr($class, '_', DIRECTORY_SEPARATOR) . $ext;

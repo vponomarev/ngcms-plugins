@@ -41,7 +41,7 @@ switch ($_REQUEST['action']) {
 }
 function main() {
 
-	global $tpl, $lang;
+	global $tpl, $lang, $main_admin;
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.general.form'), 'gmanager', 1);
 	$tvars['vars']['locate_tpl_list'] = MakeDropDown(array(0 => $lang['gmanager:label_site'], 1 => $lang['gmanager:label_plugin']), 'locate_tpl', pluginGetVariable('gmanager', 'locate_tpl'));
 	$tvars['vars']['if_auto_cash_list'] = MakeDropDown(array(0 => $lang['gmanager:label_no'], 1 => $lang['gmanager:label_yes']), 'if_auto_cash', pluginGetVariable('gmanager', 'if_auto_cash'));
@@ -59,7 +59,7 @@ function main() {
 	$tvars['vars']['action'] = $lang['gmanager:button_general'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function general_submit() {
@@ -82,7 +82,7 @@ function general_submit() {
 
 function showlist() {
 
-	global $tpl, $lang, $mysql;
+	global $tpl, $lang, $mysql, $main_admin;
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.list', 'conf.list.row'), 'gmanager', 1);
 	$output = '';
 	foreach ($mysql->select('select * from ' . prefix . '_gmanager order by `order`') as $row) {
@@ -102,7 +102,7 @@ function showlist() {
 	$tvars['vars']['action'] = $lang['gmanager:button_list'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function update() {
@@ -136,7 +136,7 @@ function GetKeyFromName($name, $array) {
 
 function edit() {
 
-	global $mysql, $tpl, $lang;
+	global $mysql, $tpl, $lang, $main_admin;
 	if (!isset($_REQUEST['id'])) return;
 	$id = intval($_REQUEST['id']);
 	$galery = $mysql->record('select * from ' . prefix . '_gmanager where `id`=' . db_squote($id) . ' limit 1');
@@ -159,7 +159,7 @@ function edit() {
 	$tvars['vars']['action'] = $lang['gmanager:button_edit'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function edit_submit() {
@@ -220,7 +220,7 @@ function move($action) {
 
 function delete() {
 
-	global $mysql, $tpl, $lang;
+	global $mysql, $tpl, $lang, $main_admin;
 	if (!isset($_REQUEST['id'])) return;
 	$id = intval($_REQUEST['id']);
 	$galery = $mysql->record('select `title` from ' . prefix . '_gmanager where `id`=' . db_squote($id) . ' limit 1');
@@ -249,7 +249,7 @@ function delete() {
 	$tvars['vars']['action'] = $lang['gmanager:title_commit'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function clear_cash() {

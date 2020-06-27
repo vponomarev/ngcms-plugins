@@ -50,7 +50,7 @@ $adsPRO_cache = array(
 	'flag.main'     => false
 );
 // Main function of plugin
-function plugin_ads_pro($params) {
+function plugin_ads_pro($params = []) {
 
 	global $template, $config, $CurrentHandler, $catmap, $mysql, $adsPRO_cache;
 	$dataConfig = pluginGetVariable('ads_pro', 'data');

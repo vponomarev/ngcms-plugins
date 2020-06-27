@@ -15,11 +15,12 @@ WBBLANG['en'] = CURLANG = {
 	justifycenter: "Align center",
 	justifyright: "Align right",
 	table: "Insert table",
-	bullist: "• Unordered list",
+	bullist: "вЂў Unordered list",
 	numlist: "1. Ordered list",
 	quote: "Quote",
 	offtop: "Offtop",
 	code: "Code",
+	more: "Р Р°Р·РґРµР»РёС‚РµР»СЊ РєСЂР°С‚РєРѕРіРѕ Рё РїРѕР»РЅРѕРіРѕ СЃРѕРґРµСЂР¶Р°РЅРёСЏ",
 	spoiler: "Spoiler",
 	fontcolor: "Font color",
 	fontsize: "Font size",
@@ -110,7 +111,7 @@ wbbdebug=true;
 			smileConversion:	true,
 
 			//END img upload config 
-			buttons: 			"bold,italic,underline,strike,sup,sub,|,img,video,link,|,bullist,numlist,|,fontcolor,fontsize,fontfamily,|,justifyleft,justifycenter,justifyright,|,quote,code,table,removeFormat",
+			buttons: 			"bold,italic,underline,strike,sup,sub,|,img,ngimg,video,link,smilebox,|,bullist,numlist,|,fontcolor,fontsize,fontfamily,|,justifyleft,justifycenter,justifyright,|,quote,code,more,table,removeFormat",
 			allButtons: {
 				bold : {
 					title: CURLANG.bold,
@@ -210,6 +211,14 @@ wbbdebug=true;
 						'<img src="{SRC}" width="{WIDTH}" height="{HEIGHT}"/>':"[img width={WIDTH},height={HEIGHT}]{SRC}[/img]"
 					}
 				},
+				ngimg : {
+					title: CURLANG.img,
+					buttonHTML: "<span class='fonticon ve-tlb-img1' title='NG image box'>\uE017</span>",
+					cmd: function() {
+							try{document.forms['DATA_tmp_storage'].area.value=currentInputAreaID;} catch(err){;} getImageList('img_popup', 8, 1); 
+  							
+  						},
+				},
 				bullist : {
 					title: CURLANG.bullist,
 					buttonHTML: '<span class="fonticon ve-tlb-list1">\uE009</span>',
@@ -245,6 +254,16 @@ wbbdebug=true;
 					onlyClearText: true,
 					transform : {
 						'<code>{SELTEXT}</code>':"[code]{SELTEXT}[/code]"
+					}
+				},
+				more : {
+					title: CURLANG.more,
+					buttonText: '[more]',
+					/*buttonHTML: '<span class="fonticon">\uE00d</span>', */
+					hotkey: 'ctrl+shift+9',
+					//onlyClearText: true,
+					transform : {
+						'<i><!--more--></i> ':"<!--more-->"
 					}
 				},
 				offtop : {
@@ -313,7 +332,22 @@ wbbdebug=true;
 				smilebox: {
 					type: 'smilebox',
 					title: CURLANG.smilebox,
-					buttonHTML: '<span class="fonticon ve-tlb-smilebox1">\uE00b</span>'
+					buttonHTML: '<span class="fonticon ve-tlb-smilebox1">\uE00b</span>',
+					modal: {
+						title: CURLANG.smilebox,
+						width: "600px",
+						tabs: [
+{title:CURLANG.sm1, img: '<img src="{themePrefix}{themeName}/img/smiles/sm1.png" class="sm">', bbcode:":)"},
+{title:CURLANG.sm8 ,img: '<img src="{themePrefix}{themeName}/img/smiles/sm8.png" class="sm">', bbcode:":("},
+{title:CURLANG.sm1, img: '<img src="{themePrefix}{themeName}/img/smiles/sm2.png" class="sm">', bbcode:":D"},
+{title:CURLANG.sm3, img: '<img src="{themePrefix}{themeName}/img/smiles/sm3.png" class="sm">', bbcode:";)"},
+{title:CURLANG.sm4, img: '<img src="{themePrefix}{themeName}/img/smiles/sm4.png" class="sm">', bbcode:":up:"},
+{title:CURLANG.sm5, img: '<img src="{themePrefix}{themeName}/img/smiles/sm5.png" class="sm">', bbcode:":down:"},
+{title:CURLANG.sm6, img: '<img src="{themePrefix}{themeName}/img/smiles/sm6.png" class="sm">', bbcode:":shock:"},
+{title:CURLANG.sm7, img: '<img src="{themePrefix}{themeName}/img/smiles/sm7.png" class="sm">', bbcode:":angry:"},
+{title:CURLANG.sm9, img: '<img src="{themePrefix}{themeName}/img/smiles/sm9.png" class="sm">', bbcode:":sick:"}
+],
+				}
 				},
 				justifyleft: {
 					title: CURLANG.justifyleft,
@@ -385,7 +419,7 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "1",
 					transform: {
-						'<font size="1">{SELTEXT}</font>':'[size=50]{SELTEXT}[/size]'
+						'<font size="1">{SELTEXT}</font>':'[size=1]{SELTEXT}[/size]'
 					}
 				},
 				fs_small: {
@@ -394,7 +428,7 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "2",
 					transform: {
-						'<font size="2">{SELTEXT}</font>':'[size=85]{SELTEXT}[/size]'
+						'<font size="2">{SELTEXT}</font>':'[size=2]{SELTEXT}[/size]'
 					}
 				},
 				fs_normal: {
@@ -403,7 +437,7 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "3",
 					transform: {
-						'<font size="3">{SELTEXT}</font>':'[size=100]{SELTEXT}[/size]'
+						'<font size="3">{SELTEXT}</font>':'[size=3]{SELTEXT}[/size]'
 					}
 				},
 				fs_big: {
@@ -412,7 +446,7 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "4",
 					transform: {
-						'<font size="4">{SELTEXT}</font>':'[size=150]{SELTEXT}[/size]'
+						'<font size="4">{SELTEXT}</font>':'[size=4]{SELTEXT}[/size]'
 					}
 				},
 				fs_verybig: {
@@ -421,7 +455,7 @@ wbbdebug=true;
 					excmd: 'fontSize',
 					exvalue: "6",
 					transform: {
-						'<font size="6">{SELTEXT}</font>':'[size=200]{SELTEXT}[/size]'
+						'<font size="6">{SELTEXT}</font>':'[size=5]{SELTEXT}[/size]'
 					}
 				},
 				
@@ -429,7 +463,7 @@ wbbdebug=true;
 					title: CURLANG.removeFormat,
 					buttonHTML: '<span class="fonticon ve-tlb-removeformat1">\uE00f</span>',
 					excmd: "removeFormat"
-				}
+				},
 			},
 			systr: {
 				'<br/>':"\n",
@@ -1215,7 +1249,7 @@ wbbdebug=true;
 			if (this.$modal.size()==0) {
 				$.log("Init modal");
 				this.$modal = $('<div>').attr("id","wbbmodal").prependTo(document.body)
-					.html('<div class="wbbm"><div class="wbbm-title"><span class="wbbm-title-text"></span><span class="wbbclose" title="'+CURLANG.close+'">x</span></div><div class="wbbm-content"></div><div class="wbbm-bottom"><button id="wbbm-submit" class="wbb-button">'+CURLANG.save+'</button><button id="wbbm-cancel" class="wbb-cancel-button">'+CURLANG.cancel+'</button><button id="wbbm-remove" class="wbb-remove-button">'+CURLANG.remove+'</button></div></div>').hide();
+					.html('<div class="wbbm"><div class="wbbm-title"><span class="wbbm-title-text"></span><span class="wbbclose" title="'+CURLANG.close+'">Г—</span></div><div class="wbbm-content"></div><div class="wbbm-bottom"><button id="wbbm-submit" class="wbb-button">'+CURLANG.save+'</button><button id="wbbm-cancel" class="wbb-cancel-button">'+CURLANG.cancel+'</button><button id="wbbm-remove" class="wbb-remove-button">'+CURLANG.remove+'</button></div></div>').hide();
 				
 				this.$modal.find('#wbbm-cancel,.wbbclose').click($.proxy(this.closeModal,this));
 				this.$modal.bind('click',$.proxy(function(e) {

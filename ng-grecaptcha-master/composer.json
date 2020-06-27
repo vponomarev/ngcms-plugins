@@ -1,0 +1,26 @@
+{
+    "name": "russsiq/ng-grecaptcha",
+    "description": "Защита форм сайта от интернет-ботов с Google reCAPTCHA v3",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+        "name": "Рустам Гимранов",
+        "email": "rustam_gimranov@mail.ru",
+        "homepage": "https://github.com/russsiq",
+        "role": "Developer"
+    }],
+    "repositories": [{
+        "type": "vcs",
+        "url": "https://github.com/russsiq/ng-grecaptcha"
+    }],
+    "require": {
+        "php": ">=7.0.0",
+        "russsiq/ng-helpers": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Plugins\\GRecaptcha\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}

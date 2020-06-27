@@ -72,7 +72,7 @@ function general_submit() {
 
 function main() {
 
-	global $tpl, $lang;
+	global $tpl, $lang, $main_admin;
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.general.form'), 'category_access', 1);
 	$guest = pluginGetVariable('category_access', 'guest');
 	$coment = pluginGetVariable('category_access', 'coment');
@@ -93,12 +93,12 @@ function main() {
 	$tvars['vars']['action'] = $lang['category_access:button_general'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function show_list_user() {
 
-	global $tpl, $lang, $catz, $catmap;
+	global $tpl, $lang, $catz, $catmap, $main_admin;
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.list.user', 'conf.list.user.row'), 'category_access', 1);
 	$users = pluginGetVariable('category_access', 'users');
 	$output = '';
@@ -116,12 +116,12 @@ function show_list_user() {
 	$tvars['vars']['action'] = $lang['category_access:button_list_user'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function show_list_category() {
 
-	global $tpl, $lang, $catz, $catmap;
+	global $tpl, $lang, $catz, $catmap, $main_admin;
 	$tpath = locatePluginTemplates(array('conf.main', 'conf.list', 'conf.list.row'), 'category_access', 1);
 	$categorys = pluginGetVariable('category_access', 'categorys');
 	$output = '';
@@ -139,12 +139,12 @@ function show_list_category() {
 	$tvars['vars']['action'] = $lang['category_access:button_list_category'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function add_user() {
 
-	global $tpl, $lang, $catz, $catmap, $mysql;
+	global $tpl, $lang, $catz, $catmap, $mysql, $main_admin;
 	$users = pluginGetVariable('category_access', 'users');
 	$if_add = true;
 	$user = '';
@@ -208,12 +208,12 @@ function add_user() {
 	$tvars['vars']['action'] = $if_add ? $lang['category_access:button_add_user'] : $lang['category_access:button_edit_user'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function add_category() {
 
-	global $tpl, $lang, $catz, $catmap;
+	global $tpl, $lang, $catz, $catmap, $main_admin;
 	$categorys = pluginGetVariable('category_access', 'categorys');
 	if (isset($_POST['category']) && is_array($_POST['category'])) {
 		foreach ($_POST['category'] as $category) {
@@ -251,12 +251,12 @@ function add_category() {
 	$tvars['vars']['action'] = $lang['category_access:button_add_category'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function delete_user() {
 
-	global $tpl, $lang;
+	global $tpl, $lang, $main_admin;
 	$users = pluginGetVariable('category_access', 'users');
 	if (!isset($_REQUEST['user']) || !array_key_exists($_REQUEST['user'], $users)) {
 		msg(array('type' => 'error', 'info' => $lang['category_access:error_not_exists_user'], 'text' => $lang['category_access:error_val_title']));
@@ -285,12 +285,12 @@ function delete_user() {
 	$tvars['vars']['action'] = $lang['category_access:title_commit'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }
 
 function delete_category() {
 
-	global $tpl, $lang, $catz, $catmap;
+	global $tpl, $lang, $catz, $catmap, $main_admin;
 	$categorys = pluginGetVariable('category_access', 'categorys');
 	if (!isset($_REQUEST['category']) || !in_array($_REQUEST['category'], $categorys)) {
 		msg(array('type' => 'error', 'info' => $lang['category_access:error_not_exists'], 'text' => $lang['category_access:error_val_title']));
@@ -319,5 +319,5 @@ function delete_category() {
 	$tvars['vars']['action'] = $lang['category_access:title_commit'];
 	$tpl->template('conf.main', $tpath['conf.main']);
 	$tpl->vars('conf.main', $tvars);
-	print $tpl->show('conf.main');
+	$main_admin = $tpl->show('conf.main');
 }

@@ -176,7 +176,7 @@ class auth_basic extends CoreAuthPlugin {
 	// 1 - всё ok
 	function register(&$params, $values, &$msg) {
 
-		global $config, $mysql, $lang, $tpl;
+		global $config, $mysql, $lang, $tpl, $UGROUP;
 		LoadPluginLang('auth_basic', 'auth', '', 'auth');
 		$error = 0;
 		$userid = 0;

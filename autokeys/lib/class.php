@@ -127,8 +127,8 @@ function akeysGetKeys($params) {
 		'good_b'          => pluginGetVariable('autokeys', 'good_b') ? pluginGetVariable('autokeys', 'good_b') : false,
 	);
 	$keyword = new autokeyword($cfg, "windows-1251");
-	$words = substr($keyword->parse_words(), 0, $cfg['word_sum']);
-	$words = substr($words, 0, strrpos($words, ', '));
+	$words = mb_substr($keyword->parse_words(), 0, $cfg['word_sum']);
+	$words = mb_substr($words, 0, strrpos($words, ', '));
 
 	return $words;
 }

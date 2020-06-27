@@ -36,8 +36,8 @@ function bbMediaProcess($content) {
 					}
 					if ((!$brk) && ($jline[$ji] == ']')) {
 						// Found correct delimiter
-						$paramLine = substr($jline, 0, $ji);
-						$alt = substr($jline, $ji + 1);
+						$paramLine = mb_substr($jline, 0, $ji);
+						$alt = mb_substr($jline, $ji + 1);
 						break;
 					}
 				}
@@ -59,7 +59,7 @@ function bbMediaProcess($content) {
 			// Now let's compose a resulting URL
 			$keys['file'] = ((!isset($keys['file']) || !$keys['file']) ? $alt : $keys['file']);
 			// Let's extract file extension and try to retrieve file type
-			$fileExt = strtolower(substr(strrchr($keys['file'], "."), 1));
+			$fileExt = strtolower(mb_substr(strrchr($keys['file'], "."), 1));
 			switch ($fileExt) {
 				case 'mp4':
 					$keys['type'] = 'video';

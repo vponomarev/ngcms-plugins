@@ -58,7 +58,7 @@ function plugin_wpinger_servicePing() {
 	if (pluginGetVariable('wpinger', 'proxy')) {
 		$content .= '<methodCall><methodName>services.weblog.pingerProxy</methodName>' .
 			'<params>' .
-			'<param><value><string>' . iconv('Windows-1251', 'UTF-8', $config['home_title']) . '</string></value></param>' .
+			'<param><value><string>' . $config['home_title'] . '</string></value></param>' .
 			'<param><value><string>' . $smapURL . '</string></value></param>' .
 			'<param><value><array><data>';
 		foreach ($serviceList as $url) {
@@ -74,7 +74,7 @@ function plugin_wpinger_servicePing() {
 		$content = '<?xml version="1.0" encoding="UTF-8"?>' .
 			'<methodCall><methodName>weblogUpdates.ping</methodName>' .
 			'<params>' .
-			'<param><value>' . iconv('Windows-1251', 'UTF-8', $config['home_title']) . '</value></param>' .
+			'<param><value>' . $config['home_title'] . '</value></param>' .
 			'<param><value>' . $smapURL . '</value></param>' .
 			'</params>' .
 			'</methodCall>';

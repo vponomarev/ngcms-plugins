@@ -14,7 +14,7 @@ switch ($_REQUEST['action']) {
 
 function showlist()
 {
-	global $tpl, $mysql;
+	global $tpl, $mysql, $main_admin;
 	$static_page = $mysql->select('select `id`, `title` from '.prefix.'_static order by `title`, `id`');
 	$tpath = locatePluginTemplates(array('conf.list', 'conf.list.row'), 're_stat');
 	$output = ''; $no = 1; $t_values = array(); $values = pluginGetVariable('re_stat', 'values');
@@ -37,12 +37,12 @@ function showlist()
 	$tvars['vars']['entries'] = $output;
 	$tpl->template('conf.list', $tpath['conf.list']);
 	$tpl->vars('conf.list', $tvars);
-	print $tpl->show('conf.list');
+	$main_admin = $tpl->show('conf.list');
 }
 
 function editform()
 {
-	global $mysql, $tpl, $config;
+	global $mysql, $tpl, $config, $main_admin;
 	if (!isset($_REQUEST['id'])) {
 		msg(array('type' => 'info', 'info' => '<font color="red">Значение для редактирования/добавления не определено!!!</font>'));
 		showlist();	return false; }
@@ -96,7 +96,7 @@ function editform()
 	if ($id == -1) $tvars['regx']['/\[add\](.*?)\[\/add\]/si'] = '$1'; else $tvars['regx']['/\[edit\](.*?)\[\/edit\]/si'] = '$1';
 	$tpl->template('conf.edit', $tpath['conf.edit']);
 	$tpl->vars('conf.edit', $tvars);
-	print $tpl->show('conf.edit');
+	$main_admin = $tpl->show('conf.edit');
 }
 
 function delete()

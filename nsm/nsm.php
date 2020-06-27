@@ -87,7 +87,7 @@ function plugin_nsm() {
 			'itemdate'     => date("d.m.Y", $row['postdate']),
 			'cats'         => $cats,
 			'allcats'      => resolveCatNames($cats) . ' &nbsp;',
-			'title'        => secure_html((strlen($row['title']) > 70) ? substr($row['title'], 0, 70) . " ..." : $row['title']),
+			'title'        => secure_html((strlen($row['title']) > 70) ? mb_substr($row['title'], 0, 70) . " ..." : $row['title']),
 			'link'         => newsGenerateLink($row, false, 0, true),
 			'state'        => $row['approve'],
 			'editlink'     => generatePluginLink('nsm', 'edit', array('id' => $row['id']), array('id' => $row['id'])),
@@ -834,4 +834,3 @@ function plugin_nsm_del() {
 	// Show again list of news
 	plugin_nsm();
 }
-

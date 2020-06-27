@@ -50,7 +50,7 @@ function _recaptcha_qsencode ($data) {
                 $req .= $key . '=' . urlencode( stripslashes($value) ) . '&';
 
         // Cut the last '&'
-        $req=substr($req,0,strlen($req)-1);
+        $req=mb_substr($req,0,strlen($req)-1);
         return $req;
 }
 
@@ -248,11 +248,11 @@ function _recaptcha_mailhide_email_parts ($email) {
   $arr = preg_split("/@/", $email );
 
   if (strlen ($arr[0]) <= 4) {
-    $arr[0] = substr ($arr[0], 0, 1);
+    $arr[0] = mb_substr ($arr[0], 0, 1);
   } else if (strlen ($arr[0]) <= 6) {
-    $arr[0] = substr ($arr[0], 0, 3);
+    $arr[0] = mb_substr ($arr[0], 0, 3);
   } else {
-    $arr[0] = substr ($arr[0], 0, 4);
+    $arr[0] = mb_substr ($arr[0], 0, 4);
   }
   return $arr;
 }

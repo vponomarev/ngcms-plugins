@@ -1,0 +1,11 @@
+ID: ognews
+Name: Open Graph Tags
+Version: 0.03
+Actions: news; ognews.php
+Type: plugin
+Title: ognews example
+Description: ognews example
+Information: ognews example
+Author: Rostunov Sergey
+Author_URI: http://rostunov.com/
+preinstall: no

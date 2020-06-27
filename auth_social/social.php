@@ -94,7 +94,7 @@ function socialAuth() {
 				$user_doreg = $mysql->record("SELECT * FROM " . uprefix . "_users WHERE social_page = " . db_squote($auther->getSocialPage()));
 				$userid = $user_doreg['id'];
 				$get_avatar = $auther->getAvatar();
-				// если есть аватар, пробуем скачать
+				// РµСЃР»Рё РµСЃС‚СЊ Р°РІР°С‚Р°СЂ, РїСЂРѕР±СѓРµРј СЃРєР°С‡Р°С‚СЊ
 				if (!empty($get_avatar)) {
 					addToFiles('newavatar', $get_avatar);
 					// Load required library
@@ -141,7 +141,7 @@ function socialAuth() {
 				$idToUpdate = $record['id'];
 				$birthday = date('Y-m-d', strtotime($user->birthday));
 				$get_avatar = $auther->getAvatar();
-				// если есть аватар, пробуем скачать
+				// РµСЃР»Рё РµСЃС‚СЊ Р°РІР°С‚Р°СЂ, РїСЂРѕР±СѓРµРј СЃРєР°С‡Р°С‚СЊ
 				if (!empty($get_avatar)) {
 					addToFiles('newavatar', $get_avatar);
 					// Load required library

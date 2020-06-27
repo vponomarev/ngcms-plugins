@@ -26,7 +26,7 @@ switch ($_REQUEST['action']) {
 }
 function show_list_subscribe() {
 
-	global $tpl, $mysql, $lang, $config;
+	global $tpl, $mysql, $lang, $config, $main_admin;
 	$tpath = locatePluginTemplates(array('config/main', 'config/list_subscribe', 'config/list_entries'), 'subscribe_comments', 1);
 	$news_per_page = pluginGetVariable('subscribe_comments', 'admin_count');
 	if (($news_per_page < 2) || ($news_per_page > 2000)) $news_per_page = 2;
@@ -64,12 +64,12 @@ function show_list_subscribe() {
 	);
 	$tpl->template('main', $tpath['config/main'] . 'config');
 	$tpl->vars('main', $tvars);
-	print $tpl->show('main');
+	$main_admin = $tpl->show('main');
 }
 
 function show_list_subscribe_post() {
 
-	global $tpl, $mysql, $lang, $config;
+	global $tpl, $mysql, $lang, $config, $main_admin;
 	$tpath = locatePluginTemplates(array('config/main', 'config/list_subscribe_post', 'config/list_entries_post'), 'subscribe_comments', 1);
 	$news_per_page = pluginGetVariable('subscribe_comments', 'admin_count');
 	if (($news_per_page < 2) || ($news_per_page > 2000)) $news_per_page = 2;
@@ -108,7 +108,7 @@ function show_list_subscribe_post() {
 	);
 	$tpl->template('main', $tpath['config/main'] . 'config');
 	$tpl->vars('main', $tvars);
-	print $tpl->show('main');
+	$main_admin = $tpl->show('main');
 }
 
 function modify() {
@@ -140,7 +140,7 @@ function modify() {
 
 function main() {
 
-	global $tpl, $mysql, $config, $template, $cron;
+	global $tpl, $mysql, $config, $template, $cron, $main_admin;
 	$tpath = locatePluginTemplates(array('config/main', 'config/general.from', 'config/list_entries_cron', 'config/list_subscribe_cron'), 'subscribe_comments', 1);
 	$delayed_send = pluginGetVariable('subscribe_comments', 'delayed_send');
 	if ($delayed_send == 1) {
@@ -208,7 +208,7 @@ function main() {
 	);
 	$tpl->template('main', $tpath['config/main'] . 'config');
 	$tpl->vars('main', $tvars);
-	print $tpl->show('main');
+	$main_admin = $tpl->show('main');
 }
 
 function redirect_subscribe_comments($url) {

@@ -116,7 +116,7 @@ function show_comments() {
 		$query = "(";
 		foreach ($type as $val) $query .= "$val,";
 		// Удаляем последнюю запятую, заменяя её закрывающей скобкой )
-		$query = substr($query, 0, strlen($query) - 1) . ")";
+		$query = mb_substr($query, 0, strlen($query) - 1) . ")";
 		// Завершаем формирование SQL-запроса на удаление
 		$query = "DELETE FROM " . prefix . "_comments WHERE id IN " . $query;
 		// Выполняем запрос
@@ -202,7 +202,3 @@ if ($_REQUEST['action'] == 'commit') {
 	show_comments();
 	generate_config_page('show_comments', $cfg);
 }
-
-	
-
-

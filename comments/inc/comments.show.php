@@ -109,8 +109,8 @@ function comments_show($newsID, $commID = 0, $commDisplayNum = 0, $callingParams
 		}
 		/*
 		if (intval($config['com_wrap']) && (strlen($text) > $config['com_wrap'])) {
-			$tvars['vars']['comment-short']	=	substr($text, 0, $config['com_wrap']);
-			$tvars['vars']['comment-full']	=	substr($text, $config['com_wrap']);
+			$tvars['vars']['comment-short']	=	mb_substr($text, 0, $config['com_wrap']);
+			$tvars['vars']['comment-full']	=	mb_substr($text, $config['com_wrap']);
 			$tvars['regx']["'\[comment_full\](.*?)\[/comment_full\]'si"] = '$1';
 		} else {
 		*/

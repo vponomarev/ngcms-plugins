@@ -11,7 +11,7 @@ switch ($_REQUEST['action']) {
 }
 function showlist() {
 
-	global $tpl, $PLUGINS, $lang;
+	global $tpl, $PLUGINS, $lang, $main_admin;
 	plugins_load_config();
 	$ULIB = new urlLibrary();
 	$ULIB->loadConfig();
@@ -77,7 +77,7 @@ function showlist() {
 	$tvars['vars']['entries'] = $output;
 	$tpl->template('conf.list', $tpath['conf.list']);
 	$tpl->vars('conf.list', $tvars);
-	print $tpl->show('conf.list');
+	$main_admin = $tpl->show('conf.list');
 }
 
 function delete() {

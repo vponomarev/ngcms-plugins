@@ -343,7 +343,7 @@ function uprofile_editApply() {
 		'site'       => $_REQUEST['editsite'],
 		'icq'        => is_numeric($_REQUEST['editicq']) ? $_REQUEST['editicq'] : '',
 		'where_from' => $_REQUEST['editfrom'],
-		'info'       => (intval($config['user_aboutsize']) ? substr($_REQUEST['editabout'], 0, $config['user_aboutsize']) : $_REQUEST['editabout'])
+		'info'       => (intval($config['user_aboutsize']) ? mb_substr($_REQUEST['editabout'], 0, $config['user_aboutsize']) : $_REQUEST['editabout'])
 	);
 	if ($_REQUEST['editpassword'] != '') {
 		if (method_exists($auth_db, 'save_profile')) {
@@ -409,4 +409,3 @@ function uprofile_rpc_manage($params) {
 }
 
 rpcRegisterFunction('plugin.uprofile.editForm', 'uprofile_rpc_manage');
-

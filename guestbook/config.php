@@ -132,7 +132,7 @@ function insert_field() {
  */
 function edit_field($id) {
 
-	global $mysql, $twig, $lang;
+	global $mysql, $twig, $lang, $main_admin ;
 	$field = array();
 	if (!empty($id) || isset($_REQUEST['id'])) {
 		$fid = (isset($_REQUEST['id'])) ? $_REQUEST['id'] : $id;
@@ -156,7 +156,7 @@ function edit_field($id) {
 	$tVars = array(
 		'entries' => $xt->render($tVars),
 	);
-	print $xg->render($tVars);
+	$main_admin = $xg->render($tVars);
 }
 
 /*
@@ -216,7 +216,7 @@ function drop_field() {
  */
 function manage_fields() {
 
-	global $mysql, $twig, $lang;
+	global $mysql, $twig, $lang,$main_admin ;
 	$fields = $mysql->select("select * from " . prefix . "_guestbook_fields");
 	$tVars = array();
 	$tEntries = array();
@@ -236,12 +236,12 @@ function manage_fields() {
 	$tVars = array(
 		'entries' => $xt->render($tVars),
 	);
-	print $xg->render($tVars);
+	$main_admin = $xg->render($tVars);
 }
 
 function show_options() {
 
-	global $tpl, $mysql, $lang, $twig;
+	global $tpl, $mysql, $lang, $twig, $main_admin ;
 	$tpath = locatePluginTemplates(array('config/main', 'config/settings'), 'guestbook', 1);
 	if (isset($_REQUEST['submit'])) {
 		pluginSetVariable('guestbook', 'usmilies', secure_html($_REQUEST['usmilies']));
@@ -351,12 +351,12 @@ function show_options() {
 	$tVars = array(
 		'entries' => $xt->render($tVars),
 	);
-	print $xg->render($tVars);
+	$main_admin = $xg->render($tVars);
 }
 
 function show_messages() {
 
-	global $tpl, $mysql, $lang, $twig, $config, $PHP_SELF;
+	global $tpl, $mysql, $lang, $twig, $config, $PHP_SELF,$main_admin ;
 	$tpath = locatePluginTemplates(array('config/main', 'config/messages_list'), 'guestbook', 1);
 	$tVars = array();
 	$news_per_page = pluginGetVariable('guestbook', 'admin_count');
@@ -392,7 +392,7 @@ function show_messages() {
 	$tVars = array(
 		'entries' => $xt->render($tVars),
 	);
-	print $xg->render($tVars);
+	$main_admin = $xg->render($tVars);
 }
 
 function delete_social() {
@@ -438,7 +438,7 @@ function delete_message() {
 
 function edit_message($mid) {
 
-	global $tpl, $mysql, $lang, $twig, $config;
+	global $tpl, $mysql, $lang, $twig, $config,$main_admin;
 	$tpath = locatePluginTemplates(array('config/main', 'config/messages_edit'), 'guestbook', 1);
 	if (!empty($mid) || isset($_REQUEST['id'])) {
 		$id = (isset($mid)) ? intval($mid) : intval($_REQUEST['id']);
@@ -538,7 +538,7 @@ function edit_message($mid) {
 	$tVars = array(
 		'entries' => $xt->render($tVars),
 	);
-	print $xg->render($tVars);
+	$main_admin = $xg->render($tVars);
 }
 
 /*
@@ -589,7 +589,7 @@ function modify() {
  */
 function social_config() {
 
-	global $tpl, $mysql, $lang, $twig;
+	global $tpl, $mysql, $lang, $twig,$main_admin ;
 	$tpath = locatePluginTemplates(array('config/main', 'config/social'), 'guestbook', 1);
 	if (isset($_REQUEST['submit'])) {
 		pluginSetVariable('guestbook', 'vk_client_id', secure_html($_REQUEST['vk_client_id']));
@@ -629,5 +629,5 @@ function social_config() {
 	$tVars = array(
 		'entries' => $xt->render($tVars),
 	);
-	print $xg->render($tVars);
+	$main_admin = $xg->render($tVars);
 }

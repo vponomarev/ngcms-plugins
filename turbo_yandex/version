@@ -1,0 +1,24 @@
+;
+; Version description file for plugin @@ Next Generation CMS
+;
+
+ID: turbo_yandex
+Name: RSS поток для Yandex Turbo
+Name_EN: RSS export for Yandex Turbo
+Version: 0.6.0
+Acts: ppages
+File: turbo_yandex.php
+Config: config.php
+Install: install.php
+Deinstall: deinstall.php
+Library: lib; lib/TurboYandex.php
+Library: helpers; lib/helpers.php
+Type: plugin
+Description: RSS поток для Yandex Turbo
+Description_EN: RSS export for Yandex Turbo
+Author: irbees2008
+Author_URI: http://ngcmshak.ru/
+Preinstall_vars: feed_title_format="site_title"; news_title="1"; news_count="30"; use_hide="1"
+Title: RSS поток для Yandex Turbo
+Preinstall: default_no
+Information: Генерирует специальный RSS поток для Yandex Turbo

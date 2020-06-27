@@ -38,22 +38,22 @@ function rss_import_block() {
 			$newslength = 100;
 		}
 		$url = extra_get_param('rss_import', $vv . '_url');       //адрес RSS ленты
-		$rss = simplexml_load_file($url);       //Интерпретирует XML-файл в объект
+		$rss = simplexml_load_file($url);       //интерпретирует XML-файл в объект
 		if (empty($rss))
 			return $template['vars'][$vv] = 'RSS не доступен';
 		//цикл для обхода всей RSS ленты
 		$j = 1;
 		foreach ($rss->xpath('//item') as $item) {
 			$title = $item->title;       //выводим заголовок статьи
-			if (strlen($title) > $maxlength) $tvars['vars']['title'] = iconv('utf-8', 'windows-1251', substr(secure_html($title), 0, $maxlength) . "");
-			else $tvars['vars']['title'] = iconv('utf-8', 'windows-1251', secure_html($title));
+			if (strlen($title) > $maxlength) $tvars['vars']['title'] = mb_substr(secure_html($title), 0, $maxlength) . "";
+			else $tvars['vars']['title'] = secure_html($title);
 			if (extra_get_param('rss_import', $vv . '_content')) {
-				$short_news = strip_tags(iconv('utf-8', 'windows-1251', $item->description));        //выводим текст статьи	
+				$short_news = strip_tags($item->description);        //выводим текст статьи
 				if ($config['blocks_for_reg']) $short_news = $parse->userblocks($short_news);
 				//if ($config['use_htmlformatter']) $short_news = $parse -> htmlformatter($short_news);
 				if ($config['use_bbcodes']) $short_news = $parse->bbcodes($short_news);
 				if ($config['use_smilies']) $short_news = $parse->smilies($short_news);
-				if (strlen($short_news) > $newslength) $short_news = substr($short_news, 0, $newslength);
+				if (strlen($short_news) > $newslength) $short_news = mb_substr($short_news, 0, $newslength);
 				if (extra_get_param('rss_import', $vv . '_img')) $short_news = preg_replace('%<[^<>]*?img\\s+src\\s*="?[^"]+"?[^<>]*>\\s*(?:</img>)?%i', "", $short_news);
 				$tvars['vars']['short_news'] = $short_news;
 			}

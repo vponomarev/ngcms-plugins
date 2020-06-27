@@ -45,7 +45,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	$fData = unserialize($frow['struct']);
 	if (!is_array($fData)) $fData = array();
 	// Resolve UTF-8 POST issue if data are sent in UTF-8 coding
-	$flagsUTF = substr($frow['flags'], 5, 1) ? true : false;
+	$flagsUTF = mb_substr($frow['flags'], 5, 1) ? true : false;
 	$isUTF = 0;
 	foreach ($_REQUEST as $k => $v) {
 		if (preg_match("#^fld_#", $k, $null) && detectUTF8($v)) {
@@ -54,7 +54,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 		}
 	}
 	// Process link with news
-	$link_news = intval(substr($frow['flags'], 3, 1));
+	$link_news = intval(mb_substr($frow['flags'], 3, 1));
 	$nrow = '';
 	$xfValues = array();
 	if ($link_news > 0) {
@@ -122,7 +122,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 			'title' => $fInfo['title'],
 			'type'  => $fInfo['type'],
 		);
-		$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']), iconv('Windows-1251', 'UTF-8', $fInfo['title']));
+		$FBF_DATA[$fName] = array($fInfo['type'], intval($fInfo['required']), $fInfo['title']);
 		// Fill value
 		$setValue = '';
 		if ($mode && (!$fInfo['block'])) {
@@ -202,11 +202,11 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '') {
 	$tVars['entries'] = $tEntries;
 	$tVars['FBF_DATA'] = json_encode($FBF_DATA);
 	// Check if we need to check variable content via JScript
-	if (substr($frow['flags'], 0, 1)) {
+	if (mb_substr($frow['flags'], 0, 1)) {
 		$tVars['flags']['jcheck'] = 1;
 	}
 	// Check if we need captcha
-	if (substr($frow['flags'], 1, 1)) {
+	if (mb_substr($frow['flags'], 1, 1)) {
 		$tVars['flags']['captcha'] = 1;
 		$tVars['captcha_url'] = admin_url . "/captcha.php?id=feedback";
 		$tVars['captcha_rand'] = rand(00000, 99999);
@@ -266,7 +266,7 @@ function plugin_feedback_post() {
 	$fData = unserialize($frow['struct']);
 	if (!is_array($fData)) $fData = array();
 	// Process link with news
-	$link_news = intval(substr($frow['flags'], 3, 1));
+	$link_news = intval(mb_substr($frow['flags'], 3, 1));
 	$nrow = '';
 	$xfValues = array();
 	if ($link_news > 0) {
@@ -290,7 +290,7 @@ function plugin_feedback_post() {
 		}
 	}
 	// Check if captcha check if needed
-	if (substr($frow['flags'], 1, 1)) {
+	if (mb_substr($frow['flags'], 1, 1)) {
 		$vcode = $_REQUEST['vcode'];
 		if ((!$vcode) || ($vcode != $_SESSION['captcha.feedback'])) {
 			// Wrong CAPTCHA code (!!!)
@@ -300,9 +300,9 @@ function plugin_feedback_post() {
 		}
 	}
 	// Check if user requested HTML message format
-	$flagHTML = substr($frow['flags'], 2, 1) ? true : false;
-	$flagSubj = substr($frow['flags'], 4, 1) ? true : false;
-	$flagsUTF = substr($frow['flags'], 5, 1) ? true : false;
+	$flagHTML = mb_substr($frow['flags'], 2, 1) ? true : false;
+	$flagSubj = mb_substr($frow['flags'], 4, 1) ? true : false;
+	$flagsUTF = mb_substr($frow['flags'], 5, 1) ? true : false;
 	$mailTN = 'mail.' . ($flagHTML ? 'html' : 'text');
 	// Scan all fields and fill data. Prepare outgoing email.
 	$output = '';
@@ -451,7 +451,7 @@ function plugin_feedback_post() {
 			$v->onProcessNotify($form_id);
 		}
 	// Lock used captcha code if captcha is enabled
-	if (substr($frow['flags'], 1, 1)) {
+	if (mb_substr($frow['flags'], 1, 1)) {
 		//		$_SESSION['captcha.feedback'] = rand(00000, 99999);
 	}
 	// USER notification

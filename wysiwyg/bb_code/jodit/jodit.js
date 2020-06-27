@@ -1,3 +1,1 @@
-$(document).ready(function() {
-    new Jodit('.bb_code');
-});
+new Jodit('.bb_code');

@@ -614,7 +614,7 @@ class Mobile_Detect
         'Coast'         => array('Coast/[VER]'),
         'Dolfin'        => 'Dolfin/[VER]',
         // @reference: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox
-        'Firefox'       => array('Firefox/[VER]', 'FxiOS/[VER]'), 
+        'Firefox'       => array('Firefox/[VER]', 'FxiOS/[VER]'),
         'Fennec'        => 'Fennec/[VER]',
         // http://msdn.microsoft.com/en-us/library/ms537503(v=vs.85).aspx
         // https://msdn.microsoft.com/en-us/library/ie/hh869301(v=vs.85).aspx
@@ -712,7 +712,7 @@ class Mobile_Detect
         // Only save HTTP headers. In PHP land, that means only _SERVER vars that
         // start with HTTP_.
         foreach ($httpHeaders as $key => $value) {
-            if (substr($key, 0, 5) === 'HTTP_') {
+            if (mb_substr($key, 0, 5) === 'HTTP_') {
                 $this->httpHeaders[$key] = $value;
             }
         }
@@ -800,7 +800,7 @@ class Mobile_Detect
         // start with cloudfront-.
         $response = false;
         foreach ($cfHeaders as $key => $value) {
-            if (substr(strtolower($key), 0, 16) === 'http_cloudfront_') {
+            if (mb_substr(strtolower($key), 0, 16) === 'http_cloudfront_') {
                 $this->cloudfrontHeaders[strtoupper($key)] = $value;
                 $response = true;
             }
@@ -1064,13 +1064,13 @@ class Mobile_Detect
     public function __call($name, $arguments)
     {
         // make sure the name starts with 'is', otherwise
-        if (substr($name, 0, 2) !== 'is') {
+        if (mb_substr($name, 0, 2) !== 'is') {
             throw new BadMethodCallException("No such method exists: $name");
         }
 
         $this->setDetectionType(self::DETECTION_TYPE_MOBILE);
 
-        $key = substr($name, 2);
+        $key = mb_substr($name, 2);
 
         return $this->matchUAAgainstKey($key);
     }
@@ -1339,7 +1339,7 @@ class Mobile_Detect
         $isMobile = $this->isMobile();
 
         if (
-            // Apple iOS 4-7.0 – Tested on the original iPad (4.3 / 5.0), iPad 2 (4.3 / 5.1 / 6.1), iPad 3 (5.1 / 6.0), iPad Mini (6.1), iPad Retina (7.0), iPhone 3GS (4.3), iPhone 4 (4.3 / 5.1), iPhone 4S (5.1 / 6.0), iPhone 5 (6.0), and iPhone 5S (7.0)
+            // Apple iOS 4-7.0 РІР‚вЂњ Tested on the original iPad (4.3 / 5.0), iPad 2 (4.3 / 5.1 / 6.1), iPad 3 (5.1 / 6.0), iPad Mini (6.1), iPad Retina (7.0), iPhone 3GS (4.3), iPhone 4 (4.3 / 5.1), iPhone 4S (5.1 / 6.0), iPhone 5 (6.0), and iPhone 5S (7.0)
             $this->is('iOS') && $this->version('iPad', self::VERSION_TYPE_FLOAT) >= 4.3 ||
             $this->is('iOS') && $this->version('iPhone', self::VERSION_TYPE_FLOAT) >= 4.3 ||
             $this->is('iOS') && $this->version('iPod', self::VERSION_TYPE_FLOAT) >= 4.3 ||
@@ -1353,7 +1353,7 @@ class Mobile_Detect
             // Windows Phone 7.5-8 - Tested on the HTC Surround (7.5), HTC Trophy (7.5), LG-E900 (7.5), Nokia 800 (7.8), HTC Mazaa (7.8), Nokia Lumia 520 (8), Nokia Lumia 920 (8), HTC 8x (8)
             $this->version('Windows Phone OS', self::VERSION_TYPE_FLOAT) >= 7.5 ||
 
-            // Tested on the Torch 9800 (6) and Style 9670 (6), BlackBerry® Torch 9810 (7), BlackBerry Z10 (10)
+            // Tested on the Torch 9800 (6) and Style 9670 (6), BlackBerryР’В® Torch 9810 (7), BlackBerry Z10 (10)
             $this->is('BlackBerry') && $this->version('BlackBerry', self::VERSION_TYPE_FLOAT) >= 6.0 ||
             // Blackberry Playbook (1.0-2.0) - Tested on PlayBook
             $this->match('Playbook.*Tablet') ||

@@ -126,4 +126,3 @@ function plugin_nsched_cron() {
 		}
 	}
 }
-

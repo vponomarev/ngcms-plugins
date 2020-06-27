@@ -223,7 +223,7 @@ class Hybrid_Providers_Facebook extends Hybrid_Provider_Model {
 	function getCoverURL($coverInfoURL) {
 		try {
 			$headers = get_headers($coverInfoURL);
-			if (substr($headers[0], 9, 3) != "404") {
+			if (mb_substr($headers[0], 9, 3) != "404") {
 				$coverOBJ = json_decode(file_get_contents($coverInfoURL));
 				if (array_key_exists('cover', $coverOBJ)) {
 					return $coverOBJ->cover->source;

@@ -1,0 +1,1 @@
+<div class="page type-page status-publish hentry nip-recent">[not_empty]<a href="{url_entry}"data-tooltip="{name}" class="simptip-position-top simptip-movable" ><img src="{url_image_thumb}" style="width: 310px; height: 190px;" alt="" alt="{name}"/></a>[/not_empty][empty]&nbsp[/empty]</div>

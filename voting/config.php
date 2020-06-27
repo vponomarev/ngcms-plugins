@@ -21,7 +21,7 @@ $cfg = array();
 array_push($cfg, array('descr' => $lang['voting:desc']));
 array_push($cfg, array('name' => 'rotate', 'title' => $lang['voting:rotate'], 'descr' => $lang['voting:rotate#desc'], 'type' => 'select', 'values' => array('1' => $lang['yesa'], '0' => $lang['noa']), 'value' => pluginGetVariable('voting', 'rotate')));
 array_push($cfg, array('name' => 'active', 'title' => $lang['voting:active'], 'descr' => $lang['voting:active#desc'], 'type' => 'select', 'values' => (array('0' => ' -- ') + mkVoteList()), 'value' => pluginGetVariable('voting', 'active')));
-array_push($cfg, array('name' => 'secure', 'title' => $lang['voting:secure'], 'descr' => $lang['voting:secure#desc'], 'type' => 'select', 'values' => array('1' => 'БД', '0' => 'Cookie'), 'value' => pluginGetVariable('voting', 'secure')));
+array_push($cfg, array('name' => 'secure', 'title' => $lang['voting:secure'], 'descr' => $lang['voting:secure#desc'], 'type' => 'select', 'values' => array('1' => 'Р‘Р”', '0' => 'Cookie'), 'value' => pluginGetVariable('voting', 'secure')));
 array_push($cfg, array('name' => 'localsource', 'title' => $lang['voting:localsource'], 'descr' => $lang['voting:localsource#desc'], 'type' => 'select', 'values' => array('0' => $lang['voting:lsrc.site'], '1' => $lang['voting:lsrc.plugin']), 'value' => intval(pluginGetVariable($plugin, 'localsource'))));
 array_push($cfg, array('name' => 'skin', 'title' => $lang['voting:skin'], 'descr' => $lang['voting:skin#desc'], 'type' => 'select', 'values' => $skList, 'value' => pluginGetVariable('voting', 'skin')));
 array_push($cfg, array('name' => 'vpp', 'title' => $lang['voting:vpp'], 'descr' => $lang['voting:vpp#desc'], 'type' => 'input', 'value' => intval(pluginGetVariable('voting', 'vpp'))));
@@ -42,18 +42,18 @@ function mkVoteSkinList() {
 }
 
 if ($_REQUEST['action'] == 'newvote') {
-	$mysql->query("insert into " . prefix . "_vote (name) values (" . db_squote('** новое голосование **') . ")");
-	print "Новый опрос создан. <a href='$PHP_SELF?mod=extra-config&plugin=voting'>переход к редактированию</a>";
+	$mysql->query("insert into " . prefix . "_vote (name) values (" . db_squote('** РЅРѕРІРѕРµ РіРѕР»РѕСЃРѕРІР°РЅРёРµ **') . ")");
+	print "РќРѕРІС‹Р№ РѕРїСЂРѕСЃ СЃРѕР·РґР°РЅ. <a href='$PHP_SELF?mod=extra-config&plugin=voting'>РїРµСЂРµС…РѕРґ Рє СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЋ</a>";
 } else if ($_REQUEST['action'] == 'delvote') {
 	$voteid = intval($_REQUEST['id']);
 	if ($row = $mysql->record("select * from " . prefix . "_vote where id = $voteid")) {
 		$mysql->query("delete from " . prefix . "_voteline where voteid = $voteid");
 		$mysql->query("delete from " . prefix . "_vote where id = $voteid");
-		print "Опрос удалён. ";
+		print "РћРїСЂРѕСЃ СѓРґР°Р»С‘РЅ. ";
 	} else {
-		print "Такого опроса не существует. ";
+		print "РўР°РєРѕРіРѕ РѕРїСЂРѕСЃР° РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚. ";
 	}
-	print "<a href='$PHP_SELF?mod=extra-config&plugin=voting'>переход к редактированию</a>";
+	print "<a href='$PHP_SELF?mod=extra-config&plugin=voting'>РїРµСЂРµС…РѕРґ Рє СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЋ</a>";
 } else if ($_REQUEST['action'] == 'commit') {
 	// Let's look what do we need to do.
 	// First - process voteline updates/deletes

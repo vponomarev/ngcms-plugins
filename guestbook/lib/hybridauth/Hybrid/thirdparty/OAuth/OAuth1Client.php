@@ -254,8 +254,8 @@ class OAuth1Client{
 		$i = strpos($header, ':');
 
 		if ( !empty($i) ){
-			$key = str_replace('-', '_', strtolower(substr($header, 0, $i)));
-			$value = trim(substr($header, $i + 2));
+			$key = str_replace('-', '_', strtolower(mb_substr($header, 0, $i)));
+			$value = trim(mb_substr($header, $i + 2));
 			$this->http_header[$key] = $value;
 		}
 

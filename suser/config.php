@@ -12,7 +12,7 @@ switch ($_REQUEST['action']) {
 }
 function url() {
 
-	global $tpl;
+	global $tpl, $main_admin;
 	$tpath = locatePluginTemplates(array('config/main', 'config/url'), 'suser', 1);
 	if (isset($_REQUEST['submit'])) {
 		if (isset($_REQUEST['url']) && !empty($_REQUEST['url'])) {
@@ -54,12 +54,12 @@ function url() {
 	);
 	$tpl->template('main', $tpath['config/main'] . 'config');
 	$tpl->vars('main', $tvars);
-	print $tpl->show('main');
+	$main_admin = $tpl->show('main');
 }
 
 function main() {
 
-	global $tpl;
+	global $tpl, $main_admin;
 	$tpath = locatePluginTemplates(array('config/main', 'config/general.from'), 'suser', 1);
 	if (isset($_REQUEST['submit'])) {
 		pluginSetVariable('suser', 'user_per_page', intval($_REQUEST['user_per_page']));
@@ -93,7 +93,7 @@ function main() {
 	);
 	$tpl->template('main', $tpath['config/main'] . 'config');
 	$tpl->vars('main', $tvars);
-	print $tpl->show('main');
+	$main_admin = $tpl->show('main');
 }
 
 function redirect_suser($url) {

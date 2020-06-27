@@ -1217,7 +1217,7 @@ abstract class BaseFacebook
     $url = self::$DOMAIN_MAP[$name];
     if ($path) {
       if ($path[0] === '/') {
-        $path = substr($path, 1);
+        $path = mb_substr($path, 1);
       }
       $url .= $path;
     }
@@ -1510,7 +1510,7 @@ abstract class BaseFacebook
     if ($len === 0) {
       return true;
     }
-    return substr($big, -$len) === $small;
+    return mb_substr($big, -$len) === $small;
   }
 
   /**

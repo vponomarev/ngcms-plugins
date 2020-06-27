@@ -24,13 +24,13 @@ function basket_add_item($linked_ds, $linked_id, $title, $price, $count, $xfld =
 		$tCount = $res['count'];
 		$tPrice = $res['price'];
 	}
-	// Готовим переменные
+	// Р“РѕС‚РѕРІРёРј РїРµСЂРµРјРµРЅРЅС‹Рµ
 	$tVars = array(
 		'count'      => $tCount,
 		'price'      => $tPrice,
 		'ajaxUpdate' => 1,
 	);
-	// Выводим шаблон с общим итогом
+	// Р’С‹РІРѕРґРёРј С€Р°Р±Р»РѕРЅ СЃ РѕР±С‰РёРј РёС‚РѕРіРѕРј
 	$xt = $twig->loadTemplate('plugins/basket/total.tpl');
 
 	return array('status' => 1, 'errorCode' => 0, 'data' => 'Item added into basket', 'update' => arrayCharsetConvert(0, $xt->render($tVars)));

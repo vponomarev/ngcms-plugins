@@ -49,7 +49,7 @@ function showList() {
 //
 function showSectionList() {
 
-	global $xf, $lang, $tpl, $twig, $sectionID;
+	global $xf, $lang, $tpl, $twig, $sectionID, $main_admin;
 	$output = '';
 	//$output .= "<pre>".var_export($xf[$sectionID], true)."</pre>";
 	$tVars = array(
@@ -59,7 +59,7 @@ function showSectionList() {
 	$grpNews = array();
 	foreach ($xf['grp.news'] as $k => $v) {
 		$grpNews[$k] = array(
-			'title'   => iconv('Windows-1251', 'UTF-8', $v['title']),
+			'title'   => $v['title'],
 			'entries' => $v['entries'],
 		);
 	}
@@ -68,14 +68,14 @@ function showSectionList() {
 	$tVars['json']['groups.config'] = json_encode($grpNews);
 	$tVars['json']['fields.config'] = json_encode(arrayCharsetConvert(0, $xf['news']));
 	$xt = $twig->loadTemplate('plugins/xfields/tpl/groups.tpl');
-	echo $xt->render($tVars);
+	$main_admin = $xt->render($tVars);
 }
 
 //
 // Показать список доп. полей
 function showFieldList() {
 
-	global $xf, $lang, $twig, $sectionID;
+	global $xf, $lang, $twig, $sectionID, $main_admin;
 	$xEntries = array();
 	$output = '';
 	foreach ($xf[$sectionID] as $id => $data) {
@@ -118,14 +118,14 @@ function showFieldList() {
 	foreach (array('news', 'grp.news', 'users', 'grp.users', 'tdata') as $cID)
 		$tVars['bclass'][$cID] = ($cID == $sectionID) ? 'btnActive' : 'btnInactive';
 	$xt = $twig->loadTemplate('plugins/xfields/tpl/config.tpl');
-	echo $xt->render($tVars);
+	$main_admin = $xt->render($tVars);
 }
 
 //
 //
 function showAddEditForm($xdata = '', $eMode = null, $efield = null) {
 
-	global $xf, $lang, $sectionID, $twig;
+	global $xf, $lang, $sectionID, $twig, $main_admin;
 	$field = ($efield == null) ? $_REQUEST['field'] : $efield;
 	if ($eMode == null) {
 		$editMode = (is_array($xf[$sectionID][$field])) ? 1 : 0;
@@ -234,14 +234,14 @@ function showAddEditForm($xdata = '', $eMode = null, $efield = null) {
 	}
 	$tVars['sectionID'] = $sectionID;
 	$xt = $twig->loadTemplate('plugins/xfields/tpl/config_edit.tpl');
-	echo $xt->render($tVars);
+	$main_admin = $xt->render($tVars);
 }
 
 //
 //
 function doAddEdit() {
 
-	global $xf, $XF, $lang, $tpl, $twig, $mysql, $sectionID;
+	global $xf, $XF, $lang, $tpl, $twig, $mysql, $sectionID, $main_admin;
 	//print "<pre>".var_export($_POST, true)."</pre>";
 	$error = 0;
 	$field = $_REQUEST['id'];
@@ -513,14 +513,14 @@ function doAddEdit() {
 	);
 	$tVars['sectionID'] = $sectionID;
 	$xt = $twig->loadTemplate('plugins/xfields/tpl/config_done.tpl');
-	echo $xt->render($tVars);
+	$main_admin = $xt->render($tVars);
 }
 
 //
 //
 function doUpdate() {
 
-	global $xf, $XF, $lang, $tpl, $mysql, $sectionID;
+	global $xf, $XF, $lang, $tpl, $mysql, $sectionID, $main_admin;
 	$error = 0;
 	$field = $_REQUEST['field'];
 	// Check if field exists or not [depends on mode]
@@ -562,7 +562,7 @@ function doUpdate() {
 
 		return;
 	}
-	$xf = $XF;
+	$main_admin = $xf = $XF;
 }
 
 function array_key_move(&$arr, $key, $offset) {

@@ -1,0 +1,15 @@
+ID: zboard
+Name: Доска объявлений
+Version: 0.4
+Actions: ppages; zboard.php
+Actions: index; block_zboard.php
+File: zboard.php
+Config: config.php
+Install: install.php
+Deinstall: uninstall.php
+Type: plugin
+Title: Доска объявлений
+Description: Организует на сайте доску объявлений
+Author: Rostunov Sergey
+Author_URI: http://rostunov.com
+preinstall: no
