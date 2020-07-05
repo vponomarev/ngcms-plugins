@@ -247,9 +247,7 @@ twigRegisterFunction('calendar', 'show', plugin_calendar_showTwig);
 function calendar_rpc_manage($params) {
 
 	$params['flagAJAX'] = true;
-	$calendarOutput = plugin_calendar_showTwig($params);
-
-	return array('status' => 1, 'errorCode' => 0, 'data' => arrayCharsetConvert(0, $calendarOutput));
+	return array('status' => 1, 'errorCode' => 0, 'data' => plugin_calendar_showTwig($params));
 }
 
 rpcRegisterFunction('plugin.calendar.show', 'calendar_rpc_manage');
