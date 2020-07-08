@@ -67,7 +67,7 @@ class autokeyword {
 	function parse_words() {
 
 		$common = array("aaaaaaa", "aaaaaaa");
-		$s = split(" ", $this->contents);
+		$s = explode(" ", $this->contents);
 		$k = array();
 		foreach ($s as $key => $val) {
 			if (strlen(trim($val)) >= $this->wordLengthMin && strlen(trim($val)) <= $this->wordLengthMax && !in_array(trim($val), $common) && !is_numeric(trim($val))) {
