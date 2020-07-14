@@ -1170,7 +1170,7 @@ if (getPluginStatusActive('uprofile')) {
 
 		function showProfile($userID, $SQLrow, &$tvars) {
 
-			global $mysql, $config, $twig, $twigLoader;
+			global $mysql, $config, $twig, $twigLoader, $parse;
 			// Try to load config. Stop processing if config was not loaded
 			if (($xf = xf_configLoad()) === false) return;
 			$fields = xf_decode($SQLrow['xfields']);
@@ -1284,7 +1284,7 @@ class XFieldsFilterAdminCategories extends FilterAdminCategories {
 		// Get config
 		$xf = xf_configLoad();
 		// Prepare select
-		$ms = '<select name="xf_group"><option value="">** все поля **</option>';
+		$ms = '<select name="xf_group"><option value="">** РІСЃРµ РїРѕР»СЏ **</option>';
 		if (isset($xf['grp.news'])) {
 			foreach ($xf['grp.news'] as $k => $v) {
 				$ms .= '<option value="' . $k . '">' . $k . ' (' . $v['title'] . ')</option>';
@@ -1302,7 +1302,7 @@ class XFieldsFilterAdminCategories extends FilterAdminCategories {
 		// Get config
 		$xf = xf_configLoad();
 		// Prepare select
-		$ms = '<select name="xf_group"><option value="">** все поля **</option>';
+		$ms = '<select name="xf_group"><option value="">** РІСЃРµ РїРѕР»СЏ **</option>';
 		foreach ($xf['grp.news'] as $k => $v) {
 			$ms .= '<option value="' . $k . '"' . (($SQL['xf_group'] == $k) ? ' selected="selected"' : '') . '>' . $k . ' (' . $v['title'] . ')</option>';
 		}
@@ -1396,4 +1396,3 @@ class XFieldsCoreFilter extends CoreFilter {
 register_filter('news', 'xfields', new XFieldsNewsFilter);
 register_filter('core.registerUser', 'xfields', new XFieldsCoreFilter);
 register_admin_filter('categories', 'xfields', new XFieldsFilterAdminCategories);
-

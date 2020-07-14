@@ -170,8 +170,7 @@
 
 
 <script type="text/javascript" language="javascript">
-	<
-	!--
+	<!--
 	// Connect to configuration data
 	var gConfig = {{ json['groups.config'] }};
 	var fConfig = {{ json['fields.config'] }};

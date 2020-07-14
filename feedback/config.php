@@ -106,8 +106,8 @@ function saveForm() {
 	foreach ($params as $k => $v) {
 		$sqlParams [] = $k . '=' . db_squote($v);
 	}
-	$mysql->select("update " . prefix . "_feedback set " . join(", ", $sqlParams) . " where id = " . $id);
-	//$mysql->select("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($emails).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active']).", flags=".db_squote($flags)." where id = ".$id);
+	$mysql->query("update " . prefix . "_feedback set " . join(", ", $sqlParams) . " where id = " . $id);
+	//$mysql->query("update ".prefix."_feedback set name=".db_squote($name).", title=".db_squote($_REQUEST['title']).", template=".db_squote($_REQUEST['template']).", emails=".db_squote($emails).", description=".db_squote($_REQUEST['description']).", active=".intval($_REQUEST['active']).", flags=".db_squote($flags)." where id = ".$id);
 	showForm(1);
 }
 

@@ -53,7 +53,7 @@ function feedback_listTemplates() {
 }
 
 // Find location of template files for specific template
-function feedback_locateTemplateFiles($tName, $flagHTML) {
+function feedback_locateTemplateFiles($tName, bool $flagHTML = false) {
 
 	// Determine template names/path, that will be used during form generation
 	$tpath = locatePluginTemplates(array('site.form', 'site.notify', 'mail.html', 'mail.text'), 'feedback', pluginGetVariable('feedback', 'localsource'));
