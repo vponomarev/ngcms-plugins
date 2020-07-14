@@ -59,7 +59,7 @@ function showSectionList() {
 	$grpNews = array();
 	foreach ($xf['grp.news'] as $k => $v) {
 		$grpNews[$k] = array(
-			'title'   => iconv('Windows-1251', 'UTF-8', $v['title']),
+			'title'   => $v['title'],
 			'entries' => $v['entries'],
 		);
 	}
