@@ -19,7 +19,7 @@ function create_gsmg_urls()
         '',
         [
             'vars'  => [],
-            'descr' => ['russian' => 'Ëåíòà gsmg'],
+            'descr' => ['russian' => 'Ð›ÐµÐ½Ñ‚Ð° gsmg'],
         ]
     );
     $ULIB->saveConfig();
