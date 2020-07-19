@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Fill configuration parameters
 $cfg = array();
 array_push($cfg, array('descr' => 'Плагин позволяет отображать на страницах сайта рекламные ссылки сервиса ссылочной рекламы LINKFEED.RU<br/><i>Хотите помочь автору плагина? Зарегистрируйтесь на LINKFEED по <a target="_blank" href="http://www.linkfeed.ru/reg/39627">партнёрской ссылке</a>.</i>'));

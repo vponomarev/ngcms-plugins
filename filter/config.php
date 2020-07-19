@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Fill configuration parameters
 $cfg = array();
 array_push($cfg, array('descr' => 'С помощью данного плагина Вы можете фильтровать нежелательные слова в комментариях, выполнять замену нежелательных слов (мата, например) или запрещать размещение комментариев содержащих определённые последовательности (к примеру, ссылки)<br><br><br>'));

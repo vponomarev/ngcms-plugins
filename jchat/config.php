@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 loadPluginLang('jchat', 'config', '', '', ':');
 // Calculate row count
 $jcRowCount = $mysql->result("select count(*) from " . prefix . "_jchat");

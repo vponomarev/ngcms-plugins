@@ -2,7 +2,7 @@
 //
 // Configuration file for plugin
 //
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('fin_sms_rb', 'config');
 $db_update = array(
 	array(

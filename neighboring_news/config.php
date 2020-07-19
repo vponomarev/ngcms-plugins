@@ -2,7 +2,7 @@
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('Galaxy in danger');
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Fill configuration parameters
 $cfg = array();
 array_push($cfg, array('descr' => 'Плагин генерирует ссылки на следующую и предыдущую новости.'));

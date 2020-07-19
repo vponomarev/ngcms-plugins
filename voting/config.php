@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 loadPluginLang('voting', 'config', '', '', ':');
 // Fill configuration parameters
 $skList = array();

@@ -4,7 +4,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Configuration file for plugin
 //
-plugins_load_config();
+pluginsLoadConfig();
 //LoadPluginLang($plugin, 'main');
 function plugin_guestbook_install($action) {
 

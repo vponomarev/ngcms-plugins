@@ -3,7 +3,7 @@
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Load lang files
 LoadPluginLang('auth_vb', 'config', '', 'auth');
 // Fill configuration parameters

@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 $personalCount = intval(pluginGetVariable($plugin, 'personalCount'));
 if (($personalCount < 2) || ($personalCount > 100))
 	$personalCount = 10;

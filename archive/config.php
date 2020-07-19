@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('archive', 'config', '', '', ':');
 // Fill configuration parameters
 $cfg = array();

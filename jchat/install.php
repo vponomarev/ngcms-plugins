@@ -8,7 +8,7 @@ if (!defined('NGCMS')) die ('HAL');
 //	apply		- apply installation, with handy confirmation
 //	autoapply       - apply installation in automatic mode [INSTALL script]
 //
-plugins_load_config();
+pluginsLoadConfig();
 function plugin_jchat_install($action) {
 
 	global $lang;

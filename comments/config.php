@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Set default values if values are not set [for new variables]
 $pluginDefaults = array(
 	'global_default'     => 1,

@@ -12,7 +12,7 @@ switch ($_REQUEST['action']) {
 function showlist() {
 
 	global $tpl, $PLUGINS, $lang;
-	plugins_load_config();
+	pluginsLoadConfig();
 	$ULIB = new urlLibrary();
 	$ULIB->loadConfig();
 	$plug = array();

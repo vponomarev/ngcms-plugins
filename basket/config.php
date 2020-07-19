@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Load XFields config
 if (!function_exists('xf_configLoad')) {
 	print "XFields plugin is not loaded now!";

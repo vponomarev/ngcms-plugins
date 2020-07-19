@@ -3,7 +3,7 @@
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Preload header data
 $header = file_get_contents(root . 'extras/xmenu/tpl/mhead.tpl');
 // Make an activity array - to mark menu's that are activated

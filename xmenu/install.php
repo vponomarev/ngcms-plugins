@@ -2,7 +2,7 @@
 //
 // Configuration file for plugin
 //
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('xmenu', 'config');
 $db_update = array(
 	array(

@@ -4,7 +4,7 @@ if (!defined('NGCMS'))
     exit('HAL');
 
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 
 switch ($_REQUEST['action']) {
 

@@ -1,6 +1,6 @@
 <?php
 if (!defined('NGCMS')) exit('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('ads_pro', 'config', '', '', ':');
 //pluginSetVariable('ads_pro', 'data', array());
 //pluginsSaveConfig();

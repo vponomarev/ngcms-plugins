@@ -189,7 +189,7 @@ if (!getPluginStatusInstalled('comments')) {
 
 	return false;
 }
-plugins_load_config();
+pluginsLoadConfig();
 $cfg = array();
 array_push($cfg, array('descr' => 'Плагин выводит список всех комментариев на сайте.'));
 array_push($cfg, array('name' => 'perpage', 'title' => 'Кол-во комментариев для отображения на одной странице', 'type' => 'input', 'value' => extra_get_param($plugin, 'perpage')));

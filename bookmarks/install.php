@@ -1,6 +1,6 @@
 <?php
 if (!defined('NGCMS')) die ('Galaxy in danger');
-plugins_load_config();
+pluginsLoadConfig();
 if ($_REQUEST['action'] == 'commit') {
 	if (($mysql->query("CREATE TABLE `" . prefix . "_bookmarks` (`user_id` int(8) default NULL, `news_id` int(8) default NULL) ENGINE=MyISAM"))) {
 		echo "Изменения в БД были успешно внесены!";

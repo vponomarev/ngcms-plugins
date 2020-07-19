@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 //include_once root."extras/fin_sms/inc/httpget.inc.php";
 //include_once root."extras/fin_sms/inc/xml2dom.php";
 // Generate balance list

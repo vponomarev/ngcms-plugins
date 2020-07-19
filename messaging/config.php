@@ -1,5 +1,5 @@
 <?php
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('messaging', 'messaging', '', 'mes');
 $cfg = array();
 array_push($cfg, array('descr' => $lang['mes_descr']));

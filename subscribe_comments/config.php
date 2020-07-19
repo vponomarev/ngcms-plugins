@@ -2,7 +2,7 @@
 if (!defined('NGCMS')) {
 	exit('HAL');
 }
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('subscribe_comments', 'config', '', '', '#');
 $get_params = parse_url($_SERVER['HTTP_REFERER']);
 $get_params = $get_params['query'];

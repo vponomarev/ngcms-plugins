@@ -2,7 +2,7 @@
 if (!defined('NGCMS')) {
 	exit('HAL');
 }
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('xsyslog', 'config', '', '', '#');
 switch ($_REQUEST['action']) {
 	case 'list_xsyslog':

@@ -4,7 +4,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Voting plugin deinstaller
 //
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('voting', 'install');
 $db_update = array(
 	// array(

@@ -1,7 +1,7 @@
 <?php
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('guestbook', 'config', '', 'gbconfig', '#');
 switch ($_REQUEST['action']) {
 	case 'manage_fields'  :

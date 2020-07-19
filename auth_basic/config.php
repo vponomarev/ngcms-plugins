@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 $lang = LoadLang('users', 'admin');
 // Load lang files
 LoadPluginLang('auth_basic', 'config', '', 'auth', ':');
