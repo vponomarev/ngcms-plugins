@@ -1,7 +1,7 @@
 <?php
 if(!defined('NGCMS')) exit('HAL');
 
-plugins_load_config();
+pluginsLoadConfig();
 ver_ver();
 
 switch ($_REQUEST['action']) {

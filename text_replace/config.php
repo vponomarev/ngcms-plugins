@@ -1,6 +1,6 @@
 <?php
 if (!defined('NGCMS')) die ('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 $cfg = array();
 $cfgX = array();
 array_push($cfg, array('descr' => 'Замена слов на адрес страниц'));

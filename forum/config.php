@@ -16,7 +16,7 @@
 =====================================================
 */
 if (!defined('NGCMS')) exit('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 include_once(dirname(__FILE__) . '/includes/security.php');
 include_once(dirname(__FILE__) . '/includes/rewrite.php');
 include_once(dirname(__FILE__) . '/includes/constants.php');

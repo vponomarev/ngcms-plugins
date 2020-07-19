@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Fill configuration parameters
 $cfg = array();
 array_push($cfg, array('descr' => 'Плагин обеспечивает возможность публиковать/снимать с публикации новости по расписанию.'));

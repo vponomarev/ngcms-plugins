@@ -1,7 +1,7 @@
 <?php
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('ireplace', 'main', '', '', ':');
 $cfg = array();
 array_push($cfg, array('descr' => $lang['ireplace:descr']));

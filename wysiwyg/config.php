@@ -1,6 +1,6 @@
 <?php
 if (!defined('NGCMS')) die ('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('wysiwyg', 'config');
 $bb_list[] = 'Стандартный';
 $bb_list = array_merge($bb_list, ListFiles(extras_dir . '/wysiwyg/bb_code', ''));

@@ -1,7 +1,7 @@
 <?php
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 if ($_REQUEST['action'] == 'commit') {
 	plugin_mark_deinstalled($plugin);
 } else {

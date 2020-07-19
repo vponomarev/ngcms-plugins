@@ -2,7 +2,7 @@
 if (!defined('NGCMS')) {
 	die("Don't you figure you're so cool?");
 }
-plugins_load_config();
+pluginsLoadConfig();
 $cfg = array();
 array_push($cfg, array('name' => 'activate_add', 'title' => 'Автоматическое создание при добавлении новости<br/><small><b>Да</b> - ключевые слова будут автоматически создаваться при добавлении новости', 'type' => 'select', values => array(0 => $lang['noa'], 1 => $lang['yesa']), value => pluginGetVariable('autokeys', 'activate_add')));
 array_push($cfg, array('name' => 'activate_edit', 'title' => 'Автоматическое пересоздание при изменении новости<br/><small><b>Да</b> - ключевые слова будут автоматически пересоздаваться при изменении новости', 'type' => 'select', values => array(0 => $lang['noa'], 1 => $lang['yesa']), value => pluginGetVariable('autokeys', 'activate_edit')));

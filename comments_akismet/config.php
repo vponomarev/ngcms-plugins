@@ -1,5 +1,5 @@
 <?php
-plugins_load_config();
+pluginsLoadConfig();
 $cfg = array();
 $cfgX = array();
 array_push($cfg, array('descr' => 'Плагин позволяет использовать сервис Akismet для фильтрации спама в комментариях'));

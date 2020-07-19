@@ -17,7 +17,7 @@
 */
 if (!defined('NGCMS'))
 	exit('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('simple_title_pro', 'config', '', '', '#');
 switch ($_REQUEST['action']) {
 	case 'list_cat':

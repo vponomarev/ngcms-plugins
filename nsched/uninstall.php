@@ -9,9 +9,9 @@
 // #====================================================================================#
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('voting', 'install');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('nsched', 'install');
 $db_update = array(
 	array(

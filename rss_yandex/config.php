@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 $xfEnclosureValues = array('' => '');
 //
 // IF plugin 'XFIELDS' is enabled - load it to prepare `enclosure` integration

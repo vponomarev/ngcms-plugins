@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 $count = extra_get_param($plugin, 'count');
 if ((intval($count) < 1) || (intval($count) > 20))
 	$count = 3;
