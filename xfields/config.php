@@ -57,6 +57,7 @@ function showSectionList()
     $output = '';
     //$output .= "<pre>".var_export($xf[$sectionID], true)."</pre>";
     $tVars = [
+        'sectionID' => $sectionID,
         'section_name' => $lang['xfconfig']['section.'.$sectionID],
     ];
     // Prepare data
