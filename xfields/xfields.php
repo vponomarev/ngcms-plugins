@@ -305,11 +305,11 @@ class XFieldsNewsFilter extends NewsFilter
         }
         $tVars = [
             //	'entries'	=>	$xfEntries,
-            'xfGC'       => json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
-            'xfCat'      => json_encode(arrayCharsetConvert(0, $xfCategories)),
-            'xfList'     => json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
-            'xtableConf' => json_encode(arrayCharsetConvert(0, $tclist)),
-            'xtableVal'  => isset($_POST['xftable']) ? $_POST['xftable'] : json_encode(arrayCharsetConvert(0, $tlist)),
+            'xfGC'       => json_encode($xf['grp.news']),
+            'xfCat'      => json_encode($xfCategories),
+            'xfList'     => json_encode(array_keys($xf['news'])),
+            'xtableConf' => json_encode($tclist),
+            'xtableVal'  => isset($_POST['xftable']) ? $_POST['xftable'] : json_encode($tlist),
             'xtableHdr'  => $thlist,
             'xtablecnt'  => count($thlist),
             'flags'      => [
@@ -418,7 +418,7 @@ class XFieldsNewsFilter extends NewsFilter
         }
         // Prepare table data [if needed]
         if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode(iconv('Windows-1251', 'UTF-8', $_POST['xftable']), true))) {
-            $xft = arrayCharsetConvert(1, $xft);
+
             //print "<pre>[".(is_array($xft)?'ARR':'NOARR')."]INCOMING ARRAY: ".var_export($xft, true)."</pre>";
             $recList = [];
             $queryList = [];
@@ -632,11 +632,11 @@ class XFieldsNewsFilter extends NewsFilter
         // Prepare personal [group] variables
         $tVars = [
             //	'entries'		=>	$xfEntries[0],
-            'xfGC'       => json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
-            'xfCat'      => json_encode(arrayCharsetConvert(0, $xfCategories)),
-            'xfList'     => json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
-            'xtableConf' => json_encode(arrayCharsetConvert(0, $tclist)),
-            'xtableVal'  => json_encode(arrayCharsetConvert(0, $tlist)),
+            'xfGC'       => json_encode($xf['grp.news']),
+            'xfCat'      => json_encode($xfCategories),
+            'xfList'     => json_encode(array_keys($xf['news'])),
+            'xtableConf' => json_encode($tclist),
+            'xtableVal'  => json_encode($tlist),
             'xtableHdr'  => $thlist,
             'xtablecnt'  => count($thlist),
             'flags'      => [
@@ -733,7 +733,7 @@ class XFieldsNewsFilter extends NewsFilter
         // Prepare table data [if needed]
         $haveTable = false;
         if (isset($xf['tdata']) && is_array($xf['tdata']) && isset($_POST['xftable']) && is_array($xft = json_decode(iconv('Windows-1251', 'UTF-8', $_POST['xftable']), true))) {
-            $xft = arrayCharsetConvert(1, $xft);
+
             //print "<pre>[".(is_array($xft)?'ARR':'NOARR')."]INCOMING ARRAY: ".var_export($xft, true)."</pre>";
             $recList = [];
             $queryList = [];
