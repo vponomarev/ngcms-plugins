@@ -12,14 +12,13 @@
 	</li>
 </ul>
 
-<div class="tab-content">
-	<div id="config-pane" class="tab-pane fade show active">
+<form id="feedback_config" method="post" action="">
+	<input type="hidden" name="mod" value="extra-config" />
+	<input type="hidden" name="plugin" value="feedback" />
+	<input type="hidden" name="action" value="saveform" />
 
-		<form id="feedback_config" method="post" action="">
-			<input type="hidden" name="mod" value="extra-config" />
-			<input type="hidden" name="plugin" value="feedback" />
-			<input type="hidden" name="action" value="saveform" />
-
+	<div class="tab-content">
+		<div id="config-pane" class="tab-pane fade show active">
 			<div class="card">
 				<div class="card-header">
 					<div class="custom-control custom-switch py-2 mr-auto">
@@ -172,113 +171,112 @@
 				<div class="card-footer text-center">
 					<button type="submit" form="feedback_config" class="btn btn-outline-success">{{ lang['feedback:button_save'] }}</button>
 				</div>
-
-			</div>
-		</form>
-	</div>
-
-	<div id="emails-pane" class="tab-pane fade">
-		<div class="card">
-			<div class="card-header">
-				<div class="row">
-					<div class="col text-right">
-						<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#legendModal">
-							<i class="fa fa-question"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-
-			<table class="table table-sm mb-0">
-				<thead>
-					<tr>
-						<th width="20%">{{ lang['feedback:emails_group_id'] }}</th>
-						<th>{{ lang['feedback:emails_group_name'] }}</th>
-						<th>{{ lang['feedback:emails_group_list'] }}</th>
-					</tr>
-				</thead>
-				<tbody>
-				{% for egroup in egroups %}
-					<tr>
-						<td><input type="number" name="elist[{{ loop.index }}][0]" value="{{ egroup.num }}" class="form-control" disabled /></td>
-						<td><input type="text" name="elist[{{ loop.index }}][1]" value="{{ egroup.name }}" class="form-control" /></td>
-						<td><input type="text" name="elist[{{ loop.index }}][2]" value="{{ egroup.value }}" class="form-control" /></td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-
-			<div class="card-footer text-center">
-				<button type="submit" form="feedback_config" class="btn btn-outline-success">{{ lang['feedback:button_save'] }}</button>
 			</div>
 		</div>
-	</div>
 
-	<div id="fields-pane" class="tab-pane fade">
-		{% if not(entries|length) %}
-			<div class="alert alert-info">
-				<h5>{{ lang['msgi_info'] }}</h5>
-				<p>{{ lang['feedback:no_fields'] }}</p>
-				<hr>
-				<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}" class="btn btn-outline-success">{{ lang['feedback:add_new_field'] }}</a>
-			</div>
-		{%else%}
+		<div id="emails-pane" class="tab-pane fade">
 			<div class="card">
-				<div class="card-header text-md-right">
-					<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}" class="btn btn-outline-success">{{ lang['feedback:add_new_field'] }}</a>
+				<div class="card-header">
+					<div class="row">
+						<div class="col text-right">
+							<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#legendModal">
+								<i class="fa fa-question"></i>
+							</button>
+						</div>
+					</div>
 				</div>
 
 				<table class="table table-sm mb-0">
 					<thead>
 						<tr>
-							<th>{{ lang['feedback:field_id'] }}</th>
-							<th>{{ lang['feedback:field_title'] }}</th>
-							<th>{{ lang['feedback:field_type'] }}</th>
-							<th>{{ lang['feedback:field_autofill'] }}</th>
-							<th>{{ lang['feedback:field_block'] }}</th>
-							<th>{{ lang['feedback:actions'] }}</th>
+							<th width="20%">{{ lang['feedback:emails_group_id'] }}</th>
+							<th>{{ lang['feedback:emails_group_name'] }}</th>
+							<th>{{ lang['feedback:emails_group_list'] }}</th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for entry in entries %}
-							<tr>
-								<td>
-									<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}&row={{ entry.name }}">{{ entry.name }}</a>
-								</td>
-								<td>{{ entry.title }}</td>
-								<td>{{ lang['feedback:field_type_' ~ entry.type] }}</td>
-								<td>{{ lang['feedback:field_autofill_' ~ entry.auto] }}</td>
-								<td>{{ lang['feedback:field_block_' ~ entry.block] }}</td>
-								<td class="text-right" nowrap>
-									<div class="btn-group btn-group-sm" role="group">
-										<a href="?mod=extra-config&plugin=feedback&action=update&subaction=up&id={{ formID }}&name={{ entry.name }}" class="btn btn-outline-primary">
-											<i class="fa fa-arrow-up"></i>
-										</a>
-										<a href="?mod=extra-config&plugin=feedback&action=update&subaction=down&id={{ formID }}&name={{ entry.name }}" class="btn btn-outline-primary">
-											<i class="fa fa-arrow-down"></i>
-										</a>
-									</div>
-
-									<div class="btn-group btn-group-sm" role="group">
-										<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}&row={{ entry.name }}" class="btn btn-outline-primary">
-											<i class="fa fa-pencil"></i>
-										</a>
-									</div>
-
-									<div class="btn-group btn-group-sm" role="group">
-										<a href="?mod=extra-config&plugin=feedback&action=update&subaction=del&id={{ formID }}&name={{ entry.name }}" onclick="return confirm('{{ lang['feedback:msg_you_sure'] }}');" class="btn btn-outline-danger">
-											<i class="fa fa-trash"></i>
-										</a>
-									</div>
-								</td>
-							</tr>
-						{% endfor %}
+					{% for egroup in egroups %}
+						<tr>
+							<td><input type="number" name="elist[{{ loop.index }}][0]" value="{{ egroup.num }}" class="form-control" disabled /></td>
+							<td><input type="text" name="elist[{{ loop.index }}][1]" value="{{ egroup.name }}" class="form-control" /></td>
+							<td><input type="text" name="elist[{{ loop.index }}][2]" value="{{ egroup.value }}" class="form-control" /></td>
+						</tr>
+					{% endfor %}
 					</tbody>
 				</table>
+
+				<div class="card-footer text-center">
+					<button type="submit" form="feedback_config" class="btn btn-outline-success">{{ lang['feedback:button_save'] }}</button>
+				</div>
 			</div>
-		{% endif %}
+		</div>
+
+		<div id="fields-pane" class="tab-pane fade">
+			{% if not(entries|length) %}
+				<div class="alert alert-info">
+					<h5>{{ lang['msgi_info'] }}</h5>
+					<p>{{ lang['feedback:no_fields'] }}</p>
+					<hr>
+					<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}" class="btn btn-outline-success">{{ lang['feedback:add_new_field'] }}</a>
+				</div>
+			{%else%}
+				<div class="card">
+					<div class="card-header text-md-right">
+						<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}" class="btn btn-outline-success">{{ lang['feedback:add_new_field'] }}</a>
+					</div>
+
+					<table class="table table-sm mb-0">
+						<thead>
+							<tr>
+								<th>{{ lang['feedback:field_id'] }}</th>
+								<th>{{ lang['feedback:field_title'] }}</th>
+								<th>{{ lang['feedback:field_type'] }}</th>
+								<th>{{ lang['feedback:field_autofill'] }}</th>
+								<th>{{ lang['feedback:field_block'] }}</th>
+								<th>{{ lang['feedback:actions'] }}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for entry in entries %}
+								<tr>
+									<td>
+										<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}&row={{ entry.name }}">{{ entry.name }}</a>
+									</td>
+									<td>{{ entry.title }}</td>
+									<td>{{ lang['feedback:field_type_' ~ entry.type] }}</td>
+									<td>{{ lang['feedback:field_autofill_' ~ entry.auto] }}</td>
+									<td>{{ lang['feedback:field_block_' ~ entry.block] }}</td>
+									<td class="text-right" nowrap>
+										<div class="btn-group btn-group-sm" role="group">
+											<a href="?mod=extra-config&plugin=feedback&action=update&subaction=up&id={{ formID }}&name={{ entry.name }}" class="btn btn-outline-primary">
+												<i class="fa fa-arrow-up"></i>
+											</a>
+											<a href="?mod=extra-config&plugin=feedback&action=update&subaction=down&id={{ formID }}&name={{ entry.name }}" class="btn btn-outline-primary">
+												<i class="fa fa-arrow-down"></i>
+											</a>
+										</div>
+
+										<div class="btn-group btn-group-sm" role="group">
+											<a href="?mod=extra-config&plugin=feedback&action=row&form_id={{ formID }}&row={{ entry.name }}" class="btn btn-outline-primary">
+												<i class="fa fa-pencil"></i>
+											</a>
+										</div>
+
+										<div class="btn-group btn-group-sm" role="group">
+											<a href="?mod=extra-config&plugin=feedback&action=update&subaction=del&id={{ formID }}&name={{ entry.name }}" onclick="return confirm('{{ lang['feedback:msg_you_sure'] }}');" class="btn btn-outline-danger">
+												<i class="fa fa-trash"></i>
+											</a>
+										</div>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% endif %}
+		</div>
 	</div>
-</div>
+</form>
 
 <div id="legendModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="legendModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
