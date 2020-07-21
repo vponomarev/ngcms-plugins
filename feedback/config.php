@@ -282,7 +282,7 @@ function showFormRow()
         $xsel = '';
         foreach (['text', 'email', 'date', 'textarea', 'select'] as $ts) {
             $tVars['field'][$ts.'_default'] = ($xRow['type'] == $ts) ? secure_html($xRow['default']) : '';
-            $xsel .= '<option value="'.$ts.'"'.(($xRow['type'] == $ts) ? ' selected' : '').'>'.$lang['feedback:type.'.$ts];
+            $xsel .= '<option value="'.$ts.'"'.(($xRow['type'] == $ts) ? ' selected' : '').'>'.$lang['feedback:field_type_'.$ts];
         }
         $tVars['field']['type']['options'] = $xsel;
         $tVars['field']['select_options'] = implode("\n", $xRow['options']);

@@ -18,7 +18,7 @@ function plugin_feedback_install($action)
 {
     global $lang;
     if ($action != 'autoapply') {
-        loadPluginLang('feedback', 'config', '', '', ':');
+        loadPluginLang('feedback', 'install', '', '', ':');
     }
     // Fill DB_UPDATE configuration scheme
     $db_update = [
@@ -44,7 +44,7 @@ function plugin_feedback_install($action)
     // Apply requested action
     switch ($action) {
         case 'confirm':
-            generate_install_page('feedback', $lang['feedback:text.install']);
+            generate_install_page('feedback', $lang['feedback:description']);
             break;
         case 'autoapply':
         case 'apply':
