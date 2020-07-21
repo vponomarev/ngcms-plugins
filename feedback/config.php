@@ -6,6 +6,7 @@ if (!defined('NGCMS')) {
 }
 // Load langs
 loadPluginLang('feedback', 'config', '', '', ':');
+loadPluginLang('feedback', 'main', '', '', ':');
 // Load library
 include_once root.'/plugins/feedback/lib/common.php';
 // Switch action
