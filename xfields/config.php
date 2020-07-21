@@ -67,9 +67,6 @@ function showSectionList()
             'entries' => $v['entries'],
         ];
     }
-    foreach (['news', 'grp.news', 'users', 'grp.users', 'tdata'] as $cID) {
-        $tVars['bclass'][$cID] = ($cID == $sectionID) ? 'btnActive' : 'btnInactive';
-    }
     $tVars['json']['groups.config'] = json_encode($grpNews);
     $tVars['json']['fields.config'] = json_encode(arrayCharsetConvert(0, $xf['news']));
     $xt = $twig->loadTemplate('plugins/xfields/tpl/groups.tpl');
@@ -122,9 +119,6 @@ function showFieldList()
         'section_name' => $lang['xfconfig']['section.'.$sectionID],
         'sectionID'    => $sectionID,
     ];
-    foreach (['news', 'grp.news', 'users', 'grp.users', 'tdata'] as $cID) {
-        $tVars['bclass'][$cID] = ($cID == $sectionID) ? 'btnActive' : 'btnInactive';
-    }
     $xt = $twig->loadTemplate('plugins/xfields/tpl/config.tpl');
     echo $xt->render($tVars);
 }
