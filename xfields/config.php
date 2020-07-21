@@ -68,8 +68,7 @@ function showSectionList()
             'entries' => $v['entries'],
         ];
     }
-    $tVars['json']['groups.config'] = json_encode($grpNews);
-    $tVars['json']['fields.config'] = json_encode(arrayCharsetConvert(0, $xf['news']));
+
     $xt = $twig->loadTemplate('plugins/xfields/tpl/groups.tpl');
     echo $xt->render($tVars);
 }
