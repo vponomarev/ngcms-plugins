@@ -59,11 +59,13 @@ function showSectionList()
     $tVars = [
         'sectionID' => $sectionID,
         'section_name' => $lang['xfconfig']['section.'.$sectionID],
+		'xfields' => $xf['news'],
+        'groups' => [],
     ];
     // Prepare data
-    $grpNews = [];
+    $groups = [];
     foreach ($xf['grp.news'] as $k => $v) {
-        $grpNews[$k] = [
+        $tVars['groups'][$k] = [
             'title'   => $v['title'],
             'entries' => $v['entries'],
         ];
@@ -115,10 +117,11 @@ function showFieldList()
         $output = $lang['xfconfig']['nof'];
     }
     $tVars = [
-        'entries'      => $xEntries,
+        'xfields'      => $xEntries,
         'section_name' => $lang['xfconfig']['section.'.$sectionID],
         'sectionID'    => $sectionID,
     ];
+
     $xt = $twig->loadTemplate('plugins/xfields/tpl/config.tpl');
     echo $xt->render($tVars);
 }
@@ -484,7 +487,6 @@ function doAddEdit()
                     $ftype = 'char('.intval($DB['new']['db.len']).')';
                     break;
                 }
-                // no break
             case 'text':
                 $ftype = 'text';
                 break;
