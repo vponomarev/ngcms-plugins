@@ -280,7 +280,7 @@ function showFormRow()
             $tVars['field']['email_template']['value'] = '';
         }
         $xsel = '';
-        foreach (['text', 'email', 'textarea', 'select', 'date'] as $ts) {
+        foreach (['text', 'email', 'date', 'textarea', 'select'] as $ts) {
             $tVars['field'][$ts.'_default'] = ($xRow['type'] == $ts) ? secure_html($xRow['default']) : '';
             $xsel .= '<option value="'.$ts.'"'.(($xRow['type'] == $ts) ? ' selected' : '').'>'.$lang['feedback:type.'.$ts];
         }
