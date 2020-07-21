@@ -1,7 +1,6 @@
 <input type="hidden" id="xftable" name="xftable" value=""/>
 
-<script type="text/javascript" language="javascript">
-	<!--
+<script type="text/javascript">
 	// XFields configuration profile mapping
 	var xfGroupConfig = {{ xfGC }};
 	var xfCategories = {{ xfCat }};
@@ -111,7 +110,7 @@
 	// Update visibility of XFields fields
 	function xf_update_visibility(cid) {
 		// Show only fields for this category profile
-		if ((xfCategories[cid] != '') && (xfGroupConfig[xfCategories[cid]])) {
+		if (cid > 0 && (xfCategories[cid] != '') && (xfGroupConfig[xfCategories[cid]])) {
 			var xfGrp = xfGroupConfig[xfCategories[cid]];
 			$("#xf_profile").text("[ " + xfCategories[cid] + " :: " + xfGroupConfig[xfCategories[cid]]['title'] + " ]");
 		} else {
@@ -125,8 +124,8 @@
 			//alert('check field: '+xf);
 
 			// Show only fields for this category profile
-			if ((xfCategories[cid] != '') && (xfGroupConfig[xfCategories[cid]])) {
-				if (in_array(xf, xfGroupConfig[xfCategories[cid]]['entries'])) {
+			if (cid > 0 && (xfCategories[cid] != '') && (xfGroupConfig[xfCategories[cid]])) {
+				if (xfGroupConfig[xfCategories[cid]]['entries'].includes(xf)) {
 					//alert('< in_array');
 					$("#xfl_" + xf).show();
 				} else {
@@ -140,22 +139,14 @@
 
 	// Manage fields after document is loaded
 	$(document).ready(function () {
-		// Get current category
-		var currentCategory = $("#catmenu").val();
-
-		// decide groupName
-		xf_update_visibility(currentCategory);
-
 		// Catch change of #catmenu selector
 		$("#catmenu").change(function () {
-			//alert('Value changed: '+this.value);
 			xf_update_visibility(this.value);
-		});
+		})
+		.trigger('change');
 	});
 
 	$("#postForm").submit(function () {
 		return tblSaveData();
 	});
-
-	-->
 </script>
