@@ -8,7 +8,7 @@ if (!defined('NGCMS')) {
 // Configuration file for plugin
 //
 pluginsLoadConfig();
-loadPluginLang('feedback', 'config', '', '', ':');
+loadPluginLang('feedback', 'deinstall', '', '', ':');
 $db_update = [
     [
         'table'  => 'feedback',
@@ -20,5 +20,5 @@ if ($_REQUEST['action'] == 'commit') {
         plugin_mark_deinstalled($plugin);
     }
 } else {
-    generate_install_page($plugin, $lang['feedback:text.deinstall'], 'deinstall');
+    generate_install_page($plugin, $lang['feedback:description'], 'deinstall');
 }
