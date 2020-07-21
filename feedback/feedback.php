@@ -236,7 +236,7 @@ function plugin_feedback_showScreen($mode = 0, $errorText = '')
     // Prepare hidden fields
     $hF = '';
     foreach ($hiddenFields as $k => $v) {
-        $hF .= '<input type="hidden" name="'.$k.'" value="'.htmlspecialchars($v, ENT_COMPAT | ENT_HTML401, 'cp1251').'"/>'."\n";
+        $hF .= '<input type="hidden" name="'.$k.'" value="'.secure_html($v).'"/>'."\n";
     }
     $tVars['hidden_fields'] = $hF;
     // Process filters (if any)
