@@ -34,7 +34,7 @@ function xfields_rpc_group_modify($params)
             xf_configSave($xf);
 
             // Notify about changes
-            return ['status' => 1, 'errorCode' => 0, 'data' => 'New group was created', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
+            return ['status' => 1, 'errorCode' => 0, 'errorText' => 'New group was created', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
         case 'grpEdit':
             $grpId = $params['id'];
             $grpName = $params['name'];
@@ -47,7 +47,7 @@ function xfields_rpc_group_modify($params)
             xf_configSave($xf);
 
             // Notify about changes
-            return ['status' => 1, 'errorCode' => 0, 'data' => 'Group was changed', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
+            return ['status' => 1, 'errorCode' => 0, 'errorText' => 'Group was changed', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
         case 'grpDel':
             $grpId = $params['id'];
             // Check if group exists
@@ -58,7 +58,7 @@ function xfields_rpc_group_modify($params)
             xf_configSave($xf);
 
             // Notify about changes
-            return ['status' => 1, 'errorCode' => 0, 'data' => 'Group was deleted', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
+            return ['status' => 1, 'errorCode' => 0, 'errorText' => 'Group was deleted', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
         case 'fldAdd':
             $grpId = $params['id'];
             $fldId = $params['field'];
@@ -78,7 +78,7 @@ function xfields_rpc_group_modify($params)
             xf_configSave($xf);
 
             // Notify about changes
-            return ['status' => 1, 'errorCode' => 0, 'data' => 'Field was added into group', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
+            return ['status' => 1, 'errorCode' => 0, 'errorText' => 'Field was added into group', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
         case 'fldDel':
         case 'fldUp':
         case 'fldDown':
@@ -110,15 +110,15 @@ function xfields_rpc_group_modify($params)
             xf_configSave($xf);
 
             // Notify about changes
-            return ['status' => 1, 'errorCode' => 0, 'data' => 'Field was deleted/moved up/moved down', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
+            return ['status' => 1, 'errorCode' => 0, 'errorText' => 'Field was deleted/moved up/moved down', 'config' => arrayCharsetConvert(0, $xf['grp.news'])];
     }
 
-    return ['status' => 1, 'errorCode' => 0, 'data' => 'OK, '.var_export($params, true)];
+    return ['status' => 1, 'errorCode' => 0, 'errorText' => 'OK, '.var_export($params, true)];
 }
 
 function xfields_rpc_demo($params)
 {
-    return ['status' => 1, 'errorCode' => 0, 'data' => var_export($params, true)];
+    return ['status' => 1, 'errorCode' => 0, 'errorText' => var_export($params, true)];
 }
 
 rpcRegisterFunction('plugin.xfields.demo', 'xfields_rpc_demo');
