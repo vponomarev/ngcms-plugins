@@ -1,359 +1,309 @@
-<table class="content" border="0" cellpadding="1" cellspacing="1">
-	<tbody>
-	<tr>
-		<td colspan="2" class="contentHead" width="100%">
-			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="Управление плагинами">Управление
-				плагинами</a> &#8594;
-			<a href="?mod=extra-config&plugin=xfields&section={{ sectionID }}">{{ lang.xfconfig['config_text'] }}
-				xfields</a>
-			&#8594; {% if (not flags.editMode) %}{{ lang.xfconfig['title_add'] }}{% else %}{{ lang.xfconfig['title_edit'] }} ({{ id }}){% endif %}
-		</td>
-	</tr>
-	</tbody>
-</table>
-
-<script language="javascript">
-	function clx(mode) {
-		document.getElementById('type_text').style.display = (mode == 'text') ? 'block' : 'none';
-		document.getElementById('type_textarea').style.display = (mode == 'textarea') ? 'block' : 'none';
-		document.getElementById('type_select').style.display = (mode == 'select') ? 'block' : 'none';
-		document.getElementById('type_multiselect').style.display = (mode == 'multiselect') ? 'block' : 'none';
-		document.getElementById('type_checkbox').style.display = (mode == 'checkbox') ? 'block' : 'none';
-		document.getElementById('type_images').style.display = (mode == 'images') ? 'block' : 'none';
-	}
-	function storageMode(mode) {
-// alert(document.getElementById('storageRow'));
-		if (mode == 0) {
-			document.getElementById('storageRow').className = 'contRow4';
-			document.getElementById('db.type').disabled = true;
-			document.getElementById('db.len').disabled = true;
-		} else {
-			document.getElementById('storageRow').className = 'contRow1';
-			document.getElementById('db.type').disabled = false;
-			document.getElementById('db.len').disabled = false;
-		}
-
-	}
-
-</script>
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ admin_url }}"><i class="fa fa-home"></i></a></li>
+		<li class="breadcrumb-item"><a href="?mod=extras">{{ lang['extras'] }}</a></li>
+		<li class="breadcrumb-item"><a href="?mod=extra-config&plugin=xfields&section={{ sectionID }}">{{ lang.xfconfig['config_text'] }} xfields</a></li>
+		<li class="breadcrumb-item active" aria-current="page">{% if (not flags.editMode) %}{{ lang.xfconfig['title_add'] }}{% else %}{{ lang.xfconfig['title_edit'] }} ({{ id }}){% endif %}</li>
+	</ol>
+</nav>
 
 <div id="edit_yakor"></div>
 
 <form action="?mod=extra-config&plugin=xfields&action=doedit&section={{ sectionID }}" method="post" name="xfieldsform">
-	<input type="hidden" name="mod" value="extra-config">
-	<input type="hidden" name="edit" value="{% if (flags.editMode) %}1{% else %}0{% endif %}">
-	<table border="0" cellspacing="1" cellpadding="1" class="content">
-		<tr>
-			<td colspan="2" class="contentHead" width="100%">
-				<img src="{{ skins_url }}/images/nav.gif" hspace="8">{% if (flags.editMode) %}{{ lang.xfconfig['title_edit'] }}{% else %}{{ lang.xfconfig['title_add'] }}{% endif %}
-			</td>
-		</tr>
-		<tr class="contRow1">
-			<td width="50%">{{ lang.xfconfig['disabled'] }}</td>
-			<td width="47%">
-				<input type="checkbox" name="disabled" value="1" {% if (flags.disabled) %}checked="checked"{% endif %}>
-			</td>
-		</tr>
-		{% if (sectionID == 'users') and (type != 'images') %}
-			<tr class="contRow1">
-			<td width="50%">{{ lang.xfconfig['regpage'] }}</td>
-			<td width="47%">
-				<input type="checkbox" name="regpage" value="1" {% if (flags.regpage) %}checked="checked"{% endif %}>
-			</td></tr>{% endif %}
-		<tr class="contRow1">
-			<td width="50%">{{ lang.xfconfig['id'] }}</td>
-			<td width="47%">
-				<input type="text" name="id" value="{{ id }}" size="40" {% if (flags.editMode) %}readonly{% endif %}>{% if (flags.editMode) %} &nbsp; &nbsp; {{ lang.xfconfig['noeditid'] }}{% endif %}
-			</td>
-		</tr>
-		<tr class="contRow1">
-			<td width="50%">{{ lang.xfconfig['title'] }}</td>
-			<td><input type="text" name="title" value="{{ title }}" size="40"/></td>
-		</tr>
-		<tr class="contRow1">
-			<td width="50%">{{ lang.xfconfig['type'] }}</td>
-			<td>
-				<select name="type" size="5" id="xfSelectType" onclick="clx(this.value);" onchange="clx(this.value);"/>{{ type_opts }}</select>
-			</td>
-		</tr>
-	</table>
+	<input type="hidden" name="mod" value="extra-config" />
+	<input type="hidden" name="edit" value="{% if (flags.editMode) %}1{% else %}0{% endif %}" />
 
-	<!-- FIELD TYPE: TEXT -->
-	<div id="type_text">
-		<table border="0" cellspacing="1" cellpadding="1" class="content">
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_texts'] }}</td>
-				<td width="45%">{{ lang.xfconfig['html_support'] }}</td>
-				<td><input type="checkbox" name="text_html_support" value="1" {{ html_support }}></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_texts'] }}</td>
-				<td width="45%">{{ lang.xfconfig['bb_support'] }}</td>
-				<td><input type="checkbox" name="text_bb_support" value="1" {{ bb_support }}></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_texts'] }}</td>
-				<td width="45%">{{ lang.xfconfig['default'] }}</td>
-				<td><input type="text" name="text_default" value="{{ defaults.text }}" size=40></td>
-			</tr>
+	<div class="card">
+		<div class="card-header text-right">
+			<div class="custom-control custom-switch py-2 mr-auto">
+				<input id="disabled_field" type="checkbox" name="disabled" value="1" class="custom-control-input" {{ flags.disabled ? 'checked' : '' }} />
+				<label for="disabled_field" class="custom-control-label text-danger">{{ lang.xfconfig['disabled'] }}</label>
+			</div>
+		</div>
+
+		<table class="table table-sm">
+			<tbody>
+				<tr>
+					<td width="50%" colspan="2">
+						{{ lang.xfconfig['id'] }}
+					</td>
+					<td width="50%">
+						<div class="input-group">
+							<input type="text" name="id" value="{{ id }}" class="form-control" pattern="[a-z]{1}[a-z0-9]{2,}" {{ flags.editMode ? 'readonly' : '' }} required />
+							<div class="input-group-append">
+								<a class="btn btn-outline-primary" data-toggle="popover" data-placement="left" data-trigger="focus" data-html="true" data-content="{{ lang.xfconfig['id#descr'] }}" tabindex="0">
+									<i class="fa fa-question"></i>
+								</a>
+							</div>
+						</div>
+						{% if (flags.editMode) %}<small class="form-text text-danger">[{{ lang.xfconfig['no_edit_id'] }}]</small>{% endif %}
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" colspan="2">{{ lang.xfconfig['title'] }}</td>
+					<td width="50%">
+						<input type="text" name="title" value="{{ title }}" class="form-control" required />
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" colspan="2">{{ lang.xfconfig['type'] }}</td>
+					<td width="50%">
+						<select id="xfSelectType" name="type" size="6" class="custom-select" oninput="clx(this.value);" required>
+							{{ type_opts }}
+						</select>
+					</td>
+				</tr>
+			</tbody>
+
+			<!-- FIELD TYPE: TEXT -->
+			<tbody id="type_text" class="bg-light">
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['html_support'] }}</td>
+					<td width="50%"><input type="checkbox" name="text_html_support" value="1" {{ html_support }} /></td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['bb_support'] }}</td>
+					<td width="50%"><input type="checkbox" name="text_bb_support" value="1" {{ bb_support }} /></td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['default'] }}</td>
+					<td width="50%"><input type="text" name="text_default" value="{{ defaults.text }}" class="form-control" /></td>
+				</tr>
+			</tbody>
+
+			<!-- FIELD TYPE: TEXTAREA -->
+			<tbody id="type_textarea" class="bg-light">
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['html_support'] }}</td>
+					<td width="50%"><input type="checkbox" name="textarea_html_support" value="1" {{ html_support }} /></td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['bb_support'] }}</td>
+					<td width="50%"><input type="checkbox" name="textarea_bb_support" value="1" {{ bb_support }} /></td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['noformat'] }}</td>
+					<td width="50%"><input type="checkbox" name="textarea_noformat" value="1" {{ noformat }} /></td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['default'] }}</td>
+					<td width="50%"><textarea name="textarea_default" class="form-control" rows="4">{{ defaults.textarea }}</textarea></td>
+				</tr>
+			</tbody>
+
+			<!-- FIELD TYPE: SELECT -->
+			<tbody id="type_select" class="bg-light">
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['tselect_storekeys'] }}</td>
+					<td width="50%"><select name="select_storekeys" class="custom-select">{{ storekeys_opts }}</select></td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['tselect_options'] }}</td>
+					<td width="50%">
+						<table id="xfSelectTable" class="table table-sm">
+							<thead>
+								<tr>
+									<th>Код</th>
+									<th>Значение</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody id="xfSelectRows">
+								{{ sOpts }}
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="3">
+										<button id="xfBtnAdd" type="button" class="btn btn-sm btn-outline-success">+ Добавить строку</button>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['tselect_default'] }}</td>
+					<td width="50%"><input type="text" name="select_default" value="{{ defaults.select }}" class="form-control" /></td>
+				</tr>
+			</tbody>
+
+			<!-- FIELD TYPE: MULTISELECT -->
+			<tbody id="type_multiselect" class="bg-light">
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['tselect_storekeys'] }}</td>
+					<td width="50%"><select name="select_storekeys_multi" class="custom-select">{{ storekeys_opts }}</select></td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['tselect_options'] }}</td>
+					<td width="50%">
+						<table id="xfSelectTable_multi" class="table table-sm">
+							<thead>
+								<tr>
+									<th>Код</th>
+									<th>Значение</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody id="xfSelectRows_multi">
+								{{ m_sOpts }}
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="3">
+										<button id="xfBtnAdd_multi" type="button" class="btn btn-sm btn-outline-success">+ Добавить строку</button>
+									</td>
+								</tr>
+							</tfoot>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['tselect_default'] }}</td>
+					<td width="50%"><input type="text" name="select_default_multi" value="{{ defaults.select }}" class="form-control" /></td>
+				</tr>
+			</tbody>
+
+			<!-- FIELD TYPE: CHECKBOX -->
+			<tbody id="type_checkbox" class="bg-light">
+				<tr>
+					<td colspan="2">{{ lang.xfconfig['default'] }}</td>
+					<td width="50%"><input type="checkbox" name="checkbox_default" value="1" {{ defaults.checkbox }} /></td>
+				</tr>
+			</tbody>
+
+			<!-- FIELD TYPE: IMAGES -->
+			<tbody id="type_images" class="bg-light">
+				<tr>
+					<td colspan="2">Максимальное кол-во изображений для загрузки:</td>
+					<td width="50%"><input type="number" name="images_maxCount" value="{{ images.maxCount }}" class="form-control" /></td>
+				</tr>
+				<tr>
+					<td colspan="2">Добавлять штамп:</td>
+					<td width="50%"><input type="checkbox" name="images_imgStamp" value="1" {{ images.imgStamp }} /></td>
+				</tr>
+				<tr>
+					<td colspan="2">Добавлять тень:</td>
+					<td width="50%"><input type="checkbox" name="images_imgShadow" value="1" {{ images.imgShadow }} /></td>
+				</tr>
+				<tr>
+					<td colspan="2">Уменьшенная копия:</td>
+					<td width="50%">
+						<div class="form-check">
+							<input id="images_imgThumb" type="checkbox" name="images_imgThumb" value="1" class="form-check-input" {{ images.imgThumb }} />
+							{# <label for="images_imgThumb" class="form-check-label">Уменьшенная копия:</label> #}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="pl-5"><label class="col-form-label">Размер (не более), пикселей</label></td>
+					<td width="50%">
+						<div class="input-group">
+							<input type="number" name="images_thumbWidth" value="{{ images.thumbWidth }}" class="form-control" />
+							<div class="input-group-prepend input-group-append">
+								<label class="input-group-text">x</label>
+							</div>
+							<input type="number" name="images_thumbHeight" value="{{ images.thumbHeight }}" class="form-control" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="pl-5">Добавлять штамп:</td>
+					<td width="50%">
+						<input type="checkbox" name="images_thumbStamp" value="1" {{ images.thumbStamp }} />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="pl-5">Добавлять тень:</td>
+					<td width="50%">
+						<input type="checkbox" name="images_thumbShadow" value="1" {{ images.thumbShadow }} />
+					</td>
+				</tr>
+			</tbody>
+			<!-- FIELD TYPE: /CLOSED/ -->
+
+			<tbody>
+				<tr>
+					<td width="50%" colspan="2">Режим сохранения данных:</td>
+					<td width="50%">
+						<select id="storage" name="storage" class="custom-select" oninput="storageMode(this.value);">
+							<option value="0" {{ not(storage) ? 'selected' : '' }}>Единое хранилище</option>
+							<option value="1" {{ storage ? 'selected' : '' }}>Персональное поле в БД</option>
+						</select>
+					</td>
+				</tr>
+				<tr id="storageRow" class="{{ not(storage) ? 'd-none' : '' }}">
+					<td width="50%" colspan="2">Тип поля в БД и его длина:</td>
+					<td width="50%">
+						<div class="input-group">
+							<select id="db.type" name="db_type" class="custom-select">
+								<option value="int" {{ db_type in ['', 'int'] ? 'selected' : '' }}>int - только цифры</option>
+								<option value="decimal" {{ 'decimal' == db_type ? 'selected' : '' }}>decimal - число с фиксированной точкой</option>
+								<option value="char" {{ 'char' == db_type ? 'selected' : '' }}>char - текст с ограничением длины (255)</option>
+								<option value="text" {{ 'text' == db_type ? 'selected' : '' }}>text - текст с ограничением длины (65535)</option>
+								<option value="datetime" {{ 'datetime' == db_type ? 'selected' : '' }}>datetime - дата-время</option>
+							</select>
+							<input id="db.len" type="text" name="db_len" value="{{ db_len }}" maxlength="5" class="form-control" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td width="50%" colspan="2">
+						{{ lang.xfconfig['required'] }}
+						<small class="form-text text-muted">{{ lang.xfconfig['required#descr'] }}</small>
+					</td>
+					<td width="50%">
+						<select name="required" class="custom-select">{{ required_opts }}</select>
+					</td>
+				</tr>
+				{% if (sectionID != 'tdata') %}
+				<tr>
+					<td width="50%" colspan="2">
+						{{ lang.xfconfig['block_location'] }}
+					</td>
+					<td width="50%">
+						<div class="input-group">
+							<input type="number" name="area" value="{{ area }}" class="form-control" />
+							<div class="input-group-append">
+								<a class="btn btn-outline-primary" data-toggle="popover" data-placement="left" data-trigger="focus" data-html="true" data-content="{{ lang.xfconfig['block_location#descr'] }}" tabindex="0">
+									<i class="fa fa-question"></i>
+								</a>
+							</div>
+						</div>
+
+					</td>
+				</tr>
+				{% endif %}
+				{% if (sectionID == 'users') and (type != 'images') %}
+				<tr>
+					<td width="50%" colspan="2"></td>
+					<td width="50%">
+						<div class="custom-control custom-switch py-2 mr-auto">
+							<input id="regpage" type="checkbox" name="regpage" value="1" class="custom-control-input" {{ flags.regpage ? 'checked' : '' }} />
+							<label for="regpage" class="custom-control-label">{{ lang.xfconfig['regpage'] }}</label>
+						</div>
+					</td>
+				</tr>
+				{% endif %}
+			</tbody>
 		</table>
+
+
+		<div class="card-footer text-center">
+			<button id="xfBtnSubmit" type="submit" class="btn btn-outline-success">
+				{% if (flags.editMode) %}{{ lang.xfconfig['edit'] }}{% else %}{{ lang.xfconfig['save'] }}{% endif %}
+			</button>
+		</div>
 	</div>
-
-	<!-- FIELD TYPE: TEXTAREA -->
-	<div id="type_textarea">
-		<table border="0" cellspacing="1" cellpadding="1" class="content">
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_textareas'] }}</td>
-				<td width="45%">{{ lang.xfconfig['html_support'] }}</td>
-				<td><input type="checkbox" name="textarea_html_support" value="1" {{ html_support }}></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_textareas'] }}</td>
-				<td width="45%">{{ lang.xfconfig['bb_support'] }}</td>
-				<td><input type="checkbox" name="textarea_bb_support" value="1" {{ bb_support }}></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_textareas'] }}</td>
-				<td width="45%">{{ lang.xfconfig['noformat'] }}</td>
-				<td><input type="checkbox" name="textarea_noformat" value="1" {{ noformat }}></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_textareas'] }}</td>
-				<td width="45%">{{ lang.xfconfig['default'] }}</td>
-				<td>
-					<textarea name="textarea_default" cols=70 rows=4>{{ defaults.textarea }}</textarea></td>
-			</tr>
-		</table>
-	</div>
-
-	<!-- FIELD TYPE: SELECT -->
-	<div id="type_select">
-		<table border="0" cellspacing="1" cellpadding="1" class="content">
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
-				<td width="45%">{{ lang.xfconfig['tselect_storekeys'] }}</td>
-				<td><select name="select_storekeys">{{ storekeys_opts }}</select></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
-				<td valign="top">{{ lang.xfconfig['tselect_options'] }}</td>
-				<td>
-					<table id="xfSelectTable" width="100%" cellspacing="0" cellpadding="0" border="0" class="content" style="padding: 0px;">
-						<thead>
-						<tr class="contRow1">
-							<td>Код</td>
-							<td>Значение</td>
-							<td>&nbsp;</td>
-						</tr>
-						</thead>
-						<tbody id="xfSelectRows">
-						{{ sOpts }}
-						</tbody>
-						<tfoot>
-						<tr>
-							<td colspan="3">
-								<input type="button" id="xfBtnAdd" style="width: 300px;" value=" + Добавить строку"/>
-							</td>
-						</tr>
-						</tfoot>
-					</table>
-				</td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
-				<td>{{ lang.xfconfig['tselect_default'] }}</td>
-				<td><input type="text" name="select_default" value="{{ defaults.select }}" size=40></td>
-			</tr>
-		</table>
-	</div>
-
-	<!-- FIELD TYPE: MULTISELECT -->
-	<div id="type_multiselect">
-		<table border="0" cellspacing="1" cellpadding="1" class="content">
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
-				<td width="45%">{{ lang.xfconfig['tselect_storekeys'] }}</td>
-				<td><select name="select_storekeys_multi">{{ storekeys_opts }}</select></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
-				<td valign="top">{{ lang.xfconfig['tselect_options'] }}</td>
-				<td>
-					<table id="xfSelectTable_multi" width="100%" cellspacing="0" cellpadding="0" border="0" class="content" style="padding: 0px;">
-						<thead>
-						<tr class="contRow1">
-							<td>Код</td>
-							<td>Значение</td>
-							<td>&nbsp;</td>
-						</tr>
-						</thead>
-						<tbody id="xfSelectRows_multi">
-						{{ m_sOpts }}
-						</tbody>
-						<tfoot>
-						<tr>
-							<td colspan="3">
-								<input type="button" id="xfBtnAdd_multi" style="width: 300px;" value=" + Добавить строку"/>
-							</td>
-						</tr>
-						</tfoot>
-					</table>
-				</td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_selects'] }}</td>
-				<td>{{ lang.xfconfig['tselect_default'] }}</td>
-				<td><input type="text" name="select_default_multi" value="{{ defaults.select }}" size=40></td>
-			</tr>
-		</table>
-	</div>
-
-	<!-- FIELD TYPE: CHECKBOX -->
-	<div id="type_checkbox">
-		<table border="0" cellspacing="1" cellpadding="1" class="content">
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">{{ lang.xfconfig['type_checkboxs'] }}</td>
-				<td width="45%">{{ lang.xfconfig['default'] }}</td>
-				<td><input type="checkbox" name="checkbox_default" value="1" {{ defaults.checkbox }}></td>
-			</tr>
-		</table>
-	</div>
-
-	<!-- FIELD TYPE: IMAGES -->
-	<div id="type_images">
-		<table border="0" cellspacing="1" cellpadding="1" class="content">
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="45%" colspan="2">Максимальное кол-во изображений для загрузки:</td>
-				<td colspan=2"><input type="text" size="3" name="images_maxCount" value="{{ images.maxCount }}"/></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="45%" colspan="2">Добавлять штамп:</td>
-				<td colspan=2"><input type="checkbox" name="images_imgStamp" value="1" {{ images.imgStamp }} /></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="45%" colspan="2">Добавлять тень:</td>
-				<td colspan=2"><input type="checkbox"/ name="images_imgShadow" value="1" {{ images.imgShadow }} /></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="45%" colspan="2">Уменьшенная копия:</td>
-				<td colspan=2"><input type="checkbox" name="images_imgThumb" value="1" {{ images.imgThumb }} /></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="5%">&nbsp;</td>
-				<td width="40%">Не более:</td>
-				<td>&nbsp;</td>
-				<td><input type="text" size="4" name="images_thumbWidth" value="{{ images.thumbWidth }}"/> x
-					<input type="text" size="4" name="images_thumbHeight" value="{{ images.thumbHeight }}"/> пикселов
-				</td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="5%">&nbsp;</td>
-				<td width="40%">Добавлять штамп:</td>
-				<td>&nbsp;</td>
-				<td><input type="checkbox" name="images_thumbStamp" value="1" {{ images.thumbStamp }}/></td>
-			</tr>
-			<tr class="contRow1">
-				<td width="5%" style="background-color: #EAF0F7; border-left: 1px solid #D1DFEF;">изображения</td>
-				<td width="5%">&nbsp;</td>
-				<td width="40%">Добавлять тень:</td>
-				<td>&nbsp;</td>
-				<td><input type="checkbox" name="images_thumbShadow" value="1" {{ images.thumbShadow }}/></td>
-			</tr>
-		</table>
-	</div>
-	<!-- FIELD TYPE: /CLOSED/ -->
-
-	<table border="0" cellspacing="1" cellpadding="1" style="width:100%;" class="contRow3">
-		<tr class="contRow1">
-			<td width="50%">Режим сохранения данных:</td>
-			<td>
-				<select name="storage" id="storage" value="{{ storage }}" onclick="storageMode(this.value);" onchange="storageMode(this.value);"/>
-				<option value="0">Единое хранилище</option>
-				<option value="1">Персональное поле в БД</option>
-				</select></td>
-		</tr>
-		<tr class="contRow4" id="storageRow">
-			<td width="50%">Тип поля в БД:</td>
-			<td>
-				<select name="db_type" value="{{ db_type }}" id="db.type"/>
-				<option value="int">int - только цифры</option>
-				<option value="decimal">decimal - число с фиксированной точкой</option>
-				<option value="char">char - текст с ограничением длины (255)</option>
-				<option value="text">text - текст с ограничением длины (65535)</option>
-				<option value="datetime">datetime - дата-время</option>
-				</select>
-				<input maxlength="5" size="5" type="text" name="db_len" value="{{ db_len }}" id="db.len"/>
-			</td>
-		</tr>
-	</table>
-	<table border="0" cellspacing="1" cellpadding="1" class="content">
-		<tr class="contRow1">
-			<td width="50%">{{ lang.xfconfig['required'] }}</td>
-			<td width="47%"><select name="required">{{ required_opts }}</select></td>
-		</tr>
-		{% if (sectionID != 'tdata') %}
-			<tr class="contRow1">
-			<td width="50%">Блок:<br/>
-				<small>Этот параметр позволяет указать в каком именно месте интерфейса добавления/редактирования новости
-					появится данная переменная.<br/><b>По умолчанию</b> - блок `дополнительно`<br/><b>1</b> - блок
-					`основное содержание`<br/><b>другие (цифровые) значения</b> - для блоков, добавленных в ручном
-					режиме в админ панель
-				</small>
-			</td>
-			<td width="47%"><input type="text" name="area" value="{{ area }}"/></td></tr>{% endif %}
-	</table>
-
-	<table width="100%">
-		<tr>&nbsp;</tr>
-		<tr align="center">
-			<td class="contentEdit" valign="top" width="100%">
-				<input id="xfBtnSubmit" type="submit" class="button" value="{% if (flags.editMode) %}{{ lang.xfconfig['edit'] }}{% else %}{{ lang.xfconfig['save'] }}{% endif %}">
-			</td>
-		</tr>
-	</table>
 </form>
 
 <script type="text/javascript">
-	clx('{{ type }}');
-	document.getElementById('storage').value = '{{ storage }}';
-	document.getElementById('db.type').value = '{{ db_type }}';
-	storageMode(document.getElementById('storage').value);
+	$(document).ready(function() {
+		$('[data-toggle="popover"]').popover();
 
-	var soMaxNum = $('#xfSelectTable >tbody >tr').length + 1;
+		clx('{{ type }}');
 
-	$('#xfSelectTable a').click(function () {
-		if ($('#xfSelectTable >tbody >tr').length > 1) {
-			$(this).parent().parent().remove();
-		} else {
-			$(this).parent().parent().find("input").val('');
-		}
-	});
+		var soMaxNum = $('#xfSelectTable >tbody >tr').length + 1;
 
-	$("#xfBtnSubmit").click(function () {
-		// Check if type == 'select'
-		if ($("#xfBtnType").val() == 'select') {
-			// Prepare list of data
-
-
-		}
-
-	});
-
-	// jQuery - INIT `select` configuration
-	$("#xfBtnAdd").click(function () {
-		var xl = $('#xfSelectTable tbody>tr:last').clone();
-		xl.find("input").val('');
-		xl.find("input").eq(0).attr("name", "so_data[" + soMaxNum + "][0]");
-		xl.find("input").eq(1).attr("name", "so_data[" + soMaxNum + "][1]");
-		soMaxNum++;
-
-		xl.insertAfter('#xfSelectTable tbody>tr:last');
 		$('#xfSelectTable a').click(function () {
 			if ($('#xfSelectTable >tbody >tr').length > 1) {
 				$(this).parent().parent().remove();
@@ -361,27 +311,36 @@
 				$(this).parent().parent().find("input").val('');
 			}
 		});
-	});
+
+		$("#xfBtnSubmit").click(function () {
+			// Check if type == 'select'
+			if ($("#xfBtnType").val() == 'select') {
+				// Prepare list of data
+
+			}
+		});
+
+		// jQuery - INIT `select` configuration
+		$("#xfBtnAdd").click(function () {
+			var xl = $('#xfSelectTable tbody>tr:last').clone();
+			xl.find("input").val('');
+			xl.find("input").eq(0).attr("name", "so_data[" + soMaxNum + "][0]");
+			xl.find("input").eq(1).attr("name", "so_data[" + soMaxNum + "][1]");
+			soMaxNum++;
+
+			xl.insertAfter('#xfSelectTable tbody>tr:last');
+			$('#xfSelectTable a').click(function () {
+				if ($('#xfSelectTable >tbody >tr').length > 1) {
+					$(this).parent().parent().remove();
+				} else {
+					$(this).parent().parent().find("input").val('');
+				}
+			});
+		});
 
 
-	var soMaxNum_multi = $('#xfSelectTable_multi >tbody >tr').length + 1;
+		var soMaxNum_multi = $('#xfSelectTable_multi >tbody >tr').length + 1;
 
-	$('#xfSelectTable_multi a').click(function () {
-		if ($('#xfSelectTable_multi >tbody >tr').length > 1) {
-			$(this).parent().parent().remove();
-		} else {
-			$(this).parent().parent().find("input").val('');
-		}
-	});
-
-	$("#xfBtnAdd_multi").click(function () {
-		var xl = $('#xfSelectTable_multi tbody>tr:last').clone();
-		xl.find("input").val('');
-		xl.find("input").eq(0).attr("name", "mso_data[" + soMaxNum_multi + "][0]");
-		xl.find("input").eq(1).attr("name", "mso_data[" + soMaxNum_multi + "][1]");
-		soMaxNum_multi++;
-
-		xl.insertAfter('#xfSelectTable_multi tbody>tr:last');
 		$('#xfSelectTable_multi a').click(function () {
 			if ($('#xfSelectTable_multi >tbody >tr').length > 1) {
 				$(this).parent().parent().remove();
@@ -389,7 +348,35 @@
 				$(this).parent().parent().find("input").val('');
 			}
 		});
+
+		$("#xfBtnAdd_multi").click(function () {
+			var xl = $('#xfSelectTable_multi tbody>tr:last').clone();
+			xl.find("input").val('');
+			xl.find("input").eq(0).attr("name", "mso_data[" + soMaxNum_multi + "][0]");
+			xl.find("input").eq(1).attr("name", "mso_data[" + soMaxNum_multi + "][1]");
+			soMaxNum_multi++;
+
+			xl.insertAfter('#xfSelectTable_multi tbody>tr:last');
+			$('#xfSelectTable_multi a').click(function () {
+				if ($('#xfSelectTable_multi >tbody >tr').length > 1) {
+					$(this).parent().parent().remove();
+				} else {
+					$(this).parent().parent().find("input").val('');
+				}
+			});
+		});
 	});
 
+	function clx(mode) {
+		$('#type_text').toggle(mode == 'text');
+		$('#type_textarea').toggle(mode == 'textarea');
+		$('#type_select').toggle(mode == 'select');
+		$('#type_multiselect').toggle(mode == 'multiselect');
+		$('#type_checkbox').toggle(mode == 'checkbox');
+		$('#type_images').toggle(mode == 'images');
+	}
 
+	function storageMode(mode) {
+		$('#storageRow').toggleClass('d-none', 0 == mode);
+	}
 </script>
