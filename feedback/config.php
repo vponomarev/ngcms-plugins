@@ -19,7 +19,7 @@ switch ($_REQUEST['action']) {
         saveForm();
         break;
     case 'form':
-        showForm(0);
+        showForm();
         break;
     case 'row':
         showFormRow();
@@ -140,7 +140,7 @@ function showList()
     echo $xt->render($tVars);
 }
 
-function showForm($edMode)
+function showForm(bool $edMode = false)
 {
     global $mysql, $lang, $twig;
     $tVars = [];
