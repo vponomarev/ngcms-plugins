@@ -1,6 +1,6 @@
 {% include 'plugins/feedback/tpl/conf.navi.tpl' %}
 
-<form action="?mod=extra-config&plugin=feedback&action=editrow&form_id={{ formID }}&name={{ fieldName }}" method="post" name="feedbackform">
+<form action="?mod=extra-config&plugin=feedback&action=editrow&form_id={{ formID }}" method="post" name="feedbackform">
 	<input type="hidden" name="edit" value="{{ flags.addField ? '0' : '1' }}" />
 
 	<div class="card">
