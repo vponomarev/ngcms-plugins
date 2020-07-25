@@ -51,9 +51,9 @@
 							<label class="col-sm-4 col-form-label">Идентификатор группы</label>
 							<div class="col-sm-8">
 								<div class="input-group">
-									<input id="current-group-id" type="text" name="group-id" pattern="[a-zA-Z0-9]{2,10}" class="form-control" />
+									<input id="current-group-id" type="text" name="group-id" pattern="[\p{L}\p{M}\p{N}_-]{2,}" class="form-control" />
 									<div class="input-group-append">
-										<a class="btn btn-outline-primary" data-toggle="popover" data-placement="left" data-trigger="focus" data-html="true" data-content="Допустимы только латинские буквы и цифры.<br>Длина должна быть не менее 2 символов." tabindex="0">
+										<a class="btn btn-outline-primary" data-toggle="popover" data-placement="left" data-trigger="focus" data-html="true" data-content="Поле может содержать буквенно-цифровые символы, а также тире и подчеркивания и должно быть длиной от двух символов." tabindex="0">
 											<i class="fa fa-question"></i>
 										</a>
 									</div>
