@@ -106,35 +106,55 @@
 
 	tblLoadData(1);
 
+	/**
+	 * Обновить видимость доп. полей плагина `xfields`.
+	 * Ввиду множества нативных функций, здесь не применялся jQuery.
+	 * @param  {string|int}  category_id  Идентификатор категории.
+	 */
+	function xf_update_visibility(category_id) {
+	    // Работаем только с числовыми значениями.
+	    category_id = parseInt(category_id, 10);
 
-	// Update visibility of XFields fields
-	function xf_update_visibility(cid) {
-		// Show only fields for this category profile
-		if (cid > 0 && (xfCategories[cid] != '') && (xfGroupConfig[xfCategories[cid]])) {
-			var xfGrp = xfGroupConfig[xfCategories[cid]];
-			$("#xf_profile").text("[ " + xfCategories[cid] + " :: " + xfGroupConfig[xfCategories[cid]]['title'] + " ]");
-		} else {
-			$("#xf_profile").text("");
-		}
+	    // Регулярное выражение для идентификаторов DOM-элеметов, по которому будем их искать.
+	    const finderRegex = /xfl_(.*)/;
 
+	    // Если не передан идентификатор категории,
+	    // либо не существует группы доп. полей,
+	    // либо для указанной категории не задана группа доп. полей,
+	    // то отображаем по умолчанию весь список.
+	    const isDefaultVisible = !category_id || !xfCategories[category_id] || !xfGroupConfig[xfCategories[category_id]];
 
-		//alert('XF update fieldList :: cat: '+cid+'; profile: '+xfCategories[cid]+'; list: '+xfGroupConfig[xfCategories[cid]]['entries']);
-		for (var xfid in xfList) {
-			var xf = xfList[xfid];
-			//alert('check field: '+xf);
+	    // Эталонный список по которому будет производиться сортировка отображаемых доп. полей.
+	    let compareList = xfList;
 
-			// Show only fields for this category profile
-			if (cid > 0 && (xfCategories[cid] != '') && (xfGroupConfig[xfCategories[cid]])) {
-				if (xfGroupConfig[xfCategories[cid]]['entries'].includes(xf)) {
-					//alert('< in_array');
-					$("#xfl_" + xf).show();
-				} else {
-					$("#xfl_" + xf).hide();
-				}
-			} else {
-				$("#xfl_" + xf).show();
-			}
-		}
+	    if (isDefaultVisible) {
+	        // Убираем название группы доп. полей.
+	        document.querySelector('#xf_profile').textContent = '';
+	    } else {
+	        // Выбираем группу доп. полей для текущей категории.
+	        const group = xfGroupConfig[xfCategories[category_id]];
+
+	        // Изменяем подпись, отображающую название группы доп. полей.
+	        document.querySelector("#xf_profile").textContent = '[ ' + xfCategories[category_id] + ' :: ' + group['title'] + ' ]';
+
+	        // Меняем эталонный список.
+	        compareList = group['entries']
+	    }
+
+	    // Ищем все DOM-элементы с доп. полями.
+	    const [...fields] = document.querySelectorAll('[id*=xfl_]');
+
+	    // Сортируем DOM-элементы в необходимом порядке.
+	    fields.sort(function(a, b) {
+	        return compareList.indexOf(finderRegex.exec(a.id).pop()) - compareList.indexOf(finderRegex.exec(b.id).pop());
+	    });
+
+	    // Перебираем DOM-элементы.
+	    fields.map(function(element, index) {
+	        element.parentNode.appendChild(element);
+
+	        element.classList.toggle('d-none', !compareList.includes(finderRegex.exec(element.id).pop()));
+	    });
 	}
 
 	// Manage fields after document is loaded
