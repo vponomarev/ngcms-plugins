@@ -21,7 +21,7 @@ function xfields_rpc_group_modify($params)
             $grpId = $params['id'];
             $grpName = $params['name'];
             // Check for correct name
-            if (!preg_match('#^[a-zA-Z0-9]{2,10}$#', $grpId, $null)) {
+            if (!preg_match('#^[a-zA-Z0-9_]{2,}$#', $grpId, $null)) {
                 return ['status' => 0, 'errorCode' => 3, 'errorText' => 'Wrong GroupID, id should contain only from [a-z, 0-9] and length between 2-10 chars'];
             }
             // Check for duplicates
