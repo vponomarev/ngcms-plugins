@@ -2,7 +2,7 @@
 if (!defined('NGCMS')) {
 	exit('HAL');
 }
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('faq', 'config', '', '', '#');
 switch ($_REQUEST['action']) {
 	case 'list_faq':
@@ -30,7 +30,7 @@ function show_add_faq() {
 		$answer = $_REQUEST['answer'];
 		$active = 1;
 		if (empty($question) || empty($answer)) {
-			$error_text[] = 'Âû çàïîëíèëè íå âñå îáÿçàòåëüíûå ïîëÿ';
+			$error_text[] = 'Ğ’Ñ‹ Ğ·Ğ°Ğ¿Ğ¾Ğ»Ğ½Ğ¸Ğ»Ğ¸ Ğ½Ğµ Ğ²ÑĞµ Ğ¾Ğ±ÑĞ·Ğ°Ñ‚ĞµĞ»ÑŒĞ½Ñ‹Ğµ Ğ¿Ğ¾Ğ»Ñ';
 		}
 		if (empty($error_text)) {
 			$mysql->query('INSERT INTO ' . prefix . '_faq (question, answer, active) 
@@ -79,7 +79,7 @@ function show_edit_faq() {
 			$question = $_REQUEST['question'];
 			$answer = $_REQUEST['answer'];
 			if (empty($question) || empty($answer)) {
-				$error_text[] = 'Âû çàïîëíèëè íå âñå îáÿçàòåëüíûå ïîëÿ';
+				$error_text[] = 'Ğ’Ñ‹ Ğ·Ğ°Ğ¿Ğ¾Ğ»Ğ½Ğ¸Ğ»Ğ¸ Ğ½Ğµ Ğ²ÑĞµ Ğ¾Ğ±ÑĞ·Ğ°Ñ‚ĞµĞ»ÑŒĞ½Ñ‹Ğµ Ğ¿Ğ¾Ğ»Ñ';
 			}
 			if (empty($error_text)) {
 				$mysql->query('UPDATE ' . prefix . '_faq SET 
@@ -108,7 +108,7 @@ function show_edit_faq() {
 			'error'     => $error_input,
 		);
 	} else {
-		msg(array("type" => "error", "text" => "Íå íàéäåí id"));
+		msg(array("type" => "error", "text" => "ĞĞµ Ğ½Ğ°Ğ¹Ğ´ĞµĞ½ id"));
 	}
 	$tVars = array(
 		'skins_url' => skins_url,
@@ -132,7 +132,7 @@ function modify() {
 	$selected_faq = $_REQUEST['selected_faq'];
 	$subaction = $_REQUEST['subaction'];
 	if (empty($selected_faq)) {
-		return msg(array("type" => "error", "text" => "Îøèáêà, âû íå âûáğàëè çàïèñè"));
+		return msg(array("type" => "error", "text" => "ĞÑˆĞ¸Ğ±ĞºĞ°, Ğ²Ñ‹ Ğ½Ğµ Ğ²Ñ‹Ğ±Ñ€Ğ°Ğ»Ğ¸ Ğ·Ğ°Ğ¿Ğ¸ÑĞ¸"));
 	}
 	switch ($subaction) {
 		case 'mass_approve'      :
@@ -151,11 +151,11 @@ function modify() {
 					set ' . $active . '
 					WHERE id = ' . db_squote($id) . '
 					');
-			$result = 'Çàïèñè Àêòèâèğîâàíû/Äåàêòèâèğîâàíû';
+			$result = 'Ğ—Ğ°Ğ¿Ğ¸ÑĞ¸ ĞĞºÑ‚Ğ¸Ğ²Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ñ‹/Ğ”ĞµĞ°ĞºÑ‚Ğ¸Ğ²Ğ¸Ñ€Ğ¾Ğ²Ğ°Ğ½Ñ‹';
 		}
 		if (isset($del)) {
 			$mysql->query('delete from ' . prefix . '_faq where id = ' . db_squote($id));
-			$result = 'Çàïèñè óäàëåíû';
+			$result = 'Ğ—Ğ°Ğ¿Ğ¸ÑĞ¸ ÑƒĞ´Ğ°Ğ»ĞµĞ½Ñ‹';
 		}
 	}
 	msg(array("type" => "info", "info" => $result));

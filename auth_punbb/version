@@ -10,9 +10,9 @@ Install: install.php
 File: auth_punbb.php
 Config: config.php
 Type: auth
-Description: авторизация с использованием БД форума punBB
+Description: Р°РІС‚РѕСЂРёР·Р°С†РёСЏ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј Р‘Р” С„РѕСЂСѓРјР° punBB
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
-Title: Авторизация через форум punBB
+Title: РђРІС‚РѕСЂРёР·Р°С†РёСЏ С‡РµСЂРµР· С„РѕСЂСѓРј punBB
 Preinstall: no
-Information: Авторизация через БД форума punBB [адаптирована для версии 1.2.15]
+Information: РђРІС‚РѕСЂРёР·Р°С†РёСЏ С‡РµСЂРµР· Р‘Р” С„РѕСЂСѓРјР° punBB [Р°РґР°РїС‚РёСЂРѕРІР°РЅР° РґР»СЏ РІРµСЂСЃРёРё 1.2.15]

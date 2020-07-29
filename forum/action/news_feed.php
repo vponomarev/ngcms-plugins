@@ -8,17 +8,17 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
 $tpath = locatePluginTemplates(array('news_feed'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum', 'localskin'));
 if (empty($GROUP_PS['group_news']))
-	return $output = permissions_forum('Доступ в новости запрещен');
+	return $output = permissions_forum('Р”РѕСЃС‚СѓРї РІ РЅРѕРІРѕСЃС‚Рё Р·Р°РїСЂРµС‰РµРЅ');
 $limitCount = intval(pluginGetVariable('forum', 'news_per_page'));
 if (($limitCount < 2) or ($limitCount > 2000)) $limitCount = 2;
 $count = $mysql->result('SELECT COUNT(*) FROM `' . prefix . '_forum_news`');
@@ -28,7 +28,7 @@ else
 	$pageNo = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
 $countPages = ceil($count / $limitCount);
 if ($countPages < $pageNo)
-	return $output = information('Подстраницы не существует', $title = 'Информация');
+	return $output = information('РџРѕРґСЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($pageNo < 1) $pageNo = 1;
 if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 if ($countPages > 1 && $countPages >= $pageNo) {

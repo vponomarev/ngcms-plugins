@@ -10,9 +10,9 @@ File: fin_smscoin.php
 Install: install.php
 Config: config.php
 Type: plugin
-Description: Пополнение счёта :: SMS (smscoin.com)
+Description: РџРѕРїРѕР»РЅРµРЅРёРµ СЃС‡С‘С‚Р° :: SMS (smscoin.com)
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
-Title: Пополнение счёта :: SMS (smscoin.com)
+Title: РџРѕРїРѕР»РЅРµРЅРёРµ СЃС‡С‘С‚Р° :: SMS (smscoin.com)
 Preinstall: no
-Information: Дополнение к плагину <b>finance</b> - позволяет принимать платежи при помощи SMS через сервис smscoin.com
+Information: Р”РѕРїРѕР»РЅРµРЅРёРµ Рє РїР»Р°РіРёРЅСѓ <b>finance</b> - РїРѕР·РІРѕР»СЏРµС‚ РїСЂРёРЅРёРјР°С‚СЊ РїР»Р°С‚РµР¶Рё РїСЂРё РїРѕРјРѕС‰Рё SMS С‡РµСЂРµР· СЃРµСЂРІРёСЃ smscoin.com

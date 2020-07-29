@@ -1,397 +1,380 @@
-<style type="text/css">
-	.xListEntry TD {
-		padding: 5px 0 1px 5px;
-		background-color: #ffffff;
-		border-bottom: 1px solid #f0f0f0;
-		font: normal 11px verdana, tahoma, sans-serif;
-		color: #555;
-		text-align: left;
-	}
-
-	.contNav {
-		padding: 10px 0 10px 10px;
-		background: #eaf0f7 url({{ skins_url }}/images/1px.png) repeat-x;
-		color: #152F59;
-		font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-		font-size: 13px;
-		border-top: 1px solid #dfe5ec;
-		border-bottom: 3px solid #dfe5ec;
-		margin-top: 10px;
-	}
-
-	.btnMenu {
-		font: 14px "Trebuchet MS", Arial, Helvetica, sans-serif normal;
-		float: left;
-		color: #555;
-	}
-
-	.btnInactive {
-		width: 170px;
-		float: left;
-		margin-top: 5px;
-		margin-bottom: 5px;
-		padding: 7px;
-		padding-left: 35px;
-		border: 1px solid #dbe4ed;
-		cursor: pointer;
-		background: #f6f8fb url("{{ skins_url }}/images/no_plug.png") no-repeat;
-		background-position: 8px center;
-	}
-
-	.btnInactive A {
-		font: normal 14px "Trebuchet MS", Arial, Helvetica, sans-serif normal;
-		text-decoration: none;
-	}
-
-	.btnActive {
-		width: 170px;
-		float: left;
-		margin-top: 5px;
-		margin-bottom: 5px;
-		padding: 7px;
-		padding-left: 35px;
-		border: 1px solid #54a1c1;
-		cursor: pointer;
-		background: #FFFFFF url("{{ skins_url }}/images/yes_plug.png") no-repeat;
-		background-position: 8px center;
-	}
-
-	.btnActive A {
-		font: normal 14px "Trebuchet MS", Arial, Helvetica, sans-serif normal;
-		text-decoration: none;
-	}
-
-	.btnSeparator {
-		float: left;
-		width: 10px;
-	}
-
-	.btnDelimiter {
-		float: left;
-		width: 50px;
-	}
-
-	.fldHead {
-		width: 100%;
-		height: 200px;
-		border: #BFBFBF 1px solid;
-		overflow: auto;
-	}
-
-	.fldList TD {
-		border: #CFCFCF 1px solid;
-	}
-
-	.fldList TR:hover {
-		background-color: #EAF0F7;
-		border: #CFCFCF 1px solid;
-	}
-
-	#loading-layer {
-		display: none;
-		width: 180px;
-		height: 40px;
-		background: #fff;
-		text-align: center;
-		border: 1px solid #eeeeef;
-	}
-
-</style>
-<script type="text/javascript" src="{{ scriptLibrary }}/ajax.js"></script>
-<script type="text/javascript" src="{{ scriptLibrary }}/admin.js"></script>
-
-<div id="loading-layer"><img src="{{ skins_url }}/images/loading.gif" alt=""/></div>
-
-<table border="0" cellpadding="0" cellspacing="0" width="100%" class="content">
-	<tbody>
-	<tr>
-		<td colspan="5" class="contentHead" width="100%">
-			<img src="{{ skins_url }}/images/nav.gif" hspace="8"><a href="?mod=extras" title="���������� ���������">����������
-				���������</a> &#8594; <a href="?mod=extra-config&plugin=xfields">xfields</a></td>
-	</tr>
-	</tbody>
-</table>
-
 {% include 'plugins/xfields/tpl/navi.tpl' %}
 
-<table width="100%">
-	<tr>
-		<td colspan="4" width="100%" class="contentHead">
-			<img src="{{ skins_url }}/images/nav.gif" hspace="8">{{ lang.xfconfig['list'] }}: {{ section_name }}</td>
-	</tr>
-	<tr align="left">
-		<td class="contentHead" width="200" colspan="2"><b>������</b></td>
-		<td class="contentHead" colspan="3"><b>����, ����������� � ������ (<span id="grpName">n/a</span>)</b></td>
-	</tr>
-	<tr>
-		<td width="200" colspan="2">
-			<select size=15 style="width:100%; border: #BFBFBF 1px solid;" id="gList" name="gList" onclick="selectGroupList(0);" onkeyup="selectGroupList(0);"></select>
-		</td>
-		<td colspan="3">
-			<div class="fldHead">
-				<table width="100%" class="fldList" id="fList">
-					<tr>
-						<td width="50">date</td>
-						<td>���� ���������� �������</td>
-						<td width="90" align="right" nowrap>(up) (down) (del)</td>
-					</tr>
-					<tr>
-						<td width="50">&nbsp;date</td>
-						<td>���� ���������� �������</td>
-						<td width="90" align="right" nowrap>(up) (down) (del)</td>
-					</tr>
-				</table>
+{% if not(xfields|length) %}
+<div class="alert alert-info">
+	<h5>{{ lang['msgi_info'] }}</h5>
+	<p>{{ lang.xfconfig['no_fields'] }}</p>
+	<hr>
+	{# Группирование полей используется только для новостей, поэтому не используем переменную `sectionID`, а напрямую указываем `section=news` #}
+	<a href="?mod=extra-config&plugin=xfields&action=add&section=news" class="alert-link- btn btn-outline-success">{{ lang.xfconfig['add'] }}</a>
+</div>
+{% else %}
+
+<div class="card">
+	<div class="card-header">
+		<div class="row">
+			<div class="col">
+				<h5 class="font-weight-light py-2 m-0">{{ section_name }}</h5>
 			</div>
-		</td>
-	</tr>
-	<tr class="contRow1">
-		<td width="70" nowrap="nowrap">ID ������:</td>
-		<td><input id="edGrpId" style="width: 200px; height: 15px;">
-			<input type="button" id="btnDelGroup" class="button" value="�������"/></td>
-		<td width="90">�������� ����:</td>
-		<td><select style="width: 200px;  height: 19px; border: #BFBFBF 1px solid;" id="selectFList"></select>
-			<input type="button" id="btnAddField" class="button" value="��������"/></td>
-	</tr>
-	<tr class="contRow1">
-		<td width="70" nowrap="nowrap">��� ������:</td>
-		<td><input id="edGrpName" style="width: 200px; height: 15px;"></td>
-	</tr>
-</table>
+			<div class="col text-right">
+				<button id="btn-create-group" type="button" data-toggle="modal" data-target="#groupEditorModal" data-backdrop="static" class="btn btn-outline-success">Создать группу</button>
+			</div>
+		</div>
+	</div>
 
-<table width="100%">
-	<tr>&nbsp;</tr>
-	<tr align="center">
-		<td class="contentEdit" valign="top" width="100%">
-			<input type="button" id="btnModGroup" class="button" value="��������"/>
-		</td>
-	</tr>
-</table>
-</form>
+	<table id="groups-list" class="table table-sm mb-0">
+		<thead>
+			<tr>
+				<th>Идентификатор группы</th>
+				<th>Имя группы</th>
+				<th>Поля, находящиеся в группе</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr><td colspan="3">Загрузка групп дополнительных полей ...</td></tr>
+		</tbody>
+	</table>
 
+	<!-- Modal -->
+	<div id="groupEditorModal" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 id="groupEditorModalLabel" class="modal-title">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="form-group-editor" action="" method="post">
+					<div class="modal-body">
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">Идентификатор группы</label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<input id="current-group-id" type="text" name="group-id" pattern="[a-zA-Z0-9_]{2,}" class="form-control" />
+									<div class="input-group-append">
+										<a class="btn btn-outline-primary" data-toggle="popover" data-placement="left" data-trigger="focus" data-html="true" data-content="Поле может содержать латинские буквенно-цифровые символы, а также нижнее подчеркивание и должно быть длиной от двух символов." tabindex="0">
+											<i class="fa fa-question"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
 
-<script type="text/javascript" language="javascript">
-	<
-	!--
-	// Connect to configuration data
-	var gConfig = {{ json['groups.config'] }};
-	var fConfig = {{ json['fields.config'] }};
+						<div class="form-group row">
+							<label class="col-sm-4 col-form-label">Имя группы</label>
+							<div class="col-sm-8">
+								<input id="current-group-title" name="group-title" class="form-control" />
+							</div>
+						</div>
 
-	var grpList = document.getElementById('gList');
-	var fldList = document.getElementById('fList');
+						<div id="current-group-fields">
+							<div class="form-group row">
+								<label class="col-sm-4 col-form-label">Добавить поле в группу</label>
+								<div class="col-sm-8">
+									<div class="input-group mb-3">
+										<select id="xfields-list" class="custom-select">
+											{% for field, data in xfields %}
+											<option value="{{ field }}">{{ field }} :: {{ data.title }}</option>
+											{% endfor %}
+										</select>
+										<div class="input-group-append">
+											<button data-field-modify="fldAdd" type="button" class="btn btn-outline-success">Добавить</button>
+										</div>
+									</div>
+								</div>
+							</div>
 
-	var gListValue = 0;
-	var gFldValue = 0;
+							<table class="table table-sm mb-0">
+								<thead>
+									<tr>
+										<th colspan="3" class="text-center">Поля, находящиеся в группе</th>
+									</tr>
+									<tr>
+										<th>Идентификатор</th>
+										<th>Название</th>
+										<th>Действия</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
 
-	function selectGroupList(force) {
-		if ((force == 1) || (grpList.value != gListValue)) {
-			document.getElementById('grpName').innerHTML = (grpList.value != '') ? grpList.value : 'n/a';
-			while (fldList.rows.length)
-				fldList.deleteRow(0);
+					<div class="modal-footer">
+						<button id="btn-delete-group" type="button" class="btn btn-outline-danger mr-auto">Удалить</button>
+						<button type="submit" class="btn btn-outline-success">Добавить</button>
+						<button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
-			grpList.parentNode.enabled = false;
-			if (grpList.value != '') {
-				var rowNo = 0;
-				for (var i in gConfig[grpList.value]['entries']) {
-					var fldName = gConfig[grpList.value]['entries'][i];
+	<template id="group-template">
+		<tr>
+			<td>
+				<button type="button" data-group-id="" data-toggle="modal" data-target="#groupEditorModal" data-backdrop="static" class="btn btn-link">id</button>
+			</td>
+			<td>title</td>
+			<td nowrap>['fields']</td>
+		</tr>
+	</template>
 
-					var r = fldList.insertRow(-1);
-					r.tag = rowNo++;
-					//r.onclick = function() { alert(this.tag); }
-					var tl = document.createElement('td');
-					tl.innerHTML = fldName;
-					tl.width = 50;
-					r.appendChild(tl);
+	<template id="field-template">
+		<tr>
+			<td>id</td>
+			<td>title</td>
+			<td class="text-right" nowrap>
+				<div class="btn-group btn-group-sm" role="group">
+					<button type="button" data-field-modify="fldUp" data-field-id="" class="btn btn-outline-primary"><i class="fa fa-arrow-up"></i></button>
+					<button type="button" data-field-modify="fldDown" data-field-id="" class="btn btn-outline-primary"><i class="fa fa-arrow-down"></i></button>
+				</div>
+				<div class="btn-group btn-group-sm" role="group">
+					<button type="button" data-field-modify="fldDel" data-field-id="" class="btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+				</div>
+			</td>
+		</tr>
+	</template>
 
-					tl = document.createElement('td');
-					tl.innerHTML = fConfig[fldName] ? fConfig[fldName]['title'] : 'n/a';
-					r.appendChild(tl);
+	<script type="text/javascript">
+		const GROUPS = {{ groups | json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_UNICODE')) }};
+		const XFIELDS = {{ xfields | json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_UNICODE')) }};
+	</script>
 
-					tl = document.createElement('td');
-					tl.width = 70;
-					tl.style.align = 'right';
-					tl.innerHTML = '<img src="/engine/skins/default/images/up.gif" onclick="fieldModifyRequest(this.parentNode.parentNode.tag, 1);"/> ' +
-						'<img src="/engine/skins/default/images/down.gif" onclick="fieldModifyRequest(this.parentNode.parentNode.tag, 2);"/> ' +
-						'<img src="/engine/skins/default/images/delete.gif" onclick="fieldModifyRequest(this.parentNode.parentNode.tag, 3);"/>';
-					r.appendChild(tl);
+	<script type="text/javascript">
+		var current_group = getEmptyGroup();
+
+		$(document).ready(function() {
+			$('[data-toggle="popover"]').popover();
+
+			// Заполняем список имеющихся групп доп.полей.
+			fillGroupList();
+
+			// Отслеживаем изменения при вводе в форму.
+			$('#form-group-editor').on('input', function(event) {
+				const target = event.target;
+
+				if ('group-id' === target.name) {
+					current_group.id = target.value;
+
+					// Маркер режима редактирования.
+					const isEditMode = GROUPS.hasOwnProperty(current_group.id);
+
+					$(this).find('[type="submit"]')
+						.attr('disabled', isEditMode)
+						.text(isEditMode ? 'Сохранить' : 'Добавить');
 				}
-			}
 
-			grpList.parentNode.enabled = true;
-			gListValue = grpList.value;
-
-			document.getElementById('edGrpId').value = gListValue;
-			document.getElementById('edGrpName').value = (gListValue != '') ? gConfig[gListValue]['title'] : '';
-			if (gListValue == '') {
-				document.getElementById('edGrpId').readOnly = false;
-				document.getElementById('edGrpId').style.backgroundColor = '#FFFFFF';
-				document.getElementById('btnModGroup').value = "��������";
-			} else {
-				document.getElementById('edGrpId').readOnly = true;
-				document.getElementById('edGrpId').style.backgroundColor = '#EAF0F7';
-				document.getElementById('btnModGroup').value = "���������";
-			}
-		}
-
-	}
-
-	function fieldModifyRequest(id, action) {
-		// Check if we're in EDIT  mode
-		if (!document.getElementById('edGrpId').readOnly) {
-			alert('Group is not selected');
-			return;
-		}
-
-		var fn = gConfig[gListValue]['entries'][id];
-		var fa = 'fld' + ((action == 1) ? 'Up' : ((action == 2) ? 'Down' : 'Del'));
-		//alert('FieldName ('+id+')['+gListValue+']: '+fn+ '; action: '+fa);
-		//return;
-
-		rpcRequest(
-			'plugin.xfields.group.modify',
-			{
-				'action': fa,
-				'utoken': 'UTOKEN',
-				'id': document.getElementById('edGrpId').value,
-				'field': fn,
+				'group-title' === target.name && (current_group.title = target.value);
 			});
 
-	}
-
-	function drawGroupList(gID) {
-		grpList.options.length = 0;
-
-		for (var i in gConfig) {
-			var o = document.createElement('option');
-			o.value = i;
-			o.text = i + ' :: ' + gConfig[i]['title'];
-			grpList.options[grpList.options.length] = o;
-		}
-		var o = document.createElement('option');
-		o.value = '';
-		o.text = '** ����� ������ **';
-		grpList.options[grpList.options.length] = o;
-		grpList.value = gID;
-	}
-
-	function generateFieldList() {
-		var items = document.getElementById('selectFList');
-		items.options.length = 0;
-		for (var i in fConfig) {
-			var o = document.createElement('option');
-			o.value = i;
-			o.text = i + ' :: ' + fConfig[i]['title'];
-			//	alert('ADD');
-			items.options.add(o);
-		}
-	}
-
-	function initEvents() {
-		document.getElementById('btnAddField').onclick = function () {
-			var value = document.getElementById('selectFList').value;
-			if (gListValue != '') {
-				// Check if field is already in list
-				var dup = 0;
-				for (var i in gConfig[gListValue]['entries']) {
-					if (gConfig[gListValue]['entries'][i] == value)
-						dup = 1;
-				}
-
-				if (dup) {
-					alert('Duplicate entry');
+			// Добавить/Изменить/Удалить поле в группе.
+			$('#current-group-fields').on('click', 'button[data-field-modify]', function(event) {
+				if (!current_group.id) {
+					alert('Не указан Идентификатор группы.');
+				} else if (!current_group.title) {
+					alert('Не указано Имя группы.');
 				} else {
-					gConfig[gListValue]['entries'][gConfig[gListValue]['entries'].length] = value;
-					selectGroupList(1);
+					const action = $(this).attr('data-field-modify');
+					const field = 'fldAdd' === action ?
+						$('#xfields-list').val() :
+						$(this).attr('data-field-id');
+
+					rpcRequest('plugin.xfields.group.modify', {
+							'action': action,
+							'utoken': 'UTOKEN',
+							'id': current_group.id,
+							'field': field,
+						})
+						.then(() => {
+							current_group = {
+								id: current_group.id,
+								...GROUPS[current_group.id]
+							};
+
+							fillTableBodyForCurrentGroup(current_group.entries);
+						});
 				}
-			}
-		}
-		document.getElementById('btnModGroup').onclick = function () {
-			rpcRequest(
-				'plugin.xfields.group.modify',
-				{
-					'action': 'grp' + (document.getElementById('edGrpId').readOnly ? 'Edit' : 'Add'),
-					'utoken': 'UTOKEN',
-					'id': document.getElementById('edGrpId').value,
-					'name': document.getElementById('edGrpName').value
-				});
-		}
-		document.getElementById('btnDelGroup').onclick = function () {
-			// Check if we're in EDIT  mode
-			if (!document.getElementById('edGrpId').readOnly) {
-				alert('Nothing to delete!');
-				return;
-			}
+			});
 
-			rpcRequest(
-				'plugin.xfields.group.modify',
-				{
-					'action': 'grpDel',
-					'utoken': 'UTOKEN',
-					'id': document.getElementById('edGrpId').value
-				});
-		}
+			// Создаем/Сохраняем группу дополнительных полей.
+			$('#form-group-editor').on('submit', function(event) {
+				event.preventDefault();
 
-		document.getElementById('btnAddField').onclick = function () {
-			// Check if we're in EDIT  mode
-			if (!document.getElementById('edGrpId').readOnly) {
-				alert('Group is not selected');
-				return;
-			}
-
-			rpcRequest(
-				'plugin.xfields.group.modify',
-				{
-					'action': 'fldAdd',
-					'utoken': 'UTOKEN',
-					'id': document.getElementById('edGrpId').value,
-					'field': document.getElementById('selectFList').value,
-				});
-		}
-
-	}
-
-	function rpcRequest(method, params) {
-		//var dOut = json_encode(dData);
-
-		var linkTX = new sack();
-		linkTX.requestFile = 'rpc.php';
-		linkTX.setVar('json', '1');
-		linkTX.setVar('methodName', method);
-		linkTX.setVar('params', json_encode(params));
-		linkTX.method = 'POST';
-		linkTX.onComplete = function () {
-			if (linkTX.responseStatus[0] == 200) {
-				var resTX;
-				try {
-					resTX = eval('(' + linkTX.response + ')');
-				} catch (err) {
-					alert('{l_fmsg.save.json_parse_error} ' + linkTX.response);
-				}
-
-				// First - check error state
-				if (!resTX['status']) {
-					// ERROR. Display it
-					alert('Error (' + resTX['errorCode'] + '): ' + resTX['errorText']);
+				if (!current_group.id) {
+					alert('Не указан Идентификатор группы.');
+				} else if (!current_group.title) {
+					alert('Не указано Имя группы.');
 				} else {
-					//alert('Request complete, answer: '+resTX['data']+'; '+typeof(resTX['config']));
-					if (typeof(resTX['config']) == 'object') {
-						gConfig = resTX['config'];
-						drawGroupList(gListValue);
-						selectGroupList(1);
+					// Маркер режима редактирования.
+					const isEditMode = GROUPS.hasOwnProperty(current_group.id);
+
+					// Сохраняем Идентификатор текущей группы.
+					const current_group_id = current_group.id;
+
+					rpcRequest('plugin.xfields.group.modify', {
+							// Если текущая группа существует, значит обновление.
+							'action': 'grp' + (isEditMode ? 'Edit' : 'Add'),
+							'utoken': 'UTOKEN',
+							'id': current_group_id,
+							'name': current_group.title
+						})
+						.then(() => {
+							current_group = GROUPS[current_group_id];
+							current_group.id = current_group_id;
+
+							$('#groupEditorModal').modal('hide');
+						});
+				}
+			});
+
+			// Удалить группу.
+			$('#btn-delete-group').on('click', function(event) {
+				if (!current_group.id) {
+					alert('Не указан Идентификатор группы.');
+				} else {
+					const result = confirm('Хотите удалить группу доп. полей ['+current_group.id+']?');
+
+					result && rpcRequest('plugin.xfields.group.modify', {
+							'action': 'grpDel',
+							'utoken': 'UTOKEN',
+							'id': current_group.id,
+						})
+						.then(() => {
+							current_group = getEmptyGroup();
+							$('#groupEditorModal').modal('hide');
+						});
+				}
+			});
+
+			$('#groupEditorModal').on('show.bs.modal', function(event) {
+				const button = $(event.relatedTarget);
+				const group_id = button.data('group-id');
+
+				current_group = GROUPS[group_id] || getEmptyGroup();
+
+				if (undefined === group_id) {
+					$('#groupEditorModalLabel').text('Добавление группы доп. полей');
+					$('#btn-delete-group').hide();
+					$('#current-group-id').val('').removeAttr('readonly');
+					$('#current-group-title').val('');
+					$('#current-group-fields').hide();
+					$(this).find('[type="submit"]').text('Добавить');
+				} else {
+					current_group.id = group_id;
+
+					$('#groupEditorModalLabel').text('Изменение группы доп. полей');
+					$('#btn-delete-group').show();
+					$('#current-group-id').val(group_id).attr('readonly', true);
+					$('#current-group-title').val(current_group.title);
+					$('#current-group-fields').show();
+					$(this).find('[type="submit"]').text('Сохранить');
+				}
+
+				fillTableBodyForCurrentGroup(current_group.entries)
+			});
+		});
+
+		/**
+		 * Получить пустую группу.
+		 * @return {object}
+		 */
+		function getEmptyGroup() {
+			return {
+				id: 0,
+				title: '',
+				entries: []
+			};
+		}
+
+		function fillGroupList() {
+			const tbody_groups = document.querySelector('#groups-list tbody');
+
+			tbody_groups.innerHTML = !Object.keys(GROUPS).length ? '<tr><td colspan="3">Вы еще не создали группы дополнительных полей.</td></tr>' : '';
+
+			// Проверяем поддерживает ли браузер тег <template>
+			// проверив наличие аттрибута content у элемента template
+			if ('content' in document.createElement('template')) {
+				const template = document.querySelector('#group-template');
+				const cells = template.content.querySelectorAll('td');
+
+				for (const group in GROUPS) {
+					if (GROUPS.hasOwnProperty(group)) {
+						// создаём новую строку
+						const button = template.content.querySelector('button');
+
+						button.dataset.groupId = button.textContent = group;
+						cells[1].textContent = GROUPS[group].title;
+						cells[2].textContent = JSON.stringify(GROUPS[group].entries);
+
+						// клонируем новую строку и вставляем её в таблицу
+						const clone = document.importNode(template.content, true);
+
+						tbody_groups.appendChild(clone);
 					}
 				}
 			} else {
-				alert('{l_fmsg.save.httperror} ' + linkTX.responseStatus[0]);
+				// необходимо найти другой способ добавить строку в таблицу т.к.
+				// тег <template> не поддерживатся браузером
 			}
 		}
-		linkTX.onShow();
-		linkTX.runAJAX();
-	}
 
+		/**
+		 * Заполнить тело таблицы дополнительными полями группы.
+		 * @param  {array} xfields
+		 */
+		function fillTableBodyForCurrentGroup(xfields) {
+			const tbody_fields = document.querySelector('#current-group-fields tbody');
 
-	initEvents();
-	drawGroupList(0);
-	grpList.selectedIndex = 0;
-	selectGroupList(0);
-	generateFieldList();
-	//rpcRequest('plugin.xfields.demo', { 'action' : 'add', 'name' : 'infomania'});
-</script>
+			tbody_fields.innerHTML = !xfields.length ? '<tr><td colspan="3">Нет полей в группе.</td></tr>' : '';
+
+			// Проверяем поддерживает ли браузер тег <template>
+			// проверив наличие аттрибута content у элемента template
+			if ('content' in document.createElement('template')) {
+				const template = document.querySelector('#field-template');
+				const cells = template.content.querySelectorAll('td');
+				const buttons = template.content.querySelectorAll('button');
+
+				xfields.map(function(field) {
+					cells[0].textContent = field;
+					cells[1].textContent = XFIELDS[field].title;
+					[...buttons].forEach(button => button.dataset.fieldId = field)
+
+					// клонируем новую строку и вставляем её в таблицу
+					const clone = document.importNode(template.content, true);
+
+					tbody_fields.appendChild(clone);
+				});
+			} else {
+				// необходимо найти другой способ добавить строку в таблицу т.к.
+				// тег <template> не поддерживатся браузером
+			}
+		}
+
+		/**
+		 * Создаем дополнительную обертку для перерисовки списка групп.
+		 * @param  {string} method
+		 * @param  {object} params
+		 * @return {promise}
+		 */
+		function rpcRequest(method, params) {
+			return post(method, params)
+				.then((response) => {
+					// При успешном выполнении запроса, всегда должен приходить новый `config`.
+					for (const group in GROUPS) {
+						if (GROUPS.hasOwnProperty(group)) {
+							delete GROUPS[group];
+						}
+					}
+
+					for (const group in response.config) {
+						GROUPS[group] = JSON.parse(JSON.stringify(response.config[group]));
+					}
+
+					fillGroupList();
+				});
+		}
+	</script>
+</div>
+{% endif %}

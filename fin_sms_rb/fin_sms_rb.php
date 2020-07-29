@@ -17,7 +17,7 @@ class Finance_Acceptor_SMS_RB extends Finance_Acceptor {
 	function paymentAcceptForm($sum = 0) {
 
 		global $tpl, $mysql;
-		// Формируем список операторов и цены
+		// Р¤РѕСЂРјРёСЂСѓРµРј СЃРїРёСЃРѕРє РѕРїРµСЂР°С‚РѕСЂРѕРІ Рё С†РµРЅС‹
 		$data = array();
 		$query = "select * from " . prefix . "_smsrb_price order by country, operator, num";
 		foreach ($mysql->select($query) as $row) {
@@ -36,41 +36,41 @@ class Finance_Acceptor_SMS_RB extends Finance_Acceptor {
 	function paymentAccept() {
 
 		global $tpl, $username;
-		$return = '<div class="not_logged"><h3>Навигация</h3>&raquo; <a href="/plugin/finance/"><u>Переход к балансу</u></a><br />' . ($_REQUEST['back'] ? '&raquo; <a href="' . $_REQUEST['back'] . '"><u>Переход к контенту</u></a><br />' : '') . '<br /></div><br />';
+		$return = '<div class="not_logged"><h3>РќР°РІРёРіР°С†РёСЏ</h3>&raquo; <a href="/plugin/finance/"><u>РџРµСЂРµС…РѕРґ Рє Р±Р°Р»Р°РЅСЃСѓ</u></a><br />' . ($_REQUEST['back'] ? '&raquo; <a href="' . $_REQUEST['back'] . '"><u>РџРµСЂРµС…РѕРґ Рє РєРѕРЅС‚РµРЅС‚Сѓ</u></a><br />' : '') . '<br /></div><br />';
 		$passCode = $_REQUEST['passCode'];
-		// Проверяем код
+		// РџСЂРѕРІРµСЂСЏРµРј РєРѕРґ
 		$url = 'http://easysms.ru/cgi-bin/activate.pl?checkonly=1&serviceID=115&passCode=' . urlencode($passCode);
 		$result = @file_get_contents($url);
 		$rData = explode("|", trim($result));
-		// Если всё OK
+		// Р•СЃР»Рё РІСЃС‘ OK
 		if ($rData[0] == 'OK') {
-			// Код можно активировать. Проверяем цену
+			// РљРѕРґ РјРѕР¶РЅРѕ Р°РєС‚РёРІРёСЂРѕРІР°С‚СЊ. РџСЂРѕРІРµСЂСЏРµРј С†РµРЅСѓ
 			$price = file_get_contents('http://easysms.ru/cgi-bin/price_informer.pl?num=' . $rData[3]);
 			$priceData = explode('|', $price);
 			if ($priceData[0] && ($priceData[0] == $rData[3])) {
 				$acceptSum = $priceData[1 + intval(extra_get_param('fin_sms', 'bonus_mode'))];
 			} else {
-				return $return . 'Не могу получить информацию по стоимости SMS на номер "' . $rData[3] . '"';
+				return $return . 'РќРµ РјРѕРіСѓ РїРѕР»СѓС‡РёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РїРѕ СЃС‚РѕРёРјРѕСЃС‚Рё SMS РЅР° РЅРѕРјРµСЂ "' . $rData[3] . '"';
 			}
-			// Посылаем запрос на снятие денег
+			// РџРѕСЃС‹Р»Р°РµРј Р·Р°РїСЂРѕСЃ РЅР° СЃРЅСЏС‚РёРµ РґРµРЅРµРі
 			$url = 'http://easysms.ru/cgi-bin/activate.pl?checkonly=1&serviceID=115&passCode=' . urlencode($passCode);
 			$result = file_get_contents($url);
 			$rData = explode("|", trim($result));
 			if ($rData[0] == 'OK') {
-				// Кладём деньги на счёт
+				// РљР»Р°РґС‘Рј РґРµРЅСЊРіРё РЅР° СЃС‡С‘С‚
 				finance_add_money($username, '1', $acceptSum);
 
-				return $return . 'Ваш счёт пополнен на ' . $acceptSum;
+				return $return . 'Р’Р°С€ СЃС‡С‘С‚ РїРѕРїРѕР»РЅРµРЅ РЅР° ' . $acceptSum;
 			} else {
-				return $return . 'Ошибка обращения к API';
+				return $return . 'РћС€РёР±РєР° РѕР±СЂР°С‰РµРЅРёСЏ Рє API';
 			}
 		} else if ($rData[0] == 'DUP') {
-			return $return . 'Код уже активирован!';
+			return $return . 'РљРѕРґ СѓР¶Рµ Р°РєС‚РёРІРёСЂРѕРІР°РЅ!';
 		} else if ($rData[0] == 'FAIL') {
-			return $return . 'Такой код не зарегистрирован в БД!';
+			return $return . 'РўР°РєРѕР№ РєРѕРґ РЅРµ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ РІ Р‘Р”!';
 		}
 
-		return $return . 'Ошибка доступа к сервису активации.';
+		return $return . 'РћС€РёР±РєР° РґРѕСЃС‚СѓРїР° Рє СЃРµСЂРІРёСЃСѓ Р°РєС‚РёРІР°С†РёРё.';
 	}
 }
 

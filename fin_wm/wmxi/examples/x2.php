@@ -1,26 +1,26 @@
 <?php
 require_once("_header.php");
-# Получение и обработка данных формы
+# РџРѕР»СѓС‡РµРЅРёРµ Рё РѕР±СЂР°Р±РѕС‚РєР° РґР°РЅРЅС‹С… С„РѕСЂРјС‹
 if (count($_POST) > 0) {
 	$response = $wmxi->X2(
-		intval($_POST["tranid"]),    # номер перевода в системе учета отправителя; любое целое число без знака, должно быть уникальным
-		$_POST["pursesrc"],          # номер кошелька с которого выполняется перевод (отправитель)
-		$_POST["pursedest"],         # номер кошелька, но который выполняется перевод (получатель)
-		floatval($_POST["amount"]),  # число с плавающей точкой без незначащих символов
-		intval($_POST["period"]),    # целое от 0 до 255 символов; 0 - без протекции
-		trim($_POST["pcode"]),       # произвольная строка от 0 до 255 символов; пробелы в начале или конце не допускаются
-		trim($_POST["desc"]),        # произвольная строка от 0 до 255 символов; пробелы в начале или конце не допускаются
-		intval($_POST["wminvid"])    # целое число > 0; если 0 - перевод не по счету
+		intval($_POST["tranid"]),    # РЅРѕРјРµСЂ РїРµСЂРµРІРѕРґР° РІ СЃРёСЃС‚РµРјРµ СѓС‡РµС‚Р° РѕС‚РїСЂР°РІРёС‚РµР»СЏ; Р»СЋР±РѕРµ С†РµР»РѕРµ С‡РёСЃР»Рѕ Р±РµР· Р·РЅР°РєР°, РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ СѓРЅРёРєР°Р»СЊРЅС‹Рј
+		$_POST["pursesrc"],          # РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР° СЃ РєРѕС‚РѕСЂРѕРіРѕ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РїРµСЂРµРІРѕРґ (РѕС‚РїСЂР°РІРёС‚РµР»СЊ)
+		$_POST["pursedest"],         # РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР°, РЅРѕ РєРѕС‚РѕСЂС‹Р№ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РїРµСЂРµРІРѕРґ (РїРѕР»СѓС‡Р°С‚РµР»СЊ)
+		floatval($_POST["amount"]),  # С‡РёСЃР»Рѕ СЃ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ Р±РµР· РЅРµР·РЅР°С‡Р°С‰РёС… СЃРёРјРІРѕР»РѕРІ
+		intval($_POST["period"]),    # С†РµР»РѕРµ РѕС‚ 0 РґРѕ 255 СЃРёРјРІРѕР»РѕРІ; 0 - Р±РµР· РїСЂРѕС‚РµРєС†РёРё
+		trim($_POST["pcode"]),       # РїСЂРѕРёР·РІРѕР»СЊРЅР°СЏ СЃС‚СЂРѕРєР° РѕС‚ 0 РґРѕ 255 СЃРёРјРІРѕР»РѕРІ; РїСЂРѕР±РµР»С‹ РІ РЅР°С‡Р°Р»Рµ РёР»Рё РєРѕРЅС†Рµ РЅРµ РґРѕРїСѓСЃРєР°СЋС‚СЃСЏ
+		trim($_POST["desc"]),        # РїСЂРѕРёР·РІРѕР»СЊРЅР°СЏ СЃС‚СЂРѕРєР° РѕС‚ 0 РґРѕ 255 СЃРёРјРІРѕР»РѕРІ; РїСЂРѕР±РµР»С‹ РІ РЅР°С‡Р°Р»Рµ РёР»Рё РєРѕРЅС†Рµ РЅРµ РґРѕРїСѓСЃРєР°СЋС‚СЃСЏ
+		intval($_POST["wminvid"])    # С†РµР»РѕРµ С‡РёСЃР»Рѕ > 0; РµСЃР»Рё 0 - РїРµСЂРµРІРѕРґ РЅРµ РїРѕ СЃС‡РµС‚Сѓ
 	);
-	# Преобразовываем ответ сервера в структуру. Входные параметры:
-	# - XML-ответ сервера
-	# - кодировка, используемая на сайте. По умолчанию используется UTF-8
+	# РџСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°РµРј РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР° РІ СЃС‚СЂСѓРєС‚СѓСЂСѓ. Р’С…РѕРґРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹:
+	# - XML-РѕС‚РІРµС‚ СЃРµСЂРІРµСЂР°
+	# - РєРѕРґРёСЂРѕРІРєР°, РёСЃРїРѕР»СЊР·СѓРµРјР°СЏ РЅР° СЃР°Р№С‚Рµ. РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ UTF-8
 	$structure = $parser->Parse($response, DOC_ENCODING);
-	# преобразуем индексы структуры к более удобным для доступа.
-	# Не рекомендуется проводить такое преобразование с с результатом, если он содержит
-	# множество однотипных строк (например, список транзакций)
-	# если надобности в аттрибутах XML-тегов ответа нет, то второй параметр можно
-	# установить в false - в таком случае структура выйдет более компактной
+	# РїСЂРµРѕР±СЂР°Р·СѓРµРј РёРЅРґРµРєСЃС‹ СЃС‚СЂСѓРєС‚СѓСЂС‹ Рє Р±РѕР»РµРµ СѓРґРѕР±РЅС‹Рј РґР»СЏ РґРѕСЃС‚СѓРїР°.
+	# РќРµ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ РїСЂРѕРІРѕРґРёС‚СЊ С‚Р°РєРѕРµ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃ СЃ СЂРµР·СѓР»СЊС‚Р°С‚РѕРј, РµСЃР»Рё РѕРЅ СЃРѕРґРµСЂР¶РёС‚
+	# РјРЅРѕР¶РµСЃС‚РІРѕ РѕРґРЅРѕС‚РёРїРЅС‹С… СЃС‚СЂРѕРє (РЅР°РїСЂРёРјРµСЂ, СЃРїРёСЃРѕРє С‚СЂР°РЅР·Р°РєС†РёР№)
+	# РµСЃР»Рё РЅР°РґРѕР±РЅРѕСЃС‚Рё РІ Р°С‚С‚СЂРёР±СѓС‚Р°С… XML-С‚РµРіРѕРІ РѕС‚РІРµС‚Р° РЅРµС‚, С‚Рѕ РІС‚РѕСЂРѕР№ РїР°СЂР°РјРµС‚СЂ РјРѕР¶РЅРѕ
+	# СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РІ false - РІ С‚Р°РєРѕРј СЃР»СѓС‡Р°Рµ СЃС‚СЂСѓРєС‚СѓСЂР° РІС‹Р№РґРµС‚ Р±РѕР»РµРµ РєРѕРјРїР°РєС‚РЅРѕР№
 	$transformed = $parser->Reindex($structure, true);
 }
 ?>
@@ -34,45 +34,45 @@ if (count($_POST) > 0) {
 	<link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-Детальное описание параметров:
+Р”РµС‚Р°Р»СЊРЅРѕРµ РѕРїРёСЃР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ:
 <a href="http://webmoney.ru/rus/developers/interfaces/xml/purse2purse/index.shtml">http://webmoney.ru/rus/developers/interfaces/xml/purse2purse/index.shtml</a>
 <br/>
 
 <form action="" method="post">
 
-	<label>номер перевода:</label>
+	<label>РЅРѕРјРµСЂ РїРµСЂРµРІРѕРґР°:</label>
 	<input type="text" name="tranid" value="2"/>
 	<br/>
 
-	<label>номер кошелька с которого выполняется перевод (отправитель):</label>
+	<label>РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР° СЃ РєРѕС‚РѕСЂРѕРіРѕ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РїРµСЂРµРІРѕРґ (РѕС‚РїСЂР°РІРёС‚РµР»СЊ):</label>
 	<input type="text" name="pursesrc" value=""/>
 	<br/>
 
-	<label>номер кошелька, но который выполняется перевод (получатель):</label>
+	<label>РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР°, РЅРѕ РєРѕС‚РѕСЂС‹Р№ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РїРµСЂРµРІРѕРґ (РїРѕР»СѓС‡Р°С‚РµР»СЊ):</label>
 	<input type="text" name="pursedest" value=""/>
 	<br/>
 
-	<label>переводимая сумма:</label>
+	<label>РїРµСЂРµРІРѕРґРёРјР°СЏ СЃСѓРјРјР°:</label>
 	<input type="text" name="amount" value="0.01"/>
 	<br/>
 
-	<label>срок протекции сделки в днях:</label>
+	<label>СЃСЂРѕРє РїСЂРѕС‚РµРєС†РёРё СЃРґРµР»РєРё РІ РґРЅСЏС…:</label>
 	<input type="text" name="period" value="0"/>
 	<br/>
 
-	<label>код протекции сделки:</label>
+	<label>РєРѕРґ РїСЂРѕС‚РµРєС†РёРё СЃРґРµР»РєРё:</label>
 	<input type="text" name="pcode" value=""/>
 	<br/>
 
-	<label>описание оплачиваемого товара или услуги:</label>
-	<input type="text" name="desc" value="тестирование X2 wmxi"/>
+	<label>РѕРїРёСЃР°РЅРёРµ РѕРїР»Р°С‡РёРІР°РµРјРѕРіРѕ С‚РѕРІР°СЂР° РёР»Рё СѓСЃР»СѓРіРё:</label>
+	<input type="text" name="desc" value="С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ X2 wmxi"/>
 	<br/>
 
-	<label>номер счета (в системе WebMoney), по которому выполняется перевод:</label>
+	<label>РЅРѕРјРµСЂ СЃС‡РµС‚Р° (РІ СЃРёСЃС‚РµРјРµ WebMoney), РїРѕ РєРѕС‚РѕСЂРѕРјСѓ РІС‹РїРѕР»РЅСЏРµС‚СЃСЏ РїРµСЂРµРІРѕРґ:</label>
 	<input type="text" name="wminvid" value="0"/>
 	<br/>
 
-	<input type="submit" value="отправить перевод"/>
+	<input type="submit" value="РѕС‚РїСЂР°РІРёС‚СЊ РїРµСЂРµРІРѕРґ"/>
 	<br/>
 
 </form>
@@ -81,20 +81,20 @@ if (count($_POST) > 0) {
 <!--pre><?= htmlspecialchars(print_r(@$structure, true), ENT_QUOTES); ?></pre-->
 <!--pre><?= htmlspecialchars(print_r(@$transformed, true), ENT_QUOTES); ?></pre-->
 
-<pre><!-- Читаем и отображаем элементы обработанного массива после получения ответа с сервера -->
-		Номер перевода: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["tranid"], ENT_QUOTES); ?></b>
-		Отправитель: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["pursesrc"], ENT_QUOTES); ?></b>
-		Получатель: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["pursedest"], ENT_QUOTES); ?></b>
-		Сумма: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["amount"], ENT_QUOTES); ?></b>
-		Коммиссия: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["comiss"], ENT_QUOTES); ?></b>
-		Тип перевода: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["opertype"], ENT_QUOTES); ?></b>
-		Срок протекции: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["period"], ENT_QUOTES); ?></b>
-		Номер счёта: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["wminvid"], ENT_QUOTES); ?></b>
-		Описание: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["desc"], ENT_QUOTES); ?></b>
-		Создан: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["datecrt"], ENT_QUOTES); ?></b>
-		Изменён: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["dateupd"], ENT_QUOTES); ?></b>
-		Код ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
-		Описание ошибки: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
+<pre><!-- Р§РёС‚Р°РµРј Рё РѕС‚РѕР±СЂР°Р¶Р°РµРј СЌР»РµРјРµРЅС‚С‹ РѕР±СЂР°Р±РѕС‚Р°РЅРЅРѕРіРѕ РјР°СЃСЃРёРІР° РїРѕСЃР»Рµ РїРѕР»СѓС‡РµРЅРёСЏ РѕС‚РІРµС‚Р° СЃ СЃРµСЂРІРµСЂР° -->
+		РќРѕРјРµСЂ РїРµСЂРµРІРѕРґР°: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["tranid"], ENT_QUOTES); ?></b>
+		РћС‚РїСЂР°РІРёС‚РµР»СЊ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["pursesrc"], ENT_QUOTES); ?></b>
+		РџРѕР»СѓС‡Р°С‚РµР»СЊ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["pursedest"], ENT_QUOTES); ?></b>
+		РЎСѓРјРјР°: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["amount"], ENT_QUOTES); ?></b>
+		РљРѕРјРјРёСЃСЃРёСЏ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["comiss"], ENT_QUOTES); ?></b>
+		РўРёРї РїРµСЂРµРІРѕРґР°: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["opertype"], ENT_QUOTES); ?></b>
+		РЎСЂРѕРє РїСЂРѕС‚РµРєС†РёРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["period"], ENT_QUOTES); ?></b>
+		РќРѕРјРµСЂ СЃС‡С‘С‚Р°: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["wminvid"], ENT_QUOTES); ?></b>
+		РћРїРёСЃР°РЅРёРµ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["desc"], ENT_QUOTES); ?></b>
+		РЎРѕР·РґР°РЅ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["datecrt"], ENT_QUOTES); ?></b>
+		РР·РјРµРЅС‘РЅ: <b><?= htmlspecialchars(@$transformed["w3s.response"]["operation"]["dateupd"], ENT_QUOTES); ?></b>
+		РљРѕРґ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retval"], ENT_QUOTES); ?></b>
+		РћРїРёСЃР°РЅРёРµ РѕС€РёР±РєРё: <b><?= htmlspecialchars(@$transformed["w3s.response"]["retdesc"], ENT_QUOTES); ?></b>
 	</pre>
 
 </body>

@@ -1,16 +1,31 @@
-<table width="100%">
-	{% for image in images %}
-		<tr style="background-color: #{% if (loop.index is odd) %}D0D0D0{% else %}F0F0F0{% endif %};">
+<table class="table table-striped">
+	<tbody>
+		{% for image in images %}
+		<tr>
 			<td>{{ image.number }}</td>
 			{% if image.flags.exist %}
 				<td>
-				<input type="text" name="xfields_{{ image.id }}_dscr[{{ image.image.id }}]" style="width: 99%;" placeholder="Введите описание.." value="{{ image.description }}"/><br/><a href="{{ image.image.url }}" target="_blank">{% if image.flags.preview %}
-						<img src="{{ image.preview.url }}" width="{{ image.preview.width }}" height="{{ image.preview.height }}"/>{% else %}NO PREVIEW{% endif %}
-				</a><br/><label><input type="checkbox" value="1" name="xfields_{{ image.id }}_del[{{ image.image.id }}]">удалить</label>
-				</td>{% else %}
-				<td colspan="2">
-					<input type="text" name="xfields_{{ image.id }}_adscr[]" style="width: 99%;" placeholder="Введите описание.." value="{{ image.description }}"/><br/><input type="file" name="xfields_{{ image.id }}[]"/>
-				</td>{% endif %}
+					<input type="text" name="xfields_{{ image.id }}_dscr[{{ image.image.id }}]" value="{{ image.description }}" placeholder="Р’РІРµРґРёС‚Рµ РѕРїРёСЃР°РЅРёРµ..." class="form-control mb-2" />
+					<figure class="figure mb-0">
+						<a href="{{ image.image.url }}" target="_blank">
+							{% if image.flags.preview %}
+								<img src="{{ image.preview.url }}" width="{{ image.preview.width }}" height="{{ image.preview.height }}" class="figure-img img-fluid rounded" />
+							{% else %}
+								NO PREVIEW
+							{% endif %}
+						</a>
+						<figcaption class="figure-caption">
+							<label class="col-form-label d-block"><input type="checkbox" name="xfields_{{ image.id }}_del[{{ image.image.id }}]" value="1" /> СѓРґР°Р»РёС‚СЊ</label>
+						</figcaption>
+					</figure>
+				</td>
+			{% else %}
+				<td>
+					<input type="text" name="xfields_{{ image.id }}_adscr[]" value="{{ image.description }}" placeholder="Р’РІРµРґРёС‚Рµ РѕРїРёСЃР°РЅРёРµ..." class="form-control mb-2" />
+					<input type="file" name="xfields_{{ image.id }}[]" />
+				</td>
+			{% endif %}
 		</tr>
-	{% endfor %}
+		{% endfor %}
+	</tbody>
 </table>

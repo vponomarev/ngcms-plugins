@@ -1,10 +1,10 @@
 <div class="linkst">
 	<div class="inbox">
 		<p class="pagelink conl">{% if (pages.true) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages.print }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p>
-		<p class="postlink conr">{% if (post_send and state == 'open') %}<a href='{{ addpost }}'>Добавить
-				сообщение</a>{% endif %}</p>
+		<p class="postlink conr">{% if (post_send and state == 'open') %}<a href='{{ addpost }}'>Р”РѕР±Р°РІРёС‚СЊ
+				СЃРѕРѕР±С‰РµРЅРёРµ</a>{% endif %}</p>
 		<ul>
-			<li><a href='{{ home_link }}'>Список</a>&nbsp;</li>
+			<li><a href='{{ home_link }}'>РЎРїРёСЃРѕРє</a>&nbsp;</li>
 			<li>&raquo;&nbsp;<a href='{{ forum_link }}'>{{ forum_name }}</a>&nbsp;</li>
 			<li>&raquo;&nbsp;{{ subject }}</li>
 		</ul>
@@ -13,12 +13,12 @@
 </div>
 <div id="msg" class="block">
 	<form id="search" method="get" action="{{ link_topic_s }}">
-		<h2><span>Поиск по теме</span></h2>
+		<h2><span>РџРѕРёСЃРє РїРѕ С‚РµРјРµ</span></h2>
 		<div class="box">
 			<div class="inbox">
 				<input type="hidden" name="id" value="{{ tid }}">
 				{% if (not num_page == 1) %}<input type="hidden" name="page" value="{{ num_page }}">{% endif %}
-				<label><input type="text" name="s" size="40" value="{{ search }}" maxlength="100"/><input type="submit" value="Искать" accesskey="s"/><br/></label>
+				<label><input type="text" name="s" size="40" value="{{ search }}" maxlength="100"/><input type="submit" value="РСЃРєР°С‚СЊ" accesskey="s"/><br/></label>
 			</div>
 		</div>
 	</form>
@@ -29,9 +29,9 @@
 		<div id="{{ entry.post_id }}" class="blockpost rowodd">
 			<h2><span><span class="conr">#{{ entry.i }}
 						&nbsp;</span><a href='{{ entry.topic_link }}#{{ entry.post_id }}'>{% if entry.date|date('d-m-Y') == "now"|date('d-m-Y') %}
-	Сегодня {{ entry.date|date('H:i') }}
+	РЎРµРіРѕРґРЅСЏ {{ entry.date|date('H:i') }}
 {% elseif entry.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-							Вчера {{ entry.date|date('H:i') }}
+							Р’С‡РµСЂР° {{ entry.date|date('H:i') }}
 						{% else %}
 							{{ entry.date|date('d-m-Y H:i') }}
 						{% endif %}</a></span></h2>
@@ -40,31 +40,31 @@
 					<div class="postleft">
 						<dl>
 							<dt>
-								<strong><a href="{{ entry.profile_link }}">{{ entry.author }}</a>{% if (entry.tc) %} ТС{% endif %}
+								<strong><a href="{{ entry.profile_link }}">{{ entry.author }}</a>{% if (entry.tc) %} РўРЎ{% endif %}
 								</strong></dt>
 							<dd class="usertitle"><strong>{{ entry.userstatus }}</strong></dd>
 							<dd class="postavatar">
 								<img src="{% if (entry.avatar.true) %}{{ entry.avatar.print }}{% else %}{{ entry.avatar.print }}/noavatar.gif{% endif %}"/>
 							</dd>
-							<dd>Зарегистрирован: {{ entry.data_reg|date("Y-m-d") }}</dd>
-							<dd>Сообщений: {{ entry.num_post }}</dd>
+							<dd>Р—Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ: {{ entry.data_reg|date("Y-m-d") }}</dd>
+							<dd>РЎРѕРѕР±С‰РµРЅРёР№: {{ entry.num_post }}</dd>
 							{% if (entry.ip.true) %}
 								<dd>IP: {{ entry.ip.print }}</dd>
 							{% endif %}{% if (entry.uid) %}
 								<dd>
-									<a href='{{ entry.reputation_link }}'>Рейтинг</a> :
+									<a href='{{ entry.reputation_link }}'>Р РµР№С‚РёРЅРі</a> :
 									<a href='{{ entry.plus }}'>+</a>
 									&nbsp;&nbsp;<strong>{{ entry.sum }}&nbsp;&nbsp;</strong>
 									<a href='{{ entry.minus }}'>-</a>
 								</dd>
-								<dd>Спасибо сказали: <a href='{{ entry.thank_link }}'>{{ entry.int_thank }} раз(а)</a>
+								<dd>РЎРїР°СЃРёР±Рѕ СЃРєР°Р·Р°Р»Рё: <a href='{{ entry.thank_link }}'>{{ entry.int_thank }} СЂР°Р·(Р°)</a>
 								</dd>
-								<dd class="usercontacts"><a href='{{ entry.profile_link }}'>Профиль</a>&nbsp;&nbsp;
-									<a href="{{ entry.send_pm }}">ЛС</a>&nbsp;&nbsp;
-									{% if (entry.site.true) %}<a href='{{ entry.site.print }}'>Веб сайт</a>{% endif %}
+								<dd class="usercontacts"><a href='{{ entry.profile_link }}'>РџСЂРѕС„РёР»СЊ</a>&nbsp;&nbsp;
+									<a href="{{ entry.send_pm }}">Р›РЎ</a>&nbsp;&nbsp;
+									{% if (entry.site.true) %}<a href='{{ entry.site.print }}'>Р’РµР± СЃР°Р№С‚</a>{% endif %}
 								</dd>
 								{% if (entry.add_thank_link) %}
-									<dd><a href='{{ entry.add_thank_link }}'>Сказать спасибо</a></dd>{% endif %}
+									<dd><a href='{{ entry.add_thank_link }}'>РЎРєР°Р·Р°С‚СЊ СЃРїР°СЃРёР±Рѕ</a></dd>{% endif %}
 							{% endif %}
 						</dl>
 					</div>
@@ -73,19 +73,19 @@
 						<div class="postmsg">
 							<p>{{ entry.message }}</p>
 							{% if (entry.editdate.true) %}<p class="postedit">
-								<em>Отредактированно {{ entry.editdate.edited_by }}
+								<em>РћС‚СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРЅРѕ {{ entry.editdate.edited_by }}
 									({% if entry.editdate.time|date('d-m-Y') == "now"|date('d-m-Y') %}
-									Сегодня {{ entry.editdate.time|date('H:i') }}
+									РЎРµРіРѕРґРЅСЏ {{ entry.editdate.time|date('H:i') }}
 								{% elseif entry.editdate.time|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-									Вчера {{ entry.editdate.time|date('H:i') }}
+									Р’С‡РµСЂР° {{ entry.editdate.time|date('H:i') }}
 									{% else %}
 										{{ entry.editdate.time|date('d-m-Y H:i') }}
 									{% endif %})</em></p>{% endif %}
 							{% if (entry.list_attach) %}
 								<div class="postsignature">
-								<hr/>Прикрепленные файлы: <br/>
+								<hr/>РџСЂРёРєСЂРµРїР»РµРЅРЅС‹Рµ С„Р°Р№Р»С‹: <br/>
 								{% for entry in entry.list_attach %}
-									<a href='{{ entry.file_link }}'>{{ entry.file }}</a>, Размер: {{ entry.size }} Кбайт, Скачано: {{ entry.int_file }}
+									<a href='{{ entry.file_link }}'>{{ entry.file }}</a>, Р Р°Р·РјРµСЂ: {{ entry.size }} РљР±Р°Р№С‚, РЎРєР°С‡Р°РЅРѕ: {{ entry.int_file }}
 									<br/>
 								{% endfor %}
 								</div>{% endif %}
@@ -94,23 +94,23 @@
 							<hr/>{{ entry.signature }}</div>
 						{% if (entry.list_thank) %}
 							<dl>
-							<dd>Спасибо сказали: {{ entry.list_thank }}</dd>
+							<dd>РЎРїР°СЃРёР±Рѕ СЃРєР°Р·Р°Р»Рё: {{ entry.list_thank }}</dd>
 							</dl>{% endif %}
 					</div>
 					<div class="clearer"></div>
-					<div class="postfootleft">{% if (entry.active) %}<p><strong>Активен</strong></p>{% else %}<p>
-							Неактивен</p>{% endif %}</div>
+					<div class="postfootleft">{% if (entry.active) %}<p><strong>РђРєС‚РёРІРµРЅ</strong></p>{% else %}<p>
+							РќРµР°РєС‚РёРІРµРЅ</p>{% endif %}</div>
 					<div class="postfootright">
 						<ul>
 							{% if (global.user) %}
-								<li class="postreport"><a href="{{ entry.complaints_link }}">Сообщить модератору</a>
+								<li class="postreport"><a href="{{ entry.complaints_link }}">РЎРѕРѕР±С‰РёС‚СЊ РјРѕРґРµСЂР°С‚РѕСЂСѓ</a>
 								</li>{% endif %}
 							{% if (entry.post_remove and state == 'open') %}
-								<li class="postdelete"><a href='{{ entry.del_link }}'>Удалить</a></li>{% endif %}
+								<li class="postdelete"><a href='{{ entry.del_link }}'>РЈРґР°Р»РёС‚СЊ</a></li>{% endif %}
 							{% if (entry.post_modify and state == 'open') %}
-								<li class="postedit"><a href='{{ entry.edit_link }}'>Редактировать</a></li>{% endif %}
+								<li class="postedit"><a href='{{ entry.edit_link }}'>Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ</a></li>{% endif %}
 							{% if (entry.post_send and state == 'open') %}
-								<li class="postquote"><a href='{{ entry.quote.print }}'>Ответить</a></li>{% endif %}
+								<li class="postquote"><a href='{{ entry.quote.print }}'>РћС‚РІРµС‚РёС‚СЊ</a></li>{% endif %}
 							{% if (entry.post_send and state == 'open') %}
 								<script>
 									$(document).ready(function () {
@@ -123,7 +123,7 @@
 									})
 								</script>
 								<li>
-									<a href="javascript:ShowOrHide('#');" id="IncertText_{{ entry.post_id }}">Цитировать</a>
+									<a href="javascript:ShowOrHide('#');" id="IncertText_{{ entry.post_id }}">Р¦РёС‚РёСЂРѕРІР°С‚СЊ</a>
 								</li>
 							{% endif %}
 						</ul>
@@ -136,15 +136,15 @@
 <div class="linkst">
 	<div class="inbox">
 		<p class="pagelink conl">{% if (pages.true) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages.print }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p>
-		<p class="postlink conr">{% if (post_send and state == 'open') %}<a href='{{ addpost }}'>Добавить
-				сообщение</a>{% endif %}</p>
+		<p class="postlink conr">{% if (post_send and state == 'open') %}<a href='{{ addpost }}'>Р”РѕР±Р°РІРёС‚СЊ
+				СЃРѕРѕР±С‰РµРЅРёРµ</a>{% endif %}</p>
 		<ul>
-			<li><a href='{{ home_link }}'>Список</a>&nbsp;</li>
+			<li><a href='{{ home_link }}'>РЎРїРёСЃРѕРє</a>&nbsp;</li>
 			<li>&raquo;&nbsp;<a href='{{ forum_link }}'>{{ forum_name }}</a>&nbsp;</li>
 			<li>&raquo;&nbsp;{{ subject }}</li>
 		</ul>
-		{% if (subscript.true) %}Вы подписаны на эту тему - <a href='{{ subscript.uns }}'>Отписаться</a>{% else %}
-			<a href='{{ subscript.sus }}'>Подписаться и отслеживать тему</a>{% endif %}
+		{% if (subscript.true) %}Р’С‹ РїРѕРґРїРёСЃР°РЅС‹ РЅР° СЌС‚Сѓ С‚РµРјСѓ - <a href='{{ subscript.uns }}'>РћС‚РїРёСЃР°С‚СЊСЃСЏ</a>{% else %}
+			<a href='{{ subscript.sus }}'>РџРѕРґРїРёСЃР°С‚СЊСЃСЏ Рё РѕС‚СЃР»РµР¶РёРІР°С‚СЊ С‚РµРјСѓ</a>{% endif %}
 		<div class="clearer"></div>
 	</div>
 </div>
@@ -152,11 +152,11 @@
 	<div class="box">
 		<div style="padding-left: 4px">
 			<dl>
-				<dt>{{ local.num_user_loc + local.num_guest_loc }} чел. просматривают эту тему
-					(гостей: {{ local.num_guest_loc }})
+				<dt>{{ local.num_user_loc + local.num_guest_loc }} С‡РµР». РїСЂРѕСЃРјР°С‚СЂРёРІР°СЋС‚ СЌС‚Сѓ С‚РµРјСѓ
+					(РіРѕСЃС‚РµР№: {{ local.num_guest_loc }})
 				</dt>
-				<dt>Пользователей: {{ local.num_user_loc }} {{ local.list_loc_user }}</dt>
-				<dt>Ботов: {{ local.num_bot_loc }} {{ local.list_loc_bot }}</dt>
+				<dt>РџРѕР»СЊР·РѕРІР°С‚РµР»РµР№: {{ local.num_user_loc }} {{ local.list_loc_user }}</dt>
+				<dt>Р‘РѕС‚РѕРІ: {{ local.num_bot_loc }} {{ local.list_loc_bot }}</dt>
 			</dl>
 		</div>
 	</div>
@@ -168,12 +168,12 @@
 {% if (post_send and state == 'open') %}
 
 	<div class="blockform">
-		<h2><span>Быстрый ответ</span></h2>
+		<h2><span>Р‘С‹СЃС‚СЂС‹Р№ РѕС‚РІРµС‚</span></h2>
 		<div class="box">
 			<form id="post" method="post" action="{{ addpost }}">
 				<div class="inform">
 					<fieldset>
-						<legend>Напишите ваше сообщение и нажмите отправить</legend>
+						<legend>РќР°РїРёС€РёС‚Рµ РІР°С€Рµ СЃРѕРѕР±С‰РµРЅРёРµ Рё РЅР°Р¶РјРёС‚Рµ РѕС‚РїСЂР°РІРёС‚СЊ</legend>
 						<div class="infldset txtarea">
 							<div style="padding-top: 4px">
 							</div>
@@ -181,7 +181,7 @@
 						</div>
 					</fieldset>
 				</div>
-				<p><input type="submit" name="submit" tabindex="2" value="Отправить" accesskey="s"/></p>
+				<p><input type="submit" name="submit" tabindex="2" value="РћС‚РїСЂР°РІРёС‚СЊ" accesskey="s"/></p>
 			</form>
 		</div>
 	</div>
@@ -190,20 +190,20 @@
 			buttons: 'bold,italic,underline,strike|,-|,link,myimg,|,smilebox,|,bullist,numlist,|,codephp, |,quotes',
 			allButtons: {
 				myimg: {
-					title: 'Изображение',
+					title: 'РР·РѕР±СЂР°Р¶РµРЅРёРµ',
 					buttonHTML: '<span class="ve-tlb-img"></span>',
 					modal: {
-						title: 'Вставить изображение',
+						title: 'Р’СЃС‚Р°РІРёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ',
 						width: '600px',
 						tabs: [
 							{
 								input: [
 									{
 										param: "SRC",
-										title: "Введите адрес изображения",
+										title: "Р’РІРµРґРёС‚Рµ Р°РґСЂРµСЃ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ",
 										validation: '^http(s)?://.*?\.(jpg|png|gif|jpeg)$'
 									},
-									{param: "TITLE", title: "Введите заголовок изображения"}
+									{param: "TITLE", title: "Р’РІРµРґРёС‚Рµ Р·Р°РіРѕР»РѕРІРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёСЏ"}
 								]
 							}
 						],
@@ -219,14 +219,14 @@
 					title: CURLANG.code,
 					buttonText: "[code]",
 					transform: {
-						'<div class="codewrap"><div class="codetop">Код: PHP</div><div class="codemain">{SELTEXT}</div></div>': "[code=PHP]{SELTEXT}[/code]"
+						'<div class="codewrap"><div class="codetop">РљРѕРґ: PHP</div><div class="codemain">{SELTEXT}</div></div>': "[code=PHP]{SELTEXT}[/code]"
 					}
 				}, quotes: {
 					title: CURLANG.quote,
 					buttonHTML: '<span class="ve-tlb-quote"></span>',
 					transform: {
 						'<div class="quote">{SELTEXT}</div>': '[quote]{SELTEXT}[/quote]',
-						'<div class="quote"><cite>{AUTHOR} написал:</cite>{SELTEXT}</div>': '[quote={AUTHOR}]{SELTEXT}[/quote]'
+						'<div class="quote"><cite>{AUTHOR} РЅР°РїРёСЃР°Р»:</cite>{SELTEXT}</div>': '[quote={AUTHOR}]{SELTEXT}[/quote]'
 					}
 				}
 			},

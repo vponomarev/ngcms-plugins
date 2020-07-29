@@ -4,7 +4,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Voting plugin deinstaller
 //
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('voting', 'install');
 $db_update = array(
 	// array(
@@ -22,7 +22,7 @@ if ($_REQUEST['action'] == 'commit') {
 		plugin_mark_deinstalled('voting');
 	}
 } else {
-	$text = 'Внимание! Удаление плагина приведёт к удалению всех созданных на сайте опросов!<br><br>';
+	$text = 'Р’РЅРёРјР°РЅРёРµ! РЈРґР°Р»РµРЅРёРµ РїР»Р°РіРёРЅР° РїСЂРёРІРµРґС‘С‚ Рє СѓРґР°Р»РµРЅРёСЋ РІСЃРµС… СЃРѕР·РґР°РЅРЅС‹С… РЅР° СЃР°Р№С‚Рµ РѕРїСЂРѕСЃРѕРІ!<br><br>';
 	generate_install_page('voting', $text, 'deinstall');
 }
 ?>

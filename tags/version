@@ -3,7 +3,7 @@
 ;
 
 ID: tags
-Name: Теги
+Name: РўРµРіРё
 Version: 0.25
 Acts: index,news,ppages,admin:mod:news,admin:mod:preview
 Actions: rpc;lib/librpc.php
@@ -12,9 +12,9 @@ Config: config.php
 Install: install.php
 Deinstall: deinstall.php
 Type: plugin
-Description: Использование тегов и облака тегов
+Description: РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ С‚РµРіРѕРІ Рё РѕР±Р»Р°РєР° С‚РµРіРѕРІ
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 URI: http://no_url.com/
-Title: Облако тегов
-Information: Показывает массив ключевых слов, созданных в новости. Чем чаще ключевое слово встречается в новостях, тем сильнее выделяется данное слово в &quot;облаке&quot;.
+Title: РћР±Р»Р°РєРѕ С‚РµРіРѕРІ
+Information: РџРѕРєР°Р·С‹РІР°РµС‚ РјР°СЃСЃРёРІ РєР»СЋС‡РµРІС‹С… СЃР»РѕРІ, СЃРѕР·РґР°РЅРЅС‹С… РІ РЅРѕРІРѕСЃС‚Рё. Р§РµРј С‡Р°С‰Рµ РєР»СЋС‡РµРІРѕРµ СЃР»РѕРІРѕ РІСЃС‚СЂРµС‡Р°РµС‚СЃСЏ РІ РЅРѕРІРѕСЃС‚СЏС…, С‚РµРј СЃРёР»СЊРЅРµРµ РІС‹РґРµР»СЏРµС‚СЃСЏ РґР°РЅРЅРѕРµ СЃР»РѕРІРѕ РІ &quot;РѕР±Р»Р°РєРµ&quot;.

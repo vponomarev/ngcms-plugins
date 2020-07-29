@@ -3,15 +3,15 @@
 ;
  
 ID: comments_akismet
-Name: Антиспам на основе Akismet
+Name: РђРЅС‚РёСЃРїР°Рј РЅР° РѕСЃРЅРѕРІРµ Akismet
 Version: 0.02
 Acts: comments:add
 File: antispam.php
 Config: config.php
 Type: plugin
-Description: Фильтрует спам в комментариях
+Description: Р¤РёР»СЊС‚СЂСѓРµС‚ СЃРїР°Рј РІ РєРѕРјРјРµРЅС‚Р°СЂРёСЏС…
 Author: wget
 Author_URI: http://ngcms.ru/forum/profile.php?id=2348
 Title: Antispam
-Information: Фильтрует спам в комментариях
+Information: Р¤РёР»СЊС‚СЂСѓРµС‚ СЃРїР°Рј РІ РєРѕРјРјРµРЅС‚Р°СЂРёСЏС…
 Preinstall: no

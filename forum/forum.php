@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит 
- комментариев. То, что писалось с трудом, должно 
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚ 
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ 
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -72,9 +72,9 @@ function plugin_show_forum() {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/index.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -93,9 +93,9 @@ function plugin_showforum_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/showforum.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -114,9 +114,9 @@ function plugin_showtopic_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/showtopic.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -135,9 +135,9 @@ function plugin_userlist_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/userlist.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -157,9 +157,9 @@ function plugin_search_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/search.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -178,9 +178,9 @@ function plugin_register_forum() {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/register.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -198,7 +198,7 @@ function plugin_login_forum() {
 	if ($ban[$ip] < 3)
 		include(FORUM_DIR . '/action/login.php');
 	else
-		$output = information('Вы забанены!!!');
+		$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	show_main_page(false, $output, $welcome, $event);
 }
 
@@ -214,9 +214,9 @@ function plugin_profile_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/profile.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -234,7 +234,7 @@ function plugin_out_forum() {
 	if ($ban[$ip] < 3)
 		include(FORUM_DIR . '/action/out.php');
 	else
-		$output = information('Вы забанены!!!');
+		$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	show_main_page(false, $output, $welcome, $event);
 }
 
@@ -250,9 +250,9 @@ function plugin_newpost_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/newpost.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -271,9 +271,9 @@ function plugin_newtopic_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/newtopic.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -292,9 +292,9 @@ function plugin_topic_modify_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/topic_modify.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -313,9 +313,9 @@ function plugin_delpost_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/delpost.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -334,9 +334,9 @@ function plugin_edit_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/edit.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -355,9 +355,9 @@ function plugin_rules_forum() {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/rules.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -376,9 +376,9 @@ function plugin_unsubscribe_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/uns.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -397,9 +397,9 @@ function plugin_markread_forum() {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/markread.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -418,9 +418,9 @@ function plugin_reputation_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/reputation.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -439,9 +439,9 @@ function plugin_add_reputation_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/addrep.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -460,9 +460,9 @@ function plugin_act_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/act.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -481,9 +481,9 @@ function plugin_news_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/news.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -502,9 +502,9 @@ function plugin_news_feed_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/news_feed.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -524,9 +524,9 @@ function plugin_rss_feed_forum($params) {
 		if ($ban[$ip] < 3)
 			$output = rss_export_generate_forum();
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -550,9 +550,9 @@ function plugin_rss_forum($params) {
 		if ($ban[$ip] < 3)
 			$output = rss_export_generate_forum($id);
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -571,9 +571,9 @@ function plugin_add_thank_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/add_thank.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -592,9 +592,9 @@ function plugin_thank_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/thank.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -613,9 +613,9 @@ function plugin_complaints_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/complaints.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -634,9 +634,9 @@ function plugin_send_pm_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/send_pm.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -655,9 +655,9 @@ function plugin_list_pm_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/list_pm.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -675,9 +675,9 @@ function plugin_del_pm_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/del_pm.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -694,9 +694,9 @@ function lock_passwd_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/lock_passwd.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -714,9 +714,9 @@ function plugin_downloads_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/downloads.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}
@@ -734,9 +734,9 @@ function plugin_moderate_forum($params) {
 		if ($ban[$ip] < 3)
 			include(FORUM_DIR . '/action/moderate.php');
 		else
-			$output = information('Вы забанены!!!');
+			$output = information('Р’С‹ Р·Р°Р±Р°РЅРµРЅС‹!!!');
 	} else {
-		$output = permissions_forum('У вас нет доступа на чтение форума');
+		$output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° РЅР° С‡С‚РµРЅРёРµ С„РѕСЂСѓРјР°');
 		$welcome = false;
 		$event = false;
 	}

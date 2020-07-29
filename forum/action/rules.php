@@ -8,17 +8,17 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Íàñòîÿùèé ïğîãğàììèñò íèêîãäà íå ñòàâèò
- êîììåíòàğèåâ. Òî, ÷òî ïèñàëîñü ñ òğóäîì, äîëæíî
- ïîíèìàòüñÿ ñ òğóäîì. :))
+ Â© ĞĞ°ÑÑ‚Ğ¾ÑÑ‰Ğ¸Ğ¹ Ğ¿Ñ€Ğ¾Ğ³Ñ€Ğ°Ğ¼Ğ¼Ğ¸ÑÑ‚ Ğ½Ğ¸ĞºĞ¾Ğ³Ğ´Ğ° Ğ½Ğµ ÑÑ‚Ğ°Ğ²Ğ¸Ñ‚
+ ĞºĞ¾Ğ¼Ğ¼ĞµĞ½Ñ‚Ğ°Ñ€Ğ¸ĞµĞ². Ğ¢Ğ¾, Ñ‡Ñ‚Ğ¾ Ğ¿Ğ¸ÑĞ°Ğ»Ğ¾ÑÑŒ Ñ Ñ‚Ñ€ÑƒĞ´Ğ¾Ğ¼, Ğ´Ğ¾Ğ»Ğ¶Ğ½Ğ¾
+ Ğ¿Ğ¾Ğ½Ğ¸Ğ¼Ğ°Ñ‚ÑŒÑÑ Ñ Ñ‚Ñ€ÑƒĞ´Ğ¾Ğ¼. :))
 -----------------------------------------------------
- Äàííûé êîä çàùèùåí àâòîğñêèìè ïğàâàìè
+ Ğ”Ğ°Ğ½Ğ½Ñ‹Ğ¹ ĞºĞ¾Ğ´ Ğ·Ğ°Ñ‰Ğ¸Ñ‰ĞµĞ½ Ğ°Ğ²Ñ‚Ğ¾Ñ€ÑĞºĞ¸Ğ¼Ğ¸ Ğ¿Ñ€Ğ°Ğ²Ğ°Ğ¼Ğ¸
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
 $tpath = locatePluginTemplates(array('rules'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum', 'localskin'));
 $xt = $twig->loadTemplate($tpath['rules'] . 'rules.tpl');
 if (!pluginGetVariable('forum', 'rules_on_off'))
-	return $output = information('Ïğàâèëà îòêëş÷åíû', $title = 'Èíôîğìàöèÿ');
+	return $output = information('ĞŸÑ€Ğ°Ğ²Ğ¸Ğ»Ğ° Ğ¾Ñ‚ĞºĞ»ÑÑ‡ĞµĞ½Ñ‹', $title = 'Ğ˜Ğ½Ñ„Ğ¾Ñ€Ğ¼Ğ°Ñ†Ğ¸Ñ');
 $tVars['entries'] = nl2br(pluginGetVariable('forum', 'rules'));
 $output = $xt->render($tVars);

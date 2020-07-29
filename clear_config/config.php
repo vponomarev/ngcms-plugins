@@ -1,7 +1,7 @@
 <?php
 if (!defined('NGCMS')) exit('HAL');
 $lang = LoadLang('users', 'admin');
-LoadPluginLang('clear_config', 'config', '', 'ñ_ñ', ':');
+LoadPluginLang('clear_config', 'config', '', 'Ñ_Ñ', ':');
 switch ($_REQUEST['action']) {
 	case 'delete':
 		delete();
@@ -12,7 +12,7 @@ switch ($_REQUEST['action']) {
 function showlist() {
 
 	global $tpl, $PLUGINS, $lang;
-	plugins_load_config();
+	pluginsLoadConfig();
 	$ULIB = new urlLibrary();
 	$ULIB->loadConfig();
 	$plug = array();
@@ -66,8 +66,8 @@ function showlist() {
 			$pvars['vars']['conf'] .=
 				'<a href="/engine/admin.php?mod=extra-config&plugin=clear_config&action=delete&id=' . $row .
 				'&conf=' . $rrow .
-				'" title="' . $lang['ñ_ñ:' . $rrow] .
-				'" onclick="return confirm(\'' . sprintf($lang['ñ_ñ:confirm'], $lang['ñ_ñ:' . $rrow], $row) . '\');" ' .
+				'" title="' . $lang['Ñ_Ñ:' . $rrow] .
+				'" onclick="return confirm(\'' . sprintf($lang['Ñ_Ñ:confirm'], $lang['Ñ_Ñ:' . $rrow], $row) . '\');" ' .
 				'><img src="/engine/plugins/clear_config/tpl/images/' . $rrow . '.png" /></a>&#160;';
 		}
 		$tpl->template('conf.list.row', $tpath['conf.list.row']);
@@ -84,7 +84,7 @@ function delete() {
 
 	global $PLUGINS, $lang;
 	if (!isset($_REQUEST['id']) || !isset($_REQUEST['conf'])) {
-		msg(array('type' => 'info', 'info' => $lang['ñ_ñ:error']));
+		msg(array('type' => 'info', 'info' => $lang['Ñ_Ñ:error']));
 		showlist();
 
 		return false;
@@ -95,8 +95,8 @@ function delete() {
 		case 'active':
 			if (isset($PLUGINS['active']['active'][$id])) {
 				unset($PLUGINS['active']['active'][$id]);
-				msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_ok'], 'active', $id)));
-			} else msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_er'], 'active', $id)));
+				msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_ok'], 'active', $id)));
+			} else msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_er'], 'active', $id)));
 			break;
 		case 'actions':
 			$if_delete = false;
@@ -108,34 +108,34 @@ function delete() {
 					}
 				}
 			}
-			if ($if_delete) msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_ok'], 'actions', $id)));
-			else msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_er'], 'actions', $id)));
+			if ($if_delete) msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_ok'], 'actions', $id)));
+			else msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_er'], 'actions', $id)));
 			break;
 		case 'installed':
 			if (isset($PLUGINS['active']['installed'][$id])) {
 				unset($PLUGINS['active']['installed'][$id]);
-				msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_ok'], 'installed', $id)));
-			} else msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_er'], 'installed', $id)));
+				msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_ok'], 'installed', $id)));
+			} else msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_er'], 'installed', $id)));
 			break;
 		case 'libs':
 			if (isset($PLUGINS['active']['libs'][$id])) {
 				unset($PLUGINS['active']['libs'][$id]);
-				msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_ok'], 'libs', $id)));
-			} else msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_er'], 'libs', $id)));
+				msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_ok'], 'libs', $id)));
+			} else msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_er'], 'libs', $id)));
 			break;
 		case 'config':
 			if (isset($PLUGINS['config'][$id])) {
 				unset($PLUGINS['config'][$id]);
-				msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_ok'], 'config', $id)));
-			} else msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_er'], 'config', $id)));
+				msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_ok'], 'config', $id)));
+			} else msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_er'], 'config', $id)));
 			break;
 		case 'urlcmd':
 			$ULIB = new urlLibrary();
 			$ULIB->loadConfig();
 			if (isset($ULIB->CMD[$id])) {
 				unset($ULIB->CMD[$id]);
-				msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_ok'], 'urlcmd', $id)));
-			} else msg(array('type' => 'info', 'info' => sprintf($lang['ñ_ñ:del_er'], 'urlcmd', $id)));
+				msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_ok'], 'urlcmd', $id)));
+			} else msg(array('type' => 'info', 'info' => sprintf($lang['Ñ_Ñ:del_er'], 'urlcmd', $id)));
 			$ULIB->saveConfig();
 			break;
 	}

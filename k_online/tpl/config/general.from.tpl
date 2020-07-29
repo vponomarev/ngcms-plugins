@@ -2,10 +2,10 @@
 	<tr>
 		<td colspan=2>
 			<fieldset class="admGroup">
-				<legend class="title">Настройки</legend>
+				<legend class="title">РќР°СЃС‚СЂРѕР№РєРё</legend>
 				<table width="100%" border="0" class="content">
 					<tr>
-						<td class="contentEntry1" valign=top>Стили для админов<br/>
+						<td class="contentEntry1" valign=top>РЎС‚РёР»Рё РґР»СЏ Р°РґРјРёРЅРѕРІ<br/>
 							<small></small>
 						</td>
 						<td class="contentEntry2" valign=top>
@@ -13,7 +13,7 @@
 							<input name="style_admin_start" type="text" size=40 value="{{ style_admin_start.print }}"/>
 
 						</td>
-						<td class="contentEntry1" valign=top>Стили для админов<br/>
+						<td class="contentEntry1" valign=top>РЎС‚РёР»Рё РґР»СЏ Р°РґРјРёРЅРѕРІ<br/>
 							<small></small>
 						</td>
 						<td class="contentEntry2" valign=top>
@@ -22,77 +22,77 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Заголовок в полной новости<br/>
-							<small>Текст поля &lt;title&gt;&lt;/title&gt; в полной новости (разрешено %cat%, %title%,
+						<td class="contentEntry1" valign=top>Р—Р°РіРѕР»РѕРІРѕРє РІ РїРѕР»РЅРѕР№ РЅРѕРІРѕСЃС‚Рё<br/>
+							<small>РўРµРєСЃС‚ РїРѕР»СЏ &lt;title&gt;&lt;/title&gt; РІ РїРѕР»РЅРѕР№ РЅРѕРІРѕСЃС‚Рё (СЂР°Р·СЂРµС€РµРЅРѕ %cat%, %title%,
 								%home%, %num%)
 							</small>
 						</td>
 						<td class="contentEntry2" valign=top>{{ n_title.error }}
-							<input name="n_title" type="text" title="Заголовок в полной новости" size=40 value="{{ n_title.print }}"/>
+							<input name="n_title" type="text" title="Р—Р°РіРѕР»РѕРІРѕРє РІ РїРѕР»РЅРѕР№ РЅРѕРІРѕСЃС‚Рё" size=40 value="{{ n_title.print }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Заголовок главной страницы<br/>
-							<small>Текст поля &lt;title&gt;&lt;/title&gt; главной страницы (разрешено %home% %num%)
+						<td class="contentEntry1" valign=top>Р—Р°РіРѕР»РѕРІРѕРє РіР»Р°РІРЅРѕР№ СЃС‚СЂР°РЅРёС†С‹<br/>
+							<small>РўРµРєСЃС‚ РїРѕР»СЏ &lt;title&gt;&lt;/title&gt; РіР»Р°РІРЅРѕР№ СЃС‚СЂР°РЅРёС†С‹ (СЂР°Р·СЂРµС€РµРЅРѕ %home% %num%)
 							</small>
 						</td>
 						<td class="contentEntry2" valign=top>{{ m_title.error }}
-							<input name="m_title" type="text" title="Заголовок главной страницы" size=40 value="{{ m_title.print }}"/>
+							<input name="m_title" type="text" title="Р—Р°РіРѕР»РѕРІРѕРє РіР»Р°РІРЅРѕР№ СЃС‚СЂР°РЅРёС†С‹" size=40 value="{{ m_title.print }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Заголовок статической страницы<br/>
-							<small>Текст поля &lt;title&gt;&lt;/title&gt; статической страницы (разрешено %home% и
+						<td class="contentEntry1" valign=top>Р—Р°РіРѕР»РѕРІРѕРє СЃС‚Р°С‚РёС‡РµСЃРєРѕР№ СЃС‚СЂР°РЅРёС†С‹<br/>
+							<small>РўРµРєСЃС‚ РїРѕР»СЏ &lt;title&gt;&lt;/title&gt; СЃС‚Р°С‚РёС‡РµСЃРєРѕР№ СЃС‚СЂР°РЅРёС†С‹ (СЂР°Р·СЂРµС€РµРЅРѕ %home% Рё
 								%static%)
 							</small>
 						</td>
 						<td class="contentEntry2" valign=top>{{ static_title.error }}
-							<input name="static_title" type="text" title="Заголовок статической страницы" size=40 value="{{ static_title.print }}"/>
+							<input name="static_title" type="text" title="Р—Р°РіРѕР»РѕРІРѕРє СЃС‚Р°С‚РёС‡РµСЃРєРѕР№ СЃС‚СЂР°РЅРёС†С‹" size=40 value="{{ static_title.print }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Заголовок остальных страницы<br/>
-							<small>Текст поля &lt;title>&lt;/title> других страниц (профиль пользователя, личный
-								профиль) (разрешено %home%, %other%, %html% и %num%)
+						<td class="contentEntry1" valign=top>Р—Р°РіРѕР»РѕРІРѕРє РѕСЃС‚Р°Р»СЊРЅС‹С… СЃС‚СЂР°РЅРёС†С‹<br/>
+							<small>РўРµРєСЃС‚ РїРѕР»СЏ &lt;title>&lt;/title> РґСЂСѓРіРёС… СЃС‚СЂР°РЅРёС† (РїСЂРѕС„РёР»СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, Р»РёС‡РЅС‹Р№
+								РїСЂРѕС„РёР»СЊ) (СЂР°Р·СЂРµС€РµРЅРѕ %home%, %other%, %html% Рё %num%)
 							</small>
 						</td>
 						<td class="contentEntry2" valign=top>{{ o_title.error }}
-							<input name="o_title" type="text" title="Заголовок остальных страницы" size=40 value="{{ o_title.print }}"/>
+							<input name="o_title" type="text" title="Р—Р°РіРѕР»РѕРІРѕРє РѕСЃС‚Р°Р»СЊРЅС‹С… СЃС‚СЂР°РЅРёС†С‹" size=40 value="{{ o_title.print }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Дополнительная информация для страницы<br/>
-							<small>Вывод дополнительной информацию о странице (прим. имя тега) - данных передадутся в
-								переменную %html%
+						<td class="contentEntry1" valign=top>Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РґР»СЏ СЃС‚СЂР°РЅРёС†С‹<br/>
+							<small>Р’С‹РІРѕРґ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕР№ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ СЃС‚СЂР°РЅРёС†Рµ (РїСЂРёРј. РёРјСЏ С‚РµРіР°) - РґР°РЅРЅС‹С… РїРµСЂРµРґР°РґСѓС‚СЃСЏ РІ
+								РїРµСЂРµРјРµРЅРЅСѓСЋ %html%
 							</small>
 						</td>
 						<td class="contentEntry2" valign=top>{{ html_secure.error }}
-							<input name="html_secure" type="text" title="Дополнительная информация для страницы" size=40 value="{{ html_secure.print }}"/>
+							<input name="html_secure" type="text" title="Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ РґР»СЏ СЃС‚СЂР°РЅРёС†С‹" size=40 value="{{ html_secure.print }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Плагины исключения<br/>
-							<small>Список плагинов на которых работа плагина не распространяется</small>
+						<td class="contentEntry1" valign=top>РџР»Р°РіРёРЅС‹ РёСЃРєР»СЋС‡РµРЅРёСЏ<br/>
+							<small>РЎРїРёСЃРѕРє РїР»Р°РіРёРЅРѕРІ РЅР° РєРѕС‚РѕСЂС‹С… СЂР°Р±РѕС‚Р° РїР»Р°РіРёРЅР° РЅРµ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅСЏРµС‚СЃСЏ</small>
 						</td>
 						<td class="contentEntry2" valign=top>{{ p_title.error }}
-							<input name="p_title" type="text" title="Список плагинов на которых работа плагина не распространяется" size=40 value="{{ p_title.print }}"/>
+							<input name="p_title" type="text" title="РЎРїРёСЃРѕРє РїР»Р°РіРёРЅРѕРІ РЅР° РєРѕС‚РѕСЂС‹С… СЂР°Р±РѕС‚Р° РїР»Р°РіРёРЅР° РЅРµ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅСЏРµС‚СЃСЏ" size=40 value="{{ p_title.print }}"/>
 						</td>
 					</tr>
 					<tr>
-						<td class="contentEntry1" valign=top>Номер страницы<br/>
-							<small>Форматирование номера страницы (например, Страница 4 [Страница %count%] - где %count%
-								номер страницы) - данных передадутся в переменную %num%
+						<td class="contentEntry1" valign=top>РќРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹<br/>
+							<small>Р¤РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ РЅРѕРјРµСЂР° СЃС‚СЂР°РЅРёС†С‹ (РЅР°РїСЂРёРјРµСЂ, РЎС‚СЂР°РЅРёС†Р° 4 [РЎС‚СЂР°РЅРёС†Р° %count%] - РіРґРµ %count%
+								РЅРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹) - РґР°РЅРЅС‹С… РїРµСЂРµРґР°РґСѓС‚СЃСЏ РІ РїРµСЂРµРјРµРЅРЅСѓСЋ %num%
 							</small>
 						</td>
 						<td class="contentEntry2" valign=top>{{ num_title.error }}
-							<input name="num_title" type="text" title="Номер страницы" size=40 value="{{ num_title.print }}"/>
+							<input name="num_title" type="text" title="РќРѕРјРµСЂ СЃС‚СЂР°РЅРёС†С‹" size=40 value="{{ num_title.print }}"/>
 						</td>
 					</tr>
 					<tr>
 						<td class="contentEntry1" valign=top><br/>
-							<small>Ключи:<br/><b>%cat%</b> - имя категории<br/><b>%title%</b> - имя
-								новости<br><b>%home%</b> - заголовок сайта<br/><b>%static%</b> - заголовок статической
-								страницы<br/><b>%other%</b> - заголовок любой другой страницы<br></small>
+							<small>РљР»СЋС‡Рё:<br/><b>%cat%</b> - РёРјСЏ РєР°С‚РµРіРѕСЂРёРё<br/><b>%title%</b> - РёРјСЏ
+								РЅРѕРІРѕСЃС‚Рё<br><b>%home%</b> - Р·Р°РіРѕР»РѕРІРѕРє СЃР°Р№С‚Р°<br/><b>%static%</b> - Р·Р°РіРѕР»РѕРІРѕРє СЃС‚Р°С‚РёС‡РµСЃРєРѕР№
+								СЃС‚СЂР°РЅРёС†С‹<br/><b>%other%</b> - Р·Р°РіРѕР»РѕРІРѕРє Р»СЋР±РѕР№ РґСЂСѓРіРѕР№ СЃС‚СЂР°РЅРёС†С‹<br></small>
 						</td>
 						<td class="contentEntry2" valign=top></td>
 					</tr>
@@ -106,7 +106,7 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input name="submit" type="submit" value="Сохранить" class="button"/>
+				<input name="submit" type="submit" value="РЎРѕС…СЂР°РЅРёС‚СЊ" class="button"/>
 			</td>
 		</tr>
 	</table>

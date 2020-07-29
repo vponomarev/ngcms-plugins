@@ -4,17 +4,17 @@
  * Copyright (C) 2010-2011 Alexey N. Zhukov (http://digitalplace.ru)
  * web:    http://digitalplace.ru
  * e-mail: zhukov.alexei@gmail.com
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or (at
  * your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -85,12 +85,16 @@ function breadcrumbs() {
 			if ($catz[$params['category']]['parent'] != 0 && !pluginGetVariable('breadcrumbs', 'block_full_path')) {
 				$id = $catz[$params['category']]['parent'];
 				do {
-					$location_tmp[] = array(
-						'url'   => generateLink('news', 'by.category', array('category' => $catz[$params['category']]['alt'], 'catid' => $catz[$params['category']]['id'])),
-						'title' => $catz[$params['category']]['name'],
-						'link'  => GetCategories($id, false),
-					);
-					$id = $catz[$catmap[$id]]['parent'];
+					$row = $catz[$catmap[$id]];
+					$location_tmp[] = [
+						'url' => generateLink('news', 'by.category', [
+							'category' => $row['alt'],
+							'catid' => $row['id'],
+						]),
+						'title' => $row['name'],
+						'link' => GetCategories($id),
+					];
+					$id = $row['parent'];
 				} while ($id != 0);
 				$location = array_merge($location, array_reverse($location_tmp));
 			}
@@ -179,26 +183,9 @@ function breadcrumbs() {
 					# last item becomes plain text
 					$location_last = $SYSTEM_FLAGS['info']['breadcrumbs'][$i]['text'];
 				} else {
-					$link = str_replace(
-						array(
-							'{plugin_url}',
-							'{plugin}'
-						),
-						array(
-							generatePluginLink($params['plugin'], '', array(), array(), false, true),
-							$SYSTEM_FLAGS['info']['title']['group'] != $lang['loc_plugin'] ? $SYSTEM_FLAGS['info']['title']['group'] : $params['plugin']
-						),
-						$lang['bc:plugin']
-					);
-					$location[] = array(
-						'url'   => generatePluginLink($params['plugin'], '', array(), array(), false, true),
-						'title' => $SYSTEM_FLAGS['info']['title']['group'] != $lang['loc_plugin'] ? $SYSTEM_FLAGS['info']['title']['group'] : $params['plugin'],
-						'link'  => $link,
-					);
-					if ($SYSTEM_FLAGS['info']['title']['group'] != $lang['loc_plugin'])
-						$location_last = $SYSTEM_FLAGS['info']['title']['group'];
-					else
-						$location_last = $params['plugin'];
+					$location_last = $SYSTEM_FLAGS['info']['title']['group'] != $lang['loc_plugin']
+					    ? $SYSTEM_FLAGS['info']['title']['group']
+					    : $params['plugin'];
 				}
 			}
 			# full news

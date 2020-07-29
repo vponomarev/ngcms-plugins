@@ -1,7 +1,7 @@
 <?php
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('guestbook', 'config', '', 'gbconfig', '#');
 switch ($_REQUEST['action']) {
 	case 'manage_fields'  :
@@ -269,7 +269,7 @@ function show_options() {
 								'matchRegex' => '\\d{1,4}',
 								'descr'      =>
 									array(
-										'russian' => 'Ñòðàíèöà',
+										'russian' => 'Ð¡Ñ‚Ñ€Ð°Ð½Ð¸Ñ†Ð°',
 									),
 							),
 						'act'  =>
@@ -281,7 +281,7 @@ function show_options() {
 									),
 							),
 					),
-					'descr' => array('russian' => 'Ãîñòåâàÿ êíèãà'),
+					'descr' => array('russian' => 'Ð“Ð¾ÑÑ‚ÐµÐ²Ð°Ñ ÐºÐ½Ð¸Ð³Ð°'),
 				)
 			);
 			$ULIB->registerCommand('guestbook', 'edit',
@@ -292,11 +292,11 @@ function show_options() {
 								'matchRegex' => '\\d+',
 								'descr'      =>
 									array(
-										'russian' => 'ID çàïèñè',
+										'russian' => 'ID Ð·Ð°Ð¿Ð¸ÑÐ¸',
 									),
 							),
 					),
-					'descr' => array('russian' => 'Ðåäàêòèðîâàíèå'),
+					'descr' => array('russian' => 'Ð ÐµÐ´Ð°ÐºÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ'),
 				)
 			);
 			$ULIB->saveConfig();
@@ -517,7 +517,7 @@ function edit_message($mid) {
 			$tFields[] = $tField;
 		}
 	} else {
-		msg(array("type" => "error", "text" => "Íå ïåðåäàí id"));
+		msg(array("type" => "error", "text" => "ÐÐµ Ð¿ÐµÑ€ÐµÐ´Ð°Ð½ id"));
 	}
 	$xt = $twig->loadTemplate($tpath['config/messages_edit'] . 'config/messages_edit.tpl');
 	$tVars = array(

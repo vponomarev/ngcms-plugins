@@ -1,14 +1,14 @@
 <?php
-plugins_load_config();
+pluginsLoadConfig();
 $cfg = array();
-array_push($cfg, array('name' => 'c_title', 'title' => 'Title для категории', 'descr' => 'Разрешено только %1% и %3%', 'type' => 'input', 'value' => extra_get_param('simple_title', 'c_title')));
-array_push($cfg, array('name' => 'n_title', 'title' => 'Title для новости', 'descr' => 'Все три разрешены', 'type' => 'input', 'value' => extra_get_param('simple_title', 'n_title')));
-array_push($cfg, array('name' => 'm_title', 'title' => 'Title для главной страницы<br>Только %3%', 'type' => 'input', 'value' => extra_get_param('simple_title', 'm_title')));
-array_push($cfg, array('name' => 'static_title', 'title' => 'Title для статической страницы<br>Только %3%', 'type' => 'input', 'value' => extra_get_param('simple_title', 'static_title')));
-array_push($cfg, array('descr' => 'Ключи:<br><b>%1%</b> - имя категории<br><b>%2%</b> - имя новости<br><b>%3%</b> - заголовок сайта<br><b>%4%</b> - заголовок статической страницы<br>'));
+array_push($cfg, array('name' => 'c_title', 'title' => 'Title РґР»СЏ РєР°С‚РµРіРѕСЂРёРё', 'descr' => 'Р Р°Р·СЂРµС€РµРЅРѕ С‚РѕР»СЊРєРѕ %1% Рё %3%', 'type' => 'input', 'value' => extra_get_param('simple_title', 'c_title')));
+array_push($cfg, array('name' => 'n_title', 'title' => 'Title РґР»СЏ РЅРѕРІРѕСЃС‚Рё', 'descr' => 'Р’СЃРµ С‚СЂРё СЂР°Р·СЂРµС€РµРЅС‹', 'type' => 'input', 'value' => extra_get_param('simple_title', 'n_title')));
+array_push($cfg, array('name' => 'm_title', 'title' => 'Title РґР»СЏ РіР»Р°РІРЅРѕР№ СЃС‚СЂР°РЅРёС†С‹<br>РўРѕР»СЊРєРѕ %3%', 'type' => 'input', 'value' => extra_get_param('simple_title', 'm_title')));
+array_push($cfg, array('name' => 'static_title', 'title' => 'Title РґР»СЏ СЃС‚Р°С‚РёС‡РµСЃРєРѕР№ СЃС‚СЂР°РЅРёС†С‹<br>РўРѕР»СЊРєРѕ %3%', 'type' => 'input', 'value' => extra_get_param('simple_title', 'static_title')));
+array_push($cfg, array('descr' => 'РљР»СЋС‡Рё:<br><b>%1%</b> - РёРјСЏ РєР°С‚РµРіРѕСЂРёРё<br><b>%2%</b> - РёРјСЏ РЅРѕРІРѕСЃС‚Рё<br><b>%3%</b> - Р·Р°РіРѕР»РѕРІРѕРє СЃР°Р№С‚Р°<br><b>%4%</b> - Р·Р°РіРѕР»РѕРІРѕРє СЃС‚Р°С‚РёС‡РµСЃРєРѕР№ СЃС‚СЂР°РЅРёС†С‹<br>'));
 if ($_REQUEST['action'] == 'commit') {
 	commit_plugin_config_changes('simple_title', $cfg);
-	print "Changes commited: <a href='admin.php?mod=extra-config&plugin=simple_title'>Назад</a>\n";
+	print "Changes commited: <a href='admin.php?mod=extra-config&plugin=simple_title'>РќР°Р·Р°Рґ</a>\n";
 } else {
 	generate_config_page('simple_title', $cfg);
 }

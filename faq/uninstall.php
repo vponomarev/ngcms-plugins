@@ -4,7 +4,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Configuration file for plugin
 //
-plugins_load_config();
+pluginsLoadConfig();
 $db_update = array(
 	array(
 		'table'  => 'faq',
@@ -16,6 +16,6 @@ if ($_REQUEST['action'] == 'commit') {
 		plugin_mark_deinstalled($plugin);
 	}
 } else {
-	generate_install_page($plugin, 'Óäàëåíèå ïëàãèíà', 'deinstall');
+	generate_install_page($plugin, 'Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð¿Ð»Ð°Ð³Ð¸Ð½Ð°', 'deinstall');
 }
 ?>

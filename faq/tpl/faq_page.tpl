@@ -1,6 +1,6 @@
 {% if (entries) %}
 	<h2 class="title top">
-		<span>Вопросы / Ответы</span>
+		<span>Р’РѕРїСЂРѕСЃС‹ / РћС‚РІРµС‚С‹</span>
 	</h2>
 	<section class="questions">
 		{% for entry in entries %}

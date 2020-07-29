@@ -1,5 +1,5 @@
 <div class="block">
-	<h2><span>Правила форума</span></h2>
+	<h2><span>РџСЂР°РІРёР»Р° С„РѕСЂСѓРјР°</span></h2>
 	<div class="box">
 		<div class="inbox">
 			<p>{{ entries }}</p>

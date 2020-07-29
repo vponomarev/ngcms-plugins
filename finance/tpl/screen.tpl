@@ -1,7 +1,7 @@
 <div class="not_logged">
-	<h3>Финансовая информация</h3>
-	<u>Ваш баланс</u>: <font color="blue"><b>{ubalance}</b></font> {currency}&nbsp;</b><br/><br/>
+	<h3>Р¤РёРЅР°РЅСЃРѕРІР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ</h3>
+	<u>Р’Р°С€ Р±Р°Р»Р°РЅСЃ</u>: <font color="blue"><b>{ubalance}</b></font> {currency}&nbsp;</b><br/><br/>
 </div><br/>
-<div class="not_logged">Выбор варианта пополнения счета:
+<div class="not_logged">Р’С‹Р±РѕСЂ РІР°СЂРёР°РЅС‚Р° РїРѕРїРѕР»РЅРµРЅРёСЏ СЃС‡РµС‚Р°:
 	<ul>{entries}</ul>
 </div>

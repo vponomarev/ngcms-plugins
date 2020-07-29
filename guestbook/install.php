@@ -4,7 +4,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Configuration file for plugin
 //
-plugins_load_config();
+pluginsLoadConfig();
 //LoadPluginLang($plugin, 'main');
 function plugin_guestbook_install($action) {
 
@@ -42,7 +42,7 @@ function plugin_guestbook_install($action) {
 	);
 	switch ($action) {
 		case 'confirm':
-			generate_install_page('guestbook', 'Плагин позволяет организовать гостевую книгу на вашем сайте<br />');
+			generate_install_page('guestbook', 'РџР»Р°РіРёРЅ РїРѕР·РІРѕР»СЏРµС‚ РѕСЂРіР°РЅРёР·РѕРІР°С‚СЊ РіРѕСЃС‚РµРІСѓСЋ РєРЅРёРіСѓ РЅР° РІР°С€РµРј СЃР°Р№С‚Рµ<br />');
 			break;
 		case 'autoapply':
 		case 'apply':

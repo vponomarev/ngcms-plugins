@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -21,13 +21,13 @@ if (isset($params['id']))
 else
 	$id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 if (empty($id))
-	return $output = information('id поста не указан не передан', $title = 'Информация');
+	return $output = information('id РїРѕСЃС‚Р° РЅРµ СѓРєР°Р·Р°РЅ РЅРµ РїРµСЂРµРґР°РЅ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $sql = "SELECT p.author_id, p.id as pid, p.c_data, t.fid, t.id as tid, t.int_post FROM " . prefix . "_forum_posts AS p LEFT JOIN " . prefix . "_forum_topics AS t ON t.id = p.tid WHERE p.id = " . securemysql("{$id}") . " LIMIT 1";
 $row = $mysql->record($sql);
 $sql = "SELECT id as fid, moderators FROM " . prefix . "_forum_forums WHERE id = " . securemysql("{$row['fid']}") . " LIMIT 1";
 $rows = $mysql->record($sql);
 if (!(($userROW['id'] == $row['author_id'] && (($time - $row['c_data']) < (pluginGetVariable('forum', 'edit_del_time') * 60) or (pluginGetVariable('forum', 'edit_del_time') == 0))) or ($userROW['status'] == 1)))
-	return $output = information('Вы не можете удалять', $title = 'Информация');
+	return $output = information('Р’С‹ РЅРµ РјРѕР¶РµС‚Рµ СѓРґР°Р»СЏС‚СЊ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $sql_2 = "SELECT id FROM `" . prefix . "_forum_posts` WHERE `tid` = '{$row['tid']}' ORDER BY c_data ASC LIMIT 1";
 $row_2 = $mysql->record($sql_2);
 $delet_subject = ($id == $row_2['id']) ? true : false;
@@ -42,9 +42,9 @@ if ($delet_subject) {
 		global_update_forum($row['fid']);
 		generate_index_cache(true);
 
-		return $output = announcement_forum('Данные внесены', link_forum($row['fid']), 2);
+		return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_forum($row['fid']), 2);
 	} else {
-		return $output = information('Вы не имеете права удалить сообщение', $title = 'Информация');
+		return $output = information('Р’С‹ РЅРµ РёРјРµРµС‚Рµ РїСЂР°РІР° СѓРґР°Р»РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	}
 } else {
 	if (($row['author_id'] == $userROW['id'] && $FORUM_PS[$row['fid']]['topic_remove_your']) || moder_perm($row['fid'], 'topic_remove', $rows['moderators']) || $FORUM_PS[$row['fid']]['topic_remove']) {
@@ -54,8 +54,8 @@ if ($delet_subject) {
 		global_update_forum($row['fid']);
 		generate_index_cache(true);
 
-		return $output = announcement_forum('Данные внесены', link_topic($row_3['id'], 'pid') . '#' . $row_3['id'], 2);
+		return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_topic($row_3['id'], 'pid') . '#' . $row_3['id'], 2);
 	} else {
-		return $output = information('Вы не имеете права удалить сообщение', $title = 'Информация');
+		return $output = information('Р’С‹ РЅРµ РёРјРµРµС‚Рµ РїСЂР°РІР° СѓРґР°Р»РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	}
 }

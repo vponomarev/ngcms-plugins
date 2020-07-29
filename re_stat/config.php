@@ -1,7 +1,7 @@
 <?php
 if(!defined('NGCMS')) exit('HAL');
 
-plugins_load_config();
+pluginsLoadConfig();
 ver_ver();
 
 switch ($_REQUEST['action']) {
@@ -25,10 +25,10 @@ function showlist()
 			'id' => $key,
 			'no' => $no ++,
 			'code' => $row['code'],
-			'title' => ($title?$title:'<font color="red">Такой страницы не сущуствует</font>'),
+			'title' => ($title?$title:'<font color="red">РўР°РєРѕР№ СЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰СѓСЃС‚РІСѓРµС‚</font>'),
 			'error' => '',
 			);
-		if (in_array($row['code'], $t_values, true)) $pvars['vars']['error'] = '<font color="red">Повторяющийся код</font>';
+		if (in_array($row['code'], $t_values, true)) $pvars['vars']['error'] = '<font color="red">РџРѕРІС‚РѕСЂСЏСЋС‰РёР№СЃСЏ РєРѕРґ</font>';
 		$t_values[] = $row['code'];
 		$tpl->template('conf.list.row', $tpath['conf.list.row']);
 		$tpl -> vars('conf.list.row', $pvars);
@@ -44,24 +44,24 @@ function editform()
 {
 	global $mysql, $tpl, $config;
 	if (!isset($_REQUEST['id'])) {
-		msg(array('type' => 'info', 'info' => '<font color="red">Значение для редактирования/добавления не определено!!!</font>'));
+		msg(array('type' => 'info', 'info' => '<font color="red">Р—РЅР°С‡РµРЅРёРµ РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ/РґРѕР±Р°РІР»РµРЅРёСЏ РЅРµ РѕРїСЂРµРґРµР»РµРЅРѕ!!!</font>'));
 		showlist();	return false; }
 	$id = intval($_REQUEST['id']);
 	$values = pluginGetVariable('re_stat', 'values');
 	if ($id != -1 && !is_array($values)) {
-		msg(array('type' => 'info', 'info' => '<font color="red">В базе отсутствуют значения, редактировать нечего!!!</font>'));
+		msg(array('type' => 'info', 'info' => '<font color="red">Р’ Р±Р°Р·Рµ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ Р·РЅР°С‡РµРЅРёСЏ, СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РЅРµС‡РµРіРѕ!!!</font>'));
 		showlist();	return false; }
 	if ($id != -1 && !array_key_exists($id, $values)) {
-		msg(array('type' => 'info', 'info' => '<font color="red">Ключ id='.$id.' отсутствует в базе</font>'));
+		msg(array('type' => 'info', 'info' => '<font color="red">РљР»СЋС‡ id='.$id.' РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РІ Р±Р°Р·Рµ</font>'));
 		showlist(); return false; } 
 	$if_error = false; $idstat = 0; $code = '';
 	if (isset($_REQUEST['code']) && isset($_REQUEST['idstat'])){
 		$code = secure_html(convert($_REQUEST['code']));
 		if (!$code) { 
-			msg(array('type' => 'info', 'info' => '<font color="red">Значение <b>код</b> не может быть пустым</font>'));
+			msg(array('type' => 'info', 'info' => '<font color="red">Р—РЅР°С‡РµРЅРёРµ <b>РєРѕРґ</b> РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј</font>'));
 			$if_error = true; }
 		foreach ($values as $key => $row) if ($row['code'] === $code && $key != $id){
-			msg(array('type' => 'info', 'info' => '<font color="red">Такое значение <b>код</b> уже присутствует в списке</font>'));
+			msg(array('type' => 'info', 'info' => '<font color="red">РўР°РєРѕРµ Р·РЅР°С‡РµРЅРёРµ <b>РєРѕРґ</b> СѓР¶Рµ РїСЂРёСЃСѓС‚СЃС‚РІСѓРµС‚ РІ СЃРїРёСЃРєРµ</font>'));
 			$if_error = true; }
 		if (!$if_error){
 			$idstat = intval($_REQUEST['idstat']);
@@ -75,7 +75,7 @@ function editform()
 				$values[$id]['id'] = $idstat;}
 			pluginSetVariable('re_stat', 'values', $values);
 			pluginsSaveConfig();
-			$title = '<font color="red">Такой страницы не сущуствует</font>';
+			$title = '<font color="red">РўР°РєРѕР№ СЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰СѓСЃС‚РІСѓРµС‚</font>';
 			foreach ($mysql->select('select `title` from '.prefix.'_static where `id`='.$idstat.' limit 1') as $page) $title = $page['title'];
 			$ULIB->registerCommand('re_stat', $code, array('vars' => array(), 'descr' => array ($config['default_lang'] => $title)));
 			$ULIB->saveConfig();
@@ -102,15 +102,15 @@ function editform()
 function delete()
 {
 	if (!isset($_REQUEST['id'])) {
-		msg(array('type' => 'info', 'info' => '<font color="red">Значение для удаления не определено, удалять нечего!!!</font>'));
+		msg(array('type' => 'info', 'info' => '<font color="red">Р—РЅР°С‡РµРЅРёРµ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ РЅРµ РѕРїСЂРµРґРµР»РµРЅРѕ, СѓРґР°Р»СЏС‚СЊ РЅРµС‡РµРіРѕ!!!</font>'));
 		showlist();	return false; }
 	$id = intval($_REQUEST['id']);
 	$values = pluginGetVariable('re_stat', 'values');
 	if (!is_array($values)) {
-		msg(array('type' => 'info', 'info' => '<font color="red">В базе отсутствуют значения, удалять нечего!!!</font>'));
+		msg(array('type' => 'info', 'info' => '<font color="red">Р’ Р±Р°Р·Рµ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ Р·РЅР°С‡РµРЅРёСЏ, СѓРґР°Р»СЏС‚СЊ РЅРµС‡РµРіРѕ!!!</font>'));
 		showlist();	return false; }
 	if (!array_key_exists($id, $values)) {
-		msg(array('type' => 'info', 'info' => '<font color="red">Ключ id='.$id.' отсутствует в базе</font>'));
+		msg(array('type' => 'info', 'info' => '<font color="red">РљР»СЋС‡ id='.$id.' РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РІ Р±Р°Р·Рµ</font>'));
 		showlist(); return false; }
 
 	$ULIB = new urlLibrary();
@@ -133,12 +133,12 @@ function re_map()
 		unset($ULIB->CMD['re_stat']);
 	$values = pluginGetVariable('re_stat', 'values');
 	foreach ($values as $key => $row){
-		$title = '<font color="red">Такой страницы не сущуствует</font>';
+		$title = '<font color="red">РўР°РєРѕР№ СЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰СѓСЃС‚РІСѓРµС‚</font>';
 		foreach ($mysql->select('select `title` from '.prefix.'_static where `id`='.$row['id'].' limit 1') as $page) $title = $page['title'];
 		$ULIB->registerCommand('re_stat', $row['code'], array('vars' => array(), 'descr' => array ($config['default_lang'] => $title)));
 	}
 	$ULIB->saveConfig();
-	msg(array('type' => 'info', 'info' => '<font color="green">Карта ссылок успешно перестроена</font>'));
+	msg(array('type' => 'info', 'info' => '<font color="green">РљР°СЂС‚Р° СЃСЃС‹Р»РѕРє СѓСЃРїРµС€РЅРѕ РїРµСЂРµСЃС‚СЂРѕРµРЅР°</font>'));
 }
 
 function ver_ver()
@@ -164,7 +164,7 @@ function ver_ver()
 		pluginSetVariable('re_stat', 'values', $values);
 		pluginSetVariable('re_stat', 'version', '0.02');
 		pluginsSaveConfig();
-		msg(array('type' => 'info', 'info' => '<font color="green">База настроек успешно обновленна до версии 0.02</font>'));
+		msg(array('type' => 'info', 'info' => '<font color="green">Р‘Р°Р·Р° РЅР°СЃС‚СЂРѕРµРє СѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІР»РµРЅРЅР° РґРѕ РІРµСЂСЃРёРё 0.02</font>'));
 		re_map();
 	}
 }

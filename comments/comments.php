@@ -184,7 +184,7 @@ class CommentsFilterAdminCategories extends FilterAdminCategories {
 		loadPluginLang('comments', 'config', '', '', ':');
 		$allowCom = pluginGetVariable('comments', 'default_categories');
 		$ms = '<select name="allow_com">';
-		$cv = array('0' => 'запретить', '1' => 'разрешить', '2' => 'по умолчанию');
+		$cv = array('0' => 'Р·Р°РїСЂРµС‚РёС‚СЊ', '1' => 'СЂР°Р·СЂРµС€РёС‚СЊ', '2' => 'РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ');
 		for ($i = 0; $i < 3; $i++) {
 			$ms .= '<option value="' . $i . '"' . (($allowCom == $i) ? ' selected="selected"' : '') . '>' . $cv[$i] . '</option>';
 		}
@@ -201,7 +201,7 @@ class CommentsFilterAdminCategories extends FilterAdminCategories {
 			$SQL['allow_com'] = pluginGetVariable('comments', 'default_categories');
 		}
 		$ms = '<select name="allow_com">';
-		$cv = array('0' => 'запретить', '1' => 'разрешить', '2' => 'по умолчанию');
+		$cv = array('0' => 'Р·Р°РїСЂРµС‚РёС‚СЊ', '1' => 'СЂР°Р·СЂРµС€РёС‚СЊ', '2' => 'РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ');
 		for ($i = 0; $i < 3; $i++) {
 			$ms .= '<option value="' . $i . '"' . (($SQL['allow_com'] == $i) ? ' selected="selected"' : '') . '>' . $cv[$i] . '</option>';
 		}

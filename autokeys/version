@@ -6,6 +6,6 @@ Actions: rpc;lib/librpc.php
 File: autokeys.php
 Config:config.php
 Type: plugin
-Description: Автоматическое добавление поля keywords
+Description: РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ РґРѕР±Р°РІР»РµРЅРёРµ РїРѕР»СЏ keywords
 Author: Maxym A. Dogadaylo
 Author_URI: http://football-stat.ru/

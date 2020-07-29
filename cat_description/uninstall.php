@@ -4,6 +4,6 @@ if (!defined('NGCMS')) die ('HAL');
 if ($_REQUEST['action'] == 'commit') {
 	plugin_mark_deinstalled('cat_description');
 } else {
-	$text = 'Cейчас плагин будет удален';
+	$text = 'CРµР№С‡Р°СЃ РїР»Р°РіРёРЅ Р±СѓРґРµС‚ СѓРґР°Р»РµРЅ';
 	generate_install_page('cat_description', $text, 'deinstall');
 }

@@ -94,8 +94,8 @@
 	<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr>
 			<td width="100%" colspan="2" class="contentHead">
-				<img src="{{ skins_url }}/images/nav.gif" hspace="8" alt=""/>Настройка плагина: Журнал действий
-				пользователей
+				<img src="{{ skins_url }}/images/nav.gif" hspace="8" alt=""/>РќР°СЃС‚СЂРѕР№РєР° РїР»Р°РіРёРЅР°: Р–СѓСЂРЅР°Р» РґРµР№СЃС‚РІРёР№
+				РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 			</td>
 		</tr>
 		<tr>
@@ -117,16 +117,16 @@
 					<table border="0" cellspacing="0" cellpadding="0" class="filterblock">
 						<tr>
 							<td valign="top">
-								<label>Дата</label>
-								с:&nbsp;
+								<label>Р”Р°С‚Р°</label>
+								СЃ:&nbsp;
 								<input type="text" id="dr1" name="dr1" value="{{ fDateStart }}" class="bfdate"/>&nbsp;&nbsp;
-								по&nbsp;&nbsp;
+								РїРѕ&nbsp;&nbsp;
 								<input type="text" id="dr2" name="dr2" value="{{ fDateEnd }}" class="bfdate"/>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<label>Пользователь</label>
+								<label>РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ</label>
 								<input name="an" id="an" class="bfauthor" type="text" value="{{ an }}" autocomplete="off"/>
 								<span id="suggestLoader" style="width: 20px; visibility: hidden;"><img src="{{ skins_url }}/images/loading.gif"/></span>
 							</td>
@@ -161,22 +161,22 @@
 					<table border="0" cellspacing="0" cellpadding="0" class="filterblock">
 						<tr>
 							<td>
-								<label>Статус</label>
+								<label>РЎС‚Р°С‚СѓСЃ</label>
 								<select name="status" class="bfstatus">
-									<option value="null" {% if fstatus  == 'null' %}selected{% endif %}>- Все -</option>
+									<option value="null" {% if fstatus  == 'null' %}selected{% endif %}>- Р’СЃРµ -</option>
 									<option value="0" {% if fstatus == '0' %}selected{% endif %}>0</option>
 									<option value="1" {% if fstatus == '1' %}selected{% endif %}>1</option>
 								</select>
 							</td>
 							<td>
-								<label>На странице</label>
+								<label>РќР° СЃС‚СЂР°РЅРёС†Рµ</label>
 								<input name="rpp" value="{{ rpp }}" type="text" size="3"/>
 							</td>
 						</tr>
 						<tr>
 							<!--  <td colspan="2">
-							  <label>Очистить данные</label>
-							  <input type="button" name="clearbtn" value="Очистить" class="filterbutton"  />
+							  <label>РћС‡РёСЃС‚РёС‚СЊ РґР°РЅРЅС‹Рµ</label>
+							  <input type="button" name="clearbtn" value="РћС‡РёСЃС‚РёС‚СЊ" class="filterbutton"  />
 							  </td> -->
 						</tr>
 					</table>
@@ -185,11 +185,11 @@
 
 			</tr>
 			<tr>
-				<td><input type="submit" value="Показать" class="filterbutton"/></td>
+				<td><input type="submit" value="РџРѕРєР°Р·Р°С‚СЊ" class="filterbutton"/></td>
 			</tr>
 		</table>
 	</form>
-	<!-- Конец блока фильтрации -->
+	<!-- РљРѕРЅРµС† Р±Р»РѕРєР° С„РёР»СЊС‚СЂР°С†РёРё -->
 
 	<br/>
 

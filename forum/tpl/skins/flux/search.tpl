@@ -1,41 +1,41 @@
 {% if (submit) %}
 	<div id="searchform" class="blockform">
-		<h2><span>Поиск</span></h2>
+		<h2><span>РџРѕРёСЃРє</span></h2>
 		<div class="box">
 			<form id="search" method="post" action="">
 				<div class="inform">
 					<fieldset>
-						<legend>Укажите критерий для поиска</legend>
+						<legend>РЈРєР°Р¶РёС‚Рµ РєСЂРёС‚РµСЂРёР№ РґР»СЏ РїРѕРёСЃРєР°</legend>
 						<div class="infldset">
-							<label class="conl">Ключевые
-								слова<br/><input type="text" name="keywords" size="40" maxlength="100"/><br/></label>
+							<label class="conl">РљР»СЋС‡РµРІС‹Рµ
+								СЃР»РѕРІР°<br/><input type="text" name="keywords" size="40" maxlength="100"/><br/></label>
 						</div>
 					</fieldset>
 				</div>
 				<div class="inform">
 					<fieldset>
-						<legend>Выберите где искать</legend>
+						<legend>Р’С‹Р±РµСЂРёС‚Рµ РіРґРµ РёСЃРєР°С‚СЊ</legend>
 						<div class="infldset">
-							<label class="conl">Форум<br/>
+							<label class="conl">Р¤РѕСЂСѓРј<br/>
 								<select id="forum" name="forum_id">
-									<option value='0'>Все имеющиеся</option>
+									<option value='0'>Р’СЃРµ РёРјРµСЋС‰РёРµСЃСЏ</option>
 									{% for entry in entries %}
 										<option value='{{ entry.forum_id }}'>{{ entry.forum_name }}</option>
 									{% endfor %}
 								</select>
 								<br/></label>
-							<label class="conl">Поиск в<br/>
+							<label class="conl">РџРѕРёСЃРє РІ<br/>
 								<select name="search_in">
-									<option value='all' selected>Текстах сообщений и заголовках тем</option>
-									<option value='post'>Только в текстах сообщений</option>
-									<option value='topic'>Только в заголовках тем</option>
+									<option value='all' selected>РўРµРєСЃС‚Р°С… СЃРѕРѕР±С‰РµРЅРёР№ Рё Р·Р°РіРѕР»РѕРІРєР°С… С‚РµРј</option>
+									<option value='post'>РўРѕР»СЊРєРѕ РІ С‚РµРєСЃС‚Р°С… СЃРѕРѕР±С‰РµРЅРёР№</option>
+									<option value='topic'>РўРѕР»СЊРєРѕ РІ Р·Р°РіРѕР»РѕРІРєР°С… С‚РµРј</option>
 								</select>
 								<br/></label>
-							<p class="clearb">Выберите в каком форуме вы желаете искать и место поиска.</p>
+							<p class="clearb">Р’С‹Р±РµСЂРёС‚Рµ РІ РєР°РєРѕРј С„РѕСЂСѓРјРµ РІС‹ Р¶РµР»Р°РµС‚Рµ РёСЃРєР°С‚СЊ Рё РјРµСЃС‚Рѕ РїРѕРёСЃРєР°.</p>
 						</div>
 					</fieldset>
 				</div>
-				<p><input type="submit" name="submit" value="Отправить" accesskey="s"/></p>
+				<p><input type="submit" name="submit" value="РћС‚РїСЂР°РІРёС‚СЊ" accesskey="s"/></p>
 			</form>
 		</div>
 	</div>
@@ -47,14 +47,14 @@
 		</div>
 	</div>
 	<div id="vf" class="blocktable">
-		<h2><span>Результаты поиска</span></h2>
+		<h2><span>Р РµР·СѓР»СЊС‚Р°С‚С‹ РїРѕРёСЃРєР°</span></h2>
 		<div class="box">
 			<div class="inbox">
 				<table cellspacing="0">
 					<thead>
 					<tr>
-						<th class="tcl" scope="col">Тема</th>
-						<th class="tcl" scope="col">Найденое в сообщениях</th>
+						<th class="tcl" scope="col">РўРµРјР°</th>
+						<th class="tcl" scope="col">РќР°Р№РґРµРЅРѕРµ РІ СЃРѕРѕР±С‰РµРЅРёСЏС…</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -66,7 +66,7 @@
 										<div class="nosize"><!-- --></div>
 									</div>
 									<div class="tclcon">
-										<a href='{{ entry.topic_link }}'>{{ entry.subject }}</a> <span class='byuser'>оставил&nbsp;{{ entry.user }}</span>
+										<a href='{{ entry.topic_link }}'>{{ entry.subject }}</a> <span class='byuser'>РѕСЃС‚Р°РІРёР»&nbsp;{{ entry.user }}</span>
 									</div>
 								</div>
 							</td>
@@ -80,7 +80,7 @@
 										<div class="nosize"><!-- --></div>
 									</div>
 									<div class="tclcon">
-										По вашему запросу <b>'.$get_url.'</b> ничего не найдено
+										РџРѕ РІР°С€РµРјСѓ Р·Р°РїСЂРѕСЃСѓ <b>'.$get_url.'</b> РЅРёС‡РµРіРѕ РЅРµ РЅР°Р№РґРµРЅРѕ
 									</div>
 								</div>
 							</td>

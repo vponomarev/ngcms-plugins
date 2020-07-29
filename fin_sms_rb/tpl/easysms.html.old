@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Персональный доступ :: проект snap.align.ru</title>
+<title>РџРµСЂСЃРѕРЅР°Р»СЊРЅС‹Р№ РґРѕСЃС‚СѓРї :: РїСЂРѕРµРєС‚ snap.align.ru</title>
 <link rel=stylesheet type=text/css href="main.css">
 </head>
 
@@ -20,71 +20,71 @@ function hide(id) {
 </script>	    
 
 
-<b>WEB.Персональный доступ</b> <small>// проект //</small> <b>snap.align.ru</b>
+<b>WEB.РџРµСЂСЃРѕРЅР°Р»СЊРЅС‹Р№ РґРѕСЃС‚СѓРї</b> <small>// РїСЂРѕРµРєС‚ //</small> <b>snap.align.ru</b>
 <hr>
-<span style="float: right; border: 1px solid #AABBCC; padding: 5px;">Действие кода: 13:35</span>
+<span style="float: right; border: 1px solid #AABBCC; padding: 5px;">Р”РµР№СЃС‚РІРёРµ РєРѕРґР°: 13:35</span>
 <table class="areatext">
-<tr><td>Ваш сотовый оператор (<a href="#">полный список</a>):<br><br>
+<tr><td>Р’Р°С€ СЃРѕС‚РѕРІС‹Р№ РѕРїРµСЂР°С‚РѕСЂ (<a href="#">РїРѕР»РЅС‹Р№ СЃРїРёСЃРѕРє</a>):<br><br>
 <select id="operator" class="areatext" style="width:200px;" onchange="priceValue.innerHTML=operator.value; if(operator.value){show('sendForm');}else{hide('sendForm');}">
 <option value="">--</option>
-<option value="$0,6 (без НДС)">Билайн</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">Р‘РёР»Р°Р№РЅ</option>
 
-<option value="17,22руб. (без НДС)">МТС (весь кроме Юга)</option>
-<option value="21 руб. (с НДС)">МТС Юг</option>
-<option value="20 руб. (с НДС)">МегаФон</option>
-<option value="$0,6 (без НДС)">Скайлинк</option>
-<option value="20 руб. (с НДС)">СМАРТС</option>
-<option value="21 руб. (с НДС)">Индиго GSM</option>
-<option value="$0,6 (без НДС)">TELE2</option>
-<option value="$0,6 (без НДС)">НТК</option>
-<option value="$0,6 (без НДС)">Сахалинский GSM</option>
+<option value="17,22СЂСѓР±. (Р±РµР· РќР”РЎ)">РњРўРЎ (РІРµСЃСЊ РєСЂРѕРјРµ Р®РіР°)</option>
+<option value="21 СЂСѓР±. (СЃ РќР”РЎ)">РњРўРЎ Р®Рі</option>
+<option value="20 СЂСѓР±. (СЃ РќР”РЎ)">РњРµРіР°Р¤РѕРЅ</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">РЎРєР°Р№Р»РёРЅРє</option>
+<option value="20 СЂСѓР±. (СЃ РќР”РЎ)">РЎРњРђР РўРЎ</option>
+<option value="21 СЂСѓР±. (СЃ РќР”РЎ)">РРЅРґРёРіРѕ GSM</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">TELE2</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">РќРўРљ</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">РЎР°С…Р°Р»РёРЅСЃРєРёР№ GSM</option>
 
-<option value="$0,6 (без НДС)">БайкалВестКом</option>
-<option value="$0,6 (без НДС)">Енисейтелеком</option>
-<option value="21,24 руб. (с НДС)">Utel (УралCвязьИнформ, ЮУСТ, Ермак RMS)</option>
-<option value="$0,6 (без НДС)">Цифровая экспансия</option>
-<option value="20 руб. (с НДС)">Ульяновск-GSM</option>
-<option value="21 руб. (с НДС)">СТеК GSM</option>
-<option value="20 руб. (с НДС)">ON (ОАО ТАТИНКОМ-Т)</option>
-<option value="$0,6 (без НДС)">ММС GSM</option>
-<option value="$0,6 (без НДС)">ON GSM</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">Р‘Р°Р№РєР°Р»Р’РµСЃС‚РљРѕРј</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">Р•РЅРёСЃРµР№С‚РµР»РµРєРѕРј</option>
+<option value="21,24 СЂСѓР±. (СЃ РќР”РЎ)">Utel (РЈСЂР°Р»CРІСЏР·СЊРРЅС„РѕСЂРј, Р®РЈРЎРў, Р•СЂРјР°Рє RMS)</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">Р¦РёС„СЂРѕРІР°СЏ СЌРєСЃРїР°РЅСЃРёСЏ</option>
+<option value="20 СЂСѓР±. (СЃ РќР”РЎ)">РЈР»СЊСЏРЅРѕРІСЃРє-GSM</option>
+<option value="21 СЂСѓР±. (СЃ РќР”РЎ)">РЎРўРµРљ GSM</option>
+<option value="20 СЂСѓР±. (СЃ РќР”РЎ)">ON (РћРђРћ РўРђРўРРќРљРћРњ-Рў)</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">РњРњРЎ GSM</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">ON GSM</option>
 
-<option value="$0,6 (без НДС)">АКОС</option>
-<option value="20 руб. (с НДС)">Элайн GSM</option>
-<option value="19,68 руб. (без НДС)">НСС</option>
-<option value="20 руб. (с НДС)">Дальсвязь</option>
-<option value="20 руб. (с НДС)">Связьинформ</option>
+<option value="$0,6 (Р±РµР· РќР”РЎ)">РђРљРћРЎ</option>
+<option value="20 СЂСѓР±. (СЃ РќР”РЎ)">Р­Р»Р°Р№РЅ GSM</option>
+<option value="19,68 СЂСѓР±. (Р±РµР· РќР”РЎ)">РќРЎРЎ</option>
+<option value="20 СЂСѓР±. (СЃ РќР”РЎ)">Р”Р°Р»СЊСЃРІСЏР·СЊ</option>
+<option value="20 СЂСѓР±. (СЃ РќР”РЎ)">РЎРІСЏР·СЊРёРЅС„РѕСЂРј</option>
 </select>
 </td></tr>
 </table>
 <br>
-Вам необходимо выбрать сумму пополнения Вашего виртуального счёта.
-<br><font color=blue>[ для получения доступа Вам необходимо пополнить Ваш счёт на сумму не менее <b>$0.20</b> ]</font><br>
+Р’Р°Рј РЅРµРѕР±С…РѕРґРёРјРѕ РІС‹Р±СЂР°С‚СЊ СЃСѓРјРјСѓ РїРѕРїРѕР»РЅРµРЅРёСЏ Р’Р°С€РµРіРѕ РІРёСЂС‚СѓР°Р»СЊРЅРѕРіРѕ СЃС‡С‘С‚Р°.
+<br><font color=blue>[ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РґРѕСЃС‚СѓРїР° Р’Р°Рј РЅРµРѕР±С…РѕРґРёРјРѕ РїРѕРїРѕР»РЅРёС‚СЊ Р’Р°С€ СЃС‡С‘С‚ РЅР° СЃСѓРјРјСѓ РЅРµ РјРµРЅРµРµ <b>$0.20</b> ]</font><br>
 <table border=1 class="areatext">
-<tr><td title="Сумма (в условных единицах, действующих на сайте) пополнения Вашего виртуального счета">Сумма пополнения <small>(<b>*</b>)</small></td><td title="сумма, которая будет списана с баланса Вашего сотового телефона">Сумма списания <small>(<b>*</b>)</small></td><td title="текст (кодовая последовательность) SMS сообщения, который необходимо отправить на указанный короткий номер">Что необходим отправить в SMS<small>(<b>*</b>)</small></td></tr>
-<tr style="background-color: #AABBDD;"><td>24 у.е.</td><td>45 руб (без НДС)</td><td><small>код <span style="background: white;"><b>AM+12345</b></a></span> на номер <span class="bigtext" style="background: white;"><b>8883</b></span></td></tr>
-<tr style="background-color: yellow;"><td>8 у.е.</td><td>24 руб (без НДС)</td><td><small>код <span style="background: white;"><b>AM+12345</b></a></span> на номер <span class="bigtext" style="background: white;"><b>8884</b></span></td></tr>
+<tr><td title="РЎСѓРјРјР° (РІ СѓСЃР»РѕРІРЅС‹С… РµРґРёРЅРёС†Р°С…, РґРµР№СЃС‚РІСѓСЋС‰РёС… РЅР° СЃР°Р№С‚Рµ) РїРѕРїРѕР»РЅРµРЅРёСЏ Р’Р°С€РµРіРѕ РІРёСЂС‚СѓР°Р»СЊРЅРѕРіРѕ СЃС‡РµС‚Р°">РЎСѓРјРјР° РїРѕРїРѕР»РЅРµРЅРёСЏ <small>(<b>*</b>)</small></td><td title="СЃСѓРјРјР°, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ СЃРїРёСЃР°РЅР° СЃ Р±Р°Р»Р°РЅСЃР° Р’Р°С€РµРіРѕ СЃРѕС‚РѕРІРѕРіРѕ С‚РµР»РµС„РѕРЅР°">РЎСѓРјРјР° СЃРїРёСЃР°РЅРёСЏ <small>(<b>*</b>)</small></td><td title="С‚РµРєСЃС‚ (РєРѕРґРѕРІР°СЏ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ) SMS СЃРѕРѕР±С‰РµРЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ РЅРµРѕР±С…РѕРґРёРјРѕ РѕС‚РїСЂР°РІРёС‚СЊ РЅР° СѓРєР°Р·Р°РЅРЅС‹Р№ РєРѕСЂРѕС‚РєРёР№ РЅРѕРјРµСЂ">Р§С‚Рѕ РЅРµРѕР±С…РѕРґРёРј РѕС‚РїСЂР°РІРёС‚СЊ РІ SMS<small>(<b>*</b>)</small></td></tr>
+<tr style="background-color: #AABBDD;"><td>24 Сѓ.Рµ.</td><td>45 СЂСѓР± (Р±РµР· РќР”РЎ)</td><td><small>РєРѕРґ <span style="background: white;"><b>AM+12345</b></a></span> РЅР° РЅРѕРјРµСЂ <span class="bigtext" style="background: white;"><b>8883</b></span></td></tr>
+<tr style="background-color: yellow;"><td>8 Сѓ.Рµ.</td><td>24 СЂСѓР± (Р±РµР· РќР”РЎ)</td><td><small>РєРѕРґ <span style="background: white;"><b>AM+12345</b></a></span> РЅР° РЅРѕРјРµСЂ <span class="bigtext" style="background: white;"><b>8884</b></span></td></tr>
 </table>
-<br>Подсказка:
+<br>РџРѕРґСЃРєР°Р·РєР°:
 <table class="areatext">
-<tr style="background-color: #AABBDD;"><td>Данного платежа будет достаточно, чтобы получить желаемый доступ</td></tr>
-<tr style="background-color: yellow;"><td>Суммы, полученной по этому платежу, не достаточно для получения желаемого доступа!</td></tr>
+<tr style="background-color: #AABBDD;"><td>Р”Р°РЅРЅРѕРіРѕ РїР»Р°С‚РµР¶Р° Р±СѓРґРµС‚ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ, С‡С‚РѕР±С‹ РїРѕР»СѓС‡РёС‚СЊ Р¶РµР»Р°РµРјС‹Р№ РґРѕСЃС‚СѓРї</td></tr>
+<tr style="background-color: yellow;"><td>РЎСѓРјРјС‹, РїРѕР»СѓС‡РµРЅРЅРѕР№ РїРѕ СЌС‚РѕРјСѓ РїР»Р°С‚РµР¶Сѓ, РЅРµ РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ Р¶РµР»Р°РµРјРѕРіРѕ РґРѕСЃС‚СѓРїР°!</td></tr>
 </table>
 <br>
 
 <div id="sendForm" style="background: #AAEEEE; visibility: hidden; display: none;">
-Отправьте SMS:<br>
+РћС‚РїСЂР°РІСЊС‚Рµ SMS:<br>
 
-* на номер &rarr; <span class="bigtext"> 8884</span><br>
-* текст: <span style="background: white;">ME+11</a></span> <span style="background: white;"><b>ваш_текст</b></span><br>
+* РЅР° РЅРѕРјРµСЂ &rarr; <span class="bigtext"> 8884</span><br>
+* С‚РµРєСЃС‚: <span style="background: white;">ME+11</a></span> <span style="background: white;"><b>РІР°С€_С‚РµРєСЃС‚</b></span><br>
 <br>
-Пример:<br>
-Вы отправляете сообщение с текстом <span style="background: white;">ME+11</span> <span style="background: white;">Привет создателям!</span> на номер <span style="background: white;">8884</span><br><br>
+РџСЂРёРјРµСЂ:<br>
+Р’С‹ РѕС‚РїСЂР°РІР»СЏРµС‚Рµ СЃРѕРѕР±С‰РµРЅРёРµ СЃ С‚РµРєСЃС‚РѕРј <span style="background: white;">ME+11</span> <span style="background: white;">РџСЂРёРІРµС‚ СЃРѕР·РґР°С‚РµР»СЏРј!</span> РЅР° РЅРѕРјРµСЂ <span style="background: white;">8884</span><br><br>
 
-<b>Услуга платная. Стоимость отправки одной SMS: <span name="priceValue" id="priceValue">--нет данных--</span></b><br>
-<i>Внимание, срок действия кода для отправки сообщения: <b>10</b> минут!</i>
+<b>РЈСЃР»СѓРіР° РїР»Р°С‚РЅР°СЏ. РЎС‚РѕРёРјРѕСЃС‚СЊ РѕС‚РїСЂР°РІРєРё РѕРґРЅРѕР№ SMS: <span name="priceValue" id="priceValue">--РЅРµС‚ РґР°РЅРЅС‹С…--</span></b><br>
+<i>Р’РЅРёРјР°РЅРёРµ, СЃСЂРѕРє РґРµР№СЃС‚РІРёСЏ РєРѕРґР° РґР»СЏ РѕС‚РїСЂР°РІРєРё СЃРѕРѕР±С‰РµРЅРёСЏ: <b>10</b> РјРёРЅСѓС‚!</i>
 <br>
 <br>
 </div>
 
-Услуга предоставляется совместно с проектом <a href="http://easysms.ru/">EasySMS.RU</a>
+РЈСЃР»СѓРіР° РїСЂРµРґРѕСЃС‚Р°РІР»СЏРµС‚СЃСЏ СЃРѕРІРјРµСЃС‚РЅРѕ СЃ РїСЂРѕРµРєС‚РѕРј <a href="http://easysms.ru/">EasySMS.RU</a>

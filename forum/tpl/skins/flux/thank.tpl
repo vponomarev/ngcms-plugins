@@ -5,16 +5,16 @@
 	</div>
 </div>
 <div class="blockform">
-	<h2><span>История благодарностей участнику {{ to_author }}::: Спасибо сказали: {{ int_thank }} раз(а)</span></h2>
+	<h2><span>РСЃС‚РѕСЂРёСЏ Р±Р»Р°РіРѕРґР°СЂРЅРѕСЃС‚РµР№ СѓС‡Р°СЃС‚РЅРёРєСѓ {{ to_author }}::: РЎРїР°СЃРёР±Рѕ СЃРєР°Р·Р°Р»Рё: {{ int_thank }} СЂР°Р·(Р°)</span></h2>
 	<div class="box">
 		<div class="inbox">
 			<table cellspacing="0">
 				<thead>
 				<tr>
-					<th class="tc3" style="width:15%">Дата поста:</th>
-					<th class="tc3" style="width:15%">В теме:</th>
-					<th class="tc3" style="width:35%">За сообщение:</th>
-					<th class="tc3" style="width:10%">Спасибо сказали:</th>
+					<th class="tc3" style="width:15%">Р”Р°С‚Р° РїРѕСЃС‚Р°:</th>
+					<th class="tc3" style="width:15%">Р’ С‚РµРјРµ:</th>
+					<th class="tc3" style="width:35%">Р—Р° СЃРѕРѕР±С‰РµРЅРёРµ:</th>
+					<th class="tc3" style="width:10%">РЎРїР°СЃРёР±Рѕ СЃРєР°Р·Р°Р»Рё:</th>
 				<tbody>
 				{% for entry in entries %}
 					<tr>
@@ -25,7 +25,7 @@
 					</tr>
 				{% else %}
 					<tr>
-						<td>Пусто</td>
+						<td>РџСѓСЃС‚Рѕ</td>
 					</tr>
 				{% endfor %}
 				</tbody>

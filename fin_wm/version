@@ -9,9 +9,9 @@ Acts: fin_acceptors
 File: fin_wm.php
 Config: config.php
 Type: plugin
-Description: Пополнение счёта :: WebMoney
+Description: РџРѕРїРѕР»РЅРµРЅРёРµ СЃС‡С‘С‚Р° :: WebMoney
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
-Title: Пополнение счёта :: WebMoney
+Title: РџРѕРїРѕР»РЅРµРЅРёРµ СЃС‡С‘С‚Р° :: WebMoney
 Preinstall: no
-Information: Дополнение к плагину <b>finance</b> - позволяет принимать платежи через систему WebMoney
+Information: Р”РѕРїРѕР»РЅРµРЅРёРµ Рє РїР»Р°РіРёРЅСѓ <b>finance</b> - РїРѕР·РІРѕР»СЏРµС‚ РїСЂРёРЅРёРјР°С‚СЊ РїР»Р°С‚РµР¶Рё С‡РµСЂРµР· СЃРёСЃС‚РµРјСѓ WebMoney

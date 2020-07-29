@@ -11,7 +11,7 @@
 </script>
 <div class="blockform">
 	{{ error }}
-	<h2><span>Зайти</span></h2>
+	<h2><span>Р—Р°Р№С‚Рё</span></h2>
 	<div class="box">
 		<div class="inbox">
 			<p>{{ info }}</p>
@@ -19,17 +19,17 @@
 		<form method="post" action="{{ action }}">
 			<div class="inform">
 				<fieldset>
-					<legend>Введите ваше имя и пароль ниже</legend>
+					<legend>Р’РІРµРґРёС‚Рµ РІР°С€Рµ РёРјСЏ Рё РїР°СЂРѕР»СЊ РЅРёР¶Рµ</legend>
 					<div class="infldset">
-						<label class="conl"><strong>Имя</strong><br/><input type="text" name="username" value="{{ username }}" size="25" maxlength="25" tabindex="1"/><br/></label>
-						<label class="conl"><strong>Пароль</strong><br/><input type="text" name="password" size="16" maxlength="16" tabindex="2"/><br/></label>
-						<p class="clearb">Поставь галочку если человек:
+						<label class="conl"><strong>РРјСЏ</strong><br/><input type="text" name="username" value="{{ username }}" size="25" maxlength="25" tabindex="1"/><br/></label>
+						<label class="conl"><strong>РџР°СЂРѕР»СЊ</strong><br/><input type="text" name="password" size="16" maxlength="16" tabindex="2"/><br/></label>
+						<p class="clearb">РџРѕСЃС‚Р°РІСЊ РіР°Р»РѕС‡РєСѓ РµСЃР»Рё С‡РµР»РѕРІРµРє:
 							<input type="checkbox" id="forum_captcha" onclick="forum_change();" value="1"></p>
 						<input type="hidden" name="forum_captcha_sess" id="forum_captcha_sess" value="0">
 					</div>
 				</fieldset>
 			</div>
-			<p><input type="submit" name="submit" value="Зайти" tabindex="3"/></p>
+			<p><input type="submit" name="submit" value="Р—Р°Р№С‚Рё" tabindex="3"/></p>
 		</form>
 	</div>
 </div>

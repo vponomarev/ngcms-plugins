@@ -8,8 +8,8 @@ Deinstall: uninstall.php
 Config: config.php
 Type: plugin
 Title: Gallery Manager
-Description: Позволяет управлять галереями на сайте
-Information: Позволяет управлять галереями на сайте
+Description: РџРѕР·РІРѕР»СЏРµС‚ СѓРїСЂР°РІР»СЏС‚СЊ РіР°Р»РµСЂРµСЏРјРё РЅР° СЃР°Р№С‚Рµ
+Information: РџРѕР·РІРѕР»СЏРµС‚ СѓРїСЂР°РІР»СЏС‚СЊ РіР°Р»РµСЂРµСЏРјРё РЅР° СЃР°Р№С‚Рµ
 Author: Ivan Litvinenko (Amarelius)
 Author_URI: http://arnit.com.ua/
 Preinstall: default_no

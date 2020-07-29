@@ -4,7 +4,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Configuration file for plugin
 //
-plugins_load_config();
+pluginsLoadConfig();
 $db_update = array(
 	array(
 		'table'  => 'forum_complaints',
@@ -83,6 +83,6 @@ if ($_REQUEST['action'] == 'commit') {
 		plugin_mark_deinstalled($plugin);
 	}
 } else {
-	generate_install_page($plugin, 'Òåñòîâîå óäàëåíèå', 'deinstall');
+	generate_install_page($plugin, 'Ð¢ÐµÑÑ‚Ð¾Ð²Ð¾Ðµ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ðµ', 'deinstall');
 }
 ?>

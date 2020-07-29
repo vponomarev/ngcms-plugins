@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Load lang files
 LoadPluginLang('switcher', 'config');
 // Fill configuration parameters
@@ -33,7 +33,7 @@ for ($i = 1; $i <= $profile_count; $i++) {
 	array_push($cfgX, array('name' => 'profile' . $i . '_id', 'title' => $lang['switcher_id'], 'descr' => $lang['switcher_id_desc'], 'type' => 'input', 'value' => pluginGetVariable('switcher', 'profile' . $i . '_id')));
 	array_push($cfgX, array('name' => 'profile' . $i . '_redirect', 'title' => $lang['switcher_redirect'], 'descr' => $lang['switcher_redirect_desc'], 'type' => 'input', 'html_flags' => ' size="45"', 'value' => pluginGetVariable('switcher', 'profile' . $i . '_redirect')));
 	array_push($cfgX, array('name' => 'profile' . $i . '_domains', 'title' => $lang['switcher_domains'], 'descr' => $lang['switcher_domains_desc'], 'type' => 'text', 'html_flags' => 'cols=30 rows=3', 'value' => pluginGetVariable('switcher', 'profile' . $i . '_domains')));
-	array_push($cfg, array('mode' => 'group', 'title' => '<b>' . $lang['switcher_profile'] . ' ¹' . $i . '</b>', 'entries' => $cfgX));
+	array_push($cfg, array('mode' => 'group', 'title' => '<b>' . $lang['switcher_profile'] . ' #' . $i . '</b>', 'entries' => $cfgX));
 }
 // RUN
 if ($_REQUEST['action'] == 'commit') {

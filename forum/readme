@@ -1,13 +1,13 @@
 # =========================================================================== #
-# NG CMS // Плагины // Форум                                    #
+# NG CMS // РџР»Р°РіРёРЅС‹ // Р¤РѕСЂСѓРј                                    #
 # =========================================================================== #
 
-Плагин отображает на сайте информационный блок с RSS канала других сайтов.
+РџР»Р°РіРёРЅ РѕС‚РѕР±СЂР°Р¶Р°РµС‚ РЅР° СЃР°Р№С‚Рµ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Р№ Р±Р»РѕРє СЃ RSS РєР°РЅР°Р»Р° РґСЂСѓРіРёС… СЃР°Р№С‚РѕРІ.
 
-Используемые шаблоны:
+РСЃРїРѕР»СЊР·СѓРµРјС‹Рµ С€Р°Р±Р»РѕРЅС‹:
 --------------------------------------------------------------------
-В /engine/skins/default/tpl/news/add.tpl
-После:
+Р’ /engine/skins/default/tpl/news/add.tpl
+РџРѕСЃР»Рµ:
 {% if flags['multicat.show'] %}
   <tr>
    <td></td>
@@ -20,24 +20,24 @@
   </tr>
   <tr><td colspan=2>&nbsp;</td></tr>
 {% endif %}
-Добавляем:
+Р”РѕР±Р°РІР»СЏРµРј:
 <tr>
 	<td width="20"></td>
-	<td><span class="f15">Форум</span></td>
+	<td><span class="f15">Р¤РѕСЂСѓРј</span></td>
 </tr>
 <tr>
 	<td></td><td><div class="list">
 	<select name="forum_id" id="catmenu">
-		<option>Выберите форум</option>
+		<option>Р’С‹Р±РµСЂРёС‚Рµ С„РѕСЂСѓРј</option>
 		{{ options_forum }}
 	</select></div></td>
 </tr>
 
-Находим:
+РќР°С…РѕРґРёРј:
 <label><input type="checkbox" name="mainpage" value="1" class="check" id="mainpage" {% if (flags.mainpage) %}checked="checked" {% endif %}{% if flags['mainpage.disabled'] %}disabled {% endif %}  /> {{ lang.addnews['mainpage'] }}</label><br />
-Перед ней добавляем:
-<label><input type="checkbox" name="create_forum" value="1" class="check" id="mainpage" /> Создать на форуме</label><br />
+РџРµСЂРµРґ РЅРµР№ РґРѕР±Р°РІР»СЏРµРј:
+<label><input type="checkbox" name="create_forum" value="1" class="check" id="mainpage" /> РЎРѕР·РґР°С‚СЊ РЅР° С„РѕСЂСѓРјРµ</label><br />
 
-В шаблонах news.short.tpl, news.full.tpl доступен блок:
-  . {topic_forum_url}          - Отображает ссылку на форум (показывается если у этой новости есть тема на форуме)
-  .  [topic_show][/topic_show] - Отображает внутри если есть темы на форуме 
+Р’ С€Р°Р±Р»РѕРЅР°С… news.short.tpl, news.full.tpl РґРѕСЃС‚СѓРїРµРЅ Р±Р»РѕРє:
+  . {topic_forum_url}          - РћС‚РѕР±СЂР°Р¶Р°РµС‚ СЃСЃС‹Р»РєСѓ РЅР° С„РѕСЂСѓРј (РїРѕРєР°Р·С‹РІР°РµС‚СЃСЏ РµСЃР»Рё Сѓ СЌС‚РѕР№ РЅРѕРІРѕСЃС‚Рё РµСЃС‚СЊ С‚РµРјР° РЅР° С„РѕСЂСѓРјРµ)
+  .  [topic_show][/topic_show] - РћС‚РѕР±СЂР°Р¶Р°РµС‚ РІРЅСѓС‚СЂРё РµСЃР»Рё РµСЃС‚СЊ С‚РµРјС‹ РЅР° С„РѕСЂСѓРјРµ 

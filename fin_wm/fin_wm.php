@@ -8,7 +8,7 @@ class Finance_Acceptor_WM extends Finance_Acceptor {
 	function Finance_Acceptor_WM() {
 
 		parent::Finance_Acceptor();
-		// Определяем список поддерживаемых валют
+		// РћРїСЂРµРґРµР»СЏРµРј СЃРїРёСЃРѕРє РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹С… РІР°Р»СЋС‚
 		$sCurrency = array();
 		foreach (array('wmz', 'wmr', 'wme') as $c) {
 			if (pluginGetVariable('fin_wm', 'allow_' . $c))
@@ -16,7 +16,7 @@ class Finance_Acceptor_WM extends Finance_Acceptor {
 		}
 		$sList = join('/', $sCurrency);
 		if (!count($sCurrency)) {
-			$sList = 'нет поддерживаемых валют';
+			$sList = 'РЅРµС‚ РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹С… РІР°Р»СЋС‚';
 		}
 		$this->active = 1;
 		$this->id = 'wm';
@@ -40,11 +40,11 @@ class Finance_Acceptor_WM extends Finance_Acceptor {
 			return $tpl->show('result_fail');
 		}
 		if (!$username) {
-			return 'Для пополнения счёта вам необходимо предварительно авторизоваться';
+			return 'Р”Р»СЏ РїРѕРїРѕР»РЅРµРЅРёСЏ СЃС‡С‘С‚Р° РІР°Рј РЅРµРѕР±С…РѕРґРёРјРѕ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕ Р°РІС‚РѕСЂРёР·РѕРІР°С‚СЊСЃСЏ';
 		}
 		$tpl->template('pay_form', extras_dir . '/fin_wm/tpl');
 		$tvars['vars']['syscurrency'] = pluginGetVariable('finance', 'syscurrency');
-		// Определяем список поддерживаемых валют
+		// РћРїСЂРµРґРµР»СЏРµРј СЃРїРёСЃРѕРє РїРѕРґРґРµСЂР¶РёРІР°РµРјС‹С… РІР°Р»СЋС‚
 		$sCurrency = array();
 		foreach (array('wmz', 'wmr', 'wme') as $c) {
 			if (pluginGetVariable('fin_wm', 'allow_' . $c))
@@ -56,7 +56,7 @@ class Finance_Acceptor_WM extends Finance_Acceptor {
 		$tvars['vars']['userid'] = $userROW['id'];
 		$tvars['vars']['login'] = $userROW['name'];
 		$tvars['vars']['home'] = home;
-		$tvars['vars']['descr'] = 'Пополнение пользовательского счёта (ID:' . $userROW['id'] . '|' . $userROW['name'] . '|' . home . ')';
+		$tvars['vars']['descr'] = 'РџРѕРїРѕР»РЅРµРЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРѕРіРѕ СЃС‡С‘С‚Р° (ID:' . $userROW['id'] . '|' . $userROW['name'] . '|' . home . ')';
 		$tpl->vars('pay_form', $tvars);
 
 		return $tpl->show('pay_form');
@@ -66,14 +66,14 @@ class Finance_Acceptor_WM extends Finance_Acceptor {
 
 		global $tpl, $username, $SUPRESS_TEMPLATE_SHOW;
 		//
-		// Сюда приходит запрос от сервиса WebMoney
+		// РЎСЋРґР° РїСЂРёС…РѕРґРёС‚ Р·Р°РїСЂРѕСЃ РѕС‚ СЃРµСЂРІРёСЃР° WebMoney
 		//
 		$WM = array();
 		foreach (array('mode', 'payment_amount', 'payee_purse', 'payment_no', 'payer_wm', 'payer_purse', 'sys_invs_no', 'sys_trans_no', 'sys_trans_date', 'hash') as $k) {
 			$WM[$k] = $_REQUEST['LMI_' . strtoupper($k)];
 		}
 		$SUPRESS_TEMPLATE_SHOW = 1;
-		// Определяем на какой кошелёк идёт платёж
+		// РћРїСЂРµРґРµР»СЏРµРј РЅР° РєР°РєРѕР№ РєРѕС€РµР»С‘Рє РёРґС‘С‚ РїР»Р°С‚С‘Р¶
 		$pType = '';
 		$pNumber = '';
 		$pRating = 0;
@@ -85,26 +85,26 @@ class Finance_Acceptor_WM extends Finance_Acceptor {
 				break;
 			}
 		}
-		// Проверяем соответствие параметров
+		// РџСЂРѕРІРµСЂСЏРµРј СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ
 		if ($pNumber == '') {
-			// Неверный номер кошелька для приёма платежей
-			return 'Ошибка (платёж на неверный кошелёк)';
+			// РќРµРІРµСЂРЅС‹Р№ РЅРѕРјРµСЂ РєРѕС€РµР»СЊРєР° РґР»СЏ РїСЂРёС‘РјР° РїР»Р°С‚РµР¶РµР№
+			return 'РћС€РёР±РєР° (РїР»Р°С‚С‘Р¶ РЅР° РЅРµРІРµСЂРЅС‹Р№ РєРѕС€РµР»С‘Рє)';
 		}
 		$checkline = $WM['payee_purse'] . $WM['payment_amount'] . $WM['payment_no'] . $WM['mode'] . $WM['sys_invs_no'] . $WM['sys_trans_no'] . $WM['sys_trans_date'] . extra_get_param('fin_wm', 'secret_key') . $WM['payer_purse'] . $WM['payer_wm'];
 		$checksym = md5($checkline);
-		// Если не передали хеша - значит тестирование
+		// Р•СЃР»Рё РЅРµ РїРµСЂРµРґР°Р»Рё С…РµС€Р° - Р·РЅР°С‡РёС‚ С‚РµСЃС‚РёСЂРѕРІР°РЅРёРµ
 		if (!$WM['hash']) {
 			return 'YES';
 		}
 		if (strtolower($checksym) != strtolower($WM['hash'])) {
-			return "Ошибка (некорректная хеш-строка)\n";
+			return "РћС€РёР±РєР° (РЅРµРєРѕСЂСЂРµРєС‚РЅР°СЏ С…РµС€-СЃС‚СЂРѕРєР°)\n";
 		} else {
-			// Проверка прошла успешно. Берём сумму и кладём на счёт
+			// РџСЂРѕРІРµСЂРєР° РїСЂРѕС€Р»Р° СѓСЃРїРµС€РЅРѕ. Р‘РµСЂС‘Рј СЃСѓРјРјСѓ Рё РєР»Р°РґС‘Рј РЅР° СЃС‡С‘С‚
 			$login = $_REQUEST['login'];
 			if ($login) {
-				// Рассчитываем сумму платежа
+				// Р Р°СЃСЃС‡РёС‚С‹РІР°РµРј СЃСѓРјРјСѓ РїР»Р°С‚РµР¶Р°
 				$sum = doubleval($WM['payment_amount']) * $pRating;
-				finance_add_money($login, extra_get_param('fin_wm', 'balance_no'), $sum, 'Пополнение счета через WebMoney (' . $pType . ' по курсу ' . $pRating . ')');
+				finance_add_money($login, extra_get_param('fin_wm', 'balance_no'), $sum, 'РџРѕРїРѕР»РЅРµРЅРёРµ СЃС‡РµС‚Р° С‡РµСЂРµР· WebMoney (' . $pType . ' РїРѕ РєСѓСЂСЃСѓ ' . $pRating . ')');
 
 				return 'OK';
 			}

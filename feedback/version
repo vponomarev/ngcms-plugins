@@ -4,16 +4,16 @@
 
 ID: feedback
 Name: Feedback forms
-Version: 0.26
+Version: 0.30
 Acts: ppages
 File: feedback.php
 Config: config.php
 Install: install.php
 Deinstall: uninstall.php
 Type: plugin
-Description: Генератор форм обратной связи
+Description: Р“РµРЅРµСЂР°С‚РѕСЂ С„РѕСЂРј РѕР±СЂР°С‚РЅРѕР№ СЃРІСЏР·Рё
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru
-Title: Формы обратной связи
-Information: Позволяет создавать различные формы обратной связи.
+Title: Р¤РѕСЂРјС‹ РѕР±СЂР°С‚РЅРѕР№ СЃРІСЏР·Рё
+Information: РџРѕР·РІРѕР»СЏРµС‚ СЃРѕР·РґР°РІР°С‚СЊ СЂР°Р·Р»РёС‡РЅС‹Рµ С„РѕСЂРјС‹ РѕР±СЂР°С‚РЅРѕР№ СЃРІСЏР·Рё.
 Library: common; lib/common.php

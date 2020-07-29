@@ -2,8 +2,8 @@
 <form method="post" action="">
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr>
-			<td width="50%" class="contentEntry1">Заголовок новости<br/>
-				<small>Текст поля &lt;title&gt;&lt;/title&gt; в полной новости (разрешено %cat%, %title%, %home%,
+			<td width="50%" class="contentEntry1">Р—Р°РіРѕР»РѕРІРѕРє РЅРѕРІРѕСЃС‚Рё<br/>
+				<small>РўРµРєСЃС‚ РїРѕР»СЏ &lt;title&gt;&lt;/title&gt; РІ РїРѕР»РЅРѕР№ РЅРѕРІРѕСЃС‚Рё (СЂР°Р·СЂРµС€РµРЅРѕ %cat%, %title%, %home%,
 					%num%)
 				</small>
 			</td>
@@ -18,7 +18,7 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input type="submit" name="submit" value="Добавить" class="button"/>
+				<input type="submit" name="submit" value="Р”РѕР±Р°РІРёС‚СЊ" class="button"/>
 			</td>
 		</tr>
 	</table>

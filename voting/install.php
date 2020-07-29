@@ -4,7 +4,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 // Voting plugin installer
 //
-plugins_load_config();
+pluginsLoadConfig();
 function plugin_voting_install($action) {
 
 	global $lang;

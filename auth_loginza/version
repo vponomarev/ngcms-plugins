@@ -11,8 +11,8 @@ Config: config.php
 Install: install.php
 Deinstall: uninstall.php
 Type: plugin
-Description: Аутентификация через Google, Yandex, Twitter, Facebook и т.д.
+Description: РђСѓС‚РµРЅС‚РёС„РёРєР°С†РёСЏ С‡РµСЂРµР· Google, Yandex, Twitter, Facebook Рё С‚.Рґ.
 Author: Alexey N. Zhukov (Wolverine)
 Author_URI: http://digitalplace.ru/
 URI: http://no_url.com/
-Information: Аутентификация через Google, Yandex, Twitter, Facebook и т.д.
+Information: РђСѓС‚РµРЅС‚РёС„РёРєР°С†РёСЏ С‡РµСЂРµР· Google, Yandex, Twitter, Facebook Рё С‚.Рґ.

@@ -5,30 +5,30 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Generate balance list
-$blist = array('' => 'основной баланс');
+$blist = array('' => 'РѕСЃРЅРѕРІРЅРѕР№ Р±Р°Р»Р°РЅСЃ');
 foreach ($mysql->select("select * from " . prefix . "_balance_manager where monetary=1 order by id") as $brow) {
 	$blist[$brow['id']] = $brow['id'] . ($brow['type'] ? ' (' . $brow['type'] . ')' : '');
 }
 // Fill configuration parameters
 $cfg = array();
 array_push($cfg, array(
-	'descr' => 'Плагин позволяет получать платежи от посетителей через SMS при помощи сервиса smscoin.com.<br>Для приёма средств исполизуется сервис <b>смс:банк</b>.<br/><b><u>Настроечные параметры для сервиса SMSCOIN:</u></b><br/>' .
+	'descr' => 'РџР»Р°РіРёРЅ РїРѕР·РІРѕР»СЏРµС‚ РїРѕР»СѓС‡Р°С‚СЊ РїР»Р°С‚РµР¶Рё РѕС‚ РїРѕСЃРµС‚РёС‚РµР»РµР№ С‡РµСЂРµР· SMS РїСЂРё РїРѕРјРѕС‰Рё СЃРµСЂРІРёСЃР° smscoin.com.<br>Р”Р»СЏ РїСЂРёС‘РјР° СЃСЂРµРґСЃС‚РІ РёСЃРїРѕР»РёР·СѓРµС‚СЃСЏ СЃРµСЂРІРёСЃ <b>СЃРјСЃ:Р±Р°РЅРє</b>.<br/><b><u>РќР°СЃС‚СЂРѕРµС‡РЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ СЃРµСЂРІРёСЃР° SMSCOIN:</u></b><br/>' .
 		'<b>Result URL:</b> ' . home . generateLink('core', 'plugin', array('plugin' => 'finance'), array('mode' => 'pay_accept', 'acceptor' => 'smscoin')) . '<br/>' .
 		'<b>Success URL:</b> ' . home . generateLink('core', 'plugin', array('plugin' => 'finance'), array('mode' => 'pay_accept_form', 'acceptor' => 'smscoin', 'result_ok' => '1')) . '<br/>' .
 		'<b>Fail URL:</b> ' . home . generateLink('core', 'plugin', array('plugin' => 'finance'), array('mode' => 'pay_accept_form', 'acceptor' => 'smscoin', 'result_fail' => '1')) . '<br/>'
 ));
 $cfgX = array();
-array_push($cfgX, array('name' => 'balance_no', 'title' => 'Номер баланса на который начисляются бонусы', 'descr' => 'В списке отображаются только монетарные балансы<br/><font color="red"><b>Для разделения <u>реальных</u> платежей (например, из WEBMONEY) и <u>виртуальных</u> платежей (из SMSCOIN) настоятельно рекомендуется для платежей из SMSCOIN создавать выделенный дополнительный монетарный баланс - это позволит более точно учитывать поступления средств от посетителей.</b><br/>Балансы настраиваются в настройках плагина finance</font>', 'type' => 'select', 'values' => $blist, value => extra_get_param('fin_smscoin', 'balance_no')));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Финансовые настройки</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'balance_no', 'title' => 'РќРѕРјРµСЂ Р±Р°Р»Р°РЅСЃР° РЅР° РєРѕС‚РѕСЂС‹Р№ РЅР°С‡РёСЃР»СЏСЋС‚СЃСЏ Р±РѕРЅСѓСЃС‹', 'descr' => 'Р’ СЃРїРёСЃРєРµ РѕС‚РѕР±СЂР°Р¶Р°СЋС‚СЃСЏ С‚РѕР»СЊРєРѕ РјРѕРЅРµС‚Р°СЂРЅС‹Рµ Р±Р°Р»Р°РЅСЃС‹<br/><font color="red"><b>Р”Р»СЏ СЂР°Р·РґРµР»РµРЅРёСЏ <u>СЂРµР°Р»СЊРЅС‹С…</u> РїР»Р°С‚РµР¶РµР№ (РЅР°РїСЂРёРјРµСЂ, РёР· WEBMONEY) Рё <u>РІРёСЂС‚СѓР°Р»СЊРЅС‹С…</u> РїР»Р°С‚РµР¶РµР№ (РёР· SMSCOIN) РЅР°СЃС‚РѕСЏС‚РµР»СЊРЅРѕ СЂРµРєРѕРјРµРЅРґСѓРµС‚СЃСЏ РґР»СЏ РїР»Р°С‚РµР¶РµР№ РёР· SMSCOIN СЃРѕР·РґР°РІР°С‚СЊ РІС‹РґРµР»РµРЅРЅС‹Р№ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ РјРѕРЅРµС‚Р°СЂРЅС‹Р№ Р±Р°Р»Р°РЅСЃ - СЌС‚Рѕ РїРѕР·РІРѕР»РёС‚ Р±РѕР»РµРµ С‚РѕС‡РЅРѕ СѓС‡РёС‚С‹РІР°С‚СЊ РїРѕСЃС‚СѓРїР»РµРЅРёСЏ СЃСЂРµРґСЃС‚РІ РѕС‚ РїРѕСЃРµС‚РёС‚РµР»РµР№.</b><br/>Р‘Р°Р»Р°РЅСЃС‹ РЅР°СЃС‚СЂР°РёРІР°СЋС‚СЃСЏ РІ РЅР°СЃС‚СЂРѕР№РєР°С… РїР»Р°РіРёРЅР° finance</font>', 'type' => 'select', 'values' => $blist, value => extra_get_param('fin_smscoin', 'balance_no')));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>Р¤РёРЅР°РЅСЃРѕРІС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё</b>', 'entries' => $cfgX));
 $cfgX = array();
-array_push($cfgX, array('name' => 'post_url', 'title' => 'URL платёжного шлюза', 'descr' => 'Значение опции `<b>Адрес шлюза</b> в настройках вашего <b>sms:банк</b>а', 'type' => 'input', value => extra_get_param('fin_smscoin', 'post_url')));
-array_push($cfgX, array('name' => 'bank_id', 'title' => 'Идентификатор вашего сервиса <b>sms:банк</b>', 'descr' => 'Необходимо указать идентификационный номер вашего сервиса <b>sms:банк</b>', 'type' => 'input', value => intval(extra_get_param('fin_smscoin', 'bank_id'))));
-array_push($cfgX, array('name' => 'secret_key', 'title' => 'Секрерный код', 'descr' => 'Данный секретный код вводится в настройках сервиса <b>смс:банк</b>', 'type' => 'input', value => extra_get_param('fin_smscoin', 'secret_key')));
-array_push($cfgX, array('name' => 'clear_mode', 'title' => 'Вид суммы пополнения счёта', 'descr' => '<b>Платёж</b> - счёт пополняется на сумму, равную сумме платежа пользователя<br/><b>Прибыль</b> - счёт пополняется на сумму, равную полученной от отправки SMS прибыли', 'type' => 'select', 'values' => array(0 => 'Платёж', 1 => 'Прибыль'), 'value' => extra_get_param('fin_smscoin', 'clear_mode')));
-array_push($cfgX, array('name' => 'pay_rate', 'title' => 'Коэффициент пересчета из `USD` (в которых производятся расчёты с сервисом SMSCOIN) в валюту сайта (текущая валюта: <b>' . pluginGetVariable('finance', 'syscurrency') . '</b>)', 'descr' => '1 <b>USD</b> SMSCOIN = XX.XXX <b>' . pluginGetVariable('finance', 'syscurrency') . '</b>', 'type' => 'input', value => pluginGetVariable('fin_smscoin', 'pay_rate')));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Интеграционные настройки с сервисом SMSCOIN</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'post_url', 'title' => 'URL РїР»Р°С‚С‘Р¶РЅРѕРіРѕ С€Р»СЋР·Р°', 'descr' => 'Р—РЅР°С‡РµРЅРёРµ РѕРїС†РёРё `<b>РђРґСЂРµСЃ С€Р»СЋР·Р°</b> РІ РЅР°СЃС‚СЂРѕР№РєР°С… РІР°С€РµРіРѕ <b>sms:Р±Р°РЅРє</b>Р°', 'type' => 'input', value => extra_get_param('fin_smscoin', 'post_url')));
+array_push($cfgX, array('name' => 'bank_id', 'title' => 'РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РІР°С€РµРіРѕ СЃРµСЂРІРёСЃР° <b>sms:Р±Р°РЅРє</b>', 'descr' => 'РќРµРѕР±С…РѕРґРёРјРѕ СѓРєР°Р·Р°С‚СЊ РёРґРµРЅС‚РёС„РёРєР°С†РёРѕРЅРЅС‹Р№ РЅРѕРјРµСЂ РІР°С€РµРіРѕ СЃРµСЂРІРёСЃР° <b>sms:Р±Р°РЅРє</b>', 'type' => 'input', value => intval(extra_get_param('fin_smscoin', 'bank_id'))));
+array_push($cfgX, array('name' => 'secret_key', 'title' => 'РЎРµРєСЂРµСЂРЅС‹Р№ РєРѕРґ', 'descr' => 'Р”Р°РЅРЅС‹Р№ СЃРµРєСЂРµС‚РЅС‹Р№ РєРѕРґ РІРІРѕРґРёС‚СЃСЏ РІ РЅР°СЃС‚СЂРѕР№РєР°С… СЃРµСЂРІРёСЃР° <b>СЃРјСЃ:Р±Р°РЅРє</b>', 'type' => 'input', value => extra_get_param('fin_smscoin', 'secret_key')));
+array_push($cfgX, array('name' => 'clear_mode', 'title' => 'Р’РёРґ СЃСѓРјРјС‹ РїРѕРїРѕР»РЅРµРЅРёСЏ СЃС‡С‘С‚Р°', 'descr' => '<b>РџР»Р°С‚С‘Р¶</b> - СЃС‡С‘С‚ РїРѕРїРѕР»РЅСЏРµС‚СЃСЏ РЅР° СЃСѓРјРјСѓ, СЂР°РІРЅСѓСЋ СЃСѓРјРјРµ РїР»Р°С‚РµР¶Р° РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ<br/><b>РџСЂРёР±С‹Р»СЊ</b> - СЃС‡С‘С‚ РїРѕРїРѕР»РЅСЏРµС‚СЃСЏ РЅР° СЃСѓРјРјСѓ, СЂР°РІРЅСѓСЋ РїРѕР»СѓС‡РµРЅРЅРѕР№ РѕС‚ РѕС‚РїСЂР°РІРєРё SMS РїСЂРёР±С‹Р»Рё', 'type' => 'select', 'values' => array(0 => 'РџР»Р°С‚С‘Р¶', 1 => 'РџСЂРёР±С‹Р»СЊ'), 'value' => extra_get_param('fin_smscoin', 'clear_mode')));
+array_push($cfgX, array('name' => 'pay_rate', 'title' => 'РљРѕСЌС„С„РёС†РёРµРЅС‚ РїРµСЂРµСЃС‡РµС‚Р° РёР· `USD` (РІ РєРѕС‚РѕСЂС‹С… РїСЂРѕРёР·РІРѕРґСЏС‚СЃСЏ СЂР°СЃС‡С‘С‚С‹ СЃ СЃРµСЂРІРёСЃРѕРј SMSCOIN) РІ РІР°Р»СЋС‚Сѓ СЃР°Р№С‚Р° (С‚РµРєСѓС‰Р°СЏ РІР°Р»СЋС‚Р°: <b>' . pluginGetVariable('finance', 'syscurrency') . '</b>)', 'descr' => '1 <b>USD</b> SMSCOIN = XX.XXX <b>' . pluginGetVariable('finance', 'syscurrency') . '</b>', 'type' => 'input', value => pluginGetVariable('fin_smscoin', 'pay_rate')));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>РРЅС‚РµРіСЂР°С†РёРѕРЅРЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё СЃ СЃРµСЂРІРёСЃРѕРј SMSCOIN</b>', 'entries' => $cfgX));
 // RUN
 if ($_REQUEST['action'] == 'commit') {
 	// If submit requested, do config save

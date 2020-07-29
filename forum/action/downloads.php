@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Íàñòîÿùèé ïðîãðàììèñò íèêîãäà íå ñòàâèò
- êîììåíòàðèåâ. Òî, ÷òî ïèñàëîñü ñ òðóäîì, äîëæíî
- ïîíèìàòüñÿ ñ òðóäîì. :))
+ Â© ÐÐ°ÑÑ‚Ð¾ÑÑ‰Ð¸Ð¹ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð¸ÑÑ‚ Ð½Ð¸ÐºÐ¾Ð³Ð´Ð° Ð½Ðµ ÑÑ‚Ð°Ð²Ð¸Ñ‚
+ ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸ÐµÐ². Ð¢Ð¾, Ñ‡Ñ‚Ð¾ Ð¿Ð¸ÑÐ°Ð»Ð¾ÑÑŒ Ñ Ñ‚Ñ€ÑƒÐ´Ð¾Ð¼, Ð´Ð¾Ð»Ð¶Ð½Ð¾
+ Ð¿Ð¾Ð½Ð¸Ð¼Ð°Ñ‚ÑŒÑÑ Ñ Ñ‚Ñ€ÑƒÐ´Ð¾Ð¼. :))
 -----------------------------------------------------
- Äàííûé êîä çàùèùåí àâòîðñêèìè ïðàâàìè
+ Ð”Ð°Ð½Ð½Ñ‹Ð¹ ÐºÐ¾Ð´ Ð·Ð°Ñ‰Ð¸Ñ‰ÐµÐ½ Ð°Ð²Ñ‚Ð¾Ñ€ÑÐºÐ¸Ð¼Ð¸ Ð¿Ñ€Ð°Ð²Ð°Ð¼Ð¸
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -21,16 +21,16 @@ if (isset($params['id']))
 else
 	$id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : '';
 if (empty($id))
-	return $output = information('id ôàéëà íå óêàçàí', $title = 'Èíôîðìàöèÿ');
+	return $output = information('id Ñ„Ð°Ð¹Ð»Ð° Ð½Ðµ ÑƒÐºÐ°Ð·Ð°Ð½', $title = 'Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ');
 if (!is_array($userROW))
-	return $output = information('Êà÷àòü ôàéëû ìîãóò òîëüêî çàðåãèñòèðîâàííûå', $title = 'Èíôîðìàöèÿ');
+	return $output = information('ÐšÐ°Ñ‡Ð°Ñ‚ÑŒ Ñ„Ð°Ð¹Ð»Ñ‹ Ð¼Ð¾Ð³ÑƒÑ‚ Ñ‚Ð¾Ð»ÑŒÐºÐ¾ Ð·Ð°Ñ€ÐµÐ³Ð¸ÑÑ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ', $title = 'Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ');
 $row = $mysql->record('SELECT * FROM ' . prefix . '_forum_attach WHERE id = ' . securemysql($id) . ' LIMIT 1');
 if (empty($row))
-	return $output = information('Òàêîãî ôàéëà íåò â áàçå', $title = 'Èíôîðìàöèÿ');
+	return $output = information('Ð¢Ð°ÐºÐ¾Ð³Ð¾ Ñ„Ð°Ð¹Ð»Ð° Ð½ÐµÑ‚ Ð² Ð±Ð°Ð·Ðµ', $title = 'Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ');
 $file = files_dir . 'forum/' . $row['location'] . '/' . $row['file'];
 if (!is_file($file)) {
 	//$mysql->query('DELETE FROM '.prefix.'_forum_attach WHERE id = '.securemysql($id).' LIMIT 1');
-	return $output = information('Òàêîãî ôàéëà íåò è èç áàçû óäàëåí', $title = 'Èíôîðìàöèÿ');
+	return $output = information('Ð¢Ð°ÐºÐ¾Ð³Ð¾ Ñ„Ð°Ð¹Ð»Ð° Ð½ÐµÑ‚ Ð¸ Ð¸Ð· Ð±Ð°Ð·Ñ‹ ÑƒÐ´Ð°Ð»ÐµÐ½', $title = 'Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ');
 }
 $mysql->query('UPDATE ' . prefix . '_forum_attach SET downloads = downloads + 1 WHERE id = ' . securemysql($id) . ' LIMIT 1');
 header('Content-Type: application/force-download');

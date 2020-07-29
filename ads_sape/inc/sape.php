@@ -1,25 +1,25 @@
 <?php
 /**
- * SAPE.ru - Интеллектуальная система купли-продажи ссылок
+ * SAPE.ru - РРЅС‚РµР»Р»РµРєС‚СѓР°Р»СЊРЅР°СЏ СЃРёСЃС‚РµРјР° РєСѓРїР»Рё-РїСЂРѕРґР°Р¶Рё СЃСЃС‹Р»РѕРє
  *
- * PHP-клиент
+ * PHP-РєР»РёРµРЅС‚
  *
- * Вебмастеры! Не нужно ничего менять в этом файле!
- * Все настройки - через параметры при вызове кода.
- * Читайте: http://help.sape.ru/
+ * Р’РµР±РјР°СЃС‚РµСЂС‹! РќРµ РЅСѓР¶РЅРѕ РЅРёС‡РµРіРѕ РјРµРЅСЏС‚СЊ РІ СЌС‚РѕРј С„Р°Р№Р»Рµ!
+ * Р’СЃРµ РЅР°СЃС‚СЂРѕР№РєРё - С‡РµСЂРµР· РїР°СЂР°РјРµС‚СЂС‹ РїСЂРё РІС‹Р·РѕРІРµ РєРѕРґР°.
+ * Р§РёС‚Р°Р№С‚Рµ: http://help.sape.ru/
  *
- * По всем вопросам обращайтесь на support@sape.ru
+ * РџРѕ РІСЃРµРј РІРѕРїСЂРѕСЃР°Рј РѕР±СЂР°С‰Р°Р№С‚РµСЃСЊ РЅР° support@sape.ru
  *
- * class SAPE_base                - базовый класс
- * class SAPE_client            - класс для вывода обычных ссылок
- * class SAPE_client_context    - класс для вывода контекстных сссылок
- * class SAPE_articles            - класс для вывода статей
+ * class SAPE_base                - Р±Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ
+ * class SAPE_client            - РєР»Р°СЃСЃ РґР»СЏ РІС‹РІРѕРґР° РѕР±С‹С‡РЅС‹С… СЃСЃС‹Р»РѕРє
+ * class SAPE_client_context    - РєР»Р°СЃСЃ РґР»СЏ РІС‹РІРѕРґР° РєРѕРЅС‚РµРєСЃС‚РЅС‹С… СЃСЃСЃС‹Р»РѕРє
+ * class SAPE_articles            - РєР»Р°СЃСЃ РґР»СЏ РІС‹РІРѕРґР° СЃС‚Р°С‚РµР№
  *
- * @version 1.1.5 от 23.09.2011
+ * @version 1.1.5 РѕС‚ 23.09.2011
  */
 
 /**
- * Основной класс, выполняющий всю рутину
+ * РћСЃРЅРѕРІРЅРѕР№ РєР»Р°СЃСЃ, РІС‹РїРѕР»РЅСЏСЋС‰РёР№ РІСЃСЋ СЂСѓС‚РёРЅСѓ
  */
 class SAPE_base {
 
@@ -28,28 +28,28 @@ class SAPE_base {
 	var $_charset = ''; // http://www.php.net/manual/en/function.iconv.php
 	var $_sape_charset = '';
 	var $_server_list = array('dispenser-01.sape.ru', 'dispenser-02.sape.ru');
-	var $_cache_lifetime = 3600; // Пожалейте наш сервер :о)
-	// Если скачать базу ссылок не удалось, то следующая попытка будет через столько секунд
+	var $_cache_lifetime = 3600; // РџРѕР¶Р°Р»РµР№С‚Рµ РЅР°С€ СЃРµСЂРІРµСЂ :Рѕ)
+	// Р•СЃР»Рё СЃРєР°С‡Р°С‚СЊ Р±Р°Р·Сѓ СЃСЃС‹Р»РѕРє РЅРµ СѓРґР°Р»РѕСЃСЊ, С‚Рѕ СЃР»РµРґСѓСЋС‰Р°СЏ РїРѕРїС‹С‚РєР° Р±СѓРґРµС‚ С‡РµСЂРµР· СЃС‚РѕР»СЊРєРѕ СЃРµРєСѓРЅРґ
 	var $_cache_reloadtime = 600;
 	var $_error = '';
 	var $_host = '';
 	var $_request_uri = '';
 	var $_multi_site = false;
-	var $_fetch_remote_type = ''; // Способ подключения к удалённому серверу [file_get_contents|curl|socket]
-	var $_socket_timeout = 6; // Сколько ждать ответа
+	var $_fetch_remote_type = ''; // РЎРїРѕСЃРѕР± РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СѓРґР°Р»С‘РЅРЅРѕРјСѓ СЃРµСЂРІРµСЂСѓ [file_get_contents|curl|socket]
+	var $_socket_timeout = 6; // РЎРєРѕР»СЊРєРѕ Р¶РґР°С‚СЊ РѕС‚РІРµС‚Р°
 	var $_force_show_code = false;
-	var $_is_our_bot = false; // Если наш робот
+	var $_is_our_bot = false; // Р•СЃР»Рё РЅР°С€ СЂРѕР±РѕС‚
 	var $_debug = false;
-	var $_ignore_case = false; // Регистронезависимый режим работы, использовать только на свой страх и риск
-	var $_db_file = ''; // Путь к файлу с данными
-	var $_use_server_array = false; // Откуда будем брать uri страницы: $_SERVER['REQUEST_URI'] или getenv('REQUEST_URI')
+	var $_ignore_case = false; // Р РµРіРёСЃС‚СЂРѕРЅРµР·Р°РІРёСЃРёРјС‹Р№ СЂРµР¶РёРј СЂР°Р±РѕС‚С‹, РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ С‚РѕР»СЊРєРѕ РЅР° СЃРІРѕР№ СЃС‚СЂР°С… Рё СЂРёСЃРє
+	var $_db_file = ''; // РџСѓС‚СЊ Рє С„Р°Р№Р»Сѓ СЃ РґР°РЅРЅС‹РјРё
+	var $_use_server_array = false; // РћС‚РєСѓРґР° Р±СѓРґРµРј Р±СЂР°С‚СЊ uri СЃС‚СЂР°РЅРёС†С‹: $_SERVER['REQUEST_URI'] РёР»Рё getenv('REQUEST_URI')
 	var $_force_update_db = false;
-	var $_is_block_css_showed = false; // Флаг для отрисовки css в блочных ссылках
+	var $_is_block_css_showed = false; // Р¤Р»Р°Рі РґР»СЏ РѕС‚СЂРёСЃРѕРІРєРё css РІ Р±Р»РѕС‡РЅС‹С… СЃСЃС‹Р»РєР°С…
 	var $_is_block_ins_beforeall_showed = false;
 
 	function SAPE_base($options = null) {
 
-		// Поехали :o)
+		// РџРѕРµС…Р°Р»Рё :o)
 		$host = '';
 		if (is_array($options)) {
 			if (isset($options['host'])) {
@@ -64,7 +64,7 @@ class SAPE_base {
 		if (isset($options['use_server_array']) && $options['use_server_array'] == true) {
 			$this->_use_server_array = true;
 		}
-		// Какой сайт?
+		// РљР°РєРѕР№ СЃР°Р№С‚?
 		if (strlen($host)) {
 			$this->_host = $host;
 		} else {
@@ -72,7 +72,7 @@ class SAPE_base {
 		}
 		$this->_host = preg_replace('/^http:\/\//', '', $this->_host);
 		$this->_host = preg_replace('/^www\./', '', $this->_host);
-		// Какая страница?
+		// РљР°РєР°СЏ СЃС‚СЂР°РЅРёС†Р°?
 		if (isset($options['request_uri']) && strlen($options['request_uri'])) {
 			$this->_request_uri = $options['request_uri'];
 		} elseif ($this->_use_server_array === false) {
@@ -81,20 +81,20 @@ class SAPE_base {
 		if (strlen($this->_request_uri) == 0) {
 			$this->_request_uri = $_SERVER['REQUEST_URI'];
 		}
-		// На случай, если хочется много сайтов в одной папке
+		// РќР° СЃР»СѓС‡Р°Р№, РµСЃР»Рё С…РѕС‡РµС‚СЃСЏ РјРЅРѕРіРѕ СЃР°Р№С‚РѕРІ РІ РѕРґРЅРѕР№ РїР°РїРєРµ
 		if (isset($options['multi_site']) && $options['multi_site'] == true) {
 			$this->_multi_site = true;
 		}
-		// Выводить информацию о дебаге
+		// Р’С‹РІРѕРґРёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РґРµР±Р°РіРµ
 		if (isset($options['debug']) && $options['debug'] == true) {
 			$this->_debug = true;
 		}
-		// Определяем наш ли робот
+		// РћРїСЂРµРґРµР»СЏРµРј РЅР°С€ Р»Рё СЂРѕР±РѕС‚
 		if (isset($_COOKIE['sape_cookie']) && ($_COOKIE['sape_cookie'] == _SAPE_USER)) {
 			$this->_is_our_bot = true;
 			if (isset($_COOKIE['sape_debug']) && ($_COOKIE['sape_debug'] == 1)) {
 				$this->_debug = true;
-				//для удобства дебега саппортом
+				//РґР»СЏ СѓРґРѕР±СЃС‚РІР° РґРµР±РµРіР° СЃР°РїРїРѕСЂС‚РѕРј
 				$this->_options = $options;
 				$this->_server_request_uri = $this->_request_uri = $_SERVER['REQUEST_URI'];
 				$this->_getenv_request_uri = getenv('REQUEST_URI');
@@ -106,11 +106,11 @@ class SAPE_base {
 		} else {
 			$this->_is_our_bot = false;
 		}
-		// Сообщать об ошибках
+		// РЎРѕРѕР±С‰Р°С‚СЊ РѕР± РѕС€РёР±РєР°С…
 		if (isset($options['verbose']) && $options['verbose'] == true || $this->_debug) {
 			$this->_verbose = true;
 		}
-		// Кодировка
+		// РљРѕРґРёСЂРѕРІРєР°
 		if (isset($options['charset']) && strlen($options['charset'])) {
 			$this->_charset = $options['charset'];
 		} else {
@@ -122,14 +122,14 @@ class SAPE_base {
 		if (isset($options['socket_timeout']) && is_numeric($options['socket_timeout']) && $options['socket_timeout'] > 0) {
 			$this->_socket_timeout = $options['socket_timeout'];
 		}
-		// Всегда выводить чек-код
+		// Р’СЃРµРіРґР° РІС‹РІРѕРґРёС‚СЊ С‡РµРє-РєРѕРґ
 		if (isset($options['force_show_code']) && $options['force_show_code'] == true) {
 			$this->_force_show_code = true;
 		}
 		if (!defined('_SAPE_USER')) {
-			return $this->raise_error('Не задана константа _SAPE_USER');
+			return $this->raise_error('РќРµ Р·Р°РґР°РЅР° РєРѕРЅСЃС‚Р°РЅС‚Р° _SAPE_USER');
 		}
-		//Не обращаем внимания на регистр ссылок
+		//РќРµ РѕР±СЂР°С‰Р°РµРј РІРЅРёРјР°РЅРёСЏ РЅР° СЂРµРіРёСЃС‚СЂ СЃСЃС‹Р»РѕРє
 		if (isset($options['ignore_case']) && $options['ignore_case'] == true) {
 			$this->_ignore_case = true;
 			$this->_request_uri = strtolower($this->_request_uri);
@@ -137,7 +137,7 @@ class SAPE_base {
 	}
 
 	/**
-	 * Функция для подключения к удалённому серверу
+	 * Р¤СѓРЅРєС†РёСЏ РґР»СЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє СѓРґР°Р»С‘РЅРЅРѕРјСѓ СЃРµСЂРІРµСЂСѓ
 	 */
 	function fetch_remote_file($host, $path) {
 
@@ -199,11 +199,11 @@ class SAPE_base {
 			}
 		}
 
-		return $this->raise_error('Не могу подключиться к серверу: ' . $host . $path . ', type: ' . $this->_fetch_remote_type);
+		return $this->raise_error('РќРµ РјРѕРіСѓ РїРѕРґРєР»СЋС‡РёС‚СЊСЃСЏ Рє СЃРµСЂРІРµСЂСѓ: ' . $host . $path . ', type: ' . $this->_fetch_remote_type);
 	}
 
 	/**
-	 * Функция чтения из локального файла
+	 * Р¤СѓРЅРєС†РёСЏ С‡С‚РµРЅРёСЏ РёР· Р»РѕРєР°Р»СЊРЅРѕРіРѕ С„Р°Р№Р»Р°
 	 */
 	function _read($filename) {
 
@@ -223,11 +223,11 @@ class SAPE_base {
 			return $data;
 		}
 
-		return $this->raise_error('Не могу считать данные из файла: ' . $filename);
+		return $this->raise_error('РќРµ РјРѕРіСѓ СЃС‡РёС‚Р°С‚СЊ РґР°РЅРЅС‹Рµ РёР· С„Р°Р№Р»Р°: ' . $filename);
 	}
 
 	/**
-	 * Функция записи в локальный файл
+	 * Р¤СѓРЅРєС†РёСЏ Р·Р°РїРёСЃРё РІ Р»РѕРєР°Р»СЊРЅС‹Р№ С„Р°Р№Р»
 	 */
 	function _write($filename, $data) {
 
@@ -241,7 +241,7 @@ class SAPE_base {
 				if (md5($this->_read($filename)) != md5($data)) {
 					@unlink($filename);
 
-					return $this->raise_error('Нарушена целостность данных при записи в файл: ' . $filename);
+					return $this->raise_error('РќР°СЂСѓС€РµРЅР° С†РµР»РѕСЃС‚РЅРѕСЃС‚СЊ РґР°РЅРЅС‹С… РїСЂРё Р·Р°РїРёСЃРё РІ С„Р°Р№Р»: ' . $filename);
 				}
 			} else {
 				return false;
@@ -250,11 +250,11 @@ class SAPE_base {
 			return true;
 		}
 
-		return $this->raise_error('Не могу записать данные в файл: ' . $filename);
+		return $this->raise_error('РќРµ РјРѕРіСѓ Р·Р°РїРёСЃР°С‚СЊ РґР°РЅРЅС‹Рµ РІ С„Р°Р№Р»: ' . $filename);
 	}
 
 	/**
-	 * Функция обработки ошибок
+	 * Р¤СѓРЅРєС†РёСЏ РѕР±СЂР°Р±РѕС‚РєРё РѕС€РёР±РѕРє
 	 */
 	function raise_error($e) {
 
@@ -267,21 +267,21 @@ class SAPE_base {
 	}
 
 	/**
-	 * Загрузка данных
+	 * Р—Р°РіСЂСѓР·РєР° РґР°РЅРЅС‹С…
 	 */
 	function load_data() {
 
 		$this->_db_file = $this->_get_db_file();
 		if (!is_file($this->_db_file)) {
-			// Пытаемся создать файл.
+			// РџС‹С‚Р°РµРјСЃСЏ СЃРѕР·РґР°С‚СЊ С„Р°Р№Р».
 			if (@touch($this->_db_file)) {
-				@chmod($this->_db_file, 0666); // Права доступа
+				@chmod($this->_db_file, 0666); // РџСЂР°РІР° РґРѕСЃС‚СѓРїР°
 			} else {
-				return $this->raise_error('Нет файла ' . $this->_db_file . '. Создать не удалось. Выставите права 777 на папку.');
+				return $this->raise_error('РќРµС‚ С„Р°Р№Р»Р° ' . $this->_db_file . '. РЎРѕР·РґР°С‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ. Р’С‹СЃС‚Р°РІРёС‚Рµ РїСЂР°РІР° 777 РЅР° РїР°РїРєСѓ.');
 			}
 		}
 		if (!is_writable($this->_db_file)) {
-			return $this->raise_error('Нет доступа на запись к файлу: ' . $this->_db_file . '! Выставите права 777 на папку.');
+			return $this->raise_error('РќРµС‚ РґРѕСЃС‚СѓРїР° РЅР° Р·Р°РїРёСЃСЊ Рє С„Р°Р№Р»Сѓ: ' . $this->_db_file . '! Р’С‹СЃС‚Р°РІРёС‚Рµ РїСЂР°РІР° 777 РЅР° РїР°РїРєСѓ.');
 		}
 		@clearstatcache();
 		$data = $this->_read($this->_db_file);
@@ -299,7 +299,7 @@ class SAPE_base {
 				)
 			)
 		) {
-			// Чтобы не повесить площадку клиента и чтобы не было одновременных запросов
+			// Р§С‚РѕР±С‹ РЅРµ РїРѕРІРµСЃРёС‚СЊ РїР»РѕС‰Р°РґРєСѓ РєР»РёРµРЅС‚Р° Рё С‡С‚РѕР±С‹ РЅРµ Р±С‹Р»Рѕ РѕРґРЅРѕРІСЂРµРјРµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРІ
 			@touch($this->_db_file, (time() - $this->_cache_lifetime + $this->_cache_reloadtime));
 			$path = $this->_get_dispenser_path();
 			if (strlen($this->_charset)) {
@@ -310,10 +310,10 @@ class SAPE_base {
 					if (substr($data, 0, 12) == 'FATAL ERROR:') {
 						$this->raise_error($data);
 					} else {
-						// [псевдо]проверка целостности:
+						// [РїСЃРµРІРґРѕ]РїСЂРѕРІРµСЂРєР° С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё:
 						$hash = @unserialize($data);
 						if ($hash != false) {
-							// попытаемся записать кодировку в кеш
+							// РїРѕРїС‹С‚Р°РµРјСЃСЏ Р·Р°РїРёСЃР°С‚СЊ РєРѕРґРёСЂРѕРІРєСѓ РІ РєРµС€
 							$hash['__sape_charset__'] = $this->_charset;
 							$hash['__last_update__'] = time();
 							$hash['__multi_site__'] = $this->_multi_site;
@@ -332,7 +332,7 @@ class SAPE_base {
 				}
 			}
 		}
-		// Убиваем PHPSESSID
+		// РЈР±РёРІР°РµРј PHPSESSID
 		if (strlen(session_id())) {
 			$session = session_name() . '=' . session_id();
 			$this->_request_uri = str_replace(array('?' . $session, '&' . $session), '', $this->_request_uri);
@@ -342,7 +342,7 @@ class SAPE_base {
 }
 
 /**
- * Класс для работы с обычными ссылками
+ * РљР»Р°СЃСЃ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РѕР±С‹С‡РЅС‹РјРё СЃСЃС‹Р»РєР°РјРё
  */
 class SAPE_client extends SAPE_base {
 
@@ -358,7 +358,7 @@ class SAPE_client extends SAPE_base {
 	}
 
 	/**
-	 * Обработка html для массива ссылок
+	 * РћР±СЂР°Р±РѕС‚РєР° html РґР»СЏ РјР°СЃСЃРёРІР° СЃСЃС‹Р»РѕРє
 	 *
 	 * @param string $html
 	 *
@@ -369,7 +369,7 @@ class SAPE_client extends SAPE_base {
 		if (empty($options)) {
 			$options = array();
 		}
-		// если запрошена определенная кодировка, и известна кодировка кеша, и они разные, конвертируем в заданную
+		// РµСЃР»Рё Р·Р°РїСЂРѕС€РµРЅР° РѕРїСЂРµРґРµР»РµРЅРЅР°СЏ РєРѕРґРёСЂРѕРІРєР°, Рё РёР·РІРµСЃС‚РЅР° РєРѕРґРёСЂРѕРІРєР° РєРµС€Р°, Рё РѕРЅРё СЂР°Р·РЅС‹Рµ, РєРѕРЅРІРµСЂС‚РёСЂСѓРµРј РІ Р·Р°РґР°РЅРЅСѓСЋ
 		if (
 			strlen($this->_charset) > 0
 			&&
@@ -412,7 +412,7 @@ class SAPE_client extends SAPE_base {
 	}
 
 	/**
-	 * Финальная обработка html перед выводом ссылок
+	 * Р¤РёРЅР°Р»СЊРЅР°СЏ РѕР±СЂР°Р±РѕС‚РєР° html РїРµСЂРµРґ РІС‹РІРѕРґРѕРј СЃСЃС‹Р»РѕРє
 	 *
 	 * @param string $html
 	 *
@@ -428,32 +428,32 @@ class SAPE_client extends SAPE_base {
 	}
 
 	/**
-	 * Вывод ссылок в виде блока
+	 * Р’С‹РІРѕРґ СЃСЃС‹Р»РѕРє РІ РІРёРґРµ Р±Р»РѕРєР°
 	 *
-	 * @param int   $n       Количествово
-	 * @param int   $offset  Смещение
-	 * @param array $options Опции
+	 * @param int   $n       РљРѕР»РёС‡РµСЃС‚РІРѕРІРѕ
+	 * @param int   $offset  РЎРјРµС‰РµРЅРёРµ
+	 * @param array $options РћРїС†РёРё
 	 *
 	 * <code>
 	 * $options = array();
 	 * $options['block_no_css'] = (false|true);
-	 * // Переопределяет запрет на вывод css в коде страницы: false - выводить css
+	 * // РџРµСЂРµРѕРїСЂРµРґРµР»СЏРµС‚ Р·Р°РїСЂРµС‚ РЅР° РІС‹РІРѕРґ css РІ РєРѕРґРµ СЃС‚СЂР°РЅРёС†С‹: false - РІС‹РІРѕРґРёС‚СЊ css
 	 * $options['block_orientation'] = (1|0);
-	 * // Переопределяет ориентацию блока: 1 - горизонтальная, 0 - вертикальная
+	 * // РџРµСЂРµРѕРїСЂРµРґРµР»СЏРµС‚ РѕСЂРёРµРЅС‚Р°С†РёСЋ Р±Р»РѕРєР°: 1 - РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ, 0 - РІРµСЂС‚РёРєР°Р»СЊРЅР°СЏ
 	 * $options['block_width'] = ('auto'|'[?]px'|'[?]%'|'[?]');
-	 * // Переопределяет ширину блока:
-	 * // 'auto'  - определяется шириной блока-предка с фиксированной шириной,
-	 * // если такового нет, то займет всю ширину
-	 * // '[?]px' - значение в пикселях
-	 * // '[?]%'  - значение в процентах от ширины блока-предка с фиксированной шириной
-	 * // '[?]'   - любое другое значение, которое поддерживается спецификацией CSS
+	 * // РџРµСЂРµРѕРїСЂРµРґРµР»СЏРµС‚ С€РёСЂРёРЅСѓ Р±Р»РѕРєР°:
+	 * // 'auto'  - РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ С€РёСЂРёРЅРѕР№ Р±Р»РѕРєР°-РїСЂРµРґРєР° СЃ С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕР№ С€РёСЂРёРЅРѕР№,
+	 * // РµСЃР»Рё С‚Р°РєРѕРІРѕРіРѕ РЅРµС‚, С‚Рѕ Р·Р°Р№РјРµС‚ РІСЃСЋ С€РёСЂРёРЅСѓ
+	 * // '[?]px' - Р·РЅР°С‡РµРЅРёРµ РІ РїРёРєСЃРµР»СЏС…
+	 * // '[?]%'  - Р·РЅР°С‡РµРЅРёРµ РІ РїСЂРѕС†РµРЅС‚Р°С… РѕС‚ С€РёСЂРёРЅС‹ Р±Р»РѕРєР°-РїСЂРµРґРєР° СЃ С„РёРєСЃРёСЂРѕРІР°РЅРЅРѕР№ С€РёСЂРёРЅРѕР№
+	 * // '[?]'   - Р»СЋР±РѕРµ РґСЂСѓРіРѕРµ Р·РЅР°С‡РµРЅРёРµ, РєРѕС‚РѕСЂРѕРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ СЃРїРµС†РёС„РёРєР°С†РёРµР№ CSS
 	 * </code>
 	 *
 	 * @return string
 	 */
 	function return_block_links($n = null, $offset = 0, $options = null) {
 
-		// Объединить параметры
+		// РћР±СЉРµРґРёРЅРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹
 		if (empty($options)) {
 			$options = array();
 		}
@@ -466,16 +466,16 @@ class SAPE_client extends SAPE_base {
 			$ext_options = $this->_block_tpl_options;
 		}
 		$options = array_merge($defaults, $ext_options, $options);
-		// Ссылки переданы не массивом (чек-код) => выводим как есть + инфо о блоке
+		// РЎСЃС‹Р»РєРё РїРµСЂРµРґР°РЅС‹ РЅРµ РјР°СЃСЃРёРІРѕРј (С‡РµРє-РєРѕРґ) => РІС‹РІРѕРґРёРј РєР°Рє РµСЃС‚СЊ + РёРЅС„Рѕ Рѕ Р±Р»РѕРєРµ
 		if (!is_array($this->_links_page)) {
 			$html = $this->_return_array_links_html('', array('is_block_links' => true));
 
 			return $this->_return_html($this->_links_page . $html);
-		} // Не переданы шаблоны => нельзя вывести блоком - ничего не делать
+		} // РќРµ РїРµСЂРµРґР°РЅС‹ С€Р°Р±Р»РѕРЅС‹ => РЅРµР»СЊР·СЏ РІС‹РІРµСЃС‚Рё Р±Р»РѕРєРѕРј - РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°С‚СЊ
 		elseif (!isset($this->_block_tpl)) {
 			return $this->_return_html('');
 		}
-		// Определим нужное число элементов в блоке
+		// РћРїСЂРµРґРµР»РёРј РЅСѓР¶РЅРѕРµ С‡РёСЃР»Рѕ СЌР»РµРјРµРЅС‚РѕРІ РІ Р±Р»РѕРєРµ
 		$total_page_links = count($this->_links_page);
 		$need_show_obligatory_block = false;
 		$need_show_conditional_block = false;
@@ -492,7 +492,7 @@ class SAPE_client extends SAPE_base {
 		if (!is_numeric($n) || $n > $total_page_links) {
 			$n = $total_page_links;
 		}
-		// Выборка ссылок
+		// Р’С‹Р±РѕСЂРєР° СЃСЃС‹Р»РѕРє
 		$links = array();
 		for ($i = 1; $i <= $n; $i++) {
 			if ($offset > 0 && $i <= $offset) {
@@ -502,12 +502,12 @@ class SAPE_client extends SAPE_base {
 			}
 		}
 		$html = '';
-		// Подсчет числа опциональных блоков
+		// РџРѕРґСЃС‡РµС‚ С‡РёСЃР»Р° РѕРїС†РёРѕРЅР°Р»СЊРЅС‹С… Р±Р»РѕРєРѕРІ
 		$nof_conditional = 0;
 		if (count($links) < $n_requested && true == $need_show_conditional_block) {
 			$nof_conditional = $n_requested - count($links);
 		}
-		//Если нет ссылок и нет вставных блоков, то ничего не выводим
+		//Р•СЃР»Рё РЅРµС‚ СЃСЃС‹Р»РѕРє Рё РЅРµС‚ РІСЃС‚Р°РІРЅС‹С… Р±Р»РѕРєРѕРІ, С‚Рѕ РЅРёС‡РµРіРѕ РЅРµ РІС‹РІРѕРґРёРј
 		if (empty($links) && $need_show_obligatory_block == false && $nof_conditional == 0) {
 			$return_links_options = array(
 				'is_block_links'      => true,
@@ -520,21 +520,21 @@ class SAPE_client extends SAPE_base {
 
 			return $this->_return_html($html);
 		}
-		// Делаем вывод стилей, только один раз. Или не выводим их вообще, если так задано в параметрах
+		// Р”РµР»Р°РµРј РІС‹РІРѕРґ СЃС‚РёР»РµР№, С‚РѕР»СЊРєРѕ РѕРґРёРЅ СЂР°Р·. РР»Рё РЅРµ РІС‹РІРѕРґРёРј РёС… РІРѕРѕР±С‰Рµ, РµСЃР»Рё С‚Р°Рє Р·Р°РґР°РЅРѕ РІ РїР°СЂР°РјРµС‚СЂР°С…
 		if (!$this->_is_block_css_showed && false == $options['block_no_css']) {
 			$html .= $this->_block_tpl['css'];
 			$this->_is_block_css_showed = true;
 		}
-		// Вставной блок в начале всех блоков
+		// Р’СЃС‚Р°РІРЅРѕР№ Р±Р»РѕРє РІ РЅР°С‡Р°Р»Рµ РІСЃРµС… Р±Р»РѕРєРѕРІ
 		if (isset($this->_block_ins_beforeall) && !$this->_is_block_ins_beforeall_showed) {
 			$html .= $this->_block_ins_beforeall;
 			$this->_is_block_ins_beforeall_showed = true;
 		}
-		// Вставной блок в начале блока
+		// Р’СЃС‚Р°РІРЅРѕР№ Р±Р»РѕРє РІ РЅР°С‡Р°Р»Рµ Р±Р»РѕРєР°
 		if (isset($this->_block_ins_beforeblock)) {
 			$html .= $this->_block_ins_beforeblock;
 		}
-		// Получаем шаблоны в зависимости от ориентации блока
+		// РџРѕР»СѓС‡Р°РµРј С€Р°Р±Р»РѕРЅС‹ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РѕСЂРёРµРЅС‚Р°С†РёРё Р±Р»РѕРєР°
 		$block_tpl_parts = $this->_block_tpl[$options['block_orientation']];
 		$block_tpl = $block_tpl_parts['block'];
 		$item_tpl = $block_tpl_parts['item'];
@@ -551,7 +551,7 @@ class SAPE_client extends SAPE_base {
 			} elseif (function_exists('ucfirst') && (strlen($this->_sape_charset) == 0 || strpos($this->_sape_charset, '1251') !== false)) {
 				$link_item[3][0] = ucfirst($link_item[3][0]);
 			}
-			// Если есть раскодированный URL, то заменить его при выводе
+			// Р•СЃР»Рё РµСЃС‚СЊ СЂР°СЃРєРѕРґРёСЂРѕРІР°РЅРЅС‹Р№ URL, С‚Рѕ Р·Р°РјРµРЅРёС‚СЊ РµРіРѕ РїСЂРё РІС‹РІРѕРґРµ
 			if (isset($this->_block_uri_idna) && isset($this->_block_uri_idna[$link_item[2]])) {
 				$link_item[2] = $this->_block_uri_idna[$link_item[2]];
 			}
@@ -562,12 +562,12 @@ class SAPE_client extends SAPE_base {
 			$item = str_replace('{link}', $link_item[1], $item);
 			$items .= $item;
 		}
-		// Вставной обязатльный элемент в блоке
+		// Р’СЃС‚Р°РІРЅРѕР№ РѕР±СЏР·Р°С‚Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚ РІ Р±Р»РѕРєРµ
 		if (true == $need_show_obligatory_block) {
 			$items .= str_replace('{item}', $this->_block_ins_itemobligatory, $item_container_tpl);
 			$nof_items_total += 1;
 		}
-		// Вставные опциональные элементы в блоке
+		// Р’СЃС‚Р°РІРЅС‹Рµ РѕРїС†РёРѕРЅР°Р»СЊРЅС‹Рµ СЌР»РµРјРµРЅС‚С‹ РІ Р±Р»РѕРєРµ
 		if ($need_show_conditional_block == true && $nof_conditional > 0) {
 			for ($i = 0; $i < $nof_conditional; $i++) {
 				$items .= str_replace('{item}', $this->_block_ins_itemconditional, $item_container_tpl);
@@ -576,23 +576,23 @@ class SAPE_client extends SAPE_base {
 		}
 		if ($items != '') {
 			$html .= str_replace('{items}', $items, $block_tpl);
-			// Проставляем ширину, чтобы везде одинковая была
+			// РџСЂРѕСЃС‚Р°РІР»СЏРµРј С€РёСЂРёРЅСѓ, С‡С‚РѕР±С‹ РІРµР·РґРµ РѕРґРёРЅРєРѕРІР°СЏ Р±С‹Р»Р°
 			if ($nof_items_total > 0) {
 				$html = str_replace('{td_width}', round(100 / $nof_items_total), $html);
 			} else {
 				$html = str_replace('{td_width}', 0, $html);
 			}
-			// Если задано, то переопределить ширину блока
+			// Р•СЃР»Рё Р·Р°РґР°РЅРѕ, С‚Рѕ РїРµСЂРµРѕРїСЂРµРґРµР»РёС‚СЊ С€РёСЂРёРЅСѓ Р±Р»РѕРєР°
 			if (isset($options['block_width']) && !empty($options['block_width'])) {
 				$html = str_replace('{block_style_custom}', 'style="width: ' . $options['block_width'] . '!important;"', $html);
 			}
 		}
 		unset($block_tpl_parts, $block_tpl, $items, $item, $item_tpl, $item_container_tpl);
-		// Вставной блок в конце блока
+		// Р’СЃС‚Р°РІРЅРѕР№ Р±Р»РѕРє РІ РєРѕРЅС†Рµ Р±Р»РѕРєР°
 		if (isset($this->_block_ins_afterblock)) {
 			$html .= $this->_block_ins_afterblock;
 		}
-		//Заполняем оставшиеся модификаторы значениями
+		//Р—Р°РїРѕР»РЅСЏРµРј РѕСЃС‚Р°РІС€РёРµСЃСЏ РјРѕРґРёС„РёРєР°С‚РѕСЂС‹ Р·РЅР°С‡РµРЅРёСЏРјРё
 		unset($options['block_no_css'], $options['block_orientation'], $options['block_width']);
 		$tpl_modifiers = array_keys($options);
 		foreach ($tpl_modifiers as $k => $m) {
@@ -602,7 +602,7 @@ class SAPE_client extends SAPE_base {
 		$tpl_modifiers_values = array_values($options);
 		$html = str_replace($tpl_modifiers, $tpl_modifiers_values, $html);
 		unset($tpl_modifiers, $tpl_modifiers_values);
-		//Очищаем незаполненные модификаторы
+		//РћС‡РёС‰Р°РµРј РЅРµР·Р°РїРѕР»РЅРµРЅРЅС‹Рµ РјРѕРґРёС„РёРєР°С‚РѕСЂС‹
 		$clear_modifiers_regexp = '#\{[a-z\d_\-]+\}#';
 		$html = preg_replace($clear_modifiers_regexp, ' ', $html);
 		$return_links_options = array(
@@ -618,16 +618,16 @@ class SAPE_client extends SAPE_base {
 	}
 
 	/**
-	 * Вывод ссылок в обычном виде - текст с разделителем
+	 * Р’С‹РІРѕРґ СЃСЃС‹Р»РѕРє РІ РѕР±С‹С‡РЅРѕРј РІРёРґРµ - С‚РµРєСЃС‚ СЃ СЂР°Р·РґРµР»РёС‚РµР»РµРј
 	 *
-	 * @param int   $n       Количествово
-	 * @param int   $offset  Смещение
-	 * @param array $options Опции
+	 * @param int   $n       РљРѕР»РёС‡РµСЃС‚РІРѕРІРѕ
+	 * @param int   $offset  РЎРјРµС‰РµРЅРёРµ
+	 * @param array $options РћРїС†РёРё
 	 *
 	 * <code>
 	 * $options = array();
 	 * $options['as_block'] = (false|true);
-	 * // Показывать ли ссылки в виде блока
+	 * // РџРѕРєР°Р·С‹РІР°С‚СЊ Р»Рё СЃСЃС‹Р»РєРё РІ РІРёРґРµ Р±Р»РѕРєР°
 	 * </code>
 	 *
 	 * @see return_block_links()
@@ -635,7 +635,7 @@ class SAPE_client extends SAPE_base {
 	 */
 	function return_links($n = null, $offset = 0, $options = null) {
 
-		//Опрелелить, как выводить ссылки
+		//РћРїСЂРµР»РµР»РёС‚СЊ, РєР°Рє РІС‹РІРѕРґРёС‚СЊ СЃСЃС‹Р»РєРё
 		$as_block = $this->_show_only_block;
 		if (is_array($options) && isset($options['as_block']) && false == $as_block) {
 			$as_block = $options['as_block'];
@@ -658,7 +658,7 @@ class SAPE_client extends SAPE_base {
 				}
 			}
 			$html = join($this->_links_delimiter, $links);
-			// если запрошена определенная кодировка, и известна кодировка кеша, и они разные, конвертируем в заданную
+			// РµСЃР»Рё Р·Р°РїСЂРѕС€РµРЅР° РѕРїСЂРµРґРµР»РµРЅРЅР°СЏ РєРѕРґРёСЂРѕРІРєР°, Рё РёР·РІРµСЃС‚РЅР° РєРѕРґРёСЂРѕРІРєР° РєРµС€Р°, Рё РѕРЅРё СЂР°Р·РЅС‹Рµ, РєРѕРЅРІРµСЂС‚РёСЂСѓРµРј РІ Р·Р°РґР°РЅРЅСѓСЋ
 			if (
 				strlen($this->_charset) > 0
 				&&
@@ -713,7 +713,7 @@ class SAPE_client extends SAPE_base {
 		if (isset($this->_links['__sape_delimiter__'])) {
 			$this->_links_delimiter = $this->_links['__sape_delimiter__'];
 		}
-		// определяем кодировку кеша
+		// РѕРїСЂРµРґРµР»СЏРµРј РєРѕРґРёСЂРѕРІРєСѓ РєРµС€Р°
 		if (isset($this->_links['__sape_charset__'])) {
 			$this->_sape_charset = $this->_links['__sape_charset__'];
 		} else {
@@ -728,31 +728,31 @@ class SAPE_client extends SAPE_base {
 				}
 			}
 		}
-		// Есть ли флаг блочных ссылок
+		// Р•СЃС‚СЊ Р»Рё С„Р»Р°Рі Р±Р»РѕС‡РЅС‹С… СЃСЃС‹Р»РѕРє
 		if (isset($this->_links['__sape_show_only_block__'])) {
 			$this->_show_only_block = $this->_links['__sape_show_only_block__'];
 		} else {
 			$this->_show_only_block = false;
 		}
-		// Есть ли шаблон для красивых ссылок
+		// Р•СЃС‚СЊ Р»Рё С€Р°Р±Р»РѕРЅ РґР»СЏ РєСЂР°СЃРёРІС‹С… СЃСЃС‹Р»РѕРє
 		if (isset($this->_links['__sape_block_tpl__']) && !empty($this->_links['__sape_block_tpl__'])
 			&& is_array($this->_links['__sape_block_tpl__'])
 		) {
 			$this->_block_tpl = $this->_links['__sape_block_tpl__'];
 		}
-		// Есть ли параметры для красивых ссылок
+		// Р•СЃС‚СЊ Р»Рё РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ РєСЂР°СЃРёРІС‹С… СЃСЃС‹Р»РѕРє
 		if (isset($this->_links['__sape_block_tpl_options__']) && !empty($this->_links['__sape_block_tpl_options__'])
 			&& is_array($this->_links['__sape_block_tpl_options__'])
 		) {
 			$this->_block_tpl_options = $this->_links['__sape_block_tpl_options__'];
 		}
-		// IDNA-домены
+		// IDNA-РґРѕРјРµРЅС‹
 		if (isset($this->_links['__sape_block_uri_idna__']) && !empty($this->_links['__sape_block_uri_idna__'])
 			&& is_array($this->_links['__sape_block_uri_idna__'])
 		) {
 			$this->_block_uri_idna = $this->_links['__sape_block_uri_idna__'];
 		}
-		// Блоки
+		// Р‘Р»РѕРєРё
 		$check_blocks = array(
 			'beforeall',
 			'beforeblock',
@@ -772,7 +772,7 @@ class SAPE_client extends SAPE_base {
 }
 
 /**
- * Класс для работы с контекстными ссылками
+ * РљР»Р°СЃСЃ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ РєРѕРЅС‚РµРєСЃС‚РЅС‹РјРё СЃСЃС‹Р»РєР°РјРё
  */
 class SAPE_context extends SAPE_base {
 
@@ -788,7 +788,7 @@ class SAPE_context extends SAPE_base {
 	}
 
 	/**
-	 * Замена слов в куске текста и обрамляет его тегами sape_index
+	 * Р—Р°РјРµРЅР° СЃР»РѕРІ РІ РєСѓСЃРєРµ С‚РµРєСЃС‚Р° Рё РѕР±СЂР°РјР»СЏРµС‚ РµРіРѕ С‚РµРіР°РјРё sape_index
 	 */
 	function replace_in_text_segment($text) {
 
@@ -801,9 +801,9 @@ class SAPE_context extends SAPE_base {
 			if ($this->_debug) {
 				$debug .= '<!-- sentences for replace: ';
 			}
-			//Создаем массив исходных текстов для замены
+			//РЎРѕР·РґР°РµРј РјР°СЃСЃРёРІ РёСЃС…РѕРґРЅС‹С… С‚РµРєСЃС‚РѕРІ РґР»СЏ Р·Р°РјРµРЅС‹
 			foreach ($this->_words_page as $n => $sentence) {
-				//Заменяем все сущности на символы
+				//Р—Р°РјРµРЅСЏРµРј РІСЃРµ СЃСѓС‰РЅРѕСЃС‚Рё РЅР° СЃРёРјРІРѕР»С‹
 				$special_chars = array(
 					'&amp;'  => '&',
 					'&quot;' => '"',
@@ -815,9 +815,9 @@ class SAPE_context extends SAPE_base {
 				foreach ($special_chars as $from => $to) {
 					str_replace($from, $to, $sentence);
 				}
-				//Преобразуем все спец символы в сущности
+				//РџСЂРµРѕР±СЂР°Р·СѓРµРј РІСЃРµ СЃРїРµС† СЃРёРјРІРѕР»С‹ РІ СЃСѓС‰РЅРѕСЃС‚Рё
 				$sentence = htmlspecialchars($sentence);
-				//Квотируем
+				//РљРІРѕС‚РёСЂСѓРµРј
 				$sentence = preg_quote($sentence, '/');
 				$replace_array = array();
 				if (preg_match_all('/(&[#a-zA-Z0-9]{2,6};)/isU', $sentence, $out)) {
@@ -827,11 +827,11 @@ class SAPE_context extends SAPE_base {
 						$replace_array[$unspec] = $real;
 					}
 				}
-				//Заменяем сущности на ИЛИ (сущность|символ)
+				//Р—Р°РјРµРЅСЏРµРј СЃСѓС‰РЅРѕСЃС‚Рё РЅР° РР›Р (СЃСѓС‰РЅРѕСЃС‚СЊ|СЃРёРјРІРѕР»)
 				foreach ($replace_array as $unspec => $real) {
 					$sentence = str_replace($real, '((' . $real . ')|(' . $unspec . '))', $sentence);
 				}
-				//Заменяем пробелы на переносы или сущности пробелов
+				//Р—Р°РјРµРЅСЏРµРј РїСЂРѕР±РµР»С‹ РЅР° РїРµСЂРµРЅРѕСЃС‹ РёР»Рё СЃСѓС‰РЅРѕСЃС‚Рё РїСЂРѕР±РµР»РѕРІ
 				$source_sentences[$n] = str_replace(' ', '((\s)|(&nbsp;))+', $sentence);
 				if ($this->_debug) {
 					$debug .= $source_sentences[$n] . "\r\n\r\n";
@@ -840,21 +840,21 @@ class SAPE_context extends SAPE_base {
 			if ($this->_debug) {
 				$debug .= '-->';
 			}
-			//если это первый кусок, то не будем добавлять <
+			//РµСЃР»Рё СЌС‚Рѕ РїРµСЂРІС‹Р№ РєСѓСЃРѕРє, С‚Рѕ РЅРµ Р±СѓРґРµРј РґРѕР±Р°РІР»СЏС‚СЊ <
 			$first_part = true;
-			//пустая переменная для записи
+			//РїСѓСЃС‚Р°СЏ РїРµСЂРµРјРµРЅРЅР°СЏ РґР»СЏ Р·Р°РїРёСЃРё
 			if (count($source_sentences) > 0) {
 				$content = '';
-				$open_tags = array(); //Открытые забаненые тэги
-				$close_tag = ''; //Название текущего закрывающего тэга
-				//Разбиваем по символу начала тега
+				$open_tags = array(); //РћС‚РєСЂС‹С‚С‹Рµ Р·Р°Р±Р°РЅРµРЅС‹Рµ С‚СЌРіРё
+				$close_tag = ''; //РќР°Р·РІР°РЅРёРµ С‚РµРєСѓС‰РµРіРѕ Р·Р°РєСЂС‹РІР°СЋС‰РµРіРѕ С‚СЌРіР°
+				//Р Р°Р·Р±РёРІР°РµРј РїРѕ СЃРёРјРІРѕР»Сѓ РЅР°С‡Р°Р»Р° С‚РµРіР°
 				$part = strtok(' ' . $text, '<');
 				while ($part !== false) {
-					//Определяем название тэга
+					//РћРїСЂРµРґРµР»СЏРµРј РЅР°Р·РІР°РЅРёРµ С‚СЌРіР°
 					if (preg_match('/(?si)^(\/?[a-z0-9]+)/', $part, $matches)) {
-						//Определяем название тега
+						//РћРїСЂРµРґРµР»СЏРµРј РЅР°Р·РІР°РЅРёРµ С‚РµРіР°
 						$tag_name = strtolower($matches[1]);
-						//Определяем закрывающий ли тэг
+						//РћРїСЂРµРґРµР»СЏРµРј Р·Р°РєСЂС‹РІР°СЋС‰РёР№ Р»Рё С‚СЌРі
 						if (substr($tag_name, 0, 1) == '/') {
 							$close_tag = substr($tag_name, 1);
 							if ($this->_debug) {
@@ -867,7 +867,7 @@ class SAPE_context extends SAPE_base {
 							}
 						}
 						$cnt_tags = count($open_tags);
-						//Если закрывающий тег совпадает с тегом в стеке открытых запрещенных тегов
+						//Р•СЃР»Рё Р·Р°РєСЂС‹РІР°СЋС‰РёР№ С‚РµРі СЃРѕРІРїР°РґР°РµС‚ СЃ С‚РµРіРѕРј РІ СЃС‚РµРєРµ РѕС‚РєСЂС‹С‚С‹С… Р·Р°РїСЂРµС‰РµРЅРЅС‹С… С‚РµРіРѕРІ
 						if (($cnt_tags > 0) && ($open_tags[$cnt_tags - 1] == $close_tag)) {
 							array_pop($open_tags);
 							if ($this->_debug) {
@@ -879,21 +879,21 @@ class SAPE_context extends SAPE_base {
 								}
 							}
 						}
-						//Если нет открытых плохих тегов, то обрабатываем
+						//Р•СЃР»Рё РЅРµС‚ РѕС‚РєСЂС‹С‚С‹С… РїР»РѕС…РёС… С‚РµРіРѕРІ, С‚Рѕ РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј
 						if (count($open_tags) == 0) {
-							//если не запрещенный тэг, то начинаем обработку
+							//РµСЃР»Рё РЅРµ Р·Р°РїСЂРµС‰РµРЅРЅС‹Р№ С‚СЌРі, С‚Рѕ РЅР°С‡РёРЅР°РµРј РѕР±СЂР°Р±РѕС‚РєСѓ
 							if (!in_array($tag_name, $this->_filter_tags)) {
 								$split_parts = explode('>', $part, 2);
-								//Перестраховываемся
+								//РџРµСЂРµСЃС‚СЂР°С…РѕРІС‹РІР°РµРјСЃСЏ
 								if (count($split_parts) == 2) {
-									//Начинаем перебор фраз для замены
+									//РќР°С‡РёРЅР°РµРј РїРµСЂРµР±РѕСЂ С„СЂР°Р· РґР»СЏ Р·Р°РјРµРЅС‹
 									foreach ($source_sentences as $n => $sentence) {
 										if (preg_match('/' . $sentence . '/', $split_parts[1]) == 1) {
 											$split_parts[1] = preg_replace('/' . $sentence . '/', str_replace('$', '\$', $this->_words_page[$n]), $split_parts[1], 1);
 											if ($this->_debug) {
 												$debug .= '<!-- ' . $sentence . ' --- ' . $this->_words_page[$n] . ' replaced -->';
 											}
-											//Если заменили, то удаляем строчку из списка замены
+											//Р•СЃР»Рё Р·Р°РјРµРЅРёР»Рё, С‚Рѕ СѓРґР°Р»СЏРµРј СЃС‚СЂРѕС‡РєСѓ РёР· СЃРїРёСЃРєР° Р·Р°РјРµРЅС‹
 											unset($source_sentences[$n]);
 											unset($this->_words_page[$n]);
 										}
@@ -902,7 +902,7 @@ class SAPE_context extends SAPE_base {
 									unset($split_parts);
 								}
 							} else {
-								//Если у нас запрещеный тэг, то помещаем его в стек открытых
+								//Р•СЃР»Рё Сѓ РЅР°СЃ Р·Р°РїСЂРµС‰РµРЅС‹Р№ С‚СЌРі, С‚Рѕ РїРѕРјРµС‰Р°РµРј РµРіРѕ РІ СЃС‚РµРє РѕС‚РєСЂС‹С‚С‹С…
 								$open_tags[] = $tag_name;
 								if ($this->_debug) {
 									$debug .= '<!-- ' . $tag_name . ' - added to open_tags, stop replacement -->';
@@ -910,33 +910,33 @@ class SAPE_context extends SAPE_base {
 							}
 						}
 					} else {
-						//Если нет названия тега, то считаем, что перед нами текст
+						//Р•СЃР»Рё РЅРµС‚ РЅР°Р·РІР°РЅРёСЏ С‚РµРіР°, С‚Рѕ СЃС‡РёС‚Р°РµРј, С‡С‚Рѕ РїРµСЂРµРґ РЅР°РјРё С‚РµРєСЃС‚
 						foreach ($source_sentences as $n => $sentence) {
 							if (preg_match('/' . $sentence . '/', $part) == 1) {
 								$part = preg_replace('/' . $sentence . '/', str_replace('$', '\$', $this->_words_page[$n]), $part, 1);
 								if ($this->_debug) {
 									$debug .= '<!-- ' . $sentence . ' --- ' . $this->_words_page[$n] . ' replaced -->';
 								}
-								//Если заменили, то удаляем строчку из списка замены,
-								//чтобы было можно делать множественный вызов
+								//Р•СЃР»Рё Р·Р°РјРµРЅРёР»Рё, С‚Рѕ СѓРґР°Р»СЏРµРј СЃС‚СЂРѕС‡РєСѓ РёР· СЃРїРёСЃРєР° Р·Р°РјРµРЅС‹,
+								//С‡С‚РѕР±С‹ Р±С‹Р»Рѕ РјРѕР¶РЅРѕ РґРµР»Р°С‚СЊ РјРЅРѕР¶РµСЃС‚РІРµРЅРЅС‹Р№ РІС‹Р·РѕРІ
 								unset($source_sentences[$n]);
 								unset($this->_words_page[$n]);
 							}
 						}
 					}
-					//Если у нас режим дебагинга, то выводим
+					//Р•СЃР»Рё Сѓ РЅР°СЃ СЂРµР¶РёРј РґРµР±Р°РіРёРЅРіР°, С‚Рѕ РІС‹РІРѕРґРёРј
 					if ($this->_debug) {
 						$content .= $debug;
 						$debug = '';
 					}
-					//Если это первая часть, то не выводим <
+					//Р•СЃР»Рё СЌС‚Рѕ РїРµСЂРІР°СЏ С‡Р°СЃС‚СЊ, С‚Рѕ РЅРµ РІС‹РІРѕРґРёРј <
 					if ($first_part) {
 						$content .= $part;
 						$first_part = false;
 					} else {
 						$content .= $debug . '<' . $part;
 					}
-					//Получаем следующу часть
+					//РџРѕР»СѓС‡Р°РµРј СЃР»РµРґСѓСЋС‰Сѓ С‡Р°СЃС‚СЊ
 					unset($part);
 					$part = strtok('<');
 				}
@@ -972,17 +972,17 @@ class SAPE_context extends SAPE_base {
 	}
 
 	/**
-	 * Замена слов
+	 * Р—Р°РјРµРЅР° СЃР»РѕРІ
 	 */
 	function replace_in_page(&$buffer) {
 
 		if (count($this->_words_page) > 0) {
-			//разбиваем строку по sape_index
-			//Проверяем есть ли теги sape_index
+			//СЂР°Р·Р±РёРІР°РµРј СЃС‚СЂРѕРєСѓ РїРѕ sape_index
+			//РџСЂРѕРІРµСЂСЏРµРј РµСЃС‚СЊ Р»Рё С‚РµРіРё sape_index
 			$split_content = preg_split('/(?smi)(<\/?sape_index>)/', $buffer, -1);
 			$cnt_parts = count($split_content);
 			if ($cnt_parts > 1) {
-				//Если есть хоть одна пара sape_index, то начинаем работу
+				//Р•СЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅР° РїР°СЂР° sape_index, С‚Рѕ РЅР°С‡РёРЅР°РµРј СЂР°Р±РѕС‚Сѓ
 				if ($cnt_parts >= 3) {
 					for ($i = 1; $i < $cnt_parts; $i = $i + 2) {
 						$split_content[$i] = $this->replace_in_text_segment($split_content[$i]);
@@ -993,9 +993,9 @@ class SAPE_context extends SAPE_base {
 					$buffer .= '<!-- Split by Sape_index cnt_parts=' . $cnt_parts . '-->';
 				}
 			} else {
-				//Если не нашли sape_index, то пробуем разбить по BODY
+				//Р•СЃР»Рё РЅРµ РЅР°С€Р»Рё sape_index, С‚Рѕ РїСЂРѕР±СѓРµРј СЂР°Р·Р±РёС‚СЊ РїРѕ BODY
 				$split_content = preg_split('/(?smi)(<\/?body[^>]*>)/', $buffer, -1, PREG_SPLIT_DELIM_CAPTURE);
-				//Если нашли содержимое между body
+				//Р•СЃР»Рё РЅР°С€Р»Рё СЃРѕРґРµСЂР¶РёРјРѕРµ РјРµР¶РґСѓ body
 				if (count($split_content) == 5) {
 					$split_content[0] = $split_content[0] . $split_content[1];
 					$split_content[1] = $this->replace_in_text_segment($split_content[2]);
@@ -1007,7 +1007,7 @@ class SAPE_context extends SAPE_base {
 						$buffer .= '<!-- Split by BODY -->';
 					}
 				} else {
-					//Если не нашли sape_index и не смогли разбить по body
+					//Р•СЃР»Рё РЅРµ РЅР°С€Р»Рё sape_index Рё РЅРµ СЃРјРѕРіР»Рё СЂР°Р·Р±РёС‚СЊ РїРѕ body
 					if ($this->_debug) {
 						$buffer .= '<!-- Can`t split by BODY -->';
 					}
@@ -1053,7 +1053,7 @@ class SAPE_context extends SAPE_base {
 }
 
 /**
- * Класс для работы со статьями articles.sape.ru показывает анонсы и статьи
+ * РљР»Р°СЃСЃ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃРѕ СЃС‚Р°С‚СЊСЏРјРё articles.sape.ru РїРѕРєР°Р·С‹РІР°РµС‚ Р°РЅРѕРЅСЃС‹ Рё СЃС‚Р°С‚СЊРё
  */
 class SAPE_articles extends SAPE_base {
 
@@ -1077,7 +1077,7 @@ class SAPE_articles extends SAPE_base {
 		if (is_array($options) && isset($options['headers_enabled'])) {
 			$this->_headers_enabled = $options['headers_enabled'];
 		}
-		// Кодировка
+		// РљРѕРґРёСЂРѕРІРєР°
 		if (isset($options['charset']) && strlen($options['charset'])) {
 			$this->_charset = $options['charset'];
 		} else {
@@ -1123,10 +1123,10 @@ class SAPE_articles extends SAPE_base {
 	}
 
 	/**
-	 * Возвращает анонсы для вывода
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ Р°РЅРѕРЅСЃС‹ РґР»СЏ РІС‹РІРѕРґР°
 	 *
-	 * @param int $n      Сколько анонсов вывести, либо не задано - вывести все
-	 * @param int $offset C какого анонса начинаем вывод(нумерация с 0), либо не задано - с нулевого
+	 * @param int $n      РЎРєРѕР»СЊРєРѕ Р°РЅРѕРЅСЃРѕРІ РІС‹РІРµСЃС‚Рё, Р»РёР±Рѕ РЅРµ Р·Р°РґР°РЅРѕ - РІС‹РІРµСЃС‚Рё РІСЃРµ
+	 * @param int $offset C РєР°РєРѕРіРѕ Р°РЅРѕРЅСЃР° РЅР°С‡РёРЅР°РµРј РІС‹РІРѕРґ(РЅСѓРјРµСЂР°С†РёСЏ СЃ 0), Р»РёР±Рѕ РЅРµ Р·Р°РґР°РЅРѕ - СЃ РЅСѓР»РµРІРѕРіРѕ
 	 *
 	 * @return string
 	 */
@@ -1169,7 +1169,7 @@ class SAPE_articles extends SAPE_base {
 	}
 
 	/**
-	 * Возвращает полный HTML код страницы статьи
+	 * Р’РѕР·РІСЂР°С‰Р°РµС‚ РїРѕР»РЅС‹Р№ HTML РєРѕРґ СЃС‚СЂР°РЅРёС†С‹ СЃС‚Р°С‚СЊРё
 	 * @return string
 	 */
 	function process_request() {
@@ -1190,19 +1190,19 @@ class SAPE_articles extends SAPE_base {
 	function _return_article() {
 
 		$this->_set_request_mode('article');
-		//Загружаем статью
+		//Р—Р°РіСЂСѓР¶Р°РµРј СЃС‚Р°С‚СЊСЋ
 		$article_meta = $this->_data['index']['articles'][$this->_request_uri];
 		$this->_save_file_name = $article_meta['id'] . '.article.db';
 		$this->_article_id = $article_meta['id'];
 		$this->load_data();
-		//Обновим если устарела
+		//РћР±РЅРѕРІРёРј РµСЃР»Рё СѓСЃС‚Р°СЂРµР»Р°
 		if (!isset($this->_data['article']['date_updated']) OR $this->_data['article']['date_updated'] < $article_meta['date_updated']) {
 			unlink($this->_get_db_file());
 			$this->load_data();
 		}
-		//Получим шаблон
+		//РџРѕР»СѓС‡РёРј С€Р°Р±Р»РѕРЅ
 		$template = $this->_get_template($this->_data['index']['templates'][$article_meta['template_id']]['url'], $article_meta['template_id']);
-		//Выведем статью
+		//Р’С‹РІРµРґРµРј СЃС‚Р°С‚СЊСЋ
 		$article_html = $this->_fetch_article($template);
 		if ($this->_is_our_bot) {
 			$article_html .= $this->_noindex_code;
@@ -1215,11 +1215,11 @@ class SAPE_articles extends SAPE_base {
 
 		$this->_images_path = dirname(__FILE__) . '/images/';
 		if (!is_dir($this->_images_path)) {
-			// Пытаемся создать папку.
+			// РџС‹С‚Р°РµРјСЃСЏ СЃРѕР·РґР°С‚СЊ РїР°РїРєСѓ.
 			if (@mkdir($this->_images_path)) {
-				@chmod($this->_images_path, 0777);    // Права доступа
+				@chmod($this->_images_path, 0777);    // РџСЂР°РІР° РґРѕСЃС‚СѓРїР°
 			} else {
-				return $this->raise_error('Нет папки ' . $this->_images_path . '. Создать не удалось. Выставите права 777 на папку.');
+				return $this->raise_error('РќРµС‚ РїР°РїРєРё ' . $this->_images_path . '. РЎРѕР·РґР°С‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ. Р’С‹СЃС‚Р°РІРёС‚Рµ РїСЂР°РІР° 777 РЅР° РїР°РїРєСѓ.');
 			}
 		}
 		if ($this->_multi_site) {
@@ -1231,11 +1231,11 @@ class SAPE_articles extends SAPE_base {
 
 		$this->_set_request_mode('image');
 		$this->_prepare_path_to_images();
-		//Проверим загружена ли картинка
+		//РџСЂРѕРІРµСЂРёРј Р·Р°РіСЂСѓР¶РµРЅР° Р»Рё РєР°СЂС‚РёРЅРєР°
 		$image_meta = $this->_data['index']['images'][$this->_request_uri];
 		$image_path = $this->_images_path . $image_meta['id'] . '.' . $image_meta['ext'];
 		if (!is_file($image_path) or filemtime($image_path) > $image_meta['date_updated']) {
-			// Чтобы не повесить площадку клиента и чтобы не было одновременных запросов
+			// Р§С‚РѕР±С‹ РЅРµ РїРѕРІРµСЃРёС‚СЊ РїР»РѕС‰Р°РґРєСѓ РєР»РёРµРЅС‚Р° Рё С‡С‚РѕР±С‹ РЅРµ Р±С‹Р»Рѕ РѕРґРЅРѕРІСЂРµРјРµРЅРЅС‹С… Р·Р°РїСЂРѕСЃРѕРІ
 			@touch($image_path, $image_meta['date_updated']);
 			$path = $image_meta['dispenser_path'];
 			foreach ($this->_server_list as $i => $server) {
@@ -1243,7 +1243,7 @@ class SAPE_articles extends SAPE_base {
 					if (substr($data, 0, 12) == 'FATAL ERROR:') {
 						$this->raise_error($data);
 					} else {
-						// [псевдо]проверка целостности:
+						// [РїСЃРµРІРґРѕ]РїСЂРѕРІРµСЂРєР° С†РµР»РѕСЃС‚РЅРѕСЃС‚Рё:
 						if (strlen($data) > 0) {
 							$this->_write($image_path, $data);
 							break;
@@ -1283,25 +1283,25 @@ class SAPE_articles extends SAPE_base {
 
 	function _get_template($template_url, $templateId) {
 
-		//Загрузим индекс если есть
+		//Р—Р°РіСЂСѓР·РёРј РёРЅРґРµРєСЃ РµСЃР»Рё РµСЃС‚СЊ
 		$this->_save_file_name = 'tpl.articles.db';
 		$index_file = $this->_get_db_file();
 		if (file_exists($index_file)) {
 			$this->_data['templates'] = unserialize($this->_read($index_file));
 		}
-		//Если шаблон не найден или устарел в индексе, обновим его
+		//Р•СЃР»Рё С€Р°Р±Р»РѕРЅ РЅРµ РЅР°Р№РґРµРЅ РёР»Рё СѓСЃС‚Р°СЂРµР» РІ РёРЅРґРµРєСЃРµ, РѕР±РЅРѕРІРёРј РµРіРѕ
 		if (!isset($this->_data['templates'][$template_url])
 			or (time() - $this->_data['templates'][$template_url]['date_updated']) > $this->_data['index']['templates'][$templateId]['lifetime']
 		) {
 			$this->_refresh_template($template_url, $index_file);
 		}
-		//Если шаблон не обнаружен - ошибка
+		//Р•СЃР»Рё С€Р°Р±Р»РѕРЅ РЅРµ РѕР±РЅР°СЂСѓР¶РµРЅ - РѕС€РёР±РєР°
 		if (!isset($this->_data['templates'][$template_url])) {
 			if ($this->_template_error) {
 				return $this->raise_error($this->_template_error);
 			}
 
-			return $this->raise_error('Не найден шаблон для статьи');
+			return $this->raise_error('РќРµ РЅР°Р№РґРµРЅ С€Р°Р±Р»РѕРЅ РґР»СЏ СЃС‚Р°С‚СЊРё');
 		}
 
 		return $this->_data['templates'][$template_url]['body'];
@@ -1318,14 +1318,14 @@ class SAPE_articles extends SAPE_base {
 			$download_url .= '?' . $parseUrl['query'];
 		}
 		$template_body = $this->fetch_remote_file($this->_real_host, $download_url);
-		//проверим его на корректность
+		//РїСЂРѕРІРµСЂРёРј РµРіРѕ РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ
 		if (!$this->_is_valid_template($template_body)) {
 			return false;
 		}
 		$template_body = $this->_cut_template_links($template_body);
-		//Запишем его вместе с другими в кэш
+		//Р—Р°РїРёС€РµРј РµРіРѕ РІРјРµСЃС‚Рµ СЃ РґСЂСѓРіРёРјРё РІ РєСЌС€
 		$this->_data['templates'][$template_url] = array('body' => $template_body, 'date_updated' => time());
-		//И сохраним кэш
+		//Р СЃРѕС…СЂР°РЅРёРј РєСЌС€
 		$this->_write($index_file, serialize($this->_data['templates']));
 	}
 
@@ -1377,7 +1377,7 @@ class SAPE_articles extends SAPE_base {
 		$this->_cut_unnecessary($template_body, 'S', '|<script[^>]*>.*?</script>|si');
 		$this->_cut_unnecessary($template_body, 'N', '|<noindex[^>]*>.*?</noindex>|si');
 		$slices = preg_split($link_pattern, $template_body, -1, PREG_SPLIT_DELIM_CAPTURE);
-		//Обрамляем все видимые ссылки в noindex
+		//РћР±СЂР°РјР»СЏРµРј РІСЃРµ РІРёРґРёРјС‹Рµ СЃСЃС‹Р»РєРё РІ noindex
 		if (is_array($slices)) {
 			foreach ($slices as $id => $link) {
 				if ($id % 2 == 0) {
@@ -1387,16 +1387,16 @@ class SAPE_articles extends SAPE_base {
 					$parsed_url = @parse_url($urls[1]);
 					$host = isset($parsed_url['host']) ? $parsed_url['host'] : false;
 					if (!in_array($host, $allowed_domains) || !$host) {
-						//Обрамляем в тэги noindex
+						//РћР±СЂР°РјР»СЏРµРј РІ С‚СЌРіРё noindex
 						$slices[$id] = '<noindex>' . $slices[$id] . '</noindex>';
 					}
 				}
 			}
 			$template_body = implode('', $slices);
 		}
-		//Вновь отображаем содержимое внутри noindex
+		//Р’РЅРѕРІСЊ РѕС‚РѕР±СЂР°Р¶Р°РµРј СЃРѕРґРµСЂР¶РёРјРѕРµ РІРЅСѓС‚СЂРё noindex
 		$this->_restore_unnecessary($template_body, 'N');
-		//Прописываем всем ссылкам nofollow
+		//РџСЂРѕРїРёСЃС‹РІР°РµРј РІСЃРµРј СЃСЃС‹Р»РєР°Рј nofollow
 		$slices = preg_split($link_pattern, $template_body, -1, PREG_SPLIT_DELIM_CAPTURE);
 		if (is_array($slices)) {
 			foreach ($slices as $id => $link) {
@@ -1407,9 +1407,9 @@ class SAPE_articles extends SAPE_base {
 					$parsed_url = @parse_url($urls[1]);
 					$host = isset($parsed_url['host']) ? $parsed_url['host'] : false;
 					if (!in_array($host, $allowed_domains) || !$host) {
-						//вырезаем REL
+						//РІС‹СЂРµР·Р°РµРј REL
 						$slices[$id] = preg_replace($rel_pattern, '', $link);
-						//Добавляем rel=nofollow
+						//Р”РѕР±Р°РІР»СЏРµРј rel=nofollow
 						$slices[$id] = preg_replace($link_subpattern, '$0rel="nofollow" ', $slices[$id]);
 					}
 				}
@@ -1426,7 +1426,7 @@ class SAPE_articles extends SAPE_base {
 
 		foreach ($this->_data['index']['template_required_fields'] as $field) {
 			if (strpos($template_body, '{' . $field . '}') === false) {
-				$this->_template_error = 'В шаблоне не хватает поля ' . $field . '.';
+				$this->_template_error = 'Р’ С€Р°Р±Р»РѕРЅРµ РЅРµ С…РІР°С‚Р°РµС‚ РїРѕР»СЏ ' . $field . '.';
 
 				return false;
 			}

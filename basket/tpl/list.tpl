@@ -1,16 +1,16 @@
 {% if (recs > 0) %}
 	<form method="post" action="/plugin/basket/update/"/>
-	<h3>Ваша корзина</h3>
+	<h3>Р’Р°С€Р° РєРѕСЂР·РёРЅР°</h3>
 	<div class="table">
 		<table class="basket_tb">
 			<thead>
 			<tr valign="top">
 				<td>#</td>
-				<td>Наименование</td>
-				<td>Размер</td>
-				<td>Цена</td>
-				<td>Кол-во</td>
-				<td>Стоимость</td>
+				<td>РќР°РёРјРµРЅРѕРІР°РЅРёРµ</td>
+				<td>Р Р°Р·РјРµСЂ</td>
+				<td>Р¦РµРЅР°</td>
+				<td>РљРѕР»-РІРѕ</td>
+				<td>РЎС‚РѕРёРјРѕСЃС‚СЊ</td>
 			</tr>
 			</thead>
 			<tbody>
@@ -29,16 +29,16 @@
 			</tbody>
 			<tfoot>
 			<tr>
-				<td colspan="4">Итого:</td>
+				<td colspan="4">РС‚РѕРіРѕ:</td>
 				<td align="right">{{ total }}</td>
 			</tr>
 			</tfoot>
 		</table>
 	</div>
 	<br/>
-	<input type="submit" style="width: 150px;" value="Пересчитать"/>
-	<input type="button" style="width: 150px;" value="Оформить заказ" onclick="document.location='{{ form_url }}';"/>
+	<input type="submit" style="width: 150px;" value="РџРµСЂРµСЃС‡РёС‚Р°С‚СЊ"/>
+	<input type="button" style="width: 150px;" value="РћС„РѕСЂРјРёС‚СЊ Р·Р°РєР°Р·" onclick="document.location='{{ form_url }}';"/>
 	</form>
 {% else %}
-	Ваша корзина пуста!
+	Р’Р°С€Р° РєРѕСЂР·РёРЅР° РїСѓСЃС‚Р°!
 {% endif %}

@@ -104,7 +104,7 @@ class SubscribeComments extends FilterComments {
 		} else {
 			//var_dump($newsRec);
 			//$row = $mysql->record("select * from ".prefix."_news where id=".db_squote($newsRec['id']));
-			// Ðàññûëàåì ñðàçó
+			// Ð Ð°ÑÑÑ‹Ð»Ð°ÐµÐ¼ ÑÑ€Ð°Ð·Ñƒ
 			$newsLink = newsGenerateLink($newsRec, false, 0, true);
 			foreach ($mysql->select("select * from " . prefix . "_subscribe_comments where news_id='" . $newsRec['id'] . "' and news_altname='" . $newsRec['alt_name'] . "'") as $srow) {
 				$alink = ($SQL['author_id']) ? generatePluginLink('uprofile', 'show', array('name' => $SQL['author'], 'id' => $SQL['author_id']), array(), false, true) : '';

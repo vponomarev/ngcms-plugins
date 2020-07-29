@@ -33,7 +33,7 @@ function comments_add() {
 		$is_member = 1;
 		$memberRec = $userROW;
 	} else {
-		$SQL['author'] = secure_html(convert(trim($_POST['name'])));
+		$SQL['author'] = secure_html(trim($_POST['name']));
 		$SQL['author_id'] = 0;
 		$SQL['mail'] = secure_html(trim($_POST['mail']));
 		$is_member = 0;
@@ -49,7 +49,8 @@ function comments_add() {
 
 		return;
 	}
-	$SQL['text'] = secure_html(convert(trim($_POST['content'])));
+	$SQL['text'] = secure_html(trim($_POST['content']));
+
 	// If user is not logged, make some additional tests
 	if (!$is_member) {
 		// Check if unreg are allowed to make comments

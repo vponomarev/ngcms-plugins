@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит 
- комментариев. То, что писалось с трудом, должно 
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚ 
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ 
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -161,7 +161,7 @@ function forum_close_quote_tag() {
 
 function forum_quote_tag($quote) {
 
-	return '<blockquote><div class="incqbox"><h4>' . $quote . ' пишет:</h4><p>';
+	return '<blockquote><div class="incqbox"><h4>' . $quote . ' РїРёС€РµС‚:</h4><p>';
 }
 
 function forum_color_tag($color, $show) {
@@ -229,7 +229,7 @@ function forum_html_tag($text) {
 		. ' text-align:right;">'
 		. "<code style=\"color:#FFFFFF\">\n" . $num . "\n</code></div>";
 
-	return '<div class="codewrap"><div class="codetop">Код: HTML</div><div class="codemain">' . $line . $text . '</div></div>';
+	return '<div class="codewrap"><div class="codetop">РљРѕРґ: HTML</div><div class="codemain">' . $line . $text . '</div></div>';
 }
 
 function forum_php_tag($text) {
@@ -250,7 +250,7 @@ function forum_php_tag($text) {
 		. ' text-align:right;">'
 		. "<code style=\"color:#FFFFFF\">\n" . $num . "\n</code></div>";
 
-	return '<div class="codewrap"><div class="codetop">Код: PHP</div><div class="codemain">' . $line . $text . '</div></div>';
+	return '<div class="codewrap"><div class="codetop">РљРѕРґ: PHP</div><div class="codemain">' . $line . $text . '</div></div>';
 }
 
 function forum_code_tag($code, $text) {

@@ -1,10 +1,10 @@
 <div class="linkst">
 	<div class="inbox">
 		<p class="pagelink conl">{% if (pages) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p>
-		{% if (topic_send) %}<p class="postlink conr"><a href='{{ send_topic }}'>Добавить тему</a></p>{% endif %}
+		{% if (topic_send) %}<p class="postlink conr"><a href='{{ send_topic }}'>Р”РѕР±Р°РІРёС‚СЊ С‚РµРјСѓ</a></p>{% endif %}
 		<ul>
-			<li><a href='{{ home_link }}'>Список</a>&nbsp;</li>
-			<li>&raquo;&nbsp;{{ forum_name }}{% if (lock_passwd) %}<sup>Запаролен</sup>{% endif %}</li>
+			<li><a href='{{ home_link }}'>РЎРїРёСЃРѕРє</a>&nbsp;</li>
+			<li>&raquo;&nbsp;{{ forum_name }}{% if (lock_passwd) %}<sup>Р—Р°РїР°СЂРѕР»РµРЅ</sup>{% endif %}</li>
 		</ul>
 		<div class="clearer"></div>
 	</div>
@@ -17,10 +17,10 @@
 				<table cellspacing="0">
 				<thead>
 				<tr>
-					<th class="tcl" scope="col">Важные темы</th>
-					<th class="tc2" scope="col">Ответов</th>
-					<th class="tc3" scope="col">Просмотров</th>
-					<th class="tcr" scope="col">Последнее сообщение</th>
+					<th class="tcl" scope="col">Р’Р°Р¶РЅС‹Рµ С‚РµРјС‹</th>
+					<th class="tc2" scope="col">РћС‚РІРµС‚РѕРІ</th>
+					<th class="tc3" scope="col">РџСЂРѕСЃРјРѕС‚СЂРѕРІ</th>
+					<th class="tcr" scope="col">РџРѕСЃР»РµРґРЅРµРµ СЃРѕРѕР±С‰РµРЅРёРµ</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -33,7 +33,7 @@
 									<div class="nosize"><!-- --></div>
 								</div>
 								<div class="tclcon">
-									<a href='{{ entry.topic_link }}'>{{ entry.topic_name }}</a><span class='byuser'> оставил&nbsp;{{ entry.topic_author }}</span> {% if (entry.pag_topic) %}( {{ entry.pag_topic }} ){% endif %}
+									<a href='{{ entry.topic_link }}'>{{ entry.topic_name }}</a><span class='byuser'> РѕСЃС‚Р°РІРёР»&nbsp;{{ entry.topic_author }}</span> {% if (entry.pag_topic) %}( {{ entry.pag_topic }} ){% endif %}
 								</div>
 							</div>
 						</td>
@@ -41,21 +41,21 @@
 						<td class="tc3">{{ entry.int_views }}</td>
 						<td class='tcr'>
 							{% if (entry.last_post_forum.topic_name) %}
-								<div class="last_post_img">Тема:
+								<div class="last_post_img">РўРµРјР°:
 									<span style="padding: 0px 3px 0px 0px;">
-								<a href="{{ entry.last_post_forum.l_author_link }}" title="Профиль {{ entry.last_post_forum.l_author }}"><img src="{% if (entry.last_post_forum.l_author_avatar.true) %}{{ entry.last_post_forum.l_author_avatar.print }}{% else %}{{ entry.last_post_forum.l_author_avatar.print }}/noavatar.gif{% endif %}" width="100" height="100" alt=""/></a>
+								<a href="{{ entry.last_post_forum.l_author_link }}" title="РџСЂРѕС„РёР»СЊ {{ entry.last_post_forum.l_author }}"><img src="{% if (entry.last_post_forum.l_author_avatar.true) %}{{ entry.last_post_forum.l_author_avatar.print }}{% else %}{{ entry.last_post_forum.l_author_avatar.print }}/noavatar.gif{% endif %}" width="100" height="100" alt=""/></a>
 							</span>
 									<a href="{{ entry.last_post_forum.topic_link }}">{{ entry.last_post_forum.topic_name }}</a>
-									<span class="byuser">Автор: <a href="{{ entry.last_post_forum.l_author_link }}" title="Профиль {{ entry.last_post_forum.l_author }}">{{ entry.last_post_forum.l_author }}</a>
+									<span class="byuser">РђРІС‚РѕСЂ: <a href="{{ entry.last_post_forum.l_author_link }}" title="РџСЂРѕС„РёР»СЊ {{ entry.last_post_forum.l_author }}">{{ entry.last_post_forum.l_author }}</a>
 							(<i style="font-size: 11px;">{% if entry.last_post_forum.date|date('d-m-Y') == "now"|date('d-m-Y') %}
-	Сегодня {{ entry.last_post_forum.date|date('H:i') }}
+	РЎРµРіРѕРґРЅСЏ {{ entry.last_post_forum.date|date('H:i') }}
 {% elseif entry.last_post_forum.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-												Вчера {{ entry.last_post_forum.date|date('H:i') }}
+												Р’С‡РµСЂР° {{ entry.last_post_forum.date|date('H:i') }}
 											{% else %}
 												{{ entry.last_post_forum.date|date('d-m-Y H:i') }}
 											{% endif %}</i>)</span>
 								</div>
-							{% else %}нет сообщений{% endif %}
+							{% else %}РЅРµС‚ СЃРѕРѕР±С‰РµРЅРёР№{% endif %}
 						</td>
 
 					</tr>
@@ -65,7 +65,7 @@
 							<div class="intd">
 								<div class="icon"></div>
 								<div class="tclcon">
-									Нету тем
+									РќРµС‚Сѓ С‚РµРј
 								</div>
 							</div>
 						</td>
@@ -79,10 +79,10 @@
 			<table cellspacing="0">
 				<thead>
 				<tr>
-					<th class="tcl" scope="col">Тема</th>
-					<th class="tc2" scope="col">Ответов</th>
-					<th class="tc3" scope="col">Просмотров</th>
-					<th class="tcr" scope="col">Последнее сообщение</th>
+					<th class="tcl" scope="col">РўРµРјР°</th>
+					<th class="tc2" scope="col">РћС‚РІРµС‚РѕРІ</th>
+					<th class="tc3" scope="col">РџСЂРѕСЃРјРѕС‚СЂРѕРІ</th>
+					<th class="tcr" scope="col">РџРѕСЃР»РµРґРЅРµРµ СЃРѕРѕР±С‰РµРЅРёРµ</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -95,9 +95,9 @@
 									<div class="nosize"><!-- --></div>
 								</div>
 								<div class="tclcon">
-									<a href='{{ entry.topic_link }}'>{{ entry.topic_name }}</a><span class='byuser'> оставил&nbsp;{{ entry.topic_author }}</span> {% if (entry.topic_modify) %}
+									<a href='{{ entry.topic_link }}'>{{ entry.topic_name }}</a><span class='byuser'> РѕСЃС‚Р°РІРёР»&nbsp;{{ entry.topic_author }}</span> {% if (entry.topic_modify) %}
 										<a href="{{ entry.topic_modify_link }}">
-											(Редактировать)</a>{% endif %} {% if (entry.pag_topic) %}( {{ entry.pag_topic }} ){% endif %}
+											(Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ)</a>{% endif %} {% if (entry.pag_topic) %}( {{ entry.pag_topic }} ){% endif %}
 								</div>
 							</div>
 						</td>
@@ -105,21 +105,21 @@
 						<td class="tc3">{{ entry.int_views }}</td>
 						<td class='tcr'>
 							{% if (entry.last_post_forum.topic_name) %}
-								<div class="last_post_img">Тема:
+								<div class="last_post_img">РўРµРјР°:
 									<span style="padding: 0px 3px 0px 0px;">
-								<a href="{{ entry.last_post_forum.l_author_link }}" title="Профиль {{ entry.last_post_forum.l_author }}"><img src="{% if (entry.last_post_forum.l_author_avatar.true) %}{{ entry.last_post_forum.l_author_avatar.print }}{% else %}{{ entry.last_post_forum.l_author_avatar.print }}/noavatar.gif{% endif %}" width="100" height="100" alt=""/></a>
+								<a href="{{ entry.last_post_forum.l_author_link }}" title="РџСЂРѕС„РёР»СЊ {{ entry.last_post_forum.l_author }}"><img src="{% if (entry.last_post_forum.l_author_avatar.true) %}{{ entry.last_post_forum.l_author_avatar.print }}{% else %}{{ entry.last_post_forum.l_author_avatar.print }}/noavatar.gif{% endif %}" width="100" height="100" alt=""/></a>
 							</span>
 									<a href="{{ entry.last_post_forum.topic_link }}">{{ entry.last_post_forum.topic_name }}</a>
-									<span class="byuser">Автор: <a href="{{ entry.last_post_forum.l_author_link }}" title="Профиль {{ entry.last_post_forum.l_author }}">{{ entry.last_post_forum.l_author }}</a>
+									<span class="byuser">РђРІС‚РѕСЂ: <a href="{{ entry.last_post_forum.l_author_link }}" title="РџСЂРѕС„РёР»СЊ {{ entry.last_post_forum.l_author }}">{{ entry.last_post_forum.l_author }}</a>
 							(<i style="font-size: 11px;">{% if entry.last_post_forum.date|date('d-m-Y') == "now"|date('d-m-Y') %}
-	Сегодня {{ entry.last_post_forum.date|date('H:i') }}
+	РЎРµРіРѕРґРЅСЏ {{ entry.last_post_forum.date|date('H:i') }}
 {% elseif entry.last_post_forum.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-												Вчера {{ entry.last_post_forum.date|date('H:i') }}
+												Р’С‡РµСЂР° {{ entry.last_post_forum.date|date('H:i') }}
 											{% else %}
 												{{ entry.last_post_forum.date|date('d-m-Y H:i') }}
 											{% endif %}</i>)</span>
 								</div>
-							{% else %}нет сообщений{% endif %}
+							{% else %}РЅРµС‚ СЃРѕРѕР±С‰РµРЅРёР№{% endif %}
 						</td>
 					</tr>
 				{% else %}
@@ -128,7 +128,7 @@
 							<div class="intd">
 								<div class="icon"></div>
 								<div class="tclcon">
-									Нету тем
+									РќРµС‚Сѓ С‚РµРј
 								</div>
 							</div>
 						</td>
@@ -145,9 +145,9 @@
 <div class="linkst">
 	<div class="inbox">
 		<p class="pagelink conl">{% if (pages) %}{% if (prevlink.true) %}{{ prevlink.link }}{% endif %}{{ pages }}{% if (nextlink.true) %}{{ nextlink.link }}{% endif %}{% endif %}</p>
-		{% if (topic_send) %}<p class="postlink conr"><a href='{{ send_topic }}'>Добавить тему</a></p>{% endif %}
+		{% if (topic_send) %}<p class="postlink conr"><a href='{{ send_topic }}'>Р”РѕР±Р°РІРёС‚СЊ С‚РµРјСѓ</a></p>{% endif %}
 		<ul>
-			<li><a href='{{ home_link }}'>Список</a>&nbsp;</li>
+			<li><a href='{{ home_link }}'>РЎРїРёСЃРѕРє</a>&nbsp;</li>
 			<li>&raquo;&nbsp;{{ forum_name }}</li>
 		</ul>
 		<div class="clearer"></div>
@@ -157,11 +157,11 @@
 	<div class="box">
 		<div style="padding-left: 4px">
 			<dl>
-				<dt>{{ local.num_user_loc + local.num_guest_loc }} чел. просматривают эту тему
-					(гостей: {{ local.num_guest_loc }})
+				<dt>{{ local.num_user_loc + local.num_guest_loc }} С‡РµР». РїСЂРѕСЃРјР°С‚СЂРёРІР°СЋС‚ СЌС‚Сѓ С‚РµРјСѓ
+					(РіРѕСЃС‚РµР№: {{ local.num_guest_loc }})
 				</dt>
-				<dt>Пользователей: {{ local.num_user_loc }} {{ local.list_loc_user }}</dt>
-				<dt>Ботов: {{ local.num_bot_loc }} {{ local.list_loc_bot }}</dt>
+				<dt>РџРѕР»СЊР·РѕРІР°С‚РµР»РµР№: {{ local.num_user_loc }} {{ local.list_loc_user }}</dt>
+				<dt>Р‘РѕС‚РѕРІ: {{ local.num_bot_loc }} {{ local.list_loc_bot }}</dt>
 			</dl>
 		</div>
 	</div>

@@ -5,14 +5,14 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang($plugin, 'config', '', '', ':');
 // Fill configuration parameters
 $cfg = array();
 $cfgX = array();
 array_push($cfg, array('descr' => $lang['other_user_news:description']));
 $cfgX = array();
-array_push($cfgX, array('name' => 'localsource', 'title' => $lang['other_user_news:localsource'], 'descr' => $lang['other_user_news:localsource#desc'], 'type' => 'select', 'values' => array('0' => 'Øàáëîí ñàéòà', '1' => 'Ïëàãèí'), 'value' => intval(pluginGetVariable($plugin, 'localsource'))));
+array_push($cfgX, array('name' => 'localsource', 'title' => $lang['other_user_news:localsource'], 'descr' => $lang['other_user_news:localsource#desc'], 'type' => 'select', 'values' => array('0' => 'Ð¨Ð°Ð±Ð»Ð¾Ð½ ÑÐ°Ð¹Ñ‚Ð°', '1' => 'ÐŸÐ»Ð°Ð³Ð¸Ð½'), 'value' => intval(pluginGetVariable($plugin, 'localsource'))));
 array_push($cfg, array('mode' => 'group', 'title' => $lang['other_user_news:group.source'], 'entries' => $cfgX));
 // RUN
 if ($_REQUEST['action'] == 'commit') {

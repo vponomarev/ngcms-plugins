@@ -3,7 +3,7 @@
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Preload header data
 $header = file_get_contents(root . 'extras/xmenu/tpl/mhead.tpl');
 // Make an activity array - to mark menu's that are activated
@@ -18,7 +18,7 @@ array_push($cfg, array('type' => 'flat', 'input' => str_replace('{activity}', jo
 // FIRST: Category list with menu mapping
 $cfgX = array();
 array_push($cfg, array('type' => 'flat', 'input' => '<div id="menu_0" style="display: block;">' . "\n" . '<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">' . "\n"));
-$outline = array('<tr><td rowspan=2><b>Название категории</b></td><td colspan=9><b>Меню, в которых данная категория отображается</b></td></tr><tr><td>Меню 1</td><td>Меню 2</td><td>Меню 3</td><td>Меню 4</td><td>Меню 5</td><td>Меню 6</td><td>Меню 7</td><td>Меню 8</td><td>Меню 9</td><td width="20%"></td></tr>');
+$outline = array('<tr><td rowspan=2><b>РќР°Р·РІР°РЅРёРµ РєР°С‚РµРіРѕСЂРёРё</b></td><td colspan=9><b>РњРµРЅСЋ, РІ РєРѕС‚РѕСЂС‹С… РґР°РЅРЅР°СЏ РєР°С‚РµРіРѕСЂРёСЏ РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ</b></td></tr><tr><td>РњРµРЅСЋ 1</td><td>РњРµРЅСЋ 2</td><td>РњРµРЅСЋ 3</td><td>РњРµРЅСЋ 4</td><td>РњРµРЅСЋ 5</td><td>РњРµРЅСЋ 6</td><td>РњРµРЅСЋ 7</td><td>РњРµРЅСЋ 8</td><td>РњРµРЅСЋ 9</td><td width="20%"></td></tr>');
 foreach ($catz as $name => $val) {
 	$line = '<tr><td>' . str_repeat('&#8212; ', $val['poslevel']) . $val['name'] . '</td>';
 	for ($i = 1; $i <= 9; $i++) {
@@ -28,17 +28,17 @@ foreach ($catz as $name => $val) {
 	$outline [] = $line;
 }
 array_push($cfgX, array('type' => 'flat', 'input' => join("\n", $outline)));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Распределение категорий</b>', 'entries' => $cfgX));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>Р Р°СЃРїСЂРµРґРµР»РµРЅРёРµ РєР°С‚РµРіРѕСЂРёР№</b>', 'entries' => $cfgX));
 array_push($cfg, array('type' => 'flat', 'input' => "\n</table></div>\n\n"));
 // SECOND: Populate config parameters for menus 1-9
 for ($i = 1; $i <= 9; $i++) {
 	$cfgX = array();
 	array_push($cfg, array('type' => 'flat', 'input' => '<div id="menu_' . $i . '" style="display: ' . (!$i ? 'block' : 'none') . ';">' . "\n" . '<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">' . "\n"));
-	array_push($cfgX, array('type' => 'select', 'name' => 'activate[' . $i . ']', 'title' => 'Активация меню', 'descr' => '<b>Да</b> - данное меню активно<br/><b>Нет</b> - меню неактивно', 'values' => array('0' => 'Нет', '1' => 'Да'), value => (is_array($var = extra_get_param('xmenu', 'activate')) ? $var[$i] : 0)));
-	array_push($cfgX, array('type' => 'select', 'name' => 'mode[' . $i . ']', 'title' => 'Режим отображения меню', 'descr' => '<b>Выбранные категории</b> - отображаются категории, по которым выставлен флаг для данного меню<br/><b>Текущие подкатегории</b> - подкатегории текущей категории. В случае главной страницы - все категории 1 уровня', 'values' => array('0' => 'Выбранные категории', '1' => 'Текущие подкатегории'), value => (is_array($var = extra_get_param('xmenu', 'mode')) ? $var[$i] : 0)));
-	array_push($cfgX, array('type' => 'select', 'name' => 'news[' . $i . ']', 'title' => 'Добавить новость категории', 'descr' => '<b>Да</b> - для каждой категории будет выводиться последняя новость из этой категории<br/><b>Нет</b> - будет отображаться только сама категория', 'values' => array('0' => 'Нет', '1' => 'Да'), value => (is_array($var = extra_get_param('xmenu', 'news')) ? $var[$i] : 0)));
-	array_push($cfgX, array('type' => 'select', 'name' => 'skin[' . $i . ']', 'title' => 'Шаблон отображения меню', 'descr' => 'Выберите шаблон, с помощью которого будет отображаться данное меню', 'values' => array('default' => 'default'), value => (is_array($var = extra_get_param('xmenu', 'skin')) ? $var[$i] : 0)));
-	array_push($cfg, array('mode' => 'group', 'title' => '<b>Настройки меню # ' . $i . '</b>', 'entries' => $cfgX));
+	array_push($cfgX, array('type' => 'select', 'name' => 'activate[' . $i . ']', 'title' => 'РђРєС‚РёРІР°С†РёСЏ РјРµРЅСЋ', 'descr' => '<b>Р”Р°</b> - РґР°РЅРЅРѕРµ РјРµРЅСЋ Р°РєС‚РёРІРЅРѕ<br/><b>РќРµС‚</b> - РјРµРЅСЋ РЅРµР°РєС‚РёРІРЅРѕ', 'values' => array('0' => 'РќРµС‚', '1' => 'Р”Р°'), value => (is_array($var = extra_get_param('xmenu', 'activate')) ? $var[$i] : 0)));
+	array_push($cfgX, array('type' => 'select', 'name' => 'mode[' . $i . ']', 'title' => 'Р РµР¶РёРј РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РјРµРЅСЋ', 'descr' => '<b>Р’С‹Р±СЂР°РЅРЅС‹Рµ РєР°С‚РµРіРѕСЂРёРё</b> - РѕС‚РѕР±СЂР°Р¶Р°СЋС‚СЃСЏ РєР°С‚РµРіРѕСЂРёРё, РїРѕ РєРѕС‚РѕСЂС‹Рј РІС‹СЃС‚Р°РІР»РµРЅ С„Р»Р°Рі РґР»СЏ РґР°РЅРЅРѕРіРѕ РјРµРЅСЋ<br/><b>РўРµРєСѓС‰РёРµ РїРѕРґРєР°С‚РµРіРѕСЂРёРё</b> - РїРѕРґРєР°С‚РµРіРѕСЂРёРё С‚РµРєСѓС‰РµР№ РєР°С‚РµРіРѕСЂРёРё. Р’ СЃР»СѓС‡Р°Рµ РіР»Р°РІРЅРѕР№ СЃС‚СЂР°РЅРёС†С‹ - РІСЃРµ РєР°С‚РµРіРѕСЂРёРё 1 СѓСЂРѕРІРЅСЏ', 'values' => array('0' => 'Р’С‹Р±СЂР°РЅРЅС‹Рµ РєР°С‚РµРіРѕСЂРёРё', '1' => 'РўРµРєСѓС‰РёРµ РїРѕРґРєР°С‚РµРіРѕСЂРёРё'), value => (is_array($var = extra_get_param('xmenu', 'mode')) ? $var[$i] : 0)));
+	array_push($cfgX, array('type' => 'select', 'name' => 'news[' . $i . ']', 'title' => 'Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІРѕСЃС‚СЊ РєР°С‚РµРіРѕСЂРёРё', 'descr' => '<b>Р”Р°</b> - РґР»СЏ РєР°Р¶РґРѕР№ РєР°С‚РµРіРѕСЂРёРё Р±СѓРґРµС‚ РІС‹РІРѕРґРёС‚СЊСЃСЏ РїРѕСЃР»РµРґРЅСЏСЏ РЅРѕРІРѕСЃС‚СЊ РёР· СЌС‚РѕР№ РєР°С‚РµРіРѕСЂРёРё<br/><b>РќРµС‚</b> - Р±СѓРґРµС‚ РѕС‚РѕР±СЂР°Р¶Р°С‚СЊСЃСЏ С‚РѕР»СЊРєРѕ СЃР°РјР° РєР°С‚РµРіРѕСЂРёСЏ', 'values' => array('0' => 'РќРµС‚', '1' => 'Р”Р°'), value => (is_array($var = extra_get_param('xmenu', 'news')) ? $var[$i] : 0)));
+	array_push($cfgX, array('type' => 'select', 'name' => 'skin[' . $i . ']', 'title' => 'РЁР°Р±Р»РѕРЅ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РјРµРЅСЋ', 'descr' => 'Р’С‹Р±РµСЂРёС‚Рµ С€Р°Р±Р»РѕРЅ, СЃ РїРѕРјРѕС‰СЊСЋ РєРѕС‚РѕСЂРѕРіРѕ Р±СѓРґРµС‚ РѕС‚РѕР±СЂР°Р¶Р°С‚СЊСЃСЏ РґР°РЅРЅРѕРµ РјРµРЅСЋ', 'values' => array('default' => 'default'), value => (is_array($var = extra_get_param('xmenu', 'skin')) ? $var[$i] : 0)));
+	array_push($cfg, array('mode' => 'group', 'title' => '<b>РќР°СЃС‚СЂРѕР№РєРё РјРµРЅСЋ # ' . $i . '</b>', 'entries' => $cfgX));
 	array_push($cfg, array('type' => 'flat', 'input' => "\n</table></div>\n\n"));
 }
 // Print footer

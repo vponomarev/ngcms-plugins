@@ -30,7 +30,7 @@
 		</tr>
 	{% else %}
 		<tr align="left">
-			<td calspan="10" class="contentEntry1">По вашему запросу ничего не найдено.</td>
+			<td calspan="10" class="contentEntry1">РџРѕ РІР°С€РµРјСѓ Р·Р°РїСЂРѕСЃСѓ РЅРёС‡РµРіРѕ РЅРµ РЅР°Р№РґРµРЅРѕ.</td>
 		</tr>
 	{% endfor %}
 	<tr>

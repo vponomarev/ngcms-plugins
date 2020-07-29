@@ -1,32 +1,32 @@
 <fieldset class="admGroup">
-	<legend class="title">Благодарности</legend>
+	<legend class="title">Р‘Р»Р°РіРѕРґР°СЂРЅРѕСЃС‚Рё</legend>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<dl>
 			<dt>
-				<strong>Программирование:</strong>
+				<strong>РџСЂРѕРіСЂР°РјРјРёСЂРѕРІР°РЅРёРµ:</strong>
 			</dt>
 			<dd>Nail' Davydov (<a href="http://ngcms.ru/forum/profile.php?id=8">ROZARD</a>)</dd>
 
 			<dt>
-				<strong>Тестеры и аудит:</strong>
+				<strong>РўРµСЃС‚РµСЂС‹ Рё Р°СѓРґРёС‚:</strong>
 			</dt>
-			<dd>Александр -(<a href="http://ngcms.ru/forum/profile.php?id=435">Север</a>)</dd>
+			<dd>РђР»РµРєСЃР°РЅРґСЂ -(<a href="http://ngcms.ru/forum/profile.php?id=435">РЎРµРІРµСЂ</a>)</dd>
 			<dt>
-				<strong>Тестеры и аудит:</strong>
+				<strong>РўРµСЃС‚РµСЂС‹ Рё Р°СѓРґРёС‚:</strong>
 			</dt>
 			<dd>- - (<a href="http://ngcms.ru/forum/profile.php?id=65">tayzer</a>)</dd>
 		</dl>
 	</table>
 </fieldset>
 <fieldset class="admGroup">
-	<legend class="title">Поддержка</legend>
+	<legend class="title">РџРѕРґРґРµСЂР¶РєР°</legend>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<dl>
 			<dt>
-				<strong>По всем проблема и предложениям обращаться на:
+				<strong>РџРѕ РІСЃРµРј РїСЂРѕР±Р»РµРјР° Рё РїСЂРµРґР»РѕР¶РµРЅРёСЏРј РѕР±СЂР°С‰Р°С‚СЊСЃСЏ РЅР°:
 					<a href="http://ngcms.ru/forum/viewtopic.php?id=2055" target="_blank"><b>simple_title_pro</b></a></strong>
 			</dt>
-			<dt><a href="/engine/admin.php?mod=extra-config&plugin=simple_title_pro&action=license" target="_blank"><b>Лицензия</b></a>
+			<dt><a href="/engine/admin.php?mod=extra-config&plugin=simple_title_pro&action=license" target="_blank"><b>Р›РёС†РµРЅР·РёСЏ</b></a>
 			</dt>
 		</dl>
 	</table>

@@ -1,7 +1,7 @@
 <?php
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 // Load library
 include_once(root . "/plugins/gsmg/lib/common.php");
 //

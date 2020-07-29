@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит 
- комментариев. То, что писалось с трудом, должно 
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚ 
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ 
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -85,25 +85,25 @@ function header_show() {
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Добавить сообщение / %name_forum%');
+				'Р”РѕР±Р°РІРёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%');
 			break;
 		case 'newtopic':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Добавить тему / %name_forum%');
+				'Р”РѕР±Р°РІРёС‚СЊ С‚РµРјСѓ / %name_forum%');
 			break;
 		case 'delpost':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Удалить сообщение / %name_forum%');
+				'РЈРґР°Р»РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%');
 			break;
 		case 'edit':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Редактировать / %name_forum%');
+				'Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ / %name_forum%');
 			break;
 		case 'rules':
 			$titles = str_replace(
@@ -115,37 +115,37 @@ function header_show() {
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Последние сообщения / %name_forum%');
+				'РџРѕСЃР»РµРґРЅРёРµ СЃРѕРѕР±С‰РµРЅРёСЏ / %name_forum%');
 			break;
 		case 'markread':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Всё прочитано / %name_forum%');
+				'Р’СЃС‘ РїСЂРѕС‡РёС‚Р°РЅРѕ / %name_forum%');
 			break;
 		case 'rep':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%', '%others%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group'], $SYSTEM_FLAGS['info']['title']['others']),
-				'Репутация участника %others% / %name_forum%');
+				'Р РµРїСѓС‚Р°С†РёСЏ СѓС‡Р°СЃС‚РЅРёРєР° %others% / %name_forum%');
 			break;
 		case 'addr':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Добавить репутацию / %name_forum%');
+				'Р”РѕР±Р°РІРёС‚СЊ СЂРµРїСѓС‚Р°С†РёСЋ / %name_forum%');
 			break;
 		case 'news':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%', '%name_news%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group'], $SYSTEM_FLAGS['info']['title']['others']),
-				'%name_news% / Новости / %name_forum%');
+				'%name_news% / РќРѕРІРѕСЃС‚Рё / %name_forum%');
 			break;
 		case 'news_feed':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%', '%num%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group'], $pageNo),
-				'Вся лента / %name_forum% [/ %num%]');
+				'Р’СЃСЏ Р»РµРЅС‚Р° / %name_forum% [/ %num%]');
 			break;
 		case 'act':
 			$titles = str_replace(
@@ -157,61 +157,61 @@ function header_show() {
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%', '%others%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group'], $SYSTEM_FLAGS['info']['title']['others']),
-				'История благодарностей участнику %others% / %name_forum%');
+				'РСЃС‚РѕСЂРёСЏ Р±Р»Р°РіРѕРґР°СЂРЅРѕСЃС‚РµР№ СѓС‡Р°СЃС‚РЅРёРєСѓ %others% / %name_forum%');
 			break;
 		case 'complaints':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Сообщить модератору / %name_forum%');
+				'РЎРѕРѕР±С‰РёС‚СЊ РјРѕРґРµСЂР°С‚РѕСЂСѓ / %name_forum%');
 			break;
 		case 'send_pm':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Новое сообщение / %name_forum%');
+				'РќРѕРІРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%');
 			break;
 		case 'list_pm':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Личное сообщение / %name_forum%');
+				'Р›РёС‡РЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%');
 			break;
 		case 'del_pm':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Удалить сообщение / %name_forum%');
+				'РЈРґР°Р»РёС‚СЊ СЃРѕРѕР±С‰РµРЅРёРµ / %name_forum%');
 			break;
 		case 'downloads':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Загрузка файла / %name_forum%');
+				'Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р° / %name_forum%');
 			break;
 		case 'erro404':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Информация / %name_forum%');
+				'РРЅС„РѕСЂРјР°С†РёСЏ / %name_forum%');
 			break;
 		case 'perm':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Нет доступа / %name_forum%');
+				'РќРµС‚ РґРѕСЃС‚СѓРїР° / %name_forum%');
 			break;
 		case 'lock_passwd':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Форум запаролен / %name_forum%');
+				'Р¤РѕСЂСѓРј Р·Р°РїР°СЂРѕР»РµРЅ / %name_forum%');
 			break;
 		case 'moderate':
 			$titles = str_replace(
 				array('%name_site%', '%name_forum%'),
 				array($SYSTEM_FLAGS['info']['title']['header'], $SYSTEM_FLAGS['info']['title']['group']),
-				'Раздел модератора / %name_forum%');
+				'Р Р°Р·РґРµР» РјРѕРґРµСЂР°С‚РѕСЂР° / %name_forum%');
 			break;
 	}
 	$titles = preg_replace('/\[([^\[\]]+)\]/', (isset($pageNo) && $pageNo) ? '\\1' : '', $titles);
@@ -530,13 +530,13 @@ function announcement_forum($message, $url, $banned = 0, $referer = false) {
 	$xt = $twig->loadTemplate($tpath['redirect'] . 'redirect.tpl');
 	suppress_show();
 	$show_main = true;
-	$SYSTEM_FLAGS['info']['title']['item'] = 'Переодресация';
+	$SYSTEM_FLAGS['info']['title']['item'] = 'РџРµСЂРµРѕРґСЂРµСЃР°С†РёСЏ';
 	switch ($banned) {
 		case 2:
-			$banned = "Запрос обработан: ${message}";
+			$banned = "Р—Р°РїСЂРѕСЃ РѕР±СЂР°Р±РѕС‚Р°РЅ: ${message}";
 			break;
 		case 1:
-			$banned = "Ошибка 404: ${message}";
+			$banned = "РћС€РёР±РєР° 404: ${message}";
 			break;
 		case 0:
 		default:
@@ -556,7 +556,7 @@ function announcement_forum($message, $url, $banned = 0, $referer = false) {
 	return $xt->render($tVars);
 }
 
-function information($info, $title = 'Информация', $error_404 = false) {
+function information($info, $title = 'РРЅС„РѕСЂРјР°С†РёСЏ', $error_404 = false) {
 
 	global $twig, $SYSTEM_FLAGS, $CurrentHandler;
 	$CurrentHandler['handlerName'] = 'erro404';
@@ -572,7 +572,7 @@ function information($info, $title = 'Информация', $error_404 = false) {
 	return $xt->render($tVars);
 }
 
-function permissions_forum($info, $title = 'Информация') {
+function permissions_forum($info, $title = 'РРЅС„РѕСЂРјР°С†РёСЏ') {
 
 	global $twig, $SYSTEM_FLAGS, $CurrentHandler;
 	$CurrentHandler['handlerName'] = 'perm';

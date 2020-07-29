@@ -1,7 +1,7 @@
 {% if (preview.true) %}
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
-		<h2><span>Предосмотр</span></h2>
-		<p>{% if (content) %}{{ preview.print }}{% else %}Вы не добавили текста{% endif %}</p>
+		<h2><span>РџСЂРµРґРѕСЃРјРѕС‚СЂ</span></h2>
+		<p>{% if (content) %}{{ preview.print }}{% else %}Р’С‹ РЅРµ РґРѕР±Р°РІРёР»Рё С‚РµРєСЃС‚Р°{% endif %}</p>
 	</table>
 {% endif %}
 {{ error }}
@@ -10,20 +10,20 @@
 <form method="post" action="" name="form" enctype="multipart/form-data">
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr>
-			<td width="50%" class="contentEntry1">Название новости<br/>
+			<td width="50%" class="contentEntry1">РќР°Р·РІР°РЅРёРµ РЅРѕРІРѕСЃС‚Рё<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2"><input type="text" size="40" name="title" value="{{ title }}"/></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Описание новости<br/>
+			<td width="50%" class="contentEntry1">РћРїРёСЃР°РЅРёРµ РЅРѕРІРѕСЃС‚Рё<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2">
 				<textarea type="text" name="content" id="content" cols="100" rows="10">{{ content }}</textarea></td>
 		</tr>
 		<tr>
-			<td width="50%" class="contentEntry1">Уведомить пользователей о новости?<br/>
+			<td width="50%" class="contentEntry1">РЈРІРµРґРѕРјРёС‚СЊ РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№ Рѕ РЅРѕРІРѕСЃС‚Рё?<br/>
 				<small></small>
 			</td>
 			<td width="50%" class="contentEntry2"><input type="checkbox" name="mail" value="1" {{ checked }} /></td>
@@ -35,8 +35,8 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input type="submit" name="submit" value="Добавить" class="button"/>
-				<input type="submit" name="preview" value="Предпросмотр" class="button"/>
+				<input type="submit" name="submit" value="Р”РѕР±Р°РІРёС‚СЊ" class="button"/>
+				<input type="submit" name="preview" value="РџСЂРµРґРїСЂРѕСЃРјРѕС‚СЂ" class="button"/>
 			</td>
 		</tr>
 	</table>
@@ -46,19 +46,19 @@
 		buttons: 'bold,italic,underline,strike|,-|,link,myimg,|,smilebox,|,bullist,numlist,quotes, |,codephp, ,|,quote_name',
 		allButtons: {
 			myimg: {
-				title: 'Изображение',
+				title: 'РР·РѕР±СЂР°Р¶РµРЅРёРµ',
 				buttonHTML: '<span class="ve-tlb-img"></span>',
 				modal: {
-					title: 'Вставить изображение',
+					title: 'Р’СЃС‚Р°РІРёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ',
 					width: '600px',
 					tabs: [{
 						input: [
 							{
 								param: "SRC",
-								title: "Введите адрес изображения",
+								title: "Р’РІРµРґРёС‚Рµ Р°РґСЂРµСЃ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ",
 								validation: '^http(s)?://.*?\.(jpg|png|gif|jpeg)$'
 							},
-							{param: "TITLE", title: "Введите заголовок изображения"}
+							{param: "TITLE", title: "Р’РІРµРґРёС‚Рµ Р·Р°РіРѕР»РѕРІРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёСЏ"}
 						]
 					}],
 					onLoad: function () {
@@ -73,14 +73,14 @@
 				title: CURLANG.code,
 				buttonText: "[code]",
 				transform: {
-					'<div class="codewrap"><div class="codetop">Код: PHP</div><div class="codemain">{SELTEXT}</div></div>': "[code=PHP]{SELTEXT}[/code]"
+					'<div class="codewrap"><div class="codetop">РљРѕРґ: PHP</div><div class="codemain">{SELTEXT}</div></div>': "[code=PHP]{SELTEXT}[/code]"
 				}
 			}, quotes: {
 				title: CURLANG.quote,
 				buttonHTML: '<span class="ve-tlb-quote"></span>',
 				transform: {
 					'<div class="quote">{SELTEXT}</div>': '[quote]{SELTEXT}[/quote]',
-					'<div class="quote"><cite>{AUTHOR} написал:</cite>{SELTEXT}</div>': '[quote={AUTHOR}]{SELTEXT}[/quote]'
+					'<div class="quote"><cite>{AUTHOR} РЅР°РїРёСЃР°Р»:</cite>{SELTEXT}</div>': '[quote={AUTHOR}]{SELTEXT}[/quote]'
 				}
 			}
 		},

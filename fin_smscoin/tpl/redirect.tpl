@@ -1,16 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title>Переход на страницу платежного шлюза</title>
+	<title>РџРµСЂРµС…РѕРґ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РїР»Р°С‚РµР¶РЅРѕРіРѕ С€Р»СЋР·Р°</title>
 </head>
 <body style="font-family: verdana;">
 <div style="background-color : #ffc; color : #444; padding : 5px 0 5px 5px; font : normal 10px verdana, sans-serif; border : 1px dotted #999;">
-	<p>Переадресация на страницу платёжного шлюза...</p>
+	<p>РџРµСЂРµР°РґСЂРµСЃР°С†РёСЏ РЅР° СЃС‚СЂР°РЅРёС†Сѓ РїР»Р°С‚С‘Р¶РЅРѕРіРѕ С€Р»СЋР·Р°...</p>
 	<br/>
-	<p>Если переадресация не произойдёт в течении нескольких секунд, то вам необходимо нажать на кнопку `оплатить`.</p>
+	<p>Р•СЃР»Рё РїРµСЂРµР°РґСЂРµСЃР°С†РёСЏ РЅРµ РїСЂРѕРёР·РѕР№РґС‘С‚ РІ С‚РµС‡РµРЅРёРё РЅРµСЃРєРѕР»СЊРєРёС… СЃРµРєСѓРЅРґ, С‚Рѕ РІР°Рј РЅРµРѕР±С…РѕРґРёРјРѕ РЅР°Р¶Р°С‚СЊ РЅР° РєРЅРѕРїРєСѓ `РѕРїР»Р°С‚РёС‚СЊ`.</p>
 	<form method="post" action="{form_url}" id="payform">
 		{inputs}
-		<input style="font-family: verdana;" type="submit" value="Оплатить"/>
+		<input style="font-family: verdana;" type="submit" value="РћРїР»Р°С‚РёС‚СЊ"/>
 	</form>
 </div>
 

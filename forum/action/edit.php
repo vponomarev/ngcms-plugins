@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -23,12 +23,12 @@ if (isset($params['id']))
 else
 	$id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : '';
 if (empty($id))
-	return $output = information('id сообщения не указан не передан', $title = 'Информация');
+	return $output = information('id СЃРѕРѕР±С‰РµРЅРёСЏ РЅРµ СѓРєР°Р·Р°РЅ РЅРµ РїРµСЂРµРґР°РЅ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $time = time() + ($config['date_adjust'] * 60);
 $sql = 'SELECT p.message, p.author_id, p.tid, p.id, p.c_data, t.title, t.fid FROM ' . prefix . '_forum_posts AS p LEFT JOIN ' . prefix . '_forum_topics AS t ON t.id = p.tid WHERE p.id = ' . securemysql($id) . ' LIMIT 1';
 $row = $mysql->record($sql);
 if (!(($userROW['id'] == $row['author_id'] && (($time - $row['c_data']) < (pluginGetVariable('forum', 'edit_del_time') * 60) or (pluginGetVariable('forum', 'edit_del_time') == 0))) or ($userROW['status'] == 1)))
-	return $output = information('Вы не можете редактировать', $title = 'Информация');
+	return $output = information('Р’С‹ РЅРµ РјРѕР¶РµС‚Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $sql = "SELECT id as fid, moderators FROM " . prefix . "_forum_forums WHERE id = " . securemysql("{$row['fid']}") . " LIMIT 1";
 $rows = $mysql->record($sql);
 $sql_2 = 'SELECT `id` FROM `' . prefix . '_forum_posts` WHERE `tid` = ' . securemysql($row['tid']) . ' ORDER BY id LIMIT 1';
@@ -43,7 +43,7 @@ if (($edit_subject && (($userROW['id'] == $row['author_id'] && $FORUM_PS[$rows['
 	if (isset($_REQUEST['submit'])) {
 		delete_attach($del);
 		if ($edit_subject) {
-			if (empty($subject)) $error_text[] = 'Вы не добавили заголовок';
+			if (empty($subject)) $error_text[] = 'Р’С‹ РЅРµ РґРѕР±Р°РІРёР»Рё Р·Р°РіРѕР»РѕРІРѕРє';
 			if (empty($error_text)) {
 				$mysql->query('UPDATE ' . prefix . '_forum_topics SET title = ' . securemysql($subject) . ' 
 					WHERE id = ' . securemysql($row['tid']) . ' LIMIT 1');
@@ -53,8 +53,8 @@ if (($edit_subject && (($userROW['id'] == $row['author_id'] && $FORUM_PS[$rows['
 			if ($mysql->result('SELECT COUNT(*) FROM `' . prefix . '_forum_attach` WHERE `pid` = ' . securemysql($id)) < 3)
 				$file = forum_upload_files();
 			else
-				$error_text[] = 'Вы превысили лимит количества файлов к одному сообщения';
-		if (empty($message)) $error_text[] = 'Вы не добавили сообщение';
+				$error_text[] = 'Р’С‹ РїСЂРµРІС‹СЃРёР»Рё Р»РёРјРёС‚ РєРѕР»РёС‡РµСЃС‚РІР° С„Р°Р№Р»РѕРІ Рє РѕРґРЅРѕРјСѓ СЃРѕРѕР±С‰РµРЅРёСЏ';
+		if (empty($message)) $error_text[] = 'Р’С‹ РЅРµ РґРѕР±Р°РІРёР»Рё СЃРѕРѕР±С‰РµРЅРёРµ';
 		if (empty($error_text)) {
 			$mysql->query('UPDATE ' . prefix . '_forum_posts SET 
 						message = ' . securemysql($message) . ', 
@@ -87,7 +87,7 @@ if (($edit_subject && (($userROW['id'] == $row['author_id'] && $FORUM_PS[$rows['
 						)
 					');
 
-			return $output = announcement_forum('Данные внесены', link_topic($id, 'pid') . '#' . $id, 2);
+			return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_topic($id, 'pid') . '#' . $id, 2);
 		}
 	}
 	$error_input = '';
@@ -125,5 +125,5 @@ if (($edit_subject && (($userROW['id'] == $row['author_id'] && $FORUM_PS[$rows['
 	);
 	$output = $xt->render($tVars);
 } else {
-	return $output = information('Вы не можете редактировать', $title = 'Информация');
+	return $output = information('Р’С‹ РЅРµ РјРѕР¶РµС‚Рµ СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 }

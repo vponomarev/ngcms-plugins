@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -23,19 +23,19 @@ if (isset($params['pid']))
 else
 	$pid = isset($_REQUEST['pid']) ? intval($_REQUEST['pid']) : 0;
 if (empty($pid))
-	return $output = information('Сообщение не выбрано', $title = 'Информация');
+	return $output = information('РЎРѕРѕР±С‰РµРЅРёРµ РЅРµ РІС‹Р±СЂР°РЅРѕ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if (!is_array($userROW))
-	return $output = information('У вас нет прав доступа', $title = 'Информация');
+	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $row = $mysql->record('SELECT * FROM ' . prefix . '_forum_posts WHERE id = ' . securemysql($pid) . ' LIMIT 1');
 $row_2 = $mysql->result('SELECT 1 FROM ' . prefix . '_users WHERE id = ' . securemysql($row['author_id']) . ' LIMIT 1');
 if (empty($row_2))
-	return $output = information('Такого пользователя нет', $title = 'Информация');
+	return $output = information('РўР°РєРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РЅРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($mysql->result('SELECT 1 FROM ' . prefix . '_forum_thank WHERE pid = ' . securemysql($pid) . ' and  author_id = ' . securemysql($userROW['id']) . ' LIMIT 1'))
-	return $output = announcement_forum('Данные внесены', link_topic($pid, 'pid') . '#' . $pid, 2);
+	return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_topic($pid, 'pid') . '#' . $pid, 2);
 if (empty($row))
-	return $output = information('Такого сообщения не существует', $title = 'Информация');
+	return $output = information('РўР°РєРѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($userROW['id'] == $row['author_id'])
-	return $output = information('За себя нельзя', $title = 'Информация');
+	return $output = information('Р—Р° СЃРµР±СЏ РЅРµР»СЊР·СЏ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $mysql->query('insert into ' . prefix . '_forum_thank (
 			tid, 
 			pid, 
@@ -56,4 +56,4 @@ $mysql->query('insert into ' . prefix . '_forum_thank (
 	');
 $int_thank = $mysql->result('SELECT COUNT(*) FROM ' . prefix . '_forum_thank WHERE to_author_id = ' . securemysql($row['author_id']));
 $mysql->query('UPDATE ' . prefix . '_users SET int_thank = ' . securemysql($int_thank) . ' WHERE id = ' . securemysql($row['author_id']) . ' LIMIT 1');
-return $output = announcement_forum('Данные внесены', link_topic($pid, 'pid') . '#' . $pid, 2);
+return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_topic($pid, 'pid') . '#' . $pid, 2);

@@ -25,10 +25,10 @@ function plugin_gsmg_screen() {
 	}
 	$output = '<?xml version="1.0" encoding="UTF-8"?>';
 	$output .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-	// Настройки постранички
+	// РќР°СЃС‚СЂРѕР№РєРё РїРѕСЃС‚СЂР°РЅРёС‡РєРё
 	if ($config['number'] < 1)
 		$config['number'] = 5;
-	// Надо ли выводить данные с головной страницы
+	// РќР°РґРѕ Р»Рё РІС‹РІРѕРґРёС‚СЊ РґР°РЅРЅС‹Рµ СЃ РіРѕР»РѕРІРЅРѕР№ СЃС‚СЂР°РЅРёС†С‹
 	if (extra_get_param('gsmg', 'main')) {
 		$output .= "<url>";
 		$output .= "<loc>" . generateLink('news', 'main', array(), array(), false, true) . "</loc>";
@@ -50,7 +50,7 @@ function plugin_gsmg_screen() {
 			}
 		}
 	}
-	// Надо ли выводить данные по категориям
+	// РќР°РґРѕ Р»Рё РІС‹РІРѕРґРёС‚СЊ РґР°РЅРЅС‹Рµ РїРѕ РєР°С‚РµРіРѕСЂРёСЏРј
 	if (extra_get_param('gsmg', 'cat')) {
 		foreach ($catmap as $id => $altname) {
 			$output .= "<url>";
@@ -73,7 +73,7 @@ function plugin_gsmg_screen() {
 			}
 		}
 	}
-	// Надо ли выводить данные по новостям
+	// РќР°РґРѕ Р»Рё РІС‹РІРѕРґРёС‚СЊ РґР°РЅРЅС‹Рµ РїРѕ РЅРѕРІРѕСЃС‚СЏРј
 	if (extra_get_param('gsmg', 'news')) {
 		$query = "select id, postdate, author, author_id, alt_name, editdate, catid from " . prefix . "_news where approve = 1 order by id desc";
 		foreach ($mysql->select($query, 1) as $rec) {
@@ -86,7 +86,7 @@ function plugin_gsmg_screen() {
 			$output .= "</url>";
 		}
 	}
-	// Надо ли выводить данные по статическим страницам
+	// РќР°РґРѕ Р»Рё РІС‹РІРѕРґРёС‚СЊ РґР°РЅРЅС‹Рµ РїРѕ СЃС‚Р°С‚РёС‡РµСЃРєРёРј СЃС‚СЂР°РЅРёС†Р°Рј
 	if (extra_get_param('gsmg', 'static')) {
 		$query = "select id, alt_name from " . prefix . "_static where approve = 1";
 		foreach ($mysql->select($query, 1) as $rec) {

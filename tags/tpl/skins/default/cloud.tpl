@@ -5,7 +5,7 @@
 				<tr>
 					<td><img border="0" src="{tpl_url}/images/2z_40.gif" width="7" height="36"/></td>
 					<td style="background-image:url('{tpl_url}/images/2z_41.gif');" width="100%">
-						&nbsp;<img border="0" src="{tpl_url}/images/bib.gif"/> <b>Облако тегов ::
+						&nbsp;<img border="0" src="{tpl_url}/images/bib.gif"/> <b>РћР±Р»Р°РєРѕ С‚РµРіРѕРІ ::
 							<b><font color="#FFFFFF">{tag}</font></b></td>
 					<td><img border="0" src="{tpl_url}/images/2z_44.gif" width="7" height="36"/></td>
 				</tr>

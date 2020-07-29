@@ -8,20 +8,20 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
 if (empty($GROUP_PS['group_pm']))
-	return $output = permissions_forum('У вас нет доступа к сообщениям');
+	return $output = permissions_forum('РЈ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° Рє СЃРѕРѕР±С‰РµРЅРёСЏРј');
 $tpath = locatePluginTemplates(array('list_pm'), 'forum', pluginGetVariable('forum', 'localsource'), pluginGetVariable('forum', 'localskin'));
 $xt = $twig->loadTemplate($tpath['list_pm'] . 'list_pm.tpl');
 if (!is_array($userROW))
-	return $output = information('У вас нет прав доступа', $title = 'Информация');
+	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if (isset($params['id']))
 	$id = isset($params['id']) ? intval($params['id']) : 0;
 else
@@ -53,7 +53,7 @@ if ($_POST['submit']) {
 			$mysql->query('DELETE FROM ' . prefix . '_pm WHERE ((`from_id`=' . db_squote($userROW['id']) . ' AND `folder`=\'outbox\') OR (`to_id`=' . db_squote($userROW['id']) . ') AND `folder`=\'inbox\') AND id = \'' . intval($pid) . '\'');
 		}
 
-		return $output = announcement_forum('Сообщения удалены', link_list_pm(0, 0, $io), 2);
+		return $output = announcement_forum('РЎРѕРѕР±С‰РµРЅРёСЏ СѓРґР°Р»РµРЅС‹', link_list_pm(0, 0, $io), 2);
 	}
 }
 if ($id) {
@@ -62,19 +62,19 @@ if ($id) {
 			WHERE pm.id = ' . securemysql($id) . ' LIMIT 1');
 	switch ($row['ustatus']) {
 		case 1:
-			$userstatus = "Администратор";
+			$userstatus = "РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ";
 			break;
 		case 2:
-			$userstatus = "Редактор";
+			$userstatus = "Р РµРґР°РєС‚РѕСЂ";
 			break;
 		case 3:
-			$userstatus = "Журналист";
+			$userstatus = "Р–СѓСЂРЅР°Р»РёСЃС‚";
 			break;
 		case 4:
-			$userstatus = "Пользователь";
+			$userstatus = "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ";
 			break;
 		default:
-			$userstatus = "Забанен или удален";
+			$userstatus = "Р—Р°Р±Р°РЅРµРЅ РёР»Рё СѓРґР°Р»РµРЅ";
 	};
 	//print "<pre>".var_export($row, true)."</pre>";
 	if ($userROW['id'] == $row[$show_id]) {
@@ -120,7 +120,7 @@ else
 $count = $mysql->result('SELECT COUNT(*) FROM `' . prefix . '_pm` WHERE ' . $show_id . ' = ' . securemysql($userROW['id']) . ' AND folder=\'' . $io . '\'');
 $countPages = ceil($count / $limitCount);
 if ($countPages < $pageNo)
-	return $output = information('Подстраницы не существует', $title = 'Информация');
+	return $output = information('РџРѕРґСЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($pageNo < 1) $pageNo = 1;
 if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 if ($countPages > 1 && $countPages >= $pageNo) {

@@ -2,23 +2,23 @@
 	<table width="97%" class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr align="center" class="contHead">
 			<td>ID</td>
-			<td>Позиция</td>
-			<td>Наименование</td>
-			<td>Тем</td>
-			<td>Сообщений</td>
-			<td width="160">Действие</td>
+			<td>РџРѕР·РёС†РёСЏ</td>
+			<td>РќР°РёРјРµРЅРѕРІР°РЅРёРµ</td>
+			<td>РўРµРј</td>
+			<td>РЎРѕРѕР±С‰РµРЅРёР№</td>
+			<td width="160">Р”РµР№СЃС‚РІРёРµ</td>
 		</tr>
 
 		{{ entries }}
 
 		<tr>
 			<td width="100%" colspan="6" align="right">
-				<input class="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=send_section'" value="Добавить раздел"/>
+				<input class="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=send_section'" value="Р”РѕР±Р°РІРёС‚СЊ СЂР°Р·РґРµР»"/>
 			</td>
 		</tr>
 		<tr>
 			<td width="100%" colspan="6" class="contentEdit" align="center">
-				<input type="submit" name="submit" value="Отсортировать форум" class="navbutton"/>
+				<input type="submit" name="submit" value="РћС‚СЃРѕСЂС‚РёСЂРѕРІР°С‚СЊ С„РѕСЂСѓРј" class="navbutton"/>
 			</td>
 		</tr>
 		<tr>

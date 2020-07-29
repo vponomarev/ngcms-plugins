@@ -5,7 +5,7 @@ Acts: twig,index
 File: other_user_news.php
 Config: config.php
 Type: plugin
-Description: Другие новости от пользователя
+Description: Р”СЂСѓРіРёРµ РЅРѕРІРѕСЃС‚Рё РѕС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 Author: Rostunov Sergey
 Author_URI: http://rostunov.com
 preinstall: no

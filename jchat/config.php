@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 loadPluginLang('jchat', 'config', '', '', ':');
 // Calculate row count
 $jcRowCount = $mysql->result("select count(*) from " . prefix . "_jchat");
@@ -13,9 +13,9 @@ $jcRowCount = $mysql->result("select count(*) from " . prefix . "_jchat");
 $cfg = array();
 array_push($cfg, array('descr' => $lang['jchat:desc']));
 $cfgX = array();
-array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2">Всего записей: ' . $jcRowCount . '</td></tr>'));
-array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2"><input type="checkbox" name="purge" value="1"/> Удалить старые записи, оставив последние <input type="text" name="purge_save" size="3" value="50"/></td></tr>'));
-array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2"><input type="checkbox" name="reload" value="1"/> Перезагрузить страницу у всех посетителей</td></tr>'));
+array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2">Р’СЃРµРіРѕ Р·Р°РїРёСЃРµР№: ' . $jcRowCount . '</td></tr>'));
+array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2"><input type="checkbox" name="purge" value="1"/> РЈРґР°Р»РёС‚СЊ СЃС‚Р°СЂС‹Рµ Р·Р°РїРёСЃРё, РѕСЃС‚Р°РІРёРІ РїРѕСЃР»РµРґРЅРёРµ <input type="text" name="purge_save" size="3" value="50"/></td></tr>'));
+array_push($cfgX, array('type' => 'flat', 'input' => '<tr><td class="contentEntry1" valign="top" colspan="2"><input type="checkbox" name="reload" value="1"/> РџРµСЂРµР·Р°РіСЂСѓР·РёС‚СЊ СЃС‚СЂР°РЅРёС†Сѓ Сѓ РІСЃРµС… РїРѕСЃРµС‚РёС‚РµР»РµР№</td></tr>'));
 array_push($cfg, array('mode' => 'group', 'title' => '<b>' . $lang['jchat:conf.stat'] . '</b>', 'entries' => $cfgX));
 $cfgX = array();
 array_push($cfgX, array('name' => 'localsource', 'title' => $lang['jchat:localsource'], 'descr' => $lang['jchat:localsource#desc'], 'type' => 'select', 'values' => array('0' => $lang['jchat:lsrc.site'], '1' => $lang['jchat:lsrc.plugin']), 'value' => intval(pluginGetVariable($plugin, 'localsource'))));

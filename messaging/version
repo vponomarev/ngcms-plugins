@@ -9,7 +9,7 @@ Acts: core
 File: messaging.php
 Config: config.php
 Type: plugin
-Description: Массовая рассылка сообщений по email и ЛС
+Description: РњР°СЃСЃРѕРІР°СЏ СЂР°СЃСЃС‹Р»РєР° СЃРѕРѕР±С‰РµРЅРёР№ РїРѕ email Рё Р›РЎ
 Author: SwiZZeR
 Author_URI: http://2z-project.ru/
 URI: http://no_url.com/

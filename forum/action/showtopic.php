@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит 
- комментариев. То, что писалось с трудом, должно 
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚ 
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ 
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
-	 Данный код защищен авторскими правами
+	 Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -42,7 +42,7 @@ if (($limitCount < 2) or ($limitCount > 2000)) $limitCount = 2;
 if ($pid) {
 	$id = $mysql->result('SELECT tid FROM ' . prefix . '_forum_posts WHERE id= ' . securemysql($pid) . ' LIMIT 1', -1);
 	if (empty($id))
-		return $output = information('Этой темы не существует', $title = 'Информация');
+		return $output = information('Р­С‚РѕР№ С‚РµРјС‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 	$count = $mysql->result('SELECT COUNT(*) FROM ' . prefix . '_forum_posts WHERE tid = ' . securemysql($id) . ' AND id < ' . securemysql($pid)) + 1;
 	$pageNo = ceil($count / $limitCount);
 	if ($pageNo > 1)
@@ -52,7 +52,7 @@ if ($pid) {
 if (isset($params['s']) or isset($_REQUEST['s'])) {
 	$s = $params['s'] ? secure_search_forum($params['s']) : secure_search_forum($_REQUEST['s']);
 	if (strlen($s) < 3)
-		return $output = information('Слишком короткое слово', $title = 'Информация', true);
+		return $output = information('РЎР»РёС€РєРѕРј РєРѕСЂРѕС‚РєРѕРµ СЃР»РѕРІРѕ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ', true);
 	$search = 'AND MATCH (p.message) AGAINST (\'' . $mysql->db_quote($s) . '\')';
 	$search_p = array('id' => $id, 's' => $s);
 	if (checkLinkAvailable('forum', 'showtopic')) {
@@ -74,7 +74,7 @@ else
 				INNER JOIN ' . prefix . '_forum_forums AS f ON f.id = t.fid 
 				WHERE t.id = ' . securemysql($id) . ' LIMIT 1');
 if (empty($result))
-	return $output = information('Этой темы не существует', $title = 'Информация');
+	return $output = information('Р­С‚РѕР№ С‚РµРјС‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ((isset($result['lock_passwd']) && $result['lock_passwd']) && empty($_SESSION['lock_passwd_' . $result['fid']]))
 	return redirect_forum(link_lock_passwd($result['fid'], 'pid', $pid));
 if ((isset($result['redirect_url']) && $result['redirect_url']))
@@ -91,7 +91,7 @@ $twig->addGlobal('MODE_PS', ($MODE_PS || $userROW['status'] == 1) ? 1 : 0);
 //print "<pre>".var_export($MODE_PERM[$result['fid']], true)."</pre>";
 //print "<pre>".var_export($FORUM_PS[$result['fid']], true)."</pre>";
 if (empty($FORUM_PS[$result['fid']]['forum_read']) or empty($FORUM_PS[$result['fid']]['topic_read']))
-	return $output = permissions_forum('Доступ в тему запрещен');
+	return $output = permissions_forum('Р”РѕСЃС‚СѓРї РІ С‚РµРјСѓ Р·Р°РїСЂРµС‰РµРЅ');
 $SYSTEM_FLAGS['info']['title']['item'] = $result['Ftitle'];
 $SYSTEM_FLAGS['info']['title']['name_topic'] = $result['Ttitle'];
 if (isset($search))
@@ -100,7 +100,7 @@ else
 	$count_2 = $result['int_post'] + 1;
 $countPages = ceil($count_2 / $limitCount);
 if ($countPages < $pageNo)
-	return $output = information('Подстраницы не существует', $title = 'Информация');
+	return $output = information('РџРѕРґСЃС‚СЂР°РЅРёС†С‹ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if ($pageNo < 1) $pageNo = 1;
 if (!isset($limitStart)) $limitStart = ($pageNo - 1) * $limitCount;
 $navigations = LoadVariables();
@@ -119,17 +119,17 @@ $result_2 = $mysql->select('SELECT p.id as pid, p.message, p.author_id, p.author
 				WHERE p.tid = ' . securemysql($id) . ' ' . $search . ' ORDER BY p.c_data ASC 
 				LIMIT ' . $limitStart . ', ' . $limitCount);
 if (empty($result_2) and isset($search) and $pageNo == 1) {
-	return $output = information('Ничего не найдено', $title = 'Информация', true);
+	return $output = information('РќРёС‡РµРіРѕ РЅРµ РЅР°Р№РґРµРЅРѕ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ', true);
 }/* elseif(empty($result_2) and isset($search) and $pageNo > 1){
 		$link_topic_zero = checkLinkAvailable('forum', 'showtopic')?
 			generatePageLink(array('pluginName' => 'forum', 'pluginHandler' => 'showtopic', 'params' => $search_p, 'xparams' => array(), 'paginator' => array('page', 0, false)), 1):
 			generatePageLink(array('pluginName' => 'core', 'pluginHandler' => 'plugin', 'params' => array('plugin' => 'forum', 'handler' => 'showtopic'), 'xparams' => $search_p, 'paginator' => array('page', 1, false)), 1);
-		return $output = announcement_forum('Сбрасываем подстраницу', $link_topic_zero, 0);
+		return $output = announcement_forum('РЎР±СЂР°СЃС‹РІР°РµРј РїРѕРґСЃС‚СЂР°РЅРёС†Сѓ', $link_topic_zero, 0);
 	}else */
 if (empty($result_2)) {
 	//$mysql->query('DELETE FROM '.prefix.'_forum_topics WHERE id = '.securemysql($id).' LIMIT 1');
 	//$mysql->query('DELETE FROM '.prefix.'_forum_subscriptions WHERE tid = '.securemysql($id));
-	return $output = information('У этой темы нет сообщений', $title = 'Информация', true);
+	return $output = information('РЈ СЌС‚РѕР№ С‚РµРјС‹ РЅРµС‚ СЃРѕРѕР±С‰РµРЅРёР№', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ', true);
 }
 update_review($id);
 $i = $limitStart;

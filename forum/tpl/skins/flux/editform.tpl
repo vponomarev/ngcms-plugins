@@ -1,11 +1,11 @@
 {% if (preview.true) %}
 	<div id="postpreview" class="blockpost">
-	<h2><span>Предосмотр</span></h2>
+	<h2><span>РџСЂРµРґРѕСЃРјРѕС‚СЂ</span></h2>
 	<div class="box">
 		<div class="inbox">
 			<div class="postright">
 				<div class="postmsg">
-					<p>{% if (message.true) %}{{ preview.print }}{% else %}Вы не добавили текста{% endif %}</p>
+					<p>{% if (message.true) %}{{ preview.print }}{% else %}Р’С‹ РЅРµ РґРѕР±Р°РІРёР»Рё С‚РµРєСЃС‚Р°{% endif %}</p>
 				</div>
 			</div>
 		</div>
@@ -13,55 +13,55 @@
 	</div>{% endif %}
 <div class="blockform">
 	{% if (error.true) %}{{ error.print }}{% endif %}
-	<h2><span>Редактировать</span></h2>
+	<h2><span>Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ</span></h2>
 	<div class="box">
 		<form name="sendForm" id="sendForm" method="post" action="" enctype="multipart/form-data">
 			<div class="inform">
 				<fieldset>
-					<legend>Напишите ваше сообщение и нажмите отправить</legend>
+					<legend>РќР°РїРёС€РёС‚Рµ РІР°С€Рµ СЃРѕРѕР±С‰РµРЅРёРµ Рё РЅР°Р¶РјРёС‚Рµ РѕС‚РїСЂР°РІРёС‚СЊ</legend>
 					<div class="infldset txtarea">
 						{% if (subject.true) %}
-							<label>Заголовок<br/>
+							<label>Р—Р°РіРѕР»РѕРІРѕРє<br/>
 								<input class="longinput" type="text" name="subject" size="80" maxlength="70" tabindex="1" value="{{ subject.print }}"/><br/></label>
 						{% endif %}
-						<label><strong>Сообщение</strong><br/>
+						<label><strong>РЎРѕРѕР±С‰РµРЅРёРµ</strong><br/>
 							<textarea name="message" id="message" rows="20" cols="95" tabindex="1">{{ message.print }}</textarea><br/></label>
 					</div>
 				</fieldset>
 			</div>
 			<div class="inform">
 				<fieldset>
-					<legend>Прикрепленные файлы</legend>
+					<legend>РџСЂРёРєСЂРµРїР»РµРЅРЅС‹Рµ С„Р°Р№Р»С‹</legend>
 					<div class="infldset">
 						<div class="rbox">
-							Прикрепленные файлы: (отметьте для удаления)<br/>
+							РџСЂРёРєСЂРµРїР»РµРЅРЅС‹Рµ С„Р°Р№Р»С‹: (РѕС‚РјРµС‚СЊС‚Рµ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ)<br/>
 							{% for entry in list_attach %}
-								<input type="checkbox" name="attach_delete[]" value="{{ entry.file_id }}"/>Удалить?
-								<a href="{{ entry.file_link }}">{{ entry.file }}</a>, Размер: {{ entry.size }} Кбайт, Скачано: {{ entry.int_file }}
+								<input type="checkbox" name="attach_delete[]" value="{{ entry.file_id }}"/>РЈРґР°Р»РёС‚СЊ?
+								<a href="{{ entry.file_link }}">{{ entry.file }}</a>, Р Р°Р·РјРµСЂ: {{ entry.size }} РљР±Р°Р№С‚, РЎРєР°С‡Р°РЅРѕ: {{ entry.int_file }}
 								<br/>
 							{% endfor %}
-							Прикрепить новый файл, максимум: 3 файлов<br/>
+							РџСЂРёРєСЂРµРїРёС‚СЊ РЅРѕРІС‹Р№ С„Р°Р№Р», РјР°РєСЃРёРјСѓРј: 3 С„Р°Р№Р»РѕРІ<br/>
 							<input type="file" name="files" size="80"/><br/>
-							Примечание: при использовании кнопки "Просмотр" все опции для файлов не сохраняются, вам
-							придется снова указать какие файлы надо загрузить / какие удалить
+							РџСЂРёРјРµС‡Р°РЅРёРµ: РїСЂРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРё РєРЅРѕРїРєРё "РџСЂРѕСЃРјРѕС‚СЂ" РІСЃРµ РѕРїС†РёРё РґР»СЏ С„Р°Р№Р»РѕРІ РЅРµ СЃРѕС…СЂР°РЅСЏСЋС‚СЃСЏ, РІР°Рј
+							РїСЂРёРґРµС‚СЃСЏ СЃРЅРѕРІР° СѓРєР°Р·Р°С‚СЊ РєР°РєРёРµ С„Р°Р№Р»С‹ РЅР°РґРѕ Р·Р°РіСЂСѓР·РёС‚СЊ / РєР°РєРёРµ СѓРґР°Р»РёС‚СЊ
 						</div>
 					</div>
 				</fieldset>
 			</div>
 			<div class="inform">
 				<fieldset>
-					<legend>Свойства</legend>
+					<legend>РЎРІРѕР№СЃС‚РІР°</legend>
 					<div class="infldset">
 						<div class="rbox">
-							<label><input type="checkbox" name="subscribe" value="1" tabindex="4"/>Подписаться и следить
-								за ответами в этой теме<br/></label>
+							<label><input type="checkbox" name="subscribe" value="1" tabindex="4"/>РџРѕРґРїРёСЃР°С‚СЊСЃСЏ Рё СЃР»РµРґРёС‚СЊ
+								Р·Р° РѕС‚РІРµС‚Р°РјРё РІ СЌС‚РѕР№ С‚РµРјРµ<br/></label>
 						</div>
 					</div>
 				</fieldset>
 			</div>
 			<p>
-				<input type="submit" name="submit" value="Отредактировать" tabindex="4" accesskey="s"/><input type="submit" name="preview" value="Предпросмотр" tabindex="4" accesskey="s"/>
-				<a href="javascript:history.go(-1)">Вернуться назад</a></p>
+				<input type="submit" name="submit" value="РћС‚СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ" tabindex="4" accesskey="s"/><input type="submit" name="preview" value="РџСЂРµРґРїСЂРѕСЃРјРѕС‚СЂ" tabindex="4" accesskey="s"/>
+				<a href="javascript:history.go(-1)">Р’РµСЂРЅСѓС‚СЊСЃСЏ РЅР°Р·Р°Рґ</a></p>
 		</form>
 	</div>
 </div>
@@ -70,20 +70,20 @@
 		buttons: 'bold,italic,underline,strike|,-|,link,myimg,|,smilebox,|,bullist,numlist,|,codephp, |,quotes',
 		allButtons: {
 			myimg: {
-				title: 'Изображение',
+				title: 'РР·РѕР±СЂР°Р¶РµРЅРёРµ',
 				buttonHTML: '<span class="ve-tlb-img"></span>',
 				modal: {
-					title: 'Вставить изображение',
+					title: 'Р’СЃС‚Р°РІРёС‚СЊ РёР·РѕР±СЂР°Р¶РµРЅРёРµ',
 					width: '600px',
 					tabs: [
 						{
 							input: [
 								{
 									param: "SRC",
-									title: "Введите адрес изображения",
+									title: "Р’РІРµРґРёС‚Рµ Р°РґСЂРµСЃ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ",
 									validation: '^http(s)?://.*?\.(jpg|png|gif|jpeg)$'
 								},
-								{param: "TITLE", title: "Введите заголовок изображения"}
+								{param: "TITLE", title: "Р’РІРµРґРёС‚Рµ Р·Р°РіРѕР»РѕРІРѕРє РёР·РѕР±СЂР°Р¶РµРЅРёСЏ"}
 							]
 						}
 					],
@@ -99,14 +99,14 @@
 				title: CURLANG.code,
 				buttonText: "[code]",
 				transform: {
-					'<div class="codewrap"><div class="codetop">Код: PHP</div><div class="codemain">{SELTEXT}</div></div>': "[code=PHP]{SELTEXT}[/code]"
+					'<div class="codewrap"><div class="codetop">РљРѕРґ: PHP</div><div class="codemain">{SELTEXT}</div></div>': "[code=PHP]{SELTEXT}[/code]"
 				}
 			}, quotes: {
 				title: CURLANG.quote,
 				buttonHTML: '<span class="ve-tlb-quote"></span>',
 				transform: {
 					'<div class="quote">{SELTEXT}</div>': '[quote]{SELTEXT}[/quote]',
-					'<div class="quote"><cite>{AUTHOR} написал:</cite>{SELTEXT}</div>': '[quote={AUTHOR}]{SELTEXT}[/quote]'
+					'<div class="quote"><cite>{AUTHOR} РЅР°РїРёСЃР°Р»:</cite>{SELTEXT}</div>': '[quote={AUTHOR}]{SELTEXT}[/quote]'
 				}
 			}
 		},

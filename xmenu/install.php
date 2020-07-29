@@ -2,7 +2,7 @@
 //
 // Configuration file for plugin
 //
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('xmenu', 'config');
 $db_update = array(
 	array(
@@ -19,7 +19,7 @@ if ($_REQUEST['action'] == 'commit') {
 		plugin_mark_installed('xmenu');
 	}
 } else {
-	$text = "Плагин <b>xmenu</b> реализует расширенные возможности генерации меню.<br /><br />Внимание! При установке плагин производит изменения в БД системы!";
+	$text = "РџР»Р°РіРёРЅ <b>xmenu</b> СЂРµР°Р»РёР·СѓРµС‚ СЂР°СЃС€РёСЂРµРЅРЅС‹Рµ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё РіРµРЅРµСЂР°С†РёРё РјРµРЅСЋ.<br /><br />Р’РЅРёРјР°РЅРёРµ! РџСЂРё СѓСЃС‚Р°РЅРѕРІРєРµ РїР»Р°РіРёРЅ РїСЂРѕРёР·РІРѕРґРёС‚ РёР·РјРµРЅРµРЅРёСЏ РІ Р‘Р” СЃРёСЃС‚РµРјС‹!";
 	generate_install_page('finance', $text);
 }
 ?>

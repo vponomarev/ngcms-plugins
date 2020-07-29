@@ -1,8 +1,8 @@
 <div style="text-align : left;">
 	<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tr>
-			<td width="100%" colspan="2" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt=""/>Íàñòðîéêà
-				ïëàãèíà: Ïîäïèñêà íà êîììåíòàðèè => {global}
+			<td width="100%" colspan="2" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt=""/>ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°
+				Ð¿Ð»Ð°Ð³Ð¸Ð½Ð°: ÐŸÐ¾Ð´Ð¿Ð¸ÑÐºÐ° Ð½Ð° ÐºÐ¾Ð¼Ð¼ÐµÐ½Ñ‚Ð°Ñ€Ð¸Ð¸ => {global}
 			</td>
 		</tr>
 		<tr>
@@ -13,9 +13,9 @@
 	<table border="0" cellspacing="0" cellpadding="0" width="100%">
 		<tr align="center">
 			<td width="100%" class="contentNav" align="center" style="background-repeat: no-repeat; background-position: left;">
-				<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=subscribe_comments'" value="Îáùèå íàñòðîéêè" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=subscribe_comments&action=list_subscribe'" value="Ñïèñîê ïîäïèñ÷èêîâ" class="navbutton"/>
-				[hide_delayed]<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=subscribe_comments&action=list_subscribe_post'" value="Ñôîðìèðîâàííûå ïèñüìà" class="navbutton"/>[/hide_delayed]
+				<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=subscribe_comments'" value="ÐžÐ±Ñ‰Ð¸Ðµ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸" class="navbutton"/>
+				<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=subscribe_comments&action=list_subscribe'" value="Ð¡Ð¿Ð¸ÑÐ¾Ðº Ð¿Ð¾Ð´Ð¿Ð¸ÑÑ‡Ð¸ÐºÐ¾Ð²" class="navbutton"/>
+				[hide_delayed]<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=subscribe_comments&action=list_subscribe_post'" value="Ð¡Ñ„Ð¾Ñ€Ð¼Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ð¿Ð¸ÑÑŒÐ¼Ð°" class="navbutton"/>[/hide_delayed]
 			</td>
 		</tr>
 	</table>

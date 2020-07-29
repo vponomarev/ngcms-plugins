@@ -2,7 +2,7 @@ ID: xmenu
 Name: eXtended menus
 Version: 0.1
 Type: plugin
-Description: Расширенное меню
+Description: Р Р°СЃС€РёСЂРµРЅРЅРѕРµ РјРµРЅСЋ
 Author: Vitaly A. Ponomarev
 Author_URI: http://2lib.ru/
 Actions: admin:mod:categories; xmenu_adm.php

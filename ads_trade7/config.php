@@ -5,21 +5,21 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Fill configuration parameters
 $cfg = array();
 $cfgX = array();
-array_push($cfg, array('descr' => 'Плагин предназначен для отображения тизера (рекламного блока) биржи <b>trade7.ru</b>'));
-array_push($cfgX, array('name' => 'id', 'title' => "Ваш идентификатор (id)", 'descr' => 'Значение параметра <b>id</b> из строки запуска скрипта', 'type' => 'input', 'value' => pluginGetVariable('ads_trade7', 'id')));
-array_push($cfgX, array('name' => 'cs', 'title' => "Кодировка сайта (cs)", 'descr' => 'Значение параметра <b>cs</b> из строки запуска скрипта', 'type' => 'input', 'value' => pluginGetVariable('ads_trade7', 'cs')));
-array_push($cfgX, array('name' => 'categories_2', 'title' => "Список категорий контента (categories_2) для отображения в тизере", 'descr' => 'Значение параметра <b>categories_2</b> из строки запуска скрипта', 'html_flags' => 'size=40;', 'type' => 'input', 'value' => pluginGetVariable('ads_trade7', 'categories_2')));
-array_push($cfgX, array('name' => 'size', 'title' => "Размер тизера (size)", 'descr' => 'Значение параметра <b>size</b> из строки запуска скрипта', 'type' => 'input', 'value' => pluginGetVariable('ads_trade7', 'size')));
-array_push($cfgX, array('name' => 'default', 'title' => "Значение по умолчанию", 'descr' => 'Что отображать вместо рекламного блока в случае, если сервер рекламной биржи недоступен', 'type' => 'text', 'html_flags' => 'cols=70 rows=3', 'value' => pluginGetVariable('ads_trade7', 'default')));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Настройки идентификации/отображения</b>', 'entries' => $cfgX));
+array_push($cfg, array('descr' => 'РџР»Р°РіРёРЅ РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ С‚РёР·РµСЂР° (СЂРµРєР»Р°РјРЅРѕРіРѕ Р±Р»РѕРєР°) Р±РёСЂР¶Рё <b>trade7.ru</b>'));
+array_push($cfgX, array('name' => 'id', 'title' => "Р’Р°С€ РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ (id)", 'descr' => 'Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° <b>id</b> РёР· СЃС‚СЂРѕРєРё Р·Р°РїСѓСЃРєР° СЃРєСЂРёРїС‚Р°', 'type' => 'input', 'value' => pluginGetVariable('ads_trade7', 'id')));
+array_push($cfgX, array('name' => 'cs', 'title' => "РљРѕРґРёСЂРѕРІРєР° СЃР°Р№С‚Р° (cs)", 'descr' => 'Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° <b>cs</b> РёР· СЃС‚СЂРѕРєРё Р·Р°РїСѓСЃРєР° СЃРєСЂРёРїС‚Р°', 'type' => 'input', 'value' => pluginGetVariable('ads_trade7', 'cs')));
+array_push($cfgX, array('name' => 'categories_2', 'title' => "РЎРїРёСЃРѕРє РєР°С‚РµРіРѕСЂРёР№ РєРѕРЅС‚РµРЅС‚Р° (categories_2) РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РІ С‚РёР·РµСЂРµ", 'descr' => 'Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° <b>categories_2</b> РёР· СЃС‚СЂРѕРєРё Р·Р°РїСѓСЃРєР° СЃРєСЂРёРїС‚Р°', 'html_flags' => 'size=40;', 'type' => 'input', 'value' => pluginGetVariable('ads_trade7', 'categories_2')));
+array_push($cfgX, array('name' => 'size', 'title' => "Р Р°Р·РјРµСЂ С‚РёР·РµСЂР° (size)", 'descr' => 'Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР° <b>size</b> РёР· СЃС‚СЂРѕРєРё Р·Р°РїСѓСЃРєР° СЃРєСЂРёРїС‚Р°', 'type' => 'input', 'value' => pluginGetVariable('ads_trade7', 'size')));
+array_push($cfgX, array('name' => 'default', 'title' => "Р—РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ", 'descr' => 'Р§С‚Рѕ РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ РІРјРµСЃС‚Рѕ СЂРµРєР»Р°РјРЅРѕРіРѕ Р±Р»РѕРєР° РІ СЃР»СѓС‡Р°Рµ, РµСЃР»Рё СЃРµСЂРІРµСЂ СЂРµРєР»Р°РјРЅРѕР№ Р±РёСЂР¶Рё РЅРµРґРѕСЃС‚СѓРїРµРЅ', 'type' => 'text', 'html_flags' => 'cols=70 rows=3', 'value' => pluginGetVariable('ads_trade7', 'default')));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>РќР°СЃС‚СЂРѕР№РєРё РёРґРµРЅС‚РёС„РёРєР°С†РёРё/РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ</b>', 'entries' => $cfgX));
 $cfgX = array();
-array_push($cfgX, array('name' => 'timeout_sec', 'title' => "Таймаут (целая часть, в секундах)", 'descr' => 'Таймаут на время обращения к серверу', 'type' => 'input', 'value' => intval(pluginGetVariable('ads_trade7', 'timeout_sec'))));
-array_push($cfgX, array('name' => 'timeout_usec', 'title' => "Таймаут (дробная часть, в милисекундах)", 'descr' => 'Таймаут на время обращения к серверу', 'type' => 'input', 'value' => intval(pluginGetVariable('ads_trade7', 'timeout_usec'))));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Настройки таймаута</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'timeout_sec', 'title' => "РўР°Р№РјР°СѓС‚ (С†РµР»Р°СЏ С‡Р°СЃС‚СЊ, РІ СЃРµРєСѓРЅРґР°С…)", 'descr' => 'РўР°Р№РјР°СѓС‚ РЅР° РІСЂРµРјСЏ РѕР±СЂР°С‰РµРЅРёСЏ Рє СЃРµСЂРІРµСЂСѓ', 'type' => 'input', 'value' => intval(pluginGetVariable('ads_trade7', 'timeout_sec'))));
+array_push($cfgX, array('name' => 'timeout_usec', 'title' => "РўР°Р№РјР°СѓС‚ (РґСЂРѕР±РЅР°СЏ С‡Р°СЃС‚СЊ, РІ РјРёР»РёСЃРµРєСѓРЅРґР°С…)", 'descr' => 'РўР°Р№РјР°СѓС‚ РЅР° РІСЂРµРјСЏ РѕР±СЂР°С‰РµРЅРёСЏ Рє СЃРµСЂРІРµСЂСѓ', 'type' => 'input', 'value' => intval(pluginGetVariable('ads_trade7', 'timeout_usec'))));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>РќР°СЃС‚СЂРѕР№РєРё С‚Р°Р№РјР°СѓС‚Р°</b>', 'entries' => $cfgX));
 // RUN
 if ($_REQUEST['action'] == 'commit') {
 	// If submit requested, do config save

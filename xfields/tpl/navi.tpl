@@ -1,19 +1,25 @@
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tbody>
-	<tr>
-		<td colspan="8" class="contNav" width="100%">
-			<div id="btnMenu">
-				<span class="{{ bclass['news'] }}" onclick='document.location="?mod=extra-config&plugin=xfields&section=news";'>Новости: поля</span><span class="btnSeparator">&nbsp;</span>
-				<span class="{{ bclass['grp.news'] }}" onclick='document.location="?mod=extra-config&plugin=xfields&section=grp.news";'>Новости: группы</span><span class="btnDelimiter">&nbsp;</span>
-				<span class="{{ bclass['tdata'] }}" onclick='document.location="?mod=extra-config&plugin=xfields&section=tdata";'>Новости: таблицы</span><span class="btnSeparator">&nbsp;</span>
-				{% if (pluginIsActive('uprofile')) %}
-					<span class="{{ bclass['users'] }}" onclick='document.location="?mod=extra-config&plugin=xfields&section=users";'>Пользователи: поля</span>
-					<span class="btnDelimiter">&nbsp;</span>
-				{% endif %}
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="{{ admin_url }}"><i class="fa fa-home"></i></a></li>
+		<li class="breadcrumb-item"><a href="?mod=extras">{{ lang['extras'] }}</a></li>
+		<li class="breadcrumb-item"><a href="?mod=extra-config&plugin=xfields">xfields</a></li>
+		<li class="breadcrumb-item active" aria-current="page">{{ lang.xfconfig['list'] }}</li>
+	</ol>
+</nav>
 
-			</div>
-			&nbsp;
-		</td>
-	</tr>
-	</tbody>
-</table>
+<ul class="nav nav-pills mb-3 d-md-flex d-block" role="tablist">
+	<li class="nav-item">
+		<a href="?mod=extra-config&plugin=xfields&section=news" class="nav-link {{ 'news' == sectionID ? 'active' : '' }}">РќРѕРІРѕСЃС‚Рё: РїРѕР»СЏ</a>
+	</li>
+	<li class="nav-item">
+		<a href="?mod=extra-config&plugin=xfields&section=grp.news" class="nav-link {{ 'grp.news' == sectionID ? 'active' : '' }}">РќРѕРІРѕСЃС‚Рё: РіСЂСѓРїРїС‹</a>
+		</li>
+	<li class="nav-item">
+		<a href="?mod=extra-config&plugin=xfields&section=tdata" class="nav-link {{ 'tdata' == sectionID ? 'active' : '' }}">РќРѕРІРѕСЃС‚Рё: С‚Р°Р±Р»РёС†С‹</a>
+	</li>
+	{% if (pluginIsActive('uprofile')) %}
+	<li class="nav-item">
+		<a href="?mod=extra-config&plugin=xfields&section=users" class="nav-link {{ 'users' == sectionID ? 'active' : '' }}">РџРѕР»СЊР·РѕРІР°С‚РµР»Рё: РїРѕР»СЏ</a>
+	</li>
+	{% endif %}
+</ul>

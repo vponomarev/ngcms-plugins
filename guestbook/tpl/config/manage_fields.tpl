@@ -33,7 +33,7 @@
 		{% endfor %}
 		<tr>
 			<td colspan="5" style="text-align: left; padding: 10px 10px 0 0;">
-				<a href="?mod=extra-config&plugin=guestbook&action=add_field">Добавить новое поле</a>
+				<a href="?mod=extra-config&plugin=guestbook&action=add_field">Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІРѕРµ РїРѕР»Рµ</a>
 			</td>
 		</tr>
 	</table>

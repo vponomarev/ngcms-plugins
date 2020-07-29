@@ -8,11 +8,11 @@
  Jabber: ROZARD@ya.ru
  E-mail: ROZARD@list.ru
 -----------------------------------------------------
- © Настоящий программист никогда не ставит
- комментариев. То, что писалось с трудом, должно
- пониматься с трудом. :))
+ В© РќР°СЃС‚РѕСЏС‰РёР№ РїСЂРѕРіСЂР°РјРјРёСЃС‚ РЅРёРєРѕРіРґР° РЅРµ СЃС‚Р°РІРёС‚
+ РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ. РўРѕ, С‡С‚Рѕ РїРёСЃР°Р»РѕСЃСЊ СЃ С‚СЂСѓРґРѕРј, РґРѕР»Р¶РЅРѕ
+ РїРѕРЅРёРјР°С‚СЊСЃСЏ СЃ С‚СЂСѓРґРѕРј. :))
 -----------------------------------------------------
- Данный код защищен авторскими правами
+ Р”Р°РЅРЅС‹Р№ РєРѕРґ Р·Р°С‰РёС‰РµРЅ Р°РІС‚РѕСЂСЃРєРёРјРё РїСЂР°РІР°РјРё
 =====================================================
 */
 if (!defined('NGCMS')) die ('HAL');
@@ -23,15 +23,15 @@ if (isset($params['id']))
 else
 	$id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : '';
 if (!is_array($userROW))
-	return $output = information('У вас нет прав доступа', $title = 'Информация');
+	return $output = information('РЈ РІР°СЃ РЅРµС‚ РїСЂР°РІ РґРѕСЃС‚СѓРїР°', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if (empty($id))
-	return $output = information('id сообщения не передан', $title = 'Информация');
+	return $output = information('id СЃРѕРѕР±С‰РµРЅРёСЏ РЅРµ РїРµСЂРµРґР°РЅ', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 if (!$mysql->record('SELECT 1 FROM ' . prefix . '_forum_posts WHERE id = ' . securemysql($id) . ' LIMIT 1'))
-	return $output = information('Этого сообщения не существует', $title = 'Информация');
+	return $output = information('Р­С‚РѕРіРѕ СЃРѕРѕР±С‰РµРЅРёСЏ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚', $title = 'РРЅС„РѕСЂРјР°С†РёСЏ');
 $message = isset($_REQUEST['message']) ? secureinput($_REQUEST['message']) : '';
 $time = time() + ($config['date_adjust'] * 60);
 if (isset($_REQUEST['submit'])) {
-	if (empty($message)) $error_text[] = 'Сообщение пусто';
+	if (empty($message)) $error_text[] = 'РЎРѕРѕР±С‰РµРЅРёРµ РїСѓСЃС‚Рѕ';
 	if (empty($error_text)) {
 		$mysql->query('INSERT INTO ' . prefix . '_forum_complaints(
 					pid,
@@ -48,7 +48,7 @@ if (isset($_REQUEST['submit'])) {
 				)
 			');
 
-		return $output = announcement_forum('Данные внесены', link_topic($id, 'pid') . '#' . $id, 2);
+		return $output = announcement_forum('Р”Р°РЅРЅС‹Рµ РІРЅРµСЃРµРЅС‹', link_topic($id, 'pid') . '#' . $id, 2);
 	}
 }
 $error_input = '';

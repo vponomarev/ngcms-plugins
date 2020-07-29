@@ -5,7 +5,7 @@
 	</div>
 </div>
 <div class="block">
-	<h2><span>Вся лента</span></h2>
+	<h2><span>Р’СЃСЏ Р»РµРЅС‚Р°</span></h2>
 	<div class="box">
 		<div class="inbox">
 			{% for entry in entries %}
@@ -24,11 +24,11 @@
 	<div class="box">
 		<div style="padding-left: 4px">
 			<dl>
-				<dt>{{ local.num_user_loc + local.num_guest_loc }} чел. просматривают эту тему
-					(гостей: {{ local.num_guest_loc }})
+				<dt>{{ local.num_user_loc + local.num_guest_loc }} С‡РµР». РїСЂРѕСЃРјР°С‚СЂРёРІР°СЋС‚ СЌС‚Сѓ С‚РµРјСѓ
+					(РіРѕСЃС‚РµР№: {{ local.num_guest_loc }})
 				</dt>
-				<dt>Пользователей: {{ local.num_user_loc }} {{ local.list_loc_user }}</dt>
-				<dt>Ботов: {{ local.num_bot_loc }} {{ local.list_loc_bot }}</dt>
+				<dt>РџРѕР»СЊР·РѕРІР°С‚РµР»РµР№: {{ local.num_user_loc }} {{ local.list_loc_user }}</dt>
+				<dt>Р‘РѕС‚РѕРІ: {{ local.num_bot_loc }} {{ local.list_loc_bot }}</dt>
 			</dl>
 		</div>
 	</div>

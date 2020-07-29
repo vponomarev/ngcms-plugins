@@ -10,6 +10,6 @@ Install: install.php
 File: auth_vb.php
 Config: config.php
 Type: auth
-Description: авторизация с использованием БД форума vBulletin
+Description: Р°РІС‚РѕСЂРёР·Р°С†РёСЏ СЃ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёРµРј Р‘Р” С„РѕСЂСѓРјР° vBulletin
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/

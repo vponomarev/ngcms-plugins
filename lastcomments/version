@@ -3,7 +3,7 @@
 ;
 
 ID: lastcomments
-Name: Последние комментарии
+Name: РџРѕСЃР»РµРґРЅРёРµ РєРѕРјРјРµРЅС‚Р°СЂРёРё
 Version: 0.10
 Acts: index, ppages 
 File: lastcomments.php
@@ -11,9 +11,9 @@ Config: config.php
 install: install.php
 deinstall: uninstall.php
 Type: plugin
-Description: Вывод последних комментариев
+Description: Р’С‹РІРѕРґ РїРѕСЃР»РµРґРЅРёС… РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ
 Author:  SwiZZeR, EsCaPeR, Vitaly, Megaket4up
-Title: Последние комментарии
-Information: Отображение последних комментариев, оставленных на страницах сайта
+Title: РџРѕСЃР»РµРґРЅРёРµ РєРѕРјРјРµРЅС‚Р°СЂРёРё
+Information: РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РїРѕСЃР»РµРґРЅРёС… РєРѕРјРјРµРЅС‚Р°СЂРёРµРІ, РѕСЃС‚Р°РІР»РµРЅРЅС‹С… РЅР° СЃС‚СЂР°РЅРёС†Р°С… СЃР°Р№С‚Р°
 Preinstall: default_no
 Preinstall_vars: cache="1"; cacheExpire="3600";

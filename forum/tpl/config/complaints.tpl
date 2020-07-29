@@ -1,10 +1,10 @@
 <table border="0" cellspacing="0" cellpadding="0" class="content" align="center">
 	<tr align="left" class="contHead">
 		<td width="3%" nowrap>#</td>
-		<td width="15%">Стукач</td>
-		<td width="40%">Жалоба</td>
-		<td width="15%">Действие</td>
-		<td width="15%">Кто закрыл</td>
+		<td width="15%">РЎС‚СѓРєР°С‡</td>
+		<td width="40%">Р–Р°Р»РѕР±Р°</td>
+		<td width="15%">Р”РµР№СЃС‚РІРёРµ</td>
+		<td width="15%">РљС‚Рѕ Р·Р°РєСЂС‹Р»</td>
 	</tr>
 	{% for entry in entries %}
 		<tr align="left">
@@ -17,15 +17,15 @@
 				</small>
 			</td>
 			<td class="contentEntry1">{% if (entry.viewed == 0) %}
-					<input class="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=closed_complaints&id={{ entry.id }}'" value="Закрыть" />{% else %}
-					<input class="button" value="Закрыто"/>{% endif %}</td>
-			<td class="contentEntry1">{% if (entry.viewed == 0) %}Пока открыа{% else %}{{ entry.who_author }}<br/>
+					<input class="button" onmousedown="javascript:window.location.href='{{ admin_url }}/admin.php?mod=extra-config&plugin=forum&action=closed_complaints&id={{ entry.id }}'" value="Р—Р°РєСЂС‹С‚СЊ" />{% else %}
+					<input class="button" value="Р—Р°РєСЂС‹С‚Рѕ"/>{% endif %}</td>
+			<td class="contentEntry1">{% if (entry.viewed == 0) %}РџРѕРєР° РѕС‚РєСЂС‹Р°{% else %}{{ entry.who_author }}<br/>
 					<small><a href="{{ entry.who_author_link }}">{{ entry.home_url }}{{ entry.who_author_link }}</a>
 					</small>{% endif %}</td>
 		</tr>
 	{% else %}
 		<tr align="left">
-			<td width="10%" class="contentEntry1">Пусто</td>
+			<td width="10%" class="contentEntry1">РџСѓСЃС‚Рѕ</td>
 			<td width="60%" class="contentEntry1"></a></td>
 			<td width="30%" class="contentEntry1"></td>
 			<td width="30%" class="contentEntry1"></td>

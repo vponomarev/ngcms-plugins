@@ -1,11 +1,11 @@
 <?php
 // #====================================================================================#
-// # Наименование плагина: nsched [ News SCHEDuller ]                                   #
-// # Разрешено к использованию с: Next Generation CMS                                   #
-// # Автор: Vitaly A Ponomarev, vp7@mail.ru                                             #
+// # РќР°РёРјРµРЅРѕРІР°РЅРёРµ РїР»Р°РіРёРЅР°: nsched [ News SCHEDuller ]                                   #
+// # Р Р°Р·СЂРµС€РµРЅРѕ Рє РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЋ СЃ: Next Generation CMS                                   #
+// # РђРІС‚РѕСЂ: Vitaly A Ponomarev, vp7@mail.ru                                             #
 // #====================================================================================#
 // #====================================================================================#
-// # Ядро плагина                                                                       #
+// # РЇРґСЂРѕ РїР»Р°РіРёРЅР°                                                                       #
 // #====================================================================================#
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
@@ -17,12 +17,12 @@ class NSchedNewsFilter extends NewsFilter {
 		$perm = checkPermission(array('plugin' => '#admin', 'item' => 'news'), null, array('personal.publish', 'personal.unpublish', 'other.publish', 'other.unpublish'));
 		$tvars['plugin']['nsched'] = '';
 		if ($perm['personal.publish'] || $perm['personal.unpublish']) {
-			$tvars['plugin']['nsched'] .= '<tr><td width="100%" class="contentHead"><img src="' . admin_url . '/skins/default/images/nav.gif" hspace="8" alt="" />Управление публикацией новостей</td></tr><tr><td width="100%" class="contentEntry1"><table>';
+			$tvars['plugin']['nsched'] .= '<tr><td width="100%" class="contentHead"><img src="' . admin_url . '/skins/default/images/nav.gif" hspace="8" alt="" />РЈРїСЂР°РІР»РµРЅРёРµ РїСѓР±Р»РёРєР°С†РёРµР№ РЅРѕРІРѕСЃС‚РµР№</td></tr><tr><td width="100%" class="contentEntry1"><table>';
 			if ($perm['personal.publish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td>Дата включения:</td><td><input id="nsched_activate" name="nsched_activate" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Р”Р°С‚Р° РІРєР»СЋС‡РµРЅРёСЏ:</td><td><input id="nsched_activate" name="nsched_activate" /> <small>( РІ С„РѕСЂРјР°С‚Рµ Р“Р“Р“Р“-РњРњ-Р”Р” Р§Р§:РњРњ )</small></td></tr>';
 			}
 			if ($perm['personal.unpublish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td>Дата отключения:</td><td><input id="nsched_deactivate" name="nsched_deactivate"/> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Р”Р°С‚Р° РѕС‚РєР»СЋС‡РµРЅРёСЏ:</td><td><input id="nsched_deactivate" name="nsched_deactivate"/> <small>( РІ С„РѕСЂРјР°С‚Рµ Р“Р“Р“Р“-РњРњ-Р”Р” Р§Р§:РњРњ )</small></td></tr>';
 			}
 			$tvars['plugin']['nsched'] .= '</table></td></tr><script language="javascript" type="text/javascript">' . "$('#nsched_activate').datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm'});$('#nsched_deactivate').datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm'});</script>";
 		}
@@ -57,12 +57,12 @@ class NSchedNewsFilter extends NewsFilter {
 		}
 		$tvars['plugin']['nsched'] = '';
 		if ($perm[$permGroupMode . '.publish'] || $perm[$permGroupMode . '.unpublish']) {
-			$tvars['plugin']['nsched'] .= '<tr><td width="100%" class="contentHead"><img src="' . admin_url . '/skins/default/images/nav.gif" hspace="8" alt="" />Управление публикацией новостей</td></tr><tr><td width="100%" class="contentEntry1"><table>';
+			$tvars['plugin']['nsched'] .= '<tr><td width="100%" class="contentHead"><img src="' . admin_url . '/skins/default/images/nav.gif" hspace="8" alt="" />РЈРїСЂР°РІР»РµРЅРёРµ РїСѓР±Р»РёРєР°С†РёРµР№ РЅРѕРІРѕСЃС‚РµР№</td></tr><tr><td width="100%" class="contentEntry1"><table>';
 			if ($perm[$permGroupMode . '.publish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td>Дата включения:</td><td><input name="nsched_activate" id="nsched_activate" value="' . $nactivate . '" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Р”Р°С‚Р° РІРєР»СЋС‡РµРЅРёСЏ:</td><td><input name="nsched_activate" id="nsched_activate" value="' . $nactivate . '" /> <small>( РІ С„РѕСЂРјР°С‚Рµ Р“Р“Р“Р“-РњРњ-Р”Р” Р§Р§:РњРњ )</small></td></tr>';
 			}
 			if ($perm[$permGroupMode . '.unpublish']) {
-				$tvars['plugin']['nsched'] .= '<tr><td>Дата отключения:</td><td><input name="nsched_deactivate" id="nsched_deactivate" value="' . $ndeactivate . '" /> <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small></td></tr>';
+				$tvars['plugin']['nsched'] .= '<tr><td>Р”Р°С‚Р° РѕС‚РєР»СЋС‡РµРЅРёСЏ:</td><td><input name="nsched_deactivate" id="nsched_deactivate" value="' . $ndeactivate . '" /> <small>( РІ С„РѕСЂРјР°С‚Рµ Р“Р“Р“Р“-РњРњ-Р”Р” Р§Р§:РњРњ )</small></td></tr>';
 			}
 			$tvars['plugin']['nsched'] .= '</table></td></tr><script language="javascript" type="text/javascript">' . "$('#nsched_activate').datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm', currentText: '" . $nactivate . "'});$('#nsched_deactivate').datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm', currentText: '" . $ndeactivate . "'});</script>";
 		}
@@ -88,36 +88,36 @@ class NSchedNewsFilter extends NewsFilter {
 register_filter('news', 'nsched', new NSchedNewsFilter);
 //add_act('cron_nsched', 'plugin_nsched');
 //
-// Функция вызываемая по крону
+// Р¤СѓРЅРєС†РёСЏ РІС‹Р·С‹РІР°РµРјР°СЏ РїРѕ РєСЂРѕРЅСѓ
 //
 function plugin_nsched_cron() {
 
 	global $mysql, $catz, $catmap;
-	// Список новостей для (де)активации
+	// РЎРїРёСЃРѕРє РЅРѕРІРѕСЃС‚РµР№ РґР»СЏ (РґРµ)Р°РєС‚РёРІР°С†РёРё
 	$listActivate = array();
 	$dataActivate = array();
 	$listDeactivate = array();
 	$dataDeactivate = array();
-	// Выбираем новости для которых сработал флаг "опубликовать по дате"
+	// Р’С‹Р±РёСЂР°РµРј РЅРѕРІРѕСЃС‚Рё РґР»СЏ РєРѕС‚РѕСЂС‹С… СЃСЂР°Р±РѕС‚Р°Р» С„Р»Р°Рі "РѕРїСѓР±Р»РёРєРѕРІР°С‚СЊ РїРѕ РґР°С‚Рµ"
 	foreach ($mysql->select("select * from " . prefix . "_news where (nsched_activate>0) and (nsched_activate <= now())") as $row) {
 		$listActivate[] = $row['id'];
 		$dataActivate[$row['id']] = $row;
 		//$mysql->query("update ".prefix."_news set approve=1, nsched_activate=0 where id = ".$row['id']);
 	}
-	// Выбираем новости для которых сработал флаг "снять публикацию по дате"
+	// Р’С‹Р±РёСЂР°РµРј РЅРѕРІРѕСЃС‚Рё РґР»СЏ РєРѕС‚РѕСЂС‹С… СЃСЂР°Р±РѕС‚Р°Р» С„Р»Р°Рі "СЃРЅСЏС‚СЊ РїСѓР±Р»РёРєР°С†РёСЋ РїРѕ РґР°С‚Рµ"
 	foreach ($mysql->select("select * from " . prefix . "_news where (nsched_deactivate>0) and (nsched_deactivate <= now())") as $row) {
 		$listDeactivate[] = $row['id'];
 		$dataDeactivate[$row['id']] = $row;
 		//$mysql->query("update ".prefix."_news set approve=0, nsched_deactivate=0 where id = ".$row['id']);
 	}
-	// Проверяем, есть ли новости для (де)активации
+	// РџСЂРѕРІРµСЂСЏРµРј, РµСЃС‚СЊ Р»Рё РЅРѕРІРѕСЃС‚Рё РґР»СЏ (РґРµ)Р°РєС‚РёРІР°С†РёРё
 	if (count($listActivate) || count($listDeactivate)) {
-		// Загружаем необходимые плагины
+		// Р—Р°РіСЂСѓР¶Р°РµРј РЅРµРѕР±С…РѕРґРёРјС‹Рµ РїР»Р°РіРёРЅС‹
 		loadActionHandlers('admin');
 		loadActionHandlers('admin:mod:editnews');
-		// Загружаем системную библиотеку
+		// Р—Р°РіСЂСѓР¶Р°РµРј СЃРёСЃС‚РµРјРЅСѓСЋ Р±РёР±Р»РёРѕС‚РµРєСѓ
 		require_once(root . 'includes/inc/lib_admin.php');
-		// Запускаем модификацию новостей
+		// Р—Р°РїСѓСЃРєР°РµРј РјРѕРґРёС„РёРєР°С†РёСЋ РЅРѕРІРѕСЃС‚РµР№
 		if (count($listActivate)) {
 			massModifyNews(array('data' => $dataActivate), array('approve' => 1, 'nsched_activate' => ''), false);
 		}

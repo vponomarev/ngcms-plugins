@@ -5,7 +5,7 @@ Acts: index
 File: top_active_users.php
 Config: config.php
 Type: plugin
-Description: Топ активных пользователей
+Description: РўРѕРї Р°РєС‚РёРІРЅС‹С… РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№
 Author: Rostunov Sergey
 Author_URI: http://rostunov.com
 preinstall: no

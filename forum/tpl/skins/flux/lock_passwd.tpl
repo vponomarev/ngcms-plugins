@@ -1,19 +1,19 @@
 <div class="blockform">
-	<h2><span>Доступ на форум под паролем</span></h2>
+	<h2><span>Р”РѕСЃС‚СѓРї РЅР° С„РѕСЂСѓРј РїРѕРґ РїР°СЂРѕР»РµРј</span></h2>
 	<div class="box">
 		<form id="lock" method="post" action="">
 			<div class="inform">
 				<fieldset>
-					<legend>Введите пароль</legend>
+					<legend>Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ</legend>
 					<div class="infldset">
-						{% if (error_text['empty_passwd']) %}Вы не ввели пароль<br/>{% endif %}
-						{% if (error_text['error_passwd']) %}Неверный пароль{% endif %}
-						<label class="conl"><strong>Пароль</strong><br/><input type="password" name="lock_passwd" size="30" maxlength="30" tabindex="2" value="{{ lock_passwd }}"/><br/></label>
+						{% if (error_text['empty_passwd']) %}Р’С‹ РЅРµ РІРІРµР»Рё РїР°СЂРѕР»СЊ<br/>{% endif %}
+						{% if (error_text['error_passwd']) %}РќРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ{% endif %}
+						<label class="conl"><strong>РџР°СЂРѕР»СЊ</strong><br/><input type="password" name="lock_passwd" size="30" maxlength="30" tabindex="2" value="{{ lock_passwd }}"/><br/></label>
 					</div>
 				</fieldset>
 			</div>
 			<input type="hidden" name="submit" value="1">
-			<p><input type="submit" name="submit" value="Ввод" tabindex="3"/></p>
+			<p><input type="submit" name="submit" value="Р’РІРѕРґ" tabindex="3"/></p>
 		</form>
 	</div>
 </div>

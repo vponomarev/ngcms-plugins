@@ -9,8 +9,8 @@ Acts: index_post
 File: ads_trade7.php
 Config: config.php
 Type: plugin
-Title: Вставка тизеров с trade7.ru
-Description: Тизерная реклама trade7.ru
+Title: Р’СЃС‚Р°РІРєР° С‚РёР·РµСЂРѕРІ СЃ trade7.ru
+Description: РўРёР·РµСЂРЅР°СЏ СЂРµРєР»Р°РјР° trade7.ru
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 preinstall: no

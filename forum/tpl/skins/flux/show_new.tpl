@@ -5,16 +5,16 @@
 	</div>
 </div>
 <div id="vf" class="blocktable">
-	<h2><span>Результаты поиска</span></h2>
+	<h2><span>Р РµР·СѓР»СЊС‚Р°С‚С‹ РїРѕРёСЃРєР°</span></h2>
 	<div class="box">
 		<div class="inbox">
 			<table cellspacing="0">
 				<thead>
 				<tr>
-					<th class="tcl" scope="col">Тема</th>
-					<th class="tc2" scope="col">Форум</th>
-					<th class="tc3" scope="col">Ответов</th>
-					<th class="tcr" scope="col">Последнее сообщение</th>
+					<th class="tcl" scope="col">РўРµРјР°</th>
+					<th class="tc2" scope="col">Р¤РѕСЂСѓРј</th>
+					<th class="tc3" scope="col">РћС‚РІРµС‚РѕРІ</th>
+					<th class="tcr" scope="col">РџРѕСЃР»РµРґРЅРµРµ СЃРѕРѕР±С‰РµРЅРёРµ</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -26,7 +26,7 @@
 									<div class="nosize"><!-- --></div>
 								</div>
 								<div class="tclcon">
-									<a href='{{ entry.topic_link }}'>{{ entry.subject }}</a><span class='byuser'> оставил&nbsp;{{ entry.user }}</span>
+									<a href='{{ entry.topic_link }}'>{{ entry.subject }}</a><span class='byuser'> РѕСЃС‚Р°РІРёР»&nbsp;{{ entry.user }}</span>
 								</div>
 							</div>
 						</td>
@@ -34,13 +34,13 @@
 						<td class="tc3">{{ entry.num_replies }}</td>
 						<td class='tcr'>
 							<a href='{{ entry.last_post_forum.topic_link }}'>{% if entry.last_post_forum.date|date('d-m-Y') == "now"|date('d-m-Y') %}
-									Сегодня {{ entry.last_post_forum.date|date('H:i') }}
+									РЎРµРіРѕРґРЅСЏ {{ entry.last_post_forum.date|date('H:i') }}
 								{% elseif entry.last_post_forum.date|date('d-m-Y') == "now-1 day"|date('d-m-Y') %}
-									Вчера {{ entry.last_post_forum.date|date('H:i') }}
+									Р’С‡РµСЂР° {{ entry.last_post_forum.date|date('H:i') }}
 								{% else %}
 									{{ entry.last_post_forum.date|date('d-m-Y H:i') }}
 								{% endif %}</a>
-							оставил&nbsp;<a href='{{ entry.last_post_forum.profile_link }}'>{{ entry.last_post_forum.profile }}</a>
+							РѕСЃС‚Р°РІРёР»&nbsp;<a href='{{ entry.last_post_forum.profile_link }}'>{{ entry.last_post_forum.profile }}</a>
 						</td>
 					</tr>
 				{% else %}
@@ -49,7 +49,7 @@
 							<div class="intd">
 								<div class="icon"></div>
 								<div class="tclcon">
-									Нету тем
+									РќРµС‚Сѓ С‚РµРј
 								</div>
 							</div>
 						</td>

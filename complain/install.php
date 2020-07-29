@@ -54,7 +54,7 @@ function plugin_complain_install($action) {
 			$params = array(
 				'localsource'        => 1,
 				'extform'            => 1,
-				'errlist'            => "1|Íåâåðíàÿ ññûëêà\n2|Ññûëêà óäàëåíà\n3|Äðóãàÿ îøèáêà",
+				'errlist'            => "1|ÐÐµÐ²ÐµÑ€Ð½Ð°Ñ ÑÑÑ‹Ð»ÐºÐ°\n2|Ð¡ÑÑ‹Ð»ÐºÐ° ÑƒÐ´Ð°Ð»ÐµÐ½Ð°\n3|Ð”Ñ€ÑƒÐ³Ð°Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ°",
 				'inform_author'      => 1,
 				'inform_admin'       => 2,
 				'author_multi'       => 1,

@@ -5,7 +5,7 @@ if (!defined('NGCMS')) die ('HAL');
 // Configuration file for plugin
 //
 // Preload config file
-plugins_load_config();
+pluginsLoadConfig();
 // Fill configuration parameters
 $skList = array();
 if ($skDir = opendir(extras_dir . '/rating/tpl/skins')) {
@@ -19,13 +19,13 @@ if ($skDir = opendir(extras_dir . '/rating/tpl/skins')) {
 // Fill configuration parameters
 $cfg = array();
 $cfgX = array();
-array_push($cfg, array('descr' => 'Плагин позволяет посетителям проставлять рейтинг для новостей на сайте.'));
-array_push($cfgX, array('name' => 'regonly', 'title' => 'Рейтинг только для зарегистрированных', 'descr' => '<b>Да</b> - проставлять оценки могут только зарегистрированные пользователи<br><b>Нет</b> - проставлять оценки могут все', 'type' => 'select', 'values' => array('0' => 'Нет', '1' => 'Да'), 'value' => extra_get_param($plugin, 'regonly')));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Настройки плагина</b>', 'entries' => $cfgX));
+array_push($cfg, array('descr' => 'РџР»Р°РіРёРЅ РїРѕР·РІРѕР»СЏРµС‚ РїРѕСЃРµС‚РёС‚РµР»СЏРј РїСЂРѕСЃС‚Р°РІР»СЏС‚СЊ СЂРµР№С‚РёРЅРі РґР»СЏ РЅРѕРІРѕСЃС‚РµР№ РЅР° СЃР°Р№С‚Рµ.'));
+array_push($cfgX, array('name' => 'regonly', 'title' => 'Р РµР№С‚РёРЅРі С‚РѕР»СЊРєРѕ РґР»СЏ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹С…', 'descr' => '<b>Р”Р°</b> - РїСЂРѕСЃС‚Р°РІР»СЏС‚СЊ РѕС†РµРЅРєРё РјРѕРіСѓС‚ С‚РѕР»СЊРєРѕ Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»Рё<br><b>РќРµС‚</b> - РїСЂРѕСЃС‚Р°РІР»СЏС‚СЊ РѕС†РµРЅРєРё РјРѕРіСѓС‚ РІСЃРµ', 'type' => 'select', 'values' => array('0' => 'РќРµС‚', '1' => 'Р”Р°'), 'value' => extra_get_param($plugin, 'regonly')));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>РќР°СЃС‚СЂРѕР№РєРё РїР»Р°РіРёРЅР°</b>', 'entries' => $cfgX));
 $cfgX = array();
-array_push($cfgX, array('name' => 'localsource', 'title' => "Выберите каталог из которого плагин будет брать шаблоны для отображения<br /><small><b>Шаблон сайта</b> - плагин будет пытаться взять шаблоны из общего шаблона сайта; в случае недоступности - шаблоны будут взяты из собственного каталога плагина<br /><b>Плагин</b> - шаблоны будут браться из собственного каталога плагина</small>", 'type' => 'select', 'values' => array('0' => 'Шаблон сайта', '1' => 'Плагин'), 'value' => intval(extra_get_param($plugin, 'localsource'))));
-array_push($cfgX, array('name' => 'localskin', 'title' => "Выберите активный шаблон<br /><small>Выбранный скин будет использоваться при установке <b>Плагин</b> в предыдущем поле</small>", 'type' => 'select', 'values' => $skList, 'value' => extra_get_param($plugin, 'localskin') ? extra_get_param($plugin, 'localskin') : 'basic'));
-array_push($cfg, array('mode' => 'group', 'title' => '<b>Настройки отображения</b>', 'entries' => $cfgX));
+array_push($cfgX, array('name' => 'localsource', 'title' => "Р’С‹Р±РµСЂРёС‚Рµ РєР°С‚Р°Р»РѕРі РёР· РєРѕС‚РѕСЂРѕРіРѕ РїР»Р°РіРёРЅ Р±СѓРґРµС‚ Р±СЂР°С‚СЊ С€Р°Р±Р»РѕРЅС‹ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ<br /><small><b>РЁР°Р±Р»РѕРЅ СЃР°Р№С‚Р°</b> - РїР»Р°РіРёРЅ Р±СѓРґРµС‚ РїС‹С‚Р°С‚СЊСЃСЏ РІР·СЏС‚СЊ С€Р°Р±Р»РѕРЅС‹ РёР· РѕР±С‰РµРіРѕ С€Р°Р±Р»РѕРЅР° СЃР°Р№С‚Р°; РІ СЃР»СѓС‡Р°Рµ РЅРµРґРѕСЃС‚СѓРїРЅРѕСЃС‚Рё - С€Р°Р±Р»РѕРЅС‹ Р±СѓРґСѓС‚ РІР·СЏС‚С‹ РёР· СЃРѕР±СЃС‚РІРµРЅРЅРѕРіРѕ РєР°С‚Р°Р»РѕРіР° РїР»Р°РіРёРЅР°<br /><b>РџР»Р°РіРёРЅ</b> - С€Р°Р±Р»РѕРЅС‹ Р±СѓРґСѓС‚ Р±СЂР°С‚СЊСЃСЏ РёР· СЃРѕР±СЃС‚РІРµРЅРЅРѕРіРѕ РєР°С‚Р°Р»РѕРіР° РїР»Р°РіРёРЅР°</small>", 'type' => 'select', 'values' => array('0' => 'РЁР°Р±Р»РѕРЅ СЃР°Р№С‚Р°', '1' => 'РџР»Р°РіРёРЅ'), 'value' => intval(extra_get_param($plugin, 'localsource'))));
+array_push($cfgX, array('name' => 'localskin', 'title' => "Р’С‹Р±РµСЂРёС‚Рµ Р°РєС‚РёРІРЅС‹Р№ С€Р°Р±Р»РѕРЅ<br /><small>Р’С‹Р±СЂР°РЅРЅС‹Р№ СЃРєРёРЅ Р±СѓРґРµС‚ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ РїСЂРё СѓСЃС‚Р°РЅРѕРІРєРµ <b>РџР»Р°РіРёРЅ</b> РІ РїСЂРµРґС‹РґСѓС‰РµРј РїРѕР»Рµ</small>", 'type' => 'select', 'values' => $skList, 'value' => extra_get_param($plugin, 'localskin') ? extra_get_param($plugin, 'localskin') : 'basic'));
+array_push($cfg, array('mode' => 'group', 'title' => '<b>РќР°СЃС‚СЂРѕР№РєРё РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ</b>', 'entries' => $cfgX));
 // RUN
 if ($_REQUEST['action'] == 'commit') {
 	// If submit requested, do config save

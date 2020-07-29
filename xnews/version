@@ -3,15 +3,15 @@
 ;
 
 ID: xnews
-Name: Блоки новостей
+Name: Р‘Р»РѕРєРё РЅРѕРІРѕСЃС‚РµР№
 Version: 0.04
 Acts: index, twig
 File: xnews.php
 Config: config.php
 Type: widget
-Description: Вывод блоков новостей
+Description: Р’С‹РІРѕРґ Р±Р»РѕРєРѕРІ РЅРѕРІРѕСЃС‚РµР№
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
-Title: Вывод блоков новостей
-Information: Вывод информационных блоков новостей по заданным вами критериям
+Title: Р’С‹РІРѕРґ Р±Р»РѕРєРѕРІ РЅРѕРІРѕСЃС‚РµР№
+Information: Р’С‹РІРѕРґ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹С… Р±Р»РѕРєРѕРІ РЅРѕРІРѕСЃС‚РµР№ РїРѕ Р·Р°РґР°РЅРЅС‹Рј РІР°РјРё РєСЂРёС‚РµСЂРёСЏРј
 Preinstall: no

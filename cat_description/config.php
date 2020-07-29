@@ -1,6 +1,6 @@
 <?php
 if (!defined('NGCMS')) exit('HAL');
-plugins_load_config();
+pluginsLoadConfig();
 LoadPluginLang('cat_description', 'config', '', '', ':');
 switch ($_REQUEST['action']) {
 	case 'edit':

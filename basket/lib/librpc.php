@@ -24,13 +24,13 @@ function basket_add_item($linked_ds, $linked_id, $title, $price, $count, $xfld =
 		$tCount = $res['count'];
 		$tPrice = $res['price'];
 	}
-	// Ãîòîâèì ïåğåìåííûå
+	// Ğ“Ğ¾Ñ‚Ğ¾Ğ²Ğ¸Ğ¼ Ğ¿ĞµÑ€ĞµĞ¼ĞµĞ½Ğ½Ñ‹Ğµ
 	$tVars = array(
 		'count'      => $tCount,
 		'price'      => $tPrice,
 		'ajaxUpdate' => 1,
 	);
-	// Âûâîäèì øàáëîí ñ îáùèì èòîãîì
+	// Ğ’Ñ‹Ğ²Ğ¾Ğ´Ğ¸Ğ¼ ÑˆĞ°Ğ±Ğ»Ğ¾Ğ½ Ñ Ğ¾Ğ±Ñ‰Ğ¸Ğ¼ Ğ¸Ñ‚Ğ¾Ğ³Ğ¾Ğ¼
 	$xt = $twig->loadTemplate('plugins/basket/total.tpl');
 
 	return array('status' => 1, 'errorCode' => 0, 'data' => 'Item added into basket', 'update' => arrayCharsetConvert(0, $xt->render($tVars)));
