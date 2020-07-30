@@ -1,6 +1,6 @@
 ID: wysiwyg
 Name: Редактор wysiwyg
-Version: 0.12
+Version: 0.13
 Actions: core; wysiwyg.php
 Config: config.php
 Type: plugin
@@ -10,3 +10,4 @@ Information:
 Author: Nail' R. Davydov (ROZARD)
 Author_URI: http://ngcms.ru/
 preinstall: no
+MinEngineBuild: 20200731
