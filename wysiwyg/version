@@ -1,6 +1,6 @@
 ID: wysiwyg
 Name: Редактор wysiwyg
-Version: 0.13
+Version: 0.14
 Actions: core; wysiwyg.php
 Config: config.php
 Type: plugin
