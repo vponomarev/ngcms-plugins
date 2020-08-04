@@ -1,6 +1,8 @@
 <?php
+
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
+
 // Check execution mode
 if (!pluginGetVariable('archive', 'mode')) {
 	add_act('index', 'plugin_archive'); // auto
@@ -99,6 +101,7 @@ function plug_arch($maxnum, $counter, $tcounter, $overrideTemplateName, $cacheEx
 	// Предзагрузка шаблона entries [ чтобы отработал setConversion ] при его наличии
 	if (isset($tpath['entries']))
 		$twig->loadTemplate($tpath['entries'] . 'entries.tpl');
+
 	$xt = $twig->loadTemplate($tpath[$templateName] . $templateName . '.tpl');
 	$output = $xt->render($tVars);
 	if ($cacheExpire > 0) {
@@ -117,9 +120,6 @@ function plug_arch($maxnum, $counter, $tcounter, $overrideTemplateName, $cacheEx
 // * template	- Personal template for plugin
 // * cacheExpire		- age of cache [in seconds]
 function plugin_archive_showTwig($params) {
-
-	global $CurrentHandler, $config;
-
 	return plug_arch(isset($params['maxnum']) ? $params['maxnum'] : pluginGetVariable('archive', 'maxnum'), isset($params['counter']) ? $params['counter'] : false, isset($params['tcounter']) ? $params['tcounter'] : false, isset($params['template']) ? $params['template'] : false, isset($params['cacheExpire']) ? $params['cacheExpire'] : 0);
 }
 

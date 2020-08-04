@@ -4,7 +4,7 @@
 
 ID: archive
 Name: Show news archive
-Version: 0.08
+Version: 0.09
 Acts: index
 File: archive.php
 Config: config.php
@@ -16,3 +16,4 @@ Preinstall: default_no
 Preinstall_vars: maxnum="12"; counter="1"; cache="1"; cacheExpire="3600";
 Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
+MinEngineBuild: 2020731
