@@ -62,8 +62,6 @@ function bb(&$tvars) {
     $tvars['preloadRAW'] = (isset($tvars['preloadRAW'])?$tvars['preloadRAW']:'').join("\n", $list);
     $tvars['flags']['disableTagsSmilies'] = true;
     $tvars['editorClassName'] = 'bb_code';
-    $tvars['isBBCode'] = true;
-    $tvars['attributBB'] = 'bb_code';
     return;
 }
 
