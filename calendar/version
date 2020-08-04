@@ -4,7 +4,7 @@
 
 ID: calendar
 Name: Show news calendar
-Version: 0.12
+Version: 0.13
 Acts: index, twig, rpc
 File: calendar.php
 Config: config.php
@@ -16,3 +16,4 @@ Title: Календарь новостей
 Information: Отображение данных о новостях по выбранному месяцу, при этом дни, когда были новости, выделяются.
 Preinstall: default_no
 Preinstall_vars: cache="1"; cacheExpire="3600";
+MinEngineBuild: 2020731
