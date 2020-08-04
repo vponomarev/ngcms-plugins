@@ -4,7 +4,7 @@
 
 ID: uprofile
 Name: Users profile
-Version: 0.12
+Version: 0.13
 Acts: ppages,rpc
 File: uprofile.php
 Config: config.php
@@ -16,3 +16,4 @@ Author: Vitaly A. Ponomarev
 Author_URI: http://ngcms.ru/
 preinstall: yes
 Library: lib; lib/uprofile.lib.php
+MinEngineBuild: 2020731

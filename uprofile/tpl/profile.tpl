@@ -18,54 +18,52 @@
 		// ICQ
 		var icq = f.editicq.value;
 		if ((icq.length > 0) && (!icq.match(/^\d{4,10}$/))) {
-			alert("{l_uprofile:wrong_icq}");
+			alert("{{ lang.uprofile.wrong_icq }}");
 			return false;
 		}
 
 		// Email
 		var email = f.editmail.value;
 		if ((email.length > 0) && (!emailCheck(email))) {
-			alert("{l_uprofile:wrong_email}");
+			alert("{{ lang.uprofile.wrong_email }}");
 			return false;
 		}
 
 		// About
 		var about = f.editabout.value;
-		if (({about_sizelimit} > 0) && (about.length > {about_sizelimit})) {
-			alert("{about_sizelimit_text}");
+		if (({{ info_sizelimit }} > 0) && (about.length > {{ info_sizelimit }})) {
+			alert("{{ info_sizelimit_text }}");
 			return false;
 		}
 		return true;
 	}
 </script>
-<form id="profileForm" method="post" action="{form_action}" enctype="multipart/form-data">
-	<input type="hidden" name="token" value="{token}"/>
+<form id="profileForm" method="post" action="{{ form_action }}" enctype="multipart/form-data">
+	<input type="hidden" name="token" value="{{ token }}"/>
 	<table border="0" width="100%" cellspacing="0" cellpadding="0">
 		<tr>
 			<td>
 				<table border="0" width="100%" cellspacing="0" cellpadding="0">
 					<tr>
 						<td>
-							<img border="0" src="{tpl_url}/images/2z_40.gif" width="7" height="36"></td>
-						<td background="{tpl_url}/images/2z_41.gif" width="100%">&nbsp;<b><font color="#FFFFFF">{l_uprofile:profile_of}
-									{name}</font></b></td>
+						<td width="100%" align="center">{{ lang.uprofile.profile_of }} {{ user.name }}</td>
 						<td>
-							<img border="0" src="{tpl_url}/images/2z_44.gif" width="7" height="36"></td>
 					</tr>
 				</table>
+				<br/>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<table border="0" width="100%" cellspacing="0" cellpadding="0">
 					<tr>
-						<td background="{tpl_url}/images/2z_54.gif" width="7">&nbsp;</td>
+						<td width="7">&nbsp;</td>
 						<td bgcolor="#FFFFFF">
 							<table border="0" cellspacing="0" cellpadding="0" width="100%">
 								<tr align="center">
 									<td width="100%" class="contentEdit" align="center" valign="top">
-										<input type="button" onmousedown="javascript:ChangeOption('maincontent')" value="{l_uprofile:maincontent}" class="button"/>
-										<input type="button" onmousedown="javascript:ChangeOption('additional')" value="{l_uprofile:additional}" class="button"/>
+										<input type="button" onmousedown="javascript:ChangeOption('maincontent')" value="{{ lang.uprofile.maincontent }}" class="button"/>
+										<input type="button" onmousedown="javascript:ChangeOption('additional')" value="{{ lang.uprofile.additional }}" class="button"/>
 									</td>
 								</tr>
 							</table>
@@ -73,74 +71,74 @@
 							<table id="maincontent" class="content" width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 								<tr>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										{l_uprofile:status}
+										{{ lang.uprofile.status }}
 									</td>
-									<td style="padding: 5px; background-color: #f9fafb;" class="entry">{status}</td>
+									<td style="padding: 5px; background-color: #f9fafb;" class="entry">{{ user.status }}</td>
 								</tr>
 								<tr>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										{l_uprofile:regdate}
+										{{ lang.uprofile.regdate }}
 									</td>
-									<td style="padding: 5px; background-color: #f9fafb;" class="entry">{regdate}</td>
+									<td style="padding: 5px; background-color: #f9fafb;" class="entry">{{ user.reg }}</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px;" class="entry">{l_uprofile:last}</td>
-									<td style="padding: 5px;" class="entry">{last}</td>
+									<td style="padding: 5px;" class="entry">{{ lang.uprofile.last }}</td>
+									<td style="padding: 5px;" class="entry">{{ user.last }}</td>
 								</tr>
 								<tr>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										{l_uprofile:all_news}
+										{{ lang.uprofile.all_news }}
 									</td>
-									<td style="padding: 5px; background-color: #f9fafb;" class="entry">{news}</td>
+									<td style="padding: 5px; background-color: #f9fafb;" class="entry">{{ user.news }}</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px;" class="entry">{l_uprofile:all_comments}</td>
-									<td style="padding: 5px;" class="entry">{comments}</td>
+									<td style="padding: 5px;" class="entry">{{ lang.uprofile.all_comments }}</td>
+									<td style="padding: 5px;" class="entry">{{ user.com }}</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px;" class="entry">{l_uprofile:email}</td>
+									<td style="padding: 5px;" class="entry">{{ lang.uprofile.email }}</td>
 									<td style="padding: 5px;" class="entry">
-										<input type="text" class="email" name="editmail" value="{email}" size="40"/>
+										<input type="text" class="email" name="editmail" value="{{ user.email }}" size="40"/>
 									</td>
 								</tr>
 								<tr>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										{l_uprofile:site}
+										{{ lang.uprofile.site }}
 									</td>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										<input type="text" name="editsite" value="{site}" size="40"/></td>
+										<input type="text" name="editsite" value="{{ user.site }}" size="40"/></td>
 								</tr>
 								<tr>
-									<td style="padding: 5px;" class="entry">{l_uprofile:icq}</td>
+									<td style="padding: 5px;" class="entry">{{ lang.uprofile.icq }}</td>
 									<td style="padding: 5px;" class="entry">
-										<input type="text" name="editicq" value="{icq}" size="40" maxlength="10"/></td>
+										<input type="text" name="editicq" value="{{ user.icq }}" size="40" maxlength="10"/></td>
 								</tr>
 								<tr>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										{l_uprofile:from}
+										{{ lang.uprofile.from }}
 									</td>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										<input type="text" name="editfrom" value="{from}" size="40" maxlength="60"/>
+										<input type="text" name="editfrom" value="{{ user.from }}" size="40" maxlength="60"/>
 									</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px;" class="entry">{l_uprofile:about} {about_sizelimit_text}
+									<td style="padding: 5px;" class="entry">{{ lang.uprofile.about }} {{ about_sizelimit_text }}
 									</td>
 									<td style="padding: 5px;" class="entry">
-										<textarea name="editabout" rows="7" cols="55">{about}</textarea></td>
+										<textarea name="editabout" rows="7" cols="55">{{ user.info }}</textarea></td>
 								</tr>
 								<tr>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										{l_uprofile:new_pass}
+										{{ lang.uprofile.new_pass }}
 									</td>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
 										<input class="password" name="editpassword" size="40" maxlength="16" autocomplete="off"/><br/>
-										<small>{l_uprofile:pass_left}</small>
+										<small>{{ lang.uprofile.pass_left }}</small>
 									</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px;" class="entry">{l_uprofile:oldpass}<br/>
-										<small>{l_uprofile:oldpass#desc}</small>
+									<td style="padding: 5px;" class="entry">{{ lang.uprofile.oldpass }}<br/>
+										<small>{{ lang.uprofile['oldpass#desc'] }}</small>
 									</td>
 									<td style="padding: 5px;" class="entry">
 										<input type="password" name="oldpass" value="" size="40" maxlength="10" autocomplete="off"/>
@@ -152,13 +150,33 @@
 							<table id="additional" style="display: none;" class="content" border="0" width="100%" cellspacing="0" cellpadding="0">
 								<tr>
 									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
-										{l_uprofile:avatar}
+										{{ lang.uprofile.avatar }}
 									</td>
-									<td style="padding: 5px; background-color: #f9fafb;" class="entry">{avatar}</td>
+									<td style="padding: 5px; background-color: #f9fafb;" class="entry">
+										{% if (flags.avatarAllowed) %}
+										<input type="file" name="newavatar" size="40" /><br />
+										{% if (user.flags.hasAvatar) %}
+											<img src="{{ user.avatar }}" style="margin: 5px; border: 0px; alt=""/><br/>
+											<input type="checkbox" name="delavatar" id="delavatar" class="check" />&nbsp;
+											<label for="delavatar">{{ lang.uprofile['delete'] }}</label>
+										{% endif %}
+										{% else %}{{ lang.uprofile['avatars_denied'] }}
+										{% endif %}
+									</td>
 								</tr>
 								<tr>
-									<td style="padding: 5px;" class="entry">{l_uprofile:photo}</td>
-									<td style="padding: 5px;" class="entry">{photo}</td>
+									<td style="padding: 5px;" class="entry">{{ lang.uprofile.photo }}</td>
+									<td style="padding: 5px;" class="entry">
+										{% if (flags.photoAllowed) %}
+										<input type="file" name="newphoto" size="40" /><br />
+										{% if (user.flags.hasPhoto) %}
+											<a href="{{ user.photo }}" target="_blank"><img src="{{ user.photo_thumb }}" style="margin: 5px; border: 0px; alt=""/></a><br/>
+											<input type="checkbox" name="delphoto" id="delphoto" class="check" />&nbsp;
+											<label for="delphoto">{{ lang.uprofile['delete'] }}</label>
+										{% endif %}
+										{% else %}{{ lang.uprofile['photos_denied'] }}
+										{% endif %}
+									</td>
 								</tr>
 								{plugin_xfields_0}
 							</table>
@@ -166,13 +184,13 @@
 							<table border="0" width="100%" cellspacing="0" cellpadding="0">
 								<tr align="center">
 									<td width="100%" class="contentEdit" align="center" valign="top">
-										<input type="submit" value="{l_uprofile:save}" class="button" onclick="return validate_form();"/>
+										<input type="submit" value="{{ lang.uprofile.save }}" class="button" onclick="return validate_form();"/>
 										<input type="hidden" name="plugin_cmd" value="apply"/>
 									</td>
 								</tr>
 							</table>
 						</td>
-						<td background="{tpl_url}/images/2z_59.gif" width="7">&nbsp;</td>
+						<td width="7">&nbsp;</td>
 					</tr>
 				</table>
 			</td>
@@ -182,10 +200,10 @@
 				<table border="0" width="100%" cellspacing="0" cellpadding="0">
 					<tr>
 						<td>
-							<img border="0" src="{tpl_url}/images/2z_68.gif" width="7" height="4"></td>
-						<td background="{tpl_url}/images/2z_69.gif" width="100%"></td>
+							</td>
+						<td width="100%"></td>
 						<td>
-							<img border="0" src="{tpl_url}/images/2z_70.gif" width="7" height="4"></td>
+							</td>
 					</tr>
 				</table>
 			</td>

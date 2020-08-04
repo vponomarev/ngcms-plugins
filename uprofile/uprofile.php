@@ -1,12 +1,15 @@
 <?php
+
 // Protect against hack attempts
 if (!defined('NGCMS')) die ('HAL');
+
 //LoadPluginLang('uprofile', 'main', '', '', ':');
 LoadPluginLang('uprofile', 'main', '', 'uprofile', '#');
 register_plugin_page('uprofile', 'edit', 'uprofile_editProfile', 0);
 register_plugin_page('uprofile', 'apply', 'uprofile_applyProfile', 0);
 register_plugin_page('uprofile', 'show', 'uprofile_showProfile', 0);
 LoadPluginLibrary('uprofile', 'lib');
+
 // =============================================================
 // External functions of plugin
 // =============================================================
