@@ -4,7 +4,7 @@
 
 ID: xfields
 Name: Custom fields
-Version: 0.30
+Version: 0.31
 Acts: core, admin:mod:news, admin:mod:categories
 File: xfields.php
 Actions: rpc;lib/librpc.php
@@ -19,3 +19,4 @@ Title: Дополнительные поля
 Information: Позволяет создавать пользовательские дополнительные поля в новостях.
 Preinstall: no
 Library: common; lib/common.php
+MinEngineBuild: 2020731
