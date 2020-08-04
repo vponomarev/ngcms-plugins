@@ -19,3 +19,4 @@ Preinstall_vars: restorepw="1";
 Title: Базовый модуль авторизации
 Information: Обеспечивает авторизацию пользователей в системе, обязателен к использованию.
 preinstall: yes
+MinEngineBuild: 2020731
