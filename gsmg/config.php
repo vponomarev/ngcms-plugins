@@ -9,7 +9,8 @@ pluginsLoadConfig();
 // Fill configuration parameters
 $cfg = array();
 $cfgX = array();
-array_push($cfg, array('descr' => 'Плагин генерации XML карты сайта для поисковой системы Google'));
+$pl = generatePluginLink('gsmg', null, [], [], false, true);
+array_push($cfg, array('descr' => 'Плагин генерации XML карты сайта для поисковой системы Google<br/>При включении плагина Sitemap доступно по ссылке: <a target="_blank" href="'.$pl.'">'.$pl.'</a>'));
 array_push($cfgX, array('name' => 'main', 'title' => "Добавлять головную страницу в карту сайта", 'descr' => "<b>Да</b> - страница будет добавляться в карту сайта<br /><b>Нет</b> - страница не будет добавляться в карту сайта", 'type' => 'select', 'values' => array('0' => 'Нет', '1' => 'Да'), 'value' => intval(extra_get_param($plugin, 'main'))));
 array_push($cfgX, array('name' => 'main_pr', 'title' => "Приоритет головной страницы", 'descr' => 'значение от <b>0.0</b> до <b>1.0</b>', 'type' => 'input', 'value' => (extra_get_param($plugin, 'main_pr') == '') ? '1.0' : extra_get_param($plugin, 'main_pr')));
 array_push($cfgX, array('name' => 'mainp', 'title' => "Добавлять постраничку головной страницы в карту сайта", 'descr' => "<b>Да</b> - страница будет добавляться в карту сайта<br /><b>Нет</b> - страница не будет добавляться в карту сайта", 'type' => 'select', 'values' => array('0' => 'Нет', '1' => 'Да'), 'value' => intval(extra_get_param($plugin, 'mainp'))));
