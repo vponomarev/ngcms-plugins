@@ -35,10 +35,10 @@ array_push($cfgX, array('name' => 'cacheExpire', 'title' => 'Период обн
 array_push($cfg, array('mode' => 'group', 'title' => '<b>Настройки кеширования</b>', 'entries' => $cfgX));
 // RUN 
 if ($_REQUEST['action'] == 'commit') {
-	// If submit requested, do config save
-	commit_plugin_config_changes($plugin, $cfg);
-	print_commit_complete($plugin);
+    // If submit requested, do config save
+    commit_plugin_config_changes($plugin, $cfg);
+    print_commit_complete($plugin);
 } else {
-	generate_config_page($plugin, $cfg);
+    generate_config_page($plugin, $cfg);
 }
 ?>

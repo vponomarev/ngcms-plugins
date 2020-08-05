@@ -4,7 +4,7 @@
 
 ID: gsmg
 Name: Google SiteMap Generator
-Version: 0.11
+Version: 0.12
 Acts: ppages
 File: gsmg.php
 Config: config.php
@@ -17,3 +17,4 @@ Author_URI: http://ngcms.ru/
 Title: Генератор Google SiteMap
 Information: Позволяет создавать SiteMap для вашего сайта
 Library: common; lib/common.php
+MinEngineBuild: 2020731
