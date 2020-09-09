@@ -1,8 +1,8 @@
-<tr align="center" class="contRow1">
+<tr>
 	<td>{cat_name}</td>
 	<td>{tpl}</td>
 	<td>
-		<input type="image" src="{admin_url}/plugins/multi_main/tpl/images/edit.png" title="{l_multi_main:button_edit}" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=multi_main&action=add_form&cat={cat}'"/>&#160;
-		<input type="image" src="{admin_url}/plugins/multi_main/tpl/images/dell.png" title="{l_multi_main:button_dell}" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=multi_main&action=dell&cat={cat}'"/>
+		<a title="{l_multi_main:button_edit}" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=multi_main&action=add_form&cat={cat}'"><i class="fa fa-pencil-square-o fa-lg" aria-hidden="true" style="color: green;"></i> </a>
+		<a title="{l_multi_main:button_dell}" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=multi_main&action=dell&cat={cat}'"><i class="fa fa-times fa-lg" aria-hidden="true" style="color: red;"></i></a>
 	</td>
 </tr>
