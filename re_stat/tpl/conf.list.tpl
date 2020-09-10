@@ -1,46 +1,52 @@
-<div style="text-align : left;">
-
-<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
-<tr>
-<td width="100%" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" /><a href="admin.php?mod=extras">Управление плагинами</a></td>
-</tr>
-<tr><td>&nbsp;</td></tr>
-<tr>
-<td width="100%" class="contentHead"><img src="{skins_url}/images/nav.gif" hspace="8" alt="" />Настройка плагина: re_stat</td>
-</tr>
-<tr><td>&nbsp;</td></tr>
-</table>
-
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-<tr align="center">
-<td width="100%" class="contentNav" align="center" valign="top">
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0 text-dark" style="padding: 20px 0 0 0;">re_stat</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="admin.php"><i class="fa fa-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="admin.php?mod=extras">{l_extras}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">re_stat</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 <form action="admin.php?mod=extra-config&amp;plugin=re_stat" method="post" name="options_bar">
-<input type="hidden" name="action" value="" />
-<input type="hidden" name="id" value="-1" />
-<input type="submit" value="Список" class="navbutton" onClick="document.forms['options_bar'].action.value = '';" />
-<input type="submit" value="Добавить" class="navbutton" onClick="document.forms['options_bar'].action.value = 'add';" />
+    <input type="hidden" name="action" value="" />
+    <input type="hidden" name="id" value="-1" />
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-12 text-center">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <input type="submit" value="Список" class="btn btn-outline-primary"
+                        onClick="document.forms['options_bar'].action.value = '';" />
+                    <input type="submit" value="Добавить" class="btn btn-outline-primary"
+                        onClick="document.forms['options_bar'].action.value = 'add';" />
+                </div>
+            </div>
+        </div>
 </form>
-</td>
-</tr>
-</table>
-<br/>
-
-<table width="97%" class="content" border="0" cellspacing="0" cellpadding="0" align="center">
-<tr align="center" class="contHead">
-<td>№п.п.</td>
-<td>Код</td>
-<td>Статическая страница</td>
-<td width="160">Действие</td>
-</tr>
-{entries}
-<tr><td width="100%" colspan="4">&nbsp;</td></tr>
-<tr>
-<td width="100%" colspan="4" class="contentEdit" align="center">
-<form action="admin.php?mod=extra-config&amp;plugin=re_stat" method="post" name="options_bar_bottom">
-<input type="hidden" name="action" value="re_map" />
-<input type="submit" value="Перестроить карту ссылок" class="navbutton" />
-</form>
-</td>
-</tr>
-</table>
+<div class="col-sm-12 mt-2">
+    <div class="card">
+        <div class="card-header">re_stat</div>
+        <div class="card-body">
+            <table class="table table-sm table-bordered table-hover ">
+                <thead>
+                    <tr>
+                        <td>№п.п.</td>
+                        <td>Код</td>
+                        <td>Статическая страница</td>
+                        <td width="160">Действие</td>
+                    </tr>
+                </thead>
+                {entries}
+            </table>
+        </div>
+        <form action="admin.php?mod=extra-config&amp;plugin=re_stat" method="post" name="options_bar_bottom">
+            <input type="hidden" name="action" value="re_map" />
+            <div class="card-footer text-center"><input type="submit" value="Перестроить карту ссылок"
+                    class="btn btn-outline-success" /></div>
+        </form>
+    </div>
 </div>
