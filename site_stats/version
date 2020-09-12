@@ -1,0 +1,18 @@
+;
+; Version description file for plugin @@ Next Geration CMS
+;
+
+ID: site_stats
+Name: Статистика сайта
+Version: 0.1
+Acts: cron, index 
+File: site_stats.php
+Install: install.php
+Deinstall: deinstall.php
+Config: config.php
+Type: plugin
+Description: Вывод количественной статистики сайта количество новостей, пользователей, страниц и т.д.
+Author: Necronominicon &amp; Nail' R. Davydov (ROZARD) &amp; RusiQ
+Title: Вывод статистики сайта
+Information: Вывод количественной статистики сайта
+Preinstall: default_no

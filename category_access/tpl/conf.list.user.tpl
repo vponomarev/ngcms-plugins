@@ -1,14 +1,17 @@
-<table width="97%" class="content" border="0" cellspacing="0" cellpadding="0" align="center">
-	<tr align="center" width="100%" class="contHead">
-		<td>{l_category_access:label_user_name}</td>
-		<td>{l_category_access:label_category}</td>
-		<td width="8%">{l_category_access:label_action}</td>
-	</tr>
-	{entries}
-	<tr>
-		<td width="100%" colspan="6">&nbsp;</td>
-	</tr>
-	<tr>
-		<td width="100%" colspan="6" class="contentEdit" align="center">&nbsp;</td>
-	</tr>
-</table>
+<div class="col-sm-12 mt-2">
+	<div class="card">
+		<div class="card-header">{action}</div>
+		<div class="card-body">
+			<table class="table table-sm">
+				<thead>
+					<tr>
+						<th scope="col">{l_category_access:label_user_name}</th>
+						<th scope="col">{l_category_access:label_category}</th>
+						<th scope="col">{l_category_access:label_action}</th>
+					</tr>
+				</thead>
+				{entries}
+			</table>
+		</div>
+	</div>
+</div>

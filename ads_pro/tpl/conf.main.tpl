@@ -1,27 +1,34 @@
+<div class="container-fluid">
+	<div class="row mb-2">
+		<div class="col-sm-6">
+			<h1 class="m-0 text-dark" style="padding: 20px 0 0 0;"><a href="?mod=extra-config&plugin=ads_pro">ads_pro</a> &#8594; {action}</h1>
+		</div><!-- /.col -->
+		<div class="col-sm-6">
+			<ol class="breadcrumb float-sm-right">
+				<li class="breadcrumb-item"><a href="admin.php"><i class="fa fa-home"></i></a></li>
+				<li class="breadcrumb-item"><a href="admin.php?mod=extras">{l_extras}</a></li>
+				<li class="breadcrumb-item active" aria-current="page">ads_pro - {action}</li>
+			</ol>
+		</div><!-- /.col -->
+	</div><!-- /.row -->
+</div><!-- /.container-fluid -->
 <div style="text-align : left;">
-	<table class="content" border="0" cellspacing="0" cellpadding="0" align="center">
-		<tr>
-			<td width="100%" colspan="2" class="contentHead">
-				<img src="{skins_url}/images/nav.gif" hspace="8" alt=""/><a href="admin.php?mod=extras" title="{l_extras}">{l_extras}</a>
-				&#8594; <a href="?mod=extra-config&plugin=ads_pro">ads_pro</a> &#8594; {action}
-			</td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-		</tr>
-	</table>
+	<ul class="nav nav-tabs nav-fill mb-3 d-md-flex d-block" role="tablist">
+		<li class="nav-item"><a	onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=ads_pro'"
+				class="nav-link active" data-toggle="tab">{l_ads_pro:button_general}</a></li>
+		<li class="nav-item"><a
+				onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=ads_pro&action=list'"
+				class="nav-link" data-toggle="tab">{l_ads_pro:button_list}</a></li>
+		<li class="nav-item"><a
+				onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=ads_pro&action=add'"
+				class="nav-link" data-toggle="tab">{l_ads_pro:button_add}</a></li>
 
-	<table border="0" cellspacing="0" cellpadding="0" width="100%">
-		<tr align="center">
-			<td width="100%" class="contentNav" align="center">
-				<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=ads_pro'" value="{l_ads_pro:button_general}" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=ads_pro&action=list'" value="{l_ads_pro:button_list}" class="navbutton"/>
-				<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=ads_pro&action=add'" value="{l_ads_pro:button_add}" class="navbutton"/>
-			</td>
-		</tr>
-	</table>
-	<br/>
+	</ul>
 
-	{entries}
-
+	<div id="userTabs" class="tab-content">
+		<!-- ########################## DB TAB ########################## -->
+		<div id="userTabs-db" class="tab-pane show active">
+			{entries}
+		</div>
+	</div>
 </div>

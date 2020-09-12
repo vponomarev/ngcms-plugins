@@ -1,8 +1,8 @@
+
 <form method="post" action="{admin_url}/admin.php?mod=extra-config&plugin=ads_pro">
-	<input type="hidden" name="action" value="main_submit"/>
+	<input type="hidden" name="action" value="main_submit" />
 	<fieldset>
-		<legend><b>{l_ads_pro:general_config}</b></legend>
-		<table border="0" width="100%" cellspacing="0" cellpadding="0">
+		<table class="table table-sm">
 			<tr>
 				<td width="50%" class="contentEntry1" align="left">{l_ads_pro:general_news}</td>
 				<td class="contentEntry1" align="left"><select name="support_news">
@@ -30,29 +30,8 @@
 			</tr>
 		</table>
 	</fieldset>
-	<input type="submit" value="{l_ads_pro:general_submit}"/>
+	<input type="submit" value="{l_ads_pro:general_submit}" class="btn btn-outline-success" />
+	<input type="button"
+		onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=ads_pro&action=clear_cash'"
+		value="{l_ads_pro:button_clear_cash}" class="btn btn-outline-warning" />
 </form>
-<br/><br/>
-
-<fieldset>
-	<legend><b>{l_ads_pro:general_legend}</b></legend>
-	<table border="0" width="100%" cellspacing="0" cellpadding="0">
-		<tr>
-			<td width="100%" class="contentEntry1" align="center">
-				<input type="button" onmousedown="javascript:window.location.href='{admin_url}/admin.php?mod=extra-config&plugin=ads_pro&action=clear_cash'" value="{l_ads_pro:button_clear_cash}" class="navbutton"/>
-			</td>
-		</tr>
-	</table>
-</fieldset>
-
-
-<table border="0" width="100%" cellspacing="0" cellpadding="0">
-	<tr>
-		<td width="100%" colspan="2">&nbsp;</td>
-	</tr>
-	<tr>
-		<td width="100%" colspan="2" class="contentEdit" align="center">
-			&nbsp;
-		</td>
-	</tr>
-</table>

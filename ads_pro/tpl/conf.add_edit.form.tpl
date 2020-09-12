@@ -76,7 +76,7 @@
 
 <form method="post" action="admin.php?mod=extra-config&amp;plugin=ads_pro&amp;action=[add]add_submit[/add][edit]edit_submit[/edit]">
 	<input type="hidden" name="id" value="[add]0[/add][edit]{id}[/edit]"/>
-	<table border="0" width="100%" cellspacing="0" cellpadding="0">
+	<table class="table table-sm">
 		<tr>
 			<td width="50%" class="contentEntry1">{l_ads_pro:name}<br/>
 				<small>{l_ads_pro:name_d}</small>
@@ -104,8 +104,8 @@
 				<small>{l_ads_pro:location_d}</small>
 			</td>
 			<td width="50%" class="contentEntry2">
-				<input type="button" class="button" value='{l_ads_pro:location_dell}' onClick="RemoveBlok();return false;"/>&nbsp;
-				<input type="button" class="button" value='{l_ads_pro:location_add}' onClick="AddBlok();return false;"/><br/>
+				<input type="button" class="btn btn-outline-primary" value='{l_ads_pro:location_dell}' onClick="RemoveBlok();return false;"/>&nbsp;
+				<input type="button" class="btn btn-outline-primary" value='{l_ads_pro:location_add}' onClick="AddBlok();return false;"/><br/>
 				<table id="blokup" align="left">[edit]{location_list}[/edit]</table>
 			</td>
 		</tr>
@@ -158,7 +158,7 @@
 		</tr>
 		<tr>
 			<td width="100%" colspan="2" class="contentEdit" align="center">
-				<input type="submit" value="[add]{l_ads_pro:add_submit}[/add][edit]{l_ads_pro:edit_submit}[/edit]" class="button"/>
+				<input type="submit" value="[add]{l_ads_pro:add_submit}[/add][edit]{l_ads_pro:edit_submit}[/edit]" class="btn btn-outline-success"/>
 			</td>
 		</tr>
 	</table>

@@ -1,6 +1,6 @@
 <?php
 // Protect against hack attempts
-if (!defined('NGCMS')) die ('HAL');
+if (!defined('NGCMS')) die('HAL');
 //
 // Прописываем свой модуль
 //
@@ -8,13 +8,15 @@ global $AUTH_METHOD;
 global $AUTH_CAPABILITIES;
 global $config;
 
-class auth_basic extends CoreAuthPlugin {
+class auth_basic extends CoreAuthPlugin
+{
 
 	// Осуществить вход
 	// $username	= логин
 	// $password	= пароль
 	// $auto_scan	= если 1, то функция сама должна найти нужные параметры среди POST'ов
-	function login($auto_scan = 1, $username = '', $password = '') {
+	function login($auto_scan = 1, $username = '', $password = '')
+	{
 
 		global $mysql;
 		if ($auto_scan) {
@@ -49,7 +51,8 @@ class auth_basic extends CoreAuthPlugin {
 	//
 	// Сохранить в БД информацию о том, что пользователь авторизовался
 	// $dbrow	= строка из нашей таблицы пользователей
-	function save_auth($dbrow) {
+	function save_auth($dbrow)
+	{
 
 		global $config, $mysql, $ip, $ngCookieDomain;
 		// создаём random cookie
@@ -82,7 +85,8 @@ class auth_basic extends CoreAuthPlugin {
 
 	//
 	// Проверить авторизацию пользователя
-	function check_auth() {
+	function check_auth()
+	{
 
 		global $config, $mysql, $ip;
 		$auth_cookie = isset($_COOKIE['zz_auth']) ? $_COOKIE['zz_auth'] : '';
@@ -131,7 +135,8 @@ class auth_basic extends CoreAuthPlugin {
 
 	//
 	// Отменить авторизацию
-	function drop_auth() {
+	function drop_auth()
+	{
 
 		global $config, $mysql, $userROW;
 		$auth_cookie = $_COOKIE['zz_auth'];
@@ -151,7 +156,8 @@ class auth_basic extends CoreAuthPlugin {
 
 	//
 	// Вернуть массив параметров, необходимых при регистрации
-	function get_reg_params() {
+	function get_reg_params()
+	{
 
 		global $config, $lang;
 		$params = array();
@@ -174,9 +180,10 @@ class auth_basic extends CoreAuthPlugin {
 	// Возвращаемые значения:
 	// 0 - ошибка
 	// 1 - всё ok
-	function register(&$params, $values, &$msg) {
+	function register(&$params, $values, &$msg)
+	{
 
-		global $config, $mysql, $lang, $tpl;
+		global $config, $mysql, $lang, $tpl, $UGROUP;
 		LoadPluginLang('auth_basic', 'auth', '', 'auth');
 		$error = 0;
 		$userid = 0;
@@ -264,7 +271,7 @@ class auth_basic extends CoreAuthPlugin {
 		}
 		// Определяем действия в зависимости от типа регистрации
 		switch ($config['register_type']) {
-			// 0 - Мгновенная [автогенерация пароля, без email нотификации]
+				// 0 - Мгновенная [автогенерация пароля, без email нотификации]
 			case 0:
 				$newpassword = MakeRandomPassword();
 				$mysql->query("INSERT INTO " . uprefix . "_users (name, pass, mail, status, reg, last) VALUES (" . db_squote($values['login']) . ", " . db_squote(EncodePassword($newpassword)) . ", " . db_squote($values['email']) . ", " . $regGroup . ", '" . $add_time . "', '')");
@@ -274,7 +281,7 @@ class auth_basic extends CoreAuthPlugin {
 					"info" => str_replace(array('{login}', '{password}'), array($values['login'], $newpassword), $lang['auth_reg.success0'])
 				));
 				break;
-			// 1 - Простая [автогенерация пароля, с email нотификацией]
+				// 1 - Простая [автогенерация пароля, с email нотификацией]
 			case 1:
 				$newpassword = MakeRandomPassword();
 				$mysql->query("INSERT INTO " . uprefix . "_users (name, pass, mail, status, reg, last) VALUES (" . db_squote($values['login']) . ", " . db_squote(EncodePassword($newpassword)) . ", " . db_squote($values['email']) . ", " . $regGroup . ", '" . $add_time . "', '')");
@@ -303,7 +310,7 @@ class auth_basic extends CoreAuthPlugin {
 					"info" => str_replace(array('{login}', '{password}', '{email}'), array($values['login'], $newpassword, $values['email']), $lang['auth_reg.success1'])
 				));
 				break;
-			// 2 - С подтверждением [автогенерация пароля, пароль отправляется на email адрес и не показывается в админке]
+				// 2 - С подтверждением [автогенерация пароля, пароль отправляется на email адрес и не показывается в админке]
 			case 2:
 				// New password
 				$newpassword = MakeRandomPassword();
@@ -336,7 +343,7 @@ class auth_basic extends CoreAuthPlugin {
 					"info" => str_replace(array('{login}', '{password}', '{email}'), array($values['login'], $newpassword, $values['email']), $lang['auth_reg.success2'])
 				));
 				break;
-			// 3 - Ручная с нотификацией [ручная генерация пароля, email нотификация]
+				// 3 - Ручная с нотификацией [ручная генерация пароля, email нотификация]
 			case 3:
 				$mysql->query("INSERT INTO " . uprefix . "_users (name, pass, mail, status, reg, last) VALUES (" . db_squote($values['login']) . ", " . db_squote(EncodePassword($values['password'])) . ", " . db_squote($values['email']) . ", " . $regGroup . ", '" . $add_time . "', '')");
 				$userid = $mysql->result('select LAST_INSERT_ID()');
@@ -362,7 +369,7 @@ class auth_basic extends CoreAuthPlugin {
 					"info" => str_replace(array('{login}', '{password}', '{email}'), array($values['login'], $values['password'], $values['email']), $lang['auth_reg.success3'])
 				));
 				break;
-			// 4 - Ручная с подтверждением [ручная генерация пароля, подтверждение email адреса]
+				// 4 - Ручная с подтверждением [ручная генерация пароля, подтверждение email адреса]
 			case 4:
 				$actcode = MakeRandomPassword();
 				$mysql->query("INSERT INTO " . uprefix . "_users (name, pass, mail, status, reg, last, activation) VALUES (" . db_squote($values['login']) . ", " . db_squote(EncodePassword($values['password'])) . ", " . db_squote($values['email']) . ", " . $regGroup . ", '" . $add_time . "', '', " . db_squote($actcode) . ")");
@@ -390,7 +397,7 @@ class auth_basic extends CoreAuthPlugin {
 					"text" => $lang['msgo_registered'],
 					"info" => str_replace(array('{login}', '{password}', '{email}'), array($values['login'], $values['password'], $values['email']), $lang['auth_reg.success4'])
 				));
-			//print "<pre>".var_export($lang, true)."</pre>";
+				//print "<pre>".var_export($lang, true)."</pre>";
 		}
 
 		return ($userid > 0) ? $userid : 1;
@@ -398,7 +405,8 @@ class auth_basic extends CoreAuthPlugin {
 
 	//
 	// Вернуть массив параметров, необходимых для восстановления пароля
-	function get_restorepw_params() {
+	function get_restorepw_params()
+	{
 
 		global $config, $lang;
 		$params = array();
@@ -422,7 +430,8 @@ class auth_basic extends CoreAuthPlugin {
 
 	//
 	// Восстановить пароль
-	function restorepw(&$params, $values, &$msg) {
+	function restorepw(&$params, $values, &$msg)
+	{
 
 		global $config, $mysql, $lang, $tpl;
 		$error = 0;
@@ -488,7 +497,8 @@ class auth_basic extends CoreAuthPlugin {
 	// 2	- Incorrect length
 	// 3	- Incorrect format
 	// 100	- Available for registration
-	function onlineCheckRegistration($params) {
+	function onlineCheckRegistration($params)
+	{
 
 		global $config, $mysql;
 		// Prepare basic reply array
@@ -574,7 +584,8 @@ class auth_basic extends CoreAuthPlugin {
 	//
 	// Подтверждение восстановления пароля
 	//
-	function confirm_restorepw(&$msg, $reqid = null, $reqsecret = null) {
+	function confirm_restorepw(&$msg, $reqid = null, $reqsecret = null)
+	{
 
 		global $config, $mysql, $lang, $tpl;
 		LoadPluginLang('auth_basic', 'auth', '', 'auth');
