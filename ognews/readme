@@ -1,0 +1,23 @@
+Протокол Open Graph - это разметка, которую вы можете добавить к своим HTML-документам, 
+чтобы логически структурировать ваш контент и получить контроль над фрагментами, 
+которые отображаются, когда ваши URL-адреса публикуются через социальные сети,такие как :
+Facebook,LinkedIn,Twitter,VKontakte,Odnoklassniki
+и такие приложения, как 
+Slack,WhatsApp,Viber и Telegram.
+
+Страница плагина и обсуждение http://ngcms.ru/forum/viewtopic.php?id=3794
+
+1.скачиваем плагин
+2.заливаем в директорию Ваш_сайт/engine/plugins/
+3.Включаем плагин в админке .
+4.Открываем папку с вашим шаблоном и находим файл main.tpl и ищем там строку 
+Код:
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ lang['langcode'] }}" lang="{{ lang['langcode'] }}" dir="ltr">
+
+это строка из дефолтного шаблона, у вас может быть немного другая по содержимому, и добавляем в эту строку 
+Код:
+prefix="og: http://ogp.me/ns#"
+чтобы получилось
+Код:
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{{ lang['langcode'] }}" lang="{{ lang['langcode'] }}" dir="ltr" prefix="og: http://ogp.me/ns#">
+Этим мы объявляем что используется разметка Open Graph
