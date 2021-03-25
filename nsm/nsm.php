@@ -422,7 +422,7 @@ function plugin_nsm_addForm($tpl_name = 'news.add', $retry = '') {
 		'listURL'    => generateLink('core', 'plugin', array('plugin' => 'nsm'), array()),
 		'JEV'        => $retry ? $retry : '{}',
 		'smilies'    => ($config['use_smilies']) ? InsertSmilies('', 20, 'currentInputAreaID') : '',
-		'quicktags'  => ($config['use_bbcodes']) ? QuickTags('currentInputAreaID', 'news') : '',
+		'quicktags'  => ($config['use_bbcodes']) ? BBCodes('ng_news_content') : '',
 		'flags'      => array(
 			'mainpage'            => $perm['add.mainpage'] && $perm['personal.mainpage'],
 			'favorite'            => $perm['add.favorite'] && $perm['personal.favorite'],
@@ -728,8 +728,8 @@ function plugin_nsm_editForm($tpl_name = 'news.edit', $retry = '') {
 			generateLink('uprofile', 'show', array('name' => $row['author'], 'id' => $row['author_id'])) :
 			generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('name' => $row['author'], 'id' => $row['author_id'])),
 		'smilies'     => $config['use_smilies'] ? InsertSmilies('', 20, 'currentInputAreaID') : '',
-		'quicktags'   => $config['use_bbcodes'] ? QuickTags('currentInputAreaID', 'news') : '',
-		'approve'     => $row['approve'],
+		'quicktags'   => $config['use_bbcodes'] ? BBCodes('ng_news_content') : '',
+		'approve'     => $row['approve'], 
 		'flags'       => array(
 			'edit_split'          => $config['news.edit.split'] ? true : false,
 			'meta'                => $config['meta'] ? true : false,
