@@ -147,7 +147,7 @@ function plugin_nsm_add($tpl_name) {
 		}
 		$o = addNews(array('no.meta' => true, 'no.files' => true, 'no.editurl' => true));
 		if (!$o) {
-			plugin_nsm_addForm($tpl_name, json_encode(arrayCharsetConvert(0, $_POST)));
+			plugin_nsm_addForm($tpl_name, json_encode($_POST));
 		} else {
 			// Show list of current news
 			plugin_nsm();
@@ -225,7 +225,7 @@ function plugin_nsm_edit($tpl_name) {
 		} else {
 			$o = editNews(array('no.meta' => true, 'no.files' => true));
 			if (!$o) {
-				plugin_nsm_editForm($tpl_name, json_encode(arrayCharsetConvert(0, $_POST)));
+				plugin_nsm_editForm($tpl_name, json_encode($_POST));
 			}
 		}
 	}
@@ -377,11 +377,11 @@ function plugin_nsm_addForm($tpl_name = 'news.add', $retry = '') {
 
 		$tfVars = array(
 		//  'entries'   =>  $xfEntries,
-			'xfGC'      =>  json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
-			'xfCat'     =>  json_encode(arrayCharsetConvert(0, $xfCategories)),
-			'xfList'    =>  json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
-			'xtableConf'    =>  json_encode(arrayCharsetConvert(0, $tclist)),
-			'xtableVal'     =>  isset($_POST['xftable'])?$_POST['xftable']:json_encode(arrayCharsetConvert(0, $tlist)),
+			'xfGC'      =>  json_encode($xf['grp.news']),
+			'xfCat'     =>  json_encode($xfCategories),
+			'xfList'    =>  json_encode(array_keys($xf['news'])),
+			'xtableConf'    =>  json_encode($tclist),
+			'xtableVal'     =>  isset($_POST['xftable'])?$_POST['xftable']:json_encode($tlist),
 			'xtableHdr'     =>  $thlist,
 			'xtablecnt'     =>  count($thlist),
 			'flags'         => array(
@@ -422,7 +422,7 @@ function plugin_nsm_addForm($tpl_name = 'news.add', $retry = '') {
 		'listURL'    => generateLink('core', 'plugin', array('plugin' => 'nsm'), array()),
 		'JEV'        => $retry ? $retry : '{}',
 		'smilies'    => ($config['use_smilies']) ? InsertSmilies('', 20, 'currentInputAreaID') : '',
-		'quicktags'  => ($config['use_bbcodes']) ? QuickTags('currentInputAreaID', 'news') : '',
+		'quicktags'  => ($config['use_bbcodes']) ? BBCodes('ng_news_content') : '',
 		'flags'      => array(
 			'mainpage'            => $perm['add.mainpage'] && $perm['personal.mainpage'],
 			'favorite'            => $perm['add.favorite'] && $perm['personal.favorite'],
@@ -666,11 +666,11 @@ function plugin_nsm_editForm($tpl_name = 'news.edit', $retry = '') {
 		// Prepare personal [group] variables
 		$tfVars = array(
 			//  'entries'       =>  $xfEntries[0],
-			'xfGC'       => json_encode(arrayCharsetConvert(0, $xf['grp.news'])),
-			'xfCat'      => json_encode(arrayCharsetConvert(0, $xfCategories)),
-			'xfList'     => json_encode(arrayCharsetConvert(0, array_keys($xf['news']))),
-			'xtableConf' => json_encode(arrayCharsetConvert(0, $tclist)),
-			'xtableVal'  => json_encode(arrayCharsetConvert(0, $tlist)),
+			'xfGC'       => json_encode($xf['grp.news']),
+			'xfCat'      => json_encode($xfCategories),
+			'xfList'     => json_encode(array_keys($xf['news'])),
+			'xtableConf' => json_encode($tclist),
+			'xtableVal'  => json_encode($tlist),
 			'xtableHdr'  => $thlist,
 			'xtablecnt'  => count($thlist),
 			'flags'      => array(
@@ -728,8 +728,8 @@ function plugin_nsm_editForm($tpl_name = 'news.edit', $retry = '') {
 			generateLink('uprofile', 'show', array('name' => $row['author'], 'id' => $row['author_id'])) :
 			generateLink('core', 'plugin', array('plugin' => 'uprofile', 'handler' => 'show'), array('name' => $row['author'], 'id' => $row['author_id'])),
 		'smilies'     => $config['use_smilies'] ? InsertSmilies('', 20, 'currentInputAreaID') : '',
-		'quicktags'   => $config['use_bbcodes'] ? QuickTags('currentInputAreaID', 'news') : '',
-		'approve'     => $row['approve'],
+		'quicktags'   => $config['use_bbcodes'] ? BBCodes('ng_news_content') : '',
+		'approve'     => $row['approve'], 
 		'flags'       => array(
 			'edit_split'          => $config['news.edit.split'] ? true : false,
 			'meta'                => $config['meta'] ? true : false,
