@@ -1,7 +1,12 @@
-<table border="0" width="100%">
+<table>
 	<tr>
-		<td colspan="2" align="center" style="padding: 10px;">[prev-link]{l_tags:paginator.prev}[/prev-link]&nbsp;
-			{pages} &nbsp;[next-link]{l_tags:paginator.next}[/next-link]
+		<td>&nbsp;&raquo;</td>
+		<td><a href="{news_link}">{title}</a></td>
+	<tr>
+		<td>&nbsp;</td>
+		<td>
+			<small>{date}</small>
 		</td>
 	</tr>
 </table>
+<br/>
