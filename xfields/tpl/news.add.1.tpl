@@ -1,5 +1,5 @@
-<tr>
-	<th colspan="2">
+<tr class="thead-dark">
+	<th scope="col">
 		{{ lang['xfields_group_title'] }}
 		<span id="xf_profile"></span>
 	</th>
