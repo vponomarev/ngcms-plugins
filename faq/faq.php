@@ -77,4 +77,4 @@ function plugin_faq_showTwig($params) {
 	return plug_faq($params['maxnum'], isset($params['template']) ? $params['template'] : false, isset($params['order']) ? $params['order'] : 'DESC', isset($params['cacheExpire']) ? $params['cacheExpire'] : 0);
 }
 
-twigRegisterFunction('faq', 'show', plugin_faq_showTwig);
+twigRegisterFunction('faq', 'show', 'plugin_faq_showTwig');

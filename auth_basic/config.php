@@ -27,16 +27,16 @@ if ($lastupdate < 1) {
 $cfg = array();
 $cfgX = array();
 array_push($cfg, array('descr' => $lang['auth:description']));
-array_push($cfgX, array('name' => 'lastupdate', 'title' => $lang['auth:lastupdate'], 'descr' => $lang['auth:lastupdate_descr'], 'type' => 'input', value => $lastupdate));
-array_push($cfgX, array('name' => 'regstatus', 'title' => $lang['auth:regstatus'], 'descr' => $lang['auth:regstatus_descr'], 'type' => 'select', 'values' => $groupOptions, value => $regGroup));
-array_push($cfgX, array('name' => 'restorepw', 'title' => $lang['auth:restorepw'], 'descr' => $lang['auth:restorepw_descr'], 'type' => 'select', 'values' => array('0' => $lang['auth:restore_disabled'], 'login' => $lang['auth:restore_login'], 'email' => $lang['auth:restore_email'], 'both' => $lang['auth:restore_both']), value => pluginGetVariable('auth_basic', 'restorepw')));
-array_push($cfgX, array('name' => 'regcharset', 'title' => $lang['auth:regcharset'], 'descr' => $lang['auth:regcharset_descr'], 'type' => 'select', 'values' => array('0' => 'Eng', '1' => 'Rus', '2' => 'Eng+Rus', '3' => 'All'), value => pluginGetVariable('auth_basic', 'regcharset')));
-array_push($cfgX, array('name' => 'iplock', 'title' => $lang['auth:iplock'], 'descr' => $lang['auth:iplock_descr'], 'type' => 'select', 'values' => array('0' => $lang['noa'], '1' => $lang['yesa']), value => pluginGetVariable('auth_basic', 'iplock')));
-array_push($cfgX, array('name' => 'multilogin', 'title' => $lang['auth:multilogin'], 'descr' => $lang['auth:multilogin_descr'], 'type' => 'select', 'values' => array('0' => $lang['noa'], '1' => $lang['yesa']), value => pluginGetVariable('auth_basic', 'multilogin')));
+array_push($cfgX, array('name' => 'lastupdate', 'title' => $lang['auth:lastupdate'], 'descr' => $lang['auth:lastupdate_descr'], 'type' => 'input', 'value' => $lastupdate));
+array_push($cfgX, array('name' => 'regstatus', 'title' => $lang['auth:regstatus'], 'descr' => $lang['auth:regstatus_descr'], 'type' => 'select', 'values' => $groupOptions, 'value' => $regGroup));
+array_push($cfgX, array('name' => 'restorepw', 'title' => $lang['auth:restorepw'], 'descr' => $lang['auth:restorepw_descr'], 'type' => 'select', 'values' => array('0' => $lang['auth:restore_disabled'], 'login' => $lang['auth:restore_login'], 'email' => $lang['auth:restore_email'], 'both' => $lang['auth:restore_both']), 'value' => pluginGetVariable('auth_basic', 'restorepw')));
+array_push($cfgX, array('name' => 'regcharset', 'title' => $lang['auth:regcharset'], 'descr' => $lang['auth:regcharset_descr'], 'type' => 'select', 'values' => array('0' => 'Eng', '1' => 'Rus', '2' => 'Eng+Rus', '3' => 'All'), 'value' => pluginGetVariable('auth_basic', 'regcharset')));
+array_push($cfgX, array('name' => 'iplock', 'title' => $lang['auth:iplock'], 'descr' => $lang['auth:iplock_descr'], 'type' => 'select', 'values' => array('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => pluginGetVariable('auth_basic', 'iplock')));
+array_push($cfgX, array('name' => 'multilogin', 'title' => $lang['auth:multilogin'], 'descr' => $lang['auth:multilogin_descr'], 'type' => 'select', 'values' => array('0' => $lang['noa'], '1' => $lang['yesa']), 'value' => pluginGetVariable('auth_basic', 'multilogin')));
 array_push($cfg, array('mode' => 'group', 'title' => '<b>' . $lang['auth:block.main'] . '</b>', 'entries' => $cfgX));
 $cfgX = array();
-array_push($cfgX, array('name' => 'en_dbprefix', 'title' => $lang['auth:en_dbprefix'], 'descr' => $lang['auth:en_dbprefix_descr'], 'type' => 'checkbox', value => pluginGetVariable('auth_basic', 'en_dbprefix')));
-array_push($cfgX, array('name' => 'dbprefix', 'title' => $lang['auth:dbprefix'], 'descr' => $lang['auth:dbprefix_descr'], 'type' => 'input', value => pluginGetVariable('auth_basic', 'dbprefix')));
+array_push($cfgX, array('name' => 'en_dbprefix', 'title' => $lang['auth:en_dbprefix'], 'descr' => $lang['auth:en_dbprefix_descr'], 'type' => 'checkbox', 'value' => pluginGetVariable('auth_basic', 'en_dbprefix')));
+array_push($cfgX, array('name' => 'dbprefix', 'title' => $lang['auth:dbprefix'], 'descr' => $lang['auth:dbprefix_descr'], 'type' => 'input', 'value' => pluginGetVariable('auth_basic', 'dbprefix')));
 array_push($cfg, array('mode' => 'group', 'title' => '<b>' . $lang['auth:block.uprefix'] . '</b>', 'entries' => $cfgX));
 // RUN
 if ($_REQUEST['action'] == 'commit') {

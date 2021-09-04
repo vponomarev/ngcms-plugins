@@ -1,8 +1,11 @@
 <?php
 
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+
 require_once 'lib/Mobile_Detect.php';
 
-class Twig_Extension_MobileDetect extends Twig_Extension
+class Twig_Extension_MobileDetect extends AbstractExtension
 {
     protected $detector;
 
@@ -21,16 +24,16 @@ class Twig_Extension_MobileDetect extends Twig_Extension
      */
     public function getFunctions()
     {
-        $functions = array(
-            'get_available_devices' => new Twig_Function_Method($this, 'getAvailableDevices'),
-            'is_mobile' => new Twig_Function_Method($this, 'isMobile'),
-            'is_tablet' => new Twig_Function_Method($this, 'isTablet'),
-        );
+        $functions = [
+            new TwigFunction('get_available_devices', 'getAvailableDevices'),
+            new TwigFunction('is_mobile', 'isMobile'),
+            new TwigFunction('is_tablet', 'isTablet'),
+        ];
 
         foreach ($this->getAvailableDevices() as $device => $fixedName) {
             $methodName = 'is'.$device;
             $twigFunctionName = 'is_'.$fixedName;
-            $functions[$twigFunctionName] = new Twig_Function_Method($this, 'is'.$methodName);
+            $functions[] = new TwigFunction($twigFunctionName, 'is'.$methodName);
         }
 
         return $functions;

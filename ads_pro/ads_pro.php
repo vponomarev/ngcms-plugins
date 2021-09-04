@@ -18,7 +18,7 @@ class ADSProStaticFilter extends StaticFilter {
 // - news
 class ADSProNewsFilter extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $adsPRO_cache;
 		if ($mode['style'] == 'full') {
@@ -50,7 +50,7 @@ $adsPRO_cache = array(
 	'flag.main'     => false
 );
 // Main function of plugin
-function plugin_ads_pro($params) {
+function plugin_ads_pro() {
 
 	global $template, $config, $CurrentHandler, $catmap, $mysql, $adsPRO_cache;
 	$dataConfig = pluginGetVariable('ads_pro', 'data');

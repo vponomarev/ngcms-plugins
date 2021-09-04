@@ -31,7 +31,7 @@ LoadPluginLang('bookmarks', 'main', '', '', ':');
 $bookmarks_script = '
 <script type="text/javascript">
 
-	<!-- (ñ)habrahabr.ru -->
+	<!-- (ï¿½)habrahabr.ru -->
 	function futu_alert(header, text, close, className) {
 		if (!document.getElementById(\'futu_alerts_holder\')) {
 			var futuAlertOuter = document.createElement(\'div\');
@@ -144,7 +144,7 @@ $bookmarksList = array();
 # generate links for add/remove bookmark 
 class BookmarksNewsFilter extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars) {
+	public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $lang, $bookmarksLoaded, $bookmarksList, $userROW, $tpl, $mysql, $twig;
 		# determine paths for template files

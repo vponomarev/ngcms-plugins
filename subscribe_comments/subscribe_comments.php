@@ -51,7 +51,7 @@ function plugin_subscribe_comments_cron() {
 
 class ShowSubscribeForm extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $mysql, $tpl, $config;
 		//plugin_subscribe_comments_cron();

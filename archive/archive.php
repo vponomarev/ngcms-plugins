@@ -123,4 +123,4 @@ function plugin_archive_showTwig($params) {
 	return plug_arch(isset($params['maxnum']) ? $params['maxnum'] : pluginGetVariable('archive', 'maxnum'), isset($params['counter']) ? $params['counter'] : false, isset($params['tcounter']) ? $params['tcounter'] : false, isset($params['template']) ? $params['template'] : false, isset($params['cacheExpire']) ? $params['cacheExpire'] : 0);
 }
 
-twigRegisterFunction('archive', 'show', plugin_archive_showTwig);
+twigRegisterFunction('archive', 'show', 'plugin_archive_showTwig');

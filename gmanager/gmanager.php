@@ -237,7 +237,7 @@ function plugin_gmanager_gallery($params) {
 	if (pluginGetVariable('gmanager', 'if_auto_cash')) cacheStoreFile($cacheFileName, $output, 'gmanager');
 }
 
-function plugin_gmanager_category($params) {
+function plugin_gmanager_category() {
 
 	global $tpl, $lang, $mysql, $template;
 	if (pluginGetVariable('gmanager', 'if_auto_cash')) {

@@ -88,7 +88,7 @@ function plugin_rating_screen() {
 //
 class RatingNewsFilter extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $tpl, $mysql, $userROW;
 		$tvars['vars']['plugin_rating'] = rating_show($SQLnews['id'], $SQLnews['rating'], $SQLnews['votes']);

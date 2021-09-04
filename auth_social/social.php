@@ -96,7 +96,7 @@ function socialAuth() {
 				$get_avatar = $auther->getAvatar();
 				// если есть аватар, пробуем скачать
 				if (!empty($get_avatar)) {
-					addToFiles('newavatar', $get_avatar);
+                    addAvatarToFiles('newavatar', $get_avatar);
 					// Load required library
 					@include_once root . 'includes/classes/upload.class.php';
 					// UPLOAD AVATAR
@@ -143,7 +143,7 @@ function socialAuth() {
 				$get_avatar = $auther->getAvatar();
 				// если есть аватар, пробуем скачать
 				if (!empty($get_avatar)) {
-					addToFiles('newavatar', $get_avatar);
+                    addAvatarToFiles('newavatar', $get_avatar);
 					// Load required library
 					@include_once root . 'includes/classes/upload.class.php';
 					// UPLOAD AVATAR
@@ -301,14 +301,14 @@ if (class_exists('p_uprofileFilter')) {
 }
 /**
  * Add to $_FILES from external url
- * sample usage: addToFiles('google_favicon', 'http://google.com/favicon.ico');
+ * sample usage: addAvatarToFiles('google_favicon', 'http://google.com/favicon.ico');
  * @since  17.12.12 17:23
  * @author mekegi
  *
  * @param string $key
  * @param string $url sample http://some.tld/path/to/file.ext
  */
-function addToFiles($key, $url) {
+function addAvatarToFiles($key, $url) {
 
 	$tempName = tempnam(ini_get('upload_tmp_dir'), 'upload_');
 	//$tempName = tempnam('/tmp', 'php_files');

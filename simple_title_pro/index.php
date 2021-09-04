@@ -53,7 +53,7 @@ function simple_title_pro() {
 						return;
 					}
 				}
-				$title = $mysql->result('SELECT title FROM ' . prefix . '_simple_title_pro WHERE cat_id = ' . db_squote($SYSTEM_FLAGS['news']['currentCategory.id']) . ' LIMIT 1');
+				$title = $mysql->record('SELECT title FROM ' . prefix . '_simple_title_pro WHERE cat_id = ' . db_squote($SYSTEM_FLAGS['news']['currentCategory.id']) . ' LIMIT 1');
 				if (empty($title))
 					$title = pluginGetVariable('simple_title_pro', 'c_title');
 				if (true) {
@@ -90,7 +90,7 @@ function simple_title_pro() {
 						return;
 					}
 				}
-				$title = $mysql->result('SELECT title FROM ' . prefix . '_simple_title_pro WHERE news_id = ' . db_squote($SYSTEM_FLAGS['news']['db.id']) . ' LIMIT 1');
+				$title = $mysql->record('SELECT title FROM ' . prefix . '_simple_title_pro WHERE news_id = ' . db_squote($SYSTEM_FLAGS['news']['db.id']) . ' LIMIT 1');
 				if (empty($title))
 					$title = pluginGetVariable('simple_title_pro', 'n_title');
 				if (true) {
@@ -123,7 +123,7 @@ function simple_title_pro() {
 					return;
 				}
 			}
-			$title = $mysql->result('SELECT title FROM ' . prefix . '_simple_title_pro WHERE static_id = ' . db_squote($SYSTEM_FLAGS['static']['db.id']) . ' LIMIT 1');
+			$title = $mysql->record('SELECT title FROM ' . prefix . '_simple_title_pro WHERE static_id = ' . db_squote($SYSTEM_FLAGS['static']['db.id']) . ' LIMIT 1');
 			if (empty($title))
 				$title = pluginGetVariable('simple_title_pro', 'static_title');
 			if (true) {

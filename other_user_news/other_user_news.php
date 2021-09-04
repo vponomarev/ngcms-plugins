@@ -102,4 +102,4 @@ function plugin_other_user_news_showTwig($params) {
 	return plugin_other_user_news($params['number'], $params['mode'], $params['template'], isset($params['cacheExpire']) ? $params['cacheExpire'] : 0);
 }
 
-twigRegisterFunction('other_user_news', 'show', plugin_other_user_news_showTwig);
+twigRegisterFunction('other_user_news', 'show', 'plugin_other_user_news_showTwig');

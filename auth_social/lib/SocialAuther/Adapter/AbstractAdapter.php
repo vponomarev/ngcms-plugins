@@ -264,7 +264,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * Make post request and return result
      *
      * @param string $url
-     * @param string $params
+     * @param array $params
      * @param bool $parse
      * @return array|string
      */

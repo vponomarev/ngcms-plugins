@@ -287,4 +287,4 @@ if (!pluginGetVariable('calendar', 'mode')) {
 
 // Register function and template
 rpcRegisterFunction('plugin.calendar.show', 'calendar_rpc_manage');
-twigRegisterFunction('calendar', 'show', plugin_calendar_showTwig);
+twigRegisterFunction('calendar', 'show', 'plugin_calendar_showTwig');

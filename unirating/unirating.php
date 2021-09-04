@@ -14,7 +14,7 @@ if (!defined('NGCMS')) die ('HAL');
 //
 class UNRatingNewsFilter extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+	public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $tpl, $mysql, $userROW;
 		LoadPluginLang('unirating', 'site');

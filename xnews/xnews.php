@@ -146,6 +146,7 @@ function xNewsShowBlock($params) {
 			$cacheDisabled = true;
 		}
 	}
+
 	$showCount = ($params['count'] > 0) ? intval($params['count']) : 10;
 	$showSkip = ($params['skip'] > 0) ? intval($params['skip']) : 0;
 	$showAge = ($params['maxAge'] > 0) ? intval($params['maxAge']) : 0;
@@ -154,7 +155,7 @@ function xNewsShowBlock($params) {
 	$cacheKeys [] = '|maxAge=' . $showAge;
 	$cacheKeys [] = '|embed=' . intval($params['extractEmbeddedItems']);
 	$cacheKeys [] = '|categoryMode=' . $params['categoryMode'];
-	$cacheKeys [] = '|categories=' . join(",", $categoryList);
+	$cacheKeys [] = '|categories=' . implode(",", $categoryList ?: []);
 	if ($showAge > 0) {
 		$filterList [] = '((unix_timestamp(now()) - postdate) < ' . ($showAge * 86400) . ')';
 	}
@@ -240,5 +241,5 @@ function xNewsShowBlock($params) {
 	return $xOut;
 }
 
-twigRegisterFunction('xnews', 'show', xNewsShowBlock);
+twigRegisterFunction('xnews', 'show', 'xNewsShowBlock');
 

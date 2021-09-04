@@ -75,7 +75,7 @@ class CommentsNewsFilter extends NewsFilter {
 		return 1;
 	}
 
-	function showNews($newsID, $SQLnews, &$tvars, $callingParams = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $catmap, $catz, $config, $userROW, $template, $lang, $tpl;
 		// Determine if comments are allowed in  this specific news

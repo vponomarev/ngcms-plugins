@@ -159,8 +159,8 @@ function site_stats()
     $bot = filter_bots($_SERVER['HTTP_USER_AGENT']);
 
     if (is_array($userROW)) {
-        $id = null;
-        $ips = null;
+        $id = '';
+        $ips = 0;
         $users = $userROW['name'];
         $users_id = $userROW['id'];
         $users_status = $userROW['status'];
@@ -379,7 +379,7 @@ function site_stats()
     }
 
     $stats = unserialize(getSiteStats($templateName));
-    $count = count($stats);
+    $count = $stats ? count($stats) : [];
 
     $outNW = intval(pluginGetVariable('site_stats', 'outNW'));
     

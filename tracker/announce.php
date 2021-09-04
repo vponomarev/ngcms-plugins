@@ -252,7 +252,7 @@ class TrackerNewsFilter extends NewsFilter {
 			plugin_tracker_updnews($newsID, $xSQL);
 	}
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+	public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $tpl, $config, $mysql, $lang;
 		$tvars['vars']['plugin_tracker'] = '';

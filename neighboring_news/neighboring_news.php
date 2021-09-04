@@ -24,7 +24,7 @@ if (!defined('NGCMS')) die ('Galaxy in danger');
 
 class NeighboringNewsFilter extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $mysql, $config, $tpl, $catz, $catmap, $CurrentHandler;
 		// Determine paths for all template files

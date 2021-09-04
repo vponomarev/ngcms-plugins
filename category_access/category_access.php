@@ -22,7 +22,7 @@ class CategoryAccessNewsFilter extends NewsFilter {
 		}
 	}
 
-	function showNews($newsID, $SQLnews, &$tvars, &$mode) {
+	public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $userROW, $catmap, $catz;
 		if ($this->flag) {

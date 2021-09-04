@@ -3,9 +3,8 @@ if (!defined('NGCMS')) die ('HAL');
 
 class Text_ReplaceNewsFilter extends NewsFilter {
 
-	function Text_ReplaceNewsFilter() {
-
-		$this->text = array();
+	public function __construct() {
+		$this->text = [];
 		$this->p_count = 0;
 		$this->c_replace = 0;
 		$this->str_url = "<a href=''>error</a>";
@@ -16,7 +15,7 @@ class Text_ReplaceNewsFilter extends NewsFilter {
 		$this->text = array_map('trim', explode("\n", $this->text));
 	}
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode) {
+	public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		foreach (array('short-story', 'full-story') as $varKeyName) {
 			if (!isset($tvars['vars'][$varKeyName])) {
@@ -70,9 +69,9 @@ class Text_ReplaceNewsFilter extends NewsFilter {
 				if ($pos2 !== false && $pos2 > $pos) return $this->text_replace($text, $search, $replace, $p_count, $pos + 1, $i - 1);
 			}
 			if ($this->c_replace <> 0) {
-				if ($text{$pos + strlen($search)} == ''
-					or $text{$pos + strlen($search)} == ' '
-					or $text{$pos + strlen($search)} == '<'
+				if ($text[$pos + strlen($search)] == ''
+					or $text[$pos + strlen($search)] == ' '
+					or $text[$pos + strlen($search)] == '<'
 				) {
 				} else return $this->text_replace($text, $search, $replace, $p_count, $pos + 1, $i - 1);
 			}

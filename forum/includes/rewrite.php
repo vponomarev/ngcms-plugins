@@ -413,4 +413,4 @@ function link_downloads($id) {
 	return $url;
 }
 
-twigRegisterFunction('forum', 'link_moderate', link_moderate);
+twigRegisterFunction('forum', 'link_moderate', 'link_moderate');

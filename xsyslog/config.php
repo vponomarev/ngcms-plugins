@@ -46,16 +46,11 @@ function show_xsyslog() {
 	if ($fAuthorName) {
 		array_push($conditions, "username = " . db_squote($fAuthorName));
 	}
-	switch ($fStatus) {
-		case 'null':
-			break;
-		case 0:
-			array_push($conditions, "status = " . db_squote($fStatus));
-			break;
-		case 1:
-			array_push($conditions, "status = " . db_squote($fStatus));
-			break;
-	}
+
+    if ($fStatus !== null) {
+        array_push($conditions, "status = " . (int)$fStatus);
+    }
+
 	if ($fPlugin) {
 		array_push($conditions, "plugin = " . db_squote($fPlugin));
 	}

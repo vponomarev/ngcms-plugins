@@ -537,5 +537,5 @@ function addToFiles($key, $url) {
 	//return $_FILES[$key];
 }
 
-twigRegisterFunction('guestbook', 'show', guestbook_block);
+twigRegisterFunction('guestbook', 'show', 'guestbook_block');
 ?>

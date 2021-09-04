@@ -128,7 +128,7 @@ function forum_show_news($params) {
 	return $xt->render($tVars);
 }
 
-twigRegisterFunction('forum', 'ShowListNews', forum_show_news);
-twigRegisterFunction('forum', 'ShowTopics', forum_show_topics);
-twigRegisterFunction('forum', 'ShowTopicsTop', forum_show_topics_top);
-twigRegisterFunction('forum', 'ShowAUsers', forum_show_a_users);
+twigRegisterFunction('forum', 'ShowListNews', 'forum_show_news');
+twigRegisterFunction('forum', 'ShowTopics', 'forum_show_topics');
+twigRegisterFunction('forum', 'ShowTopicsTop', 'forum_show_topics_top');
+twigRegisterFunction('forum', 'ShowAUsers', 'forum_show_a_users');

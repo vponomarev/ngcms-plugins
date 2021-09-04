@@ -229,7 +229,7 @@ if (class_exists('XFieldsFilter') && class_exists('FeedbackFilter')) {
 class BasketNewsFilter extends NewsFilter {
 
 	// Show news call :: processor (call after all processing is finished and before show)
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $DSlist;
 		// Определяем - работаем ли мы внутри строк таблиц

@@ -12,7 +12,7 @@ LoadPluginLang('finance', 'config', '', '', ':');
 $cfg = array();
 array_push($cfg, array('descr' => $lang['finance:description']));
 $cfgX = array();
-array_push($cfgX, array('name' => 'syscurrency', 'title' => $lang['finance:syscurrency'], 'descr' => $lang['finance:syscurrency.descr'], 'type' => 'select', 'values' => array('RUR' => 'RUR', 'EUR' => 'EUR', 'USD' => 'USD'), value => extra_get_param('finance', 'syscurrency')));
+array_push($cfgX, array('name' => 'syscurrency', 'title' => $lang['finance:syscurrency'], 'descr' => $lang['finance:syscurrency.descr'], 'type' => 'select', 'values' => array('RUR' => 'RUR', 'EUR' => 'EUR', 'USD' => 'USD'), 'value' => extra_get_param('finance', 'syscurrency')));
 array_push($cfg, array('mode' => 'group', 'title' => '<b>Общие настройки</b>', 'entries' => $cfgX));
 $b = array();
 foreach ($mysql->select("select * from " . prefix . "_balance_manager order by id") as $row) {
@@ -21,8 +21,8 @@ foreach ($mysql->select("select * from " . prefix . "_balance_manager order by i
 for ($i = 1; $i < 5; $i++) {
 	$cfgX = array();
 	//array_push($cfgX, array('title' => '== <b>Настройки баланса №'.$i.'</b> =='));
-	array_push($cfgX, array('nosave' => 1, 'name' => 'balance' . $i . '_monetary', 'title' => $lang['finance:balance.monetary'], 'descr' => $lang['finance:balance.monetary.descr'], 'type' => 'select', 'values' => array('1' => 'Да', '0' => 'Нет'), value => $b[$i]['monetary']));
-	array_push($cfgX, array('nosave' => 1, 'name' => 'balance' . $i . '_type', 'title' => $lang['finance:balance.type'], 'descr' => $lang['finance:balance.type.descr'], 'type' => 'input', value => $b[$i]['type']));
+	array_push($cfgX, array('nosave' => 1, 'name' => 'balance' . $i . '_monetary', 'title' => $lang['finance:balance.monetary'], 'descr' => $lang['finance:balance.monetary.descr'], 'type' => 'select', 'values' => array('1' => 'Да', '0' => 'Нет'), 'value' => $b[$i]['monetary']));
+	array_push($cfgX, array('nosave' => 1, 'name' => 'balance' . $i . '_type', 'title' => $lang['finance:balance.type'], 'descr' => $lang['finance:balance.type.descr'], 'type' => 'input', 'value' => $b[$i]['type']));
 	array_push($cfgX, array('nosave' => 1, 'name' => 'balance' . $i . '_description', 'title' => $lang['finance:balance.descr'], 'descr' => $lang['finance:balance.descr.descr'], 'type' => 'input', 'value' => $b[$i]['description']));
 	array_push($cfg, array('mode' => 'group', 'title' => '<b>' . $lang['finance:balance.header'] . $i . '</b>', 'entries' => $cfgX));
 }

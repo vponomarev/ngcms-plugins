@@ -4,7 +4,7 @@ if (!defined('NGCMS')) die ('HAL');
 
 class VarMgrNewsFilter extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars) {
+	public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $lang, $langShortMonths, $langMonths;
 		if (extra_get_param('varmgr', 'extdate')) {

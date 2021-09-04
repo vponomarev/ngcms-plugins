@@ -13,7 +13,7 @@ class BBmediaNewsfilter extends NewsFilter {
 		}
 	}
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		if (($t = bbMediaProcess($tvars['vars']['short-story'])) !== false) {
 			$tvars['vars']['short-story'] = $t;

@@ -51,7 +51,7 @@ class TitleNewsFilter extends NewsFilter {
 	function editNewsForm($newsID, $SQLold, &$tvars) {
 
 		global $mysql;
-		if ($row = $mysql->result('SELECT title FROM ' . prefix . '_simple_title_pro WHERE news_id = \'' . intval($newsID) . '\' LIMIT 1'))
+		if ($row = $mysql->record('SELECT title FROM ' . prefix . '_simple_title_pro WHERE news_id = \'' . intval($newsID) . '\' LIMIT 1'))
 			$tvars['titles'] = $row;
 		else
 			$tvars['titles'] = '';
@@ -62,7 +62,7 @@ class TitleNewsFilter extends NewsFilter {
 		global $mysql, $config;
 		$title = isset($_REQUEST['titles']) ? secure_html($_REQUEST['titles']) : '';
 		if (isset($newsID)) {
-			if ($mysql->result('SELECT 1 FROM ' . prefix . '_simple_title_pro WHERE news_id = \'' . intval($newsID) . '\' LIMIT 1')) {
+			if ($mysql->record('SELECT 1 FROM ' . prefix . '_simple_title_pro WHERE news_id = \'' . intval($newsID) . '\' LIMIT 1')) {
 				$cacheFileName = md5('block_directory_sites_news' . $newsID . $config['default_lang']) . '.txt';
 				cacheStoreFile($cacheFileName, $title, 'simple_title_pro');
 				$mysql->query('UPDATE ' . prefix . '_simple_title_pro SET 

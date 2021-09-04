@@ -9,23 +9,27 @@ function plugin_top_active_users($number, $mode, $overrideTemplateName, $cacheEx
 	$cacheDisabled = false;
 	if (($number < 1) || ($number > 100))
 		$number = 5;
+
+    $sql = "SELECT * FROM " . uprefix . "_users ";
+
 	switch ($mode) {
 		case 'news':
-			$sql = "SELECT id, name, com, news, avatar, mail, last, reg FROM " . uprefix . "_users ORDER BY news DESC";
+			$sql .= "ORDER BY news DESC";
 			break;
 		case 'com':
-			$sql = "SELECT id, name, com, news, avatar, mail, last, reg FROM " . uprefix . "_users ORDER BY com DESC";
+            $haveComments = $mysql->tableExists(prefix.'_comments');
+            $sql .= $haveComments ? "ORDER BY com DESC" : "ORDER BY news DESC";
 			break;
 		case 'last':
-			$sql = "SELECT id, name, com, news, avatar, mail, last, reg FROM " . uprefix . "_users ORDER BY reg DESC";
+			$sql .= "ORDER BY reg DESC";
 			break;
 		case 'rnd':
 			$cacheDisabled = true;
-			$sql = "SELECT id, name, com, news, avatar, mail, last, reg FROM " . uprefix . "_users ORDER BY RAND() DESC";
+			$sql .= "ORDER BY RAND() DESC";
 			break;
 		default:
 			$mode = 'news';
-			$sql = "SELECT id, name, com, news, avatar, mail, last, reg FROM " . uprefix . "_users ORDER BY news DESC";
+			$sql .= "ORDER BY news DESC";
 			break;
 	}
 	$sql .= " limit " . $number;
@@ -113,4 +117,4 @@ function plugin_top_active_users_showTwig($params) {
 	return plugin_top_active_users($params['number'], $params['mode'], $params['template'], isset($params['cacheExpire']) ? $params['cacheExpire'] : 0);
 }
 
-twigRegisterFunction('top_active_users', 'show', plugin_top_active_users_showTwig);
+twigRegisterFunction('top_active_users', 'show', 'plugin_top_active_users_showTwig');

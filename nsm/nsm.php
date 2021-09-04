@@ -331,7 +331,7 @@ function plugin_nsm_addForm($tpl_name = 'news.add', $retry = '') {
 						$xfEntry['input'] = $val;
 						break;
 					default:
-						continue;
+						continue(2);
 				}
 				$xfEntries[intval($data['area'])][] = $xfEntry;
 				$xfList[$id] = $xfEntry;

@@ -50,7 +50,7 @@ class FinanceNewsFilter extends NewsFilter {
 		return 1;
 	}
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $tpl, $mysql, $userROW, $FINANCE_MONEY_ACCEPTORS;
 		// Если цена не выставлена - пропускаем
@@ -123,13 +123,13 @@ register_filter('news', 'finance', new FinanceNewsFilter);
 register_plugin_page('finance', '', 'plugin_finance_screen', 0);
 add_act('index', 'finance_info');
 add_act('usermenu', 'finance_info_menu');
-function finance_info($sth) {
+function finance_info() {
 
 	global $userROW, $template;
 	$template['vars']['plugin_finance_balance'] = is_array($userROW) ? (sprintf("%.02f", finance_check_money($userROW['name']) / 100) . ' ' . pluginGetVariable('finance', 'syscurrency')) : '';
 }
 
-function finance_info_menu($sth) {
+function finance_info_menu() {
 
 	global $userROW, $tvars;
 	$tvars['vars']['plugin_finance_balance'] = is_array($userROW) ? (sprintf("%.02f", finance_check_money($userROW['name']) / 100) . ' ' . pluginGetVariable('finance', 'syscurrency')) : '';

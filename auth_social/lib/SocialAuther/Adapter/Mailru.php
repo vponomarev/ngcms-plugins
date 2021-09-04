@@ -18,7 +18,7 @@ class Mailru extends AbstractAdapter
             'avatar'     => 'pic_big',
             'birthday'   => 'birthday',
             'country'    => 'country_name',
-+           'city'       => 'city_name'
+            'city'       => 'city_name'
         );
 
         $this->provider = 'mailru';

@@ -91,7 +91,7 @@ function plugin_block_zgallery($number, $mode, $cat, $overrideTemplateName, $cac
 
 class ShowZgallery extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+	public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $mysql, $tpl, $config, $twig;
 		/*
@@ -134,5 +134,5 @@ function plugin_block_zgallery_showTwig($params) {
 	return plugin_block_zgallery($params['number'], $params['mode'], $params['cat'], $params['template'], isset($params['cacheExpire']) ? $params['cacheExpire'] : 0);
 }
 
-twigRegisterFunction('zgallery', 'show', plugin_block_zgallery_showTwig);
+twigRegisterFunction('zgallery', 'show', 'plugin_block_zgallery_showTwig');
 register_filter('news', 'zgallery', new ShowZgallery);

@@ -323,7 +323,7 @@ function plugin_complain_update() {
 //
 class ComplainNewsFilter extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		global $tpl, $mysql, $userROW;
 		// Show only in full news

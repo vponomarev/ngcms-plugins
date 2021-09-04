@@ -3,7 +3,7 @@
 if (!defined('NGCMS')) die('HAL');
 class OGNEWSNewsFilter extends NewsFilter
 {
-    function showNews($newsID, $SQLnews, $tvars, $mode = array())
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = [])
     {
         global $CurrentHandler, $config;
         if (($CurrentHandler['handlerName'] == 'news') || ($CurrentHandler['handlerName'] == 'print')) {

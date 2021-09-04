@@ -19,7 +19,7 @@ include_once(dirname(__FILE__) . '/includes/rewrite.php');
 
 class ShowForumNewsFilter extends NewsFilter {
 
-	function showNews($newsID, $SQLnews, &$tvars, $mode = array()) {
+    public function showNews($newsID, $SQLnews, &$tvars, $mode = []) {
 
 		if (empty($SQLnews['tid'])) {
 			$tvars['vars']['topic_forum_url'] = '';
