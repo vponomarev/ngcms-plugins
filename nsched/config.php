@@ -11,30 +11,33 @@ if (! defined('NGCMS')) {
 
 // Preload config file
 pluginsLoadConfig();
+LoadPluginLang($plugin, 'config', '', '', ':');
 
 // Fill configuration parameters
 $cfg = [];
 
 array_push($cfg, [
-    'descr' => 'Плагин обеспечивает возможность публиковать/снимать с публикации новости по расписанию.',
+    'descr' => $lang[$plugin.':description'],
 ]);
 
 array_push($cfg, [
     'name' => 'period',
-    'title' => 'Периодичность анализа новостей',
-    'descr' => 'Период проверки полей <i>Дата включения</i> и <i>Дата отключения</i>.<br>Чем реже производится анализ - тем ниже нагрузка на БД, но при этом менее точно отрабатывает время публикации/снятия с публикации',
+    'title' => $lang[$plugin.':period'],
+    'descr' => $lang[$plugin.':period_descr'],
     'type' => 'select',
     'values' => [
-        '0' => 'не запускать',
-        '5m' => '5 минут',
-        '10m' => '10 минут',
-        '15m' => '15 минут',
-        '30m' => '30 минут',
-        '1h' => '1 час',
-        '2h' => '2 часа',
-        '3h' => '3 часа',
-        '6h' => '6 часов',
-        '12h' => '12 часов',
+        '0' => $lang[$plugin.':period_value_0'],
+        '5m' => $lang[$plugin.':period_value_5m'],
+        '10m' => $lang[$plugin.':period_value_10m'],
+        '15m' => $lang[$plugin.':period_value_15m'],
+        '30m' => $lang[$plugin.':period_value_30m'],
+        '1h' => $lang[$plugin.':period_value_1h'],
+        '2h' => $lang[$plugin.':period_value_2h'],
+        '3h' => $lang[$plugin.':period_value_3h'],
+        '4h' => $lang[$plugin.':period_value_4h'],
+        '6h' => $lang[$plugin.':period_value_6h'],
+        '8h' => $lang[$plugin.':period_value_8h'],
+        '12h' => $lang[$plugin.':period_value_12h'],
     ],
     'value' => pluginGetVariable($plugin, 'period'),
 ]);
@@ -84,11 +87,11 @@ if ($_REQUEST['action'] == 'commit') {
             break;
     }
 
+    /** @var cronManager $cron */
+    $cron->unregisterTask($plugin);
+    $cron->registerTask($plugin, 'run', $regRun[0], $regRun[1], '*', '*', '*');
+
     commit_plugin_config_changes($plugin, $cfg);
-
-    $cron->unregisterTask('nsched');
-    $cron->registerTask('nsched', 'run', $regRun[0], $regRun[1], '*', '*', '*');
-
     print_commit_complete($plugin);
 } else {
     generate_config_page($plugin, $cfg);

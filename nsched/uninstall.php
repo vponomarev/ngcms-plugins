@@ -15,7 +15,7 @@ if (! defined('NGCMS')) {
 }
 
 pluginsLoadConfig();
-LoadPluginLang('nsched', 'install');
+LoadPluginLang('nsched', 'deinstall', '', '', ':');
 
 $db_update = [
     [
@@ -34,6 +34,5 @@ if ($_REQUEST['action'] == 'commit') {
         plugin_mark_deinstalled('nsched');
     }
 } else {
-    $text = 'При удалении плагина <b>nsched</b> вся информация о расписании размещения/удаления новостей будет потеряна!<br><br>';
-    generate_install_page('nsched', $text, 'deinstall');
+    generate_install_page('nsched', $lang[$plugin.':description'], 'deinstall');
 }

@@ -15,7 +15,7 @@ if (! defined('NGCMS')) {
 }
 
 pluginsLoadConfig();
-LoadPluginLang('nsched', 'install');
+LoadPluginLang($plugin, 'install', '', '', ':');
 
 $db_update = [
     [
@@ -30,10 +30,9 @@ $db_update = [
 
 if ($_REQUEST['action'] == 'commit') {
     // If submit requested, do config save
-    if (fixdb_plugin_install('nsched', $db_update)) {
-        plugin_mark_installed('nsched');
+    if (fixdb_plugin_install($plugin, $db_update)) {
+        plugin_mark_installed($plugin);
     }
 } else {
-    $text = 'Плагин <b>nsched</b> позволяет публиковать/снимать с публикации новости по расписанию.<br><br>';
-    generate_install_page('nsched', $text);
+    generate_install_page($plugin, $lang[$plugin.':description']);
 }
