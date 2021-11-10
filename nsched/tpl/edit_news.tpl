@@ -11,7 +11,7 @@
         <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small>
     </td>
     <td>
-        <input type="text" name="nsched_activate" value="{{ nsched_activate }}" class="form-control" />
+        <input type="text" name="nsched_activate" value="{{ nsched_activate }}" autocomplete="off" class="form-control" />
     </td>
 </tr>
 {% endif %}
@@ -23,7 +23,7 @@
         <small>( в формате ГГГГ-ММ-ДД ЧЧ:ММ )</small>
     </td>
     <td>
-        <input type="text" name="nsched_deactivate" value="{{ nsched_deactivate }}" class="form-control" />
+        <input type="text" name="nsched_deactivate" value="{{ nsched_deactivate }}" autocomplete="off" class="form-control" />
     </td>
 </tr>
 {% endif %}
