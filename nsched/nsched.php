@@ -28,20 +28,20 @@ class NSchedNewsFilter extends NewsFilter
         /** @var Twig\Environment $twig */
         global $twig;
 
-        $perm = checkPermission(self::PERMISSION_IDENTIFIER, null, [
-            'personal.publish',
-            'personal.unpublish',
+        $permissions = $this->permissions('personal', [
+            'publish',
+            'unpublish',
         ]);
 
         $tvars['plugin']['nsched'] = '';
 
-        if ($perm['personal.publish'] || $perm['personal.unpublish']) {
+        if ($permissions['personal.publish'] || $permissions['personal.unpublish']) {
             $tvars['plugin']['nsched'] = $twig->render(
                 'plugins/nsched/tpl/add_news.tpl',
                 [
                     'flags' => [
-                        'can_publish' => (bool) $perm['personal.publish'],
-                        'can_unpublish' => (bool) $perm['personal.unpublish'],
+                        'can_publish' => (bool) $permissions['personal.publish'],
+                        'can_unpublish' => (bool) $permissions['personal.unpublish'],
                     ],
                 ]
             );
@@ -52,16 +52,16 @@ class NSchedNewsFilter extends NewsFilter
 
     public function addNews(&$tvars, &$SQL)
     {
-        $perm = checkPermission(self::PERMISSION_IDENTIFIER, null, [
-            'personal.publish',
-            'personal.unpublish',
+        $permissions = $this->permissions('personal', [
+            'publish',
+            'unpublish',
         ]);
 
-        if ($perm['personal.publish']) {
+        if ($permissions['personal.publish']) {
             $SQL['nsched_activate'] = $_REQUEST['nsched_activate'];
         }
 
-        if ($perm['personal.unpublish']) {
+        if ($permissions['personal.unpublish']) {
             $SQL['nsched_deactivate'] = $_REQUEST['nsched_deactivate'];
         }
 
@@ -73,18 +73,15 @@ class NSchedNewsFilter extends NewsFilter
         /** @var Twig\Environment $twig */
         global $twig, $userROW;
 
-        $perm = checkPermission(self::PERMISSION_IDENTIFIER, null, [
-            'personal.publish',
-            'personal.unpublish',
-            'other.publish',
-            'other.unpublish',
+        $permissionGroup = $SQLold['author_id'] == $userROW['id'] ? 'personal' : 'other';
+
+        $permissions = $this->permissions($permissionGroup, [
+            'publish',
+            'unpublish',
         ]);
 
-        $isOwn = ($SQLold['author_id'] == $userROW['id']) ? 1 : 0;
-        $permGroupMode = $isOwn ? 'personal' : 'other';
-
-        $ndeactivate = $SQLold['nsched_deactivate'];
         $nactivate = $SQLold['nsched_activate'];
+        $ndeactivate = $SQLold['nsched_deactivate'];
 
         if (self::EMPTY_DATETIME === $nactivate) {
             $nactivate = '';
@@ -96,15 +93,15 @@ class NSchedNewsFilter extends NewsFilter
 
         $tvars['plugin']['nsched'] = '';
 
-        if ($perm[$permGroupMode.'.publish'] || $perm[$permGroupMode.'.unpublish']) {
+        if ($permissions[$permissionGroup.'.publish'] || $permissions[$permissionGroup.'.unpublish']) {
             $tvars['plugin']['nsched'] = $twig->render(
                 'plugins/nsched/tpl/edit_news.tpl',
                 [
                     'nsched_activate' => $nactivate,
                     'nsched_deactivate' => $ndeactivate,
                     'flags' => [
-                        'can_publish' => (bool) $perm[$permGroupMode.'.publish'],
-                        'can_unpublish' => (bool) $perm[$permGroupMode.'.unpublish'],
+                        'can_publish' => (bool) $permissions[$permissionGroup.'.publish'],
+                        'can_unpublish' => (bool) $permissions[$permissionGroup.'.unpublish'],
                     ],
                 ]
             );
@@ -117,25 +114,34 @@ class NSchedNewsFilter extends NewsFilter
     {
         global $userROW;
 
-        $perm = checkPermission(self::PERMISSION_IDENTIFIER, null, [
-            'personal.publish',
-            'personal.unpublish',
-            'other.publish',
-            'other.unpublish',
+        $permissionGroup = $SQLold['author_id'] == $userROW['id'] ? 'personal' : 'other';
+
+        $permissions = $this->permissions($permissionGroup, [
+            'publish',
+            'unpublish',
         ]);
 
-        $isOwn = ($SQLold['author_id'] == $userROW['id']) ? 1 : 0;
-        $permGroupMode = $isOwn ? 'personal' : 'other';
-
-        if ($perm[$permGroupMode.'.publish']) {
+        if ($permissions[$permissionGroup.'.publish']) {
             $SQLnew['nsched_activate'] = $_REQUEST['nsched_activate'];
         }
 
-        if ($perm[$permGroupMode.'.unpublish']) {
+        if ($permissions[$permissionGroup.'.unpublish']) {
             $SQLnew['nsched_deactivate'] = $_REQUEST['nsched_deactivate'];
         }
 
         return 1;
+    }
+
+    private function permissions(
+        string $group, array $actions, array $user = null
+    ): array {
+        return checkPermission(
+            self::PERMISSION_IDENTIFIER,
+            $user,
+            array_map(function(string $action) use ($group) {
+                return sprintf('%s.%s', $group, $action);
+            }, $actions)
+        );
     }
 }
 
