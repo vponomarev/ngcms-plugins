@@ -32,8 +32,6 @@ class NSchedNewsFilter extends NewsFilter
             [
                 'personal.publish',
                 'personal.unpublish',
-                'other.publish',
-                'other.unpublish',
             ]
         );
 
@@ -65,8 +63,6 @@ class NSchedNewsFilter extends NewsFilter
             [
                 'personal.publish',
                 'personal.unpublish',
-                'other.publish',
-                'other.unpublish',
             ]
         );
 
