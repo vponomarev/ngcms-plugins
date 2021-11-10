@@ -16,6 +16,8 @@ if (! defined('NGCMS')) {
 
 class NSchedNewsFilter extends NewsFilter
 {
+    public const EMPTY_DATETIME = '0000-00-00 00:00:00';
+
     public function addNewsForm(&$tvars)
     {
         /** @var Twig\Environment $twig */
@@ -100,14 +102,15 @@ class NSchedNewsFilter extends NewsFilter
 
         $isOwn = ($SQLold['author_id'] == $userROW['id']) ? 1 : 0;
         $permGroupMode = $isOwn ? 'personal' : 'other';
+
         $ndeactivate = $SQLold['nsched_deactivate'];
         $nactivate = $SQLold['nsched_activate'];
 
-        if ($nactivate == '0000-00-00 00:00:00') {
+        if (self::EMPTY_DATETIME === $nactivate) {
             $nactivate = '';
         }
 
-        if ($ndeactivate == '0000-00-00 00:00:00') {
+        if (self::EMPTY_DATETIME === $ndeactivate) {
             $ndeactivate = '';
         }
 
