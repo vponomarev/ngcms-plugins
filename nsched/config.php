@@ -50,7 +50,7 @@ if ($_REQUEST['action'] == 'commit') {
 
     switch ($_REQUEST['period']) {
         case '5m':
-            $regRun = ['*', '*'];
+            $regRun = ['0,5,10,15,20,25,30,35,40,45,50,55', '*'];
             break;
         case '10m':
             $regRun = ['0,10,20,30,40,50', '*'];
