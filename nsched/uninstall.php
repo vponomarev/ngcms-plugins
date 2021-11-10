@@ -15,8 +15,6 @@ if (! defined('NGCMS')) {
 }
 
 pluginsLoadConfig();
-LoadPluginLang('voting', 'install');
-pluginsLoadConfig();
 LoadPluginLang('nsched', 'install');
 
 $db_update = [
