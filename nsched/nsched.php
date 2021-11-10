@@ -18,22 +18,20 @@ class NSchedNewsFilter extends NewsFilter
 {
     public const EMPTY_DATETIME = '0000-00-00 00:00:00';
 
+    public const PERMISSION_IDENTIFIER = [
+        'plugin' => '#admin',
+        'item' => 'news',
+    ];
+
     public function addNewsForm(&$tvars)
     {
         /** @var Twig\Environment $twig */
         global $twig;
 
-        $perm = checkPermission(
-            [
-                'plugin' => '#admin',
-                'item' => 'news',
-            ],
-            null,
-            [
-                'personal.publish',
-                'personal.unpublish',
-            ]
-        );
+        $perm = checkPermission(self::PERMISSION_IDENTIFIER, null, [
+            'personal.publish',
+            'personal.unpublish',
+        ]);
 
         $tvars['plugin']['nsched'] = '';
 
@@ -54,17 +52,10 @@ class NSchedNewsFilter extends NewsFilter
 
     public function addNews(&$tvars, &$SQL)
     {
-        $perm = checkPermission(
-            [
-                'plugin' => '#admin',
-                'item' => 'news',
-            ],
-            null,
-            [
-                'personal.publish',
-                'personal.unpublish',
-            ]
-        );
+        $perm = checkPermission(self::PERMISSION_IDENTIFIER, null, [
+            'personal.publish',
+            'personal.unpublish',
+        ]);
 
         if ($perm['personal.publish']) {
             $SQL['nsched_activate'] = $_REQUEST['nsched_activate'];
@@ -82,19 +73,12 @@ class NSchedNewsFilter extends NewsFilter
         /** @var Twig\Environment $twig */
         global $twig, $userROW;
 
-        $perm = checkPermission(
-            [
-                'plugin' => '#admin',
-                'item' => 'news',
-            ],
-            null,
-            [
-                'personal.publish',
-                'personal.unpublish',
-                'other.publish',
-                'other.unpublish',
-            ]
-        );
+        $perm = checkPermission(self::PERMISSION_IDENTIFIER, null, [
+            'personal.publish',
+            'personal.unpublish',
+            'other.publish',
+            'other.unpublish',
+        ]);
 
         $isOwn = ($SQLold['author_id'] == $userROW['id']) ? 1 : 0;
         $permGroupMode = $isOwn ? 'personal' : 'other';
@@ -133,10 +117,7 @@ class NSchedNewsFilter extends NewsFilter
     {
         global $userROW;
 
-        $perm = checkPermission([
-            'plugin' => '#admin',
-            'item' => 'news',
-        ], null, [
+        $perm = checkPermission(self::PERMISSION_IDENTIFIER, null, [
             'personal.publish',
             'personal.unpublish',
             'other.publish',
