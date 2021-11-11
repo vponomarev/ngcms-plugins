@@ -62,12 +62,12 @@ class NSchedNewsFilter extends NewsFilter
         ]);
 
         if ($permissions['personal.publish']) {
-            $date = DateTime::createFromFormat(
+            $publishDate = DateTime::createFromFormat(
                 self::FORMAT_DATETIME, $_REQUEST['nsched_activate']
             );
 
-            if ($date) {
-                $SQL['nsched_activate'] = $date->getTimestamp();
+            if ($publishDate) {
+                $SQL['nsched_activate'] = $publishDate->getTimestamp();
 
                 if (pluginGetVariable('nsched', 'sync_dates')) {
                     $SQL['postdate'] = $SQL['nsched_activate'];
@@ -79,14 +79,14 @@ class NSchedNewsFilter extends NewsFilter
         }
 
         if ($permissions['personal.unpublish']) {
-            $date = DateTime::createFromFormat(
+            $unpublishDate = DateTime::createFromFormat(
                 self::FORMAT_DATETIME, $_REQUEST['nsched_deactivate']
             );
 
-            if ($date) {
-                $SQL['nsched_deactivate'] = $date->getTimestamp();
+            if ($unpublishDate {
+                $SQLnew['nsched_deactivate'] = $unpublishDate->getTimestamp();
             } else {
-                $SQL['nsched_deactivate'] = self::EMPTY_DATETIME;
+                $SQLnew['nsched_deactivate'] = self::EMPTY_DATETIME;
             }
         }
 
@@ -152,12 +152,12 @@ class NSchedNewsFilter extends NewsFilter
         ]);
 
         if ($permissions[$permissionGroup.'.publish']) {
-            $date = DateTime::createFromFormat(
+            $publishDate = DateTime::createFromFormat(
                 self::FORMAT_DATETIME, $_REQUEST['nsched_activate']
             );
 
-            if ($date) {
-                $SQLnew['nsched_activate'] = $date->getTimestamp();
+            if ($publishDate) {
+                $SQLnew['nsched_activate'] = $publishDate->getTimestamp();
 
                 if (pluginGetVariable('nsched', 'sync_dates')) {
                     $SQLnew['postdate'] = $SQLnew['nsched_activate'];
@@ -169,12 +169,12 @@ class NSchedNewsFilter extends NewsFilter
         }
 
         if ($permissions[$permissionGroup.'.unpublish']) {
-            $date = DateTime::createFromFormat(
+            $unpublishDate = DateTime::createFromFormat(
                 self::FORMAT_DATETIME, $_REQUEST['nsched_deactivate']
             );
 
-            if ($date) {
-                $SQLnew['nsched_deactivate'] = $date->getTimestamp();
+            if ($unpublishDate) {
+                $SQLnew['nsched_deactivate'] = $unpublishDate->getTimestamp();
             } else {
                 $SQLnew['nsched_deactivate'] = self::EMPTY_DATETIME;
             }
