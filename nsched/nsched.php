@@ -14,9 +14,12 @@ if (! defined('NGCMS')) {
     die('HAL');
 }
 
+use DateTime;
+
 class NSchedNewsFilter extends NewsFilter
 {
-    public const EMPTY_DATETIME = '0000-00-00 00:00:00';
+    public const EMPTY_DATETIME = '0';
+    public const FORMAT_DATETIME = 'd.m.Y H:i';
 
     public const PERMISSION_IDENTIFIER = [
         'plugin' => '#admin',
@@ -39,6 +42,7 @@ class NSchedNewsFilter extends NewsFilter
             $tvars['plugin']['nsched'] = $twig->render(
                 'plugins/nsched/tpl/add_news.tpl',
                 [
+                    'format_datetime' => self::FORMAT_DATETIME,
                     'flags' => [
                         'can_publish' => (bool) $permissions['personal.publish'],
                         'can_unpublish' => (bool) $permissions['personal.unpublish'],
@@ -58,11 +62,27 @@ class NSchedNewsFilter extends NewsFilter
         ]);
 
         if ($permissions['personal.publish']) {
-            $SQL['nsched_activate'] = $_REQUEST['nsched_activate'];
+            $date = DateTime::createFromFormat(
+                self::FORMAT_DATETIME, $_REQUEST['nsched_activate']
+            );
+
+            if ($date) {
+                $SQL['nsched_activate'] = $date->getTimestamp();
+            } else {
+                $SQL['nsched_activate'] = self::EMPTY_DATETIME;
+            }
         }
 
         if ($permissions['personal.unpublish']) {
-            $SQL['nsched_deactivate'] = $_REQUEST['nsched_deactivate'];
+            $date = DateTime::createFromFormat(
+                self::FORMAT_DATETIME, $_REQUEST['nsched_deactivate']
+            );
+
+            if ($date) {
+                $SQL['nsched_deactivate'] = $date->getTimestamp();
+            } else {
+                $SQL['nsched_deactivate'] = self::EMPTY_DATETIME;
+            }
         }
 
         return 1;
@@ -80,15 +100,19 @@ class NSchedNewsFilter extends NewsFilter
             'unpublish',
         ]);
 
-        $nactivate = $SQLold['nsched_activate'];
-        $ndeactivate = $SQLold['nsched_deactivate'];
+        $nactivate = '';
+        $ndeactivate = '';
 
-        if (self::EMPTY_DATETIME === $nactivate) {
-            $nactivate = '';
+        if ($SQLold['nsched_activate']) {
+            $nactivate = (new DateTime)
+                ->setTimestamp($SQLold['nsched_activate'])
+                ->format(self::FORMAT_DATETIME);
         }
 
-        if (self::EMPTY_DATETIME === $ndeactivate) {
-            $ndeactivate = '';
+        if ($SQLold['nsched_deactivate']) {
+            $ndeactivate = (new DateTime)
+                ->setTimestamp($SQLold['nsched_deactivate'])
+                ->format(self::FORMAT_DATETIME);
         }
 
         $tvars['plugin']['nsched'] = '';
@@ -99,6 +123,7 @@ class NSchedNewsFilter extends NewsFilter
                 [
                     'nsched_activate' => $nactivate,
                     'nsched_deactivate' => $ndeactivate,
+                    'format_datetime' => self::FORMAT_DATETIME,
                     'flags' => [
                         'can_publish' => (bool) $permissions[$permissionGroup.'.publish'],
                         'can_unpublish' => (bool) $permissions[$permissionGroup.'.unpublish'],
@@ -122,11 +147,27 @@ class NSchedNewsFilter extends NewsFilter
         ]);
 
         if ($permissions[$permissionGroup.'.publish']) {
-            $SQLnew['nsched_activate'] = $_REQUEST['nsched_activate'];
+            $date = DateTime::createFromFormat(
+                self::FORMAT_DATETIME, $_REQUEST['nsched_activate']
+            );
+
+            if ($date) {
+                $SQLnew['nsched_activate'] = $date->getTimestamp();
+            } else {
+                $SQLnew['nsched_activate'] = self::EMPTY_DATETIME;
+            }
         }
 
         if ($permissions[$permissionGroup.'.unpublish']) {
-            $SQLnew['nsched_deactivate'] = $_REQUEST['nsched_deactivate'];
+            $date = DateTime::createFromFormat(
+                self::FORMAT_DATETIME, $_REQUEST['nsched_deactivate']
+            );
+
+            if ($date) {
+                $SQLnew['nsched_deactivate'] = $date->getTimestamp();
+            } else {
+                $SQLnew['nsched_deactivate'] = self::EMPTY_DATETIME;
+            }
         }
 
         return 1;
@@ -162,14 +203,14 @@ function plugin_nsched_cron()
     $dataDeactivate = [];
 
     // Выбираем новости для которых сработал флаг "опубликовать по дате"
-    foreach ($mysql->select('select * from '.prefix.'_news where (nsched_activate>0) and (nsched_activate <= now())') as $row) {
+    foreach ($mysql->select('select * from '.prefix.'_news where (nsched_activate>0) and (nsched_activate <= unix_timestamp())') as $row) {
         $listActivate[] = $row['id'];
         $dataActivate[$row['id']] = $row;
         //$mysql->query("update ".prefix."_news set approve=1, nsched_activate=0 where id = ".$row['id']);
     }
 
     // Выбираем новости для которых сработал флаг "снять публикацию по дате"
-    foreach ($mysql->select('select * from '.prefix.'_news where (nsched_deactivate>0) and (nsched_deactivate <= now())') as $row) {
+    foreach ($mysql->select('select * from '.prefix.'_news where (nsched_deactivate>0) and (nsched_deactivate <= unix_timestamp())') as $row) {
         $listDeactivate[] = $row['id'];
         $dataDeactivate[$row['id']] = $row;
         //$mysql->query("update ".prefix."_news set approve=0, nsched_deactivate=0 where id = ".$row['id']);

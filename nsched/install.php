@@ -22,8 +22,8 @@ $db_update = [
         'table' => 'news',
         'action' => 'modify',
         'fields' => [
-            ['action' => 'cmodify', 'name' => 'nsched_activate', 'type' => 'datetime'],
-            ['action' => 'cmodify', 'name' => 'nsched_deactivate', 'type' => 'datetime'],
+            ['action' => 'cmodify', 'name' => 'nsched_activate', 'type' => 'int(10)', 'params' => 'not null default "0"'],
+            ['action' => 'cmodify', 'name' => 'nsched_deactivate', 'type' => 'int(10)', 'params' => 'not null default "0"'],
         ],
     ],
 ];
