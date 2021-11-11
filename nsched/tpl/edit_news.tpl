@@ -1,3 +1,4 @@
+<tbody>
 <tr>
     <th colspan="2">Управление публикацией новостей</th>
 </tr>
@@ -25,6 +26,7 @@
     </td>
 </tr>
 {% endif %}
+</tbody>
 
 <script>
     $('[name="nsched_activate"]').datetimepicker({
