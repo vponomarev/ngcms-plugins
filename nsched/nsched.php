@@ -26,6 +26,8 @@ class NSchedNewsFilter extends NewsFilter
         'item' => 'news',
     ];
 
+    private $currentDate;
+
     public function addNewsForm(&$tvars)
     {
         /** @var Twig\Environment $twig */
@@ -66,7 +68,7 @@ class NSchedNewsFilter extends NewsFilter
                 self::FORMAT_DATETIME, $_REQUEST['nsched_activate']
             );
 
-            if ($publishDate) {
+            if ($publishDate && $publishDate > $this->currentDate()) {
                 $SQL['nsched_activate'] = $publishDate->getTimestamp();
 
                 if (pluginGetVariable('nsched', 'sync_dates')) {
@@ -83,7 +85,7 @@ class NSchedNewsFilter extends NewsFilter
                 self::FORMAT_DATETIME, $_REQUEST['nsched_deactivate']
             );
 
-            if ($unpublishDate {
+            if ($unpublishDate && $unpublishDate > $this->currentDate()) {
                 $SQLnew['nsched_deactivate'] = $unpublishDate->getTimestamp();
             } else {
                 $SQLnew['nsched_deactivate'] = self::EMPTY_DATETIME;
@@ -156,7 +158,7 @@ class NSchedNewsFilter extends NewsFilter
                 self::FORMAT_DATETIME, $_REQUEST['nsched_activate']
             );
 
-            if ($publishDate) {
+            if ($publishDate && $publishDate > $this->currentDate()) {
                 $SQLnew['nsched_activate'] = $publishDate->getTimestamp();
 
                 if (pluginGetVariable('nsched', 'sync_dates')) {
@@ -173,7 +175,7 @@ class NSchedNewsFilter extends NewsFilter
                 self::FORMAT_DATETIME, $_REQUEST['nsched_deactivate']
             );
 
-            if ($unpublishDate) {
+            if ($unpublishDate && $unpublishDate > $this->currentDate()) {
                 $SQLnew['nsched_deactivate'] = $unpublishDate->getTimestamp();
             } else {
                 $SQLnew['nsched_deactivate'] = self::EMPTY_DATETIME;
@@ -193,6 +195,12 @@ class NSchedNewsFilter extends NewsFilter
                 return sprintf('%s.%s', $group, $action);
             }, $actions)
         );
+    }
+
+    private function currentDate(): DateTime
+    {
+        return $this->currentDate
+            ?? $this->currentDate = new DateTime;
     }
 }
 
