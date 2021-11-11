@@ -42,6 +42,18 @@ array_push($cfg, [
     'value' => pluginGetVariable($plugin, 'period'),
 ]);
 
+array_push($cfg, [
+    'name' => 'sync_dates',
+    'title' => $lang[$plugin.':sync_dates'],
+    'descr' => $lang[$plugin.':sync_dates_descr'],
+    'type' => 'select',
+    'values' => [
+        $lang['noa'],
+        $lang['yesa'],
+    ],
+    'value' => pluginGetVariable($plugin, 'sync_dates'),
+]);
+
 // RUN
 if ($_REQUEST['action'] == 'commit') {
     // If submit requested, do config save

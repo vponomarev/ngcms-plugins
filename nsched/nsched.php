@@ -68,6 +68,11 @@ class NSchedNewsFilter extends NewsFilter
 
             if ($date) {
                 $SQL['nsched_activate'] = $date->getTimestamp();
+
+                if (pluginGetVariable('nsched', 'sync_dates')) {
+                    $SQL['postdate'] = $SQL['nsched_activate'];
+                    $SQL['editdate'] = $SQL['nsched_activate'];
+                }
             } else {
                 $SQL['nsched_activate'] = self::EMPTY_DATETIME;
             }
@@ -153,6 +158,11 @@ class NSchedNewsFilter extends NewsFilter
 
             if ($date) {
                 $SQLnew['nsched_activate'] = $date->getTimestamp();
+
+                if (pluginGetVariable('nsched', 'sync_dates')) {
+                    $SQLnew['postdate'] = $SQLnew['nsched_activate'];
+                    $SQLnew['editdate'] = $SQLnew['nsched_activate'];
+                }
             } else {
                 $SQLnew['nsched_activate'] = self::EMPTY_DATETIME;
             }
