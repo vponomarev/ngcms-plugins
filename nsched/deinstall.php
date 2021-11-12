@@ -15,24 +15,24 @@ if (! defined('NGCMS')) {
 }
 
 pluginsLoadConfig();
-LoadPluginLang($plugin, 'install', '', '', ':');
+LoadPluginLang('nsched', 'deinstall', '', '', ':');
 
 $db_update = [
     [
         'table' => 'news',
         'action' => 'modify',
         'fields' => [
-            ['action' => 'cmodify', 'name' => 'nsched_activate', 'type' => 'int(10)', 'params' => 'not null default "0"'],
-            ['action' => 'cmodify', 'name' => 'nsched_deactivate', 'type' => 'int(10)', 'params' => 'not null default "0"'],
+            ['action' => 'drop', 'name' => 'nsched_activate'],
+            ['action' => 'drop', 'name' => 'nsched_deactivate'],
         ],
     ],
 ];
 
 if ($_REQUEST['action'] == 'commit') {
     // If submit requested, do config save
-    if (fixdb_plugin_install($plugin, $db_update)) {
-        plugin_mark_installed($plugin);
+    if (fixdb_plugin_install('nsched', $db_update, 'deinstall')) {
+        plugin_mark_deinstalled('nsched');
     }
 } else {
-    generate_install_page($plugin, $lang[$plugin.':description']);
+    generate_install_page('nsched', $lang[$plugin.':description'], 'deinstall');
 }

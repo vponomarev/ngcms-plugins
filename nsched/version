@@ -8,11 +8,12 @@ Version: 0.12
 Acts: cron, admin:mod:news
 File: nsched.php
 Install: install.php
-Deinstall: uninstall.php
+Deinstall: deinstall.php
 Config: config.php
 Type: plugin
 Description: Публикация/снятие с публикации новостей по расписанию
 Author: Vitaly A. Ponomarev
+Author_URI: http://ngcms.ru/
 Title: Управление публикацией новостей
 Information: Позволяет для каждой новости задать свои дату+время публикации/снятия с публикации.<br/>Полезно в случае отпуска администратора сайта (создаются новости "впрок", но публикуются они в заданное время) или для размещения рекламных статей с ограниченным сроком жизни.
 Preinstall: no
