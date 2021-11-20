@@ -110,15 +110,15 @@ class NSchedNewsFilter extends NewsFilter
         $nactivate = '';
         $ndeactivate = '';
 
-        if ($SQLold['nsched_activate']) {
+        if (static::isValidTimestamp($SQLold['nsched_activate'])) {
             $nactivate = (new DateTime)
-                ->setTimestamp($SQLold['nsched_activate'])
+                ->setTimestamp((int) $SQLold['nsched_activate'])
                 ->format(self::FORMAT_DATETIME);
         }
 
-        if ($SQLold['nsched_deactivate']) {
+        if (static::isValidTimestamp($SQLold['nsched_deactivate'])) {
             $ndeactivate = (new DateTime)
-                ->setTimestamp($SQLold['nsched_deactivate'])
+                ->setTimestamp((int) $SQLold['nsched_deactivate'])
                 ->format(self::FORMAT_DATETIME);
         }
 
@@ -201,6 +201,13 @@ class NSchedNewsFilter extends NewsFilter
     {
         return $this->currentDate
             ?? $this->currentDate = new DateTime;
+    }
+
+    private static function isValidTimestamp($value): bool
+    {
+        return !empty($value)
+            && is_numeric($value)
+            && 10 === strlen((string) $value);
     }
 }
 
